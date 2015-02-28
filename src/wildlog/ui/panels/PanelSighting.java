@@ -1603,6 +1603,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
             txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+            btnUpdateSightingActionPerformed(null);
         }
         // Setup Sun and Moon
         if (sighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay())

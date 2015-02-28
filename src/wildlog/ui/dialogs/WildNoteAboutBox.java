@@ -46,7 +46,7 @@ public class WildNoteAboutBox extends JDialog {
         appTitleLabel.setToolTipText("");
         appTitleLabel.setName("appTitleLabel"); // NOI18N
 
-        appDescLabel.setText("<html>WildNote is a seperate software application developed by Henry de Lange (myself) for Android devices. Using WildNote you can easily capture Observations on the go and import the data into WildLog. <br>For more information please visit the website.</html>");
+        appDescLabel.setText("<html>WildNote is a seperate software application developed by Henry de Lange for Android devices. Using WildNote you can easily capture Observations on the go and import the data into WildLog. <br>For more information please visit the website.</html>");
         appDescLabel.setName("appDescLabel"); // NOI18N
 
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/AboutWildNote.gif"))); // NOI18N

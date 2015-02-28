@@ -63,8 +63,8 @@ public class ReportExportDialog extends JDialog {
 
         btnExportImage = new javax.swing.JButton();
         btnExportHTML = new javax.swing.JButton();
-        btnExportPDF = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
+        btnExportPDF = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -113,25 +113,6 @@ public class ReportExportDialog extends JDialog {
         });
         getContentPane().add(btnExportHTML);
 
-        btnExportPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF.png"))); // NOI18N
-        btnExportPDF.setText("Export as PDF");
-        btnExportPDF.setToolTipText("Create a PDF file of the active report.");
-        btnExportPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportPDF.setFocusPainted(false);
-        btnExportPDF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportPDF.setIconTextGap(10);
-        btnExportPDF.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportPDF.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportPDF.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportPDF.setName("btnExportPDF"); // NOI18N
-        btnExportPDF.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportPDF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportPDFActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExportPDF);
-
         btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         btnExportCSV.setText("Export as Spreadsheet");
         btnExportCSV.setToolTipText("Create a CSV file of all relevant Observations used by this report. Can be opened in Excel, etc.");
@@ -150,6 +131,25 @@ public class ReportExportDialog extends JDialog {
             }
         });
         getContentPane().add(btnExportCSV);
+
+        btnExportPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF.png"))); // NOI18N
+        btnExportPDF.setText("Export as PDF");
+        btnExportPDF.setToolTipText("Create a PDF file of the active report.");
+        btnExportPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportPDF.setFocusPainted(false);
+        btnExportPDF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportPDF.setIconTextGap(10);
+        btnExportPDF.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportPDF.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportPDF.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportPDF.setName("btnExportPDF"); // NOI18N
+        btnExportPDF.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportPDFActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportPDF);
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         btnPrint.setText("Print the Report");

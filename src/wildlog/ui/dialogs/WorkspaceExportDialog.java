@@ -256,6 +256,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
         chkDefaultDestinationFolder.setSelected(true);
         chkDefaultDestinationFolder.setText("Use default export folder");
+        chkDefaultDestinationFolder.setToolTipText("If selected Export the new Workspace to the Export folder of the current Workspace.");
         chkDefaultDestinationFolder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkDefaultDestinationFolder.setFocusPainted(false);
 

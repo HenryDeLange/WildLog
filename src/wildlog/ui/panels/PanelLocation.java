@@ -1250,6 +1250,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
             txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
+            btnUpdateActionPerformed(null);
         }
         btnUpdate.requestFocus();
     }//GEN-LAST:event_btnGPSActionPerformed

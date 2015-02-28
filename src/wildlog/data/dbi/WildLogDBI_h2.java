@@ -38,7 +38,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     public WildLogDBI_h2() throws Exception {
         this("jdbc:h2:"
                 + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", true);
+                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=30", true);
     }
 
     /**
@@ -561,8 +561,27 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             results = state.executeQuery("SELECT * FROM WILDLOG");
             // If there isn't a row create one
             if (!results.next()) {
-// FIXME: Error when opening a WildNote v1.1 export with WildLog v4.2: "Column count does not match"
                 createOrUpdate(new WildLogOptions());
+                // Check whether this is a very old database (before the WildLogOptions existed)
+                results = state.executeQuery("select count(*) from information_schema.columns where table_name = 'SIGHTINGS' and column_name = 'MOONLIGHT'");
+                if (results.next() && results.getInt(1) < 1) {
+                    // Drop the columns that will be re-added during the updates
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLATITUDE");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLONGITUDE");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLATOPTION");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLONOPTION");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTSLIDESHOWSPEED");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTSLIDESHOWSIZE");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTONLINEMAP");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN USETHUMBNAILTABLES");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN USETHUMBNAILBROWSE");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN ENABLESOUNDS");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN USESCIENTIFICNAMES");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN WORKSPACENAME");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN WORKSPACEID");
+                    // Set the version number to trigger the updates
+                    state.executeUpdate("UPDATE WILDLOG SET VERSION=1");
+                }
             }
             // Read the row
             boolean fullyUpdated = false;
@@ -685,8 +704,6 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         ResultSet results = null;
         try {
             state = conn.createStatement();
-            // Add the column with default value etc.
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5");
             // Extra stuff om van v1 na v3 te gaan (stuff vir pa se data)
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLATITUDE double DEFAULT -28.7");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLONGITUDE double DEFAULT 24.7");
@@ -740,6 +757,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG ALTER COLUMN DEFAULTLONGITUDE double");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLATOPTION varchar(10) DEFAULT 'South'");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLONOPTION varchar(10) DEFAULT 'East'");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSIZE int DEFAULT 750");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTONLINEMAP smallint DEFAULT true");
             // Change the Visit type Enum values
@@ -804,7 +822,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTNAME, LOCATIONNAME)");
             state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTNAME, VISITNAME)");
             state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
-            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+            try {
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+            }
+            catch (SQLException ex) {
+                ex.printStackTrace(System.out);
+                // Try again to create the index, but settle for non-unique
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+            }
             state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (ID)");
             state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
             state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");

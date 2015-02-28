@@ -29,6 +29,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
+import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
@@ -420,6 +421,7 @@ public class UtilsImageProcessing {
                                 tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
                             }
                         }
+                        tempDataObjectWithGPS.setGPSAccuracy(GPSAccuracy.GOOD);
                     }
                     catch (NumberFormatException ex) {
                         System.err.println("Could not parse GPS info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());

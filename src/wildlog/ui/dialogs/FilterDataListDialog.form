@@ -100,6 +100,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Update.png"/>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Confirm the selection."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -177,7 +178,11 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnSelectAll">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/SelectAll.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Select All"/>
+        <Property name="toolTipText" type="java.lang.String" value="Select all the entries in the table."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -189,7 +194,11 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnClearAll">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/SelectClear.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Clear All"/>
+        <Property name="toolTipText" type="java.lang.String" value="Unselect all the entries in the table."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

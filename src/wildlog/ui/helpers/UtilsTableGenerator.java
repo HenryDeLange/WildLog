@@ -806,19 +806,18 @@ public final class UtilsTableGenerator {
                         @Override
                         public void run() {
                             String text = "<html>"
-                                    + "Showing " + inTable.getModel().getRowCount() + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations."
+                                    + "Showing " + inTable.getModel().getRowCount() + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations.";
+                            if (inFilterProperties.getStartDate() != null) {
+                                text = text + "<br/>Filtering on all Observations from " + inFilterProperties.getStartDate().format(UtilsTime.WL_DATE_FORMATTER);
+                            }
+                            if (inFilterProperties.getEndDate() != null) {
+                                text = text + " to " + inFilterProperties.getEndDate().format(UtilsTime.WL_DATE_FORMATTER);
+                            }
+                            text = text + "."
                                     + "<br/>The current filters are using"
                                     + " " + inActiveLocations.size() + " (of " + inApp.getDBI().count(new Location()) + ") Places"
                                     + ", " + inActiveVisits.size() + " (of " + inApp.getDBI().count(new Visit()) + ") Periods "
                                     + " and " + inActiveElements.size() + " (of " + inApp.getDBI().count(new Element()) + ") Creatures";
-                            if (inFilterProperties.getStartDate() != null) {
-                                text = text + "." 
-                                    + "<br/>Filtering on all Observations from " + inFilterProperties.getStartDate().format(UtilsTime.WL_DATE_FORMATTER);
-                            }
-                            if (inFilterProperties.getEndDate() != null) {
-                                text = text
-                                    + " to " + inFilterProperties.getEndDate().format(UtilsTime.WL_DATE_FORMATTER);
-                            }
                             text = text + "." 
                                     + "<br/>Additional Observation properties may also be active."
                                     + "</html>";

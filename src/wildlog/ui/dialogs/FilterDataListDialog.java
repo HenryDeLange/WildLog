@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -48,6 +49,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             ex.printStackTrace(System.err);
         }
         if (typeInstance instanceof Element) {
+            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Element.gif")).getImage());
             Set<String> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
                 setOriginalData.add(sighting.getElementName());
@@ -60,6 +62,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         }
         else
         if (typeInstance instanceof Location) {
+            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Location.gif")).getImage());
             Set<String> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
                 setOriginalData.add(sighting.getLocationName());
@@ -72,6 +75,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         }
         else
         if (typeInstance instanceof Visit) {
+            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Visit.gif")).getImage());
             Set<String> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
                 setOriginalData.add(sighting.getVisitName());
@@ -112,14 +116,17 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             typeInstance = null;
         }
         if (typeInstance instanceof Element) {
+            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Element.gif")).getImage());
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Element>) inLstOriginalData);
         }
         else
         if (typeInstance instanceof Location) {
+            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Location.gif")).getImage());
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Location>) inLstOriginalData);
         }
         else
         if (typeInstance instanceof Visit) {
+            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Visit.gif")).getImage());
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Visit>) inLstOriginalData);
         }
         else
@@ -231,6 +238,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         });
 
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnSelect.setToolTipText("Confirm the selection.");
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelect.setFocusPainted(false);
         btnSelect.addActionListener(new java.awt.event.ActionListener() {
@@ -264,7 +272,9 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         lblTotalSelected.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTotalSelected.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        btnSelectAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SelectAll.png"))); // NOI18N
         btnSelectAll.setText("Select All");
+        btnSelectAll.setToolTipText("Select all the entries in the table.");
         btnSelectAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelectAll.setFocusPainted(false);
         btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
@@ -273,7 +283,9 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             }
         });
 
+        btnClearAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SelectClear.png"))); // NOI18N
         btnClearAll.setText("Clear All");
+        btnClearAll.setToolTipText("Unselect all the entries in the table.");
         btnClearAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClearAll.setFocusPainted(false);
         btnClearAll.addActionListener(new java.awt.event.ActionListener() {

@@ -93,7 +93,7 @@ public class GPSDialog extends JDialog {
         // Load the defaults if no values were provided
         loadDefaultLatAndLon();
         // Load the accuracy
-        if (dataObjectWithGPS.getGPSAccuracy() != null) {
+        if (dataObjectWithGPS.getGPSAccuracy() != null && !GPSAccuracy.NONE.equals(dataObjectWithGPS.getGPSAccuracy())) {
             cmbAccuracy.setSelectedItem(dataObjectWithGPS.getGPSAccuracy());
         }
         else {

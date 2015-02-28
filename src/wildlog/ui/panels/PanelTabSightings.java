@@ -388,8 +388,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFiltersLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(lblFilterDetails)
-                .addGap(15, 15, 15)
                 .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFilterLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFilterVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -398,7 +396,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnFilterProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnResetFilters, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(15, 15, 15)
+                .addComponent(lblFilterDetails)
+                .addGap(5, 5, 5))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -585,6 +585,17 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // Setup full lists for the first time if they were null
+        if (lstFilteredLocations == null) {
+            lstFilteredLocations = app.getDBI().list(new Location());
+        }
+        if (lstFilteredVisits == null) {
+            lstFilteredVisits = app.getDBI().list(new Visit());
+        }
+        if (lstFilteredElements == null) {
+            lstFilteredElements = app.getDBI().list(new Element());
+        }
+        // Load the table
         UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                 filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
     }//GEN-LAST:event_formComponentShown
@@ -723,10 +734,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }
     
     private void setupDefaultFilters() {
-        // Setup full lists
-        lstFilteredLocations = app.getDBI().list(new Location());
-        lstFilteredVisits = app.getDBI().list(new Visit());
-        lstFilteredElements = app.getDBI().list(new Element());
         // Setup new FilterProperties
         filterProperties = new FilterProperties();
         filterProperties.setStartDate(LocalDate.now().minusMonths(3));

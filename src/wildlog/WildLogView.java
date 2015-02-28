@@ -458,14 +458,14 @@ public final class WildLogView extends JFrame {
         jLabel5.setName("jLabel5"); // NOI18N
 
         lblWorkspaceName.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblWorkspaceName.setForeground(new java.awt.Color(110, 135, 82));
+        lblWorkspaceName.setForeground(new java.awt.Color(118, 146, 86));
         lblWorkspaceName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceName.setText("...Workspace Name...");
-        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active Workspace Name", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 10), new java.awt.Color(57, 65, 52))); // NOI18N
+        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active Workspace Name", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 10), new java.awt.Color(70, 79, 64))); // NOI18N
         lblWorkspaceName.setName("lblWorkspaceName"); // NOI18N
 
         lblWorkspacePath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblWorkspacePath.setForeground(new java.awt.Color(58, 68, 47));
+        lblWorkspacePath.setForeground(new java.awt.Color(66, 78, 52));
         lblWorkspacePath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblWorkspacePath.setText(WildLogPaths.getFullWorkspacePrefix().toString());
         lblWorkspacePath.setName("lblWorkspacePath"); // NOI18N
@@ -480,19 +480,19 @@ public final class WildLogView extends JFrame {
         jLabel8.setName("jLabel8"); // NOI18N
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(58, 68, 47));
+        jLabel21.setForeground(new java.awt.Color(66, 78, 52));
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel21.setText("<html><u>Active Workspace Folder:</u></html>");
         jLabel21.setName("jLabel21"); // NOI18N
 
         jLabel23.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(58, 68, 47));
+        jLabel23.setForeground(new java.awt.Color(66, 78, 52));
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel23.setText("<html><u>Active Settings Folder:</u></html>");
         jLabel23.setName("jLabel23"); // NOI18N
 
         lblSettingsPath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblSettingsPath.setForeground(new java.awt.Color(58, 68, 47));
+        lblSettingsPath.setForeground(new java.awt.Color(66, 78, 52));
         lblSettingsPath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString());
         lblSettingsPath.setName("lblSettingsPath"); // NOI18N
@@ -2007,6 +2007,7 @@ public final class WildLogView extends JFrame {
                         // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
                         setMessage("Cleanup Step 1: Validate database references to the files in the Workspace... " + getProgress() + "%");
                         finalHandleFeedback.println("** Starting Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
+                        finalHandleFeedback.println("");
                         finalHandleFeedback.println("1) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
                         List<WildLogFile> allFiles = app.getDBI().list(new WildLogFile());
                         int filesWithoutID = 0;
@@ -2452,6 +2453,7 @@ public final class WildLogView extends JFrame {
                         // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
                         // TODO: Maybe delete all non-wildlog files during cleanup
 
+                        finalHandleFeedback.println("");
                         finalHandleFeedback.println("** Finished Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");

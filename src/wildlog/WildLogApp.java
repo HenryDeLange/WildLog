@@ -97,7 +97,6 @@ public class WildLogApp extends Application {
         if (threadCount < 3) {
             threadCount = 3;
         }
-//        sharedExecutor = Executors.newFixedThreadPool(threadCount, new NamedThreadFactory("WildLogShared-NeverShutdown"));
         // Makse sure all the basic data/file folders are in place
         try {
             Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());
@@ -161,7 +160,7 @@ public class WildLogApp extends Application {
                            if (!WILDLOG_VERSION.equalsIgnoreCase(response.toString())) {
                                JOptionPane.showMessageDialog(null, 
                                        "A newer version of WildLog is available.\n"
-                                       + "You can visit http://www.mywild.co.za to download the latest version.\n",
+                                       + "To download the latest version visit http://www.mywild.co.za \n",
                                        "WildLog " + response.toString() + " is now available", 
                                        JOptionPane.INFORMATION_MESSAGE);
                            }
@@ -647,15 +646,5 @@ public class WildLogApp extends Application {
     public WildLogView getMainFrame() {
         return view;
     }
-
-//    /**
-//     * This ExecutorService is shared and available to the entire application and
-//     * should thus only process tasks that does not require the service to
-//     * shutdown (or wait for execution to finish).
-//     * @return
-//     */
-//    public ExecutorService getSharedExecutor() {
-//        return sharedExecutor;
-//    }
 
 }
