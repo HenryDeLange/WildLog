@@ -1218,8 +1218,10 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Check whether to update or create it.
             if (inOldName != null) {
-                // Update the related tables if the name cahnges
+                // Update the related tables if the name changes
+                VisitCore originalVisit;
                 if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
+                    originalVisit = find(new VisitCore(inOldName));
                     // Update the Sightings
                     SightingCore sighting = new SightingCore();
                     sighting.setVisitName(inOldName);
@@ -1235,10 +1237,20 @@ public abstract class DBI_JDBC implements DBI {
                         createOrUpdate(temp, true);
                     }
                 }
-                // This method should cascade and save the Sightings records when the Visit's LocationName changes. 
-                
-// TODO: Implement this (load old record, check if names are the same, if not do Sighting update). Ja dis overhead, maar seker beter so, ek save nooit regtig baie Visits op 'n slag nie...
-                
+                else {
+                    originalVisit = inVisit;
+                }
+                // This method should cascade and save the Sightings records when the Visit's LocationName changed (Visit was moved).
+                if (!originalVisit.getLocationName().equals(inVisit.getLocationName())) {
+                    // Update the Sightings
+                    SightingCore sighting = new SightingCore();
+                    sighting.setVisitName(inOldName);
+                    List<SightingCore> sightings = list(sighting, false);
+                    for (SightingCore temp : sightings) {
+                        temp.setLocationName(inVisit.getLocationName());
+                        createOrUpdate(temp, false);
+                    }
+                }
                 // Update
                 state = conn.prepareStatement(updateVisit);
                 state.setString(8, UtilsData.sanitizeString(inOldName));
@@ -1280,7 +1292,7 @@ public abstract class DBI_JDBC implements DBI {
     @Override
     public <T extends SightingCore> boolean createOrUpdate(T inSighting, boolean inNewButKeepID) {
         PreparedStatement state = null;
-        Statement tempState = null;
+        PreparedStatement tempState = null;
         ResultSet results = null;
         boolean isUpdate = false;
         try {
@@ -1293,14 +1305,16 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 if (!inNewButKeepID) {
                     // Get the new ID
-                    tempState = conn.createStatement();
+                    tempState = conn.prepareStatement("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?");
                     inSighting.setSightingCounter(generateID());
+                    tempState.setLong(1, inSighting.getSightingCounter());
                     // Make sure it is unique (should almost always be, but let's be safe...)
-                    results = tempState.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter());
+                    results = tempState.executeQuery();
                     while (results.next() && results.getInt(1) > 0) {
                         // ID already used, try a new ID
                         inSighting.setSightingCounter(generateID());
-                        results = tempState.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter());
+                        tempState.setLong(1, inSighting.getSightingCounter());
+                        results = tempState.executeQuery();
                     }
                 }
                 // Insert
@@ -1404,11 +1418,11 @@ public abstract class DBI_JDBC implements DBI {
 
     @Override
     public <T extends WildLogOptions> boolean createOrUpdate(T inWildLogOptions) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         try {
-            state = conn.createStatement();
-            results = state.executeQuery(findWildLogOptions);
+            state = conn.prepareStatement(findWildLogOptions);
+            results = state.executeQuery();
             if (!results.next()) {
                 // Insert
                 PreparedStatement prepState = null;
