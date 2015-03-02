@@ -1117,7 +1117,7 @@
                             </LineBorder>
                           </Border>
                           <Font PropertyName="font" name="Tahoma" size="10" style="0"/>
-                          <Color PropertyName="color" blue="40" green="4f" red="46" type="rgb"/>
+                          <Color PropertyName="color" blue="42" green="66" red="50" type="rgb"/>
                         </TitledBorder>
                       </Border>
                     </Property>

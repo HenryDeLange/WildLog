@@ -349,86 +349,105 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowElementSightingsActionPerformed
 
     private void btnGIFElementSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGIFElementSightingsActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "'");
-                Sighting temp = new Sighting();
-                temp.setElementName(element.getPrimaryName());
-                List<Sighting> sightingList = app.getDBI().list(temp, false);
-                if (!sightingList.isEmpty()) {
-                    Collections.sort(sightingList);
-                    setProgress(1);
-                    setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "' " + getProgress() + "%");
-                    List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
-                    for (Sighting tempSighting : sightingList) {
-                        slideshowList.addAll(UtilsMovies.getFilePaths(app, new WildLogFile(tempSighting.getWildLogFileID())));
-                    }
-                    // Now create the GIF
-                    if (!slideshowList.isEmpty()) {
-                        Path outputPath = WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(element.getPrimaryName() + "_Observations.gif");
-                        Files.createDirectories(outputPath.getParent());
-                        ImageOutputStream output = null;
-                        try {
-                            output = new FileImageOutputStream(outputPath.toFile());
-                            int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
-                            ImageIcon image = UtilsImageProcessing.getScaledIcon(WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), thumbnailSize);
-                            BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-                            Graphics2D graphics2D = bufferedImage.createGraphics();
-                            graphics2D.drawImage(image.getImage(), 
-                                        (thumbnailSize - image.getIconWidth())/2, 
-                                        (thumbnailSize - image.getIconHeight())/2, 
-                                        image.getIconWidth(), 
-                                        image.getIconHeight(), 
-                                        Color.BLACK, null);
-                            int timeBetweenFrames = (int) (1000.0 / ((double) app.getWildLogOptions().getDefaultSlideshowSpeed()));
-                            AnimatedGIFWriter gifWriter = new AnimatedGIFWriter(output, bufferedImage.getType(), timeBetweenFrames, true);
-                            gifWriter.writeToGIF(bufferedImage);
-                            setProgress(2);
-                            setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "' " + getProgress() + "%");
-                            for (int t = 0; t < slideshowList.size(); t++) {
-                                image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize);
-                                bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
-                                graphics2D = bufferedImage.createGraphics();
+        final Sighting temp = new Sighting();
+        final String tempName;
+        if (element != null) {
+            tempName = element.getPrimaryName();
+            temp.setElementName(element.getPrimaryName());
+        }
+        else
+        if (location != null) {
+            tempName = location.getName();
+            temp.setLocationName(location.getName());
+        }
+        else
+        if (visit != null) {
+            tempName = visit.getName();
+            temp.setVisitName(visit.getName());
+        }
+        else {
+            tempName = null;
+        }
+        if (tempName != null) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setMessage("Creating the Animated GIF for '" + tempName + "'");
+                    List<Sighting> sightingList = app.getDBI().list(temp, false);
+                    if (!sightingList.isEmpty()) {
+                        Collections.sort(sightingList);
+                        setProgress(1);
+                        setMessage("Creating the Animated GIF for '" + tempName + "' " + getProgress() + "%");
+                        List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
+                        for (Sighting tempSighting : sightingList) {
+                            slideshowList.addAll(UtilsMovies.getFilePaths(app, new WildLogFile(tempSighting.getWildLogFileID())));
+                        }
+                        // Now create the GIF
+                        if (!slideshowList.isEmpty()) {
+                            Path outputPath = WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(tempName + "_Observations.gif");
+                            Files.createDirectories(outputPath.getParent());
+                            ImageOutputStream output = null;
+                            try {
+                                output = new FileImageOutputStream(outputPath.toFile());
+                                int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
+                                ImageIcon image = UtilsImageProcessing.getScaledIcon(WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), thumbnailSize);
+                                BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                                Graphics2D graphics2D = bufferedImage.createGraphics();
                                 graphics2D.drawImage(image.getImage(), 
-                                        (thumbnailSize - image.getIconWidth())/2, 
-                                        (thumbnailSize - image.getIconHeight())/2, 
-                                        image.getIconWidth(), 
-                                        image.getIconHeight(), 
-                                        Color.BLACK, null);
+                                            (thumbnailSize - image.getIconWidth())/2, 
+                                            (thumbnailSize - image.getIconHeight())/2, 
+                                            image.getIconWidth(), 
+                                            image.getIconHeight(), 
+                                            Color.BLACK, null);
+                                int timeBetweenFrames = (int) (1000.0 / ((double) app.getWildLogOptions().getDefaultSlideshowSpeed()));
+                                AnimatedGIFWriter gifWriter = new AnimatedGIFWriter(output, bufferedImage.getType(), timeBetweenFrames, true);
                                 gifWriter.writeToGIF(bufferedImage);
-                                setProgress(2 + (int)((((double)t)/((double)slideshowList.size()))*98));
-                                setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "' " + getProgress() + "%");
+                                setProgress(2);
+                                setMessage("Creating the Animated GIF for '" + tempName + "' " + getProgress() + "%");
+                                for (int t = 0; t < slideshowList.size(); t++) {
+                                    image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize);
+                                    bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
+                                    graphics2D = bufferedImage.createGraphics();
+                                    graphics2D.drawImage(image.getImage(), 
+                                            (thumbnailSize - image.getIconWidth())/2, 
+                                            (thumbnailSize - image.getIconHeight())/2, 
+                                            image.getIconWidth(), 
+                                            image.getIconHeight(), 
+                                            Color.BLACK, null);
+                                    gifWriter.writeToGIF(bufferedImage);
+                                    setProgress(2 + (int)((((double)t)/((double)slideshowList.size()))*98));
+                                    setMessage("Creating the Animated GIF for '" + tempName + "' " + getProgress() + "%");
+                                }
+                                gifWriter.finishGIF();
                             }
-                            gifWriter.finishGIF();
-                        }
-                        catch (IOException ex) {
-                            ex.printStackTrace(System.err);
-                        }
-                        finally {
-                            if (output != null) {
-                                try {
-                                    output.flush();
-                                }
-                                catch (IOException ex) {
-                                    ex.printStackTrace(System.err);
-                                }
-                                try {
-                                    output.close();
-                                }
-                                catch (IOException ex) {
-                                    ex.printStackTrace(System.err);
+                            catch (IOException ex) {
+                                ex.printStackTrace(System.err);
+                            }
+                            finally {
+                                if (output != null) {
+                                    try {
+                                        output.flush();
+                                    }
+                                    catch (IOException ex) {
+                                        ex.printStackTrace(System.err);
+                                    }
+                                    try {
+                                        output.close();
+                                    }
+                                    catch (IOException ex) {
+                                        ex.printStackTrace(System.err);
+                                    }
                                 }
                             }
+                            UtilsFileProcessing.openFile(outputPath.getParent());
                         }
-                        UtilsFileProcessing.openFile(outputPath.getParent());
                     }
+                    setProgress(100);
+                    setMessage("Done with the Animated GIF for '" + tempName + "'");
+                    return null;
                 }
-                setProgress(100);
-                setMessage("Done with the Animated GIF for '" + element.getPrimaryName() + "'");
-                return null;
-            }
-        });
+            });
+        }
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnGIFElementSightingsActionPerformed

@@ -70,6 +70,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnAdvanced.setEnabled(false);
             btnBrowse.setEnabled(false);
             btnGoLocation.setEnabled(false);
+            btnBulkImport.setEnabled(false);
             btnDeleteImage.setEnabled(false);
             btnDeleteSighting.setEnabled(false);
             btnEditSighting.setEnabled(false);

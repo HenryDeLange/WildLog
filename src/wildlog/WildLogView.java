@@ -461,7 +461,7 @@ public final class WildLogView extends JFrame {
         lblWorkspaceName.setForeground(new java.awt.Color(118, 146, 86));
         lblWorkspaceName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceName.setText("...Workspace Name...");
-        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active Workspace Name", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 10), new java.awt.Color(70, 79, 64))); // NOI18N
+        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active Workspace Name", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 10), new java.awt.Color(80, 102, 66))); // NOI18N
         lblWorkspaceName.setName("lblWorkspaceName"); // NOI18N
 
         lblWorkspacePath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N

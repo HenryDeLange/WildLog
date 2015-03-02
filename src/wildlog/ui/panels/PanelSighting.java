@@ -1100,6 +1100,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnCalculateDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration_Small.png"))); // NOI18N
         btnCalculateDuration.setText("<html>Calculate <b>Duration</b> from <b>Image</b> data</html>");
         btnCalculateDuration.setToolTipText("Attempt to calculate the Duration of the Observation based on times specified on the uploaded images.");
+        btnCalculateDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode);
         btnCalculateDuration.setFocusPainted(false);
         btnCalculateDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

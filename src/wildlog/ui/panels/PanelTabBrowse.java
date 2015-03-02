@@ -393,6 +393,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultElementImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         btnSetDefaultElementImage.setText("Default Creature File");
         btnSetDefaultElementImage.setToolTipText("Set this file as the default for the related Creature.");
+        btnSetDefaultElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetDefaultElementImage.setFocusPainted(false);
         btnSetDefaultElementImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetDefaultElementImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -404,6 +406,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultLocationImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
         btnSetDefaultLocationImage.setText("Default Place File");
         btnSetDefaultLocationImage.setToolTipText("Set this file as the default for the related Place.");
+        btnSetDefaultLocationImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetDefaultLocationImage.setFocusPainted(false);
         btnSetDefaultLocationImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetDefaultLocationImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -415,6 +419,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultVisitImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         btnSetDefaultVisitImage.setText("Default Period File");
         btnSetDefaultVisitImage.setToolTipText("Set this file as the default for the related Period.");
+        btnSetDefaultVisitImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetDefaultVisitImage.setFocusPainted(false);
         btnSetDefaultVisitImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetDefaultVisitImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -695,6 +701,15 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         catch (LLJTranException | IOException ex) {
                             ex.printStackTrace(System.err);
+                            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                @Override
+                                public int showDialog() {
+                                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                                        "There was an unexpected error while trying to rotate the current image.",
+                                        "Could Not Rotate Image", JOptionPane.ERROR_MESSAGE);
+                                    return 0;
+                                }
+                            });
                         }
                         finally {
                             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
