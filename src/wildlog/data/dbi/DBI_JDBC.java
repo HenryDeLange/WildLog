@@ -919,7 +919,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             else
             if (inSighting.getElementName() != null && inSighting.getLocationName() != null && inSighting.getVisitName() != null) {
-                sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ? AND VISITNAME = ?";
+                sql = sql + " WHERE ELEMENTNAME = ? AND SIGHTINGS.LOCATIONNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
                 state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
@@ -927,7 +927,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             else
             if (inSighting.getElementName() != null && inSighting.getLocationName() != null) {
-                sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ?";
+                sql = sql + " WHERE ELEMENTNAME = ? AND SIGHTINGS.LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
                 state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
@@ -941,7 +941,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             else
             if (inSighting.getLocationName() != null && inSighting.getVisitName() != null) {
-                sql = sql + " WHERE LOCATIONNAME = ? AND VISITNAME = ?";
+                sql = sql + " WHERE SIGHTINGS.LOCATIONNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
                 state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
@@ -954,7 +954,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             else
             if (inSighting.getLocationName() != null) {
-                sql = sql + " WHERE LOCATIONNAME = ?";
+                sql = sql + " WHERE SIGHTINGS.LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
             }
