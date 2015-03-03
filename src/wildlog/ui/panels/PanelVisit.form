@@ -382,21 +382,30 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="btnMapSighting" alignment="0" pref="110" max="32767" attributes="0"/>
-                          <Component id="btnReport" alignment="0" pref="110" max="32767" attributes="1"/>
-                          <Component id="btnHTML" alignment="0" pref="110" max="32767" attributes="1"/>
-                          <Component id="btnSlideshow" max="32767" attributes="1"/>
-                          <Component id="btnAdvanced" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnBulkImport" min="-2" pref="110" max="-2" attributes="0"/>
-                          <Component id="btnGoLocation" min="-2" pref="110" max="-2" attributes="0"/>
-                          <Component id="btnUpdate" min="-2" pref="110" max="-2" attributes="0"/>
-                          <Component id="btnBrowse" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="btnMapSighting" alignment="0" pref="110" max="32767" attributes="0"/>
+                                  <Component id="btnReport" alignment="0" pref="110" max="32767" attributes="1"/>
+                                  <Component id="btnSlideshow" alignment="0" pref="110" max="32767" attributes="1"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="btnHTML" min="-2" pref="110" max="-2" attributes="1"/>
+                                  <Component id="btnGoLocation" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="btnBulkImport" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="btnAdvanced" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="btnUpdate" max="32767" attributes="0"/>
+                                  <Component id="btnBrowse" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
@@ -408,24 +417,23 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="btnUpdate" min="-2" pref="60" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                               <Component id="btnBulkImport" min="-2" pref="35" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                              <Component id="btnGoLocation" min="-2" pref="35" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="btnBrowse" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                                  <Component id="btnSlideshow" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
                               <Component id="btnAdvanced" min="-2" pref="33" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                              <Component id="btnBrowse" min="-2" pref="35" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
                               <Component id="btnMapSighting" min="-2" pref="33" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Component id="btnReport" min="-2" pref="33" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Component id="btnSlideshow" min="-2" pref="33" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Component id="btnHTML" min="-2" pref="33" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Component id="btnGoLocation" min="-2" pref="35" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>

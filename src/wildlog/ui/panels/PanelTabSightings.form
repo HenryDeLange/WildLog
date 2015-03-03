@@ -64,7 +64,6 @@
                           <Component id="lblImage" min="-2" max="-2" attributes="0"/>
                           <Component id="pnlFilters" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
@@ -78,9 +77,9 @@
                       <Component id="pnlViews" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="pnlFeatures" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -121,7 +120,7 @@
           <Font name="Tahoma" size="14" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="All Observations:"/>
+        <Property name="text" type="java.lang.String" value="Observations List:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnGoSighting">
@@ -429,11 +428,12 @@
         </Property>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="Observations Filters">
+            <TitledBorder justification="2" title="Observations Filters">
               <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
                 <EtchetBorder/>
               </Border>
               <Font PropertyName="font" name="Tahoma" size="12" style="0"/>
+              <Color PropertyName="color" blue="33" green="33" red="33" type="rgb"/>
             </TitledBorder>
           </Border>
         </Property>

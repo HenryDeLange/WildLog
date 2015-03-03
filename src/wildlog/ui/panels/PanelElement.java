@@ -915,7 +915,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtBehaviourDescription.setColumns(20);
         txtBehaviourDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtBehaviourDescription.setLineWrap(true);
-        txtBehaviourDescription.setRows(5);
+        txtBehaviourDescription.setRows(4);
         txtBehaviourDescription.setText(element.getBehaviourDescription());
         txtBehaviourDescription.setWrapStyleWord(true);
         txtBehaviourDescription.setName("txtBehaviourDescription"); // NOI18N
@@ -962,7 +962,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtDescription.setColumns(20);
         txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDescription.setLineWrap(true);
-        txtDescription.setRows(5);
+        txtDescription.setRows(4);
         txtDescription.setText(element.getDescription());
         txtDescription.setWrapStyleWord(true);
         txtDescription.setName("txtDescription"); // NOI18N
@@ -1160,7 +1160,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         .addGap(5, 5, 5)
                         .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel59)
-                            .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                            .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
                             .addGroup(pnlInfo2Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addGap(6, 6, 6)
