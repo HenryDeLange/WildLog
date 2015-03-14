@@ -44,24 +44,24 @@ public class DurationChart extends AbstractReport<Sighting> {
         super("Duration Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
-        Button btnLineChart = new Button("Duration for All");
+        Button btnLineChart = new Button("All Observations Duration (Line)");
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.TIMELINE_FOR_ALL;
-                setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific time period.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific duration.</html>");
             }
         });
         lstCustomButtons.add(btnLineChart);
         // Timeline per element
-        Button btnStackedBarChart = new Button("Duration per Creature");
+        Button btnStackedBarChart = new Button("Creatures Duration (Line)");
         btnStackedBarChart.setCursor(Cursor.HAND);
         btnStackedBarChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.TIMELINE_PER_ELEMENT;
-                setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific time period.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific duration.</html>");
             }
         });
         lstCustomButtons.add(btnStackedBarChart);
@@ -69,6 +69,7 @@ public class DurationChart extends AbstractReport<Sighting> {
         lstCustomButtons.add(new Label("Duration interval size:"));
         cmbIntervalSize = new ComboBox<>(FXCollections.observableArrayList(options));
         cmbIntervalSize.setCursor(Cursor.HAND);
+        cmbIntervalSize.setVisibleRowCount(10);
         cmbIntervalSize.getSelectionModel().clearSelection();
         cmbIntervalSize.getSelectionModel().select(2);
         cmbIntervalSize.setOnAction(new EventHandler() {
@@ -76,11 +77,11 @@ public class DurationChart extends AbstractReport<Sighting> {
             public void handle(Event event) {
                 if (!cmbIntervalSize.getSelectionModel().isEmpty()) {
                     if (chartType == ChartType.TIMELINE_FOR_ALL) {
-                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific time period.</html>");
+                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific duration.</html>");
                     }
                     else
                     if (chartType == ChartType.TIMELINE_PER_ELEMENT) {
-                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific time period.</html>");
+                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific duration.</html>");
                     }
                 }
             }
@@ -280,80 +281,81 @@ public class DurationChart extends AbstractReport<Sighting> {
             minInterval = 15;
             maxMinutesCap = 120;
         }
-        // Get start time
-        String mins;
+        // Get times as String
+        StringBuilder timeString = new StringBuilder(15);
         if (inMinutes < minInterval) {
-            mins = "00";
+            timeString.append("00");
         }
         else
         if (inMinutes > maxMinutesCap) {
             if (minInterval > 0) {
-                mins = " " + (maxMinutesCap + (minInterval)) + "+";
+                timeString.append(" ").append(maxMinutesCap + (minInterval)).append("+");
             }
             else {
-                mins = " " + (maxMinutesCap + 1) + "+";
+                timeString.append(" ").append(maxMinutesCap + 1).append("+");
             }
         }
         else {
             if (minInterval > 0) {
-                mins = "" + (inMinutes / minInterval) * minInterval;
+                timeString.append((inMinutes / minInterval) * minInterval);
             }
             else {
-                mins = "" + inMinutes;
+                timeString.append(inMinutes);
             }
         }
-        if (mins.length() < 2) {
-            mins = "0" + mins;
+        if (timeString.length() < 2) {
+            timeString.insert(0, "0");
         }
-        String secs;
         if (inMinutes > maxMinutesCap) {
-            secs = " min";
-        }
-        else
-        if (((int)inSeconds) < secInterval) {
-            secs = "00";
+            timeString.append(" min");
         }
         else {
-            if (secInterval > 0) {
-                secs = "" + ((int)inSeconds / secInterval) * secInterval;
+            timeString.append(":");
+            if (((int)inSeconds) < secInterval) {
+                timeString.append("00");
             }
             else {
-                secs = "00";
+                if (secInterval > 0) {
+                    int temp = ((int)inSeconds / secInterval) * secInterval;
+                    if (temp < 10) {
+                        timeString.append("0");
+                    }
+                    timeString.append(temp);
+                }
+                else {
+                    timeString.append("00");
+                }
             }
         }
-        if (secs.length() < 2) {
-            secs = "0" + secs;
-        }
-        // Get end time
-        String result;
+        timeString.append("\n");
         if (inMinutes <= maxMinutesCap) {
-            String endMins;
             if (minInterval > 0) {
-                endMins = "" + (((inMinutes / minInterval) * minInterval) + minInterval - 1);
+                int temp = (((inMinutes / minInterval) * minInterval) + minInterval - 1);
+                if (temp < 10) {
+                    timeString.append("0");
+                }
+                timeString.append(temp);
             }
             else {
-                endMins = "" + inMinutes;
+                if (inMinutes < 10) {
+                    timeString.append("0");
+                }
+                timeString.append(inMinutes);
             }
-            if (endMins.length() < 2) {
-                endMins = "0" + endMins;
-            }
-            String endSecs;
+            timeString.append(":");
             if (secInterval > 0) {
-                endSecs = "" + ((((int)inSeconds / secInterval) * secInterval) + secInterval - 1);
+                int temp = (((int)inSeconds / secInterval) * secInterval) + secInterval - 1;
+                if (temp < 10) {
+                    timeString.append("0");
+                }
+                timeString.append(temp);
             }
             else {
-                endSecs = "59";
+                timeString.append("59");
             }
-            if (endSecs.length() < 2) {
-                endSecs = "0" + endSecs;
-            }
-            result = mins + ":" + secs + /*"\n  to  \n"*/"\n" + endMins + ":" + endSecs;
-        }
-        else {
-            result = mins + "\n"+ secs;
         }
         // Return result
-        return result;
+        return timeString.toString();
     }
     
 }

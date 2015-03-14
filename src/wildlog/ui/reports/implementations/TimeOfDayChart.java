@@ -234,7 +234,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             }
         }
         // Setup chart
-        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        PieChart chart = new PieChart(chartData);
         chart.getStylesheets().add("wildlog/ui/reports/chart/styling/ChartsTimeOfDay.css");
         chart.getStyleClass().add("wl-pie-time-of-day-color");
         chart.setTitle("Number of Observations per Time Of Day category");

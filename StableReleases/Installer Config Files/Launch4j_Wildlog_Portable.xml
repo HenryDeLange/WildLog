@@ -1,24 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>.\application\WildLog.jar</jar>
-  <outfile>C:\Users\Henry\Documents\NetBeansProjects\WildLog\StableReleases\Installer Config Files\WildLog\WildLog_Portable.exe</outfile>
+  <jar>.\WildLog.jar</jar>
+  <outfile>C:\Users\Henry\Documents\NetBeansProjects\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLog_Portable.exe</outfile>
   <errTitle>WildLog Startup Error</errTitle>
-  <cmdLine>properties=./application/wildlog_windows_portable.properties</cmdLine>
+  <cmdLine>properties=./wildlog_windows_portable.properties</cmdLine>
   <chdir></chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
   <supportUrl>http://www.mywild.co.za</supportUrl>
-  <customProcName>true</customProcName>
   <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
   <icon>C:\Users\Henry\Documents\NetBeansProjects\WildLog\StableReleases\Installer Config Files\misc files\WildLog.ico</icon>
   <jre>
-    <path>jre7</path>
-    <minVersion>1.7.0</minVersion>
+    <path>jre</path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.8.0</minVersion>
     <maxVersion></maxVersion>
-    <jdkPreference>jdkOnly</jdkPreference>
-    <opt>-Xms256m -Xmx1024m</opt>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+    <initialHeapSize>192</initialHeapSize>
+    <maxHeapSize>768</maxHeapSize>
+    <maxHeapPercent>75</maxHeapPercent>
   </jre>
   <splash>
     <file>C:\Users\Henry\Documents\NetBeansProjects\WildLog\StableReleases\Installer Config Files\misc files\LaunchScreen.bmp</file>
@@ -27,12 +33,12 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>4.1.0.0</fileVersion>
-    <txtFileVersion>WildLog v4.1 Launcher</txtFileVersion>
+    <fileVersion>4.2.0.0</fileVersion>
+    <txtFileVersion>WildLog v4.2 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
-    <copyright>2014</copyright>
-    <productVersion>4.1.0.0</productVersion>
-    <txtProductVersion>WildLog v4.1</txtProductVersion>
+    <copyright>2015</copyright>
+    <productVersion>4.2.0.0</productVersion>
+    <txtProductVersion>WildLog v4.2</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>

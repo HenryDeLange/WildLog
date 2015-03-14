@@ -296,7 +296,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
             chartData.add(new PieChart.Data(text + " (" + mapChartData.get(key).getCount() + ")", mapChartData.get(key).getCount()));
         }
-        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Moon Phase");
         return chart;

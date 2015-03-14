@@ -38,14 +38,14 @@ public class TimelineChart extends AbstractReport<Sighting> {
     private ChartType chartType = ChartType.TIMELINE_FOR_ALL;
     private Chart displayedChart;
     private ComboBox<String> cmbIntervalSize;
-    private final String[] options = new String[] {"5 minute", "15 minute", "30 minute", "1 hour", "2 hour", "4 hour", "6 hour"};
+    private final String[] options = new String[] {"5 minutes", "15 minutes", "30 minutes", "1 hour", "2 hours", "4 hours", "6 hours"};
 
     
     public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Timeline Reports", inLstData, inChartDescLabel);
+        super("Hourly Timeline Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
-        Button btnLineChart = new Button("Timeline for All");
+        Button btnLineChart = new Button("Observations Hourly Timeline (Line)");
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
@@ -57,7 +57,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnLineChart);
         // Timeline per element
-        Button btnStackedBarChart = new Button("Timeline per Creature");
+        Button btnStackedBarChart = new Button("Creatures Hourly Timeline (Line)");
         btnStackedBarChart.setCursor(Cursor.HAND);
         btnStackedBarChart.setOnAction(new EventHandler() {
             @Override
@@ -72,6 +72,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         lstCustomButtons.add(new Label("Timeline interval size:"));
         cmbIntervalSize = new ComboBox<>(FXCollections.observableArrayList(options));
         cmbIntervalSize.setCursor(Cursor.HAND);
+        cmbIntervalSize.setVisibleRowCount(10);
         cmbIntervalSize.getSelectionModel().clearSelection();
         cmbIntervalSize.getSelectionModel().select(3);
         cmbIntervalSize.setOnAction(new EventHandler() {
@@ -267,37 +268,32 @@ public class TimelineChart extends AbstractReport<Sighting> {
             hoursDevider = 4;
         }
         // Get start time
-        String hours;
-        if (inTime.getHour() < (24 / hoursDevider)) {
-            hours = "00";
+        StringBuilder timeString = new StringBuilder(15);
+        int temp = (inTime.getHour() / (24 / hoursDevider)) * (24 / hoursDevider);
+        if (temp < 10) {
+            timeString.append("0");
         }
-        else {
-            hours = "" + (inTime.getHour() / (24 / hoursDevider)) * (24 / hoursDevider);
+        timeString.append(temp);
+        timeString.append(":");
+        temp = (inTime.getMinute() / (60 / minsDevider)) * (60 / minsDevider);
+        if (temp < 10) {
+            timeString.append("0");
         }
-        if (hours.length() < 2) {
-            hours = "0" + hours;
+        timeString.append(temp);
+        timeString.append("\n");
+        temp = (((inTime.getHour() + (24 / hoursDevider)) / (24 / hoursDevider)) * (24 / hoursDevider) - 1);
+        if (temp < 10) {
+            timeString.append("0");
         }
-        String mins;
-        if (inTime.getMinute() < (60 / minsDevider)) {
-            mins = "00";
+        timeString.append(temp);
+        timeString.append(":");
+        temp = (((inTime.getMinute() + (60 / minsDevider)) / (60 / minsDevider)) * (60 / minsDevider) - 1);
+        if (temp < 10) {
+            timeString.append("0");
         }
-        else {
-            mins = "" + (inTime.getMinute() / (60 / minsDevider)) * (60 / minsDevider);
-        }
-        if (mins.length() < 2) {
-            mins = "0" + mins;
-        }
-        // Get end time
-        String endHours = "" + (((inTime.getHour() + (24 / hoursDevider)) / (24 / hoursDevider)) * (24 / hoursDevider) -1);
-        if (endHours.length() < 2) {
-            endHours = "0" + endHours;
-        }
-        String endMinutes = "" + (((inTime.getMinute() + (60 / minsDevider)) / (60 / minsDevider)) * (60 / minsDevider) - 1);
-        if (endMinutes.length() < 2) {
-            endMinutes = "0" + endMinutes;
-        }
+        timeString.append(temp);
         // Return result
-        return hours + ":" + mins + /*"\n  to  \n"*/"\n" + endHours + ":" + endMinutes;
+        return timeString.toString();
     }
     
 }

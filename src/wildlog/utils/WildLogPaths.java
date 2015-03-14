@@ -14,7 +14,7 @@ public enum WildLogPaths {
     /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
     DEFAUL_SETTINGS_FOLDER                (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
-    OPEN_H2                               (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.4.185.jar")),
+    OPEN_H2                               (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.4.186.jar")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
     OPEN_OPENMAP                          (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.

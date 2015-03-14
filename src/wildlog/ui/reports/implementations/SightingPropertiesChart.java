@@ -26,7 +26,6 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
-import wildlog.ui.reports.utils.UtilsReports;
 
 
 public class SightingPropertiesChart extends AbstractReport<Sighting> {
@@ -44,6 +43,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         // Pie charts
         lstCustomButtons.add(new Label("Pie Chart Categories:"));
         cmbCategories = new ComboBox<>(FXCollections.observableArrayList(options));
+        cmbCategories.setVisibleRowCount(10);
         cmbCategories.setCursor(Cursor.HAND);
         cmbCategories.getSelectionModel().clearSelection();
         cmbCategories.setOnAction(new EventHandler() {
@@ -160,7 +160,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
             PieChart.Data data = new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount());
             chartData.add(data);
         }
-        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle(title);
         return chart;

@@ -162,6 +162,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         return chart;
     }
     
+// FIXME: Baie stadig vir groot datasets. (Dalk ook tedoen met as daar 'n paar series is wat oor 'n groot x-axis gaan, basies te veel datums om te render?)
     private Chart createDailyReport(List<Sighting> inSightings, boolean inIsForAllObservations) {
         Map<String, Map<String, ReportDataWrapper>> mapSeries = new HashMap<>();
         // Get sorted (by date) Sightings list

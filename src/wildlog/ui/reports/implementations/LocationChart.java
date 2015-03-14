@@ -176,7 +176,7 @@ public class LocationChart extends AbstractReport<Sighting> {
         for (String key : keys) {
             chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
         }
-        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Place");
         return chart;

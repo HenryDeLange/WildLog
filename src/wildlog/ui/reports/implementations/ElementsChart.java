@@ -193,7 +193,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         for (String key : keys) {
             chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
         }
-        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Creature");
         return chart;
@@ -218,7 +218,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
             Set<String> setElements = mapGroupedData.get(key);
             chartData.add(new PieChart.Data(key + " (" + setElements.size() + ")", setElements.size()));
         }
-        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Creatures for each Creature Type");
         return chart;

@@ -151,7 +151,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             }
         }
         // Setup chart
-        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        PieChart chart = new PieChart(chartData);
         chart.getStylesheets().add("wildlog/ui/reports/chart/styling/ChartsDayNightTwilight.css");
         chart.getStyleClass().add("wl-pie-day-night-color");
         chart.setTitle("Number of Observations per Day, Night and Twilight period");

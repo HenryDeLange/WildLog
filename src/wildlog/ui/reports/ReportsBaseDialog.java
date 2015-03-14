@@ -38,6 +38,7 @@ import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.ui.reports.implementations.DayAndNightChart;
 import wildlog.ui.reports.implementations.DurationChart;
 import wildlog.ui.reports.implementations.ElementsChart;
+import wildlog.ui.reports.implementations.EventTimelineChart;
 import wildlog.ui.reports.implementations.LocationChart;
 import wildlog.ui.reports.implementations.MoonphaseChart;
 import wildlog.ui.reports.implementations.SightingPropertiesChart;
@@ -107,7 +108,10 @@ public class ReportsBaseDialog extends JFrame {
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
         Label lblInfo = new Label("Please select the report you would like to view from the list on the left.\n\n"
                 + "You can filter the number of Observation records that are used in the report by using the Filter buttons.\n\n"
-                + "Reports can be exported using the Export Report button.");
+                + "Reports can be exported using the Export Report button.\n\n"
+                + "Warning: \n"
+                + "The charts may display incorrectly when there are too many data series to fit on the chart area.\n"
+                + "Displaying some charts with very large datasets can make the application become unresponsive for a short while, try to reduce the amount of data displayed at a time.");
         lblInfo.setPadding(new Insets(20));
         lblInfo.setFont(new Font(18));
         lblInfo.setWrapText(true);
@@ -116,19 +120,19 @@ public class ReportsBaseDialog extends JFrame {
         sceneCharts.getStylesheets().add("wildlog/ui/reports/chart/styling/Charts.css");
         jfxReportChartPanel.setScene(sceneCharts);
         // Setup the default reports
-// TODO: Organiseer die reports dalk bietjie beter saam
-        List<AbstractReport<Sighting>> reports = new ArrayList<>(12);
+        List<AbstractReport<Sighting>> reports = new ArrayList<>(13);
         reports.add(new ElementsChart(lstFilteredData, lblReportDescription));
         reports.add(new LocationChart(lstFilteredData, lblReportDescription));
         reports.add(new VisitChart(lstFilteredData, lblReportDescription));
         reports.add(new SightingPropertiesChart(lstFilteredData, lblReportDescription));
-        reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription));
-        reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription));
         reports.add(new DayAndNightChart(lstFilteredData, lblReportDescription));
         reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription));
         reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription));
-        reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
         reports.add(new DurationChart(lstFilteredData, lblReportDescription));
+        reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
+        reports.add(new EventTimelineChart(lstFilteredData, lblReportDescription));
+        reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription));
+        reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription));
         reports.add(new TextReports(lstFilteredData, lblReportDescription));
         // Setup loading label
         final Label lblLoading = new Label("... LOADING ...");
@@ -443,7 +447,7 @@ public class ReportsBaseDialog extends JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
         );
 
         pack();

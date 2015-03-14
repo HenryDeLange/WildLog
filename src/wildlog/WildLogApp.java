@@ -152,18 +152,19 @@ public class WildLogApp extends Application {
                         con.setDoOutput(true);
                         // Have to get the input stream in order to actually send the request
                         try (InputStream inputStream = con.getInputStream()) {
-                            StringBuilder response = new StringBuilder(25);
-                            byte[] respBuffer = new byte[4096];
+                            StringBuilder response = new StringBuilder(5);
+                            byte[] respBuffer = new byte[1096];
                             while (inputStream.read(respBuffer) >= 0) {
                                 response.append(new String(respBuffer).trim());
                             }
-                           if (!WILDLOG_VERSION.equalsIgnoreCase(response.toString())) {
-                               JOptionPane.showMessageDialog(null, 
-                                       "A newer version of WildLog is available.\n"
-                                       + "To download the latest version visit http://www.mywild.co.za \n",
-                                       "WildLog " + response.toString() + " is now available", 
-                                       JOptionPane.INFORMATION_MESSAGE);
-                           }
+                            if (!WILDLOG_VERSION.equalsIgnoreCase(response.toString())) {
+                                System.out.println("WEB RESPONSE (getLatestWildLogVersion): " + response.toString());
+                                JOptionPane.showMessageDialog(null, 
+                                        "A newer version of WildLog is available.\n"
+                                        + "To download the latest version visit http://www.mywild.co.za \n",
+                                        "WildLog " + response.toString() + " is now available", 
+                                        JOptionPane.INFORMATION_MESSAGE);
+                            }
                         }
                     }
                     catch (Exception ex) {
@@ -230,12 +231,12 @@ public class WildLogApp extends Application {
                             printStream.print("&PartialLog=" + logFileSnippit);
                             // Have to get the input stream in order to actually send the request
                             try (InputStream inputStream = con.getInputStream()) {
-                                StringBuilder response = new StringBuilder(25);
-                                byte[] respBuffer = new byte[4096];
+                                StringBuilder response = new StringBuilder(35);
+                                byte[] respBuffer = new byte[1096];
                                 while (inputStream.read(respBuffer) >= 0) {
                                     response.append(new String(respBuffer).trim());
                                 }
-                            System.out.println("WEB RESPONSE (uploadWildLogInfo): " + response.toString());
+                                System.out.println("WEB RESPONSE (uploadWildLogInfo): " + response.toString());
                             }
                         }
                     }
@@ -596,6 +597,7 @@ public class WildLogApp extends Application {
                 }
             });
             btnNextMapPoint.setPreferredSize(new Dimension(60, 25));
+            btnNextMapPoint.setFocusPainted(false);
             btnNextMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif")));
             btnNextMapPoint.setCursor(new Cursor(Cursor.HAND_CURSOR));
             btnNextMapPoint.setToolTipText("Load the next Observation in the information panel.");

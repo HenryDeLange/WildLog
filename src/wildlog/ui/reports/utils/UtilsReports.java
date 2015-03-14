@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.text.Font;
@@ -138,22 +137,22 @@ public final class UtilsReports {
         }
     }
     
-    public static PieChart createPieChartWithStyleIndexReset(ObservableList<PieChart.Data> inLstData) {
+//    public static PieChart createPieChartWithStyleIndexReset(ObservableList<PieChart.Data> inLstData) {
         // FIXME: FOKKEN BELAGLIKKE HACK: Ek moet reflection gebruik om te kry dat elke nuwe donnerse chart se stylesheet index weer by 0 begin, 
         // andersins begin dit die default kleure gebruik nadat ek 'n paar keer 'n pie chart laai...
-        PieChart chart = new PieChart();
-        try {
-            Class<PieChart> cls = PieChart.class;
-            Field field = cls.getDeclaredField("uniqueId");
-            field.setAccessible(true);
-            field.setInt(chart, 0);
-        } 
-        catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        chart.setData(inLstData);
-        return chart;
-    }
+//        PieChart chart = new PieChart();
+//        try {
+//            Class<PieChart> cls = PieChart.class;
+//            Field field = cls.getDeclaredField("uniqueId");
+//            field.setAccessible(true);
+//            field.setInt(chart, 0);
+//        } 
+//        catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//        chart.setData(inLstData);
+//        return chart;
+//    }
 
     public static StackedBarChart createStackedBarChartWithStyleIndexBiggerThanEight(CategoryAxis inCategoryAxis, NumberAxis inNumberAxis,
             ObservableList<StackedBarChart.Series<String, Number>> inLstData) {
