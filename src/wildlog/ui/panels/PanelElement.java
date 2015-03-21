@@ -1381,7 +1381,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 else {
                     txtPrimaryName.setBackground(Color.RED);
                     element.setPrimaryName(oldName);
-                    txtPrimaryName.setText(txtPrimaryName.getText() + "_not_unique");
+                    txtPrimaryName.setText(txtPrimaryName.getText() + "_cannot_save");
                 }
 
                 lblElementName.setText(element.getPrimaryName());

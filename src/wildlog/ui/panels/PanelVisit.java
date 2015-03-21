@@ -1423,7 +1423,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 else {
                     txtName.setBackground(Color.RED);
                     visit.setName(oldName);
-                    txtName.setText(txtName.getText() + "_not_unique");
+                    txtName.setText(txtName.getText() + "_cannot_save");
                 }
 
                 lblVisitName.setText(txtName.getText() + " - [" + locationForVisit.getName() + "]");

@@ -1423,7 +1423,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 else {
                     txtName.setBackground(Color.RED);
                     locationWL.setName(oldName);
-                    txtName.setText(txtName.getText() + "_not_unique");
+                    txtName.setText(txtName.getText() + "_cannot_save");
                 }
 
                 lblLocation.setText(locationWL.getName());
