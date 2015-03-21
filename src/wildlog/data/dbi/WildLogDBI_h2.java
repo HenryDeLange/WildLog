@@ -807,7 +807,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.executeUpdate("UPDATE SIGHTINGS SET TIMEACCURACY = 'GOOD' WHERE TIMEACCURACY IS NULL OR TIMEACCURACY = ''");
             // Make changes to Files
             // NOTE: It is best to make sure that Clean Workspace in v3 has been run before upgrading
-            state.executeUpdate("UPDATE FILES SET ORIGINALPATH = replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/', '')");
+            state.executeUpdate("UPDATE FILES SET ORIGINALPATH = replace(replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/Files', 'Files'), 'WildLog/Files', 'Files')");
             // Create indexes
             state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
             state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");

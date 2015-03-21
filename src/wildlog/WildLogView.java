@@ -1984,7 +1984,7 @@ public final class WildLogView extends JFrame {
                                             wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(file).toString());
                                             if (app.getDBI().find(wildLogFile) == null) {
                                                 finalHandleFeedback.println("ERROR:     File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
-                                                finalHandleFeedback.println("+RESOLVED: Deleted the file from the database: " + wildLogFile.getDBFilePath());
+                                                finalHandleFeedback.println("+RESOLVED: Deleted the file from the Workspace: " + wildLogFile.getDBFilePath());
                                                 Files.deleteIfExists(file);
                                                 fileCount.counter++;
                                             }
