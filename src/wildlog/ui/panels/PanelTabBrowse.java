@@ -96,6 +96,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         app = inApp;
         tabbedPanel = inTabbedPanel;
         initComponents();
+        imgBrowsePhotos.setCursor(new Cursor(Cursor.MOVE_CURSOR));
         // Set some configuration for the tree browser
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer());

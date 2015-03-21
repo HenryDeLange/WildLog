@@ -26,15 +26,15 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel7" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="pnlViews" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnlFeatures" alignment="0" max="32767" attributes="0"/>
                   <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="pnlViews" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnDeleteSighting" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnAddSighting" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnGoSighting" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jLabel7" alignment="0" pref="130" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="pnlFeatures" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
@@ -42,9 +42,9 @@
                       <Component id="jScrollPane1" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="14" max="32767" attributes="0"/>
+                      <EmptySpace pref="22" max="32767" attributes="0"/>
                       <Component id="pnlFilters" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="12" max="32767" attributes="0"/>
+                      <EmptySpace pref="20" max="32767" attributes="0"/>
                       <Component id="lblImage" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -58,7 +58,7 @@
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="210" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblImage" min="-2" max="-2" attributes="0"/>
@@ -228,9 +228,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="btnGoVisit" alignment="0" pref="130" max="32767" attributes="1"/>
-                      <Component id="btnGoElement" alignment="0" pref="130" max="32767" attributes="1"/>
-                      <Component id="btnGoLocation" alignment="1" pref="130" max="32767" attributes="0"/>
+                      <Component id="btnGoVisit" alignment="0" max="32767" attributes="1"/>
+                      <Component id="btnGoElement" alignment="0" pref="120" max="32767" attributes="1"/>
+                      <Component id="btnGoLocation" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               </Group>
@@ -266,6 +266,9 @@
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGoLocationActionPerformed"/>
@@ -286,6 +289,9 @@
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGoVisitActionPerformed"/>
@@ -306,6 +312,9 @@
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGoElementActionPerformed"/>
@@ -337,8 +346,8 @@
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Component id="btnViewExport" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnViewReport" alignment="0" pref="130" max="32767" attributes="0"/>
-                      <Component id="btnViewMap" alignment="0" pref="130" max="32767" attributes="0"/>
+                      <Component id="btnViewReport" alignment="0" pref="120" max="32767" attributes="0"/>
+                      <Component id="btnViewMap" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
               </Group>
@@ -374,6 +383,9 @@
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewMapActionPerformed"/>
@@ -394,6 +406,9 @@
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewExportActionPerformed"/>
@@ -414,6 +429,9 @@
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewReportActionPerformed"/>

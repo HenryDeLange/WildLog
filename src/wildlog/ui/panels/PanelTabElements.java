@@ -272,7 +272,7 @@ public class PanelTabElements extends javax.swing.JPanel {
                             .addComponent(btnGoElement, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                             .addComponent(btnAddElement, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                             .addComponent(btnDeleteElement, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(10, 10, 10)
                         .addComponent(scrlElement))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

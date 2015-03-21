@@ -177,6 +177,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoLocation.setFocusPainted(false);
         btnGoLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoLocation.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoLocationActionPerformed(evt);
@@ -190,6 +191,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoVisit.setFocusPainted(false);
         btnGoVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoVisit.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnGoVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoVisitActionPerformed(evt);
@@ -203,6 +205,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoElement.setFocusPainted(false);
         btnGoElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoElement.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnGoElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoElementActionPerformed(evt);
@@ -215,9 +218,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlViewsLayout.createSequentialGroup()
                 .addGroup(pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnGoVisit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                    .addComponent(btnGoElement, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                    .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                    .addComponent(btnGoVisit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGoElement, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         pnlViewsLayout.setVerticalGroup(
@@ -242,6 +245,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnViewMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewMap.setFocusPainted(false);
         btnViewMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewMapActionPerformed(evt);
@@ -255,6 +259,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnViewExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewExport.setFocusPainted(false);
         btnViewExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewExport.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewExportActionPerformed(evt);
@@ -268,6 +273,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnViewReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewReport.setFocusPainted(false);
         btnViewReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewReport.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewReportActionPerformed(evt);
@@ -282,8 +288,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGap(0, 0, 0)
                 .addGroup(pnlFeaturesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnViewExport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnViewReport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                    .addComponent(btnViewMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                    .addComponent(btnViewReport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(btnViewMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         pnlFeaturesLayout.setVerticalGroup(
@@ -419,22 +425,22 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlViews, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlFeatures, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(pnlViews, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnDeleteSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAddSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGoSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(pnlFeatures, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnGoSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
                         .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -444,7 +450,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -518,7 +524,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                     app, app.getMainFrame(), "Edit an Existing Observation",
                     sighting, location, visit, element, this, false, false, false);
             dialog.setVisible(true);
-            doTheRefresh(this);
+//            doTheRefresh(this);
         }
         else {
             UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {

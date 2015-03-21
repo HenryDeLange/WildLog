@@ -107,11 +107,11 @@ public class ReportsBaseDialog extends JFrame {
         VBox vbox = new VBox();
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
         Label lblInfo = new Label("Please select the report you would like to view from the list on the left.\n\n"
-                + "You can filter the number of Observation records that are used in the report by using the Filter buttons.\n\n"
+                + "You can filter the number of Observations that are used in the report by using the buttons in the Report Data Filters section to the left.\n\n"
                 + "Reports can be exported using the Export Report button.\n\n"
                 + "Warning: \n"
                 + "The charts may display incorrectly when there are too many data series to fit on the chart area.\n"
-                + "Displaying some charts with very large datasets can make the application become unresponsive for a short while, try to reduce the amount of data displayed at a time.");
+                + "Displaying some charts with very large datasets can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.");
         lblInfo.setPadding(new Insets(20));
         lblInfo.setFont(new Font(18));
         lblInfo.setWrapText(true);
