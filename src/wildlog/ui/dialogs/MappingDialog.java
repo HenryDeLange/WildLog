@@ -36,6 +36,7 @@ public class MappingDialog extends JDialog {
             Sighting inSighting,
             List<Sighting> inLstSightings) {
         super(inApp.getMainFrame());
+        System.out.println("Using MappingDialog");
         // Set passed in values
         app = inApp;
         location = inLocationToMap;

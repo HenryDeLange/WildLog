@@ -32,6 +32,7 @@ public class AdvancedDialog extends JDialog {
 
     public AdvancedDialog(WildLogApp inApp, Visit inVisit, PanelVisit inPanelVisit) {
         super(inApp.getMainFrame());
+        System.out.println("Using AdvancedDialog");
         // Set passed in values
         app = inApp;
         visit = inVisit;

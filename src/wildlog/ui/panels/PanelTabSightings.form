@@ -29,12 +29,10 @@
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="pnlViews" alignment="0" max="32767" attributes="0"/>
                   <Component id="pnlFeatures" alignment="0" max="32767" attributes="0"/>
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Component id="btnDeleteSighting" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnAddSighting" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnGoSighting" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jLabel7" alignment="0" pref="130" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="btnDeleteSighting" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnAddSighting" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnGoSighting" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jLabel7" alignment="0" pref="130" max="32767" attributes="0"/>
               </Group>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" alignment="1" attributes="0">

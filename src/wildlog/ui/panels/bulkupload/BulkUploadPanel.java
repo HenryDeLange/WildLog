@@ -82,6 +82,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, String inLocationName, String inExistingVisitName, 
             Path inImportPath, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
+        System.out.println("Using BulkUploadPanel");
         app = inApp;
         selectedLocationName = inLocationName;
         existingVisitName = inExistingVisitName;

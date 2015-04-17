@@ -13,11 +13,12 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class MergeElementsDialog extends JDialog {
-    // Variables:
-    private WildLogApp app;
+    private final WildLogApp app;
 
 
     public MergeElementsDialog(WildLogApp inApp) {
+        super();
+        System.out.println("Using MergeElementsDialog");
         app = inApp;
         initComponents();
         loadLists();

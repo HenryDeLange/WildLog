@@ -48,6 +48,7 @@ public class GPSDialog extends JDialog {
 
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
+        System.out.println("Using GPSDialog");
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JFrames)
@@ -57,6 +58,7 @@ public class GPSDialog extends JDialog {
 
     public GPSDialog(WildLogApp inApp, JDialog inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
+        System.out.println("Using GPSDialog");
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JDialogs)

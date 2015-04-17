@@ -58,6 +58,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
 
     public WorkspaceExportDialog(WildLogApp inApp, Path inDefaultDestination, List<Sighting> inLimitedList) {
+        super();
+        System.out.println("Using WorkspaceExportDialog");
         app = inApp;
         defaultDestination = inDefaultDestination;
         lstSightings = inLimitedList;

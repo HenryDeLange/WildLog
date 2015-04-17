@@ -2,6 +2,8 @@ package wildlog.ui.panels;
 
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -54,6 +57,25 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
         // Add listner to auto resize columns.
         UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);
+        // "Hack" to make the buttons clickable when the mouse scrolles over the cell
+        final JTable tableHandle = tblSightings;
+        tblSightings.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent inEvent) {
+                int row = tableHandle.rowAtPoint(inEvent.getPoint());
+                int col = tableHandle.columnAtPoint(inEvent.getPoint());
+                if (row != tableHandle.getEditingRow() || col != tableHandle.getEditingColumn()) {
+                    try {
+                        if (row >= 0 && row < tableHandle.getModel().getRowCount() && col >= 0 && col < tableHandle.getModel().getColumnCount()) {
+                            tableHandle.editCellAt(row, col);
+                        }
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -606,8 +628,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-// FIXME: Daar is 'n probleem as nuwe visits, sightings ens ge-add was want dan is hulle nie in die lyste nie...        
-    // Setup full lists for the first time if they were null
+// FIXME: Daar is steeds 'n probleem as nuwe visits, sightings ens ge-add was of die name was verander, want dan is hulle nie in die lyste nie...
+        // Setup full lists for the first time if they were null
         if (lstFilteredLocations == null) {
             lstFilteredLocations = app.getDBI().list(new Location());
         }
@@ -644,6 +666,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnGoVisitActionPerformed
 
     private void btnFilterPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterPropertiesActionPerformed
+        showFilterDialog();
+    }//GEN-LAST:event_btnFilterPropertiesActionPerformed
+
+    public void showFilterDialog() {
         FilterPropertiesDialog<Sighting> dialog = new FilterPropertiesDialog<>(app.getMainFrame(), lstOriginalData, filterProperties);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
@@ -652,8 +678,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                     filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
         }
-    }//GEN-LAST:event_btnFilterPropertiesActionPerformed
-
+    }
+    
     private void btnFilterElementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementsActionPerformed
         FilterDataListDialog<Element> dialog = new FilterDataListDialog<Element>(app.getMainFrame(), 
                 app.getDBI().list(new Element()), lstFilteredElements);
@@ -758,7 +784,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void setupDefaultFilters() {
         // Setup new FilterProperties
         filterProperties = new FilterProperties();
-        filterProperties.setStartDate(LocalDate.now().minusMonths(3));
+        filterProperties.setStartDate(LocalDate.now().minusDays(3));
         filterProperties.setEndDate(LocalDate.now());
         filterProperties.setStartTime(LocalTime.MIN);
         filterProperties.setEndTime(LocalTime.MAX);
@@ -781,6 +807,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         filterProperties.setTags(new ArrayList<>(0));
         filterProperties.setIncludeEmptyTags(true);
         filterProperties.setElementTypes(new ArrayList<>(0));
+        // Also reset the filter lists
+        lstFilteredLocations = app.getDBI().list(new Location());
+        lstFilteredVisits = app.getDBI().list(new Visit());
+        lstFilteredElements = app.getDBI().list(new Element());
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

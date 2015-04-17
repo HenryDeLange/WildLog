@@ -15,10 +15,12 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class MergeLocationDialog extends JDialog {
-    private WildLogApp app;
+    private final WildLogApp app;
 
 
     public MergeLocationDialog(WildLogApp inApp) {
+        super();
+        System.out.println("Using MergeLocationDialog");
         app = inApp;
         initComponents();
         loadLists();

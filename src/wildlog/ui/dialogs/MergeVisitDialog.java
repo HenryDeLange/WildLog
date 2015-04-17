@@ -15,10 +15,12 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class MergeVisitDialog extends JDialog {
-    private WildLogApp app;
+    private final WildLogApp app;
 
 
     public MergeVisitDialog(WildLogApp inApp) {
+        super();
+        System.out.println("Using MergeVisitDialog");
         app = inApp;
         initComponents();
         loadLists();

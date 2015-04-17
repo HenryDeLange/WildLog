@@ -46,6 +46,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     
     public FilterPropertiesDialog(JFrame inParent, List<T> inLstOriginalData, FilterProperties inFilterProperties) {
         super(inParent);
+        System.out.println("Using FilterPropertiesDialog");
         initComponents();
         filterProperties = inFilterProperties;
         // Setup the escape key
@@ -502,7 +503,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(5, 5, 5)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel14)
@@ -1170,6 +1171,12 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     if (elementType.equals(inSighting.getCachedElementType())) {
                         found = true;
                         break;
+                    }
+                    if (elementType.equals(ElementType.UNKNOWN)) {
+                        if (inSighting.getCachedElementType() == null || ElementType.NONE.equals(inSighting.getCachedElementType())) {
+                            found = true;
+                            break;
+                        }
                     }
                 }
                 if (!found) {

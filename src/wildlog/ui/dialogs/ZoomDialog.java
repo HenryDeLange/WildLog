@@ -24,6 +24,7 @@ public class ZoomDialog extends javax.swing.JDialog {
     
     public ZoomDialog(JFrame inParent, List<Path> inFilesToView, int inStartIndex) {
         super(inParent, true);
+        System.out.println("Using ZoomDialog");
         filesToView = inFilesToView;
         fileIndex = inStartIndex;
         initComponents();

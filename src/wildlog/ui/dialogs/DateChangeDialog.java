@@ -21,6 +21,7 @@ public class DateChangeDialog extends JDialog {
     
     public DateChangeDialog(WildLogApp inApp, JFrame inParent, Visit inVisit) {
         super(inParent);
+        System.out.println("Using DateChangeDialog");
         visit = inVisit;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp);
@@ -31,6 +32,7 @@ public class DateChangeDialog extends JDialog {
 
     public DateChangeDialog(WildLogApp inApp, JDialog inParent, Visit inVisit) {
         super(inParent);
+        System.out.println("Using DateChangeDialog");
         visit = inVisit;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp);

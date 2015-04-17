@@ -39,6 +39,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
      */
     public FilterDataListDialog(JFrame inParent, List<Sighting> inLstOriginalData, List<T> inLstOldSelectedData, Class<T> inClassType) {
         super(inParent);
+        System.out.println("Using FilterDataListDialog");
         // Do the initial shared setup
         doSharedSetup_pre(inParent);
         // Load table content
@@ -106,6 +107,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
      */
     public FilterDataListDialog(JFrame inParent, List<T> inLstOriginalData, List<T> inLstOldSelectedData) {
         super(inParent);
+        System.out.println("Using FilterDataListDialog");
         // Do the initial shared setup
         doSharedSetup_pre(inParent);
         // Load table content

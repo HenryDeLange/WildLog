@@ -65,6 +65,7 @@ public class ReportsBaseDialog extends JFrame {
     
     public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
         super(inTitle);
+        System.out.println("Using ReportsBaseDialog");
         lstOriginalData = inSightings;
         // Get a copy for the filter list
         lstFilteredData = getCopiedList(lstOriginalData);

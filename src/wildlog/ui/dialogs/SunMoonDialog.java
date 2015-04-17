@@ -35,6 +35,7 @@ public class SunMoonDialog extends JDialog {
     /** Creates new form GPSDialog */
     public SunMoonDialog(WildLogApp inApp, DataObjectWithGPS inDataObjectWithGPS) {
         super();
+        System.out.println("Using SunMoonDialog");
         app = inApp;
         // Initialize the auto generated code
         initComponents();

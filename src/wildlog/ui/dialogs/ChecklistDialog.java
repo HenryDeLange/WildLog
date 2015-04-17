@@ -30,14 +30,15 @@ import wildlog.ui.utils.UtilsUI;
 
 
 public class ChecklistDialog extends JDialog {
-     // Variables:
     private WildLogApp app;
-    private PanelNeedsRefreshWhenDataChanges panelToRefresh;
-    private Location location;
-    private Visit visit;
+    private final PanelNeedsRefreshWhenDataChanges panelToRefresh;
+    private final Location location;
+    private final Visit visit;
 
-    /** Creates new form PanelMoveVisit */
+    
     public ChecklistDialog(WildLogApp inApp, JDialog inParent, Location inLocation, Visit inVisit, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
+        super(inParent);
+        System.out.println("Using ChecklistDialog");
         app = inApp;
         initComponents();
         loadElementList();

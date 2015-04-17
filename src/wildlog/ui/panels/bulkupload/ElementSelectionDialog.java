@@ -34,6 +34,7 @@ public class ElementSelectionDialog extends JDialog {
 
     public ElementSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedElement) {
         super(inParent);
+        System.out.println("Using ElementSelectionDialog");
         app = inApp;
         initComponents();
         // Setup the escape key
@@ -71,7 +72,7 @@ public class ElementSelectionDialog extends JDialog {
             @Override
             public void run() {
                 for (int t = 0; t < tblElement.getRowCount(); t++) {
-                    if (tblElement.getModel().getValueAt(t, columnToUse).equals(inSelectedElement)) {
+                    if (tblElement.getValueAt(t, columnToUse).equals(inSelectedElement)) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getRowCount()) - 1) {

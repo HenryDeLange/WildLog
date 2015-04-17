@@ -40,6 +40,7 @@ public class SlideshowDialog extends JDialog {
     
     public SlideshowDialog(WildLogApp inApp, Visit inVisit, Location inLocation, Element inElement) {
         super();
+        System.out.println("Using SlideshowDialog");
         // Set passed in values
         app = inApp;
         visit = inVisit;

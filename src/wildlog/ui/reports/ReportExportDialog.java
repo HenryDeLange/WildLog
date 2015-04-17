@@ -37,6 +37,7 @@ public class ReportExportDialog extends JDialog {
     
     public ReportExportDialog(JFrame inParent, BufferedImage inChartImage, Node inChartNode, String inReportName, List<Sighting> inLstSightings) {
         super(inParent);
+        System.out.println("Using ReportExportDialog");
         // Set passed in values
         chartImage = inChartImage;
         chartNode = inChartNode;

@@ -41,6 +41,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
+import wildlog.ui.helpers.renderers.ButtonTableRenderer;
 import wildlog.ui.helpers.renderers.DateCellRenderer;
 import wildlog.ui.helpers.renderers.DateTimeCellRenderer;
 import wildlog.ui.helpers.renderers.IconCellRenderer;
@@ -49,6 +50,7 @@ import wildlog.ui.helpers.renderers.TextCellRenderer;
 import wildlog.ui.helpers.renderers.WildLogDataModelWrapperCellRenderer;
 import wildlog.ui.helpers.renderers.WildLogTableModel;
 import wildlog.ui.helpers.renderers.WildLogTableModelDataWrapper;
+import wildlog.ui.helpers.renderers.editors.ButtonTableEditor;
 import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -798,15 +800,24 @@ public final class UtilsTableGenerator {
                     // Setup row selection
                     setupPreviousRowSelection(inTable, selectedRowIDs, 8);
                 }
-                else {
-                    inTable.setModel(new DefaultTableModel(new String[]{"No Observations were found that match the currently active filters"}, 0));
+                if (inTable.getModel().getRowCount() == 0) {
+                    inTable.setRowHeight(50);
+                    inTable.setModel(new DefaultTableModel(new String[]{"No Observations were found that match the currently active filters."}, 1));
+                    inTable.getModel().setValueAt("Filter Observations. (Click here to open the Filter Observations dialog "
+                            + "or use the buttons below to refine the criteria.)", 0, 0);
+                    inTable.setDefaultRenderer(Object.class, new ButtonTableRenderer());
+                    inTable.setDefaultEditor(Object.class, new ButtonTableEditor());
                 }
                 // Need to wait for the table to finish loading before updating the label
                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
+                            int rowCount = inTable.getModel().getRowCount();
+                            if (inTable.getRowHeight() == 50) {
+                                rowCount = 0;
+                            }
                             String text = "<html>"
-                                    + "Showing " + inTable.getModel().getRowCount() + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations.";
+                                    + "Showing " + rowCount + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations.";
                             if (inFilterProperties.getStartDate() != null) {
                                 text = text + "<br/>Filtering on all Observations from " + inFilterProperties.getStartDate().format(UtilsTime.WL_DATE_FORMATTER);
                             }
