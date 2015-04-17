@@ -10,6 +10,7 @@ public enum ElementType {
     INSECT("Insect"),
     PLANT("Plant"),
     OTHER("Other"),
+    UNKNOWN("Unknown"),
     NONE("");
 
     private final String text;
