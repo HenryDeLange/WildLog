@@ -7,3 +7,8 @@ Maak seker die non-bundled zip se .bat en .exe werk reg.
 
 -------------------------------------------
 Om 'n LINUX .sh file glo double-clickable te maak kan mens seker die UI gebruik of die "chmod +x filename.sh" command gebruik.
+
+-------------------------------------------
+
+Die ZIP en MSI is dieselfde, met die JRE gebundle.
+Die portable ZIP version is dieselfde as die res maar net sonder die JRE.
