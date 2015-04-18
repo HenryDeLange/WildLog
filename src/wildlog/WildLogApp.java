@@ -200,7 +200,7 @@ public class WildLogApp extends Application {
                         ex.printStackTrace(System.err);
                     }
                 }
-            }, 15, TimeUnit.SECONDS);
+            }, 10, TimeUnit.SECONDS);
             // Try to upload log data
             executor.schedule(new Runnable() {
                 @Override
@@ -273,7 +273,7 @@ public class WildLogApp extends Application {
                         ex.printStackTrace(System.err);
                     }
                 }
-            }, 30, TimeUnit.SECONDS);
+            }, 20, TimeUnit.SECONDS);
             executor.shutdown();
         }
     }
