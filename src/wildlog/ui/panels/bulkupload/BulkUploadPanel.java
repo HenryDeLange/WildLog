@@ -821,6 +821,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         for (File testDuplicateFiles : files) {
                                             if (testDuplicateFiles.equals(imageWrapper.getFile().toFile())) {
                                                 uploadListContainsDuplicates = true;
+                                                break;
                                             }
                                         }
                                     }

@@ -11,7 +11,6 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -457,15 +456,13 @@ public class UtilsImageProcessing {
      * @param inOriginalAbsolutePath
      * @param inSize
      */
-    public static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
+    private static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
         // Resize the file and then save the thumbnail to into WildLog's folders
 // TODO: Soek 'n beter manier om die image te save wat nie dependant is op die ImageIcon nie...
         ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalAbsolutePath, inSize.getSize());
         try {
             // Make the folder
-            if (!Files.exists(inThumbnailAbsolutePath, LinkOption.NOFOLLOW_LINKS)) {
-                Files.createDirectories(inThumbnailAbsolutePath);
-            }
+            Files.createDirectories(inThumbnailAbsolutePath.getParent());
             // Create the image to save
             BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = bufferedImage.createGraphics();
@@ -476,9 +473,10 @@ public class UtilsImageProcessing {
         }
         catch (IOException ex) {
             // FIXME: This can generate "Access is denied" IO exceptions when multiple threads try to create the icons for the first time. 
-            //        I'm OK with that and don't want to add sync blocks just to hadle that initial posible scenario. 
+            //        I'm OK with that and don't want to add sync blocks just to handle that initial posible scenario. 
             //        If it continues or gives problems with "real" files, then fix it properly...
             ex.printStackTrace(System.err);
+            System.err.println("Current thread name was -> " + Thread.currentThread().getName());
         }
     }
 

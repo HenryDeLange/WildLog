@@ -168,11 +168,22 @@ public final class UtilsFileProcessing {
         // (Dit sal dan hopelik 'n beter user experience gee as die thumbnails klaar daar is teen die tyd dat mens dit in die app view...)
         if (inCreateThumbnails) {
             if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
-                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                if (inTheLock != null) {
+                    synchronized (inTheLock) {
+                        // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                    }
+                }
+                else {
+                    // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                }
             }
         }
     }

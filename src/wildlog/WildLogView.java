@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
@@ -2037,7 +2036,7 @@ public final class WildLogView extends JFrame {
                                 filesWithoutPath++;
                                 continue;
                             }
-                            if (!Files.exists(wildLogFile.getAbsolutePath(), LinkOption.NOFOLLOW_LINKS)) {
+                            if (!Files.exists(wildLogFile.getAbsolutePath())) {
                                 finalHandleFeedback.println("ERROR:     File record in the database can't be found on disk. FilePath: " + wildLogFile.getDBFilePath());
                                 finalHandleFeedback.println("+RESOLVED: Deleted the database file record.");
                                 app.getDBI().delete(wildLogFile);
