@@ -25,14 +25,14 @@ import wildlog.utils.WildLogPaths;
 
 
 public class AdvancedDialog extends JDialog {
-    private WildLogApp app;
-    private Visit visit;
-    private PanelVisit panelVisit;
+    private final WildLogApp app;
+    private final Visit visit;
+    private final PanelVisit panelVisit;
 
 
     public AdvancedDialog(WildLogApp inApp, Visit inVisit, PanelVisit inPanelVisit) {
         super(inApp.getMainFrame());
-        System.out.println("Using AdvancedDialog");
+        System.out.println("[AdvancedDialog]");
         // Set passed in values
         app = inApp;
         visit = inVisit;

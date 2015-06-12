@@ -22,13 +22,14 @@ import wildlog.utils.WildLogPaths;
 
 
 public class MappingDialog extends JDialog {
-    private WildLogApp app;
-    private Location location;
-    private Element element;
-    private Visit visit;
-    private Sighting sighting;
-    private List<Sighting> lstSightings;
+    private final WildLogApp app;
+    private final Location location;
+    private final Element element;
+    private final Visit visit;
+    private final Sighting sighting;
+    private final List<Sighting> lstSightings;
 
+    
     public MappingDialog(WildLogApp inApp,
             Location inLocationToMap,
             Element inElementToMap,
@@ -36,7 +37,7 @@ public class MappingDialog extends JDialog {
             Sighting inSighting,
             List<Sighting> inLstSightings) {
         super(inApp.getMainFrame());
-        System.out.println("Using MappingDialog");
+        System.out.println("[MappingDialog]");
         // Set passed in values
         app = inApp;
         location = inLocationToMap;

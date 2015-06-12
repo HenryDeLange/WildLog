@@ -1406,6 +1406,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        System.out.println("[PanelVisit-Save]");
         if (UtilsData.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = lastSavedVisit.getName();

@@ -30,7 +30,7 @@ public class LocationSelectionDialog extends JDialog {
 
     public LocationSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedLocation) {
         super(inParent);
-        System.out.println("Using LocationSelectionDialog");
+        System.out.println("[LocationSelectionDialog]");
         app = inApp;
         initComponents();
         // Setup the escape key

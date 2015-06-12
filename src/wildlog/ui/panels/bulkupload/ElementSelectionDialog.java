@@ -34,7 +34,7 @@ public class ElementSelectionDialog extends JDialog {
 
     public ElementSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedElement) {
         super(inParent);
-        System.out.println("Using ElementSelectionDialog");
+        System.out.println("[ElementSelectionDialog]");
         app = inApp;
         initComponents();
         // Setup the escape key

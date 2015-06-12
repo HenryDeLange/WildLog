@@ -766,7 +766,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel62.setText("Endangered:");
         jLabel62.setName("jLabel62"); // NOI18N
 
-        cmbType.setMaximumRowCount(9);
+        cmbType.setMaximumRowCount(11);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(element.getType());
         cmbType.setFocusable(false);
@@ -1364,6 +1364,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        System.out.println("[PanelElement-Save]");
         if (UtilsData.checkCharacters(txtPrimaryName.getText().trim())) {
             if (txtPrimaryName.getText().length() > 0) {
                 String oldName = lastSavedElement.getPrimaryName();

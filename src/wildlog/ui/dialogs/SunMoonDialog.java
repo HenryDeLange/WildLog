@@ -27,15 +27,15 @@ import wildlog.ui.utils.UtilsUI;
 
 
 public class SunMoonDialog extends JDialog {
-    private DataObjectWithGPS dataObjectWithGPS;
-    private WildLogApp app;
+    private final DataObjectWithGPS dataObjectWithGPS;
+    private final WildLogApp app;
     private Date date;
     private TimeFormat prevTimeFormat;
 
     /** Creates new form GPSDialog */
     public SunMoonDialog(WildLogApp inApp, DataObjectWithGPS inDataObjectWithGPS) {
         super();
-        System.out.println("Using SunMoonDialog");
+        System.out.println("[SunMoonDialog]");
         app = inApp;
         // Initialize the auto generated code
         initComponents();

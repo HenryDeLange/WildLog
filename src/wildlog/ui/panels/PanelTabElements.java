@@ -151,7 +151,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         pnlFilters.setBackground(new java.awt.Color(201, 218, 199));
         pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Filter Creatures", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
-        cmbType.setMaximumRowCount(9);
+        cmbType.setMaximumRowCount(11);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(ElementType.NONE);
         cmbType.setFocusable(false);

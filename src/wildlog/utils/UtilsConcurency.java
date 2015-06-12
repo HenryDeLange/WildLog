@@ -117,11 +117,12 @@ public final class UtilsConcurency {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
+                            final int TOTAL_RETRIES_ALLOWED = 10;
                             int count = 0;
                             try {
-                                while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < 10) {
+                                while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < TOTAL_RETRIES_ALLOWED) {
                                     count++;
-                                    System.out.println("ExecutorService expired while shutting down... Retry: " + count);
+                                    System.out.println("ExecutorService expired while shutting down... Retry: " + count + " of " + TOTAL_RETRIES_ALLOWED);
                                 }
                             }
                             catch (InterruptedException ex) {

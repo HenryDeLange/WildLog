@@ -691,7 +691,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         });
         sightingIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, -1, -1));
 
-        cmbElementType.setMaximumRowCount(9);
+        cmbElementType.setMaximumRowCount(11);
         cmbElementType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementType.setSelectedItem(ElementType.NONE);
         cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1211,6 +1211,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSightingActionPerformed
+        System.out.println("[PanelSighting-Save]");
         // Check the required fields' borders
         Color green = new Color(0,204,51);
         if (element == null) {

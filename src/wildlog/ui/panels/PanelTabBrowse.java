@@ -194,7 +194,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        cmbElementTypesBrowseTab.setMaximumRowCount(9);
+        cmbElementTypesBrowseTab.setMaximumRowCount(11);
         cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementTypesBrowseTab.setSelectedItem(ElementType.NONE);
         cmbElementTypesBrowseTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -562,6 +562,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }// </editor-fold>//GEN-END:initComponents
 
     private void rdbBrowseLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseLocationItemStateChanged
+        System.out.println("[PanelTabBrowse-Locations]");
         if (rdbBrowseLocation.isSelected()) {
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
@@ -586,6 +587,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnRefreshBrowseTreeActionPerformed
 
     private void rdbBrowseElementItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseElementItemStateChanged
+        System.out.println("[PanelTabBrowse-Elements]");
         if (rdbBrowseElement.isSelected()) {
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
@@ -609,6 +611,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_cmbElementTypesBrowseTabActionPerformed
 
     private void rdbBrowseDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseDateItemStateChanged
+        System.out.println("[PanelTabBrowse-Date]");
         if (rdbBrowseDate.isSelected()) {
             dtpStartDate.setVisible(true);
             dtpEndDate.setVisible(true);

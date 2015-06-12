@@ -28,6 +28,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -76,7 +77,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    public static String WILDLOG_VERSION = "4.2.1";
+    public static String WILDLOG_VERSION = "4.2.2";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static boolean useNimbusLF = false;
@@ -162,6 +163,7 @@ public class WildLogApp extends Application {
                             byte[] respBuffer = new byte[1096];
                             while (inputStream.read(respBuffer) >= 0) {
                                 response.append(new String(respBuffer).trim());
+                                respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
                             }
                             if (!WILDLOG_VERSION.equalsIgnoreCase(response.toString())) {
                                 System.out.println("WEB RESPONSE (getLatestWildLogVersion): " + response.toString());
@@ -238,6 +240,8 @@ public class WildLogApp extends Application {
                                     else {
                                         logFileSnippit = logInfo;
                                     }
+                                    // Om die file se path beter te lees in die uploaded log (want dit haal die snaakse karakters uit)
+                                    logFileSnippit = logFileSnippit.replace(File.separatorChar, '^');
                                 }
                                 catch (IOException  ex) {
                                     ex.printStackTrace(System.err);
@@ -264,6 +268,7 @@ public class WildLogApp extends Application {
                                 byte[] respBuffer = new byte[1096];
                                 while (inputStream.read(respBuffer) >= 0) {
                                     response.append(new String(respBuffer).trim());
+                                    respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
                                 }
                                 System.out.println("WEB RESPONSE (uploadWildLogInfo): " + response.toString());
                             }
@@ -274,6 +279,33 @@ public class WildLogApp extends Application {
                     }
                 }
             }, 20, TimeUnit.SECONDS);
+            // Reduce the size of the log file if it is getting too big
+            if (logToFile) {
+                executor.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        Path logFile = ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt");
+                        if (logFile.toFile().length() > 131072) {
+                            try {
+                                String logFileSnippit;
+                                byte[] fileBytes = Files.readAllBytes(logFile);
+                                String logInfo = new String(fileBytes, Charset.defaultCharset());
+                                int logLength = 99999;
+                                if (logInfo.length() > logLength) {
+                                    logFileSnippit = "...FILE TRUNCATED..." + System.lineSeparator() + logInfo.substring(logInfo.length() - logLength);
+                                }
+                                else {
+                                    logFileSnippit = logInfo;
+                                }
+                                Files.write(logFile, logFileSnippit.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+                            }
+                            catch (IOException ex) {
+                                ex.printStackTrace(System.err);
+                            }
+                        }
+                    }
+                }, 40, TimeUnit.SECONDS);
+            }
             executor.shutdown();
         }
     }
@@ -507,6 +539,7 @@ public class WildLogApp extends Application {
                 + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         System.out.println("WildLog Setting Folder: " + ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
         System.out.println("WildLog Application Folder: " + ACTIVEWILDLOG_CODE_FOLDER.toAbsolutePath().toString());
+        System.out.println("WildLog Version: " + WILDLOG_VERSION);
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
     }

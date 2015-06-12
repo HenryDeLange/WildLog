@@ -16,12 +16,12 @@ import wildlog.ui.utils.UtilsTime;
 
 public class DateChangeDialog extends JDialog {
     private WildLogApp app;
-    private Visit visit;
+    private final Visit visit;
 
     
     public DateChangeDialog(WildLogApp inApp, JFrame inParent, Visit inVisit) {
         super(inParent);
-        System.out.println("Using DateChangeDialog");
+        System.out.println("[DateChangeDialog]");
         visit = inVisit;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp);
@@ -32,7 +32,7 @@ public class DateChangeDialog extends JDialog {
 
     public DateChangeDialog(WildLogApp inApp, JDialog inParent, Visit inVisit) {
         super(inParent);
-        System.out.println("Using DateChangeDialog");
+        System.out.println("[DateChangeDialog]");
         visit = inVisit;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp);

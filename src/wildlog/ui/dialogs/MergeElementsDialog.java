@@ -18,7 +18,7 @@ public class MergeElementsDialog extends JDialog {
 
     public MergeElementsDialog(WildLogApp inApp) {
         super();
-        System.out.println("Using MergeElementsDialog");
+        System.out.println("[MergeElementsDialog]");
         app = inApp;
         initComponents();
         loadLists();

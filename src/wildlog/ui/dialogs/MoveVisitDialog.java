@@ -17,9 +17,10 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 public class MoveVisitDialog extends JDialog {
     private final WildLogApp app;
 
+    
     public MoveVisitDialog(WildLogApp inApp, Visit inVisit) {
         super();
-        System.out.println("Using MoveVisitDialog");
+        System.out.println("[MoveVisitDialog]");
         app = inApp;
         initComponents();
         loadLists();

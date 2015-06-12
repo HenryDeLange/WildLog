@@ -38,7 +38,7 @@ public class ChecklistDialog extends JDialog {
     
     public ChecklistDialog(WildLogApp inApp, JDialog inParent, Location inLocation, Visit inVisit, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         super(inParent);
-        System.out.println("Using ChecklistDialog");
+        System.out.println("[ChecklistDialog]");
         app = inApp;
         initComponents();
         loadElementList();

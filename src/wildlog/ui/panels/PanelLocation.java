@@ -1406,6 +1406,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        System.out.println("[PanelLocation-Save]");
         if (UtilsData.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = lastSavedLocation.getName();

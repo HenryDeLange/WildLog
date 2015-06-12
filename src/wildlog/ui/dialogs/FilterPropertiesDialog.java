@@ -46,7 +46,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     
     public FilterPropertiesDialog(JFrame inParent, List<T> inLstOriginalData, FilterProperties inFilterProperties) {
         super(inParent);
-        System.out.println("Using FilterPropertiesDialog");
+        System.out.println("[FilterPropertiesDialog]");
         initComponents();
         filterProperties = inFilterProperties;
         // Setup the escape key

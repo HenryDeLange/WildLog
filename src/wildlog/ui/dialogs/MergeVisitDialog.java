@@ -20,7 +20,7 @@ public class MergeVisitDialog extends JDialog {
 
     public MergeVisitDialog(WildLogApp inApp) {
         super();
-        System.out.println("Using MergeVisitDialog");
+        System.out.println("[MergeVisitDialog]");
         app = inApp;
         initComponents();
         loadLists();

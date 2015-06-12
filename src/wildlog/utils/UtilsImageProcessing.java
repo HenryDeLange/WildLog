@@ -48,6 +48,7 @@ public class UtilsImageProcessing {
         FileImageInputStream inputStream = null;
         try {
 //            long startTime = Calendar.getInstance().getTimeInMillis();
+// TODO: Kyk impak van die log met al die errors wat hier gebeur... Return dalk 'n nuwe "File Error" system image
             inputStream = new FileImageInputStream(inAbsolutePathToScale.toFile());
             Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
             imageReader = imageReaderList.next();

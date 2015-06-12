@@ -32,9 +32,10 @@ public class ExportDialog extends JDialog {
     private final Sighting sighting;
     private List<Sighting> lstSightings;
 
+    
     public ExportDialog(WildLogApp inApp, Location inLocation, Element inElement, Visit inVisit, Sighting inSighting, List<Sighting> inLstSightings) {
         super(inApp.getMainFrame());
-        System.out.println("Using ExportDialog");
+        System.out.println("[ExportDialog]");
         // Set passed in values
         app = inApp;
         location = inLocation;

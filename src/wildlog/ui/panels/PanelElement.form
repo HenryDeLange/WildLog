@@ -968,7 +968,7 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="cmbType">
               <Properties>
-                <Property name="maximumRowCount" type="int" value="9"/>
+                <Property name="maximumRowCount" type="int" value="11"/>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new DefaultComboBoxModel(wildlog.data.enums.ElementType.values())" type="code"/>
                 </Property>

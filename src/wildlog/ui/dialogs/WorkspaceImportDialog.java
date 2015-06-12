@@ -47,7 +47,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
 
     public WorkspaceImportDialog(WildLogApp inApp, Path inImportPath) {
         super();
-        System.out.println("Using WorkspaceImportDialog");
+        System.out.println("[WorkspaceImportDialog]");
         app = inApp;
         importWorkspace = inImportPath;
         try {
