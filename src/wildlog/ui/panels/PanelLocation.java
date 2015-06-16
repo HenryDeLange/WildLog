@@ -119,8 +119,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void setupUI() {
         initComponents();
         imageIndex = 0;
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(locationWL.getWildLogFileID()));
-        if (fotos.size() > 0) {
+        int fotoCount = app.getDBI().count(new WildLogFile(locationWL.getWildLogFileID()));
+        if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
         else {
@@ -177,18 +177,17 @@ public class PanelLocation extends PanelCanSetupHeader {
                 locationWL.getWildLogFileID(),
                 Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(locationWL.getName()),
                 inFiles.toArray(new File[inFiles.size()]),
-                lblImage,
-                WildLogThumbnailSizes.NORMAL,
+                lblImage, 
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        imageIndex = 0;
+                        setupNumberOfImages();
+                        // everything went well - saving
+                        btnUpdateActionPerformed(null);
+                    }
+                }, 
                 app, true, null, true, false);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                imageIndex = 0;
-                setupNumberOfImages();
-                // everything went well - saving
-                btnUpdateActionPerformed(null);
-            }
-        });
     }
 
     public void setLocationWL(Location inLocation) {
@@ -771,6 +770,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnBrowse.setText("Browse");
         btnBrowse.setToolTipText("Open the Browse tab and automatically select this Place in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBrowse.setFocusPainted(false);
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnBrowse.setName("btnBrowse"); // NOI18N
@@ -1201,8 +1201,8 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblNumberOfSightings.setText("0");
             lblNumberOfVisits.setText("0");
         }
-        List<WildLogFile> files = app.getDBI().list(new WildLogFile(locationWL.getWildLogFileID()));
-        if (files.size() > 0) {
+        int fotoCount = app.getDBI().count(new WildLogFile(locationWL.getWildLogFileID()));
+        if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
         else {
@@ -1384,7 +1384,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            List<File> files = UtilsFileProcessing.showFileUploadDialog(app);
+            List<File> files = UtilsFileProcessing.showFileUploadDialog(app, app.getMainFrame());
             uploadFiles(files);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
@@ -1513,9 +1513,9 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void setupNumberOfImages() {
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(locationWL.getWildLogFileID()));
-        if (fotos.size() > 0) {
-            lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
+        int fotoCount = app.getDBI().count(new WildLogFile(locationWL.getWildLogFileID()));
+        if (fotoCount > 0) {
+            lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         }
         else {
             lblNumberOfImages.setText("0 of 0");

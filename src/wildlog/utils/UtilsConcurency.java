@@ -26,7 +26,6 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public final class UtilsConcurency {
-    private static JDialog popup;
 
     private UtilsConcurency() {
     }
@@ -157,7 +156,7 @@ public final class UtilsConcurency {
     /**
      * This method will block the current thread and wait to try and run all the submitted tasks. The ExecutorService is not shutdown.
      * If the timeout expires it will cancel all remaining tasks and log an error.
-     * Tasks will be allowed about 6 minutes to complete, which should really be enough unless something went very wrong.
+     * Tasks will be allowed about 10 minutes to complete, which should really be enough unless something went very wrong.
      * @param <T>
      * @param inExecutorService
      * @param inTaskList
@@ -166,7 +165,7 @@ public final class UtilsConcurency {
     public static <T> boolean waitForExecutorToRunTasks(ExecutorService inExecutorService, Collection<? extends Callable<T>> inTaskList) {
         if (inExecutorService != null) {
             try {
-                List<Future<T>> listResults = inExecutorService.invokeAll(inTaskList, 6, TimeUnit.MINUTES);
+                List<Future<T>> listResults = inExecutorService.invokeAll(inTaskList, 10, TimeUnit.MINUTES);
                 for (Future<T> future : listResults) {
                     if (future.isCancelled()) {
                         System.err.println("ExecutorService Error... Due to the timeout some tasks were cancled.");
@@ -189,32 +188,34 @@ public final class UtilsConcurency {
     /**
      *This method will block the current thread and wait to try and run all the submitted tasks. The ExecutorService is not shutdown.
      * If the timeout expires it will cancel all remaining tasks and log an error.
-     * Tasks will be allowed about 6 minutes to complete, which should really be enough unless something went very wrong. <br/>
+     * Tasks will be allowed about 10 minutes to complete, which should really be enough unless something went very wrong. <br/>
      * <b>In addition this method will show a popup message (semi-modal) if the task is taking longer than about 1 second.
      * @param <T>
      * @param inExecutorService - The service to stop and wait for.
-     * @param inTaskList
-     * @param inParent - If the parent is a JDialog pass it in, otherwise use null to use the application's main frame.
+     * @param inTaskList - The tasks to run
+     * @param inRunWhenDone - Code that needs to run after the SwingWorker is done (to update the UI)
+     * @param inJDialogUsesAsParent - If the parent is a JDialog pass it in, otherwise use null to use the application's main frame.
      * @return
      */
-    public static <T> boolean waitForExecutorToRunTasksWithPopup(final ExecutorService inExecutorService, final Collection<? extends Callable<T>> inTaskList, final JDialog inParent) {
+    public static <T> boolean waitForExecutorToRunTasksWithPopup(final ExecutorService inExecutorService, 
+            final Collection<? extends Callable<T>> inTaskList, final Runnable inRunWhenDone, 
+            final JDialog inJDialogUsesAsParent) {
         // Create the popup
-        if (popup == null) {
-            if (inParent instanceof JDialog) {
-                popup = new JDialog(inParent, "Long Running Process", false);
-                popup.setVisible(false);
-            }
-            else {
-                popup = new JDialog(WildLogApp.getApplication().getMainFrame(), "Long Running Process", false);
-                popup.setVisible(false);
-            }
-            popup.setEnabled(false);
-            ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif"));
-            popup.setIconImage(icon.getImage());
-            popup.add(new Label("  Busy processing. Please wait..."));
-            popup.setMinimumSize(new Dimension(250, 100));
-            popup.pack();
+        JDialog popup;
+        if (inJDialogUsesAsParent instanceof JDialog) {
+            popup = new JDialog(inJDialogUsesAsParent, "Long Running Process", true);
+            popup.setVisible(false);
         }
+        else {
+            popup = new JDialog(WildLogApp.getApplication().getMainFrame(), "Long Running Process", false);
+            popup.setVisible(false);
+        }
+        popup.setEnabled(false);
+        ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif"));
+        popup.setIconImage(icon.getImage());
+        popup.add(new Label("  Busy processing. Please wait..."));
+        popup.setMinimumSize(new Dimension(250, 100));
+        popup.pack();
         // Create a swing worker that will do the running
         SwingWorker swingWorkerUpload = new SwingWorker() {
             @Override
@@ -229,6 +230,12 @@ public final class UtilsConcurency {
                 });
                 return result;
             }
+
+            @Override
+            protected void done() {
+                super.done();
+                SwingUtilities.invokeLater(inRunWhenDone);
+            }
         };
         swingWorkerUpload.execute();
         try {
@@ -240,9 +247,9 @@ public final class UtilsConcurency {
         }
         catch (TimeoutException ex) {
             // The upload is taking long, so show the popup
-            if (inParent instanceof JDialog) {
-                UtilsDialog.setDialogToCenter(inParent, popup);
-                UtilsDialog.addModalBackgroundPanel(inParent, popup);
+            if (inJDialogUsesAsParent instanceof JDialog) {
+                UtilsDialog.setDialogToCenter(inJDialogUsesAsParent, popup);
+                UtilsDialog.addModalBackgroundPanel(inJDialogUsesAsParent, popup);
             }
             else {
                 UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), popup);

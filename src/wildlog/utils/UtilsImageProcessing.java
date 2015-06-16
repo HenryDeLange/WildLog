@@ -146,8 +146,8 @@ public class UtilsImageProcessing {
 
     public static int previousImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-        if (fotos.size() > 0) {
+        int fotoCount = inApp.getDBI().count(new WildLogFile(inID));
+        if (fotoCount > 0) {
             if (newImageIndex > 0) {
                 newImageIndex = newImageIndex - 1;
             }
@@ -155,7 +155,7 @@ public class UtilsImageProcessing {
                 if (inApp.getWildLogOptions().isEnableSounds()) {
                     Toolkit.getDefaultToolkit().beep();
                 }
-                newImageIndex = fotos.size() - 1;
+                newImageIndex = fotoCount - 1;
             }
             setupFoto(inID, newImageIndex, inImageLabel, inSize, inApp);
         }
@@ -164,9 +164,9 @@ public class UtilsImageProcessing {
 
     public static int nextImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-        if (fotos.size() > 0) {
-            if (newImageIndex < fotos.size() - 1) {
+        int fotoCount = inApp.getDBI().count(new WildLogFile(inID));
+        if (fotoCount > 0) {
+            if (newImageIndex < fotoCount - 1) {
                 newImageIndex = newImageIndex + 1;
             }
             else {

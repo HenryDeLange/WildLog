@@ -298,8 +298,8 @@ public class PanelTabLocations extends JPanel {
             }
             // Get Image
             final Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
-            if (fotos.size() > 0) {
+            int fotoCount = app.getDBI().count(new WildLogFile(tempLocation.getWildLogFileID()));
+            if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(tempLocation.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {

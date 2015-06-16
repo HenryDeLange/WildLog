@@ -1384,8 +1384,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(),
                             Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getElementName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
-                            null,
-                            WildLogThumbnailSizes.NORMAL,
+                            null, null, 
                             app, true, null, true, false);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(), wildLogFile.getFilename(),
@@ -1418,8 +1417,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
-                            null,
-                            WildLogThumbnailSizes.NORMAL,
+                            null, null, 
                             app, true, null, true, false);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(), wildLogFile.getFilename(),
@@ -1448,8 +1446,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
-                            null,
-                            WildLogThumbnailSizes.NORMAL,
+                            null, null, 
                             app, true, null, true, false);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(), wildLogFile.getFilename(),
@@ -1482,8 +1479,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(),
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getVisitName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
-                            null,
-                            WildLogThumbnailSizes.NORMAL,
+                            null, null, 
                             app, true, null, true, false);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(), wildLogFile.getFilename(),
@@ -1920,7 +1916,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (inVisit != null) {
             rdbBrowseLocation.setSelected(true);
             tabbedPanel.setSelectedIndex(4);
-            // Expand location
+            // Expand the Location
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -1932,12 +1928,61 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                 }
             });
-            // Now expand visit
+            // Now expand the Visit
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     for (int t = 0; t < treBrowsePhoto.getRowCount() - 1; t++) {
                         if (inVisit.getName().equals(treBrowsePhoto.getPathForRow(t + 1).getLastPathComponent().toString())) {
+                            treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t + 1));
+                            treBrowsePhoto.scrollRowToVisible(t + 1);
+                            treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(t + 1));
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    }
+    
+    public void browseSelectedSighting(final Sighting inSighting) {
+        if (inSighting != null) {
+            rdbBrowseLocation.setSelected(true);
+            tabbedPanel.setSelectedIndex(4);
+            // Expand the Location
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int t = 0; t < treBrowsePhoto.getRowCount() - 1; t++) {
+                        if (inSighting.getLocationName().equals(treBrowsePhoto.getPathForRow(t + 1).getLastPathComponent().toString())) {
+                            treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t + 1));
+                            break;
+                        }
+                    }
+                }
+            });
+            // Now expand the Visit
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int t = 0; t < treBrowsePhoto.getRowCount() - 1; t++) {
+                        if (inSighting.getVisitName().equals(treBrowsePhoto.getPathForRow(t + 1).getLastPathComponent().toString())) {
+                            treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t + 1));
+                            treBrowsePhoto.scrollRowToVisible(t + 1);
+                            treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(t + 1));
+                            break;
+                        }
+                    }
+                }
+            });
+            // Then select the Sighting
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int t = 0; t < treBrowsePhoto.getRowCount() - 1; t++) {
+                        // Use the WildLogFileID to compare because it should be more unique than the toString()
+                        if (inSighting.getWildLogFileID().equals(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getPathForRow(t + 1)
+                                .getLastPathComponent()).getUserObject()).getWildLogFileID())) {
                             treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t + 1));
                             treBrowsePhoto.scrollRowToVisible(t + 1);
                             treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(t + 1));

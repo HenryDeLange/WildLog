@@ -126,10 +126,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void setupUI() {
         initComponents();
         imageIndex = 0;
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
-        if (fotos.size() > 0) {
+        int fotoCount = app.getDBI().count(new WildLogFile(visit.getWildLogFileID()));
+        if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
-            lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
+            lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         }
         else {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
@@ -171,18 +171,17 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 visit.getWildLogFileID(),
                 Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(locationForVisit.getName()).resolve(visit.getName()),
                 inFiles.toArray(new File[inFiles.size()]),
-                lblImage,
-                WildLogThumbnailSizes.NORMAL,
+                lblImage, 
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        imageIndex = 0;
+                        setupNumberOfImages();
+                        // everything went well - saving
+                        btnUpdateActionPerformed(null);
+                    }
+                }, 
                 app, true, null, true, false);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                imageIndex = 0;
-                setupNumberOfImages();
-                // everything went well - saving
-                btnUpdateActionPerformed(null);
-            }
-        });
     }
 
     public void setVisit(Visit inVisit) {
@@ -270,8 +269,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (sighting != null) {
             if (sighting.getElementName() != null) {
                 Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
-                if (fotos.size() > 0) {
+                int fotoCount = app.getDBI().count(new WildLogFile(tempElement.getWildLogFileID()));
+                if (fotoCount > 0) {
                     UtilsImageProcessing.setupFoto(tempElement.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
                 }
                 else {
@@ -282,8 +281,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
             }
             imageSightingIndex = 0;
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
-            if (fotos.size() > 0 ) {
+            int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));
+            if (fotoCount > 0 ) {
                 UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageSightingIndex, lblSightingImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
             }
             else {
@@ -661,6 +660,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnBrowse.setText("Browse");
         btnBrowse.setToolTipText("Open the Browse tab and automatically select this Period in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBrowse.setFocusPainted(false);
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnBrowse.setName("btnBrowse"); // NOI18N
@@ -675,15 +675,13 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         pnlButtonsLayout.setHorizontalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(btnMapSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                        .addComponent(btnReport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                        .addComponent(btnSlideshow, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnMapSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(btnReport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(btnSlideshow, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
-                    .addGroup(pnlButtonsLayout.createSequentialGroup()
-                        .addGap(5, 5, 5)
                         .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1159,8 +1157,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
-        List<WildLogFile> files = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
-        if (files.size() > 0) {
+        int fotoCount = app.getDBI().count(new WildLogFile(visit.getWildLogFileID()));
+        if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
         else {
@@ -1262,7 +1260,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            List<File> files = UtilsFileProcessing.showFileUploadDialog(app);
+            List<File> files = UtilsFileProcessing.showFileUploadDialog(app, app.getMainFrame());
             uploadFiles(files);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
@@ -1367,7 +1365,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ExportDialog dialog = new ExportDialog(app, null, null, visit, null, null);
+            List<Sighting> lstSightings = null;
+            if (tblSightings.getSelectedRowCount() > 0) {
+                lstSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
+                for (int row : tblSightings.getSelectedRows())  {
+                    lstSightings.add(app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6))));
+                }
+            }
+            ExportDialog dialog = new ExportDialog(app, null, null, visit, null, lstSightings);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnHTMLActionPerformed
@@ -1484,9 +1489,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }
 
     private void setupNumberOfImages() {
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
-        if (fotos.size() > 0) {
-            lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
+        int fotoCount = app.getDBI().count(new WildLogFile(visit.getWildLogFileID()));
+        if (fotoCount > 0) {
+            lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         }
         else {
             lblNumberOfImages.setText("0 of 0");
@@ -1495,9 +1500,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void setupNumberOfSightingImages() {
         if (sighting != null) {
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
-            if (fotos.size() > 0) {
-                lblNumberOfSightingImages.setText(imageSightingIndex+1 + " of " + fotos.size());
+            int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));
+            if (fotoCount > 0) {
+                lblNumberOfSightingImages.setText(imageSightingIndex+1 + " of " + fotoCount);
             }
             else {
                 lblNumberOfSightingImages.setText("0 of 0");

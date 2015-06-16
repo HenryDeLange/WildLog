@@ -12,6 +12,9 @@
             <Property name="text" type="java.lang.String" value="Application"/>
             <Property name="name" type="java.lang.String" value="fileMenu" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="fileMenuMenuSelected"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -119,6 +122,9 @@
             <Property name="text" type="java.lang.String" value="Backup"/>
             <Property name="name" type="java.lang.String" value="backupMenu" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="backupMenuMenuSelected"/>
+          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuBackupDatabase">
               <Properties>
@@ -152,6 +158,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Export"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="exportMenuMenuSelected"/>
+          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuExportHTML">
               <Properties>
@@ -248,6 +257,9 @@
             <Property name="text" type="java.lang.String" value="Import"/>
             <Property name="name" type="java.lang.String" value="importMenu" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="importMenuMenuSelected"/>
+          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportCSV">
               <Properties>
@@ -340,6 +352,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Advanced"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="advancedMenuMenuSelected"/>
+          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuSwitchElementNames">
               <Properties>
@@ -454,6 +469,9 @@
             <Property name="text" type="java.lang.String" value="Extra"/>
             <Property name="name" type="java.lang.String" value="extraMenu" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="extraMenuMenuSelected"/>
+          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuExifMenuItem">
               <Properties>
@@ -554,6 +572,9 @@
             <Property name="text" type="java.lang.String" value="Settings"/>
             <Property name="name" type="java.lang.String" value="settingsMenu" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="settingsMenuMenuSelected"/>
+          </Events>
           <SubComponents>
             <Menu class="javax.swing.JMenu" name="mappingMenu">
               <Properties>
@@ -720,6 +741,9 @@
             <Property name="text" type="java.lang.String" value="About"/>
             <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="helpMenuMenuSelected"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -742,6 +766,19 @@
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator16" noResource="true"/>
               </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuUserGuide">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="WildLog User Guide"/>
+                <Property name="toolTipText" type="java.lang.String" value="Opens the WildLog User Guide, or a link to a website where it can be downloaded."/>
+                <Property name="name" type="java.lang.String" value="mnuUserGuide" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuUserGuideActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuAboutWildLog">
               <Properties>

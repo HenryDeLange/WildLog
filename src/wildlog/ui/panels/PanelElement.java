@@ -94,8 +94,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void setupUI() {
         initComponents();
         imageIndex = 0;
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
-        if (fotos.size() > 0) {
+        int fotoCount = app.getDBI().count(new WildLogFile(element.getWildLogFileID()));
+        if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
         else {
@@ -161,18 +161,17 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 element.getWildLogFileID(),
                 Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getPrimaryName()),
                 inFiles.toArray(new File[inFiles.size()]),
-                lblImage,
-                WildLogThumbnailSizes.NORMAL,
+                lblImage, 
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        imageIndex = 0;
+                        setupNumberOfImages();
+                        // everything went well - saving
+                        btnUpdateActionPerformed(null);
+                    }
+                },
                 app, true, null, true, false);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                imageIndex = 0;
-                setupNumberOfImages();
-                // everything went well - saving
-                btnUpdateActionPerformed(null);
-            }
-        });
     }
 
     public Element getElement() {
@@ -577,6 +576,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnBrowse.setText("Browse");
         btnBrowse.setToolTipText("Open the Browse tab and automatically select this Creature in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBrowse.setFocusPainted(false);
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 10, 2, 8));
         btnBrowse.setName("btnBrowse"); // NOI18N
@@ -1487,7 +1487,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-            List<File> files = UtilsFileProcessing.showFileUploadDialog(app);
+            List<File> files = UtilsFileProcessing.showFileUploadDialog(app, app.getMainFrame());
             uploadFiles(files);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
@@ -1553,8 +1553,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             lblNumberOfSightings.setText("0");
             lblNumberOfLocations.setText("0");
         }
-        List<WildLogFile> files = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
-        if (files.size() > 0) {
+        int fotoCount = app.getDBI().count(new WildLogFile(element.getWildLogFileID()));
+        if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
         else {
@@ -1676,11 +1676,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
 
     private void setupNumberOfImages() {
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
-        if (fotos.size() > 0)
-            lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-        else
+        int fotoCount = app.getDBI().count(new WildLogFile(element.getWildLogFileID()));
+        if (fotoCount > 0) {
+            lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
+        } 
+        else {
             lblNumberOfImages.setText("0 of 0");
+        }
     }
 
     private void fixSelectAllForSpinners(JSpinner inSpinner) {

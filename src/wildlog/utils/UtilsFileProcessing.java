@@ -19,7 +19,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
@@ -53,10 +55,17 @@ public final class UtilsFileProcessing {
     /**
      * Upload a file using a FileChooser dialog.
      * @param inApp
+     * @param inParent
      * @return
      */
-    public static List<File> showFileUploadDialog(final WildLogApp inApp) {
-        final FileDialog fileChooser = new FileDialog(inApp.getMainFrame(), "Select Files", FileDialog.LOAD);
+    public static List<File> showFileUploadDialog(final WildLogApp inApp, RootPaneContainer inParent) {
+        FileDialog fileChooser;
+        if (inParent instanceof JDialog) {
+            fileChooser = new FileDialog((JDialog) inParent, "Select Files", FileDialog.LOAD);
+        }
+        else {
+            fileChooser = new FileDialog((JFrame) inParent, "Select Files", FileDialog.LOAD);
+        }
 //        fileChooser.setIconImage(new ImageIcon(inApp.getClass().getResource("resources/icons/WildLog Icon Small.gif")).getImage());
 //        final JFileChooser fileChooser = new JFileChooser();
         if (lastFilePath != null) {
@@ -75,7 +84,7 @@ public final class UtilsFileProcessing {
         fileChooser.setMultipleMode(true);
 //        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setPreferredSize(new Dimension(950, 550));
-        UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+        UtilsDialog.showDialogBackgroundWrapper(inParent, new UtilsDialog.DialogWrapper() {
             @Override
             public int showDialog() {
 //                return fileChooser.showOpenDialog(inApp.getMainFrame().getContentPane());
@@ -87,8 +96,9 @@ public final class UtilsFileProcessing {
         return Arrays.asList(fileChooser.getFiles());
     }
 
-    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, 
-            final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, 
+    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, 
+            final JLabel inImageLabel, final Runnable inRunWhenDone, 
+            final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, 
             final boolean inCreateThumbnails, final boolean inHandleSyncIssuesForPossibleDuplicatesInList) {
         final Object theLock;
         if (inHandleSyncIssuesForPossibleDuplicatesInList) {
@@ -131,18 +141,14 @@ public final class UtilsFileProcessing {
         }
         if (inWithSlowProcessPopup) {
             // Wait to finish the work
-            UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, inParent);
+            UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, inRunWhenDone, inParent);
         }
         else {
             UtilsConcurency.waitForExecutorToRunTasks(executorService, listCallables);
-        }
-        // Update the image that is displayed
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                UtilsImageProcessing.setupFoto(inID, 0, inImageLabel, inSize, inApp);
+            if (inRunWhenDone != null) {
+                SwingUtilities.invokeLater(inRunWhenDone);
             }
-        });
+        }
     }
 
     private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, Path inFromFile, 

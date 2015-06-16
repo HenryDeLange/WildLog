@@ -2,7 +2,6 @@ package wildlog.ui.panels;
 
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
-import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -323,8 +322,8 @@ public class PanelTabElements extends javax.swing.JPanel {
             }
             // Get Image
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
-            if (fotos.size() > 0) {
+            int fotoCount = app.getDBI().count(new WildLogFile(tempElement.getWildLogFileID()));
+            if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(tempElement.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {

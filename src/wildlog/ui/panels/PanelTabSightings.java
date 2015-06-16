@@ -45,6 +45,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private List<Location> lstFilteredLocations;
     private List<Visit> lstFilteredVisits;
     private FilterProperties filterProperties;
+    private int imageIndex;
 
     public PanelTabSightings(WildLogApp inApp, JTabbedPane inTabbedPanel) {
         app = inApp;
@@ -97,6 +98,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoLocation = new javax.swing.JButton();
         btnGoVisit = new javax.swing.JButton();
         btnGoElement = new javax.swing.JButton();
+        btnGoBrowse = new javax.swing.JButton();
         pnlFeatures = new javax.swing.JPanel();
         btnViewMap = new javax.swing.JButton();
         btnViewExport = new javax.swing.JButton();
@@ -108,6 +110,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterProperties = new javax.swing.JButton();
         btnResetFilters = new javax.swing.JButton();
         lblFilterDetails = new javax.swing.JLabel();
+        btnPrevFile = new javax.swing.JButton();
+        btnNextFile = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -234,27 +238,45 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         });
 
+        btnGoBrowse.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoBrowse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
+        btnGoBrowse.setText("Browse");
+        btnGoBrowse.setToolTipText("Open a tab for the selected Period.");
+        btnGoBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoBrowse.setFocusPainted(false);
+        btnGoBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoBrowse.setIconTextGap(6);
+        btnGoBrowse.setMargin(new java.awt.Insets(2, 4, 2, 8));
+        btnGoBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoBrowseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlViewsLayout = new javax.swing.GroupLayout(pnlViews);
         pnlViews.setLayout(pnlViewsLayout);
         pnlViewsLayout.setHorizontalGroup(
             pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlViewsLayout.createSequentialGroup()
-                .addGroup(pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnGoVisit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGoElement, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                    .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(btnGoElement, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlViewsLayout.createSequentialGroup()
+                .addGroup(pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGoVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGoBrowse, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         pnlViewsLayout.setVerticalGroup(
             pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlViewsLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGoBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
                 .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+                .addGap(5, 5, 5)
+                .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3))
         );
 
         pnlFeatures.setBackground(new java.awt.Color(235, 233, 221));
@@ -405,7 +427,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         pnlFiltersLayout.setHorizontalGroup(
             pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFiltersLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addGap(5, 5, 5)
                 .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFiltersLayout.createSequentialGroup()
                         .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -419,7 +441,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                                 .addComponent(btnFilterVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
                                 .addComponent(btnFilterElements, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(10, 10, 10))
+                        .addGap(5, 5, 5))
                     .addGroup(pnlFiltersLayout.createSequentialGroup()
                         .addComponent(lblFilterDetails)
                         .addContainerGap())))
@@ -441,6 +463,30 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGap(5, 5, 5))
         );
 
+        btnPrevFile.setBackground(new java.awt.Color(235, 233, 221));
+        btnPrevFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
+        btnPrevFile.setToolTipText("Load previous file.");
+        btnPrevFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPrevFile.setFocusPainted(false);
+        btnPrevFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnPrevFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevFileActionPerformed(evt);
+            }
+        });
+
+        btnNextFile.setBackground(new java.awt.Color(235, 233, 221));
+        btnNextFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
+        btnNextFile.setToolTipText("Load next file.");
+        btnNextFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNextFile.setFocusPainted(false);
+        btnNextFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnNextFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextFileActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -450,21 +496,23 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlViews, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlFeatures, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnDeleteSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAddSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnGoSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
+                    .addComponent(btnDeleteSighting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAddSighting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGoSighting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPrevFile)
+                        .addGap(0, 0, 0)
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btnNextFile)))
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -472,11 +520,13 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPrevFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnNextFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(13, 13, 13)
@@ -503,9 +553,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (tblSightings.getSelectedRowCount() == 1) {
             Sighting sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(
                             tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8)));
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
-            if (fotos.size() > 0 ) {
-                UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));
+            imageIndex = 0;
+            if (fotoCount > 0 ) {
+                UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
@@ -623,7 +674,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (tblSightings.getSelectedRowCount() == 1) {
             Sighting tempSighting = app.getDBI().find(new Sighting((long)tblSightings.getModel().getValueAt(
                     tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8)));
-            UtilsFileProcessing.openFile(tempSighting.getWildLogFileID(), 0, app);
+            UtilsFileProcessing.openFile(tempSighting.getWildLogFileID(), imageIndex, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
@@ -750,6 +801,29 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
 
+    private void btnGoBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBrowseActionPerformed
+        if (tblSightings.getSelectedRowCount() == 1) {
+            app.getMainFrame().browseSelectedSighting(app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8))));
+        }
+    }//GEN-LAST:event_btnGoBrowseActionPerformed
+
+    private void btnPrevFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevFileActionPerformed
+        if (tblSightings.getSelectedRowCount() == 1) {
+            Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8)));
+            imageIndex = UtilsImageProcessing.previousImage(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        }
+    }//GEN-LAST:event_btnPrevFileActionPerformed
+
+    private void btnNextFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextFileActionPerformed
+        if (tblSightings.getSelectedRowCount() == 1) {
+            Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8)));
+            imageIndex = UtilsImageProcessing.nextImage(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        }
+    }//GEN-LAST:event_btnNextFileActionPerformed
+
     private List<Sighting> getListOfSightingsFromTable() {
         List<Sighting> lstSightingsToMap;
         if (tblSightings.getSelectedRowCount() == 0) {
@@ -820,10 +894,13 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private javax.swing.JButton btnFilterLocation;
     private javax.swing.JButton btnFilterProperties;
     private javax.swing.JButton btnFilterVisit;
+    private javax.swing.JButton btnGoBrowse;
     private javax.swing.JButton btnGoElement;
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnGoSighting;
     private javax.swing.JButton btnGoVisit;
+    private javax.swing.JButton btnNextFile;
+    private javax.swing.JButton btnPrevFile;
     private javax.swing.JButton btnResetFilters;
     private javax.swing.JButton btnViewExport;
     private javax.swing.JButton btnViewMap;

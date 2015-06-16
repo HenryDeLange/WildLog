@@ -47,7 +47,11 @@ public class ExportDialog extends JDialog {
         initComponents();
         // Determine what buttons to show
         if (element == null && location == null && visit == null) {
+            btnExportFiles.setVisible(false);
             btnExportFilesObservations.setVisible(false);
+        }
+        if (inLstSightings == null || inLstSightings.isEmpty()) {
+            btnExportFilesSelectedObservations.setVisible(false);
         }
         // Pack
         pack();
@@ -73,6 +77,7 @@ public class ExportDialog extends JDialog {
         btnExportCSV = new javax.swing.JButton();
         btnExportXML = new javax.swing.JButton();
         btnExportFiles = new javax.swing.JButton();
+        btnExportFilesSelectedObservations = new javax.swing.JButton();
         btnExportFilesObservations = new javax.swing.JButton();
         btnExportWorkspace = new javax.swing.JButton();
 
@@ -218,8 +223,27 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportFiles);
 
+        btnExportFilesSelectedObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
+        btnExportFilesSelectedObservations.setText("Export Files of selected Observations");
+        btnExportFilesSelectedObservations.setToolTipText("Save copies of all relevant files in the Export folder.");
+        btnExportFilesSelectedObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportFilesSelectedObservations.setFocusPainted(false);
+        btnExportFilesSelectedObservations.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportFilesSelectedObservations.setIconTextGap(10);
+        btnExportFilesSelectedObservations.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportFilesSelectedObservations.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportFilesSelectedObservations.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportFilesSelectedObservations.setName("btnExportFilesSelectedObservations"); // NOI18N
+        btnExportFilesSelectedObservations.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportFilesSelectedObservations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportFilesSelectedObservationsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportFilesSelectedObservations);
+
         btnExportFilesObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
-        btnExportFilesObservations.setText("Export Files of linked Observations");
+        btnExportFilesObservations.setText("Export Files of all linked Observations");
         btnExportFilesObservations.setToolTipText("Save copies of all relevant files in the Export folder.");
         btnExportFilesObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportFilesObservations.setFocusPainted(false);
@@ -422,39 +446,6 @@ public class ExportDialog extends JDialog {
                     UtilsFileProcessing.openFile(destination);
                     setProgress(100);
                     setMessage("Done Exporting Files for '" + sighting.getDisplayName() + "'");
-                    return null;
-                }
-            });
-        }
-        if (lstSightings != null && !lstSightings.isEmpty()) {
-            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    setProgress(0);
-                    setMessage("Exporting Files for Observations");
-                    for (Sighting tempSighting : lstSightings) {
-                        setProgress(0);
-                        setMessage("Exporting Files for '" + tempSighting.getDisplayName() + "'");
-                        List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
-                        Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
-                                .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
-                                .resolve(tempSighting.getDisplayName());
-                        Files.createDirectories(destination);
-                        setProgress(1);
-                        setMessage("Exporting Files for '" + tempSighting.getDisplayName() + "' " + getProgress() + "%");
-                        int counter = 0;
-                        for (WildLogFile wildLogFile : listFiles) {
-                            UtilsFileProcessing.copyFile(wildLogFile.getAbsolutePath(), destination.resolve(wildLogFile.getRelativePath().getFileName()), true, true);
-                            setProgress(1 + (int)(counter/(double)listFiles.size()*98));
-                            setMessage("Exporting Files for '" + tempSighting.getDisplayName() + "' " + getProgress() + "%");
-                            counter++;
-                        }
-                        setProgress(100);
-                        setMessage("Done Exporting Files for '" + tempSighting.getDisplayName() + "'");
-                    }
-                    setProgress(100);
-                    setMessage("Done Exporting Files for Observations");
-                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath());
                     return null;
                 }
             });
@@ -837,12 +828,51 @@ public class ExportDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnExportXMLActionPerformed
 
+    private void btnExportFilesSelectedObservationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportFilesSelectedObservationsActionPerformed
+        if (lstSightings != null && !lstSightings.isEmpty()) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setProgress(0);
+                    setMessage("Exporting Files for Observations");
+                    for (Sighting tempSighting : lstSightings) {
+                        setProgress(0);
+                        setMessage("Exporting Files for '" + tempSighting.getDisplayName() + "'");
+                        List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
+                        Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
+                                .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
+                                .resolve(tempSighting.getDisplayName());
+                        Files.createDirectories(destination);
+                        setProgress(1);
+                        setMessage("Exporting Files for '" + tempSighting.getDisplayName() + "' " + getProgress() + "%");
+                        int counter = 0;
+                        for (WildLogFile wildLogFile : listFiles) {
+                            UtilsFileProcessing.copyFile(wildLogFile.getAbsolutePath(), destination.resolve(wildLogFile.getRelativePath().getFileName()), true, true);
+                            setProgress(1 + (int)(counter/(double)listFiles.size()*98));
+                            setMessage("Exporting Files for '" + tempSighting.getDisplayName() + "' " + getProgress() + "%");
+                            counter++;
+                        }
+                        setProgress(100);
+                        setMessage("Done Exporting Files for '" + tempSighting.getDisplayName() + "'");
+                    }
+                    setProgress(100);
+                    setMessage("Done Exporting Files for Observations");
+                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath());
+                    return null;
+                }
+            });
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnExportFilesSelectedObservationsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
     private javax.swing.JButton btnExportCSVBasic;
     private javax.swing.JButton btnExportFiles;
     private javax.swing.JButton btnExportFilesObservations;
+    private javax.swing.JButton btnExportFilesSelectedObservations;
     private javax.swing.JButton btnExportHTML;
     private javax.swing.JButton btnExportHTMLAdvanced;
     private javax.swing.JButton btnExportKML;

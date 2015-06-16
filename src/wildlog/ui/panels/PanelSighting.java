@@ -170,8 +170,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
         // Setup location and element images
         if (locationWL != null) {
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(locationWL.getWildLogFileID()));
-            if (fotos.size() > 0) {
+            int fotoCount = app.getDBI().count(new WildLogFile(locationWL.getWildLogFileID()));
+            if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.SMALL, app);
             }
             else {
@@ -182,8 +182,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
         if (element != null) {
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
-            if (fotos.size() > 0) {
+            int fotoCount = app.getDBI().count(new WildLogFile(element.getWildLogFileID()));
+            if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
             }
             else {
@@ -306,23 +306,24 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 sighting.getWildLogFileID(),
                 Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
                 inFiles.toArray(new File[inFiles.size()]),
-                lblImage,
-                WildLogThumbnailSizes.NORMAL,
+                lblImage, 
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        imageIndex = 0;
+                        // Load the first iamge
+                        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                        // Update the label showing the number of images
+                        setupNumberOfImages();
+                        // Calculate duration
+                        if ((int)spnDurationMinutes.getValue() == 0 && (double)spnDurationSeconds.getValue() == 0.0) {
+                            btnCalculateDurationActionPerformed(null);
+                        }
+                        // Save all the changes and auto populated fields
+                        btnUpdateSightingActionPerformed(null);
+                    }
+                }, 
                 app, true, this, true, false);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                imageIndex = 0;
-                // Update the label showing the number of images
-                setupNumberOfImages();
-                // Calculate duration
-                if ((int)spnDurationMinutes.getValue() == 0 && (double)spnDurationSeconds.getValue() == 0.0) {
-                    btnCalculateDurationActionPerformed(null);
-                }
-                // Save all the changes and auto populated fields
-                btnUpdateSightingActionPerformed(null);
-            }
-        });
     }
 
     private void setupSightingInfo() {
@@ -349,8 +350,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnDurationMinutes.setValue(sighting.getDurationMinutes());
         spnDurationSeconds.setValue(sighting.getDurationSeconds());
         // Setup the sighting's image
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
-        if (fotos.size() > 0) {
+        int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));
+        if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
         else {
@@ -1322,9 +1323,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        getGlassPane().setVisible(true);
-        uploadImage(UtilsFileProcessing.showFileUploadDialog(app));
-        getGlassPane().setVisible(false);
+        uploadImage(UtilsFileProcessing.showFileUploadDialog(app, this));
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void uploadImage(final List<File> inFiles) {
@@ -1810,9 +1809,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_formWindowClosed
 
     private void setupNumberOfImages() {
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
-        if (fotos.size() > 0) {
-            lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
+        int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));
+        if (fotoCount > 0) {
+            lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         }
         else {
             lblNumberOfImages.setText("0 of 0");
