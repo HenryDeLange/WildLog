@@ -70,15 +70,15 @@ public class ExportDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnExportFiles = new javax.swing.JButton();
+        btnExportFilesSelectedObservations = new javax.swing.JButton();
+        btnExportFilesObservations = new javax.swing.JButton();
         btnExportHTML = new javax.swing.JButton();
         btnExportHTMLAdvanced = new javax.swing.JButton();
         btnExportKML = new javax.swing.JButton();
         btnExportCSVBasic = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
         btnExportXML = new javax.swing.JButton();
-        btnExportFiles = new javax.swing.JButton();
-        btnExportFilesSelectedObservations = new javax.swing.JButton();
-        btnExportFilesObservations = new javax.swing.JButton();
         btnExportWorkspace = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -88,6 +88,63 @@ public class ExportDialog extends JDialog {
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
+
+        btnExportFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
+        btnExportFiles.setText("Export Files");
+        btnExportFiles.setToolTipText("Save copies of all relevant files in the Export folder.");
+        btnExportFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportFiles.setFocusPainted(false);
+        btnExportFiles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportFiles.setIconTextGap(10);
+        btnExportFiles.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportFiles.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportFiles.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportFiles.setName("btnExportFiles"); // NOI18N
+        btnExportFiles.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportFilesActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportFiles);
+
+        btnExportFilesSelectedObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
+        btnExportFilesSelectedObservations.setText("Export Files of selected Observations");
+        btnExportFilesSelectedObservations.setToolTipText("Save copies of the selected Observations' files in the Export folder.");
+        btnExportFilesSelectedObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportFilesSelectedObservations.setFocusPainted(false);
+        btnExportFilesSelectedObservations.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportFilesSelectedObservations.setIconTextGap(10);
+        btnExportFilesSelectedObservations.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportFilesSelectedObservations.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportFilesSelectedObservations.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportFilesSelectedObservations.setName("btnExportFilesSelectedObservations"); // NOI18N
+        btnExportFilesSelectedObservations.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportFilesSelectedObservations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportFilesSelectedObservationsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportFilesSelectedObservations);
+
+        btnExportFilesObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
+        btnExportFilesObservations.setText("Export Files of all linked Observations");
+        btnExportFilesObservations.setToolTipText("Save copies of all relevant files in the Export folder.");
+        btnExportFilesObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportFilesObservations.setFocusPainted(false);
+        btnExportFilesObservations.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportFilesObservations.setIconTextGap(10);
+        btnExportFilesObservations.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportFilesObservations.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportFilesObservations.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportFilesObservations.setName("btnExportFilesObservations"); // NOI18N
+        btnExportFilesObservations.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportFilesObservations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportFilesObservationsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportFilesObservations);
 
         btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         btnExportHTML.setText("Export as Offline Webpage (Basic)");
@@ -203,63 +260,6 @@ public class ExportDialog extends JDialog {
             }
         });
         getContentPane().add(btnExportXML);
-
-        btnExportFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
-        btnExportFiles.setText("Export Files");
-        btnExportFiles.setToolTipText("Save copies of all relevant files in the Export folder.");
-        btnExportFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportFiles.setFocusPainted(false);
-        btnExportFiles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportFiles.setIconTextGap(10);
-        btnExportFiles.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportFiles.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportFiles.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportFiles.setName("btnExportFiles"); // NOI18N
-        btnExportFiles.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportFiles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportFilesActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExportFiles);
-
-        btnExportFilesSelectedObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
-        btnExportFilesSelectedObservations.setText("Export Files of selected Observations");
-        btnExportFilesSelectedObservations.setToolTipText("Save copies of all relevant files in the Export folder.");
-        btnExportFilesSelectedObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportFilesSelectedObservations.setFocusPainted(false);
-        btnExportFilesSelectedObservations.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportFilesSelectedObservations.setIconTextGap(10);
-        btnExportFilesSelectedObservations.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportFilesSelectedObservations.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportFilesSelectedObservations.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportFilesSelectedObservations.setName("btnExportFilesSelectedObservations"); // NOI18N
-        btnExportFilesSelectedObservations.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportFilesSelectedObservations.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportFilesSelectedObservationsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExportFilesSelectedObservations);
-
-        btnExportFilesObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
-        btnExportFilesObservations.setText("Export Files of all linked Observations");
-        btnExportFilesObservations.setToolTipText("Save copies of all relevant files in the Export folder.");
-        btnExportFilesObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportFilesObservations.setFocusPainted(false);
-        btnExportFilesObservations.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportFilesObservations.setIconTextGap(10);
-        btnExportFilesObservations.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportFilesObservations.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportFilesObservations.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportFilesObservations.setName("btnExportFilesObservations"); // NOI18N
-        btnExportFilesObservations.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportFilesObservations.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportFilesObservationsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExportFilesObservations);
 
         btnExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         btnExportWorkspace.setText("Export to New Workspace");
