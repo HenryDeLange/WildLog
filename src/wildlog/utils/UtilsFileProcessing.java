@@ -14,7 +14,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,6 +37,7 @@ import wildlog.ui.helpers.filters.MovieFilter;
 public final class UtilsFileProcessing {
     private static final ExecutorService executorService = 
             Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_FileUpload"));
+    private static final Map<String, Object> fileLocks = Collections.synchronizedMap(new HashMap<>(50));
     private static Path lastFilePath = null;
 
     private UtilsFileProcessing() {
@@ -294,8 +298,17 @@ public final class UtilsFileProcessing {
     public static void createFileFromStream(InputStream inFileToRead, Path inFileToWrite) {
         if (!Files.exists(inFileToWrite)) {
             try {
-                Files.createDirectories(inFileToWrite.getParent());
-                Files.copy(inFileToRead, inFileToWrite);
+                // More than one thread can try to create these files at once, or very quickly after each other, resulting in IO errors, 
+                // thus I need to add some synchronization to make it throw less exceptions.
+                Object lock = fileLocks.get(inFileToWrite.toAbsolutePath().toString());
+                if (lock == null) {
+                    lock = new Object();
+                    fileLocks.put(inFileToWrite.toAbsolutePath().toString(), lock);
+                }
+                synchronized (lock) {
+                    Files.createDirectories(inFileToWrite.getParent());
+                    Files.copy(inFileToRead, inFileToWrite, StandardCopyOption.REPLACE_EXISTING);
+                }
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);

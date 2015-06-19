@@ -1,5 +1,6 @@
 package wildlog.ui.dialogs;
 
+import java.awt.Cursor;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -262,6 +263,8 @@ public class AdvancedDialog extends JDialog {
     }//GEN-LAST:event_btnSetAllGPSActionPerformed
 
     private void btnSetDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDurationActionPerformed
+        this.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        this.getGlassPane().setVisible(true);
         List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
         for (Sighting sighting : listSightings) {
             List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
@@ -279,6 +282,8 @@ public class AdvancedDialog extends JDialog {
             app.getDBI().createOrUpdate(sighting, false);
         }
         panelVisit.doTheRefresh(null);
+        this.getGlassPane().setCursor(Cursor.getDefaultCursor());
+        this.getGlassPane().setVisible(false);
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnSetDurationActionPerformed

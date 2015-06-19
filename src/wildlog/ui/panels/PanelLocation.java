@@ -1233,7 +1233,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            SlideshowDialog dialog = new SlideshowDialog(app, null, locationWL, null);
+            SlideshowDialog dialog = new SlideshowDialog(app, null, locationWL, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed

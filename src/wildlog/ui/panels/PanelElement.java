@@ -1663,7 +1663,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            SlideshowDialog dialog = new SlideshowDialog(app, null, null, element);
+            SlideshowDialog dialog = new SlideshowDialog(app, null, null, element, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed

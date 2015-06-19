@@ -826,17 +826,35 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private List<Sighting> getListOfSightingsFromTable() {
         List<Sighting> lstSightingsToMap;
+        if (tblSightings.getColumnCount() == 1) {
+            lstSightingsToMap = new ArrayList<>(0);
+        }
+        else
         if (tblSightings.getSelectedRowCount() == 0) {
-            // Use all Sightings
-            lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
-            for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
-                Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 8)));
-                sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 4));
-                sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 5));
-                lstSightingsToMap.add(sighting);
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "No Observations were selected, do you want to use all Observations in the table instead?",
+                            "No Observations Selected",
+                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.YES_OPTION) {
+                // Use all Sightings
+                lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
+                for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
+                    Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 8)));
+                    sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 4));
+                    sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 5));
+                    lstSightingsToMap.add(sighting);
+                }
+            }
+            else {
+                lstSightingsToMap = new ArrayList<>(0);
             }
         }
         else {

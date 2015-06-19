@@ -1379,14 +1379,30 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            SlideshowDialog dialog = new SlideshowDialog(app, visit, null, null);
+            List<Sighting> lstSightings = null;
+            if (tblSightings.getSelectedRowCount() > 0) {
+                lstSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
+                for (int row : tblSightings.getSelectedRows())  {
+                    lstSightings.add(app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6))));
+                }
+            }
+            SlideshowDialog dialog = new SlideshowDialog(app, visit, null, null, lstSightings);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            List<Sighting> lstSightings = app.getDBI().list(new Sighting(null, locationForVisit.getName(), visit.getName()), false);
+            List<Sighting> lstSightings = null;
+            if (tblSightings.getSelectedRowCount() > 0) {
+                lstSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
+                for (int row : tblSightings.getSelectedRows())  {
+                    lstSightings.add(app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6))));
+                }
+            }
+            else {
+                lstSightings = app.getDBI().list(new Sighting(null, locationForVisit.getName(), visit.getName()), false);
+            }
             MappingDialog dialog = new MappingDialog(app, null, null, visit, sighting, lstSightings);
             dialog.setVisible(true);
         }

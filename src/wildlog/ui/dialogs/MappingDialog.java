@@ -80,7 +80,7 @@ public class MappingDialog extends JDialog {
             btnViewAllSightingsForVisit.setVisible(false);
         }
         if (sighting == null) {
-            btnViewSingleSighting.setVisible(false);
+            btnViewSelectedSighting.setVisible(false);
         }
         if (inLstSightings == null) {
             btnViewListOfSightings.setVisible(false);
@@ -106,7 +106,7 @@ public class MappingDialog extends JDialog {
         btnViewLocation = new javax.swing.JButton();
         btnViewAllSightingsForVisit = new javax.swing.JButton();
         btnViewAllSightingsForElement = new javax.swing.JButton();
-        btnViewSingleSighting = new javax.swing.JButton();
+        btnViewSelectedSighting = new javax.swing.JButton();
         btnViewListOfSightings = new javax.swing.JButton();
         btnViewSightingsAndDistributionMap = new javax.swing.JButton();
         btnViewDistributionMap = new javax.swing.JButton();
@@ -192,23 +192,23 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewAllSightingsForElement);
 
-        btnViewSingleSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewSingleSighting.setText("View map of the selected Observation");
-        btnViewSingleSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewSingleSighting.setFocusPainted(false);
-        btnViewSingleSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewSingleSighting.setIconTextGap(10);
-        btnViewSingleSighting.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewSingleSighting.setMaximumSize(new java.awt.Dimension(275, 35));
-        btnViewSingleSighting.setMinimumSize(new java.awt.Dimension(275, 35));
-        btnViewSingleSighting.setName("btnViewSingleSighting"); // NOI18N
-        btnViewSingleSighting.setPreferredSize(new java.awt.Dimension(275, 35));
-        btnViewSingleSighting.addActionListener(new java.awt.event.ActionListener() {
+        btnViewSelectedSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
+        btnViewSelectedSighting.setText("View map of the selected Observation");
+        btnViewSelectedSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewSelectedSighting.setFocusPainted(false);
+        btnViewSelectedSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewSelectedSighting.setIconTextGap(10);
+        btnViewSelectedSighting.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnViewSelectedSighting.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewSelectedSighting.setMinimumSize(new java.awt.Dimension(275, 35));
+        btnViewSelectedSighting.setName("btnViewSelectedSighting"); // NOI18N
+        btnViewSelectedSighting.setPreferredSize(new java.awt.Dimension(275, 35));
+        btnViewSelectedSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewSingleSightingActionPerformed(evt);
+                btnViewSelectedSightingActionPerformed(evt);
             }
         });
-        getContentPane().add(btnViewSingleSighting);
+        getContentPane().add(btnViewSelectedSighting);
 
         btnViewListOfSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewListOfSightings.setText("View map of the Observation(s)");
@@ -537,7 +537,7 @@ public class MappingDialog extends JDialog {
         }
     }//GEN-LAST:event_btnViewAllSightingsForVisitActionPerformed
 
-    private void btnViewSingleSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewSingleSightingActionPerformed
+    private void btnViewSelectedSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewSelectedSightingActionPerformed
         // Clear old points
         UtilsMapGenerator.clearMap(app, false);
         // Load points
@@ -569,7 +569,7 @@ public class MappingDialog extends JDialog {
             app.getMapOffline().changeTitle("WildLog Map - Offline: " + visit.getName() + " (Observations)");
             app.getMapOffline().showMap(app);
         }
-    }//GEN-LAST:event_btnViewSingleSightingActionPerformed
+    }//GEN-LAST:event_btnViewSelectedSightingActionPerformed
 
     private void btnViewListOfSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewListOfSightingsActionPerformed
         // Clear old points
@@ -615,7 +615,7 @@ public class MappingDialog extends JDialog {
     private javax.swing.JButton btnViewDistributionMap;
     private javax.swing.JButton btnViewListOfSightings;
     private javax.swing.JButton btnViewLocation;
+    private javax.swing.JButton btnViewSelectedSighting;
     private javax.swing.JButton btnViewSightingsAndDistributionMap;
-    private javax.swing.JButton btnViewSingleSighting;
     // End of variables declaration//GEN-END:variables
 }
