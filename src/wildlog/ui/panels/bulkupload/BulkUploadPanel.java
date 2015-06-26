@@ -847,7 +847,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         sightingWrapper.getWildLogFileID(),
                                         Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.toPath()),
                                         files.toArray(new File[files.size()]),
-                                        null, null, 
+                                        null, 
                                         app, false, null, true, uploadListContainsDuplicates);
                                 // Update the progress
                                 try {
@@ -891,7 +891,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             visit.getWildLogFileID(),
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()),
                             visitFiles,
-                            null, null, 
+                            null, 
                             app, false, null, true, false);
                     // Saving is done, now open the visits's tab
                     this.setMessage("Saving the Bulk Import: Finished");

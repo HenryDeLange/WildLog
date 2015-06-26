@@ -13,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,7 +24,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
@@ -101,7 +101,7 @@ public final class UtilsFileProcessing {
     }
 
     public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, 
-            final JLabel inImageLabel, final Runnable inRunWhenDone, 
+            final Runnable inRunWhenDone, 
             final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, 
             final boolean inCreateThumbnails, final boolean inHandleSyncIssuesForPossibleDuplicatesInList) {
         final Object theLock;
@@ -208,11 +208,22 @@ public final class UtilsFileProcessing {
         // Copy the original file into WildLog's folders. (Don't overwrite other files, and give an error if it already exists.)
         copyFile(inFromFile, toFile, false, false);
         // Save the database entry
+        long fileSize = 0;
+        try {
+            // This may fail or not be 100% accurate accross operating systems, harddrives after being moved etc.
+            fileSize = Files.size(inFromFile);
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
         WildLogFile wildLogFile = new WildLogFile(
                 inID,
                 toFile.getFileName().toString(),
                 WildLogPaths.getFullWorkspacePrefix().relativize(toFile).toString(),
-                inFileType);
+                inFileType,
+                Calendar.getInstance().getTime(),
+                UtilsImageProcessing.getDateFromFileDate(inFromFile),
+                fileSize);
         inApp.getDBI().createOrUpdate(wildLogFile, false);
         return wildLogFile;
     }

@@ -704,6 +704,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             out.close();
                             // Delete old DB file enrty and save new one
                             app.getDBI().delete(wildLogFile);
+                            newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(newWildLogFile.getAbsolutePath()));
+                            newWildLogFile.setFileSize(Files.size(newWildLogFile.getAbsolutePath()));
                             app.getDBI().createOrUpdate(newWildLogFile, false);
                             // Cleanup
                             llj.freeMemory();
@@ -1404,7 +1406,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(),
                             Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getElementName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
-                            null, null, 
+                            null, 
                             app, true, null, true, false);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(), wildLogFile.getFilename(),
@@ -1437,7 +1439,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
-                            null, null, 
+                            null, 
                             app, true, null, true, false);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(), wildLogFile.getFilename(),
@@ -1466,7 +1468,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
-                            null, null, 
+                            null, 
                             app, true, null, true, false);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(), wildLogFile.getFilename(),
@@ -1499,7 +1501,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(),
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getVisitName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
-                            null, null, 
+                            null, 
                             app, true, null, true, false);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(), wildLogFile.getFilename(),

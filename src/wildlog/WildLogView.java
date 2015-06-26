@@ -2029,7 +2029,7 @@ public final class WildLogView extends JFrame {
                                             inWildLogFile.getId(),
                                             inExpectedPrefix,
                                             new File[]{inWildLogFile.getAbsolutePath().toFile()},
-                                            null, null, 
+                                            null, 
                                             app, false, null, false, false);
                                     // Delete the wrong entry
                                     app.getDBI().delete(inWildLogFile);
@@ -2258,10 +2258,12 @@ public final class WildLogView extends JFrame {
                                 countOther++;
                             }
                         }
+// TODO: If a file wasn't found then try to use the existing name and FileDate and FileSize to guess the link (or is it better just to move the files to the lost folder???)
                         setProgress(20);
 
                         // ---------------------2---------------------
                         setMessage("Cleanup Step 2: Validate that the Workspace files are in the database... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
                         finalHandleFeedback.println("2) Make sure the files in the Workspace are present in the database.");
                         // Secondly check the files on disk
                         CleanupCounter filesNotInDB = new CleanupCounter();
@@ -2279,9 +2281,43 @@ public final class WildLogView extends JFrame {
                         setProgress(40);
 
                         // ---------------------3---------------------
+                        // By this time the file link should be "trusted" enough to use it to update inconsistent FileDate and FileSize values (not just empty ones)
+                        int filesWithIncorrectDate = 0;
+                        int filesWithIncorrectSize = 0;
+                        setMessage("Cleanup Step 3: Check the file size and dates... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("3) Compare the size and modified date of the files on disk to the values stored in the database.");
+                        allFiles = app.getDBI().list(new WildLogFile());
+                        fileProcessCounter = 0;
+                        for (WildLogFile wildLogFile : allFiles) {
+                            LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
+                            long actualFileSize = Files.size(wildLogFile.getAbsolutePath());
+                            if (actualFileDate != null) {
+                                if (wildLogFile.getFileDate() == null || !actualFileDate.isEqual(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()))) {
+                                    wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
+                                    finalHandleFeedback.println("ERROR:     The Modified Date of the file on disk is not the same as the value stored in the database.");
+                                    finalHandleFeedback.println("+RESOLVED: Updated the database Modified Date value of the file record.");
+                                    filesWithIncorrectDate++;
+                                }
+                            }
+                            if (actualFileSize > 0) {
+                                if (actualFileSize != wildLogFile.getFileSize()) {
+                                    wildLogFile.setFileSize(actualFileSize);
+                                    finalHandleFeedback.println("ERROR:     The File Size of the file on disk is not the same as the value stored in the database.");
+                                    finalHandleFeedback.println("+RESOLVED: Updated the database File Size value of the file record.");
+                                    filesWithIncorrectSize++;
+                                }
+                            }
+                            setProgress(1 + (int)(fileProcessCounter++/(double)allFiles.size()*12));
+                            setMessage("Cleanup Step 3: Check the file size and dates... " + getProgress() + "%");
+                        }
+                        setProgress(52);
+                        
+                        // ---------------------4---------------------
                         // As alles klaar is delete alle lee en temporary folders
-                        setMessage("Cleanup Step 3: Delete empty folders in WildLog\\Files\\... " + getProgress() + "%");
-                        finalHandleFeedback.println("3) Delete all empty folders in the Workspace's Images, Movies and Other files folders.");
+                        setMessage("Cleanup Step 4: Delete empty folders in WildLog\\Files\\... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("4) Delete all empty folders in the Workspace's Images, Movies and Other files folders.");
                         try {
                             UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(WildLogPaths.WILDLOG_FILES.getAbsoluteFullPath().toFile());
                         }
@@ -2290,12 +2326,13 @@ public final class WildLogView extends JFrame {
                             finalHandleFeedback.println("ERROR:       Could not delete all empty folders.");
                             finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
                         }
-                        setProgress(45);
+                        setProgress(52);
 
-                        // ---------------------4---------------------
+                        // ---------------------5---------------------
                         // Delete alle temporary/onnodige files en folders
-                        setMessage("Cleanup Step 4: Delete exports and thumbnails... " + getProgress() + "%");
-                        finalHandleFeedback.println("4) Delete all exports and thumbnails (since these files can be recreated from within WildLog).");
+                        setMessage("Cleanup Step 5: Delete exports and thumbnails... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("5) Delete all exports and thumbnails (since these files can be recreated from within WildLog).");
                         try {
                             UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT.getAbsoluteFullPath().toFile());
                         }
@@ -2305,7 +2342,7 @@ public final class WildLogView extends JFrame {
                             finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
                         }
                         setProgress(55);
-                        setMessage("Cleanup Step 4: Delete exports and thumbnails... " + getProgress() + "%");
+                        setMessage("Cleanup Step 5: Delete exports and thumbnails... " + getProgress() + "%");
                         try {
                             UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
                         }
@@ -2316,10 +2353,11 @@ public final class WildLogView extends JFrame {
                         }
                         setProgress(65);
 
-                        // ---------------------5---------------------
+                        // ---------------------6---------------------
                         // Check the rest of the data for inconsistencies (all Locations, Visits, Creatures and Observations link correctly)
-                        setMessage("Cleanup Step 5: Check links between records in the database... " + getProgress() + "%");
-                        finalHandleFeedback.println("5) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
+                        setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("6) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
                         // Check Visits
                         List<Visit> allVisits = app.getDBI().list(new Visit());
                         int badDataLinks = 0;
@@ -2343,7 +2381,7 @@ public final class WildLogView extends JFrame {
                             }
                             countVisits++;
                             setProgress(65 + (int)(countVisits/(double)allVisits.size()*3));
-                            setMessage("Cleanup Step 5: Check links between records in the database... " + getProgress() + "%");
+                            setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
                         }
                         // Check Sightings
                         List<Sighting> allSightings = app.getDBI().list(new Sighting(), false);
@@ -2424,14 +2462,15 @@ public final class WildLogView extends JFrame {
                             }
                             countSightings++;
                             setProgress(68 + (int)(countSightings/(double)allSightings.size()*4));
-                            setMessage("Cleanup Step 5: Check links between records in the database... " + getProgress() + "%");
+                            setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
                         }
                         setProgress(72);
 
-                        // ---------------------6---------------------
+                        // ---------------------7---------------------
                         // Check GPS Accuracy
-                        setMessage("Cleanup Step 6: Check the GPS Accuracy values... " + getProgress() + "%");
-                        finalHandleFeedback.println("6) Check the GPS Accuracy values.");
+                        setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("7) Check the GPS Accuracy values.");
                         allSightings = app.getDBI().list(new Sighting(), false);
                         int countGPSAccuracy = 0;
                         int badGPSAccuracy = 0;
@@ -2458,7 +2497,7 @@ public final class WildLogView extends JFrame {
                             }
                             countGPSAccuracy++;
                             setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
-                            setMessage("Cleanup Step 6: Check the GPS Accuracy values... " + getProgress() + "%");
+                            setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
                         }
                         List<Location> allLocations = app.getDBI().list(new Location());
                         countGPSAccuracy = 0;
@@ -2485,15 +2524,16 @@ public final class WildLogView extends JFrame {
                             }
                             countGPSAccuracy++;
                             setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
-                            setMessage("Cleanup Step 6: Check the GPS Accuracy values... " + getProgress() + "%");
+                            setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
                         }
                         setProgress(76);
                         
-                        // ---------------------7---------------------
+                        // ---------------------8---------------------
                         // Re-create die default thumbnails
                         if (recreateThumbnailsResult == JOptionPane.YES_OPTION) {
-                            setMessage("Cleanup Step 7: (Optional) Recreating default thumbnails... " + getProgress() + "%");
-                            finalHandleFeedback.println("7) Recreate the default thumbnails for all images.");
+                            setMessage("Cleanup Step 8: (Optional) Recreating default thumbnails... " + getProgress() + "%");
+                            finalHandleFeedback.println("");
+                            finalHandleFeedback.println("8) Recreate the default thumbnails for all images.");
                             final List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile());
                             ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
                             final CleanupCounter countThumbnails = new CleanupCounter();
@@ -2513,7 +2553,7 @@ public final class WildLogView extends JFrame {
                                         // Not going to bother with synchornization here, since it's just the progress bar
                                         countThumbnails.counter++;
                                         setProgress(76 + (int)(countThumbnails.counter/(double)listFiles.size()*23));
-                                        setMessage("Cleanup Step 7: (Optional) Recreating default thumbnails... " + getProgress() + "%");
+                                        setMessage("Cleanup Step 8: (Optional) Recreating default thumbnails... " + getProgress() + "%");
                                     }
                                 });
                             }
@@ -2532,8 +2572,8 @@ public final class WildLogView extends JFrame {
                         }
                         else {
                             setProgress(99);
-                            setMessage("Cleanup Step 7: (Optional) Recreating default thumbnails... SKIPPED " + getProgress() + "%");
-                            finalHandleFeedback.println("7) Recreate the default thumbnails for all images. SKIPPED");
+                            setMessage("Cleanup Step 8: (Optional) Recreating default thumbnails... SKIPPED " + getProgress() + "%");
+                            finalHandleFeedback.println("8) Recreate the default thumbnails for all images. SKIPPED");
                         }
 
                         // ---------------------?---------------------
@@ -2566,6 +2606,8 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("Database file records with incorrect type: " + filesWithBadType);
                         finalHandleFeedback.println("Database file records with missing non-essential data: " + filesWithMissingData);
                         finalHandleFeedback.println("Workspace files not found in the database: " + filesNotInDB.counter);
+                        finalHandleFeedback.println("Database file records with an incorrect File Modified Date value stored in the database: " + filesWithIncorrectDate);
+                        finalHandleFeedback.println("Database file records with an incorrect File Size value stored in the database: " + filesWithIncorrectSize);
                         finalHandleFeedback.println("Incorrect links between database records: " + badDataLinks);
                         finalHandleFeedback.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
                         finalHandleFeedback.println("");
@@ -2585,6 +2627,8 @@ public final class WildLogView extends JFrame {
                         System.out.println("Database file records with incorrect type: " + filesWithBadType);
                         System.out.println("Database file records with missing non-essential data: " + filesWithMissingData);
                         System.out.println("Workspace files not found in the database: " + filesNotInDB.counter);
+                        System.out.println("Database file records with an incorrect File Modified Date value stored in the database: " + filesWithIncorrectDate);
+                        System.out.println("Database file records with an incorrect File Size value stored in the database: " + filesWithIncorrectSize);
                         System.out.println("Incorrect links between database records: " + badDataLinks);
                         System.out.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
                         System.out.println("+++++++++++++++++++ DURATION +++++++++++++++++++");
@@ -2785,7 +2829,7 @@ public final class WildLogView extends JFrame {
                             catch (IOException ex) {
                                 ex.printStackTrace(System.err);
                             }
-                            // Create the WildLogFile entry inthe DB
+                            // Create the WildLogFile entry in the DB
                             syncDBI.createOrUpdate(wildLogFile, false);
                         }
                         setProgress(20 + (int)(counter++/(double)listElements.size()*70));
@@ -3054,7 +3098,7 @@ public final class WildLogView extends JFrame {
                                         sighting.getWildLogFileID(),
                                         Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
                                         lstFiles.toArray(new File[lstFiles.size()]),
-                                        null, null, 
+                                        null, 
                                         app, false, null, true, false);
                             }
                             setTaskProgress(25 + (int)(t/(double)listSightings.size()*70));

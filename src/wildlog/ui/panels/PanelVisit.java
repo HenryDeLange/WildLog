@@ -171,11 +171,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 visit.getWildLogFileID(),
                 Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(locationForVisit.getName()).resolve(visit.getName()),
                 inFiles.toArray(new File[inFiles.size()]),
-                lblImage, 
                 new Runnable() {
                     @Override
                     public void run() {
                         imageIndex = 0;
+                        UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
                         setupNumberOfImages();
                         // everything went well - saving
                         btnUpdateActionPerformed(null);

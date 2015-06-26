@@ -182,15 +182,15 @@ public class UtilsImageProcessing {
 
     public static int setMainImage(String inID, int inImageIndex, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-        for (int t = 0; t < fotos.size(); t++) {
+        List<WildLogFile> lstFiles = inApp.getDBI().list(new WildLogFile(inID));
+        for (int t = 0; t < lstFiles.size(); t++) {
             if (t != newImageIndex) {
-                fotos.get(t).setDefaultFile(false);
+                lstFiles.get(t).setDefaultFile(false);
             }
             else {
-                fotos.get(t).setDefaultFile(true);
+                lstFiles.get(t).setDefaultFile(true);
             }
-            inApp.getDBI().createOrUpdate(fotos.get(t), true);
+            inApp.getDBI().createOrUpdate(lstFiles.get(t), true);
         }
         newImageIndex = 0;
         return newImageIndex;

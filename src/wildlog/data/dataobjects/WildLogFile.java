@@ -31,7 +31,11 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
         super(inID, inFilename, inFilePath, inFileType, inUploadDate);
     }
 
+    public WildLogFile(String inID, String inFilename, String inOriginalFileLocation, WildLogFileType inFileType, Date inUploadDate, Date inFileDate, long inFileSize) {
+        super(inID, inFilename, inOriginalFileLocation, inFileType, inUploadDate, inFileDate, inFileSize);
+    }
 
+    
     @Override
     public int compareTo(WildLogFile inWildLogFile) {
         if (inWildLogFile != null) {

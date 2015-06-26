@@ -608,11 +608,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                             "The Workspace you are opening needs to be upgraded to work with the current version of the "
                                             + "WildLog application. "
                                             + System.lineSeparator() 
-                                            + "It is strongly recommended to first manually backup (make a copy) "
-                                            + "of the Workspace (in particular the Data and Files folders) before continuing."
+                                            + "It is recommended to first manually backup (make a copy) of the Workspace before continuing, "
+                                            + "in particular the WildLog\\Data and WildLog\\Files folders."
                                             + System.lineSeparator() + System.lineSeparator() 
                                             + "Press OK when you are ready for the WildLog application to upgrade the Workspace.",
-                                            "WildLog Major Upgrade", 
+                                            "WildLog Database Structure Upgrade", 
                                             JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
                                 }
                             });
@@ -641,6 +641,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 if (results.getInt("VERSION") == 4) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4  (before upgrade to 5)"));
                                     doUpdate5();
+                                }
+                                else
+                                if (results.getInt("VERSION") == 5) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4  (before upgrade to 5)"));
+                                    doUpdate6();
                                 }
                                 UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
                                     @Override
@@ -933,6 +938,31 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         System.out.println("Finished update 5");
+    }
+    
+    private void doUpdate6() {
+        System.out.println("Starting update 6");
+        // This update adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Make changes to WildLog Options
+            state.execute("ALTER TABLE FILES ADD COLUMN FILEDATE timestamp");
+            state.execute("ALTER TABLE FILES ADD COLUMN FILESIZE bigint");
+            WildLogOptions options = find(new WildLogOptions());
+            options.setWorkspaceID(generateID());
+            createOrUpdate(options);
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=6");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        System.out.println("Finished update 6");
     }
 
 }

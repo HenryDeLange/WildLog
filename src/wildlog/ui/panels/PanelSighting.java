@@ -306,12 +306,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 sighting.getWildLogFileID(),
                 Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
                 inFiles.toArray(new File[inFiles.size()]),
-                lblImage, 
                 new Runnable() {
                     @Override
                     public void run() {
                         imageIndex = 0;
-                        // Load the first iamge
+                        // Load the first image
                         UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
                         // Update the label showing the number of images
                         setupNumberOfImages();

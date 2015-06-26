@@ -161,11 +161,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 element.getWildLogFileID(),
                 Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getPrimaryName()),
                 inFiles.toArray(new File[inFiles.size()]),
-                lblImage, 
                 new Runnable() {
                     @Override
                     public void run() {
                         imageIndex = 0;
+                        UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
                         setupNumberOfImages();
                         // everything went well - saving
                         btnUpdateActionPerformed(null);

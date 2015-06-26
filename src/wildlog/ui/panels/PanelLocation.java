@@ -177,11 +177,11 @@ public class PanelLocation extends PanelCanSetupHeader {
                 locationWL.getWildLogFileID(),
                 Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(locationWL.getName()),
                 inFiles.toArray(new File[inFiles.size()]),
-                lblImage, 
                 new Runnable() {
                     @Override
                     public void run() {
                         imageIndex = 0;
+                        UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
                         setupNumberOfImages();
                         // everything went well - saving
                         btnUpdateActionPerformed(null);
