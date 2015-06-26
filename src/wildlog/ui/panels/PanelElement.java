@@ -542,7 +542,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
 
         btnReport.setBackground(new java.awt.Color(227, 240, 227));
-        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
+        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
         btnReport.setText("View Reports");
         btnReport.setToolTipText("View reports for this Creature.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -578,7 +578,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowse.setFocusPainted(false);
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnBrowse.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnBrowse.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnBrowse.setName("btnBrowse"); // NOI18N
         btnBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -593,8 +593,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
         btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnHTML.setIconTextGap(5);
-        btnHTML.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

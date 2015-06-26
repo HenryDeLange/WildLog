@@ -444,7 +444,7 @@
               <Color blue="dd" green="e9" red="eb" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/wildlog/resources/icons/Report_Small.gif"/>
+              <Image iconType="3" name="/wildlog/resources/icons/Report_Small.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="View Reports"/>
             <Property name="toolTipText" type="java.lang.String" value="Show available reports for these Observations."/>

@@ -180,6 +180,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnRefreshBrowseTree.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnRefreshBrowseTree.setText("Reload Tree");
         btnRefreshBrowseTree.setToolTipText("This will collapse all tree nodes and reload the tree.");
+        btnRefreshBrowseTree.setFocusPainted(false);
         btnRefreshBrowseTree.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnRefreshBrowseTree.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -504,8 +505,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRotate)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnViewEXIF)
-                        .addGap(0, 0, 0))
+                        .addComponent(btnViewEXIF))
                     .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnDefault)
@@ -1295,7 +1295,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 });
                 popup.add(mnuMap);
                 // Report
-                JMenuItem mnuReport = new JMenuItem("Report", new ImageIcon(app.getClass().getResource("resources/icons/Report_Small.gif")));
+                JMenuItem mnuReport = new JMenuItem("Report", new ImageIcon(app.getClass().getResource("resources/icons/Report_Small.png")));
                 mnuReport.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {

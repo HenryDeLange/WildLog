@@ -489,7 +489,7 @@
                   <Color blue="f0" green="e4" red="e6" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Report_Small.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/Report_Small.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="View Reports"/>
                 <Property name="toolTipText" type="java.lang.String" value="View reports for this Period."/>
@@ -546,9 +546,8 @@
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="iconTextGap" type="int" value="5"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 10, 2, 8]"/>
+                  <Insets value="[2, 8, 2, 8]"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="btnHTML" noResource="true"/>
               </Properties>

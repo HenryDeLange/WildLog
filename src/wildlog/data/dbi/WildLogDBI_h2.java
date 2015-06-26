@@ -594,37 +594,73 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         fullyUpdated = false;
                         break;
                     }
-                    else
-                    // Procede with teh expected updates
-                    if (results.getInt("VERSION") == 0) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
-                        doUpdate1();
-                    }
-                    else
-                    if (results.getInt("VERSION") == 1) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v1 (before upgrade to 2)"));
-                        doUpdate2();
-                    }
-                    else
-                    if (results.getInt("VERSION") == 2) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v2 (before upgrade to 3)"));
-                        doUpdate3();
-                    }
-                    else
-                    if (results.getInt("VERSION") == 3) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v3 (before upgrade to 4)"));
-                        doUpdate4();
-                    }
-                    else
-                    if (results.getInt("VERSION") == 4) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4  (before upgrade to 5)"));
-                        doUpdate5();
-                    }
-                    else
-                    // The database and application versions are in sync
-                    if (results.getInt("VERSION") == 5) {
-                        fullyUpdated = true;
-                        break;
+                    else {
+                        // The database and application versions are in sync
+                        if (results.getInt("VERSION") == WILDLOG_DB_VERSION) {
+                            fullyUpdated = true;
+                            break;
+                        }
+                        else {
+                            int result = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                @Override
+                                public int showDialog() {
+                                    return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(),
+                                            "The Workspace you are opening needs to be upgraded to work with the current version of the "
+                                            + "WildLog application. "
+                                            + System.lineSeparator() 
+                                            + "It is strongly recommended to first manually backup (make a copy) "
+                                            + "of the Workspace (in particular the Data and Files folders) before continuing."
+                                            + System.lineSeparator() + System.lineSeparator() 
+                                            + "Press OK when you are ready for the WildLog application to upgrade the Workspace.",
+                                            "WildLog Major Upgrade", 
+                                            JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+                                }
+                            });
+                            if (result == JOptionPane.OK_OPTION) {
+                                // Procede with the needed updates
+                                if (results.getInt("VERSION") == 0) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
+                                    doUpdate1();
+                                }
+                                else
+                                if (results.getInt("VERSION") == 1) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v1 (before upgrade to 2)"));
+                                    doUpdate2();
+                                }
+                                else
+                                if (results.getInt("VERSION") == 2) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v2 (before upgrade to 3)"));
+                                    doUpdate3();
+                                }
+                                else
+                                if (results.getInt("VERSION") == 3) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v3 (before upgrade to 4)"));
+                                    doUpdate4();
+                                }
+                                else
+                                if (results.getInt("VERSION") == 4) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4  (before upgrade to 5)"));
+                                    doUpdate5();
+                                }
+                                UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                                                "The Workspace has been upgraded to be compatible with the current WildLog application. "
+                                                + System.lineSeparator() 
+                                                + "Please consider running the 'Check and Clean the Workspace' process as well. "
+                                                + System.lineSeparator() 
+                                                + "(The feature is accessable from the 'Application' menu at the top of the window.)",
+                                                "WildLog Major Upgrade Complete", 
+                                                JOptionPane.INFORMATION_MESSAGE);
+                                        return -1;
+                                    }
+                                });
+                            }
+                            else {
+                                WildLogApp.getApplication().exit();
+                            }
+                        }
                     }
                 }
             }

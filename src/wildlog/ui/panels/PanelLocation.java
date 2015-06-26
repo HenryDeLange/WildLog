@@ -772,7 +772,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowse.setFocusPainted(false);
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnBrowse.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnBrowse.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnBrowse.setName("btnBrowse"); // NOI18N
         btnBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -787,8 +787,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBulkImport.setFocusPainted(false);
         btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnBulkImport.setIconTextGap(5);
-        btnBulkImport.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnBulkImport.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnBulkImport.setName("btnBulkImport"); // NOI18N
         btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -803,8 +802,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
         btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnHTML.setIconTextGap(5);
-        btnHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnHTML.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -827,7 +825,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         });
 
         btnReport.setBackground(new java.awt.Color(233, 239, 244));
-        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
+        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
         btnReport.setText("View Reports");
         btnReport.setToolTipText("View reports for this Place.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -847,8 +845,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnSunAndMoon.setToolTipText("Show the Sun and Moon information for this Place.");
         btnSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSunAndMoon.setFocusPainted(false);
-        btnSunAndMoon.setIconTextGap(5);
-        btnSunAndMoon.setMargin(new java.awt.Insets(2, 8, 2, 2));
+        btnSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSunAndMoon.setMargin(new java.awt.Insets(2, 6, 2, 2));
         btnSunAndMoon.setName("btnSunAndMoon"); // NOI18N
         btnSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

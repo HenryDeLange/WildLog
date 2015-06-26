@@ -1938,13 +1938,14 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
+        System.out.println("[CleanWorkspace]");
         // Popup 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
         int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
             public int showDialog() {
                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
                         "<html>It is <b>HIGHLY recommended to backup the entire WildLog Workspace folder</b> before continuing! <br>"
-                        + "Please <b>close any other applications</b> that might be accessing WildLog files. <br>"
+                        + "Please <b>close any other applications</b> that might be accessing any of the Files in the WildLog Workspace. <br>"
                         + "Note that WildLog will be automatically closed when the cleanup is finished. <br>"
                         + "This task will check that all links between the data and files are correct. <br>"
                         + "In addition all unnessasary files will be removed from the Workspace. </html>",
@@ -1957,10 +1958,10 @@ public final class WildLogView extends JFrame {
                 @Override
                 public int showDialog() {
                     return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "<html>Would you like to also recreate all cached thumbnails?"
-                            + "<br/>Recreating the thumbnails can improve system performance and might correct any thumbnails that "
-                            + "are still displaying incorrectly after the aplication has been restarted."
-                            + "<br/>Warining: This step is optional and can take very long to complete."
+                            "<html>Would you like to also recreate all cached image thumbnails?"
+                            + "<br/>Recreating the thumbnails can improve system performance and might correct thumbnails that "
+                            + "are displaying incorrectly."
+                            + "<br/>Warining: This step is optional but recommended. It can take very long to complete."
                             + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
                             "Recreate Thumbnails?",
                             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -1972,7 +1973,7 @@ public final class WildLogView extends JFrame {
                 tabbedPanel.remove(STATIC_TAB_COUNT);
             }
             // Lock the input/display and show busy message
-            // Note: we never remove the Busy dialog and greyed out background since the app wil be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
+            // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
             tabbedPanel.setSelectedIndex(0);
             JPanel panel = new JPanel(new AbsoluteLayout());
             panel.setPreferredSize(new Dimension(400, 50));
@@ -2066,15 +2067,22 @@ public final class WildLogView extends JFrame {
                                 final CleanupCounter counter = new CleanupCounter();
                                 Files.walkFileTree(inWildLogPaths.getAbsoluteFullPath(), new SimpleFileVisitor<Path>() {
                                     @Override
-                                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                                    public FileVisitResult visitFile(Path originalFile, BasicFileAttributes attrs) throws IOException {
                                         if (attrs.isRegularFile()) {
                                             // Kyk in DB of die path bestaan, as dit nie daar is nie delete die file
+// TODO: As die file bestaan maar nie in die DB link nie kan mens dalk probeer "slim" wees en die link afly deur ander info soos size, date en die path...
                                             WildLogFile wildLogFile = new WildLogFile();
-                                            wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(file).toString());
+                                            wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile).toString());
                                             if (app.getDBI().find(wildLogFile) == null) {
                                                 finalHandleFeedback.println("ERROR:     File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
-                                                finalHandleFeedback.println("+RESOLVED: Deleted the file from the Workspace: " + wildLogFile.getDBFilePath());
-                                                Files.deleteIfExists(file);
+                                                finalHandleFeedback.println("+RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
+                                                // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
+                                                Path destination = WildLogPaths.WILDLOG_LOST_FILES.getAbsoluteFullPath().resolve(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile));
+                                                while (Files.exists(destination)) {
+                                                    destination = destination.getParent().resolve("wl_" + destination.getFileName());
+                                                }
+                                                UtilsFileProcessing.copyFile(originalFile, destination, false, true);
+                                                UtilsFileProcessing.deleteRecursive(originalFile.toFile());
                                                 fileCount.counter++;
                                             }
                                         }
@@ -2090,6 +2098,8 @@ public final class WildLogView extends JFrame {
                             }
                         }
                         final CleanupHelper cleanupHelper = new CleanupHelper();
+                        // Do a quick DB backup
+                        app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS_CHECK_AND_CLEAN.getAbsoluteFullPath());
                         setProgress(1);
                         // ---------------------1---------------------
                         // First check database files
@@ -2307,13 +2317,15 @@ public final class WildLogView extends JFrame {
                         setProgress(65);
 
                         // ---------------------5---------------------
-                        // Check the rest of the data for inconsistencies(all Locations, Visits, Creatures and Observations link correctly)
+                        // Check the rest of the data for inconsistencies (all Locations, Visits, Creatures and Observations link correctly)
                         setMessage("Cleanup Step 5: Check links between records in the database... " + getProgress() + "%");
                         finalHandleFeedback.println("5) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
+                        // Check Visits
                         List<Visit> allVisits = app.getDBI().list(new Visit());
                         int badDataLinks = 0;
                         int countVisits = 0;
                         for (Visit visit : allVisits) {
+                            // Validate the Visit to Location link
                             Location temp = app.getDBI().find(new Location(visit.getLocationName()));
                             if (temp == null) {
                                 badDataLinks++;
@@ -2333,10 +2345,11 @@ public final class WildLogView extends JFrame {
                             setProgress(65 + (int)(countVisits/(double)allVisits.size()*3));
                             setMessage("Cleanup Step 5: Check links between records in the database... " + getProgress() + "%");
                         }
+                        // Check Sightings
                         List<Sighting> allSightings = app.getDBI().list(new Sighting(), false);
                         int countSightings = 0;
                         for (Sighting sighting : allSightings) {
-                            // Check Location
+                            // Validate the Sighting to Location link
                             Location tempLocation = app.getDBI().find(new Location(sighting.getLocationName()));
                             if (tempLocation == null) {
                                 badDataLinks++;
@@ -2351,7 +2364,7 @@ public final class WildLogView extends JFrame {
                                 sighting.setLocationName("WildLog_lost_and_found");
                                 app.getDBI().createOrUpdate(sighting, false);
                             }
-                            // Check Element
+                            // Validate the Sighting to Element link
                             Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
                             if (tempElement == null) {
                                 badDataLinks++;
@@ -2366,7 +2379,7 @@ public final class WildLogView extends JFrame {
                                 sighting.setElementName("WildLog_lost_and_found");
                                 app.getDBI().createOrUpdate(sighting, false);
                             }
-                            // Check Visit
+                            // Validate the Sighting to Visit link
                             Visit tempVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
                             if (tempVisit == null) {
                                 badDataLinks++;
@@ -2490,9 +2503,6 @@ public final class WildLogView extends JFrame {
                                     public void run() {
                                         if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
                                             if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-    //                                            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-    //                                                wildLogFile.getAbsoluteThumbnailPath(size);
-    //                                            }
                                                 // Maak net die nodigste thumbnails, want anders vat dinge donners lank
                                                 wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
                                                 wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
@@ -2540,20 +2550,22 @@ public final class WildLogView extends JFrame {
                         
                         // ---------------------?---------------------
                         // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
-                        // TODO: Maybe delete all non-wildlog files during cleanup
+// TODO: Maybe delete all non-wildlog files from the rest of the Workspace during cleanup?
 
+                        // --------------------- DONE ---------------------
+                        // Write out the summary
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("** Finished Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
-                        finalHandleFeedback.println("File on disk moved to new folder: " + filesMoved.counter);
-                        finalHandleFeedback.println("Database file record had no reference to a file on disk: " + filesWithoutPath);
-                        finalHandleFeedback.println("Database file record had a reference to a file on disk, but the file was not found: " + filesNotOnDisk);
-                        finalHandleFeedback.println("Database file record had no ID: " + filesWithoutID);
-                        finalHandleFeedback.println("Database file record had incorrect ID: " + filesWithBadID);
-                        finalHandleFeedback.println("Database file record had incorrect type: " + filesWithBadType);
-                        finalHandleFeedback.println("Database file record was missing non-essential data: " + filesWithMissingData);
-                        finalHandleFeedback.println("Workspace file not found in the database: " + filesNotInDB.counter);
+                        finalHandleFeedback.println("Files on disk moved to new folder: " + filesMoved.counter);
+                        finalHandleFeedback.println("Database file records with no reference to a file on disk: " + filesWithoutPath);
+                        finalHandleFeedback.println("Database file records with a reference to a file on disk, but the file was not found: " + filesNotOnDisk);
+                        finalHandleFeedback.println("Database file records with no ID: " + filesWithoutID);
+                        finalHandleFeedback.println("Database file records with incorrect ID: " + filesWithBadID);
+                        finalHandleFeedback.println("Database file records with incorrect type: " + filesWithBadType);
+                        finalHandleFeedback.println("Database file records with missing non-essential data: " + filesWithMissingData);
+                        finalHandleFeedback.println("Workspace files not found in the database: " + filesNotInDB.counter);
                         finalHandleFeedback.println("Incorrect links between database records: " + badDataLinks);
                         finalHandleFeedback.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
                         finalHandleFeedback.println("");
@@ -2563,6 +2575,20 @@ public final class WildLogView extends JFrame {
                         int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
                         int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
                         feedback.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
+                        // Print info to loags aswell (for upload)
+                        System.out.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
+                        System.out.println("Files on disk moved to new folder: " + filesMoved.counter);
+                        System.out.println("Database file records with no reference to a file on disk: " + filesWithoutPath);
+                        System.out.println("Database file records with a reference to a file on disk, but the file was not found: " + filesNotOnDisk);
+                        System.out.println("Database file records with no ID: " + filesWithoutID);
+                        System.out.println("Database file records with incorrect ID: " + filesWithBadID);
+                        System.out.println("Database file records with incorrect type: " + filesWithBadType);
+                        System.out.println("Database file records with missing non-essential data: " + filesWithMissingData);
+                        System.out.println("Workspace files not found in the database: " + filesNotInDB.counter);
+                        System.out.println("Incorrect links between database records: " + badDataLinks);
+                        System.out.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
+                        System.out.println("+++++++++++++++++++ DURATION +++++++++++++++++++");
+                        System.out.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
                         setMessage("Finished Workspace Cleanup...");
                         setProgress(100);
                     }
@@ -2592,7 +2618,7 @@ public final class WildLogView extends JFrame {
                 protected void finished() {
                     super.finished();
                     // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
-                    // that asks wether you want to clos ethe application or not, and it's best to rather restart after the cleanup.
+                    // that asks wether you want to close the application or not, and it's best to rather restart after the cleanup.
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {

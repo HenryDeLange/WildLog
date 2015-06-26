@@ -125,11 +125,11 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         tblSightings.setMinimumSize(new java.awt.Dimension(300, 300));
         tblSightings.setSelectionBackground(new java.awt.Color(125, 120, 93));
         tblSightings.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblSightingsMouseClicked(evt);
-            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblSightingsMouseReleased(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSightingsMouseClicked(evt);
             }
         });
         tblSightings.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -258,12 +258,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         pnlViewsLayout.setHorizontalGroup(
             pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnGoElement, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlViewsLayout.createSequentialGroup()
-                .addGroup(pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGoVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnGoBrowse, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, 0))
+            .addComponent(btnGoVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnGoBrowse, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlViewsLayout.setVerticalGroup(
             pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,7 +308,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         });
 
         btnViewReport.setBackground(new java.awt.Color(235, 233, 221));
-        btnViewReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
+        btnViewReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
         btnViewReport.setText("View Reports");
         btnViewReport.setToolTipText("Show available reports for these Observations.");
         btnViewReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
