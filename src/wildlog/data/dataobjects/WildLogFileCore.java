@@ -12,6 +12,8 @@ public class WildLogFileCore {
     protected Date uploadDate;
     protected WildLogFileType fileType;
     protected boolean defaultFile = false;
+    protected Date fileDate;
+    protected long fileSize;
 
 
     public WildLogFileCore() {
@@ -22,15 +24,21 @@ public class WildLogFileCore {
     }
 
     public WildLogFileCore(String inID, String inFilename, String inFilePath, WildLogFileType inFileType) {
-        this(inID, inFilename, inFilePath, inFileType, Calendar.getInstance().getTime());
+        this(inID, inFilename, inFilePath, inFileType, Calendar.getInstance().getTime(), null, 0);
     }
 
     public WildLogFileCore(String inID, String inFilename, String inFilePath, WildLogFileType inFileType, Date inUploadDate) {
+        this(inID, inFilename, inFilePath, inFileType, inUploadDate, null, 0);
+    }
+
+    public WildLogFileCore(String inID, String inFilename, String inOriginalFileLocation, WildLogFileType inFileType, Date inUploadDate, Date inFileDate, long inFileSize) {
         id = inID;
         filename = inFilename;
-        originalFileLocation = inFilePath;
+        originalFileLocation = inOriginalFileLocation;
         uploadDate = inUploadDate;
         fileType = inFileType;
+        fileDate = inFileDate;
+        fileSize = inFileSize;
     }
 
     
@@ -85,6 +93,22 @@ public class WildLogFileCore {
 
     public void setDefaultFile(boolean inDefaultFile) {
         defaultFile = inDefaultFile;
+    }
+
+    public Date getFileDate() {
+        return fileDate;
+    }
+
+    public void setFileDate(Date inFileDate) {
+        fileDate = inFileDate;
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long inFileSize) {
+        fileSize = inFileSize;
     }
 
 }
