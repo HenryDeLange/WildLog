@@ -92,6 +92,14 @@ public class UtilsImageProcessing {
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
+            WildLogThumbnailSizes thumbnailSize = WildLogThumbnailSizes.NORMAL;
+            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                if (inSize == size.getSize()) {
+                    thumbnailSize = size;
+                    break;
+                }
+            }
+            return getScaledIconForBrokenFiles(thumbnailSize);
         }
         finally {
             if (imageReader != null) {
@@ -106,7 +114,6 @@ public class UtilsImageProcessing {
                 }
             }
         }
-        return getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL);
     }
 
     private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
@@ -128,6 +135,10 @@ public class UtilsImageProcessing {
 //        return getScaledIcon(Paths.get(inURL.getPath()), inSize);
 //    }
 
+    public static ImageIcon getScaledIconForBrokenFiles(WildLogThumbnailSizes inSize) {
+        return getScaledIconForPlaceholder(WildLogSystemImages.BROKEN_FILES.getWildLogFile(), inSize);
+    }
+    
     public static ImageIcon getScaledIconForNoFiles(WildLogThumbnailSizes inSize) {
         return getScaledIconForPlaceholder(WildLogSystemImages.NO_FILES.getWildLogFile(), inSize);
     }
