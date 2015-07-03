@@ -22,7 +22,7 @@
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
-    <initialHeapSize>192</initialHeapSize>
+    <initialHeapSize>384</initialHeapSize>
     <maxHeapSize>768</maxHeapSize>
     <maxHeapPercent>75</maxHeapPercent>
   </jre>
@@ -33,12 +33,12 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>4.2.0.0</fileVersion>
-    <txtFileVersion>WildLog v4.2 Launcher</txtFileVersion>
+    <fileVersion>4.2.2.0</fileVersion>
+    <txtFileVersion>WildLog v4.2.2 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
     <copyright>2015</copyright>
-    <productVersion>4.2.0.0</productVersion>
-    <txtProductVersion>WildLog v4.2</txtProductVersion>
+    <productVersion>4.2.2.0</productVersion>
+    <txtProductVersion>WildLog v4.2.2</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>
