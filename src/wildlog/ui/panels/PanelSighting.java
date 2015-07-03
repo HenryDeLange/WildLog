@@ -2,6 +2,7 @@ package wildlog.ui.panels;
 
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -18,7 +19,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
@@ -57,6 +60,7 @@ import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
+import static wildlog.ui.utils.UtilsUI.doClipboardCopy;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
@@ -866,7 +870,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         lblSightingID.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblSightingID.setForeground(new java.awt.Color(102, 102, 102));
         lblSightingID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSightingID.setToolTipText("Right-click to copy the Observation ID.");
+        lblSightingID.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         lblSightingID.setName("lblSightingID"); // NOI18N
+        lblSightingID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblSightingIDMouseReleased(evt);
+            }
+        });
         sightingIncludes.add(lblSightingID, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 120, 50));
 
         spnNumberOfElements.setModel(new javax.swing.SpinnerNumberModel(0, 0, 2147483647, 1));
@@ -1049,7 +1060,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbSex.setName("cmbSex"); // NOI18N
         sightingIncludes.add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 35, 140, -1));
 
-        jLabel16.setText("Status:");
+        jLabel16.setText("Life Status:");
         jLabel16.setName("jLabel16"); // NOI18N
         sightingIncludes.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 85, -1, 20));
 
@@ -1806,6 +1817,25 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             panelToRefresh.doTheRefresh(this);
         }
     }//GEN-LAST:event_formWindowClosed
+
+    private void lblSightingIDMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSightingIDMouseReleased
+        if ((evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt))) {
+            JPopupMenu clipboardPopup = new JPopupMenu();
+            // Build the copy popup
+            JMenuItem copyItem = new JMenuItem("Copy Observation ID", new ImageIcon(WildLogApp.class.getResource("resources/icons/copy.png")));
+            copyItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    doClipboardCopy(Long.toString(sighting.getSightingCounter()));
+                }
+            });
+            clipboardPopup.add(copyItem);
+            // Wrap up and show up the popup
+            clipboardPopup.pack();
+            clipboardPopup.show(evt.getComponent(), evt.getPoint().x, evt.getPoint().y);
+            clipboardPopup.setVisible(true);
+        }
+    }//GEN-LAST:event_lblSightingIDMouseReleased
 
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));

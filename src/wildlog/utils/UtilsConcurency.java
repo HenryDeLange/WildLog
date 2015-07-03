@@ -234,7 +234,9 @@ public final class UtilsConcurency {
             @Override
             protected void done() {
                 super.done();
-                SwingUtilities.invokeLater(inRunWhenDone);
+                if (inRunWhenDone != null) {
+                    SwingUtilities.invokeLater(inRunWhenDone);
+                }
             }
         };
         swingWorkerUpload.execute();

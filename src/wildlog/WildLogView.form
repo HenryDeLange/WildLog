@@ -770,9 +770,9 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuUserGuide">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="WildLog User Guide"/>
+                <Property name="text" type="java.lang.String" value="Help - WildLog User Guide"/>
                 <Property name="toolTipText" type="java.lang.String" value="Opens the WildLog User Guide, or a link to a website where it can be downloaded."/>
                 <Property name="name" type="java.lang.String" value="mnuUserGuide" noResource="true"/>
               </Properties>

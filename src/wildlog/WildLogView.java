@@ -1308,8 +1308,8 @@ public final class WildLogView extends JFrame {
         jSeparator16.setName("jSeparator16"); // NOI18N
         helpMenu.add(jSeparator16);
 
-        mnuUserGuide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuUserGuide.setText("WildLog User Guide");
+        mnuUserGuide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        mnuUserGuide.setText("Help - WildLog User Guide");
         mnuUserGuide.setToolTipText("Opens the WildLog User Guide, or a link to a website where it can be downloaded.");
         mnuUserGuide.setName("mnuUserGuide"); // NOI18N
         mnuUserGuide.addActionListener(new java.awt.event.ActionListener() {
