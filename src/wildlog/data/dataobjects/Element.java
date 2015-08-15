@@ -1,5 +1,8 @@
 package wildlog.data.dataobjects;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
@@ -7,9 +10,14 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogSystemImages;
 import wildlog.xml.utils.UtilsXML;
 
 
@@ -30,7 +38,8 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Creature: " + primaryName + "</title></head>");
+        StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
+        htmlElement.append("<title>Creature: ").append(primaryName).append("</title></head>");
         htmlElement.append("<body bgcolor='#E3F0E3'>");
         htmlElement.append("<table bgcolor='#E3F0E3' width='100%'>");
         htmlElement.append("<tr><td style='font-size:9px;font-family:verdana;'>");
@@ -121,46 +130,116 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
     }
 
     @Override
-    public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
-        String html = UtilsHTML.FANCY_HTML_TEMPLATE;
-        // Title
-        html = html.replace("___INSERT_TITLE___", primaryName);
-        // Background
-        html = html.replace("___INSERT_GRADIENT_CSS___", "gradient_elements");
-        inProgressbarTask.setTaskProgress(1);
-        inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
-                + " " + inProgressbarTask.getProgress() + "%");
-        // Map
-//        ___INSERT_SCRIPT_TO_LOAD_MAP_POINTS___
-        inProgressbarTask.setTaskProgress(10);
-        inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
-                + " " + inProgressbarTask.getProgress() + "%");
-        // Header
-        html = html.replace("___INSERT_TABLE_HEADER___", primaryName);
-        // Images
-        String images = "";
-        List<WildLogFile> listWildLogFiles = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
-        for (WildLogFile wildLogFile : listWildLogFiles) {
-            images = images + wildLogFile.toHTML(UtilsHTMLExportTypes.ForFancyHTML);
-        }
-        html = html.replace("___INSERT_IMAGES___", images);
-        inProgressbarTask.setTaskProgress(15);
-        inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
-                + " " + inProgressbarTask.getProgress() + "%");
-        // Details
-        html = html.replace("___INSERT_DETAILS___", toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, inProgressbarTask));
-        // Sightings
-        String sightings = "";
+    public String toFancyHTML(String inTemplate, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+        String html = inTemplate;
         List<Sighting> listSightings = inApp.getDBI().list(new Sighting(primaryName, null, null), false);
         int counter = 0;
-        for (Sighting temp : listSightings) {
-            sightings = sightings + "\n" + temp.toFancyHTML(inApp, null);
-            inProgressbarTask.setTaskProgress(15 + (int)(((double)counter/listSightings.size())*(84)));
-            inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
-                    + " " + inProgressbarTask.getProgress() + "%");
+        int mapBeginIndex = html.indexOf("//___MAP_CLICKABLE_DATA_POINTS_START___") + "//___MAP_CLICKABLE_DATA_POINTS_START___".length();
+        int mapEndIndex = html.indexOf("//___MAP_CLICKABLE_DATA_POINTS_END___");
+        String mapTemplate = html.substring(mapBeginIndex, mapEndIndex).trim();
+        StringBuilder mapBuilder = new StringBuilder(1000 * listSightings.size());
+        int relatedBeginIndex = html.indexOf("<!--___REPEAT_RELATED_RECORDS_START___-->") + "<!--___REPEAT_RELATED_RECORDS_START___-->".length();
+        int relatedEndIndex = html.indexOf("<!--___REPEAT_RELATED_RECORDS_END___-->");
+        String relatedTemplate = html.substring(relatedBeginIndex, relatedEndIndex).trim();
+        StringBuilder relatedBuilder = new StringBuilder(1500 * listSightings.size());
+        int sliderBeginIndex = html.indexOf("___SUB_SLIDER_START___") + "___SUB_SLIDER_START___".length();
+        int sliderEndIndex = html.indexOf("___SUB_SLIDER_END___");
+        String sliderTemplate = html.substring(sliderBeginIndex, sliderEndIndex).trim();
+        int lightboxBeginIndex = html.indexOf("___SUB_LIGHTBOX_START___") + "___SUB_LIGHTBOX_START___".length();
+        int lightboxEndIndex = html.indexOf("___SUB_LIGHTBOX_END___");
+        String lightboxTemplate = html.substring(lightboxBeginIndex, lightboxEndIndex).trim();
+        int subFieldBeginIndex = html.indexOf("//___REGISTER_RELATED_RECORDS_FIELD_BOXES_START___") + "//___REGISTER_RELATED_RECORDS_FIELD_BOXES_START___".length();
+        int subFieldEndIndex = html.indexOf("//___REGISTER_RELATED_RECORDS_FIELD_BOXES_END___");
+        String subFieldTemplate = html.substring(subFieldBeginIndex, subFieldEndIndex).trim();
+        StringBuilder subFieldBuilder = new StringBuilder(200 * listSightings.size());
+        int sliderScriptBeginIndex = html.indexOf("//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_START___") + "//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_START___".length();
+        int sliderScriptEndIndex = html.indexOf("//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_END___");
+        String sliderScriptTemplate = html.substring(sliderScriptBeginIndex, sliderScriptEndIndex).trim();
+        StringBuilder sliderScriptBuilder = new StringBuilder(250 * listSightings.size());
+        for (Sighting tempSighting : listSightings) {
+            // JavaScript for related record fields
+            subFieldBuilder.append(subFieldTemplate.replace("relatedRecordsFieldBoxZZZ", "relatedRecordsFieldBox" + tempSighting.getSightingCounter()));
+            subFieldBuilder.append(System.lineSeparator());
+            // JavaScript for related record sliders
+            sliderScriptBuilder.append(sliderScriptTemplate.replace("subSliderZZZ", "subSlider" + tempSighting.getSightingCounter()));
+            sliderScriptBuilder.append(System.lineSeparator());
+            // Mapping Points
+            if (UtilsGps.getLatDecimalDegree(tempSighting) != 0 && UtilsGps.getLonDecimalDegree(tempSighting) != 0) {
+                mapBuilder.append(mapTemplate.replace("var markerZZZ", "var marker" + tempSighting.getSightingCounter())
+                                             .replace("LatLng(44.5403, -78.5463)", "LatLng(" + UtilsGps.getLatDecimalDegree(tempSighting) + "," + UtilsGps.getLonDecimalDegree(tempSighting) + ")")
+                                             .replace("ZZZ-title", tempSighting.getDisplayName().replaceAll("\"", "&quot;"))
+                                             .replace("var infowindowZZZ", "var infowindow" + tempSighting.getSightingCounter())
+                                             .replace("ZZZ-content", tempSighting.toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))
+                                             .replace("addListener(markerZZZ", "addListener(marker" + tempSighting.getSightingCounter())
+                                             .replace("infowindowZZZ.open(map, markerZZZ", "infowindow" + tempSighting.getSightingCounter() + ".open(map, marker" + tempSighting.getSightingCounter())
+                                             .replace("extend(markerZZZ", "extend(marker" + tempSighting.getSightingCounter()));
+            }
+            mapBuilder.append(System.lineSeparator());
+            // Observation Info
+            List<WildLogFile> lstFiles = inApp.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
+            StringBuilder sliderBuilder = new StringBuilder(200 * lstFiles.size());
+            StringBuilder lightboxBuilder = new StringBuilder(200 * lstFiles.size());
+            if (lstFiles.isEmpty()) {
+                lstFiles.add(WildLogSystemImages.NO_FILES.getWildLogFile());
+            }
+            for (WildLogFile wildLogFile : lstFiles) {
+                Path thumbnailFolder = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS.getAbsoluteFullPath().resolve(wildLogFile.getRelativePath().getParent());
+                try {
+                    Files.createDirectories(thumbnailFolder);
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+                Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM);
+                Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
+                UtilsFileProcessing.copyFile(fromFile, thumbnailPath, false, true);
+                Path toFileAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().relativize(thumbnailPath);
+                sliderBuilder.append(sliderTemplate.replace("href=\"#bigImgZZZ2\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                   .replace("src=\"./ZZZ2.jpg\"", "src=\"../" + toFileAsRelativePath.toString() + "\"")
+                                                   .replace("ZZZ2-alt", wildLogFile.getId())
+                                                   .replace("ZZZ2-title", wildLogFile.getFilename()));
+                sliderBuilder.append(System.lineSeparator());
+                lightboxBuilder.append(lightboxTemplate.replace("id=\"bigImgZZZ2\"", "id=\"bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                       .replace("src=\"./ZZZ2.jpg\"", "src=\"" + wildLogFile.getAbsolutePath() + "\"")
+                                                       .replace("ZZZ2-alt", wildLogFile.getId())
+                                                       .replace("ZZZ2-title", wildLogFile.getFilename()));
+                lightboxBuilder.append(System.lineSeparator());
+            }
+            // Set the HTML for the Slider and LisghtBox
+            relatedBuilder.append(relatedTemplate.replace("subSliderZZZ", "subSlider" + tempSighting.getSightingCounter())
+                                                 .replace("relatedRecordsFieldBoxZZZ", "relatedRecordsFieldBox" + tempSighting.getSightingCounter())
+                                                 .replace("___RELATED_RECORD_NAME___", tempSighting.getDisplayName())
+                                                 .replace("___SUB_SLIDER_START___", "")
+                                                 .replace("___SUB_SLIDER_END___", "")
+                                                 .replace("___SUB_LIGHTBOX_START___", "")
+                                                 .replace("___SUB_LIGHTBOX_END___", "")
+                                                 .replace("___RELATED_INFORMATION_CONTENT___", tempSighting.toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))
+                                                 .replace(sliderTemplate, sliderBuilder.toString())
+                                                 .replace(lightboxTemplate, lightboxBuilder.toString()));
+            relatedBuilder.append(System.lineSeparator());
+            // Update progress
+            if (inProgressbarTask != null) {
+                inProgressbarTask.setTaskProgress(25 + (int)(((double)counter/listSightings.size())*(74)));
+                inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+                        + " " + inProgressbarTask.getProgress() + "%");
+            }
             counter++;
         }
-        html = html.replace("___INSERT_SIGHTINGS___", sightings);
+        // Set the HTML of the Javascript
+        html = html.replace("//___REGISTER_RELATED_RECORDS_FIELD_BOXES_START___", "")
+                   .replace("//___REGISTER_RELATED_RECORDS_FIELD_BOXES_END___", "")
+                   .replace(subFieldTemplate, subFieldBuilder.toString())
+                   .replace("//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_START___", "")
+                   .replace("//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_END___", "")
+                   .replace(sliderScriptTemplate, sliderScriptBuilder.toString());
+        // Set the HTML of the Map
+        html = html.replace("//___MAP_CLICKABLE_DATA_POINTS_START___", "")
+                   .replace("//___MAP_CLICKABLE_DATA_POINTS_END___", "")
+                   .replace(mapTemplate, mapBuilder.toString());
+        // Set the HTML of the Observations
+        html = html.replace("<!--___REPEAT_RELATED_RECORDS_START___-->", "")
+                   .replace("<!--___REPEAT_RELATED_RECORDS_END___-->", "")
+                   .replace(relatedTemplate, relatedBuilder.toString());
         return html;
     }
 

@@ -48,7 +48,8 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Sightings ID: " + sightingCounter + "</title></head>");
+        StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8\'>");
+        htmlSighting.append("<title>Sightings ID: ").append(sightingCounter).append("</title></head>");
         htmlSighting.append("<body bgcolor='#EEEAD3'>");
         htmlSighting.append("<table bgcolor='#EEEAD3' width='100%'>");
         htmlSighting.append("<tr><td style='font-size:9px;font-family:verdana;'>");
@@ -115,8 +116,8 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     }
 
     @Override
-    public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
-        String html = UtilsHTML.FANCY_HTML_TEMPLATE_NESTED;
+    public String toFancyHTML(String inTemplate, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+        String html = inTemplate;
         String header = getElementName() + " - " + getLocationName() + " - " + UtilsHTML.formatDateAsString(date, true);
         StringBuilder filesString = new StringBuilder(500);
         List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));

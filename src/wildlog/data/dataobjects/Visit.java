@@ -27,7 +27,8 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Periods: " + name + "</title></head>");
+        StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
+        htmlVisit.append("<title>Periods: ").append(name).append("</title></head>");
         htmlVisit.append("<body bgcolor='#E6E4F0'>");
         htmlVisit.append("<table bgcolor='#E6E4F0' width='100%'>");
         htmlVisit.append("<tr><td style='font-size:9px;font-family:verdana;'>");
@@ -80,7 +81,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
     }
 
     @Override
-    public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+    public String toFancyHTML(String inTemplate, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

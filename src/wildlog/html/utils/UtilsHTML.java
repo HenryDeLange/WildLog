@@ -2,6 +2,8 @@ package wildlog.html.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.format.DateTimeFormatter;
@@ -158,26 +160,82 @@ public final class UtilsHTML {
 
 
     public static void copyFancyHtmlResources(Path inDestinationPath) {
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/accordian.css"), inDestinationPath.resolve("accordian.css"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/accordian.js"), inDestinationPath.resolve("accordian.js"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/gradient_elements.css"), inDestinationPath.resolve("gradient_elements.css"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/gradient_locations.css"), inDestinationPath.resolve("gradient_locations.css"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/gradient_visits.css"), inDestinationPath.resolve("gradient_visits.css"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/lightbox.css"), inDestinationPath.resolve("lightbox.css"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/lightbox.js"), inDestinationPath.resolve("lightbox.js"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/maps.css"), inDestinationPath.resolve("maps.css"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/maps.js"), inDestinationPath.resolve("maps.js"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/sliderman.css"), inDestinationPath.resolve("sliderman.css"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/sliderman.js"), inDestinationPath.resolve("sliderman.js"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/bg.png"), inDestinationPath.resolve("bg.png"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/bullet.png"), inDestinationPath.resolve("bullet.png"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/bullet_active.png"), inDestinationPath.resolve("bullet_active.png"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/clear.gif"), inDestinationPath.resolve("clear.gif"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/close.gif"), inDestinationPath.resolve("close.gif"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/left.png"), inDestinationPath.resolve("left.png"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/loading.gif"), inDestinationPath.resolve("loading.gif"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/overlay.png"), inDestinationPath.resolve("overlay.png"));
-        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/html/images/right.png"), inDestinationPath.resolve("right.png"));
+        // BXSLider
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/bxSlider/jquery.bxslider.min.css"), inDestinationPath.resolve("bxSlider/jquery.bxslider.min.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/bxSlider/jquery.bxslider.min.js"), inDestinationPath.resolve("bxSlider/jquery.bxslider.min.js"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/bxSlider/images/bx_loader.gif"), inDestinationPath.resolve("bxSlider/images/bx_loader.gif"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/bxSlider/images/controls.png"), inDestinationPath.resolve("bxSlider/images/controls.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/bxSlider/vendor/jquery.easing.1.3.js"), inDestinationPath.resolve("bxSlider/vendor/jquery.easing.1.3.js"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/bxSlider/vendor/jquery.fitvids.js"), inDestinationPath.resolve("bxSlider/vendor/jquery.fitvids.js"));
+        // FontAwesome
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/css/font-awesome.min.css"), inDestinationPath.resolve("font-awesome/css/font-awesome.min.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/fonts/FontAwesome.otf"), inDestinationPath.resolve("font-awesome/fonts/FontAwesome.otf"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/fonts/fontawesome-webfont.eot"), inDestinationPath.resolve("font-awesome/fonts/fontawesome-webfont.eot"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/fonts/fontawesome-webfont.svg"), inDestinationPath.resolve("font-awesome/fonts/fontawesome-webfont.svg"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/fonts/fontawesome-webfont.ttf"), inDestinationPath.resolve("font-awesome/fonts/fontawesome-webfont.ttf"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/fonts/fontawesome-webfont.woff"), inDestinationPath.resolve("font-awesome/fonts/fontawesome-webfont.woff"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/fonts/fontawesome-webfont.woff2"), inDestinationPath.resolve("font-awesome/fonts/fontawesome-webfont.woff2"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/animated.less"), inDestinationPath.resolve("font-awesome/less/animated.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/bordered-pulled.less"), inDestinationPath.resolve("font-awesome/less/bordered-pulled.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/core.less"), inDestinationPath.resolve("font-awesome/less/core.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/fixed-width.less"), inDestinationPath.resolve("font-awesome/less/fixed-width.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/font-awesome.less"), inDestinationPath.resolve("font-awesome/less/font-awesome.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/icons.less"), inDestinationPath.resolve("font-awesome/less/icons.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/larger.less"), inDestinationPath.resolve("font-awesome/less/larger.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/list.less"), inDestinationPath.resolve("font-awesome/less/list.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/mixins.less"), inDestinationPath.resolve("font-awesome/less/mixins.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/path.less"), inDestinationPath.resolve("font-awesome/less/path.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/rotated-flipped.less"), inDestinationPath.resolve("font-awesome/less/rotated-flipped.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/stacked.less"), inDestinationPath.resolve("font-awesome/less/stacked.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/less/variables.less"), inDestinationPath.resolve("font-awesome/less/variables.less"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_animated.scss"), inDestinationPath.resolve("font-awesome/scss/_animated.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_bordered-pulled.scss"), inDestinationPath.resolve("font-awesome/scss/_bordered-pulled.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_core.scss"), inDestinationPath.resolve("font-awesome/scss/_core.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_fixed-width.scss"), inDestinationPath.resolve("font-awesome/scss/_fixed-width.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_icons.scss"), inDestinationPath.resolve("font-awesome/scss/_icons.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_larger.scss"), inDestinationPath.resolve("font-awesome/scss/_larger.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_list.scss"), inDestinationPath.resolve("font-awesome/scss/_list.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_mixins.scss"), inDestinationPath.resolve("font-awesome/scss/_mixins.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_path.scss"), inDestinationPath.resolve("font-awesome/scss/_path.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_rotated-flipped.scss"), inDestinationPath.resolve("font-awesome/scss/_rotated-flipped.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_stacked.scss"), inDestinationPath.resolve("font-awesome/scss/_stacked.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_variables.scss"), inDestinationPath.resolve("font-awesome/scss/_variables.scss"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/font-awesome/scss/_variables.scss"), inDestinationPath.resolve("font-awesome/scss/_variables.scss"));
+        // Gradient
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/gradient/gradient.css"), inDestinationPath.resolve("gradient/gradient.css"));
+        // JQUery
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/jquery/jquery-1.11.3.min.js"), inDestinationPath.resolve("jquery/jquery-1.11.3.min.js"));
+        // JQuery UI
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/jqueryui/jquery-ui.min.css"), inDestinationPath.resolve("jqueryui/jquery-ui.min.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/jqueryui/jquery-ui.min.js"), inDestinationPath.resolve("jqueryui/jquery-ui.min.js"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/jqueryui/jquery-ui.structure.min.css"), inDestinationPath.resolve("jqueryui/jquery-ui.structure.min.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/jqueryui/jquery-ui.theme.min.css"), inDestinationPath.resolve("jqueryui/jquery-ui.theme.min.css"));
+        // Prime UI
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/primeui/primeui-2.0-min.css"), inDestinationPath.resolve("primeui/primeui-2.0-min.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/primeui/primeui-2.0-min.js"), inDestinationPath.resolve("primeui/primeui-2.0-min.js"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/primeui/css/core/core.css"), inDestinationPath.resolve("primeui/css/core/core.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/primeui/css/fieldset/fieldset.css"), inDestinationPath.resolve("primeui/css/fieldset/fieldset.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/primeui/js/core/core.js"), inDestinationPath.resolve("primeui/js/core/core.js"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/primeui/js/fieldset/fieldset.js"), inDestinationPath.resolve("primeui/js/fieldset/fieldset.js"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/primeui/plugins/cursorposition.js"), inDestinationPath.resolve("primeui/plugins/cursorposition.js"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/primeui/plugins/rangyinput.js"), inDestinationPath.resolve("primeui/plugins/rangyinput.js"));
+        // Theme
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/jquery-ui.css"), inDestinationPath.resolve("theme/smoothness/jquery-ui.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/jquery-ui.min.css"), inDestinationPath.resolve("theme/smoothness/jquery-ui.min.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/theme.css"), inDestinationPath.resolve("theme/smoothness/theme.css"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-bg_flat_0_aaaaaa_40x100.png"), inDestinationPath.resolve("theme/smoothness/images/ui-bg_flat_0_aaaaaa_40x100.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-bg_flat_75_ffffff_40x100.png"), inDestinationPath.resolve("theme/smoothness/images/ui-bg_flat_75_ffffff_40x100.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-bg_glass_55_fbf9ee_1x400.png"), inDestinationPath.resolve("theme/smoothness/images/ui-bg_glass_55_fbf9ee_1x400.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-bg_glass_65_ffffff_1x400.png"), inDestinationPath.resolve("theme/smoothness/images/ui-bg_glass_65_ffffff_1x400.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-bg_glass_75_dadada_1x400.png"), inDestinationPath.resolve("theme/smoothness/images/ui-bg_glass_75_dadada_1x400.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png"), inDestinationPath.resolve("theme/smoothness/images/ui-bg_glass_75_e6e6e6_1x400.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-bg_glass_95_fef1ec_1x400.png"), inDestinationPath.resolve("theme/smoothness/images/ui-bg_glass_95_fef1ec_1x400.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png"), inDestinationPath.resolve("theme/smoothness/images/ui-bg_highlight-soft_75_cccccc_1x100.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-icons_2e83ff_256x240.png"), inDestinationPath.resolve("theme/smoothness/images/ui-icons_2e83ff_256x240.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-icons_222222_256x240.png"), inDestinationPath.resolve("theme/smoothness/images/ui-icons_222222_256x240.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-icons_454545_256x240.png"), inDestinationPath.resolve("theme/smoothness/images/ui-icons_454545_256x240.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-icons_888888_256x240.png"), inDestinationPath.resolve("theme/smoothness/images/ui-icons_888888_256x240.png"));
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-icons_cd0a0a_256x240.png"), inDestinationPath.resolve("theme/smoothness/images/ui-icons_cd0a0a_256x240.png"));
     }
 
     public static Path exportFancyHTML(DataObjectWithHTML inDataObject, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
@@ -185,102 +243,103 @@ public final class UtilsHTML {
             inProgressbarTask.setMessage("Starting the HTML (Advanced) Export for '" + inDataObject.getDisplayName() + "' ");
             inProgressbarTask.setTaskProgress(0);
         }
+        // Copy the scripts and stylesheets
+        UtilsHTML.copyFancyHtmlResources(WildLogPaths.WILDLOG_EXPORT_HTML_FANCY_RESOURCES.getAbsoluteFullPath());
+        if (inProgressbarTask != null) {
+            inProgressbarTask.setTaskProgress(3);
+            inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+        }
+        // Get the template file
+        final char[] buffer = new char[4096];
+        final StringBuilder builder = new StringBuilder(7500);
+        try (Reader in = new InputStreamReader(WildLogApp.class.getResourceAsStream("html/fancy/Template/wildlog.html"), "UTF-8")) {
+            int length = 0;
+            while (length >= 0) {
+                length = in.read(buffer, 0, buffer.length);
+                if (length > 0) {
+                    builder.append(buffer, 0, length);
+                }
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        String template = builder.toString();
+        // Replace the placeholders in the template with actual content
+        template = template.replace("___THE_TITLE___", inDataObject.getDisplayName());
+        template = template.replace("___THE_HEADING___", inDataObject.getDisplayName());
+        template = template.replace("___INFORMATION_CONTENT___", inDataObject.toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, null));
+        // Copy the thumbnails and setup the main slideshow and image list
+        int mainSliderBeginIndex = template.indexOf("___MAIN_SLIDER_START___") + "___MAIN_SLIDER_START___".length();
+        int mainSliderEndIndex = template.indexOf("___MAIN_SLIDER_END___");
+        String mainSliderTemplate = template.substring(mainSliderBeginIndex, mainSliderEndIndex).trim();
+        StringBuilder mainSlider = new StringBuilder(100);
+        int imageListBeginIndex = template.indexOf("___MAIN_LIGHTBOX_START___") + "___MAIN_LIGHTBOX_START___".length();
+        int imageListEndIndex = template.indexOf("___MAIN_LIGHTBOX_END___");
+        String imageListTemplate = template.substring(imageListBeginIndex, imageListEndIndex).trim();
+        StringBuilder imageList = new StringBuilder(200);
+        List<WildLogFile> lstFiles = inApp.getDBI().list(new WildLogFile(inDataObject.getWildLogFileID()));
+        for (int t = 0; t < lstFiles.size(); t++) {
+            WildLogFile wildLogFile = lstFiles.get(t);
+            Path thumbnailFolder = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS.getAbsoluteFullPath().resolve(wildLogFile.getRelativePath().getParent());
+            try {
+                Files.createDirectories(thumbnailFolder);
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+            Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
+            UtilsFileProcessing.copyFile(fromFile, thumbnailPath, false, true);
+            // Get relative path
+            Path toFileAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().relativize(thumbnailPath);
+            // Add to Main Slider
+            mainSlider.append(mainSliderTemplate.replace("ZZZ1-alt", wildLogFile.getId())
+                                                .replace("ZZZ1-title", wildLogFile.getFilename())
+                                                .replace("href=\"#bigImgZZZ1\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                .replace("src=\"./ZZZ1.jpg\"", "src=\"../" + toFileAsRelativePath.toString() + "\""));
+            mainSlider.append(System.lineSeparator());
+            // Add to full image list
+            imageList.append(imageListTemplate.replace("ZZZ1-alt1", wildLogFile.getId())
+                                              .replace("ZZZ1-alt2", wildLogFile.getId())
+                                              .replace("ZZZ1-title1", wildLogFile.getFilename())
+                                              .replace("ZZZ1-title2", wildLogFile.getFilename())
+                                              .replace("id=\"smallImgZZZ1\"", "id=\"smallImg" + wildLogFile.getDBFilePath() + "\"")
+                                              .replace("href=\"#bigImgZZZ1\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                              .replace("id=\"bigImgZZZ1\"", "id=\"bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                              .replace("href=\"#bigImgZZZ1a\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                              .replace("href=\"#bigImgZZZ1b\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                              .replace("src=\"./ZZZ1.jpg1\"", "src=\"../" + toFileAsRelativePath.toString() + "\"")
+                                              .replace("src=\"./ZZZ1.jpg2\"", "src=\"" + wildLogFile.getAbsolutePath() + "\""));
+            imageList.append(System.lineSeparator());
+            // Update progress
+            if (inProgressbarTask != null) {
+                inProgressbarTask.setTaskProgress((3 + (int)((double)t/(double)lstFiles.size()*22.0)));
+                inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+            }
+        }
+        // Set the HTML of the MainSlider
+        template = template.replace("___MAIN_SLIDER_START___", "");
+        template = template.replace("___MAIN_SLIDER_END___", "");
+        template = template.replace(mainSliderTemplate, mainSlider.toString());
+        // Set the HTML of the Image List Lightbox
+        template = template.replace("___MAIN_LIGHTBOX_START___", "");
+        template = template.replace("___MAIN_LIGHTBOX_END___", "");
+        template = template.replace(imageListTemplate, imageList.toString());
+        if (inProgressbarTask != null) {
+            inProgressbarTask.setTaskProgress(25);
+            inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+        }
+        // Setup the Map and Sighting data (each data object will do it slightly differently
+        template = inDataObject.toFancyHTML(template, inApp, inProgressbarTask);
+        // Write the final file
         Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().resolve(inDataObject.getExportPrefix()).resolve(inDataObject.getDisplayName() + ".html");
-        UtilsFileProcessing.createFileFromBytes(inDataObject.toFancyHTML(inApp, inProgressbarTask).getBytes(), toFile);
+        UtilsFileProcessing.createFileFromBytes(template.getBytes(), toFile);
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(100);
             inProgressbarTask.setMessage("Done with the HTML (Advanced) Export for '" + inDataObject.getDisplayName() + "' ");
         }
         return toFile;
     }
-
-    public static final String FANCY_HTML_TEMPLATE =
-            "<html>\n" +
-            "<head>\n" +
-            "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>\n" +
-            "<title>___INSERT_TITLE___</title>\n" +
-            "<!-- Gradient background -->\n" +
-            "<link rel=\"stylesheet\" type=\"text/css\" href=\"../Scripts/___INSERT_GRADIENT_CSS___.css\" />\n" +
-            "<!-- Accordian -->\n" +
-            "<link rel=\"stylesheet\" type=\"text/css\" href=\"../Scripts/accordian.css\" />\n" +
-            "<script type=\"text/javascript\" src=\"../Scripts/accordian.js\"></script>\n" +
-            "<!-- Sliderman -->\n" +
-            "<script type=\"text/javascript\" src=\"../Scripts/sliderman.js\"></script>\n" +
-            "<link rel=\"stylesheet\" type=\"text/css\" href=\"../Scripts/sliderman.css\" />\n" +
-            "<!-- Lightbox -->\n" +
-            "<script type=\"text/javascript\" src=\"../Scripts/lightbox.js\"></script>\n" +
-            "<link rel=\"stylesheet\" type=\"text/css\" href=\"../Scripts/lightbox.css\" />\n" +
-            "<!-- Maps -->\n" +
-            "<link rel=\"stylesheet\" type=\"text/css\" href=\"../Scripts/maps.css\" />\n" +
-            "<script src=\"https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization\"></script> <!-- note the extra param in the URL for the heatmap -->\n" +
-            "<script type=\"text/javascript\" src=\"../Scripts/maps.js\"></script>\n"
-            + "___INSERT_SCRIPT_TO_LOAD_MAP_POINTS___ \n" +
-            "</head>" +
-            "<body onload=\"initAccordian();\"> <!-- initLightbox(); done in modified Sliderman.js -->\n" +
-            "	<br/>\n" +
-            "	<table style=\"margin-left:auto; margin-right:auto; width:850px; font:15px arial,sans-serif;\" border=\"1\">\n" +
-            "		<tr style=\"width:850px\" align=\"center\">\n" +
-            "			<td colspan=\"2\" >\n" +
-            "				<h1>___INSERT_TABLE_HEADER___</h1>\n" +
-            "			</td>\n" +
-            "		</tr>\n" +
-            "		<tr>\n" +
-            "			<td>\n" +
-            "				<div id=\"wrapper\">\n" +
-            "					<div id=\"examples_outer\">\n" +
-            "						<div id=\"slider_container_2\">\n" +
-            "							<div id=\"SliderName_2\"  class=\"SliderName_2\">\n" +
-            "								___INSERT_IMAGES___ \n" +
-            "							</div>" +
-            "                                                   <div class=\"c\"></div>\n" +
-            "							<div id=\"SliderNameNavigation_2\"></div>\n" +
-            "							<script type=\"text/javascript\">\n" +
-            "								var demoSlider_2 = Sliderman.slider({container: 'SliderName_2', \n" +
-            "										width: 300, \n" +
-            "										height: 300, \n" +
-            "										effects: 'fade',\n" +
-            "									display: {\n" +
-            "										autoplay: 7000,\n" +
-            "										loading: {background: '#000000', opacity: 0.5, image: '../Scripts/loading.gif'},\n" +
-            "										buttons: {hide: true, opacity: 1, prev: {className: 'SliderNamePrev_2', label: ''}, next: {className: 'SliderNameNext_2', label: ''}},\n" +
-            "										description: {hide: true, background: '#000000', opacity: 0.4, height: 35, position: 'bottom'},navigation: {container: 'SliderNameNavigation_2', label: '<img src=\"../Scripts/clear.gif\" />'}\n" +
-            "									}\n" +
-            "								});\n" +
-            "							</script>\n" +
-            "						</div>\n" +
-            "					</div>\n" +
-            "				</div>\n" +
-            "			</td>\n" +
-            "			<td align=\"center\">\n" +
-            "				<div id=\"map-canvas\"></div>\n" +
-            "			</td>\n" +
-            "		</tr>" +
-            "           <tr>\n" +
-            "			<td colspan=\"2\" >\n" +
-            "				<div class=\"accordionItem\">\n" +
-            "					<h2>Full Information</h2>\n" +
-            "					<div>\n" +
-            "						___INSERT_DETAILS___ \n" +
-            "					</div>\n" +
-            "				</div>\n" +
-            "				<div class=\"accordionItem\">\n" +
-            "					<h2>Observations</h2>\n" +
-            "					<div>\n" +
-            "						___INSERT_SIGHTINGS___ \n" +
-            "					</div>\n" +
-            "				</div>\n" +
-            "			</td>\n" +
-            "		</tr>\n" +
-            "	</table>\n" +
-            "</body>\n" +
-            "</html>";
-
-    public static final String FANCY_HTML_TEMPLATE_NESTED =
-            "	<div class=\"accordionItem\">\n" +
-            "       <h2>___INSERT_NESTED_HEADER___</h2>\n" +
-            "       <div>\n" +
-            "		 ___INSERT_NESTED_CONTENT___ \n" +
-            "       </div>\n" +
-            "	</div>";
 
 }

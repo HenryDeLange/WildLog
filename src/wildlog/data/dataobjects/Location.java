@@ -26,7 +26,8 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Place: " + name + "</title></head>");
+        StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
+        htmlLocation.append("<title>Place: ").append(name).append("</title></head>");
         htmlLocation.append("<body bgcolor='E9EFF4'>");
         htmlLocation.append("<table bgcolor='#E9EFF4' width='100%'>");
         htmlLocation.append("<tr><td style='font-size:9px;font-family:verdana;'>");
@@ -97,7 +98,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
     }
 
     @Override
-    public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+    public String toFancyHTML(String inTemplate, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

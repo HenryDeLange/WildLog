@@ -46,8 +46,10 @@ public class ExportDialog extends JDialog {
         // Auto generated code
         initComponents();
         // Determine what buttons to show
-        if (element == null && location == null && visit == null) {
+        if (element == null && location == null && visit == null && sighting == null) {
             btnExportFiles.setVisible(false);
+        }
+        if (element == null && location == null && visit == null) {
             btnExportFilesObservations.setVisible(false);
         }
         if (inLstSightings == null || inLstSightings.isEmpty()) {
@@ -188,7 +190,6 @@ public class ExportDialog extends JDialog {
         btnExportHTMLAdvanced.setText("Export as Webpage (Advanced)");
         btnExportHTMLAdvanced.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportHTMLAdvanced.setEnabled(false);
         btnExportHTMLAdvanced.setFocusPainted(false);
         btnExportHTMLAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTMLAdvanced.setIconTextGap(10);
@@ -716,13 +717,54 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsHTML.copyFancyHtmlResources(WildLogPaths.WILDLOG_EXPORT_HTML_FANCY_RESOURCES.getAbsoluteFullPath());
                     UtilsFileProcessing.openFile(UtilsHTML.exportFancyHTML(element, app, this));
                     return null;
                 }
             });
         }
-// TODO: Generate fancy HTML
+        if (location != null) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    UtilsFileProcessing.openFile(UtilsHTML.exportFancyHTML(location, app, this));
+                    return null;
+                }
+            });
+        }
+        if (visit != null) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    UtilsFileProcessing.openFile(UtilsHTML.exportFancyHTML(visit, app, this));
+                    return null;
+                }
+            });
+        }
+        if (sighting != null) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    UtilsFileProcessing.openFile(UtilsHTML.exportFancyHTML(sighting, app, this));
+                    return null;
+                }
+            });
+        }
+        if (lstSightings != null && !lstSightings.isEmpty()) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setProgress(0);
+                    setMessage("Starting the HTML Export for Observations");
+                    for (Sighting tempSighting : lstSightings) {
+                        UtilsHTML.exportFancyHTML(tempSighting, app, this);
+                    }
+                    setProgress(100);
+                    setMessage("Done with the HTML Export for Observations");
+                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath());
+                    return null;
+                }
+            });
+        }
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportHTMLAdvancedActionPerformed

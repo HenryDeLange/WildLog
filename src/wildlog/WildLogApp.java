@@ -77,7 +77,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    public static String WILDLOG_VERSION = "4.2.2";
+    public static String WILDLOG_VERSION = "4.2.3";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static boolean useNimbusLF = false;
@@ -174,7 +174,7 @@ public class WildLogApp extends Application {
                                 JEditorPane editorPane = new JEditorPane("text/html", "<html><body style=\"" + style + "\">"
                                         + "To download WildLog v" + response.toString() 
                                         + " go to <a href=\"http://software.mywild.co.za/p/download-wildlog.html\">http://software.mywild.co.za/p/download-wildlog.html</a>"
-                                        + " or visit <a href=\"http://www.mywild.co.za\">http://www.mywild.co.za</a> for more information."
+                                        + " or visit <a href=\"http://software.mywild.co.za\">http://software.mywild.co.za</a> for information about the new release."
                                         + "</body></html>");
                                 editorPane.addHyperlinkListener(new HyperlinkListener() {
                                         @Override
