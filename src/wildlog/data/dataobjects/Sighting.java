@@ -116,21 +116,6 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     }
 
     @Override
-    public String toFancyHTML(String inTemplate, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
-        String html = inTemplate;
-        String header = getElementName() + " - " + getLocationName() + " - " + UtilsHTML.formatDateAsString(date, true);
-        StringBuilder filesString = new StringBuilder(500);
-        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
-        for (int t = 0; t < files.size(); t++) {
-            filesString.append(files.get(t).toHTML(UtilsHTMLExportTypes.ForFancyHTML));
-        }
-        header = header + filesString;
-        html = html.replace("___INSERT_NESTED_HEADER___", header);
-        html = html.replace("___INSERT_NESTED_CONTENT___", getHtmlContent(false, inApp, UtilsHTMLExportTypes.ForFancyHTML, inProgressbarTask));
-        return html;
-    }
-
-    @Override
     public KmlEntry toKML(int inID, WildLogApp inApp) {
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);

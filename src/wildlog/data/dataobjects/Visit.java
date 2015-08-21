@@ -81,11 +81,6 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
     }
 
     @Override
-    public String toFancyHTML(String inTemplate, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public String toXML(WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIncludeSightings) {
         StringBuilder builder = new StringBuilder(300);
         builder.append("<Period>");

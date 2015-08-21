@@ -7,16 +7,25 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogSystemImages;
 
 
 public final class UtilsHTML {
@@ -32,22 +41,6 @@ public final class UtilsHTML {
         if (UtilsHTMLExportTypes.ForHTML.equals(inExportType)) {
             // Create the directories
             Path thumbnailFolder = WildLogPaths.WILDLOG_EXPORT_HTML_THUMBNAILS.getAbsoluteFullPath().resolve(inWildLogFile.getRelativePath().getParent());
-            try {
-                Files.createDirectories(thumbnailFolder);
-            }
-            catch (IOException ex) {
-                ex.printStackTrace(System.err);
-            }
-            // Copy the file. (Don't replace files, but if it already exists use that copy.)
-            Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
-            UtilsFileProcessing.copyFile(fromFile, thumbnailPath, false, true);
-            // Get relative path
-            toFileAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath().relativize(thumbnailPath);
-        }
-        else
-        if (UtilsHTMLExportTypes.ForFancyHTML.equals(inExportType)) {
-            // Create the directories
-            Path thumbnailFolder = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS.getAbsoluteFullPath().resolve(inWildLogFile.getRelativePath().getParent());
             try {
                 Files.createDirectories(thumbnailFolder);
             }
@@ -81,10 +74,6 @@ public final class UtilsHTML {
         }
         // Generate HTML segment
         if (inExportType.equals(UtilsHTMLExportTypes.ForHTML)) {
-            return "<img src=\"../" + toFileAsRelativePath.toString().replace(File.separator, "/") + "\"/>  ";
-        }
-        else
-        if (inExportType.equals(UtilsHTMLExportTypes.ForFancyHTML)) {
             return "<img src=\"../" + toFileAsRelativePath.toString().replace(File.separator, "/") + "\"/>  ";
         }
         else
@@ -290,28 +279,38 @@ public final class UtilsHTML {
             }
             Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
             Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
-            UtilsFileProcessing.copyFile(fromFile, thumbnailPath, false, true);
+            UtilsFileProcessing.copyFile(fromFile, thumbnailPath, true, true);
             // Get relative path
-            Path toFileAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().relativize(thumbnailPath);
+            Path thumbnailAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().relativize(thumbnailPath);
             // Add to Main Slider
-            mainSlider.append(mainSliderTemplate.replace("ZZZ1-alt", wildLogFile.getId())
-                                                .replace("ZZZ1-title", wildLogFile.getFilename())
-                                                .replace("href=\"#bigImgZZZ1\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
-                                                .replace("src=\"./ZZZ1.jpg\"", "src=\"../" + toFileAsRelativePath.toString() + "\""));
+            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                mainSlider.append(mainSliderTemplate.replace("ZZZ1-alt", wildLogFile.getId())
+                                                    .replace("ZZZ1-title", wildLogFile.getFilename())
+                                                    .replace("href=\"#bigImgZZZ1\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                    .replace("src=\"./ZZZ1.jpg\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\""));
+            }
+            else {
+                mainSlider.append(mainSliderTemplate.replace("ZZZ1-alt", wildLogFile.getId())
+                                                    .replace("ZZZ1-title", wildLogFile.getFilename())
+                                                    .replace("href=\"#bigImgZZZ1\"", "href=\"" + wildLogFile.getAbsolutePath() + "\"")
+                                                    .replace("src=\"./ZZZ1.jpg\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\""));
+            }
             mainSlider.append(System.lineSeparator());
             // Add to full image list
-            imageList.append(imageListTemplate.replace("ZZZ1-alt1", wildLogFile.getId())
-                                              .replace("ZZZ1-alt2", wildLogFile.getId())
-                                              .replace("ZZZ1-title1", wildLogFile.getFilename())
-                                              .replace("ZZZ1-title2", wildLogFile.getFilename())
-                                              .replace("id=\"smallImgZZZ1\"", "id=\"smallImg" + wildLogFile.getDBFilePath() + "\"")
-                                              .replace("href=\"#bigImgZZZ1\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
-                                              .replace("id=\"bigImgZZZ1\"", "id=\"bigImg" + wildLogFile.getDBFilePath() + "\"")
-                                              .replace("href=\"#bigImgZZZ1a\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
-                                              .replace("href=\"#bigImgZZZ1b\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
-                                              .replace("src=\"./ZZZ1.jpg1\"", "src=\"../" + toFileAsRelativePath.toString() + "\"")
-                                              .replace("src=\"./ZZZ1.jpg2\"", "src=\"" + wildLogFile.getAbsolutePath() + "\""));
-            imageList.append(System.lineSeparator());
+            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                imageList.append(imageListTemplate.replace("ZZZ1-alt1", wildLogFile.getId())
+                                                  .replace("ZZZ1-alt2", wildLogFile.getId())
+                                                  .replace("ZZZ1-title1", wildLogFile.getFilename())
+                                                  .replace("ZZZ1-title2", wildLogFile.getFilename())
+                                                  .replace("id=\"smallImgZZZ1\"", "id=\"smallImg" + wildLogFile.getDBFilePath() + "\"")
+                                                  .replace("href=\"#bigImgZZZ1\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                  .replace("id=\"bigImgZZZ1\"", "id=\"bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                  .replace("href=\"#bigImgZZZ1a\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                  .replace("href=\"#bigImgZZZ1b\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                  .replace("src=\"./ZZZ1.jpg1\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\"")
+                                                  .replace("src=\"./ZZZ1.jpg2\"", "src=\"" + wildLogFile.getAbsolutePath() + "\""));
+                imageList.append(System.lineSeparator());
+            }
             // Update progress
             if (inProgressbarTask != null) {
                 inProgressbarTask.setTaskProgress((3 + (int)((double)t/(double)lstFiles.size()*22.0)));
@@ -330,8 +329,148 @@ public final class UtilsHTML {
             inProgressbarTask.setTaskProgress(25);
             inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
         }
-        // Setup the Map and Sighting data (each data object will do it slightly differently
-        template = inDataObject.toFancyHTML(template, inApp, inProgressbarTask);
+// TODO: Maak die deel optioneel, want sommige plekke kan vrek baie observations hê...
+        // Setup the Map and Related data
+        List<Sighting> lstSightings;
+        if (inDataObject instanceof Element) {
+            lstSightings = inApp.getDBI().list(new Sighting(inDataObject.getIDField(), null, null), false);
+        }
+        else
+        if (inDataObject instanceof Location) {
+            lstSightings = inApp.getDBI().list(new Sighting(null, inDataObject.getIDField(), null), false);
+        }
+        else
+        if (inDataObject instanceof Visit) {
+            lstSightings = inApp.getDBI().list(new Sighting(null, null, inDataObject.getIDField()), false);
+        }
+        else {
+            lstSightings = new ArrayList<>(3);
+        }
+        List<DataObjectWithHTML> lstRelatedData = new ArrayList<>(lstSightings);
+        if (inDataObject instanceof Sighting) {
+            lstRelatedData.add(inApp.getDBI().find(new Location(((Sighting) inDataObject).getLocationName())));
+            lstRelatedData.add(inApp.getDBI().find(new Visit(((Sighting) inDataObject).getVisitName())));
+            lstRelatedData.add(inApp.getDBI().find(new Element(((Sighting) inDataObject).getElementName())));
+        }
+        int counter = 0;
+        int mapBeginIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_START___") + "//___MAP_CLICKABLE_DATA_POINTS_START___".length();
+        int mapEndIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_END___");
+        String mapTemplate = template.substring(mapBeginIndex, mapEndIndex).trim();
+        StringBuilder mapBuilder = new StringBuilder(1000 * lstRelatedData.size());
+        int relatedBeginIndex = template.indexOf("<!--___REPEAT_RELATED_RECORDS_START___-->") + "<!--___REPEAT_RELATED_RECORDS_START___-->".length();
+        int relatedEndIndex = template.indexOf("<!--___REPEAT_RELATED_RECORDS_END___-->");
+        String relatedTemplate = template.substring(relatedBeginIndex, relatedEndIndex).trim();
+        StringBuilder relatedBuilder = new StringBuilder(1500 * lstRelatedData.size());
+        int sliderBeginIndex = template.indexOf("___SUB_SLIDER_START___") + "___SUB_SLIDER_START___".length();
+        int sliderEndIndex = template.indexOf("___SUB_SLIDER_END___");
+        String sliderTemplate = template.substring(sliderBeginIndex, sliderEndIndex).trim();
+        int lightboxBeginIndex = template.indexOf("___SUB_LIGHTBOX_START___") + "___SUB_LIGHTBOX_START___".length();
+        int lightboxEndIndex = template.indexOf("___SUB_LIGHTBOX_END___");
+        String lightboxTemplate = template.substring(lightboxBeginIndex, lightboxEndIndex).trim();
+        int subFieldBeginIndex = template.indexOf("//___REGISTER_RELATED_RECORDS_FIELD_BOXES_START___") + "//___REGISTER_RELATED_RECORDS_FIELD_BOXES_START___".length();
+        int subFieldEndIndex = template.indexOf("//___REGISTER_RELATED_RECORDS_FIELD_BOXES_END___");
+        String subFieldTemplate = template.substring(subFieldBeginIndex, subFieldEndIndex).trim();
+        StringBuilder subFieldBuilder = new StringBuilder(200 * lstRelatedData.size());
+        int sliderScriptBeginIndex = template.indexOf("//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_START___") + "//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_START___".length();
+        int sliderScriptEndIndex = template.indexOf("//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_END___");
+        String sliderScriptTemplate = template.substring(sliderScriptBeginIndex, sliderScriptEndIndex).trim();
+        StringBuilder sliderScriptBuilder = new StringBuilder(250 * lstRelatedData.size());
+        for (DataObjectWithHTML relatedData : lstRelatedData) {
+            // JavaScript for related record fields
+            subFieldBuilder.append(subFieldTemplate.replace("relatedRecordsFieldBoxZZZ", "relatedRecordsFieldBox" + relatedData.getIDField()));
+            subFieldBuilder.append(System.lineSeparator());
+            // JavaScript for related record sliders
+            sliderScriptBuilder.append(sliderScriptTemplate.replace("subSliderZZZ", "subSlider" + relatedData.getIDField()));
+            sliderScriptBuilder.append(System.lineSeparator());
+            // Mapping Points
+            if (relatedData instanceof DataObjectWithGPS) {
+                if (UtilsGps.getLatDecimalDegree((DataObjectWithGPS) relatedData) != 0 && UtilsGps.getLonDecimalDegree((DataObjectWithGPS) relatedData) != 0) {
+                    mapBuilder.append(mapTemplate.replace("var markerZZZ", "var marker" + relatedData.getIDField())
+                                                 .replace("LatLng(44.5403, -78.5463)", "LatLng(" + UtilsGps.getLatDecimalDegree((DataObjectWithGPS) relatedData) + "," + UtilsGps.getLonDecimalDegree((DataObjectWithGPS) relatedData) + ")")
+                                                 .replace("ZZZ-title", relatedData.getDisplayName().replaceAll("\"", "&quot;"))
+                                                 .replace("var infowindowZZZ", "var infowindow" + relatedData.getIDField())
+                                                 .replace("ZZZ-content", relatedData.toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))
+                                                 .replace("addListener(markerZZZ", "addListener(marker" + relatedData.getIDField())
+                                                 .replace("infowindowZZZ.open(map, markerZZZ", "infowindow" + relatedData.getIDField() + ".open(map, marker" + relatedData.getIDField())
+                                                 .replace("extend(markerZZZ", "extend(marker" + relatedData.getIDField()));
+                }
+                mapBuilder.append(System.lineSeparator());
+            }
+            // Observation Info
+            List<WildLogFile> lstSightingFiles = inApp.getDBI().list(new WildLogFile(relatedData.getWildLogFileID()));
+            StringBuilder sliderBuilder = new StringBuilder(200 * lstSightingFiles.size());
+            StringBuilder lightboxBuilder = new StringBuilder(200 * lstSightingFiles.size());
+            if (lstSightingFiles.isEmpty()) {
+                lstSightingFiles.add(WildLogSystemImages.NO_FILES.getWildLogFile());
+            }
+            for (WildLogFile wildLogFile : lstSightingFiles) {
+                Path thumbnailFolder = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS.getAbsoluteFullPath().resolve(wildLogFile.getRelativePath().getParent());
+                try {
+                    Files.createDirectories(thumbnailFolder);
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+                Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM);
+                Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
+                UtilsFileProcessing.copyFile(fromFile, thumbnailPath, true, true);
+                Path thumbnailAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().relativize(thumbnailPath);
+                if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                    sliderBuilder.append(sliderTemplate.replace("ZZZ2-alt", wildLogFile.getId())
+                                                       .replace("ZZZ2-title", wildLogFile.getFilename())
+                                                       .replace("href=\"#bigImgZZZ2\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                       .replace("src=\"./ZZZ2.jpg\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\""));
+                }
+                else {
+                    sliderBuilder.append(sliderTemplate.replace("ZZZ2-alt", wildLogFile.getId())
+                                                       .replace("ZZZ2-title", wildLogFile.getFilename())
+                                                       .replace("href=\"#bigImgZZZ2\"", "href=\"" + wildLogFile.getAbsolutePath() + "\"")
+                                                       .replace("src=\"./ZZZ2.jpg\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\""));
+                }
+                sliderBuilder.append(System.lineSeparator());
+                if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                    lightboxBuilder.append(lightboxTemplate.replace("ZZZ2-alt", wildLogFile.getId())
+                                                           .replace("ZZZ2-title", wildLogFile.getFilename())
+                                                           .replace("id=\"bigImgZZZ2\"", "id=\"bigImg" + wildLogFile.getDBFilePath() + "\"")
+                                                           .replace("src=\"./ZZZ2.jpg\"", "src=\"" + wildLogFile.getAbsolutePath() + "\""));
+                    lightboxBuilder.append(System.lineSeparator());
+                }
+            }
+            // Set the HTML for the Slider and LightBox
+            relatedBuilder.append(relatedTemplate.replace("subSliderZZZ", "subSlider" + relatedData.getIDField())
+                                                 .replace("relatedRecordsFieldBoxZZZ", "relatedRecordsFieldBox" + relatedData.getIDField())
+                                                 .replace("___RELATED_RECORD_NAME___", relatedData.getDisplayName())
+                                                 .replace("___SUB_SLIDER_START___", "")
+                                                 .replace("___SUB_SLIDER_END___", "")
+                                                 .replace("___SUB_LIGHTBOX_START___", "")
+                                                 .replace("___SUB_LIGHTBOX_END___", "")
+                                                 .replace("___RELATED_INFORMATION_CONTENT___", relatedData.toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))
+                                                 .replace(sliderTemplate, sliderBuilder.toString())
+                                                 .replace(lightboxTemplate, lightboxBuilder.toString()));
+            relatedBuilder.append(System.lineSeparator());
+            // Update progress
+            if (inProgressbarTask != null) {
+                inProgressbarTask.setTaskProgress(25 + (int)(((double)counter/lstRelatedData.size())*(74)));
+                inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+                        + " " + inProgressbarTask.getProgress() + "%");
+            }
+            counter++;
+        }
+        // Set the HTML of the Javascript
+        template = template.replace("//___REGISTER_RELATED_RECORDS_FIELD_BOXES_START___", "")
+                           .replace("//___REGISTER_RELATED_RECORDS_FIELD_BOXES_END___", "")
+                           .replace(subFieldTemplate, subFieldBuilder.toString())
+                           .replace("//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_START___", "")
+                           .replace("//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_END___", "")
+                           .replace(sliderScriptTemplate, sliderScriptBuilder.toString());
+        // Set the HTML of the Map
+        template = template.replace("//___MAP_CLICKABLE_DATA_POINTS_START___", "")
+                           .replace("//___MAP_CLICKABLE_DATA_POINTS_END___", "")
+                           .replace(mapTemplate, mapBuilder.toString());
+        // Set the HTML of the Observations
+        template = template.replace("<!--___REPEAT_RELATED_RECORDS_START___-->", "")
+                           .replace("<!--___REPEAT_RELATED_RECORDS_END___-->", "")
+                           .replace(relatedTemplate, relatedBuilder.toString());
         // Write the final file
         Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().resolve(inDataObject.getExportPrefix()).resolve(inDataObject.getDisplayName() + ".html");
         UtilsFileProcessing.createFileFromBytes(template.getBytes(), toFile);

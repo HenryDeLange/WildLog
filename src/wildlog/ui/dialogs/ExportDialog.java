@@ -11,6 +11,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.html.utils.UtilsHTML;
@@ -760,7 +761,7 @@ public class ExportDialog extends JDialog {
                     }
                     setProgress(100);
                     setMessage("Done with the HTML Export for Observations");
-                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath());
+                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().resolve(SightingCore.WILDLOG_FOLDER_PREFIX));
                     return null;
                 }
             });

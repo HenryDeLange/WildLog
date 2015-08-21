@@ -51,11 +51,6 @@ public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWit
     }
 
     @Override
-    public String toFancyHTML(String inTemplate, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
-        return sighting.toFancyHTML(inTemplate, inApp, inProgressbarTask);
-    }
-
-    @Override
     public String getExportPrefix() {
         return sighting.getExportPrefix();
     }

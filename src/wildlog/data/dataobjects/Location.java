@@ -98,11 +98,6 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
     }
 
     @Override
-    public String toFancyHTML(String inTemplate, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public KmlEntry toKML(int inID, WildLogApp inApp) {
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
