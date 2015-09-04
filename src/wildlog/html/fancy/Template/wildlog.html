@@ -104,12 +104,12 @@
             }
 	</style>
         <!--Mapping scripts-->
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=visualization"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
         <script type="text/javascript">
             function initializeMap() {
                 // Inititalize map
                 var map_options = {
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                    mapTypeId: google.maps.MapTypeId.SATELLITE
                 };
                 var map = new google.maps.Map(document.getElementById('map-canvas'), map_options)
                 var bounds = new google.maps.LatLngBounds();
