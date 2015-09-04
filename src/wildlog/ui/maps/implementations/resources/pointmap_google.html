@@ -1,0 +1,44 @@
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Point Map</title>
+    <style>
+        #map-canvas {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script type="text/javascript">
+            function initializeMap() {
+                // Inititalize map
+                var map_options = {
+                    mapTypeId: google.maps.MapTypeId.SATELLITE
+                };
+                var map = new google.maps.Map(document.getElementById('map-canvas'), map_options)
+                var bounds = new google.maps.LatLngBounds();
+                // Add markers
+//___MAP_CLICKABLE_DATA_POINTS_START___
+                var markerZZZ = new google.maps.Marker({
+                        position: new google.maps.LatLng(11.111, 22.222),
+                        map: map,
+                        title: "ZZZ-title"
+                });
+                var infowindowZZZ = new google.maps.InfoWindow({
+                        content: "ZZZ-content"
+                });
+                google.maps.event.addListener(markerZZZ, 'click', function() {
+                      infowindowZZZ.open(map, markerZZZ);
+                });
+                bounds.extend(markerZZZ.position);
+//___MAP_CLICKABLE_DATA_POINTS_END___
+                map.fitBounds(bounds);
+            }
+            google.maps.event.addDomListener(window, 'load', initializeMap);
+        </script>
+</head>
+<body>
+    <div id="map-canvas"></div>
+</body>
+</html>

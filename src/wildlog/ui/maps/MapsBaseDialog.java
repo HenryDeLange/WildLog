@@ -1,4 +1,4 @@
-package wildlog.ui.reports;
+package wildlog.ui.maps;
 
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
@@ -34,38 +34,28 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.maps.implementations.HeatMap;
+import wildlog.ui.maps.implementations.PointMap;
+import wildlog.ui.maps.implementations.helpers.AbstractMap;
+import wildlog.ui.reports.ReportExportDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
-import wildlog.ui.reports.implementations.DayAndNightChart;
-import wildlog.ui.reports.implementations.DurationChart;
-import wildlog.ui.reports.implementations.ElementsChart;
-import wildlog.ui.reports.implementations.EventTimelineChart;
-import wildlog.ui.reports.implementations.LocationChart;
-import wildlog.ui.reports.implementations.MoonphaseChart;
-import wildlog.ui.reports.implementations.SightingPropertiesChart;
-import wildlog.ui.reports.implementations.SightingStatsChart;
-import wildlog.ui.reports.implementations.SpeciesAccumulationChart;
-import wildlog.ui.reports.implementations.TextReports;
-import wildlog.ui.reports.implementations.TimeOfDayChart;
-import wildlog.ui.reports.implementations.TimelineChart;
-import wildlog.ui.reports.implementations.VisitChart;
-import wildlog.ui.reports.implementations.helpers.AbstractReport;
 
 
-public class ReportsBaseDialog extends JFrame {
-    private final JFXPanel jfxReportChartPanel;
-    private final JFXPanel jfxReportListPanel;
+public class MapsBaseDialog extends JFrame {
+    private final JFXPanel jfxMapPanel;
+    private final JFXPanel jfxMapListPanel;
     private final List<Sighting> lstOriginalData;
     private final List<Sighting> lstFilteredData;
     private List<Element> lstFilteredElements;
     private List<Location> lstFilteredLocations;
     private List<Visit> lstFilteredVisits;
     private FilterProperties filterProperties = null;
-    private AbstractReport activeReport = null;
+    private AbstractMap activeMap = null;
 
     
-    public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
+    public MapsBaseDialog(String inTitle, List<Sighting> inSightings) {
         super(inTitle);
-        System.out.println("[ReportsBaseDialog]");
+        System.out.println("[MapsBaseDialog]");
         lstOriginalData = inSightings;
         // Get a copy for the filter list
         lstFilteredData = getCopiedList(lstOriginalData);
@@ -77,10 +67,10 @@ public class ReportsBaseDialog extends JFrame {
         UtilsDialog.addEscapeKeyListener(this);
         // Create the nested JavaFx panels
         Platform.setImplicitExit(false);
-        jfxReportChartPanel = new JFXPanel();
-        jfxReportChartPanel.setBackground(pnlChartArea.getBackground());
-        pnlChartArea.add(jfxReportChartPanel, BorderLayout.CENTER);
-        jfxReportListPanel = new JFXPanel();
+        jfxMapPanel = new JFXPanel();
+        jfxMapPanel.setBackground(pnlMapArea.getBackground());
+        pnlMapArea.add(jfxMapPanel, BorderLayout.CENTER);
+        jfxMapListPanel = new JFXPanel();
         // Add the report types and sub reports to the accordian
         Platform.runLater(new Runnable() {
             @Override
@@ -92,10 +82,10 @@ public class ReportsBaseDialog extends JFrame {
     
     private void setupReportList() {
         // Setup the report buttons
-        pnlReports.add(jfxReportListPanel, BorderLayout.CENTER);
+        pnlMaps.add(jfxMapListPanel, BorderLayout.CENTER);
         AnchorPane anchorPaneForButtons = new AnchorPane();
         Scene sceneReportList = new Scene(anchorPaneForButtons);
-        jfxReportListPanel.setScene(sceneReportList);
+        jfxMapListPanel.setScene(sceneReportList);
         Accordion accordion = new Accordion();
         ScrollPane scrollPaneForButtons = new ScrollPane(accordion);
         scrollPaneForButtons.setFitToWidth(true);
@@ -107,34 +97,23 @@ public class ReportsBaseDialog extends JFrame {
         // Setup the report panel (om een of ander rede mot die een tweede wees)
         VBox vbox = new VBox();
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
-        Label lblInfo = new Label("Please select the report you would like to view from the list on the left.\n\n"
-                + "You can filter the number of Observations that are used in the report by using the buttons in the Report Data Filters section.\n\n"
-                + "Reports can be exported using the Export Report button.\n\n"
+        Label lblInfo = new Label("Please select the map you would like to view from the list on the left.\n\n"
+                + "You can filter the number of Observations that are used in the map by using the buttons in the Map Data Filters section.\n\n"
+                + "Maps can be exported using the Export Map button.\n\n"
                 + "Warning: \n"
-                + "The charts may display incorrectly when there are too many data series to fit on the chart area.\n"
-                + "Displaying some charts with very large datasets can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.");
+                + "The maps may display incorrectly when there are too much data on the map.\n"
+                + "Displaying some maps with very large data points can make the application become unresponsive for a while, try to limit the amount of data displayed at a time.");
         lblInfo.setPadding(new Insets(20));
         lblInfo.setFont(new Font(18));
         lblInfo.setWrapText(true);
         vbox.getChildren().add(lblInfo);
         Scene sceneCharts = new Scene(vbox);
         sceneCharts.getStylesheets().add("wildlog/ui/reports/chart/styling/Charts.css");
-        jfxReportChartPanel.setScene(sceneCharts);
+        jfxMapPanel.setScene(sceneCharts);
         // Setup the default reports
-        List<AbstractReport<Sighting>> reports = new ArrayList<>(13);
-        reports.add(new ElementsChart(lstFilteredData, lblReportDescription));
-        reports.add(new LocationChart(lstFilteredData, lblReportDescription));
-        reports.add(new VisitChart(lstFilteredData, lblReportDescription));
-        reports.add(new SightingPropertiesChart(lstFilteredData, lblReportDescription));
-        reports.add(new DayAndNightChart(lstFilteredData, lblReportDescription));
-        reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription));
-        reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription));
-        reports.add(new DurationChart(lstFilteredData, lblReportDescription));
-        reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
-        reports.add(new EventTimelineChart(lstFilteredData, lblReportDescription));
-        reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription));
-        reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription));
-        reports.add(new TextReports(lstFilteredData, lblReportDescription));
+        List<AbstractMap<Sighting>> lstMaps = new ArrayList<>(13);
+        lstMaps.add(new PointMap(lstFilteredData, lblMapDescription));
+        lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription));
         // Setup loading label
         final Label lblLoading = new Label("... LOADING ...");
         lblLoading.setPadding(new Insets(20));
@@ -142,17 +121,17 @@ public class ReportsBaseDialog extends JFrame {
         lblLoading.setTextAlignment(TextAlignment.CENTER);
         lblLoading.setAlignment(Pos.CENTER);
         // Add the reports
-        for (final AbstractReport<Sighting> report : reports) {
+        for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(5);
             vBox.setFillWidth(true);
-            TitledPane reportButton = new TitledPane(report.getReportButtonName(), vBox);
-            for (Node node : report.getLstCustomButtons()) {
+            TitledPane reportButton = new TitledPane(map.getMapButtonName(), vBox);
+            for (Node node : map.getLstCustomButtons()) {
                 node.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        setActiveReport(report);
-                        jfxReportChartPanel.getScene().setRoot(lblLoading);
-                        report.createReport(jfxReportChartPanel.getScene());
+                        setActiveMap(map);
+                        jfxMapPanel.getScene().setRoot(lblLoading);
+                        map.createMap(jfxMapPanel.getScene());
                     }
                 });
                 vBox.getChildren().add(node);
@@ -169,8 +148,8 @@ public class ReportsBaseDialog extends JFrame {
     private void initComponents() {
 
         jSplitPane1 = new javax.swing.JSplitPane();
-        pnlReportsAndFilters = new javax.swing.JPanel();
-        pnlReports = new javax.swing.JPanel();
+        pnlMapsAndFilters = new javax.swing.JPanel();
+        pnlMaps = new javax.swing.JPanel();
         pnlExport = new javax.swing.JPanel();
         bntExport = new javax.swing.JButton();
         pnlFilters = new javax.swing.JPanel();
@@ -184,32 +163,32 @@ public class ReportsBaseDialog extends JFrame {
         lblTotalRecords = new javax.swing.JLabel();
         lblFilteredRecords = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        pnlChartArea = new javax.swing.JPanel();
+        pnlMapArea = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        pnlChartDescription = new javax.swing.JPanel();
-        lblReportDescription = new javax.swing.JLabel();
+        pnlMapDescription = new javax.swing.JPanel();
+        lblMapDescription = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Report Icon.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Map Icon.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(920, 600));
 
         jSplitPane1.setMinimumSize(new java.awt.Dimension(210, 450));
 
-        pnlReportsAndFilters.setBackground(new java.awt.Color(179, 198, 172));
-        pnlReportsAndFilters.setMinimumSize(new java.awt.Dimension(200, 500));
-        pnlReportsAndFilters.setPreferredSize(new java.awt.Dimension(250, 500));
+        pnlMapsAndFilters.setBackground(new java.awt.Color(172, 198, 183));
+        pnlMapsAndFilters.setMinimumSize(new java.awt.Dimension(200, 500));
+        pnlMapsAndFilters.setPreferredSize(new java.awt.Dimension(250, 500));
 
-        pnlReports.setBackground(new java.awt.Color(179, 198, 172));
-        pnlReports.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-        pnlReports.setLayout(new java.awt.BorderLayout());
+        pnlMaps.setBackground(new java.awt.Color(172, 198, 183));
+        pnlMaps.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Map Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlMaps.setLayout(new java.awt.BorderLayout());
 
-        pnlExport.setBackground(new java.awt.Color(179, 198, 172));
-        pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlExport.setBackground(new java.awt.Color(172, 198, 183));
+        pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Map Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         bntExport.setBackground(new java.awt.Color(179, 198, 172));
         bntExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        bntExport.setText("Export Report");
-        bntExport.setToolTipText("Export the shown report to one of many export formats.");
+        bntExport.setText("Export Map");
+        bntExport.setToolTipText("Export the shown map.");
         bntExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bntExport.setFocusPainted(false);
         bntExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -237,8 +216,8 @@ public class ReportsBaseDialog extends JFrame {
                 .addGap(2, 2, 2))
         );
 
-        pnlFilters.setBackground(new java.awt.Color(179, 198, 172));
-        pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Data Filters", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlFilters.setBackground(new java.awt.Color(172, 198, 183));
+        pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Map Data Filters", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         btnFilterProperties.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/FilterSightings.png"))); // NOI18N
@@ -310,7 +289,7 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
-        jPanel4.setBackground(new java.awt.Color(192, 207, 186));
+        jPanel4.setBackground(new java.awt.Color(172, 198, 183));
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -380,22 +359,22 @@ public class ReportsBaseDialog extends JFrame {
                 .addGap(5, 5, 5))
         );
 
-        javax.swing.GroupLayout pnlReportsAndFiltersLayout = new javax.swing.GroupLayout(pnlReportsAndFilters);
-        pnlReportsAndFilters.setLayout(pnlReportsAndFiltersLayout);
-        pnlReportsAndFiltersLayout.setHorizontalGroup(
-            pnlReportsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlReportsAndFiltersLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlMapsAndFiltersLayout = new javax.swing.GroupLayout(pnlMapsAndFilters);
+        pnlMapsAndFilters.setLayout(pnlMapsAndFiltersLayout);
+        pnlMapsAndFiltersLayout.setHorizontalGroup(
+            pnlMapsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlMapsAndFiltersLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlReportsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(pnlMapsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pnlExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlReports, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlMaps, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
-        pnlReportsAndFiltersLayout.setVerticalGroup(
-            pnlReportsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlReportsAndFiltersLayout.createSequentialGroup()
-                .addComponent(pnlReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        pnlMapsAndFiltersLayout.setVerticalGroup(
+            pnlMapsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMapsAndFiltersLayout.createSequentialGroup()
+                .addComponent(pnlMaps, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(3, 3, 3)
                 .addComponent(pnlExport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
@@ -403,40 +382,40 @@ public class ReportsBaseDialog extends JFrame {
                 .addGap(3, 3, 3))
         );
 
-        jSplitPane1.setLeftComponent(pnlReportsAndFilters);
+        jSplitPane1.setLeftComponent(pnlMapsAndFilters);
 
-        pnlChartArea.setBackground(new java.awt.Color(255, 255, 255));
-        pnlChartArea.setLayout(new java.awt.BorderLayout());
+        pnlMapArea.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMapArea.setLayout(new java.awt.BorderLayout());
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel5.setLayout(new java.awt.BorderLayout(0, 2));
 
-        pnlChartDescription.setBackground(new java.awt.Color(213, 230, 205));
-        pnlChartDescription.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Description", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlMapDescription.setBackground(new java.awt.Color(205, 230, 209));
+        pnlMapDescription.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Map Description", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        lblReportDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblMapDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-        javax.swing.GroupLayout pnlChartDescriptionLayout = new javax.swing.GroupLayout(pnlChartDescription);
-        pnlChartDescription.setLayout(pnlChartDescriptionLayout);
-        pnlChartDescriptionLayout.setHorizontalGroup(
-            pnlChartDescriptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlChartDescriptionLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlMapDescriptionLayout = new javax.swing.GroupLayout(pnlMapDescription);
+        pnlMapDescription.setLayout(pnlMapDescriptionLayout);
+        pnlMapDescriptionLayout.setHorizontalGroup(
+            pnlMapDescriptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMapDescriptionLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(lblReportDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblMapDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
-        pnlChartDescriptionLayout.setVerticalGroup(
-            pnlChartDescriptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlChartDescriptionLayout.createSequentialGroup()
-                .addComponent(lblReportDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        pnlMapDescriptionLayout.setVerticalGroup(
+            pnlMapDescriptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMapDescriptionLayout.createSequentialGroup()
+                .addComponent(lblMapDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(3, 3, 3))
         );
 
-        jPanel5.add(pnlChartDescription, java.awt.BorderLayout.CENTER);
+        jPanel5.add(pnlMapDescription, java.awt.BorderLayout.CENTER);
 
-        pnlChartArea.add(jPanel5, java.awt.BorderLayout.SOUTH);
+        pnlMapArea.add(jPanel5, java.awt.BorderLayout.SOUTH);
 
-        jSplitPane1.setRightComponent(pnlChartArea);
+        jSplitPane1.setRightComponent(pnlMapArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -455,20 +434,20 @@ public class ReportsBaseDialog extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bntExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExportActionPerformed
-        if (activeReport != null) {
+        if (activeMap != null) {
             // The snapshot needs to be loaded from a JavaFX thread
             final JFrame parent = this;
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        WritableImage writableImage = jfxReportChartPanel.getScene().snapshot(null);
+                        WritableImage writableImage = jfxMapPanel.getScene().snapshot(null);
                         BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
-                                ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage, jfxReportChartPanel.getScene().getRoot(), 
-                                        activeReport.getReportButtonName(), lstFilteredData);
+                                ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage, jfxMapPanel.getScene().getRoot(), 
+                                        activeMap.getMapButtonName(), lstFilteredData);
                                 dialog.setVisible(true);
                             }
                         });
@@ -489,7 +468,7 @@ public class ReportsBaseDialog extends JFrame {
             // Filter the original results using the provided values
             doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, activeReport, jfxReportChartPanel);
+                    lblFilteredRecords, activeMap, jfxMapPanel);
         }
     }//GEN-LAST:event_btnFilterElementActionPerformed
 
@@ -501,7 +480,7 @@ public class ReportsBaseDialog extends JFrame {
             // Filter the original results using the provided values
             doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, activeReport, jfxReportChartPanel);
+                    lblFilteredRecords, activeMap, jfxMapPanel);
         }
     }//GEN-LAST:event_btnFilterLocationActionPerformed
 
@@ -513,7 +492,7 @@ public class ReportsBaseDialog extends JFrame {
             // Filter the original results using the provided values
             doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, activeReport, jfxReportChartPanel);
+                    lblFilteredRecords, activeMap, jfxMapPanel);
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
@@ -525,7 +504,7 @@ public class ReportsBaseDialog extends JFrame {
             // Filter the original results using the provided values
             doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, activeReport, jfxReportChartPanel);
+                    lblFilteredRecords, activeMap, jfxMapPanel);
         }
     }//GEN-LAST:event_btnFilterPropertiesActionPerformed
 
@@ -535,7 +514,7 @@ public class ReportsBaseDialog extends JFrame {
         lstFilteredVisits = null;
         doFiltering(lstOriginalData, lstFilteredData, 
                 lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                lblFilteredRecords, activeReport, jfxReportChartPanel);
+                lblFilteredRecords, activeMap, jfxMapPanel);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
     
     private List<Sighting> getCopiedList(List<Sighting> inList) {
@@ -546,13 +525,13 @@ public class ReportsBaseDialog extends JFrame {
         return list;
     }
     
-    public void setActiveReport(AbstractReport inAbstractReport) {
-        activeReport = inAbstractReport;
+    public void setActiveMap(AbstractMap inAbstractMap) {
+        activeMap = inAbstractMap;
     }
     
     private void doFiltering(final List<Sighting> lstOriginalData, List<Sighting> lstFilteredData, 
             List<Element> lstFilteredElements, List<Location> lstFilteredLocations, List<Visit> lstFilteredVisits,
-            FilterProperties filterProperties, JLabel lblFilteredRecords, AbstractReport activeReport, JFXPanel jfxReportChartPanel) {
+            FilterProperties filterProperties, JLabel lblFilteredRecords, AbstractMap activeMap, JFXPanel jfxReportChartPanel) {
         // NOTE: Don't create a new ArrayList (clear existing instead), because the reports are holding on to the reference 
         //       and will be stuck with an old list otherwise. Easiest to just keep the reference constant than to try and 
         //       update the all reports everytime (the active report already gets updated explicitly).
@@ -608,9 +587,9 @@ public class ReportsBaseDialog extends JFrame {
         }
         lblFilteredRecords.setText(Integer.toString(lstFilteredData.size()));
         // Redraw the chart
-        if (activeReport != null) {
-            activeReport.setDataList(lstFilteredData);
-            activeReport.createReport(jfxReportChartPanel.getScene());
+        if (activeMap != null) {
+            activeMap.setDataList(lstFilteredData);
+            activeMap.createMap(jfxReportChartPanel.getScene());
         }
     }
 
@@ -627,13 +606,13 @@ public class ReportsBaseDialog extends JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JLabel lblFilteredRecords;
-    private javax.swing.JLabel lblReportDescription;
+    private javax.swing.JLabel lblMapDescription;
     private javax.swing.JLabel lblTotalRecords;
-    private javax.swing.JPanel pnlChartArea;
-    private javax.swing.JPanel pnlChartDescription;
     private javax.swing.JPanel pnlExport;
     private javax.swing.JPanel pnlFilters;
-    private javax.swing.JPanel pnlReports;
-    private javax.swing.JPanel pnlReportsAndFilters;
+    private javax.swing.JPanel pnlMapArea;
+    private javax.swing.JPanel pnlMapDescription;
+    private javax.swing.JPanel pnlMaps;
+    private javax.swing.JPanel pnlMapsAndFilters;
     // End of variables declaration//GEN-END:variables
 }

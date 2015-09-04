@@ -16,6 +16,7 @@ import wildlog.mapping.kml.utils.UtilsKML;
 import wildlog.mapping.utils.UtilsMapGenerator;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -102,6 +103,7 @@ public class MappingDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnNewMAPS = new javax.swing.JButton();
         btnViewAllSightingsForLocation = new javax.swing.JButton();
         btnViewLocation = new javax.swing.JButton();
         btnViewAllSightingsForVisit = new javax.swing.JButton();
@@ -119,6 +121,25 @@ public class MappingDialog extends JDialog {
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
+
+        btnNewMAPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnNewMAPS.setText("NEW MAPS");
+        btnNewMAPS.setToolTipText("");
+        btnNewMAPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNewMAPS.setFocusPainted(false);
+        btnNewMAPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnNewMAPS.setIconTextGap(11);
+        btnNewMAPS.setMargin(new java.awt.Insets(2, 11, 2, 8));
+        btnNewMAPS.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnNewMAPS.setMinimumSize(new java.awt.Dimension(275, 35));
+        btnNewMAPS.setName("btnNewMAPS"); // NOI18N
+        btnNewMAPS.setPreferredSize(new java.awt.Dimension(275, 35));
+        btnNewMAPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewMAPSActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnNewMAPS);
 
         btnViewAllSightingsForLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewAllSightingsForLocation.setText("View map of Observations at the Place");
@@ -606,8 +627,16 @@ public class MappingDialog extends JDialog {
         }
     }//GEN-LAST:event_btnViewListOfSightingsActionPerformed
 
+    private void btnNewMAPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewMAPSActionPerformed
+// TODO: Handle the Location, Element, etc.
+        MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + "TODO: SOME NAME", 
+                app.getDBI().list(new Sighting(), true));
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnNewMAPSActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnNewMAPS;
     private javax.swing.JButton btnOpenKmlViewer;
     private javax.swing.JButton btnViewAllSightingsForElement;
     private javax.swing.JButton btnViewAllSightingsForLocation;
