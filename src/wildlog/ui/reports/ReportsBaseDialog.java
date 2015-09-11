@@ -533,6 +533,7 @@ public class ReportsBaseDialog extends JFrame {
         lstFilteredElements = null;
         lstFilteredLocations = null;
         lstFilteredVisits = null;
+        filterProperties = null;
         doFiltering(lstOriginalData, lstFilteredData, 
                 lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
                 lblFilteredRecords, activeReport, jfxReportChartPanel);
@@ -550,19 +551,19 @@ public class ReportsBaseDialog extends JFrame {
         activeReport = inAbstractReport;
     }
     
-    private void doFiltering(final List<Sighting> lstOriginalData, List<Sighting> lstFilteredData, 
-            List<Element> lstFilteredElements, List<Location> lstFilteredLocations, List<Visit> lstFilteredVisits,
-            FilterProperties filterProperties, JLabel lblFilteredRecords, AbstractReport activeReport, JFXPanel jfxReportChartPanel) {
+    private void doFiltering(final List<Sighting> inLstOriginalData, List<Sighting> inLstFilteredData, 
+            List<Element> inLstFilteredElements, List<Location> inLstFilteredLocations, List<Visit> inLstFilteredVisits,
+            FilterProperties inLilterProperties, JLabel inLblFilteredRecords, AbstractReport inActiveReport, JFXPanel inJfxReportChartPanel) {
         // NOTE: Don't create a new ArrayList (clear existing instead), because the reports are holding on to the reference 
         //       and will be stuck with an old list otherwise. Easiest to just keep the reference constant than to try and 
         //       update the all reports everytime (the active report already gets updated explicitly).
-        lstFilteredData.clear();
+        inLstFilteredData.clear();
         // All filters need to be taken into account all the time, even if only one was changed the results must still fullfill the other filters...
-        for (Sighting sighting : lstOriginalData) {
+        for (Sighting sighting : inLstOriginalData) {
             // Check filtered Elements
-            if (lstFilteredElements != null) {
+            if (inLstFilteredElements != null) {
                 boolean found = false;
-                for (Element element : lstFilteredElements) {
+                for (Element element : inLstFilteredElements) {
                     if (sighting.getElementName().equals(element.getPrimaryName())) {
                         found = true;
                         break;
@@ -573,9 +574,9 @@ public class ReportsBaseDialog extends JFrame {
                 }
             }
             // Check filtered Locations
-            if (lstFilteredLocations != null) {
+            if (inLstFilteredLocations != null) {
                 boolean found = false;
-                for (Location location : lstFilteredLocations) {
+                for (Location location : inLstFilteredLocations) {
                     if (sighting.getLocationName().equals(location.getName())) {
                         found = true;
                         break;
@@ -586,9 +587,9 @@ public class ReportsBaseDialog extends JFrame {
                 }
             }
             // Check filtered Visits
-            if (lstFilteredVisits != null) {
+            if (inLstFilteredVisits != null) {
                 boolean found = false;
-                for (Visit visit : lstFilteredVisits) {
+                for (Visit visit : inLstFilteredVisits) {
                     if (sighting.getVisitName().equals(visit.getName())) {
                         found = true;
                         break;
@@ -599,18 +600,18 @@ public class ReportsBaseDialog extends JFrame {
                 }
             }
             // Check filtered Properties
-            if (!FilterPropertiesDialog.checkFilterPropertiesMatch(filterProperties, sighting)) {
+            if (!FilterPropertiesDialog.checkFilterPropertiesMatch(inLilterProperties, sighting)) {
                 continue;
             }
             // If we haven't breaked from the for loop yet (aka continued to the next record), 
             // then this record can be added to the list
-            lstFilteredData.add(sighting.cloneShallow());
+            inLstFilteredData.add(sighting.cloneShallow());
         }
-        lblFilteredRecords.setText(Integer.toString(lstFilteredData.size()));
+        inLblFilteredRecords.setText(Integer.toString(inLstFilteredData.size()));
         // Redraw the chart
-        if (activeReport != null) {
-            activeReport.setDataList(lstFilteredData);
-            activeReport.createReport(jfxReportChartPanel.getScene());
+        if (inActiveReport != null) {
+            inActiveReport.setDataList(inLstFilteredData);
+            inActiveReport.createReport(inJfxReportChartPanel.getScene());
         }
     }
 

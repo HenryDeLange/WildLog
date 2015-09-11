@@ -1096,7 +1096,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel20.setName("jLabel20"); // NOI18N
         sightingIncludes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 277, -1, 20));
 
-        spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 60.0d, 1.0d));
+        spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.0d, 1.0d));
         spnDurationSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnDurationSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationSeconds, "0"));
         spnDurationSeconds.setEnabled(!disableEditing);

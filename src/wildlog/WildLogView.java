@@ -386,6 +386,8 @@ public final class WildLogView extends JFrame {
         mnuAboutWildNote = new javax.swing.JMenuItem();
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
         mnuUserGuide = new javax.swing.JMenuItem();
+        jSeparator17 = new javax.swing.JPopupMenu.Separator();
+        mnuCheckUpdates = new javax.swing.JMenuItem();
         javax.swing.JMenuItem mnuAboutWildLog = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -1299,7 +1301,7 @@ public final class WildLogView extends JFrame {
 
         menuBar.add(settingsMenu);
 
-        helpMenu.setText("About");
+        helpMenu.setText("Help");
         helpMenu.setName("helpMenu"); // NOI18N
         helpMenu.addMenuListener(new javax.swing.event.MenuListener() {
             public void menuCanceled(javax.swing.event.MenuEvent evt) {
@@ -1326,7 +1328,7 @@ public final class WildLogView extends JFrame {
         helpMenu.add(jSeparator16);
 
         mnuUserGuide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
-        mnuUserGuide.setText("Help - WildLog User Guide");
+        mnuUserGuide.setText("User Guide (PDF)");
         mnuUserGuide.setToolTipText("Opens the WildLog User Guide, or a link to a website where it can be downloaded.");
         mnuUserGuide.setName("mnuUserGuide"); // NOI18N
         mnuUserGuide.addActionListener(new java.awt.event.ActionListener() {
@@ -1335,6 +1337,20 @@ public final class WildLogView extends JFrame {
             }
         });
         helpMenu.add(mnuUserGuide);
+
+        jSeparator17.setName("jSeparator17"); // NOI18N
+        helpMenu.add(jSeparator17);
+
+        mnuCheckUpdates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuCheckUpdates.setText("Check for Updates");
+        mnuCheckUpdates.setToolTipText("Check online whether there is a newer version of WildLog available.");
+        mnuCheckUpdates.setName("mnuCheckUpdates"); // NOI18N
+        mnuCheckUpdates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCheckUpdatesActionPerformed(evt);
+            }
+        });
+        helpMenu.add(mnuCheckUpdates);
 
         mnuAboutWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuAboutWildLog.setText("About WildLog");
@@ -3616,6 +3632,18 @@ public final class WildLogView extends JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void mnuCheckUpdatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCheckUpdatesActionPerformed
+        ExecutorService executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("WL_CheckForUpdates"));
+        // Try to check the latest version
+        executor.submit(new Runnable() {
+            @Override
+            public void run() {
+                app.checkForUpdates();
+            }
+        });
+        executor.shutdown();
+    }//GEN-LAST:event_mnuCheckUpdatesActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3682,6 +3710,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator14;
     private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator16;
+    private javax.swing.JPopupMenu.Separator jSeparator17;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -3708,6 +3737,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuCalcSunMoon;
     private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
     private javax.swing.JMenuItem mnuChangeWorkspaceName;
+    private javax.swing.JMenuItem mnuCheckUpdates;
     private javax.swing.JMenuItem mnuCleanWorkspace;
     private javax.swing.JMenuItem mnuCreateGIF;
     private javax.swing.JMenuItem mnuCreateSlideshow;

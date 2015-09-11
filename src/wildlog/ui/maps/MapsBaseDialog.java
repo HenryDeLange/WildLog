@@ -512,6 +512,7 @@ public class MapsBaseDialog extends JFrame {
         lstFilteredElements = null;
         lstFilteredLocations = null;
         lstFilteredVisits = null;
+        filterProperties = null;
         doFiltering(lstOriginalData, lstFilteredData, 
                 lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
                 lblFilteredRecords, activeMap, jfxMapPanel);

@@ -77,7 +77,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    public static String WILDLOG_VERSION = "4.2.3";
+    public static String WILDLOG_VERSION = "4.3.beta";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static boolean useNimbusLF = false;
@@ -151,56 +151,7 @@ public class WildLogApp extends Application {
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        // Open a connection to the site
-                        URL url = new URL("http://www.mywild.co.za/wildlog/getLatestWildLogVersion.php");
-                        URLConnection con = url.openConnection();
-                        // Activate the output
-                        con.setDoOutput(true);
-                        // Have to get the input stream in order to actually send the request
-                        try (InputStream inputStream = con.getInputStream()) {
-                            StringBuilder response = new StringBuilder(5);
-                            byte[] respBuffer = new byte[1096];
-                            while (inputStream.read(respBuffer) >= 0) {
-                                response.append(new String(respBuffer).trim());
-                                respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
-                            }
-                            if (!WILDLOG_VERSION.equalsIgnoreCase(response.toString())) {
-                                System.out.println("WEB RESPONSE (getLatestWildLogVersion): " + response.toString());
-                                // Show message with download link
-                                JLabel label = new JLabel();
-                                Font font = label.getFont();
-                                String style = "font-family:" + font.getFamily() + ";font-weight:normal" + ";font-size:" + font.getSize() + "pt;";
-                                JEditorPane editorPane = new JEditorPane("text/html", "<html><body style=\"" + style + "\">"
-                                        + "To download WildLog v" + response.toString() 
-                                        + " go to <a href=\"http://software.mywild.co.za/p/download-wildlog.html\">http://software.mywild.co.za/p/download-wildlog.html</a>"
-                                        + " or visit <a href=\"http://software.mywild.co.za\">http://software.mywild.co.za</a> for information about the new release."
-                                        + "</body></html>");
-                                editorPane.addHyperlinkListener(new HyperlinkListener() {
-                                        @Override
-                                        public void hyperlinkUpdate(HyperlinkEvent inHyperlinkEvent) {
-                                            if (inHyperlinkEvent.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                                                try {
-                                                    Desktop.getDesktop().browse(inHyperlinkEvent.getURL().toURI());
-                                                }
-                                                catch (IOException | URISyntaxException ex) {
-                                                    ex.printStackTrace(System.err);
-                                                }
-                                            }
-                                        }
-                                    });
-                                editorPane.setEditable(false);
-                                editorPane.setBackground(label.getBackground());
-                                JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
-                                        editorPane, 
-                                        "A new WildLog update is available!", 
-                                        JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        }
-                    }
-                    catch (Exception ex) {
-                        ex.printStackTrace(System.err);
-                    }
+                    checkForUpdates();
                 }
             }, 10, TimeUnit.SECONDS);
             // Try to upload log data
@@ -709,6 +660,59 @@ public class WildLogApp extends Application {
 
     public WildLogView getMainFrame() {
         return view;
+    }
+    
+    public void checkForUpdates() {
+        try {
+            // Open a connection to the site
+            URL url = new URL("http://www.mywild.co.za/wildlog/getLatestWildLogVersion.php");
+            URLConnection con = url.openConnection();
+            // Activate the output
+            con.setDoOutput(true);
+            // Have to get the input stream in order to actually send the request
+            try (InputStream inputStream = con.getInputStream()) {
+                StringBuilder response = new StringBuilder(5);
+                byte[] respBuffer = new byte[1096];
+                while (inputStream.read(respBuffer) >= 0) {
+                    response.append(new String(respBuffer).trim());
+                    respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
+                }
+                if (!WILDLOG_VERSION.equalsIgnoreCase(response.toString())) {
+                    System.out.println("WEB RESPONSE (getLatestWildLogVersion): " + response.toString());
+                    // Show message with download link
+                    JLabel label = new JLabel();
+                    Font font = label.getFont();
+                    String style = "font-family:" + font.getFamily() + ";font-weight:normal" + ";font-size:" + font.getSize() + "pt;";
+                    JEditorPane editorPane = new JEditorPane("text/html", "<html><body style=\"" + style + "\">"
+                            + "To download WildLog v" + response.toString() 
+                            + " go to <a href=\"http://software.mywild.co.za/p/download-wildlog.html\">http://software.mywild.co.za/p/download-wildlog.html</a>"
+                            + " or visit <a href=\"http://software.mywild.co.za\">http://software.mywild.co.za</a> for information about the new release."
+                            + "</body></html>");
+                    editorPane.addHyperlinkListener(new HyperlinkListener() {
+                        @Override
+                        public void hyperlinkUpdate(HyperlinkEvent inHyperlinkEvent) {
+                            if (inHyperlinkEvent.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                                try {
+                                    Desktop.getDesktop().browse(inHyperlinkEvent.getURL().toURI());
+                                }
+                                catch (IOException | URISyntaxException ex) {
+                                    ex.printStackTrace(System.err);
+                                }
+                            }
+                        }
+                    });
+                    editorPane.setEditable(false);
+                    editorPane.setBackground(label.getBackground());
+                    JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                            editorPane,
+                            "A new WildLog update is available!", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
     }
 
 }

@@ -40,6 +40,12 @@ public class FilterProperties {
     private List<String> tags;
     private boolean includeEmptyTags;
     private List<ElementType> elementTypes;
+    private List<Long> sightingIDs;
+    private boolean sightingIDsIsInclude;
+    private int durationMinutes;
+    private int durationSeconds;
+    private boolean durationIsLess;
+    private boolean durationIsMore;
 
     public FilterProperties() {
     }
@@ -228,4 +234,52 @@ public class FilterProperties {
         elementTypes = inElementTypes;
     }
 
+    public List<Long> getSightingIDs() {
+        return sightingIDs;
+    }
+
+    public void setSightingIDs(List<Long> inLstSightingIDs) {
+        sightingIDs = inLstSightingIDs;
+    }
+
+    public boolean isSightingIDsIsInclude() {
+        return sightingIDsIsInclude;
+    }
+
+    public void setSightingIDsIsInclude(boolean inIsInclude) {
+        sightingIDsIsInclude = inIsInclude;
+    }
+
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(int inDurationMinutes) {
+        durationMinutes = inDurationMinutes;
+    }
+
+    public int getDurationSeconds() {
+        return durationSeconds;
+    }
+
+    public void setDurationSeconds(int inDurationSeconds) {
+        durationSeconds = inDurationSeconds;
+    }
+
+    public boolean isDurationIsLess() {
+        return durationIsLess;
+    }
+
+    public void setDurationIsLess(boolean inDurationIsLess) {
+        durationIsLess = inDurationIsLess;
+    }
+
+    public boolean isDurationIsMore() {
+        return durationIsMore;
+    }
+
+    public void setDurationIsMore(boolean inDurationIsMore) {
+        durationIsMore = inDurationIsMore;
+    }
+    
 }

@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
@@ -37,6 +39,7 @@ import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
+import wildlog.ui.utils.UtilsUI;
 
 
 public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends JDialog {
@@ -61,16 +64,30 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     }
                 },
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-
         // Position the dialog
         UtilsDialog.setDialogToCenter(inParent, thisHandler);
         UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
         UtilsDialog.addModalBackgroundPanel(this, null);
         // Spinner stuff
-        SpinnerFixer.configureSpinners(spnNumberOfElements);
         SpinnerFixer.configureSpinners(spnMoonphase);
+        SpinnerFixer.configureSpinners(spnNumberOfElements);
+        SpinnerFixer.configureSpinners(spnDurationMinutes);
+        SpinnerFixer.configureSpinners(spnDurationSeconds);
+        // Add clipboard
+        UtilsUI.attachClipboardPopup(txaSightingIDs);
+        UtilsUI.attachClipboardPopup(txaTag);
+        UtilsUI.attachClipboardPopup((JTextComponent)spnMoonphase.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnStartTime.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnEndTime.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnNumberOfElements.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnDurationMinutes.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnDurationSeconds.getEditor().getComponent(0));
         // Setup the selected values
-        selectOldValues();
+        if (filterProperties == null) {
+            filterProperties = new FilterProperties();
+            setDefaultValues(false, filterProperties);
+        }
+        populateUI();
     }
 
     /**
@@ -80,6 +97,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupIDs = new javax.swing.ButtonGroup();
         btnSelect = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -117,6 +135,14 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         chkIndividualsLess = new javax.swing.JCheckBox();
         chkIndividualsMore = new javax.swing.JCheckBox();
         chkIncludeEmptyTags = new javax.swing.JCheckBox();
+        jLabel24 = new javax.swing.JLabel();
+        spnDurationMinutes = new javax.swing.JSpinner();
+        chkDurationLess = new javax.swing.JCheckBox();
+        chkDurationMore = new javax.swing.JCheckBox();
+        spnDurationSeconds = new javax.swing.JSpinner();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
@@ -143,11 +169,19 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jLabel21 = new javax.swing.JLabel();
         chkMoonlightMore = new javax.swing.JCheckBox();
         chkMoonlightLess = new javax.swing.JCheckBox();
+        btnTemplates = new javax.swing.JButton();
         btnSelectAll = new javax.swing.JButton();
         btnClearAll = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        txaSightingIDs = new javax.swing.JTextArea();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        rdbInclude = new javax.swing.JRadioButton();
+        rdbExclude = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Filter Properties Selection");
+        setTitle("Filter Properties");
         setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/FilterSightings.png")).getImage());
         setMinimumSize(new java.awt.Dimension(550, 300));
         setModal(true);
@@ -163,10 +197,10 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
             }
         });
 
-        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel20.setText("Select the properties to filter on:");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Dates"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Dates and Times"));
 
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
@@ -181,9 +215,11 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jLabel22.setText("Daily End Time:");
 
         spnStartTime.setModel(new javax.swing.SpinnerDateModel());
+        spnStartTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnStartTime.setEditor(new javax.swing.JSpinner.DateEditor(spnStartTime, "HH:mm"));
 
         spnEndTime.setModel(new javax.swing.SpinnerDateModel());
+        spnEndTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnEndTime.setEditor(new javax.swing.JSpinner.DateEditor(spnEndTime, "HH:mm"));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -201,7 +237,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(35, 35, 35)
+                .addGap(70, 70, 70)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel22)
@@ -211,7 +247,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addComponent(jLabel16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spnStartTime)))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,20 +343,21 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6)
                     .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5))
+                .addGap(3, 3, 3))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Other Details"));
 
         jLabel10.setText("Tag:");
 
-        txaTag.setColumns(20);
-        txaTag.setRows(3);
+        txaTag.setColumns(10);
+        txaTag.setRows(2);
         jScrollPane2.setViewportView(txaTag);
 
         jLabel11.setText("Individuals:");
 
         spnNumberOfElements.setModel(new javax.swing.SpinnerNumberModel(0, 0, 2147483647, 1));
+        spnNumberOfElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel12.setText("Sex:");
 
@@ -345,13 +382,40 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jLabel13.setText("Age:");
 
         chkIndividualsLess.setText("and less");
+        chkIndividualsLess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkIndividualsLess.setFocusPainted(false);
 
         chkIndividualsMore.setText("and more");
+        chkIndividualsMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkIndividualsMore.setFocusPainted(false);
 
         chkIncludeEmptyTags.setText("Include empty tags");
+        chkIncludeEmptyTags.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkIncludeEmptyTags.setFocusPainted(false);
+
+        jLabel24.setText("Duration:");
+
+        spnDurationMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 1440, 1));
+        spnDurationMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        chkDurationLess.setText("and less");
+        chkDurationLess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkDurationLess.setFocusPainted(false);
+
+        chkDurationMore.setText("and more");
+        chkDurationMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkDurationMore.setFocusPainted(false);
+
+        spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnDurationSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        jLabel25.setText("min");
+
+        jLabel26.setText("sec");
+
+        jLabel27.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel27.setText("(separate by newline)");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -365,65 +429,90 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(171, 171, 171)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jLabel11)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(chkIndividualsLess)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(chkIndividualsMore)))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(chkIndividualsLess)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(chkIndividualsMore)))
                         .addGap(5, 5, 5))
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addComponent(jScrollPane2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkIncludeEmptyTags)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkIncludeEmptyTags)
+                            .addComponent(jLabel27))
                         .addContainerGap())))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jLabel24)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(spnDurationMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel25)
+                        .addGap(6, 6, 6)
+                        .addComponent(spnDurationSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel26)
+                        .addGap(10, 10, 10)
+                        .addComponent(chkDurationLess)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(chkDurationMore)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(3, 3, 3)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(chkIncludeEmptyTags))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel13)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel13)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel12)
-                                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(10, 10, 10)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel11))))
-                                .addGap(3, 3, 3)
+                                    .addComponent(jLabel12)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(10, 10, 10)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(chkIndividualsLess)
-                                    .addComponent(chkIndividualsMore))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane5))
-                        .addGap(5, 5, 5)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(5, 5, 5))
+                                    .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel11))))
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(chkIndividualsLess)
+                            .addComponent(chkIndividualsMore))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane5))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(spnDurationMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkDurationLess)
+                    .addComponent(chkDurationMore)
+                    .addComponent(spnDurationSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel25)
+                    .addComponent(jLabel26))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(chkIncludeEmptyTags)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel27)))
+                .addGap(3, 3, 3))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Categories"));
@@ -503,7 +592,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(5, 5, 5)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel14)
@@ -516,7 +605,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
                             .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(5, 5, 5))
+                .addGap(3, 3, 3))
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Sun And Moon Phase"));
@@ -533,6 +622,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jScrollPane8.setViewportView(lsbTimeOfDay);
 
         spnMoonphase.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        spnMoonphase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         lsbMoonlight.setBackground(new java.awt.Color(230, 226, 224));
         lsbMoonlight.setForeground(new java.awt.Color(176, 153, 145));
@@ -562,9 +652,11 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jLabel21.setText("% full");
 
         chkMoonlightMore.setText("and more");
+        chkMoonlightMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMoonlightMore.setFocusPainted(false);
 
         chkMoonlightLess.setText("and less");
+        chkMoonlightLess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMoonlightLess.setFocusPainted(false);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -597,7 +689,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                                 .addComponent(chkMoonlightLess)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(chkMoonlightMore)))
-                        .addGap(0, 7, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -627,14 +719,28 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(chkMoonlightLess)
                             .addComponent(chkMoonlightMore))))
-                .addGap(5, 5, 5))
+                .addGap(3, 3, 3))
         );
+
+        btnTemplates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/FilterSightings.png"))); // NOI18N
+        btnTemplates.setText("Templates");
+        btnTemplates.setToolTipText("Select or manage saved templates.");
+        btnTemplates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTemplates.setFocusPainted(false);
+        btnTemplates.setFocusable(false);
+        btnTemplates.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnTemplates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTemplatesActionPerformed(evt);
+            }
+        });
 
         btnSelectAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SelectAll.png"))); // NOI18N
         btnSelectAll.setText("Select All");
         btnSelectAll.setToolTipText("Select all of the filters.");
         btnSelectAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelectAll.setFocusPainted(false);
+        btnSelectAll.setFocusable(false);
         btnSelectAll.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -647,12 +753,74 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         btnClearAll.setToolTipText("Clear all of the filters.");
         btnClearAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClearAll.setFocusPainted(false);
+        btnClearAll.setFocusable(false);
         btnClearAll.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnClearAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearAllActionPerformed(evt);
             }
         });
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Observation ID"));
+
+        txaSightingIDs.setColumns(20);
+        txaSightingIDs.setRows(2);
+        jScrollPane13.setViewportView(txaSightingIDs);
+
+        jLabel7.setText("Observation IDs:");
+
+        jLabel23.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel23.setText("(separate by newline)");
+
+        buttonGroupIDs.add(rdbInclude);
+        rdbInclude.setSelected(true);
+        rdbInclude.setText("Include");
+        rdbInclude.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        buttonGroupIDs.add(rdbExclude);
+        rdbExclude.setText("Exclude");
+        rdbExclude.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel7))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel23)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rdbInclude)
+                    .addComponent(rdbExclude))
+                .addGap(5, 5, 5))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel23))
+                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(rdbInclude)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rdbExclude)))
+                .addGap(3, 3, 3))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -666,47 +834,56 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     .addGroup(layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
+                        .addComponent(btnTemplates, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
                         .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
+                        .addGap(10, 10, 10)
                         .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel20)
-                        .addGap(15, 15, 15)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(3, 3, 3)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(3, 3, 3)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(5, 5, 5))
+                                .addGap(2, 2, 2))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnTemplates, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(15, 15, 15)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addGap(2, 2, 2)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(3, 3, 3))
         );
 
         pack();
@@ -742,11 +919,28 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         filterProperties.setTags(new ArrayList<>(lines.length));
         for (String tag : lines) {
             if (!tag.trim().isEmpty()) {
-                filterProperties.getTags().add(tag);
+                filterProperties.getTags().add(tag.trim());
             }
         }
         filterProperties.setIncludeEmptyTags(chkIncludeEmptyTags.isSelected());
         filterProperties.setElementTypes(lsbElementType.getSelectedValuesList());
+        lines = txaSightingIDs.getText().split("\\r?\\n");
+        filterProperties.setSightingIDs(new ArrayList<>(lines.length));
+        for (String id : lines) {
+            if (!id.trim().isEmpty()) {
+                try {
+                    filterProperties.getSightingIDs().add(Long.parseLong(id.trim()));
+                }
+                catch (NumberFormatException ex) {
+                    // Do nothing if not a Long number...
+                }
+            }
+        }
+        filterProperties.setSightingIDsIsInclude(rdbInclude.isSelected());
+        filterProperties.setDurationMinutes((int) spnDurationMinutes.getValue());
+        filterProperties.setDurationSeconds((int) spnDurationSeconds.getValue());
+        filterProperties.setDurationIsLess(chkDurationLess.isSelected());
+        filterProperties.setDurationIsMore(chkDurationMore.isSelected());
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnSelectActionPerformed
@@ -760,14 +954,49 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     }//GEN-LAST:event_lblTimeOfDayInfoMousePressed
 
     private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
-        filterProperties = null;
-        selectOldValues();
+        setDefaultValues(false, filterProperties);
+        populateUI();
     }//GEN-LAST:event_btnSelectAllActionPerformed
 
-    private void btnClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllActionPerformed
-        if (filterProperties == null) {
-            filterProperties = new FilterProperties();
+    public static void setDefaultValues(boolean inUseRecentDates, FilterProperties inFilterProperties) {
+        if (inUseRecentDates) {
+            inFilterProperties.setStartDate(LocalDate.now().minusDays(3));
+            inFilterProperties.setEndDate(LocalDate.now());
         }
+        else {
+            inFilterProperties.setStartDate(null);
+            inFilterProperties.setEndDate(null);
+        }
+        inFilterProperties.setStartTime(LocalTime.MIN);
+        inFilterProperties.setEndTime(LocalTime.MAX);
+        inFilterProperties.setActiveTimes(Arrays.asList(ActiveTimeSpesific.values()));
+        inFilterProperties.setMoonlights(Arrays.asList(Moonlight.values()));
+        inFilterProperties.setMoonphase(0);
+        inFilterProperties.setMoonphaseIsLess(true);
+        inFilterProperties.setMoonphaseIsMore(true);
+        inFilterProperties.setVisitTypes(Arrays.asList(VisitType.values()));
+        inFilterProperties.setEvidences(Arrays.asList(SightingEvidence.values()));
+        inFilterProperties.setLifeStatuses(Arrays.asList(LifeStatus.values()));
+        inFilterProperties.setTimeAccuracies(Arrays.asList(TimeAccuracy.values()));
+        inFilterProperties.setCertainties(Arrays.asList(Certainty.values()));
+        inFilterProperties.setGPSAccuracies(Arrays.asList(GPSAccuracy.values()));
+        inFilterProperties.setAges(Arrays.asList(Age.values()));
+        inFilterProperties.setSexes(Arrays.asList(Sex.values()));
+        inFilterProperties.setNumberOfElements(0);
+        inFilterProperties.setNumberOfElementsIsLess(true);
+        inFilterProperties.setNumberOfElementsIsMore(true);
+        inFilterProperties.setTags(new ArrayList<>(0));
+        inFilterProperties.setIncludeEmptyTags(true);
+        inFilterProperties.setElementTypes(Arrays.asList(ElementType.values()));
+        inFilterProperties.setSightingIDs(new ArrayList<>(0));
+        inFilterProperties.setSightingIDsIsInclude(true);
+        inFilterProperties.setDurationMinutes(0);
+        inFilterProperties.setDurationSeconds(0);
+        inFilterProperties.setDurationIsLess(true);
+        inFilterProperties.setDurationIsMore(true);
+    }
+
+    private void btnClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllActionPerformed
         filterProperties.setStartDate(null);
         filterProperties.setEndDate(null);
         filterProperties.setStartTime(LocalTime.MIN);
@@ -791,8 +1020,19 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         filterProperties.setTags(new ArrayList<>(0));
         filterProperties.setIncludeEmptyTags(true);
         filterProperties.setElementTypes(new ArrayList<>(0));
-        selectOldValues();
+        filterProperties.setSightingIDs(new ArrayList<>(0));
+        filterProperties.setSightingIDsIsInclude(true);
+        filterProperties.setDurationMinutes(0);
+        filterProperties.setDurationSeconds(0);
+        filterProperties.setDurationIsLess(true);
+        filterProperties.setDurationIsMore(true);
+        populateUI();
     }//GEN-LAST:event_btnClearAllActionPerformed
+
+    private void btnTemplatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTemplatesActionPerformed
+        FilterTemplatesDialog dialog = new FilterTemplatesDialog(this);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnTemplatesActionPerformed
 
     public boolean isSelectionMade() {
         return selectionMade;
@@ -806,66 +1046,54 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         return filterProperties;
     }
     
-    private void selectOldValues() {
-        if (filterProperties == null) {
-            dtpStartDate.setDate(null);
-            dtpEndDate.setDate(null);
-            spnStartTime.setValue(UtilsTime.getDateFromLocalTime(LocalTime.MIN));
-            spnEndTime.setValue(UtilsTime.getDateFromLocalTime(LocalTime.MAX));
-            selectValuesInJList(lsbTimeOfDay, ActiveTimeSpesific.values());
-            selectValuesInJList(lsbMoonlight, Moonlight.values());
-            spnMoonphase.setValue(0);
-            chkMoonlightLess.setSelected(true);
-            chkMoonlightMore.setSelected(true);
-            selectValuesInJList(lsbVisitType, VisitType.values());
-            selectValuesInJList(lsbEvidence, SightingEvidence.values());
-            selectValuesInJList(lsbLifeStatus, LifeStatus.values());
-            selectValuesInJList(lsbTimeAccuracy, TimeAccuracy.values());
-            selectValuesInJList(lsbCertainty, Certainty.values());
-            selectValuesInJList(lsbGPSAccuracy, GPSAccuracy.values());
-            selectValuesInJList(lsbAge, Age.values());
-            selectValuesInJList(lsbSex, Sex.values());
-            spnNumberOfElements.setValue(0);
-            chkIndividualsLess.setSelected(true);
-            chkIndividualsMore.setSelected(true);
-            txaTag.setText("");
-            chkIncludeEmptyTags.setSelected(true);
-            selectValuesInJList(lsbElementType, ElementType.values());
-        }
-        else {
-            dtpStartDate.setDate(UtilsTime.getDateFromLocalDate(filterProperties.getStartDate()));
-            dtpEndDate.setDate(UtilsTime.getDateFromLocalDate(filterProperties.getEndDate()));
-            spnStartTime.setValue(UtilsTime.getDateFromLocalTime(filterProperties.getStartTime()));
-            spnEndTime.setValue(UtilsTime.getDateFromLocalTime(filterProperties.getEndTime()));
-            selectValuesInJList(lsbTimeOfDay, filterProperties.getActiveTimes());
-            selectValuesInJList(lsbMoonlight, filterProperties.getMoonlights());
-            spnMoonphase.setValue(filterProperties.getMoonphase());
-            chkMoonlightLess.setSelected(filterProperties.isMoonphaseIsLess());
-            chkMoonlightMore.setSelected(filterProperties.isMoonphaseIsMore());
-            selectValuesInJList(lsbVisitType, filterProperties.getVisitTypes());
-            selectValuesInJList(lsbEvidence, filterProperties.getEvidences());
-            selectValuesInJList(lsbLifeStatus, filterProperties.getLifeStatuses());
-            selectValuesInJList(lsbTimeAccuracy, filterProperties.getTimeAccuracies());
-            selectValuesInJList(lsbCertainty, filterProperties.getCertainties());
-            selectValuesInJList(lsbGPSAccuracy, filterProperties.getGPSAccuracies());
-            selectValuesInJList(lsbAge, filterProperties.getAges());
-            selectValuesInJList(lsbSex, filterProperties.getSexes());
-            spnNumberOfElements.setValue(filterProperties.getNumberOfElements());
-            chkIndividualsLess.setSelected(filterProperties.isNumberOfElementsIsLess());
-            chkIndividualsMore.setSelected(filterProperties.isNumberOfElementsIsMore());
-            String tagText = "";
-            for (String tag : filterProperties.getTags()) {
-                if (!tag.trim().isEmpty()) {
-                    if (!tagText.isEmpty()) {
-                        tagText = tagText + System.lineSeparator();
-                    }
-                    tagText = tagText + tag;
+    private void populateUI() {
+        dtpStartDate.setDate(UtilsTime.getDateFromLocalDate(filterProperties.getStartDate()));
+        dtpEndDate.setDate(UtilsTime.getDateFromLocalDate(filterProperties.getEndDate()));
+        spnStartTime.setValue(UtilsTime.getDateFromLocalTime(filterProperties.getStartTime()));
+        spnEndTime.setValue(UtilsTime.getDateFromLocalTime(filterProperties.getEndTime()));
+        selectValuesInJList(lsbTimeOfDay, filterProperties.getActiveTimes());
+        selectValuesInJList(lsbMoonlight, filterProperties.getMoonlights());
+        spnMoonphase.setValue(filterProperties.getMoonphase());
+        chkMoonlightLess.setSelected(filterProperties.isMoonphaseIsLess());
+        chkMoonlightMore.setSelected(filterProperties.isMoonphaseIsMore());
+        selectValuesInJList(lsbVisitType, filterProperties.getVisitTypes());
+        selectValuesInJList(lsbEvidence, filterProperties.getEvidences());
+        selectValuesInJList(lsbLifeStatus, filterProperties.getLifeStatuses());
+        selectValuesInJList(lsbTimeAccuracy, filterProperties.getTimeAccuracies());
+        selectValuesInJList(lsbCertainty, filterProperties.getCertainties());
+        selectValuesInJList(lsbGPSAccuracy, filterProperties.getGPSAccuracies());
+        selectValuesInJList(lsbAge, filterProperties.getAges());
+        selectValuesInJList(lsbSex, filterProperties.getSexes());
+        spnNumberOfElements.setValue(filterProperties.getNumberOfElements());
+        chkIndividualsLess.setSelected(filterProperties.isNumberOfElementsIsLess());
+        chkIndividualsMore.setSelected(filterProperties.isNumberOfElementsIsMore());
+        String tagText = "";
+        for (String tag : filterProperties.getTags()) {
+            if (!tag.trim().isEmpty()) {
+                if (!tagText.isEmpty()) {
+                    tagText = tagText + System.lineSeparator();
                 }
+                tagText = tagText + tag;
             }
-            txaTag.setText(tagText);
-            chkIncludeEmptyTags.setSelected(filterProperties.isIncludeEmptyTags());
-            selectValuesInJList(lsbElementType, filterProperties.getElementTypes());
         }
+        txaTag.setText(tagText);
+        chkIncludeEmptyTags.setSelected(filterProperties.isIncludeEmptyTags());
+        selectValuesInJList(lsbElementType, filterProperties.getElementTypes());
+        String sightingIDsText = "";
+        for (Long id : filterProperties.getSightingIDs()) {
+            if (id != 0) {
+                if (!sightingIDsText.isEmpty()) {
+                    sightingIDsText = sightingIDsText + System.lineSeparator();
+                }
+                sightingIDsText = sightingIDsText + id;
+            }
+        }
+        txaSightingIDs.setText(sightingIDsText);
+        rdbInclude.setSelected(filterProperties.isSightingIDsIsInclude());
+        spnDurationMinutes.setValue(filterProperties.getDurationMinutes());
+        spnDurationSeconds.setValue(filterProperties.getDurationSeconds());
+        chkDurationLess.setSelected(filterProperties.isDurationIsLess());
+        chkDurationMore.setSelected(filterProperties.isDurationIsMore());
     }
     
     private void selectValuesInJList(JList inList, Object[] inValues) {
@@ -1183,6 +1411,47 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     return false;
                 }
             }
+            // SightingID
+            if (inFilterProperties.getSightingIDs() != null && !inFilterProperties.getSightingIDs().isEmpty()) {
+                boolean found = false;
+                for (Long id : inFilterProperties.getSightingIDs()) {
+                    if (id == inSighting.getSightingCounter()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (inFilterProperties.isSightingIDsIsInclude()) {
+                    if (!found) {
+                        return false;
+                    }
+                }
+                else {
+                    if (found) {
+                        return false;
+                    }
+                }
+            }
+            // Duration
+            if (!(inFilterProperties.isDurationIsLess()&& inFilterProperties.isDurationIsMore()) 
+                    && (inSighting.getDurationMinutes() >= 0 && inFilterProperties.getDurationMinutes() >= 0
+                    || inSighting.getDurationSeconds()>= 0 && inFilterProperties.getDurationSeconds() >= 0)) {
+                boolean found = false;
+                if (inSighting.getDurationMinutes() == inFilterProperties.getDurationMinutes()
+                        && ((int) inSighting.getDurationSeconds()) == inFilterProperties.getDurationSeconds()) {
+                    found = true;
+                }
+                LocalTime sightingTime = LocalTime.of(inSighting.getDurationMinutes() / 60, inSighting.getDurationMinutes() % 60, (int) inSighting.getDurationSeconds());
+                LocalTime filterTime = LocalTime.of(inFilterProperties.getDurationMinutes() / 60, inFilterProperties.getDurationMinutes() % 60, inFilterProperties.getDurationSeconds());
+                if (inFilterProperties.isDurationIsLess() && filterTime.isAfter(sightingTime)) {
+                    found = true;
+                }
+                if (inFilterProperties.isDurationIsMore() && filterTime.isBefore(sightingTime)) {
+                    found = true;
+                }
+                if (!found) {
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -1191,6 +1460,10 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private javax.swing.JButton btnClearAll;
     private javax.swing.JButton btnSelect;
     private javax.swing.JButton btnSelectAll;
+    private javax.swing.JButton btnTemplates;
+    private javax.swing.ButtonGroup buttonGroupIDs;
+    private javax.swing.JCheckBox chkDurationLess;
+    private javax.swing.JCheckBox chkDurationMore;
     private javax.swing.JCheckBox chkIncludeEmptyTags;
     private javax.swing.JCheckBox chkIndividualsLess;
     private javax.swing.JCheckBox chkIndividualsMore;
@@ -1213,21 +1486,29 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
+    private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -1248,10 +1529,15 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private javax.swing.JList lsbTimeAccuracy;
     private javax.swing.JList lsbTimeOfDay;
     private javax.swing.JList lsbVisitType;
+    private javax.swing.JRadioButton rdbExclude;
+    private javax.swing.JRadioButton rdbInclude;
+    private javax.swing.JSpinner spnDurationMinutes;
+    private javax.swing.JSpinner spnDurationSeconds;
     private javax.swing.JSpinner spnEndTime;
     private javax.swing.JSpinner spnMoonphase;
     private javax.swing.JSpinner spnNumberOfElements;
     private javax.swing.JSpinner spnStartTime;
+    private javax.swing.JTextArea txaSightingIDs;
     private javax.swing.JTextArea txaTag;
     // End of variables declaration//GEN-END:variables
 }
