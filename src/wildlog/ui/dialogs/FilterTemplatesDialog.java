@@ -1,23 +1,44 @@
 package wildlog.ui.dialogs;
 
+import java.awt.event.KeyEvent;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.AdhocData;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.reports.helpers.FilterProperties;
 
 
 public class FilterTemplatesDialog extends JDialog {
+    private final WildLogApp app;
+    private FilterProperties filterProperties;
 
     
-    public FilterTemplatesDialog(JDialog inParent) {
+    public FilterTemplatesDialog(JDialog inParent, FilterProperties inFilterProperties) {
         super();
         System.out.println("[FilterTemplatesDialog]");
+        filterProperties = inFilterProperties;
+        app = WildLogApp.getApplication();
         // Initialize the auto generated code
         initComponents();
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(this, null);
+        // Load the initial data
+        loadData();
     }
 
     /** This method is called from within the constructor to
@@ -29,11 +50,11 @@ public class FilterTemplatesDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnSelectAll = new javax.swing.JButton();
-        btnSelectAll1 = new javax.swing.JButton();
-        btnSelectAll2 = new javax.swing.JButton();
+        btnSelect = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        lstTemplates = new javax.swing.JList();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -44,52 +65,60 @@ public class FilterTemplatesDialog extends JDialog {
         setName("Form"); // NOI18N
         setResizable(false);
 
-        btnSelectAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
-        btnSelectAll.setToolTipText("Apply the selected Filter Template.");
-        btnSelectAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelectAll.setFocusPainted(false);
-        btnSelectAll.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        btnSelectAll.setName("btnSelectAll"); // NOI18N
-        btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
+        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnSelect.setToolTipText("Apply the selected Filter Template.");
+        btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSelect.setFocusPainted(false);
+        btnSelect.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSelect.setName("btnSelect"); // NOI18N
+        btnSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSelectAllActionPerformed(evt);
+                btnSelectActionPerformed(evt);
             }
         });
 
-        btnSelectAll1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
-        btnSelectAll1.setToolTipText("Add the applied Filter as a Template.");
-        btnSelectAll1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelectAll1.setFocusPainted(false);
-        btnSelectAll1.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        btnSelectAll1.setName("btnSelectAll1"); // NOI18N
-        btnSelectAll1.addActionListener(new java.awt.event.ActionListener() {
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
+        btnAdd.setToolTipText("Add the applied Filter as a Template.");
+        btnAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAdd.setFocusPainted(false);
+        btnAdd.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnAdd.setName("btnAdd"); // NOI18N
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSelectAll1ActionPerformed(evt);
+                btnAddActionPerformed(evt);
             }
         });
 
-        btnSelectAll2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnSelectAll2.setToolTipText("Delete the selected Filter Template.");
-        btnSelectAll2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelectAll2.setFocusPainted(false);
-        btnSelectAll2.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        btnSelectAll2.setName("btnSelectAll2"); // NOI18N
-        btnSelectAll2.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnDelete.setToolTipText("Delete the selected Filter Template.");
+        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.setFocusPainted(false);
+        btnDelete.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnDelete.setName("btnDelete"); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSelectAll2ActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        jList1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        lstTemplates.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lstTemplates.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstTemplates.setFocusable(false);
+        lstTemplates.setName("lstTemplates"); // NOI18N
+        lstTemplates.setSelectionBackground(new java.awt.Color(143, 159, 129));
+        lstTemplates.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstTemplatesMouseClicked(evt);
+            }
         });
-        jList1.setName("jList1"); // NOI18N
-        jScrollPane1.setViewportView(jList1);
+        lstTemplates.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lstTemplatesKeyReleased(evt);
+            }
+        });
+        jScrollPane1.setViewportView(lstTemplates);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Filter Templates:");
@@ -102,54 +131,169 @@ public class FilterTemplatesDialog extends JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSelectAll1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSelectAll2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)))
+                    .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addGap(5, 5, 5)
                 .addComponent(jLabel1)
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
-                        .addComponent(btnSelectAll1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
-                        .addComponent(btnSelectAll2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
-        
-    }//GEN-LAST:event_btnSelectAllActionPerformed
+    private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        if (!lstTemplates.getSelectionModel().isSelectionEmpty()) {
+            // Get the data from the database
+            AdhocData data = app.getDBI().find(new AdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), lstTemplates.getSelectedValue().toString(), null));
+            // Create the object
+            ByteArrayInputStream inputStream = null;
+            ObjectInputStream serializer = null;
+            try {
+                inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(data.getDataValue().getBytes()));
+                serializer = new ObjectInputStream(inputStream);
+                filterProperties = (FilterProperties) serializer.readObject();
+            }
+            catch (ClassNotFoundException | IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            finally {
+                if (serializer != null) {
+                    try {
+                        serializer.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                }
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                }
+            }
+            // Close the dialog
+            setVisible(false);
+            dispose();
+        }
+    }//GEN-LAST:event_btnSelectActionPerformed
 
-    private void btnSelectAll1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAll1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSelectAll1ActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // Get the name to safe it as
+        getGlassPane().setVisible(true);
+        String templateName = JOptionPane.showInputDialog(this,
+                            "Please provide the name of the Filter Template to be saved.",
+                            "Filter Template Name", JOptionPane.QUESTION_MESSAGE);
+        getGlassPane().setVisible(false);
+        if (templateName != null && !templateName.isEmpty()) {
+            // Write the object
+            ByteArrayOutputStream outputStream = null;
+            ObjectOutputStream serializer = null;
+            try {
+                outputStream = new ByteArrayOutputStream();
+                serializer = new ObjectOutputStream(outputStream);
+                serializer.writeObject(filterProperties);
+                serializer.flush();
+                String dataValue = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+                // Save to the database
+                app.getDBI().createOrUpdate(new AdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), templateName, dataValue));
+                // Reload the data
+                loadData();
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            finally {
+                if (serializer != null) {
+                    try {
+                        serializer.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                }
+                if (outputStream != null) {
+                    try {
+                        outputStream.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
 
-    private void btnSelectAll2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAll2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSelectAll2ActionPerformed
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        if (!lstTemplates.getSelectionModel().isSelectionEmpty()) {
+            // Get the data from the database
+            app.getDBI().delete(new AdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), lstTemplates.getSelectedValue().toString(), null));
+            // Reload the data
+            loadData();
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private void lstTemplatesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstTemplatesMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnSelectActionPerformed(null);
+        }
+    }//GEN-LAST:event_lstTemplatesMouseClicked
+
+    private void lstTemplatesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstTemplatesKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            evt.consume();
+            btnSelectActionPerformed(null);
+        }
+    }//GEN-LAST:event_lstTemplatesKeyReleased
+
+    private void loadData() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
+        lstTemplates.setModel(model);
+        List<AdhocData> lstData = WildLogApp.getApplication().getDBI().list(new AdhocData());
+        Collections.sort(lstData, new Comparator<AdhocData>() {
+            @Override
+            public int compare(AdhocData o1, AdhocData o2) {
+                return o1.getDataKey().compareTo(o2.getDataKey());
+            }
+        });
+        for (AdhocData data : lstData) {
+            model.addElement(data.getDataKey());
+        }
+    }
+
+    public FilterProperties getFilterProperties() {
+        return filterProperties;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSelectAll;
-    private javax.swing.JButton btnSelectAll1;
-    private javax.swing.JButton btnSelectAll2;
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnSelect;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList lstTemplates;
     // End of variables declaration//GEN-END:variables
 }

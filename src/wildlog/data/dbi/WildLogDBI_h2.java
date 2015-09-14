@@ -644,8 +644,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 }
                                 else
                                 if (results.getInt("VERSION") == 5) {
-                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4  (before upgrade to 5)"));
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v5  (before upgrade to 6)"));
                                     doUpdate6();
+                                }
+                                else
+                                if (results.getInt("VERSION") == 6) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v6  (before upgrade to 7)"));
+                                    doUpdate7();
                                 }
                                 UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
                                     @Override
@@ -963,6 +968,29 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         System.out.println("Finished update 6");
+    }
+    
+    private void doUpdate7() {
+        System.out.println("Starting update 7");
+        // This update adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Create new tables
+            
+// FIXME: Daar is not issues met die DB upgrade proses
+            
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=7");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        System.out.println("Finished update 7");
     }
 
 }

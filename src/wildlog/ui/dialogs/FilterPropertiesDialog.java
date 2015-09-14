@@ -87,7 +87,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
             filterProperties = new FilterProperties();
             setDefaultValues(false, filterProperties);
         }
-        populateUI();
+        populateToUI(filterProperties);
     }
 
     /**
@@ -214,11 +214,11 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jLabel22.setText("Daily End Time:");
 
-        spnStartTime.setModel(new javax.swing.SpinnerDateModel());
+        spnStartTime.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
         spnStartTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnStartTime.setEditor(new javax.swing.JSpinner.DateEditor(spnStartTime, "HH:mm"));
 
-        spnEndTime.setModel(new javax.swing.SpinnerDateModel());
+        spnEndTime.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
         spnEndTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnEndTime.setEditor(new javax.swing.JSpinner.DateEditor(spnEndTime, "HH:mm"));
 
@@ -426,39 +426,40 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13)
                     .addComponent(jLabel10))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(171, 171, 171)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(chkIndividualsLess)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(chkIndividualsMore)))
-                        .addGap(5, 5, 5))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addGap(28, 28, 28)
                         .addComponent(jScrollPane2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(chkIncludeEmptyTags)
-                            .addComponent(jLabel27))
-                        .addContainerGap())))
+                            .addComponent(jLabel27)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(264, 264, 264)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addComponent(jLabel24)
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(chkIndividualsLess)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(chkIndividualsMore))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel11)
+                                        .addGap(13, 13, 13)
+                                        .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel12)))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(spnDurationMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
@@ -471,7 +472,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addComponent(chkDurationLess)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(chkDurationMore)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 30, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -481,14 +482,12 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel12)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(10, 10, 10)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel11))))
+                            .addComponent(jLabel12)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
                         .addGap(3, 3, 3)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(chkIndividualsLess)
@@ -895,55 +894,59 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         if (filterProperties == null) {
             filterProperties = new FilterProperties();
         }
-        filterProperties.setStartDate(UtilsTime.getLocalDateFromDate(dtpStartDate.getDate()));
-        filterProperties.setEndDate(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()));
-        filterProperties.setStartTime(UtilsTime.getLocalTimeFromDate((Date) spnStartTime.getValue()));
-        filterProperties.setEndTime(UtilsTime.getLocalTimeFromDate((Date) spnEndTime.getValue()));
-        filterProperties.setActiveTimes(lsbTimeOfDay.getSelectedValuesList());
-        filterProperties.setMoonlights(lsbMoonlight.getSelectedValuesList());
-        filterProperties.setMoonphase((int) spnMoonphase.getValue());
-        filterProperties.setMoonphaseIsLess(chkMoonlightLess.isSelected());
-        filterProperties.setMoonphaseIsMore(chkMoonlightMore.isSelected());
-        filterProperties.setVisitTypes(lsbVisitType.getSelectedValuesList());
-        filterProperties.setEvidences(lsbEvidence.getSelectedValuesList());
-        filterProperties.setLifeStatuses(lsbLifeStatus.getSelectedValuesList());
-        filterProperties.setTimeAccuracies(lsbTimeAccuracy.getSelectedValuesList());
-        filterProperties.setCertainties(lsbCertainty.getSelectedValuesList());
-        filterProperties.setGPSAccuracies(lsbGPSAccuracy.getSelectedValuesList());
-        filterProperties.setAges(lsbAge.getSelectedValuesList());
-        filterProperties.setSexes(lsbSex.getSelectedValuesList());
-        filterProperties.setNumberOfElements((int) spnNumberOfElements.getValue());
-        filterProperties.setNumberOfElementsIsLess(chkIndividualsLess.isSelected());
-        filterProperties.setNumberOfElementsIsMore(chkIndividualsMore.isSelected());
+        populateFromUI(filterProperties);
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnSelectActionPerformed
+
+    private void populateFromUI(FilterProperties inFilterProperties) {
+        inFilterProperties.setStartDate(UtilsTime.getLocalDateFromDate(dtpStartDate.getDate()));
+        inFilterProperties.setEndDate(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()));
+        inFilterProperties.setStartTime(UtilsTime.getLocalTimeFromDate((Date) spnStartTime.getValue()));
+        inFilterProperties.setEndTime(UtilsTime.getLocalTimeFromDate((Date) spnEndTime.getValue()));
+        inFilterProperties.setActiveTimes(lsbTimeOfDay.getSelectedValuesList());
+        inFilterProperties.setMoonlights(lsbMoonlight.getSelectedValuesList());
+        inFilterProperties.setMoonphase((int) spnMoonphase.getValue());
+        inFilterProperties.setMoonphaseIsLess(chkMoonlightLess.isSelected());
+        inFilterProperties.setMoonphaseIsMore(chkMoonlightMore.isSelected());
+        inFilterProperties.setVisitTypes(lsbVisitType.getSelectedValuesList());
+        inFilterProperties.setEvidences(lsbEvidence.getSelectedValuesList());
+        inFilterProperties.setLifeStatuses(lsbLifeStatus.getSelectedValuesList());
+        inFilterProperties.setTimeAccuracies(lsbTimeAccuracy.getSelectedValuesList());
+        inFilterProperties.setCertainties(lsbCertainty.getSelectedValuesList());
+        inFilterProperties.setGPSAccuracies(lsbGPSAccuracy.getSelectedValuesList());
+        inFilterProperties.setAges(lsbAge.getSelectedValuesList());
+        inFilterProperties.setSexes(lsbSex.getSelectedValuesList());
+        inFilterProperties.setNumberOfElements((int) spnNumberOfElements.getValue());
+        inFilterProperties.setNumberOfElementsIsLess(chkIndividualsLess.isSelected());
+        inFilterProperties.setNumberOfElementsIsMore(chkIndividualsMore.isSelected());
         String[] lines = txaTag.getText().split("\\r?\\n");
-        filterProperties.setTags(new ArrayList<>(lines.length));
+        inFilterProperties.setTags(new ArrayList<>(lines.length));
         for (String tag : lines) {
             if (!tag.trim().isEmpty()) {
-                filterProperties.getTags().add(tag.trim());
+                inFilterProperties.getTags().add(tag.trim());
             }
         }
-        filterProperties.setIncludeEmptyTags(chkIncludeEmptyTags.isSelected());
-        filterProperties.setElementTypes(lsbElementType.getSelectedValuesList());
+        inFilterProperties.setIncludeEmptyTags(chkIncludeEmptyTags.isSelected());
+        inFilterProperties.setElementTypes(lsbElementType.getSelectedValuesList());
         lines = txaSightingIDs.getText().split("\\r?\\n");
-        filterProperties.setSightingIDs(new ArrayList<>(lines.length));
+        inFilterProperties.setSightingIDs(new ArrayList<>(lines.length));
         for (String id : lines) {
             if (!id.trim().isEmpty()) {
                 try {
-                    filterProperties.getSightingIDs().add(Long.parseLong(id.trim()));
+                    inFilterProperties.getSightingIDs().add(Long.parseLong(id.trim()));
                 }
                 catch (NumberFormatException ex) {
                     // Do nothing if not a Long number...
                 }
             }
         }
-        filterProperties.setSightingIDsIsInclude(rdbInclude.isSelected());
-        filterProperties.setDurationMinutes((int) spnDurationMinutes.getValue());
-        filterProperties.setDurationSeconds((int) spnDurationSeconds.getValue());
-        filterProperties.setDurationIsLess(chkDurationLess.isSelected());
-        filterProperties.setDurationIsMore(chkDurationMore.isSelected());
-        setVisible(false);
-        dispose();
-    }//GEN-LAST:event_btnSelectActionPerformed
+        inFilterProperties.setSightingIDsIsInclude(rdbInclude.isSelected());
+        inFilterProperties.setDurationMinutes((int) spnDurationMinutes.getValue());
+        inFilterProperties.setDurationSeconds((int) spnDurationSeconds.getValue());
+        inFilterProperties.setDurationIsLess(chkDurationLess.isSelected());
+        inFilterProperties.setDurationIsMore(chkDurationMore.isSelected());
+    }
 
     private void lblTimeOfDayInfoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimeOfDayInfoMousePressed
         getGlassPane().setVisible(true);
@@ -955,7 +958,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
     private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
         setDefaultValues(false, filterProperties);
-        populateUI();
+        populateToUI(filterProperties);
     }//GEN-LAST:event_btnSelectAllActionPerformed
 
     public static void setDefaultValues(boolean inUseRecentDates, FilterProperties inFilterProperties) {
@@ -1026,12 +1029,15 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         filterProperties.setDurationSeconds(0);
         filterProperties.setDurationIsLess(true);
         filterProperties.setDurationIsMore(true);
-        populateUI();
+        populateToUI(filterProperties);
     }//GEN-LAST:event_btnClearAllActionPerformed
 
     private void btnTemplatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTemplatesActionPerformed
-        FilterTemplatesDialog dialog = new FilterTemplatesDialog(this);
+        FilterProperties tempFilterProperties = new FilterProperties();
+        populateFromUI(tempFilterProperties);
+        FilterTemplatesDialog dialog = new FilterTemplatesDialog(this, tempFilterProperties);
         dialog.setVisible(true);
+        populateToUI(dialog.getFilterProperties());
     }//GEN-LAST:event_btnTemplatesActionPerformed
 
     public boolean isSelectionMade() {
@@ -1046,29 +1052,29 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         return filterProperties;
     }
     
-    private void populateUI() {
-        dtpStartDate.setDate(UtilsTime.getDateFromLocalDate(filterProperties.getStartDate()));
-        dtpEndDate.setDate(UtilsTime.getDateFromLocalDate(filterProperties.getEndDate()));
-        spnStartTime.setValue(UtilsTime.getDateFromLocalTime(filterProperties.getStartTime()));
-        spnEndTime.setValue(UtilsTime.getDateFromLocalTime(filterProperties.getEndTime()));
-        selectValuesInJList(lsbTimeOfDay, filterProperties.getActiveTimes());
-        selectValuesInJList(lsbMoonlight, filterProperties.getMoonlights());
-        spnMoonphase.setValue(filterProperties.getMoonphase());
-        chkMoonlightLess.setSelected(filterProperties.isMoonphaseIsLess());
-        chkMoonlightMore.setSelected(filterProperties.isMoonphaseIsMore());
-        selectValuesInJList(lsbVisitType, filterProperties.getVisitTypes());
-        selectValuesInJList(lsbEvidence, filterProperties.getEvidences());
-        selectValuesInJList(lsbLifeStatus, filterProperties.getLifeStatuses());
-        selectValuesInJList(lsbTimeAccuracy, filterProperties.getTimeAccuracies());
-        selectValuesInJList(lsbCertainty, filterProperties.getCertainties());
-        selectValuesInJList(lsbGPSAccuracy, filterProperties.getGPSAccuracies());
-        selectValuesInJList(lsbAge, filterProperties.getAges());
-        selectValuesInJList(lsbSex, filterProperties.getSexes());
-        spnNumberOfElements.setValue(filterProperties.getNumberOfElements());
-        chkIndividualsLess.setSelected(filterProperties.isNumberOfElementsIsLess());
-        chkIndividualsMore.setSelected(filterProperties.isNumberOfElementsIsMore());
+    private void populateToUI(FilterProperties inFilterProperties) {
+        dtpStartDate.setDate(UtilsTime.getDateFromLocalDate(inFilterProperties.getStartDate()));
+        dtpEndDate.setDate(UtilsTime.getDateFromLocalDate(inFilterProperties.getEndDate()));
+        spnStartTime.setValue(UtilsTime.getDateFromLocalTime(inFilterProperties.getStartTime()));
+        spnEndTime.setValue(UtilsTime.getDateFromLocalTime(inFilterProperties.getEndTime()));
+        selectValuesInJList(lsbTimeOfDay, inFilterProperties.getActiveTimes());
+        selectValuesInJList(lsbMoonlight, inFilterProperties.getMoonlights());
+        spnMoonphase.setValue(inFilterProperties.getMoonphase());
+        chkMoonlightLess.setSelected(inFilterProperties.isMoonphaseIsLess());
+        chkMoonlightMore.setSelected(inFilterProperties.isMoonphaseIsMore());
+        selectValuesInJList(lsbVisitType, inFilterProperties.getVisitTypes());
+        selectValuesInJList(lsbEvidence, inFilterProperties.getEvidences());
+        selectValuesInJList(lsbLifeStatus, inFilterProperties.getLifeStatuses());
+        selectValuesInJList(lsbTimeAccuracy, inFilterProperties.getTimeAccuracies());
+        selectValuesInJList(lsbCertainty, inFilterProperties.getCertainties());
+        selectValuesInJList(lsbGPSAccuracy, inFilterProperties.getGPSAccuracies());
+        selectValuesInJList(lsbAge, inFilterProperties.getAges());
+        selectValuesInJList(lsbSex, inFilterProperties.getSexes());
+        spnNumberOfElements.setValue(inFilterProperties.getNumberOfElements());
+        chkIndividualsLess.setSelected(inFilterProperties.isNumberOfElementsIsLess());
+        chkIndividualsMore.setSelected(inFilterProperties.isNumberOfElementsIsMore());
         String tagText = "";
-        for (String tag : filterProperties.getTags()) {
+        for (String tag : inFilterProperties.getTags()) {
             if (!tag.trim().isEmpty()) {
                 if (!tagText.isEmpty()) {
                     tagText = tagText + System.lineSeparator();
@@ -1077,10 +1083,10 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
             }
         }
         txaTag.setText(tagText);
-        chkIncludeEmptyTags.setSelected(filterProperties.isIncludeEmptyTags());
-        selectValuesInJList(lsbElementType, filterProperties.getElementTypes());
+        chkIncludeEmptyTags.setSelected(inFilterProperties.isIncludeEmptyTags());
+        selectValuesInJList(lsbElementType, inFilterProperties.getElementTypes());
         String sightingIDsText = "";
-        for (Long id : filterProperties.getSightingIDs()) {
+        for (Long id : inFilterProperties.getSightingIDs()) {
             if (id != 0) {
                 if (!sightingIDsText.isEmpty()) {
                     sightingIDsText = sightingIDsText + System.lineSeparator();
@@ -1089,15 +1095,11 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
             }
         }
         txaSightingIDs.setText(sightingIDsText);
-        rdbInclude.setSelected(filterProperties.isSightingIDsIsInclude());
-        spnDurationMinutes.setValue(filterProperties.getDurationMinutes());
-        spnDurationSeconds.setValue(filterProperties.getDurationSeconds());
-        chkDurationLess.setSelected(filterProperties.isDurationIsLess());
-        chkDurationMore.setSelected(filterProperties.isDurationIsMore());
-    }
-    
-    private void selectValuesInJList(JList inList, Object[] inValues) {
-        selectValuesInJList(inList, Arrays.asList(inValues));
+        rdbInclude.setSelected(inFilterProperties.isSightingIDsIsInclude());
+        spnDurationMinutes.setValue(inFilterProperties.getDurationMinutes());
+        spnDurationSeconds.setValue(inFilterProperties.getDurationSeconds());
+        chkDurationLess.setSelected(inFilterProperties.isDurationIsLess());
+        chkDurationMore.setSelected(inFilterProperties.isDurationIsMore());
     }
     
     private void selectValuesInJList(JList inList, List inValues) {

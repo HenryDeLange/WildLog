@@ -1,5 +1,6 @@
 package wildlog.ui.reports.helpers;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -16,7 +17,8 @@ import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.VisitType;
 
 
-public class FilterProperties {
+public class FilterProperties implements Serializable {
+    private static final long serialVersionUID = 100000001L;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;
