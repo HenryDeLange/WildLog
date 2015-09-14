@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.ElementCore;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
@@ -55,7 +56,7 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected final Random randomGenerator = new Random(System.nanoTime()); // ThreadLocalRandom is beter maar net in Java 7
     // Version
-    protected static final int WILDLOG_DB_VERSION = 6;
+    protected static final int WILDLOG_DB_VERSION = 7;
     // Tables
     protected static final String tableElements = "CREATE TABLE ELEMENTS (PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL, OTHERNAME varchar(150), SCIENTIFICNAME varchar(150), DESCRIPTION longvarchar, DISTRIBUTION longvarchar, NUTRITION longvarchar, WATERDEPENDANCE varchar(50), SIZEMALEMIN float(52), SIZEMALEMAX float(52), SIZEFEMALEMIN float(52), SIZEFEMALEMAX float(52), SIZEUNIT varchar(10), SIZETYPE varchar(50), WEIGHTMALEMIN float(52), WEIGHTMALEMAX float(52), WEIGHTFEMALEMIN float(52), WEIGHTFEMALEMAX float(52), WEIGHTUNIT varchar(10), BREEDINGDURATION varchar(50), BREEDINGNUMBER varchar(50), WISHLISTRATING varchar(50), DIAGNOSTICDESCRIPTION longvarchar, ACTIVETIME varchar(50), ENDANGEREDSTATUS varchar(35), BEHAVIOURDESCRIPTION longvarchar, ADDFREQUENCY varchar(50), ELEMENTTYPE varchar(50), FEEDINGCLASS varchar(50), LIFESPAN varchar(50), REFERENCEID varchar(50))";
     protected static final String tableLocations = "CREATE TABLE LOCATIONS (NAME varchar(150) PRIMARY KEY NOT NULL, DESCRIPTION longvarchar, RATING varchar(50), GAMEVIEWINGRATING varchar(50), HABITATTYPE longvarchar, ACCOMMODATIONTYPE varchar(150), CATERING varchar(50), CONTACTNUMBERS varchar(50), WEBSITE varchar(100), EMAIL varchar(100), DIRECTIONS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, GPSACCURACY varchar(50))";
@@ -63,6 +64,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int, TEMPERATURE double, TEMPERATUREUNIT varchar(15), LIFESTATUS varchar(15), SEX varchar(15), TAG longvarchar, DURATIONMINUTES int, DURATIONSECONDS double, GPSACCURACY varchar(50), TIMEACCURACY varchar(50), AGE varchar(50))";
     protected static final String tableFiles = "CREATE TABLE FILES (ID varchar(175), FILENAME varchar(255), ORIGINALPATH varchar(500), FILETYPE varchar(50), UPLOADDATE date, ISDEFAULT smallint, FILEDATE timestamp, FILESIZE bigint)";
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG (VERSION int DEFAULT " + WILDLOG_DB_VERSION + ", DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 750, DEFAULTLATOPTION varchar(10) DEFAULT '', DEFAULTLONOPTION varchar(10) DEFAULT '', DEFAULTONLINEMAP smallint DEFAULT true, USETHUMBNAILTABLES smallint DEFAULT true, USETHUMBNAILBROWSE smallint DEFAULT false, ENABLESOUNDS smallint DEFAULT true, USESCIENTIFICNAMES smallint DEFAULT true, WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace', WORKSPACEID bigint DEFAULT 0)";
+    protected static final String tableAdhocData = "CREATE TABLE ADHOC (FIELDID varchar(150) NOT NULL, DATAKEY varchar(150) NOT NULL, DATAVALUE TEXT)";
     // Count
     protected static final String countLocation = "SELECT count(*) FROM LOCATIONS";
     protected static final String countVisit = "SELECT count(*) FROM VISITS";
@@ -76,12 +78,13 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String findElement = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = ?";
     protected static final String findFile = "SELECT * FROM FILES";
     protected static final String findWildLogOptions = "SELECT * FROM WILDLOG";
+    protected static final String findAdhocData = "SELECT * FROM ADHOC WHERE FIELDID = ? AND DATAKEY = ?";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listVisit = "SELECT * FROM VISITS";
-//    protected static final String listSighting = "SELECT * FROM SIGHTINGS";
     protected static final String listElement = "SELECT * FROM ELEMENTS";
     protected static final String listFile = "SELECT * FROM FILES";
+    protected static final String listAdhocData = "SELECT * FROM ADHOC";
     // Create
     protected static final String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS,GPSACCURACY) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
@@ -89,19 +92,22 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String createElement = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createFile = "INSERT INTO FILES (ID,FILENAME,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT,FILEDATE,FILESIZE) VALUES (?,?,?,?,?,?,?,?)";
     protected static final String createWildLogOptions = "INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, ?)";
+    protected static final String createAdhocData = "INSERT INTO ADHOC (FIELDID, DATAKEY, DATAVALUE) VALUES (?, ?, ?)";
     // Update
     protected static final String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ?, GPSACCURACY = ? WHERE NAME = ?";
     protected static final String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
     protected static final String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ?, TEMPERATURE = ?, TEMPERATUREUNIT = ?, LIFESTATUS = ?, SEX = ?, TAG = ?, DURATIONMINUTES = ?, DURATIONSECONDS = ?, GPSACCURACY = ?, TIMEACCURACY = ?, AGE = ? WHERE SIGHTINGCOUNTER = ?";
     protected static final String updateElement = "UPDATE ELEMENTS SET PRIMARYNAME = ?, OTHERNAME = ?, SCIENTIFICNAME = ?, DESCRIPTION = ?, DISTRIBUTION = ?, NUTRITION = ?, WATERDEPENDANCE = ?, SIZEMALEMIN = ?, SIZEMALEMAX = ?, SIZEFEMALEMIN = ?, SIZEFEMALEMAX = ?, SIZEUNIT = ?, SIZETYPE = ?, WEIGHTMALEMIN = ?, WEIGHTMALEMAX = ?, WEIGHTFEMALEMIN = ?, WEIGHTFEMALEMAX = ?, WEIGHTUNIT = ?, BREEDINGDURATION = ?, BREEDINGNUMBER = ?, WISHLISTRATING = ?, DIAGNOSTICDESCRIPTION = ?, ACTIVETIME = ?, ENDANGEREDSTATUS = ?, BEHAVIOURDESCRIPTION = ?, ADDFREQUENCY = ?, ELEMENTTYPE = ?, FEEDINGCLASS = ?, LIFESPAN = ?, REFERENCEID = ? WHERE PRIMARYNAME = ?";
     protected static final String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ?, FILEDATE = ?, FILESIZE = ? WHERE ORIGINALPATH = ?";
-    protected static final String updateWildLogOptions = "UPDATE WILDLOG SET DEFAULTLATITUDE = ?, DEFAULTLONGITUDE = ?, DEFAULTSLIDESHOWSPEED = ?, DEFAULTSLIDESHOWSIZE = ?, DEFAULTLATOPTION = ?, DEFAULTLONOPTION = ?, DEFAULTONLINEMAP = ?, USETHUMBNAILTABLES = ?, USETHUMBNAILBROWSE =?, ENABLESOUNDS = ?, USESCIENTIFICNAMES =?, WORKSPACENAME = ?, WORKSPACEID = ?";
+    protected static final String updateWildLogOptions = "UPDATE WILDLOG SET DEFAULTLATITUDE = ?, DEFAULTLONGITUDE = ?, DEFAULTSLIDESHOWSPEED = ?, DEFAULTSLIDESHOWSIZE = ?, DEFAULTLATOPTION = ?, DEFAULTLONOPTION = ?, DEFAULTONLINEMAP = ?, USETHUMBNAILTABLES = ?, USETHUMBNAILBROWSE =?, ENABLESOUNDS = ?, USESCIENTIFICNAMES = ?, WORKSPACENAME = ?, WORKSPACEID = ?";
+    protected static final String updateAdhocData = "UPDATE ADHOC SET FIELDID = ?, DATAKEY = ?, DATAVALUE = ? WHERE FIELDID = ? AND DATAKEY = ?";
     // Delete
     protected static final String deleteLocation = "DELETE FROM LOCATIONS WHERE NAME = ?";
     protected static final String deleteVisit = "DELETE FROM VISITS WHERE NAME = ?";
     protected static final String deleteSighting = "DELETE FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
     protected static final String deleteElement = "DELETE FROM ELEMENTS WHERE PRIMARYNAME = ?";
     protected static final String deleteFile = "DELETE FROM FILES WHERE ORIGINALPATH = ?";
+    protected static final String deleteAdhocData = "DELETE FROM ADHOC WHERE FIELDID = ? AND DATAKEY = ?";
     // Queries
     protected static final String queryLocationCountForElement = "select SIGHTINGS.LOCATIONNAME, count(*) cnt from SIGHTINGS where SIGHTINGS.ELEMENTNAME = ? group by SIGHTINGS.LOCATIONNAME order by cnt desc";
     // Variables
@@ -181,6 +187,14 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
                 state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
                 state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "ADHOC", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableAdhocData);
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FIELDID_DATAKEY ON FILES (FIELDID, DATAKEY)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -761,6 +775,38 @@ public abstract class DBI_JDBC implements DBI {
         }
         return tempWildLogOptions;
     }
+    
+    @Override
+    public <T extends AdhocData> T find(T inAdhocData) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        T temp = null;
+        try {
+            state = conn.prepareStatement(findAdhocData);
+            state.setString(1, UtilsData.sanitizeString(inAdhocData.getFieldID()));
+            state.setString(2, UtilsData.sanitizeString(inAdhocData.getDataKey()));
+            results = state.executeQuery();
+            if (results.next()) {
+                temp = (T) inAdhocData.getClass().newInstance();
+                temp.setFieldID(results.getString("FIELDID"));
+                temp.setDataKey(results.getString("DATAKEY"));
+                temp.setDataValue(results.getString("DATAVALUE"));
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return temp;
+    }
 
     @Override
     public <T extends ElementCore> List<T> list(T inElement) {
@@ -1037,6 +1083,46 @@ public abstract class DBI_JDBC implements DBI {
                 T tempFile = (T) inWildLogFile.getClass().newInstance();
                 populateWildLogFile(results, tempFile);
                 tempList.add(tempFile);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+    
+    @Override
+    public <T extends AdhocData> List<T> list(T inAdhocData) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<T> tempList = new ArrayList<T>();
+        try {
+            String sql = listAdhocData;
+            if (inAdhocData.getFieldID() != null && !inAdhocData.getFieldID().isEmpty()) {
+                sql = sql + " WHERE FIELDID = ?";
+                sql = sql + " ORDER BY FIELDID, DATAKEY";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inAdhocData.getFieldID()));
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                T temp = (T) inAdhocData.getClass().newInstance();
+                temp.setFieldID(results.getString("FIELDID"));
+                temp.setDataKey(results.getString("DATAKEY"));
+                temp.setDataValue(results.getString("DATAVALUE"));
+                tempList.add(temp);
             }
         }
         catch (SQLException ex) {
@@ -1491,6 +1577,48 @@ public abstract class DBI_JDBC implements DBI {
         }
         return true;
     }
+    
+    @Override
+    public <T extends AdhocData> boolean createOrUpdate(T inAdhocData) {
+        PreparedStatement state = null;
+        PreparedStatement tempState = null;
+        ResultSet results = null;
+        boolean isUpdate = false;
+        try {
+            tempState = conn.prepareStatement("SELECT COUNT(FIELDID) FROM ADHOC WHERE FIELDID = ? AND DATAKEY = ?");
+            tempState.setString(1, inAdhocData.getFieldID());
+            tempState.setString(2, inAdhocData.getDataKey());
+            results = tempState.executeQuery();
+            if (results.next() && results.getInt(1) > 0) {
+                // Update
+                state = conn.prepareStatement(updateAdhocData);
+                isUpdate = true;
+            }
+            else {
+                //Insert
+                state = conn.prepareStatement(createAdhocData);
+            }
+            // Populate the values
+            state.setString(1, inAdhocData.getFieldID());
+            state.setString(2, inAdhocData.getDataKey());
+            state.setString(3, inAdhocData.getDataValue());
+            if (isUpdate) {
+                state.setString(4, inAdhocData.getFieldID());
+                state.setString(5, inAdhocData.getDataKey());
+            }
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatementAndResultset(tempState, results);
+            closeStatement(state);
+        }
+        return true;
+    }
 
     @Override
     public <T extends ElementCore> boolean delete(T inElement) {
@@ -1626,6 +1754,25 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.prepareStatement(deleteFile);
             state.setString(1, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
             // Delete File from database
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends AdhocData> boolean delete(T inAdhocData) {
+        PreparedStatement state = null;
+        try {
+            state = conn.prepareStatement(deleteAdhocData);
+            state.setString(1, UtilsData.sanitizeString(inAdhocData.getFieldID()));
+            state.setString(2, UtilsData.sanitizeString(inAdhocData.getDataKey()));
             state.executeUpdate();
         }
         catch (SQLException ex) {

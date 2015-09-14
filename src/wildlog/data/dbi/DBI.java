@@ -2,6 +2,7 @@ package wildlog.data.dbi;
 
 import java.util.Date;
 import java.util.List;
+import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.ElementCore;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
@@ -28,12 +29,14 @@ public interface DBI {
     public <T extends SightingCore> T find(T inSighting);
     public <T extends WildLogFileCore> T find(T inWildLogFile);
     public <T extends WildLogOptions> T find(T inWildLogOptions);
+    public <T extends AdhocData> T find(T inAdhocData);
 
     public <T extends ElementCore> List<T> list(T inElement);
     public <T extends LocationCore> List<T> list(T inLocation);
     public <T extends VisitCore> List<T> list(T inVisit);
     public <T extends SightingCore> List<T> list(T inSighting, boolean inIncludeCachedValues);
     public <T extends WildLogFileCore> List<T> list(T inWildLogFile);
+    public <T extends AdhocData> List<T> list(T inAdhocData);
 
 // TODO: Split these methods into propper create and update versions...
     
@@ -43,12 +46,14 @@ public interface DBI {
     public <T extends SightingCore> boolean createOrUpdate(T inSighting, boolean inNewButKeepID);
     public <T extends WildLogFileCore> boolean createOrUpdate(T inFile, boolean inUpdate);
     public <T extends WildLogOptions> boolean createOrUpdate(T inWildLogOptions);
+    public <T extends AdhocData> boolean createOrUpdate(T inAdhocData);
 
     public <T extends ElementCore> boolean delete(T inElement);
     public <T extends LocationCore> boolean delete(T inLocation);
     public <T extends VisitCore> boolean delete(T inVisit);
     public <T extends SightingCore> boolean delete(T inSighting);
     public <T extends WildLogFileCore> boolean delete(T inWildLogFile);
+    public <T extends AdhocData> boolean delete(T inAdhocData);
 
     public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> 
         List<S> searchSightings(Date inStartDate, Date inEndDate, 
