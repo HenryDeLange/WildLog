@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -203,7 +204,7 @@ public final class WildLogView extends JFrame {
         setupTabHeaderSightings(3);
         setupTabHeaderBrowse(4);
         // Set the minimum size of the frame
-        this.setMinimumSize(new Dimension(1024, 705));
+        setMinimumSize(new Dimension(1024, 705));
     }
 
     private void setupTabHeaderHome() {
@@ -289,18 +290,18 @@ public final class WildLogView extends JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
+        lblBlog = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblLocations = new javax.swing.JLabel();
         lblVisits = new javax.swing.JLabel();
         lblSightings = new javax.swing.JLabel();
         lblCreatures = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
-        jLabel5 = new javax.swing.JLabel();
+        lblMyWild = new javax.swing.JLabel();
         lblWorkspaceName = new javax.swing.JLabel();
         lblWorkspacePath = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
-        jLabel8 = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         lblSettingsPath = new javax.swing.JLabel();
@@ -433,10 +434,18 @@ public final class WildLogView extends JFrame {
         jLabel12.setText("version " + WildLogApp.WILDLOG_VERSION);
         jLabel12.setName("jLabel12"); // NOI18N
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel15.setForeground(new java.awt.Color(186, 210, 159));
-        jLabel15.setText("http://cameratrap.mywild.co.za");
-        jLabel15.setName("jLabel15"); // NOI18N
+        lblBlog.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        lblBlog.setForeground(new java.awt.Color(186, 210, 159));
+        lblBlog.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblBlog.setText("http://cameratrap.mywild.co.za ");
+        lblBlog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblBlog.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        lblBlog.setName("lblBlog"); // NOI18N
+        lblBlog.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblBlogMousePressed(evt);
+            }
+        });
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Feature 1.png"))); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
@@ -461,10 +470,18 @@ public final class WildLogView extends JFrame {
         jSeparator5.setForeground(new java.awt.Color(105, 123, 79));
         jSeparator5.setName("jSeparator5"); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(107, 124, 89));
-        jLabel5.setText("http://www.mywild.co.za");
-        jLabel5.setName("jLabel5"); // NOI18N
+        lblMyWild.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        lblMyWild.setForeground(new java.awt.Color(107, 124, 89));
+        lblMyWild.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblMyWild.setText("http://www.mywild.co.za ");
+        lblMyWild.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblMyWild.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        lblMyWild.setName("lblMyWild"); // NOI18N
+        lblMyWild.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblMyWildMousePressed(evt);
+            }
+        });
 
         lblWorkspaceName.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblWorkspaceName.setForeground(new java.awt.Color(118, 146, 86));
@@ -483,10 +500,18 @@ public final class WildLogView extends JFrame {
         jSeparator6.setForeground(new java.awt.Color(216, 227, 201));
         jSeparator6.setName("jSeparator6"); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(115, 122, 107));
-        jLabel8.setText("support@mywild.co.za");
-        jLabel8.setName("jLabel8"); // NOI18N
+        lblEmail.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        lblEmail.setForeground(new java.awt.Color(115, 122, 107));
+        lblEmail.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblEmail.setText("support@mywild.co.za ");
+        lblEmail.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblEmail.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        lblEmail.setName("lblEmail"); // NOI18N
+        lblEmail.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblEmailMousePressed(evt);
+            }
+        });
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(66, 78, 52));
@@ -506,7 +531,7 @@ public final class WildLogView extends JFrame {
         lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString());
         lblSettingsPath.setName("lblSettingsPath"); // NOI18N
 
-        jButton1.setText("jButton1");
+        jButton1.setText("NEW MAPS");
         jButton1.setName("jButton1"); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -531,13 +556,26 @@ public final class WildLogView extends JFrame {
                 .addGap(50, 50, 50)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblWorkspaceName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator5, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblBlog)
+                    .addComponent(lblMyWild, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabHomeLayout.createSequentialGroup()
                         .addGap(110, 110, 110)
                         .addComponent(jLabel11)
                         .addGap(16, 16, 16)
                         .addComponent(jLabel12))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                    .addGroup(tabHomeLayout.createSequentialGroup()
                         .addGap(134, 134, 134)
                         .addComponent(lblLocations)
                         .addGap(18, 18, 18)
@@ -546,44 +584,25 @@ public final class WildLogView extends JFrame {
                         .addComponent(lblCreatures)
                         .addGap(18, 18, 18)
                         .addComponent(lblSightings))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                    .addGroup(tabHomeLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
-                            .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addGap(184, 184, 184)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(160, 495, Short.MAX_VALUE))
-            .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel8)))
-                .addContainerGap())
-            .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblWorkspaceName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator5, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)))
-                    .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addGap(279, 279, 279)
-                        .addComponent(jButton1)))
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         tabHomeLayout.setVerticalGroup(
             tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabHomeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel15)
+                .addComponent(lblBlog)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(lblMyWild)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
+                .addComponent(lblEmail)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -604,9 +623,9 @@ public final class WildLogView extends JFrame {
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
@@ -3644,6 +3663,33 @@ public final class WildLogView extends JFrame {
         executor.shutdown();
     }//GEN-LAST:event_mnuCheckUpdatesActionPerformed
 
+    private void lblBlogMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblBlogMousePressed
+        try {
+            Desktop.getDesktop().browse(URI.create(lblBlog.getText().trim()));
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }//GEN-LAST:event_lblBlogMousePressed
+
+    private void lblMyWildMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMyWildMousePressed
+        try {
+            Desktop.getDesktop().browse(URI.create(lblMyWild.getText().trim()));
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }//GEN-LAST:event_lblMyWildMousePressed
+
+    private void lblEmailMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblEmailMousePressed
+        try {
+            Desktop.getDesktop().mail(URI.create("mailto:" + lblEmail.getText().trim()));
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }//GEN-LAST:event_lblEmailMousePressed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3695,12 +3741,9 @@ public final class WildLogView extends JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
@@ -3719,8 +3762,11 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JPopupMenu.Separator jSeparator9;
+    private javax.swing.JLabel lblBlog;
     private javax.swing.JLabel lblCreatures;
+    private javax.swing.JLabel lblEmail;
     private javax.swing.JLabel lblLocations;
+    private javax.swing.JLabel lblMyWild;
     private javax.swing.JLabel lblSettingsPath;
     private javax.swing.JLabel lblSightings;
     private javax.swing.JLabel lblVisits;

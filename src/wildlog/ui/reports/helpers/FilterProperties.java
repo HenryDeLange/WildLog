@@ -18,7 +18,7 @@ import wildlog.data.enums.VisitType;
 
 
 public class FilterProperties implements Serializable {
-    private static final long serialVersionUID = 100000001L;
+    private static final long serialVersionUID = 100000001L; // This class is actually serialized when stored in the database (Adhoc table)
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime startTime;

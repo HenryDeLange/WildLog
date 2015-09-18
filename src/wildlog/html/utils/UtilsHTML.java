@@ -29,8 +29,8 @@ import wildlog.utils.WildLogSystemImages;
 
 
 public final class UtilsHTML {
-    private static final DateTimeFormatter dateFormatWithTime = DateTimeFormatter.ofPattern("E, dd MMM yyyy (hh:mm a)");
-    private static final DateTimeFormatter dateFormatWithoutTime = DateTimeFormatter.ofPattern("E, dd MMM yyyy");
+    private static final DateTimeFormatter dateFormatWithTime = DateTimeFormatter.ofPattern("dd MMM yyyy (hh:mm a)");
+    private static final DateTimeFormatter dateFormatWithoutTime = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
     private UtilsHTML() {
     }
@@ -84,7 +84,7 @@ public final class UtilsHTML {
         else
         if (inExportType.equals(UtilsHTMLExportTypes.ForMap)) {
             // Gebruik URI hier om in Windows en Linux reg te werk
-            return "<img src=\"" + inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL).toUri().toString() + "\"/>  ";
+            return "<img src='" + inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL).toUri().toString() + "'/>  ";
         }
         return "[image error]";
     }
@@ -99,7 +99,7 @@ public final class UtilsHTML {
             inProgressbarTask.setTaskProgress(1);
             inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' ");
         }
-        UtilsFileProcessing.createFileFromBytes(inDataObject.toHTML(true, true, inApp, UtilsHTMLExportTypes.ForHTML, inProgressbarTask).getBytes(), toFile);
+        UtilsFileProcessing.createFileFromBytes(inDataObject.toHTML(true, true, false, inApp, UtilsHTMLExportTypes.ForHTML, inProgressbarTask).getBytes(), toFile);
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(100);
             inProgressbarTask.setMessage("Done with the HTML Export for '" + inDataObject.getDisplayName() + "' ");
@@ -225,6 +225,8 @@ public final class UtilsHTML {
         UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-icons_454545_256x240.png"), inDestinationPath.resolve("theme/smoothness/images/ui-icons_454545_256x240.png"));
         UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-icons_888888_256x240.png"), inDestinationPath.resolve("theme/smoothness/images/ui-icons_888888_256x240.png"));
         UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/theme/smoothness/images/ui-icons_cd0a0a_256x240.png"), inDestinationPath.resolve("theme/smoothness/images/ui-icons_cd0a0a_256x240.png"));
+        // OverlappingMarkerSpiderfier
+        UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("html/fancy/Scripts/markerspider/oms.min.js"), inDestinationPath.resolve("markerspider/oms.min.js"));
     }
 
     public static Path exportFancyHTML(DataObjectWithHTML inDataObject, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
@@ -257,7 +259,7 @@ public final class UtilsHTML {
         // Replace the placeholders in the template with actual content
         template = template.replace("___THE_TITLE___", inDataObject.getDisplayName());
         template = template.replace("___THE_HEADING___", inDataObject.getDisplayName());
-        template = template.replace("___INFORMATION_CONTENT___", inDataObject.toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, null));
+        template = template.replace("___INFORMATION_CONTENT___", inDataObject.toHTML(false, false, false, inApp, UtilsHTMLExportTypes.ForHTML, null));
         // Copy the thumbnails and setup the main slideshow and image list
         int mainSliderBeginIndex = template.indexOf("___MAIN_SLIDER_START___") + "___MAIN_SLIDER_START___".length();
         int mainSliderEndIndex = template.indexOf("___MAIN_SLIDER_END___");
@@ -329,7 +331,6 @@ public final class UtilsHTML {
             inProgressbarTask.setTaskProgress(25);
             inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
         }
-// TODO: Maak die deel optioneel, want sommige plekke kan vrek baie observations hê...
         // Setup the Map and Related data
         List<Sighting> lstSightings;
         if (inDataObject instanceof Element) {
@@ -388,14 +389,14 @@ public final class UtilsHTML {
                     mapBuilder.append(mapTemplate.replace("var markerZZZ", "var marker" + relatedData.getIDField())
                                                  .replace("LatLng(44.5403, -78.5463)", "LatLng(" + UtilsGps.getLatDecimalDegree((DataObjectWithGPS) relatedData) + "," + UtilsGps.getLonDecimalDegree((DataObjectWithGPS) relatedData) + ")")
                                                  .replace("ZZZ-title", relatedData.getDisplayName().replaceAll("\"", "&quot;"))
-                                                 .replace("var infowindowZZZ", "var infowindow" + relatedData.getIDField())
-                                                 .replace("ZZZ-content", relatedData.toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))
-                                                 .replace("addListener(markerZZZ", "addListener(marker" + relatedData.getIDField())
-                                                 .replace("infowindowZZZ.open(map, markerZZZ", "infowindow" + relatedData.getIDField() + ".open(map, marker" + relatedData.getIDField())
-                                                 .replace("extend(markerZZZ", "extend(marker" + relatedData.getIDField()));
+                                                 .replace("markerZZZ.desc", "marker" + relatedData.getIDField() + ".desc")
+                                                 .replace("ZZZ-content", relatedData.toHTML(false, false, true, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))
+                                                 .replace("oms.addMarker(markerZZZ", "oms.addMarker(marker" + relatedData.getIDField())
+                                                 .replace("bounds.extend(markerZZZ", "bounds.extend(marker" + relatedData.getIDField()));
                 }
                 mapBuilder.append(System.lineSeparator());
             }
+// TODO: Maak die deel optioneel, want sommige plekke kan vrek baie observations hê...
             // Observation Info
             List<WildLogFile> lstSightingFiles = inApp.getDBI().list(new WildLogFile(relatedData.getWildLogFileID()));
             StringBuilder sliderBuilder = new StringBuilder(200 * lstSightingFiles.size());
@@ -444,7 +445,7 @@ public final class UtilsHTML {
                                                  .replace("___SUB_SLIDER_END___", "")
                                                  .replace("___SUB_LIGHTBOX_START___", "")
                                                  .replace("___SUB_LIGHTBOX_END___", "")
-                                                 .replace("___RELATED_INFORMATION_CONTENT___", relatedData.toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))
+                                                 .replace("___RELATED_INFORMATION_CONTENT___", relatedData.toHTML(false, false, false, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))
                                                  .replace(sliderTemplate, sliderBuilder.toString())
                                                  .replace(lightboxTemplate, lightboxBuilder.toString()));
             relatedBuilder.append(System.lineSeparator());

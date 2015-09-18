@@ -581,14 +581,16 @@ public class MappingDialog extends JDialog {
         setVisible(false);
         dispose();
         // Open Map
-        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
-            app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName() + " (Observations)");
-            app.getMapOnline().setLocationRelativeTo(this);
-            app.getMapOnline().showMap(Color.yellow);
-        }
-        else {
-            app.getMapOffline().changeTitle("WildLog Map - Offline: " + visit.getName() + " (Observations)");
-            app.getMapOffline().showMap(app);
+        if (sighting != null) {
+            if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
+                app.getMapOnline().setTitle("WildLog Map - Online: " + sighting.getDisplayName()+ " (Observations)");
+                app.getMapOnline().setLocationRelativeTo(this);
+                app.getMapOnline().showMap(Color.yellow);
+            }
+            else {
+                app.getMapOffline().changeTitle("WildLog Map - Offline: " + sighting.getDisplayName() + " (Observations)");
+                app.getMapOffline().showMap(app);
+            }
         }
     }//GEN-LAST:event_btnViewSelectedSightingActionPerformed
 

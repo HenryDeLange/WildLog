@@ -26,7 +26,8 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
 
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, boolean inIsSummary, 
+            WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
         StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
         htmlVisit.append("<title>Periods: ").append(name).append("</title></head>");
         htmlVisit.append("<body bgcolor='#E6E4F0'>");
@@ -36,9 +37,11 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         htmlVisit.append("<br/>");
         UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Start Date:</b><br/> ", UtilsHTML.formatDateAsString(startDate, false), true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>End Date:</b><br/> ", UtilsHTML.formatDateAsString(endDate, false), true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Game Watching:</b><br/> ", gameWatchingIntensity, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Type of Visit:</b><br/> ", type, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Description:</b><br/> ", description, true);
+        if (!inIsSummary) {
+            UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Game Watching:</b><br/> ", gameWatchingIntensity, true);
+        }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
             List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
@@ -64,7 +67,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
             List<Sighting> sightings = inApp.getDBI().list(tempSighting, false);
             int counter = 0;
             for (int t = 0; t < sightings.size(); t++) {
-                htmlVisit.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, null)).append("<br/>");
+                htmlVisit.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
                 if (inProgressbarTask != null) {
                     inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))

@@ -977,9 +977,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         ResultSet results = null;
         try {
             state = conn.createStatement();
-            // Create new tables
+            // The new ADHOC table will automatically be created
             
-// FIXME: Daar is not issues met die DB upgrade proses
+// TODO: Add more upgrade stuff here, as needed
             
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=7");

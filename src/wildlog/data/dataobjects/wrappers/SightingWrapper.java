@@ -46,8 +46,9 @@ public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWit
     }
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        return sighting.toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, inProgressbarTask);
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, boolean inIsSummary, 
+            WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
+        return sighting.toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, inProgressbarTask);
     }
 
     @Override

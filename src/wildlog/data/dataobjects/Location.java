@@ -25,37 +25,40 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
 
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, boolean inIsSummary, 
+            WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
+        StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
         htmlLocation.append("<title>Place: ").append(name).append("</title></head>");
         htmlLocation.append("<body bgcolor='E9EFF4'>");
         htmlLocation.append("<table bgcolor='#E9EFF4' width='100%'>");
         htmlLocation.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlLocation.append("<b><u>").append(name).append("</u></b>");
         htmlLocation.append("<br/>");
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/> ", UtilsGps.getLatitudeString(this), true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/> ", UtilsGps.getLongitudeString(this), true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy:</b><br/> ", gpsAccuracy, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/> ", rating, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/> ", gameViewingRating, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Habitat:</b><br/> ", habitatType, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Description:</b><br/> ", description, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Directions:</b><br/> ", directions, true);
-        if (website != null) {
-            if (website.length() > 0) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", "<a href=\"" + website + "\">" + website + "</a>", true);
+        if (!inIsSummary) {
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/> ", UtilsGps.getLatitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/> ", UtilsGps.getLongitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy:</b><br/> ", gpsAccuracy, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/> ", rating, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/> ", gameViewingRating, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Habitat:</b><br/> ", habitatType, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Directions:</b><br/> ", directions, true);
+            if (website != null) {
+                if (website.length() > 0) {
+                    UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", "<a href=\"" + website + "\">" + website + "</a>", true);
+                }
+                else {
+                    UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", website, true);
+                }
             }
             else {
                 UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", website, true);
             }
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Email:</b><br/> ", email, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Phone Number:</b><br/> ", contactNumbers, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Catering:</b><br/> ", catering, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Accomodation:</b><br/> ", accommodationType, true);
         }
-        else {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", website, true);
-        }
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Email:</b><br/> ", email, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Phone Number:</b><br/> ", contactNumbers, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Catering:</b><br/> ", catering, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Accomodation:</b><br/> ", accommodationType, true);
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
             List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
@@ -81,7 +84,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             List<Visit> visits = inApp.getDBI().list(tempVisit);
             int counter = 0;
             for (int t = 0; t < visits.size(); t++) {
-                htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, null)).append("<br/>");
+                htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
                 if (inProgressbarTask != null) {
                     inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/visits.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
@@ -102,7 +105,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
         entry.setName(name);
-        entry.setDescription(toHTML(false, true, inApp, UtilsHTMLExportTypes.ForKML, null));
+        entry.setDescription(toHTML(false, true, true, inApp, UtilsHTMLExportTypes.ForKML, null));
         entry.setStyle("locationStyle");
         entry.setLatitude(UtilsGps.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
         entry.setLongitude(UtilsGps.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));

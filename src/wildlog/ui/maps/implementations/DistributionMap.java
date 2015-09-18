@@ -26,7 +26,7 @@ import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 
 
-public class HeatMap extends AbstractMap<Sighting> {
+public class DistributionMap extends AbstractMap<Sighting> {
     private enum MapType {HEAT_MAP_CLIENTSIDE};
     private enum HeatMapSize {SMALL, MEDIUM, LARGE, VERY_LARGE};
     private MapType activeMapType = MapType.HEAT_MAP_CLIENTSIDE;
@@ -35,8 +35,8 @@ public class HeatMap extends AbstractMap<Sighting> {
     private Parent displayedMap;
 
     
-    public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Heat Maps (Online)", inLstData, inChartDescLabel);
+    public DistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
+        super("Distribution Maps (Offline)", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(7);
         // Maps
         Button btnHeatMapClient = new Button("Heat Map");
