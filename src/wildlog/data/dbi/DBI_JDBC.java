@@ -1893,10 +1893,10 @@ public abstract class DBI_JDBC implements DBI {
             // Add parameters
             int paramCounter = 1;
             if (inStartDate != null) {
-                state.setDate(paramCounter++, new java.sql.Date(inStartDate.getTime()));
+                state.setTimestamp(paramCounter++, new Timestamp(inStartDate.getTime()));
             }
             if (inEndDate != null) {
-                state.setDate(paramCounter++, new java.sql.Date(inEndDate.getTime()));
+                state.setTimestamp(paramCounter++, new Timestamp(inEndDate.getTime()));
             }
             if (inActiveLocations != null && !inActiveLocations.isEmpty()) {
                 for (LocationCore activeLocation : inActiveLocations) {
@@ -1978,7 +1978,8 @@ public abstract class DBI_JDBC implements DBI {
         return tempList;
     }
     
-    protected long generateID() {
+    @Override
+    public long generateID() {
         return System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
     }
 

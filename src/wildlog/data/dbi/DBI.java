@@ -62,4 +62,6 @@ public interface DBI {
     
     public <T extends LocationCount, V extends ElementCore> List<T> queryLocationCountForElement(V inElement, Class<T> inReturnType);
 
+    public long generateID();
+    
 }
