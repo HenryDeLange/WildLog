@@ -40,9 +40,9 @@ public final class UtilsConcurency {
     }
 
     /**
-     * This method will block the current thread and wait to try and shutdown the ExecutorService gracefully.
+     * This method will block the current thread and wait to try and <b>shutdown the ExecutorService</b> gracefully.
      * If it fails it will try to force the shutdown.
-     * Tasks will be allowed about 50 minutes to complete, which should really be enough unless something went very wrong.
+     * Tasks will be allowed about 120 minutes to complete, which should really be enough unless something went very wrong.
      * @param inExecutorService
      * @return
      */
@@ -50,10 +50,11 @@ public final class UtilsConcurency {
         if (inExecutorService != null) {
             inExecutorService.shutdown();
             try {
+                final int TOTAL_RETRIES_ALLOWED = 20;
                 int count = 0;
-                while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < 10) {
+                while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < TOTAL_RETRIES_ALLOWED) {
                     count++;
-                    System.out.println("ExecutorService expired while shutting down... Retry: " + count);
+                    System.out.println("ExecutorService expired while shutting down... Retry: " + count + " of " + TOTAL_RETRIES_ALLOWED);
                 }
                 if (!inExecutorService.isTerminated()) {
                     List<Runnable> terminationList  = inExecutorService.shutdownNow();
@@ -72,9 +73,10 @@ public final class UtilsConcurency {
     }
 
     /**
+     * <b>NOTE: This method is not currently used, so it might be buggy, see waitForExecutorToRunTasksWithPopup() instead.</b>
      * This method will block the current thread and wait to try and shutdown the ExecutorService gracefully.
-     * If it fails it will try to force the shutdown.
-     * Tasks will be allowed about 50 minutes to complete, which should really be enough unless something went very wrong. <br/>
+     * <b>The ExecutorService will be shutdown</b>, if it fails it will try to force the shutdown.
+     * Tasks will be allowed about 60 minutes to complete, which should really be enough unless something went very wrong. <br/>
      * <b>In addition this method will show a popup message (semi-modal) if the task is taking longer than about 1 second.
      * @param inExecutorService - The service to stop and wait for.
      * @param inParent - If the parent is a JDialog pass it in, otherwise use null to use the application's main frame.
@@ -186,7 +188,8 @@ public final class UtilsConcurency {
     }
 
     /**
-     *This method will block the current thread and wait to try and run all the submitted tasks. The ExecutorService is not shutdown.
+     *This method will block the current thread and wait to try and run all the submitted tasks. 
+     * <b>The ExecutorService is not shutdown.</b>
      * If the timeout expires it will cancel all remaining tasks and log an error.
      * Tasks will be allowed about 10 minutes to complete, which should really be enough unless something went very wrong. <br/>
      * <b>In addition this method will show a popup message (semi-modal) if the task is taking longer than about 1 second.

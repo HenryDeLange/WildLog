@@ -403,6 +403,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             // Save settings to the new workspace
                             WildLogOptions options = app.getDBI().find(new WildLogOptions());
                             options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
+                            options.setWorkspaceID(app.getDBI().generateID());
                             newDBI.createOrUpdate(options);
                             setProgress(3);
                             setMessage("Workspace Export: " + getProgress() + "%");

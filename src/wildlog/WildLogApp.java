@@ -139,6 +139,7 @@ public class WildLogApp extends Application {
         while (openedWorkspace == false);
         // Load the WildLogOptions
         wildLogOptions = dbi.find(new WildLogOptions());
+        System.out.println("Workspace opened with ID: " + wildLogOptions.getWorkspaceID());
         // Check to do monthly backup and try to upload the logs and user data to the MyWild DB
         Path folderPath = WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath()
                 .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_BACKUP_MONTHLY.format(LocalDateTime.now()) + ")");
@@ -186,6 +187,11 @@ public class WildLogApp extends Application {
                                     String logInfo = new String(fileBytes, Charset.defaultCharset());
                                     int logLength = 99999;
                                     if (logInfo.length() > logLength) {
+                                        
+                                        
+// FIXME: Daar is erns steeds fout met die log file upload/truncate/etc. besigheid...
+                                        
+                                        
                                         logFileSnippit = "...\n...\n" + logInfo.substring(logInfo.length() - logLength);
                                     }
                                     else {
@@ -263,8 +269,8 @@ public class WildLogApp extends Application {
 
     private boolean openWorkspace() {
         try {
+            System.out.println("Opening Workspace at: " + WildLogPaths.getFullWorkspacePrefix().toString());
             dbi = new WildLogDBI_h2();
-            System.out.println("Workspace opened at: " + WildLogPaths.getFullWorkspacePrefix().toString());
         }
         catch (Exception ex) {
             System.err.println("Could not open the Workspace. Will try to ask the user to try a new Workspace folder.");

@@ -2658,8 +2658,8 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("Database file records with incorrect type: " + filesWithBadType);
                         finalHandleFeedback.println("Database file records with missing non-essential data: " + filesWithMissingData);
                         finalHandleFeedback.println("Workspace files not found in the database: " + filesNotInDB.counter);
-                        finalHandleFeedback.println("Database file records with an incorrect File Modified Date value stored in the database: " + filesWithIncorrectDate);
-                        finalHandleFeedback.println("Database file records with an incorrect File Size value stored in the database: " + filesWithIncorrectSize);
+                        finalHandleFeedback.println("Database file records with an incorrect File Modified Date stored in the database: " + filesWithIncorrectDate);
+                        finalHandleFeedback.println("Database file records with an incorrect File Size stored in the database: " + filesWithIncorrectSize);
                         finalHandleFeedback.println("Incorrect links between database records: " + badDataLinks);
                         finalHandleFeedback.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
                         finalHandleFeedback.println("");
@@ -2669,7 +2669,7 @@ public final class WildLogView extends JFrame {
                         int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
                         int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
                         feedback.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
-                        // Print info to loags aswell (for upload)
+                        // Print info to logs aswell (for upload)
                         System.out.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
                         System.out.println("Files on disk moved to new folder: " + filesMoved.counter);
                         System.out.println("Database file records with no reference to a file on disk: " + filesWithoutPath);
@@ -2679,8 +2679,8 @@ public final class WildLogView extends JFrame {
                         System.out.println("Database file records with incorrect type: " + filesWithBadType);
                         System.out.println("Database file records with missing non-essential data: " + filesWithMissingData);
                         System.out.println("Workspace files not found in the database: " + filesNotInDB.counter);
-                        System.out.println("Database file records with an incorrect File Modified Date value stored in the database: " + filesWithIncorrectDate);
-                        System.out.println("Database file records with an incorrect File Size value stored in the database: " + filesWithIncorrectSize);
+                        System.out.println("Database file records with an incorrect File Modified Date: " + filesWithIncorrectDate);
+                        System.out.println("Database file records with an incorrect File Size: " + filesWithIncorrectSize);
                         System.out.println("Incorrect links between database records: " + badDataLinks);
                         System.out.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
                         System.out.println("+++++++++++++++++++ DURATION +++++++++++++++++++");

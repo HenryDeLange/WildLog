@@ -955,9 +955,6 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Make changes to WildLog Options
             state.execute("ALTER TABLE FILES ADD COLUMN FILEDATE timestamp");
             state.execute("ALTER TABLE FILES ADD COLUMN FILESIZE bigint");
-            WildLogOptions options = find(new WildLogOptions());
-            options.setWorkspaceID(generateID());
-            createOrUpdate(options);
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=6");
         }

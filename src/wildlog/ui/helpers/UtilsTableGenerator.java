@@ -4,6 +4,8 @@ import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -704,7 +706,8 @@ public final class UtilsTableGenerator {
                                         };
                 // Load data from DB (filtering on date and lists)
                 final List<Sighting> listSightings = inApp.getDBI().searchSightings(
-                        UtilsTime.getDateFromLocalDate(inFilterProperties.getStartDate()), UtilsTime.getDateFromLocalDate(inFilterProperties.getEndDate()), 
+                        UtilsTime.getDateFromLocalDate(inFilterProperties.getStartDate()), 
+                        UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(inFilterProperties.getEndDate(), LocalTime.MAX)), 
                         inActiveLocations, inActiveVisits, inActiveElements, true, Sighting.class);
                 if (!listSightings.isEmpty()) {
                     Collection<Callable<Object>> listCallables = Collections.synchronizedList(new ArrayList<>(listSightings.size()));

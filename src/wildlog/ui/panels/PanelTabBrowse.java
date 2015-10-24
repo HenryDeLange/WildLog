@@ -18,8 +18,11 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1346,9 +1349,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             }
                         }
                         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
+                            Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
                             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
                                     + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
-                                    app.getDBI().searchSightings(dtpStartDate.getDate(), dtpEndDate.getDate(), null, null, null, false, Sighting.class));
+                                    app.getDBI().searchSightings(dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class));
                             dialog.setVisible(true);
                             somethingToReportOn = true;
                         }
@@ -1648,7 +1652,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private void browseByDate() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-            List<Sighting> sightings = app.getDBI().searchSightings(dtpStartDate.getDate(), dtpEndDate.getDate(), null, null, null, false, Sighting.class);
+            Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
+            List<Sighting> sightings = app.getDBI().searchSightings(dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class);
             if (sightings.isEmpty()) {
                 DefaultMutableTreeNode lazyNode = new DefaultMutableTreeNode("No Observations found.");
                 root.add(lazyNode);
