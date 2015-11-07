@@ -51,6 +51,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_HTML_FANCY             (Paths.get("Export", "HTML(Advanced)")),
     WILDLOG_EXPORT_HTML_FANCY_RESOURCES   (Paths.get("Export", "HTML(Advanced)", "Scripts")),
     WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS  (Paths.get("Export", "HTML(Advanced)", "Thumbnails")),
+    WILDLOG_EXPORT_HTML_TEMPORARY         (Paths.get("Export", "HTML(Temporary)")),
     WILDLOG_EXPORT_WILDNOTE_SYNC          (Paths.get("Export", "WildNoteSync")),
     WILDLOG_EXPORT_SLIDESHOW              (Paths.get("Export", "Slideshow")),
     WILDLOG_EXPORT_FILES                  (Paths.get("Export", "OriginalFiles")),

@@ -1,4 +1,4 @@
-package wildlog.mapping.utils;
+package wildlog.maps.utils;
 
 import java.text.DecimalFormat;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;

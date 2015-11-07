@@ -1,4 +1,4 @@
-package wildlog.mapping.gpx;
+package wildlog.maps.gpx;
 
 import com.topografix.gpx._1._1.WptType;
 import java.nio.file.Path;
@@ -8,7 +8,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 
 
 public class UtilsGPX {

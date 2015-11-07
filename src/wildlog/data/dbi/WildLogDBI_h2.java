@@ -554,6 +554,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         return true;
     }
 
+// TODO: Gaan weer deur die logika en maak seker dit werk reg in alle gevalle (Dat die regte popups wys en alle upgrades gebeur)
+// TODO: Maak ook seker dat as mens 'n workspace inport wat ouer is, dat die pre=upgrade backups nie die regte DM sin vervang nie die backups moet in die externe workspace gedoen word...
     private void doUpdates() {
         Statement state = null;
         ResultSet results = null;
@@ -585,19 +587,21 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 }
             }
             // Read the row
-            boolean fullyUpdated = false;
+            boolean databaseAndApplicationInSync = false;
+            boolean wasMajorUpgrade = false;
+            boolean willPerformUpgrades = false;
             for (int t = 0; t <= WILDLOG_DB_VERSION; t++) {
                 results = state.executeQuery("SELECT VERSION FROM WILDLOG");
                 if (results.next()) {
                     if (results.getInt("VERSION") > WILDLOG_DB_VERSION) {
                         // The application codebase is older than the database version, need to update the application first
-                        fullyUpdated = false;
+                        databaseAndApplicationInSync = false;
                         break;
                     }
                     else {
                         // The database and application versions are in sync
                         if (results.getInt("VERSION") == WILDLOG_DB_VERSION) {
-                            fullyUpdated = true;
+                            databaseAndApplicationInSync = true;
                             break;
                         }
                         else {
@@ -617,6 +621,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 }
                             });
                             if (result == JOptionPane.OK_OPTION) {
+                                willPerformUpgrades = true;
                                 // Procede with the needed updates
                                 if (results.getInt("VERSION") == 0) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
@@ -646,26 +651,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 if (results.getInt("VERSION") == 5) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v5  (before upgrade to 6)"));
                                     doUpdate6();
+                                    wasMajorUpgrade = true;
                                 }
                                 else
                                 if (results.getInt("VERSION") == 6) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v6  (before upgrade to 7)"));
                                     doUpdate7();
                                 }
-                                UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                                "The Workspace has been upgraded to be compatible with the current WildLog application. "
-                                                + System.lineSeparator() 
-                                                + "Please consider running the 'Check and Clean the Workspace' process as well. "
-                                                + System.lineSeparator() 
-                                                + "(The feature is accessable from the 'Application' menu at the top of the window.)",
-                                                "WildLog Major Upgrade Complete", 
-                                                JOptionPane.INFORMATION_MESSAGE);
-                                        return -1;
-                                    }
-                                });
                             }
                             else {
                                 WildLogApp.getApplication().exit();
@@ -674,10 +666,43 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     }
                 }
             }
-            if (!fullyUpdated) {
+            if (databaseAndApplicationInSync) {
+                if (willPerformUpgrades) {
+                    if (wasMajorUpgrade) {
+                        UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                                        "The Workspace has been upgraded to be compatible with the current WildLog application. "
+                                        + System.lineSeparator() 
+                                        + "Please consider running the 'Check and Clean the Workspace' process as well. "
+                                        + System.lineSeparator() 
+                                        + "(The feature is accessable from the 'Application' menu at the top of the window.)",
+                                        "WildLog Major Upgrade Complete", 
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                return -1;
+                            }
+                        });
+                    }
+                    else {
+                        UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                                        "The Workspace has been upgraded to be compatible with the current WildLog application. ",
+                                        "WildLog Minor Upgrade Complete", 
+                                        JOptionPane.INFORMATION_MESSAGE);
+                                return -1;
+                            }
+                        });
+                    }
+                }
+            }
+            else {
                 UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
+// TODO: Gee 'n tip dat die probleem dalk net met die lock file is wat manually delete moet word?? (of sê hulle moet in manula kyk vir hulp)
                         JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
                                 "The database could not be fully updated. Make sure it is not in use or broken "
                                 + "and that you are running the latest version of the application.",

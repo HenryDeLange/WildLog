@@ -65,8 +65,8 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
-import wildlog.mapping.MapFrameOffline;
-import wildlog.mapping.MapFrameOnline;
+import wildlog.maps.MapFrameOffline;
+import wildlog.maps.MapFrameOnline;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
@@ -128,6 +128,7 @@ public class WildLogApp extends Application {
                     @Override
                     public int showDialog() {
                         JOptionPane.showMessageDialog(getMainFrame(),
+// TODO: Gee 'n tip dat die probleem dalk net met die lock file is wat manually delete moet word?? (of sê hulle moet in manula kyk vir hulp)
                                 "The WildLog Workspace could not be opened. It might be in use or broken. Please select another Workspace to open.",
                                 "WildLog Workspace Error", JOptionPane.ERROR_MESSAGE);
                         return -1;

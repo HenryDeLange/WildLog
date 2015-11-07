@@ -5,7 +5,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;

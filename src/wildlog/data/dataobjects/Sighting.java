@@ -1,6 +1,6 @@
 package wildlog.data.dataobjects;
 
-import KmlGenerator.objects.KmlEntry;
+import wildlog.maps.kml.generator.KmlEntry;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -15,7 +15,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.xml.utils.UtilsXML;

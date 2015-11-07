@@ -1,4 +1,4 @@
-package wildlog.mapping.layers;
+package wildlog.maps.layers;
 
 import java.awt.Color;
 

@@ -1,44 +1,44 @@
 package wildlog.ui.maps.implementations;
 
-import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
-import javafx.embed.swing.SwingNode;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Label;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.JLabel;
-import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
-import wildlog.mapping.MapFrameOnline;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
+import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogPaths;
 
 
 public class PointMap extends AbstractMap<Sighting> {
-    private enum MapType {POINT_MAP_GOOGLE, POINT_MAP_BING, POINT_MAP_OPENSTREETMAP};
+    private enum MapType {POINT_MAP_GOOGLE, POINT_MAP_BING};
     private MapType activeMapType = MapType.POINT_MAP_GOOGLE;
     private Parent displayedMap;
+    private String displayedTemplate;
 
     
     public PointMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Point Maps (Online)", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(7);
+        lstCustomButtons = new ArrayList<>(9);
         // Maps
         Button btnPointMapGoogle = new Button("Google Maps");
         btnPointMapGoogle.setCursor(Cursor.HAND);
@@ -60,16 +60,19 @@ public class PointMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnPointMapBing);
-        Button btnPointMapOpenStreetMap = new Button("OpenStreetMap");
-        btnPointMapOpenStreetMap.setCursor(Cursor.HAND);
-        btnPointMapOpenStreetMap.setOnAction(new EventHandler() {
+        // Options
+        lstCustomButtons.add(new Label("Map Options:"));
+        Button btnOpenInBrowser = new Button("Use External Web Browser");
+        btnOpenInBrowser.setCursor(Cursor.HAND);
+        btnOpenInBrowser.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                activeMapType = MapType.POINT_MAP_OPENSTREETMAP;
-                setupChartDescriptionLabel("<html>...Map info...</html>");
+                Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_TEMPORARY.getAbsoluteFullPath().resolve("TempMap_" + System.currentTimeMillis() + ".html");
+                UtilsFileProcessing.createFileFromBytes(displayedTemplate.getBytes(), toFile);
+                UtilsFileProcessing.openFile(toFile);
             }
         });
-        lstCustomButtons.add(btnPointMapOpenStreetMap);
+        lstCustomButtons.add(btnOpenInBrowser);
     }
 
     @Override
@@ -84,10 +87,6 @@ public class PointMap extends AbstractMap<Sighting> {
                 else
                 if (activeMapType.equals(MapType.POINT_MAP_BING)) {
                     displayedMap = createPointMapBing(lstData);
-                }
-                else
-                if (activeMapType.equals(MapType.POINT_MAP_OPENSTREETMAP)) {
-                    displayedMap = createPointMapOSM(lstData);
                 }
                 inScene.setRoot(displayedMap);
             }
@@ -140,6 +139,7 @@ public class PointMap extends AbstractMap<Sighting> {
                            .replace(gpsPointTemplate, gpsBuilder.toString());
         // Set the template
         webEngine.loadContent(template);
+        displayedTemplate = template;
         return webView;
     }
     
@@ -188,31 +188,8 @@ public class PointMap extends AbstractMap<Sighting> {
                            .replace(gpsPointTemplate, gpsBuilder.toString());
         // Set the template
         webEngine.loadContent(template);
+        displayedTemplate = template;
         return webView;
     }
-    
-    private Parent createPointMapOSM(final List<Sighting> inLstSightings) {
-        AnchorPane parent = new AnchorPane();
-        SwingNode swingNode = new SwingNode();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                MapFrameOnline map = WildLogApp.getApplication().getMapOnline();
-                map.getPointLayer().clearPoints();
-                for (Sighting sighting : inLstSightings) {
-                    map.getPointLayer().addPoint(UtilsGps.getLatDecimalDegree(sighting), UtilsGps.getLonDecimalDegree(sighting), 
-                            Color.ORANGE, sighting, WildLogApp.getApplication());
-                }
-                map.getPointLayer().loadPoints(Color.YELLOW);
-                swingNode.setContent(map.getRootPane());
-            }
-        });
-        AnchorPane.setTopAnchor(swingNode, 0.0);
-        AnchorPane.setBottomAnchor(swingNode, 0.0);
-        AnchorPane.setLeftAnchor(swingNode, 0.0);
-        AnchorPane.setRightAnchor(swingNode, 0.0);
-        parent.getChildren().add(swingNode);
-        return parent;
-    }
-    
+
 }

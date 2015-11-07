@@ -1,4 +1,4 @@
-package wildlog.mapping;
+package wildlog.maps;
 
 import com.bbn.openmap.LayerHandler;
 import com.bbn.openmap.MapBean;
@@ -9,13 +9,14 @@ import com.bbn.openmap.event.PanMouseMode;
 import com.bbn.openmap.gui.BasicMapPanel;
 import com.bbn.openmap.gui.MapPanel;
 import com.bbn.openmap.gui.OpenMapFrame;
+import com.bbn.openmap.layer.imageTile.ImageTileLayer;
 import com.bbn.openmap.layer.shape.ShapeLayer;
 import java.awt.Color;
 import java.io.File;
 import java.util.Properties;
 import javax.swing.ImageIcon;
 import wildlog.WildLogApp;
-import wildlog.mapping.layers.MapOfflinePointLayer;
+import wildlog.maps.layers.MapOfflinePointLayer;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public class MapFrameOffline {
@@ -120,10 +121,26 @@ public class MapFrameOffline {
         shapeLayerProtectedLand.setVisible(true);
 
         // Last on top
-        mapHandler.add(shapeLayerBase);
-        mapHandler.add(shapeLayerSouthAfrica);
-        mapHandler.add(shapeLayerRoads);
+//        mapHandler.add(shapeLayerBase);
+//        mapHandler.add(shapeLayerSouthAfrica);
+//        mapHandler.add(shapeLayerRoads);
         mapHandler.add(shapeLayerProtectedLand);
+        
+        // This needs JAI (the exe can be bundled with the application to allow the user to easily install, but can I make it work without install???)
+        ImageTileLayer imageTileLayer = new ImageTileLayer();
+        Properties props = new Properties();
+        props.put("prettyName", "GeoTIFF");
+        props.put("imageReaderLoaders", "geotiff");
+        props.put("geotiff", "com.bbn.openmap.dataAccess.image.geotiff.GeoTIFFImageReader.Loader");
+//        props.put("imageFilePath", "C:\\Users\\Henry\\Desktop\\Maps\\xTemp\\test2\\test.tif");
+//        props.put("imageFilePath", "C:\\Users\\Henry\\Desktop\\Maps\\Elevation\\Topography.tif");
+        props.put("imageFilePath", "C:\\Users\\Henry\\Desktop\\Maps\\Elevation\\testraw\\testraw.tif");
+//        props.put("selectColor", "FFFFFF00");
+//        props.put("imageCutoffRatio", "4000000");
+        imageTileLayer.setProperties(props);
+        imageTileLayer.setVisible(true);
+        
+        mapHandler.add(imageTileLayer);
 
         //if (inUseWMS) doWMS();
     }

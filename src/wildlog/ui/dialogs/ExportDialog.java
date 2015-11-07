@@ -15,7 +15,7 @@ import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.html.utils.UtilsHTML;
-import wildlog.mapping.kml.utils.UtilsKML;
+import wildlog.maps.kml.UtilsKML;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsTime;

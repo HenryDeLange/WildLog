@@ -1,11 +1,10 @@
-package wildlog.mapping.kml.utils;
+package wildlog.maps.kml;
 
-import KmlGenerator.KmlGenerator;
-import KmlGenerator.objects.KmlEntry;
-import KmlGenerator.objects.KmlStyle;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +17,9 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.interfaces.DataObjectBasicInfo;
 import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
+import wildlog.maps.kml.generator.KmlEntry;
+import wildlog.maps.kml.generator.KmlGenerator;
+import wildlog.maps.kml.generator.KmlStyle;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -286,6 +288,31 @@ public final class UtilsKML {
         }
         inProgressbarTask.setTaskProgress(100);
         inProgressbarTask.setMessage("Done with the KML Export for '" + inDataObject.getDisplayName() + "'");
+    }
+    
+    public static String getXmlFriendlyString(String inString) {
+        if (inString != null) {
+            StringBuilder builder = new StringBuilder(inString.length());
+            CharacterIterator iterator = new StringCharacterIterator(inString);
+            for (char temp = iterator.first(); temp != CharacterIterator.DONE; temp = iterator.next()) {
+                switch (temp) {
+                    case '&':
+                        builder.append("&amp;");
+                        break;
+                    case '<':
+                        builder.append("&lt;");
+                        break;
+                    case '>':
+                        builder.append("&gt;");
+                        break;
+                    default:
+                        builder.append(temp);
+                        break;
+                }
+            }
+            return builder.toString();
+        }
+        return null;
     }
 
 }

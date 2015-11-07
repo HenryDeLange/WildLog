@@ -1,6 +1,6 @@
 package wildlog.data.dataobjects;
 
-import KmlGenerator.objects.KmlEntry;
+import wildlog.maps.kml.generator.KmlEntry;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
@@ -8,7 +8,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.xml.utils.UtilsXML;
 

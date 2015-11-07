@@ -26,7 +26,7 @@ import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.MappingDialog;

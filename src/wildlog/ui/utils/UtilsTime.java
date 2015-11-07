@@ -15,7 +15,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.TimeFormat;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 
 
 public final class UtilsTime {

@@ -41,7 +41,7 @@ import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.helpers.renderers.ButtonTableRenderer;
 import wildlog.ui.helpers.renderers.DateCellRenderer;

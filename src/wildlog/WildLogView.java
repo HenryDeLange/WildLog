@@ -1,7 +1,5 @@
 package wildlog;
 
-import KmlGenerator.KmlGenerator;
-import KmlGenerator.objects.KmlEntry;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -82,8 +80,10 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.utils.WildLogConstants;
 import wildlog.html.utils.UtilsHTML;
-import wildlog.mapping.kml.utils.UtilsKML;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.kml.UtilsKML;
+import wildlog.maps.kml.generator.KmlEntry;
+import wildlog.maps.kml.generator.KmlGenerator;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.MergeElementsDialog;

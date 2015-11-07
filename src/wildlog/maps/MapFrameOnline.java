@@ -1,4 +1,4 @@
-package wildlog.mapping;
+package wildlog.maps;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,9 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import org.jdesktop.swingx.JXMapKit;
 import wildlog.WildLogApp;
-import wildlog.mapping.helpers.WildLogMapMouseListener;
-import wildlog.mapping.helpers.WildLogScrollPanel;
-import wildlog.mapping.layers.MapOnlinePointLayer;
+import wildlog.maps.helpers.WildLogMapMouseListener;
+import wildlog.maps.helpers.WildLogScrollPanel;
+import wildlog.maps.layers.MapOnlinePointLayer;
 
 
 public class MapFrameOnline extends JFrame {

@@ -36,6 +36,7 @@ import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.maps.implementations.DistributionMap;
 import wildlog.ui.maps.implementations.HeatMap;
+import wildlog.ui.maps.implementations.LegacyMap;
 import wildlog.ui.maps.implementations.OfflineMap;
 import wildlog.ui.maps.implementations.PointMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
@@ -118,6 +119,7 @@ public class MapsBaseDialog extends JFrame {
         lstMaps.add(new OfflineMap(lstFilteredData, lblMapDescription));
         lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription));
         lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription));
+        lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription));
         // Setup loading label
         final Label lblLoading = new Label("... LOADING ...");
         lblLoading.setPadding(new Insets(20));

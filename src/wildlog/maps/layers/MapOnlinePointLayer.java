@@ -1,4 +1,4 @@
-package wildlog.mapping.layers;
+package wildlog.maps.layers;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -21,7 +21,7 @@ import org.jdesktop.swingx.mapviewer.WaypointRenderer;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
-import wildlog.mapping.helpers.WildLogScrollPanel;
+import wildlog.maps.helpers.WildLogScrollPanel;
 
 /**
  *

@@ -1,6 +1,6 @@
 package wildlog.data.dataobjects.interfaces;
 
-import KmlGenerator.objects.KmlEntry;
+import wildlog.maps.kml.generator.KmlEntry;
 import wildlog.WildLogApp;
 
 public interface DataObjectWithKML {

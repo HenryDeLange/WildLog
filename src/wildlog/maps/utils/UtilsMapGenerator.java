@@ -1,4 +1,4 @@
-package wildlog.mapping.utils;
+package wildlog.maps.utils;
 
 import java.awt.Color;
 import java.io.File;

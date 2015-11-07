@@ -1,8 +1,5 @@
 package wildlog.astro;
 
-import astro.MoonPhase;
-import astro.MoonTimes;
-import astro.SunTimes;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;

@@ -22,7 +22,7 @@ import javafx.scene.web.WebView;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 
 

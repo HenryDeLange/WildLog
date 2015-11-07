@@ -1,4 +1,4 @@
-package wildlog.mapping.helpers;
+package wildlog.maps.helpers;
 
 import java.awt.Component;
 import javax.swing.JScrollPane;

@@ -1,7 +1,5 @@
 package wildlog.ui.dialogs;
 
-import astro.MoonTimes;
-import astro.SunTimes;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
@@ -17,9 +15,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
+import wildlog.astro.MoonTimes;
+import wildlog.astro.SunTimes;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.TimeFormat;
-import wildlog.mapping.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.utils.UtilsTime;
