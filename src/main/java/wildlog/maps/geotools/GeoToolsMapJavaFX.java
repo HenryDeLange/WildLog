@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
@@ -35,13 +36,22 @@ public class GeoToolsMapJavaFX {
     private final JFXPanel jfxPanel;
     private final MapContent mapContent = new MapContent();
     private ImageView imageView;
+    
+// TODO: Maybe need to do mapContent.dispose() when the map is closed???
 
-    public GeoToolsMapJavaFX(JFXPanel inJFXPanel) {
+    public GeoToolsMapJavaFX(JFXPanel inJFXPanel, boolean inEnhanceContrast) {
         jfxPanel = inJFXPanel;
         Group rootPane = new Group();
         Scene scene = new Scene(rootPane);
         jfxPanel.setScene(scene);
         imageView = new ImageView();
+        if (inEnhanceContrast) {
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setContrast(0.15);
+            colorAdjust.setBrightness(-0.15);
+            colorAdjust.setSaturation(0.15);
+            imageView.setEffect(colorAdjust);
+        }
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -220,12 +230,17 @@ System.out.println("GETTING MAP IMAGE");
     }
     
     public void reloadMap() {
-        if (imageView.getImage() != null /*&& imageView.getImage() instanceof WritableImage*/) {
-            imageView.setImage(SwingFXUtils.toFXImage(getMapAsImage(), (WritableImage) imageView.getImage()));
-        }
-        else {
-            imageView.setImage(SwingFXUtils.toFXImage(getMapAsImage(), null));
-        }
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if (imageView.getImage() != null /*&& imageView.getImage() instanceof WritableImage*/) {
+                    imageView.setImage(SwingFXUtils.toFXImage(getMapAsImage(), (WritableImage) imageView.getImage()));
+                }
+                else {
+                    imageView.setImage(SwingFXUtils.toFXImage(getMapAsImage(), null));
+                }
+            }
+        });
     }
     
     public void addLayer(Layer inLayer) {
@@ -235,6 +250,37 @@ System.out.println("GETTING MAP IMAGE");
                 mapContent.addLayer(inLayer);
             }
         });
+    }
+    
+    public void replaceLayer(int inIndex, Layer inNewLayer) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                // The set() call will remove and dispose the old layer
+                mapContent.layers().set(inIndex, inNewLayer);
+            }
+        });
+    }
+    
+    public void removeLayer(int inIndex) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                mapContent.layers().remove(inIndex);
+            }
+        });
+    }
+    
+    public int getLayerCount() {
+        return mapContent.layers().size();
+    }
+    
+    public ReferencedEnvelope getBounds() {
+        return mapContent.getViewport().getBounds();
+    }
+    
+    public void setBounds(ReferencedEnvelope inReferencedEnvelope) {
+        mapContent.getViewport().setBounds(inReferencedEnvelope);
     }
     
 }

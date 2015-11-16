@@ -41,11 +41,12 @@ public class BasicLauncher {
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // CREATE MAP
-        GeoToolsMapJavaFX map = new GeoToolsMapJavaFX(jfxPanel);
+        GeoToolsMapJavaFX map = new GeoToolsMapJavaFX(jfxPanel, false);
         // ADD LAYERS
         // GeoTiff
         try {
             File geotiff = new File("C:\\Users\\Henry\\Desktop\\Maps\\__FINALE_MAPS\\Earth Colours - Modern\\world_today_medium.tif");
+//            File geotiff = new File("C:\\WildLogToets\\WildLog\\Maps\\Layers\\Climate_Temperature_Min\\02Feb.tif");
             GeoTiffReader reader = new GeoTiffReader(geotiff);
             Layer gridlayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader));
             map.addLayer(gridlayer);

@@ -36,10 +36,10 @@ public class GeoToolsLayerUtils {
     private GeoToolsLayerUtils() {
     }
  
-    public static Style createGeoTIFFStyleRGB(AbstractGridCoverage2DReader reader) {
+    public static Style createGeoTIFFStyleRGB(AbstractGridCoverage2DReader inReader) {
         GridCoverage2D gridCoverage = null;
         try {
-            gridCoverage = reader.read(null);
+            gridCoverage = inReader.read(null);
         } 
         catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -80,6 +80,7 @@ public class GeoToolsLayerUtils {
         SelectedChannelType[] selectedChannelTypes = new SelectedChannelType[gridCoverage.getNumSampleDimensions()];
         StyleFactory styleFactory = CommonFactoryFinder.getStyleFactory();
         FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2();
+        // NOTE: The NORMALIZE and HISTOGRAM options don't really work very well... I'm doing it in JavaFX instead.
         ContrastEnhancement contrastEnhancement = styleFactory.contrastEnhancement(filterFactory.literal(1.0), ContrastMethod.NONE);
         for (int i = 0; i < 3; i++) {
             selectedChannelTypes[i] = styleFactory.createSelectedChannelType(String.valueOf(channelNum[i]), contrastEnhancement);
@@ -90,11 +91,11 @@ public class GeoToolsLayerUtils {
         return SLD.wrapSymbolizers(sym);
     }
     
-    public static Style createGeoTIFFStyleGreyscale(int band) {
+    public static Style createGeoTIFFStyleGreyscale(int inBand) {
         StyleFactory sf = CommonFactoryFinder.getStyleFactory();
         FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
-        ContrastEnhancement ce = sf.contrastEnhancement(ff.literal(1.0), ContrastMethod.NORMALIZE);
-        SelectedChannelType sct = sf.createSelectedChannelType(String.valueOf(band), ce);
+        ContrastEnhancement ce = sf.contrastEnhancement(ff.literal(1.0), ContrastMethod.NONE);
+        SelectedChannelType sct = sf.createSelectedChannelType(String.valueOf(inBand), ce);
         RasterSymbolizer sym = sf.getDefaultRasterSymbolizer();
         ChannelSelection sel = sf.channelSelection(sct);
         sym.setChannelSelection(sel);
