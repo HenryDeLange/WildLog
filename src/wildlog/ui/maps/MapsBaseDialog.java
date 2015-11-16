@@ -10,7 +10,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
@@ -21,7 +20,6 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,11 +32,14 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.maps.implementations.AltitudeMap;
 import wildlog.ui.maps.implementations.DistributionMap;
 import wildlog.ui.maps.implementations.HeatMap;
 import wildlog.ui.maps.implementations.LegacyMap;
 import wildlog.ui.maps.implementations.OfflineMap;
 import wildlog.ui.maps.implementations.PointMap;
+import wildlog.ui.maps.implementations.PrecipitationMap;
+import wildlog.ui.maps.implementations.TemperatureMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.ui.reports.ReportExportDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
@@ -120,12 +121,9 @@ public class MapsBaseDialog extends JFrame {
         lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription));
         lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription));
         lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription));
-        // Setup loading label
-        final Label lblLoading = new Label("... LOADING ...");
-        lblLoading.setPadding(new Insets(20));
-        lblLoading.setFont(new Font(24));
-        lblLoading.setTextAlignment(TextAlignment.CENTER);
-        lblLoading.setAlignment(Pos.CENTER);
+        lstMaps.add(new TemperatureMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
+        lstMaps.add(new PrecipitationMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
+        lstMaps.add(new AltitudeMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         // Add the reports
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(5);
@@ -134,10 +132,9 @@ public class MapsBaseDialog extends JFrame {
             for (Node node : map.getLstCustomButtons()) {
                 node.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                     @Override
-                    public void handle(ActionEvent event) {
+                    public void handle(ActionEvent inEvent) {
                         setActiveMap(map);
-                        jfxMapPanel.getScene().setRoot(lblLoading);
-                        map.createMap(jfxMapPanel.getScene());
+                        map.loadMap(jfxMapPanel.getScene());
                     }
                 });
                 vBox.getChildren().add(node);
@@ -386,7 +383,7 @@ public class MapsBaseDialog extends JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton1)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlMapsAndFiltersLayout = new javax.swing.GroupLayout(pnlMapsAndFilters);
@@ -396,21 +393,17 @@ public class MapsBaseDialog extends JFrame {
             .addGroup(pnlMapsAndFiltersLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(pnlMapsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlMapsAndFiltersLayout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(3, 3, 3))
-                    .addGroup(pnlMapsAndFiltersLayout.createSequentialGroup()
-                        .addGroup(pnlMapsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(pnlExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlMaps, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(3, 3, 3))))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlExport, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlFilters, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlMaps, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(3, 3, 3))
         );
         pnlMapsAndFiltersLayout.setVerticalGroup(
             pnlMapsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMapsAndFiltersLayout.createSequentialGroup()
-                .addComponent(pnlMaps, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
+                .addComponent(pnlMaps, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
                 .addComponent(pnlExport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -565,6 +558,10 @@ public class MapsBaseDialog extends JFrame {
     
     public void setActiveMap(AbstractMap inAbstractMap) {
         activeMap = inAbstractMap;
+    }
+
+    public AbstractMap getActiveMap() {
+        return activeMap;
     }
     
     private void doFiltering(final List<Sighting> lstOriginalData, List<Sighting> lstFilteredData, 

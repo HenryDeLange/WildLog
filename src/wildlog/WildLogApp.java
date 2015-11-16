@@ -35,6 +35,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.EventObject;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +68,7 @@ import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.maps.MapFrameOffline;
 import wildlog.maps.MapFrameOnline;
+import wildlog.maps.utils.UtilsMapGenerator;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
@@ -112,8 +114,17 @@ public class WildLogApp extends Application {
             Files.createDirectories(WildLogPaths.WILDLOG_FILES_IMAGES.getAbsoluteFullPath());
             Files.createDirectories(WildLogPaths.WILDLOG_FILES_MOVIES.getAbsoluteFullPath());
             Files.createDirectories(WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath());
-            Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
             Files.createDirectories(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
+            // Copy the bundled maps to the WorkSpace
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    UtilsMapGenerator.copyMapLayers();
+                }
+            });
+            executor.shutdown();
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);

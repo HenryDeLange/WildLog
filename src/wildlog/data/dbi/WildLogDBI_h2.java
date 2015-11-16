@@ -557,6 +557,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 // TODO: Gaan weer deur die logika en maak seker dit werk reg in alle gevalle (Dat die regte popups wys en alle upgrades gebeur)
 // TODO: Maak ook seker dat as mens 'n workspace inport wat ouer is, dat die pre=upgrade backups nie die regte DM sin vervang nie die backups moet in die externe workspace gedoen word...
     private void doUpdates() {
+
+// FIXME: Die storie werk nou nie meer as mens 'n nuwe wrokspace skep nie!!!
+        
         Statement state = null;
         ResultSet results = null;
         try {
