@@ -24,18 +24,18 @@ import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 
 
-public class TemperatureMap extends AbstractGeoToolsMap<Sighting> {
-    private enum MapType {TEMPERATURE_MIN, TEMPERATURE_MEAN, TEMPERATURE_MAX};
+public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
+    private enum MapType {TEMPERATURE_MIN, TEMPERATURE_MEAN, TEMPERATURE_MAX, PRECIPITATION_AVERAGE, PRECIPITATION_MONTHLY};
     private MapType activeMapType = MapType.TEMPERATURE_MEAN;
     private boolean animateMonths = false;
     private int activeMonth = 0;
     private final ComboBox<String> cmbMonths;
-    private final Timer timer = new Timer("WL_MonthTimer_Temperature", true);
+    private final Timer timer = new Timer("WL_MonthTimer_Climate", true);
 
     
-    public TemperatureMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
-        super("Temperature Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(9);
+    public ClimateMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
+        super("Climate Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
+        lstCustomButtons = new ArrayList<>(10);
         // Maps
         Button btnTemperatureMinMap = new Button("Minimum Temperature");
         btnTemperatureMinMap.setCursor(Cursor.HAND);
@@ -67,6 +67,29 @@ public class TemperatureMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnTemperatureMaxMap);
+        Button btnAridityMap = new Button("Annual Aridity");
+        btnAridityMap.setCursor(Cursor.HAND);
+        btnAridityMap.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                activeMapType = MapType.PRECIPITATION_AVERAGE;
+                setupChartDescriptionLabel("<html><b>Average <u>Annual</u> Aridity.</b> Blue indicates low, green medium and white high aridity.</html>");
+            }
+        });
+        lstCustomButtons.add(btnAridityMap);
+        Button btnPrecipitationMap = new Button("Monthly Precipitation");
+        btnPrecipitationMap.setCursor(Cursor.HAND);
+        btnPrecipitationMap.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                activeMapType = MapType.PRECIPITATION_MONTHLY;
+                setupChartDescriptionLabel("<html><b>Average <u>Monthly</u> Precipitation.</b> Blue indicates high, green medium and white low percipitation.</html>");
+                if (animateMonths) {
+                    doMonthAnimation(timer, 2500);
+                }
+            }
+        });
+        lstCustomButtons.add(btnPrecipitationMap);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
         cmbMonths = new ComboBox<>(FXCollections.observableArrayList(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}));
@@ -111,6 +134,14 @@ public class TemperatureMap extends AbstractGeoToolsMap<Sighting> {
         if (activeMapType.equals(MapType.TEMPERATURE_MAX)) {
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_TEMPERATURE_MAX, activeMonth);
         }
+        else
+        if (activeMapType.equals(MapType.PRECIPITATION_AVERAGE)) {
+            createMapDefault(lstData, BundledMapLayers.CLIMATE_PRECIPITATION_AVERAGE);
+        }
+        else
+        if (activeMapType.equals(MapType.PRECIPITATION_MONTHLY)) {
+            createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_PERCIPITATION_MONTHLY, activeMonth);
+        }
     }
     
     private void doMonthAnimation(Timer inTimer, long inDelay) {
@@ -120,7 +151,8 @@ public class TemperatureMap extends AbstractGeoToolsMap<Sighting> {
             public void run() {
                 if (animateMonths && (BundledMapLayers.CLIMATE_TEMPERATURE_MIN.equals(activeBaseLayer) 
                         || BundledMapLayers.CLIMATE_TEMPERATURE_MEAN.equals(activeBaseLayer) 
-                        || BundledMapLayers.CLIMATE_TEMPERATURE_MAX.equals(activeBaseLayer))
+                        || BundledMapLayers.CLIMATE_TEMPERATURE_MAX.equals(activeBaseLayer)
+                        || BundledMapLayers.CLIMATE_PERCIPITATION_MONTHLY.equals(activeBaseLayer))
                         && baseDialog.getActiveMap() == thisHandle) {
                     long startTime = System.currentTimeMillis();
 // FIXME: Hierdie is nie baie smooth nie, maar werk OK vir nou. 

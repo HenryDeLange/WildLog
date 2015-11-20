@@ -36,7 +36,7 @@ public class DistributionMap extends AbstractMap<Sighting> {
 
     
     public DistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Distribution Maps (Offline)", inLstData, inChartDescLabel);
+        super("Species Maps", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(7);
         // Maps
         Button btnHeatMapClient = new Button("Heat Map");

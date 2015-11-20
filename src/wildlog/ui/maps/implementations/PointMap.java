@@ -14,6 +14,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -37,8 +38,8 @@ public class PointMap extends AbstractMap<Sighting> {
 
     
     public PointMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Point Maps (Online)", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(9);
+        super("World Maps (Online)", inLstData, inChartDescLabel);
+        lstCustomButtons = new ArrayList<>(4);
         // Maps
         Button btnPointMapGoogle = new Button("Google Maps");
         btnPointMapGoogle.setCursor(Cursor.HAND);
@@ -62,14 +63,16 @@ public class PointMap extends AbstractMap<Sighting> {
         lstCustomButtons.add(btnPointMapBing);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
-        Button btnOpenInBrowser = new Button("Use External Web Browser");
+        Hyperlink btnOpenInBrowser = new Hyperlink("Use External Web Browser");
         btnOpenInBrowser.setCursor(Cursor.HAND);
         btnOpenInBrowser.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_TEMPORARY.getAbsoluteFullPath().resolve("TempMap_" + System.currentTimeMillis() + ".html");
-                UtilsFileProcessing.createFileFromBytes(displayedTemplate.getBytes(), toFile);
-                UtilsFileProcessing.openFile(toFile);
+                if (displayedTemplate != null && !displayedTemplate.isEmpty()) {
+                    Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_TEMPORARY.getAbsoluteFullPath().resolve("TempMap_" + System.currentTimeMillis() + ".html");
+                    UtilsFileProcessing.createFileFromBytes(displayedTemplate.getBytes(), toFile);
+                    UtilsFileProcessing.openFile(toFile);
+                }
             }
         });
         lstCustomButtons.add(btnOpenInBrowser);

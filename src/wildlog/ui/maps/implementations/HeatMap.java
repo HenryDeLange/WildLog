@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
@@ -14,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -24,6 +26,8 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
+import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogPaths;
 
 
 public class HeatMap extends AbstractMap<Sighting> {
@@ -33,11 +37,12 @@ public class HeatMap extends AbstractMap<Sighting> {
     private HeatMapSize activeHeatMapSize = HeatMapSize.MEDIUM;
     private boolean isTransparent = false;
     private Parent displayedMap;
+    private String displayedTemplate;
 
     
     public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Heat Maps (Online)", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(7);
+        super("Heat Maps", inLstData, inChartDescLabel);
+        lstCustomButtons = new ArrayList<>(8);
         // Maps
         Button btnHeatMapClient = new Button("Heat Map");
         btnHeatMapClient.setCursor(Cursor.HAND);
@@ -105,6 +110,19 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(rdbVeryLarge);
+        Hyperlink btnOpenInBrowser = new Hyperlink("Use External Web Browser");
+        btnOpenInBrowser.setCursor(Cursor.HAND);
+        btnOpenInBrowser.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                if (displayedTemplate != null && !displayedTemplate.isEmpty()) {
+                    Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_TEMPORARY.getAbsoluteFullPath().resolve("TempMap_" + System.currentTimeMillis() + ".html");
+                    UtilsFileProcessing.createFileFromBytes(displayedTemplate.getBytes(), toFile);
+                    UtilsFileProcessing.openFile(toFile);
+                }
+            }
+        });
+        lstCustomButtons.add(btnOpenInBrowser);
     }
 
     @Override
@@ -183,6 +201,7 @@ public class HeatMap extends AbstractMap<Sighting> {
         template = template.replace("//___OPTIONS___", options);
         // Set the template
         webEngine.loadContent(template);
+        displayedTemplate = template;
         return webView;
     }
     

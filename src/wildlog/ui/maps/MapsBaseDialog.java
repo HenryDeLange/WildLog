@@ -32,14 +32,15 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.maps.implementations.AltitudeMap;
+import wildlog.ui.maps.implementations.ClimateMap;
+import wildlog.ui.maps.implementations.CustomLayersMap;
 import wildlog.ui.maps.implementations.DistributionMap;
+import wildlog.ui.maps.implementations.EarthMap;
 import wildlog.ui.maps.implementations.HeatMap;
+import wildlog.ui.maps.implementations.LandStatusMap;
 import wildlog.ui.maps.implementations.LegacyMap;
-import wildlog.ui.maps.implementations.OfflineMap;
+import wildlog.ui.maps.implementations.OtherMap;
 import wildlog.ui.maps.implementations.PointMap;
-import wildlog.ui.maps.implementations.PrecipitationMap;
-import wildlog.ui.maps.implementations.TemperatureMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.ui.reports.ReportExportDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
@@ -88,8 +89,8 @@ public class MapsBaseDialog extends JFrame {
         // Setup the report buttons
         pnlMaps.add(jfxMapListPanel, BorderLayout.CENTER);
         AnchorPane anchorPaneForButtons = new AnchorPane();
-        Scene sceneReportList = new Scene(anchorPaneForButtons);
-        jfxMapListPanel.setScene(sceneReportList);
+        Scene sceneMapList = new Scene(anchorPaneForButtons);
+        jfxMapListPanel.setScene(sceneMapList);
         Accordion accordion = new Accordion();
         ScrollPane scrollPaneForButtons = new ScrollPane(accordion);
         scrollPaneForButtons.setFitToWidth(true);
@@ -112,23 +113,23 @@ public class MapsBaseDialog extends JFrame {
         lblInfo.setWrapText(true);
         vbox.getChildren().add(lblInfo);
         Scene sceneCharts = new Scene(vbox);
-        sceneCharts.getStylesheets().add("wildlog/ui/reports/chart/styling/Charts.css");
         jfxMapPanel.setScene(sceneCharts);
         // Setup the default reports
         List<AbstractMap<Sighting>> lstMaps = new ArrayList<>(13);
         lstMaps.add(new PointMap(lstFilteredData, lblMapDescription));
-        lstMaps.add(new OfflineMap(lstFilteredData, lblMapDescription));
+        lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription));
+        lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription));
+        lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
+        lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription));
-        lstMaps.add(new TemperatureMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
-        lstMaps.add(new PrecipitationMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
-        lstMaps.add(new AltitudeMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
+        lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         // Add the reports
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(5);
             vBox.setFillWidth(true);
-            TitledPane reportButton = new TitledPane(map.getMapButtonName(), vBox);
+            TitledPane mapButton = new TitledPane(map.getMapButtonName(), vBox);
             for (Node node : map.getLstCustomButtons()) {
                 node.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                     @Override
@@ -139,7 +140,7 @@ public class MapsBaseDialog extends JFrame {
                 });
                 vBox.getChildren().add(node);
             }
-            accordion.getPanes().add(reportButton);
+            accordion.getPanes().add(mapButton);
         }
     }
 

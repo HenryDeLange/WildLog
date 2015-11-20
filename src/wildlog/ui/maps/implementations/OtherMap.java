@@ -16,16 +16,26 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 
 
-public class AltitudeMap extends AbstractGeoToolsMap<Sighting> {
-    private enum MapType {ALTITUDE};
-    private MapType activeMapType = MapType.ALTITUDE;
+public class OtherMap extends AbstractGeoToolsMap<Sighting> {
+    private enum MapType {BASIC_WORLD, ALTITUDE};
+    private MapType activeMapType = MapType.BASIC_WORLD;
 
     
-    public AltitudeMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
-        super("Altitude Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(2);
+    public OtherMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
+        super("Other Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
+        lstCustomButtons = new ArrayList<>(3);
         // Maps
-        Button btnAridityMap = new Button("World Altitude");
+        Button btnBasicWorldMap = new Button("Basic World");
+        btnBasicWorldMap.setCursor(Cursor.HAND);
+        btnBasicWorldMap.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                activeMapType = MapType.BASIC_WORLD;
+                setupChartDescriptionLabel("<html>A basic map of the world with major rivers and lakes.</html>");
+            }
+        });
+        lstCustomButtons.add(btnBasicWorldMap);
+        Button btnAridityMap = new Button("Altitude");
         btnAridityMap.setCursor(Cursor.HAND);
         btnAridityMap.setOnAction(new EventHandler() {
             @Override
@@ -35,15 +45,20 @@ public class AltitudeMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnAridityMap);
+// TODO: OpenMap het 'n time of day layer wat basies wys hoe die son (dag/nag) oor die aarde lê
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
         setupShowCountriesButton();
         setupEnchanceContrastButton();
-// TODO: Add option to use other contrast enhancement options
     }
 
     @Override
     public void createMap(Scene inScene) {
+        if (activeMapType.equals(MapType.BASIC_WORLD)) {
+// TODO: Base world, rivers en lakes
+            createMapDefault(lstData, BundledMapLayers.ALTITUDE);
+        }
+        else 
         if (activeMapType.equals(MapType.ALTITUDE)) {
             createMapDefault(lstData, BundledMapLayers.ALTITUDE);
         }
