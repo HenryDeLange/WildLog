@@ -31,6 +31,8 @@ public enum WildLogPaths {
     WILDLOG_LOST_FILES                    (Paths.get("LostFiles")),
     WILDLOG_THUMBNAILS                    (Paths.get("Thumbnails")),
     WILDLOG_MAPS                          (Paths.get("Maps")),
+    WILDLOG_MAPS_CUSTOM                   (Paths.get("Maps", "Custom")),
+    WILDLOG_MAPS_SPECIES                  (Paths.get("Maps", "Species")),
     WILDLOG_BACKUPS                       (Paths.get("Backup")),
     WILDLOG_BACKUPS_MONTHLY               (Paths.get("Backup", "Auto")),
     WILDLOG_BACKUPS_CHECK_AND_CLEAN       (Paths.get("Backup", "CheckAndClean")),

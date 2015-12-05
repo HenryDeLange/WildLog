@@ -1263,7 +1263,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
         else {
             getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(app.getMainFrame(),
+            JOptionPane.showMessageDialog(this,
                     "Please fill in all of the required fields.",
                     "Can't Save Observation", JOptionPane.ERROR_MESSAGE);
             getGlassPane().setVisible(false);
@@ -1317,7 +1317,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (!bulkUploadMode) {
             if (app.getDBI().createOrUpdate(sighting, false) == false) {
                 getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(app.getMainFrame(),
+                JOptionPane.showMessageDialog(this,
                         "Could not save the Observation.",
                         "Error Saving", JOptionPane.ERROR_MESSAGE);
                 getGlassPane().setVisible(false);
@@ -1520,7 +1520,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (!hasRelevantFiles) {
             if (evt != null) {
                 getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(app.getMainFrame(),
+                JOptionPane.showMessageDialog(this,
                         "Please upload some files and try again.",
                         "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
                 getGlassPane().setVisible(false);
@@ -1572,7 +1572,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                             && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(locationWL))
                             && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(locationWL))) {
                         getGlassPane().setVisible(true);
-                        int result = JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        int result = JOptionPane.showConfirmDialog(this,
                                 "This Observation does not have a GPS point. Would you like to use the GPS point associated with the Place for the calculation?",
                                 "Use The GPS Point From The Place?", JOptionPane.YES_NO_OPTION);
                         getGlassPane().setVisible(false);
@@ -1587,7 +1587,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     }
                     else {
                         getGlassPane().setVisible(true);
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                        JOptionPane.showMessageDialog(this,
                                 "Please make sure to first provide an accurate values for the GPS point.",
                                 "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
                         getGlassPane().setVisible(false);
@@ -1600,7 +1600,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             // Only show the error if the user clicked the button
             if (evt != null) {
                 getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(app.getMainFrame(),
+                JOptionPane.showMessageDialog(this,
                         "Please make sure to first provide an accurate Date.",
                         "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
                 getGlassPane().setVisible(false);
@@ -1654,7 +1654,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             // Only show the error if the user clicked the button
             if (evt != null) {
                 getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(app.getMainFrame(),
+                JOptionPane.showMessageDialog(this,
                         "Please upload some image or movie files and try again.",
                         "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
                 getGlassPane().setVisible(false);
@@ -1688,14 +1688,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_dtpSightingDateActionPerformed
 
     private void btnAddNewLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewLocationActionPerformed
-        JDialog popup = new JDialog(app.getMainFrame(), "Add New Place", true);
+        JDialog popup = new JDialog(this, "Add New Place", true);
         ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/Location.gif"));
         popup.setIconImage(icon.getImage());
         PanelLocation panel = new PanelLocation(app, new Location(), true, this);
         popup.add(panel);
         popup.setResizable(false);
         popup.pack();
-        UtilsDialog.setDialogToCenter(app.getMainFrame(), popup);
+        UtilsDialog.setDialogToCenter(this, popup);
         UtilsDialog.addModalBackgroundPanel(this, popup);
         UtilsDialog.addEscapeKeyListener(popup);
         popup.setVisible(true);
@@ -1703,14 +1703,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnAddNewLocationActionPerformed
 
     private void btnAddNewElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewElementActionPerformed
-        JDialog popup = new JDialog(app.getMainFrame(), "Add New Creature", true);
+        JDialog popup = new JDialog(this, "Add New Creature", true);
         ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif"));
         popup.setIconImage(icon.getImage());
         PanelElement panel = new PanelElement(app, new Element(), true, this);
         popup.add(panel);
         popup.setResizable(false);
         popup.pack();
-        UtilsDialog.setDialogToCenter(app.getMainFrame(), popup);
+        UtilsDialog.setDialogToCenter(this, popup);
         UtilsDialog.addModalBackgroundPanel(this, popup);
         UtilsDialog.addEscapeKeyListener(popup);
         popup.setVisible(true);
@@ -1719,14 +1719,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void btnAddNewVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewVisitActionPerformed
         if (locationWL != null) {
-            JDialog popup = new JDialog(app.getMainFrame(), "Add New Period", true);
+            JDialog popup = new JDialog(this, "Add New Period", true);
             ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif"));
             popup.setIconImage(icon.getImage());
             PanelVisit panel = new PanelVisit(app, locationWL, new Visit(), true, this);
             popup.add(panel);
             popup.setResizable(false);
             popup.pack();
-            UtilsDialog.setDialogToCenter(app.getMainFrame(), popup);
+            UtilsDialog.setDialogToCenter(this, popup);
             UtilsDialog.addModalBackgroundPanel(this, popup);
             UtilsDialog.addEscapeKeyListener(popup);
             popup.setVisible(true);
@@ -1734,7 +1734,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
         else {
             getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(app.getMainFrame(),
+            JOptionPane.showMessageDialog(this,
                     "Please select a Place first, and then try again to add a new Period.",
                     "No Place Selected", JOptionPane.WARNING_MESSAGE);
             getGlassPane().setVisible(false);
@@ -1756,7 +1756,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 }
                 else {
                     getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                    JOptionPane.showMessageDialog(this,
                             "No GPS information could be found for the selected file.",
                             "No GPS Data Found.", JOptionPane.ERROR_MESSAGE);
                     getGlassPane().setVisible(false);
@@ -1765,7 +1765,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
         if (!hasRelevantFiles) {
             getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(app.getMainFrame(),
+            JOptionPane.showMessageDialog(this,
                     "Please upload some image files and try again.",
                     "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
             getGlassPane().setVisible(false);

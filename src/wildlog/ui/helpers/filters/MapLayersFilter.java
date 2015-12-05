@@ -4,7 +4,7 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 import wildlog.utils.UtilsFileProcessing;
 
-public class GpxFilter extends FileFilter {
+public class MapLayersFilter extends FileFilter {
 
     @Override
     public boolean accept(File inFile) {
@@ -13,7 +13,7 @@ public class GpxFilter extends FileFilter {
         }
         String extension = UtilsFileProcessing.getExtension(inFile);
         if (extension != null) {
-            if (extension.equalsIgnoreCase("gpx")) {
+            if (extension.equalsIgnoreCase("tif") || extension.equalsIgnoreCase("tiff") || extension.equalsIgnoreCase("shp")) {
                 return true;
             }
         }
@@ -22,6 +22,7 @@ public class GpxFilter extends FileFilter {
 
     @Override
     public String getDescription() {
-        return "GPX";
+        return "Map Layers";
     }
+
 }

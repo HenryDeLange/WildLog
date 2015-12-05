@@ -162,7 +162,7 @@ public class ChecklistDialog extends JDialog {
         jLabel3.setName("jLabel3"); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, -1, -1));
 
-        cmbElementType.setMaximumRowCount(9);
+        cmbElementType.setMaximumRowCount(10);
         cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
         cmbElementType.setSelectedItem(ElementType.NONE);
         cmbElementType.setFocusable(false);
