@@ -102,11 +102,11 @@ public class GeoToolsLayerUtils {
         return SLD.wrapSymbolizers(sym);
     }
 
-    public static Style createShapefileStyleBasic(FeatureSource featureSource) {
+    public static Style createShapefileStyleBasic(FeatureSource featureSource, Color inLineColor, Color inFillColor, Double inLineOpacity, Double inFillOpacity) {
         SimpleFeatureType schema = (SimpleFeatureType)featureSource.getSchema();
         Class geomType = schema.getGeometryDescriptor().getType().getBinding();
         if (Polygon.class.isAssignableFrom(geomType) || MultiPolygon.class.isAssignableFrom(geomType)) {
-            return createPolygonStyle();
+            return createPolygonStyle(inLineColor, inFillColor, inLineOpacity, inFillOpacity);
         } 
         else 
         if (LineString.class.isAssignableFrom(geomType) || MultiLineString.class.isAssignableFrom(geomType)) {
@@ -117,12 +117,12 @@ public class GeoToolsLayerUtils {
         }
     }
 
-    private static Style createPolygonStyle() {
+    private static Style createPolygonStyle(Color inLineColor, Color inFillColor, Double inLineOpacity, Double inFillOpacity) {
         StyleFactory styleFactory = CommonFactoryFinder.getStyleFactory();
         FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2();
-        Stroke stroke = styleFactory.createStroke(filterFactory.literal(Color.BLACK),
-                filterFactory.literal(1), filterFactory.literal(0.5));
-        Fill fill = styleFactory.createFill(filterFactory.literal(Color.CYAN), filterFactory.literal(0.0));
+        Stroke stroke = styleFactory.createStroke(filterFactory.literal(inLineColor),
+                filterFactory.literal(1), filterFactory.literal(inLineOpacity));
+        Fill fill = styleFactory.createFill(filterFactory.literal(inFillColor), filterFactory.literal(inFillOpacity));
         // Setting the geometryPropertyName arg to null signals that we want to draw the default geomettry of features
         Symbolizer sym = styleFactory.createPolygonSymbolizer(stroke, fill, null);
         Rule rule = styleFactory.createRule();

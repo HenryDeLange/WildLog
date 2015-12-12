@@ -59,7 +59,8 @@ public class BasicLauncher {
             File shapefile = new File("C:\\Users\\Henry\\Desktop\\Maps\\__FINALE_MAPS\\Base - World\\Small\\world.shp");
             FileDataStore shapeStore = FileDataStoreFinder.getDataStore(shapefile);
             SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-            Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource));
+            Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
+                    Color.BLACK, Color.BLUE, 0.75, 0.5));
             map.addLayer(shapelayer);
         }
         catch (IOException ex) {
