@@ -53,6 +53,7 @@ import wildlog.ui.helpers.renderers.WildLogDataModelWrapperCellRenderer;
 import wildlog.ui.helpers.renderers.WildLogTableModel;
 import wildlog.ui.helpers.renderers.WildLogTableModelDataWrapper;
 import wildlog.ui.helpers.renderers.editors.ButtonTableEditor;
+import wildlog.ui.maps.implementations.helpers.DistributionLayerCellRenderer;
 import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -1565,5 +1566,80 @@ public final class UtilsTableGenerator {
             }
         });
      }
-
+    
+    public static void setupDistributionMapLayerTable(final WildLogApp inApp, final JTable inTable, Set<String> inSetAvailableLayers) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Load the table content
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                List<Element> lstElementData = WildLogApp.getApplication().getDBI().list(new Element());
+                Set<String> localSetOfLayers = new HashSet<>(inSetAvailableLayers); // Need to make a copy because removing from the orignal will effect the HashMap's keys
+                if (lstElementData != null && !lstElementData.isEmpty() && localSetOfLayers != null && !localSetOfLayers.isEmpty()) {
+                    // Setup column names
+                    String[] columnNames = new String[] {
+                                                    "Layer Name", 
+                                                    "Scientific Name", 
+                                                    "Creature Name",
+                                                    "Type"
+                                                    };
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(lstElementData.size());
+                    // Setup new table data
+                    final Object[][] data = new Object[lstElementData.size()][columnNames.length];
+                    for (int t = 0; t < lstElementData.size(); t++) {
+                        final int finalT = t;
+                        listCallables.add(new Callable<Object>() {
+                            @Override
+                            public Object call() throws Exception {
+                                Element dataObject = lstElementData.get(finalT);
+                                data[finalT][0] = "";
+                                for (String layer : localSetOfLayers) {
+                                    if (layer.substring(0, layer.lastIndexOf('.')).equalsIgnoreCase(dataObject.getScientificName())) {
+                                        data[finalT][0] = layer;
+                                        localSetOfLayers.remove(layer);
+                                        break;
+                                    }
+                                }
+                                data[finalT][1] = dataObject.getScientificName();
+                                data[finalT][2] = dataObject.getDisplayName();
+                                data[finalT][3] = dataObject.getType();
+                                return null;
+                            }
+                        });
+                    }
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                    // Create the new model
+                    setupTableModel(inTable, data, columnNames);
+                    // Add the layers that wasn't linked yet
+                    for (String layer : localSetOfLayers) {
+                        ((WildLogTableModel) inTable.getModel()).addRow(new Object[] {layer, "", ""});
+                    }
+                    // Set the cutom renderer
+                    inTable.setDefaultRenderer(Object.class, new DistributionLayerCellRenderer(0, 0, 1, 2));
+                    // Setup the column and row sizes etc.
+                    inTable.setRowHeight(20);
+                    inTable.getColumnModel().getColumn(0).setMinWidth(50);
+                    inTable.getColumnModel().getColumn(0).setPreferredWidth(95);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(50);
+                    inTable.getColumnModel().getColumn(1).setPreferredWidth(95);
+                    inTable.getColumnModel().getColumn(2).setMinWidth(50);
+                    inTable.getColumnModel().getColumn(2).setPreferredWidth(95);
+                    inTable.getColumnModel().getColumn(3).setMinWidth(50);
+                    inTable.getColumnModel().getColumn(3).setPreferredWidth(60);
+                    inTable.getColumnModel().getColumn(3).setMaxWidth(70);
+                    // Setup default sorting
+                    setupRowSorter(inTable, 1);
+                }
+                else {
+                    inTable.setModel(new DefaultTableModel(new String[]{"No Data"}, 0));
+                }
+            }
+        });
+     }
 }

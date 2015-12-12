@@ -203,7 +203,8 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
             FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
                     WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(inBundledMapLayers.getRelativePath()).toFile());
             SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-            shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource));
+            shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource,
+                    Color.BLACK, Color.BLACK, 0.8, 0.0));
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);

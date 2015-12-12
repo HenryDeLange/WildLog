@@ -120,7 +120,7 @@ public class MapsBaseDialog extends JFrame {
         lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription));
         lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
-        lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription));
+        lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
         lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription));

@@ -30,17 +30,15 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
-public class CustomMapLayersDialog extends JDialog {
+public class CustomLayersDialog extends JDialog {
     private Map<String, Path> mapAllLayers = new HashMap<>(25);
     private List<Path> lstSelectedPaths = null;
     
-    public CustomMapLayersDialog(JFrame inParent) {
+    public CustomLayersDialog(JFrame inParent) {
         super(inParent);
         initComponents();
-        // Set the initial empty model on the selected layers list
-        lsbSelectedLayers.setModel(new DefaultListModel<>());
         // Setup the escape key
-        final CustomMapLayersDialog thisHandler = this;
+        final CustomLayersDialog thisHandler = this;
         thisHandler.getRootPane().registerKeyboardAction(
                 new ActionListener() {
                     @Override
@@ -54,6 +52,8 @@ public class CustomMapLayersDialog extends JDialog {
         UtilsDialog.setDialogToCenter(inParent, thisHandler);
         UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
         UtilsDialog.addModalBackgroundPanel(this, null);
+        // Set the initial empty model on the selected layers list
+        lsbSelectedLayers.setModel(new DefaultListModel<>());
         // Load default layers
         for (BundledMapLayers layer : BundledMapLayers.values()) {
             Path path = WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(layer.getRelativePath());
@@ -136,8 +136,6 @@ public class CustomMapLayersDialog extends JDialog {
         btnMoveUp = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         btnRemoveFromSelectedLayer = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -148,11 +146,11 @@ public class CustomMapLayersDialog extends JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Custom Map Layers");
 
-        jLabel2.setText("<html>Double-click a layer in the Available Layers list to add the layer to the Active Layers list, or use the Set Active Layer button.<br/>Double-click a layer in the Active Layers list to remove it from the list, or use the Remove button.</html>");
+        jLabel2.setText("<html>Double-click a layer in the Available Layers list to add the layer to the Selected Layers list, or use the Set Active Layer button.<br/>Double-click a layer in the Active Layers list to remove it from the list, or use the Remove button.<br/>The selected layers can be ordered using the arrow buttons. The top layer in the list will be added to the map first (at the bottom).</html>");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        lsbAllLayers.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lsbAllLayers.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lsbAllLayers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lsbAllLayers.setFocusable(false);
         lsbAllLayers.setSelectionBackground(new java.awt.Color(94, 130, 59));
@@ -164,8 +162,7 @@ public class CustomMapLayersDialog extends JDialog {
         jScrollPane1.setViewportView(lsbAllLayers);
 
         bntAddToAllLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
-        bntAddToAllLayer.setText("Add new Layer");
-        bntAddToAllLayer.setToolTipText("Add new map layers to the list and WorkSpace.");
+        bntAddToAllLayer.setToolTipText("Add a new layer to the WorkSpace.");
         bntAddToAllLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bntAddToAllLayer.setFocusPainted(false);
         bntAddToAllLayer.setFocusable(false);
@@ -177,8 +174,7 @@ public class CustomMapLayersDialog extends JDialog {
         });
 
         btnRemoveFromAllLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnRemoveFromAllLayer.setText("Remove Layer");
-        btnRemoveFromAllLayer.setToolTipText("Remove the selected layer from the list and delete the files from the WorkSpace.");
+        btnRemoveFromAllLayer.setToolTipText("Remove the selected layer from the WorkSpace.");
         btnRemoveFromAllLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemoveFromAllLayer.setFocusPainted(false);
         btnRemoveFromAllLayer.setFocusable(false);
@@ -189,12 +185,11 @@ public class CustomMapLayersDialog extends JDialog {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Available Layers:");
 
         btnSetAsSelectedLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
-        btnSetAsSelectedLayer.setText("Set Active Layer");
-        btnSetAsSelectedLayer.setToolTipText("Add the selected layer to the list of active layers.");
+        btnSetAsSelectedLayer.setToolTipText("Add the selected layer to the list of active layers, to be displayed on the map.");
         btnSetAsSelectedLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetAsSelectedLayer.setFocusPainted(false);
         btnSetAsSelectedLayer.setFocusable(false);
@@ -213,17 +208,16 @@ public class CustomMapLayersDialog extends JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(bntAddToAllLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnRemoveFromAllLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnSetAsSelectedLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(btnRemoveFromAllLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSetAsSelectedLayer)
+                            .addComponent(bntAddToAllLayer, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
         jPanel1Layout.setVerticalGroup(
@@ -231,15 +225,19 @@ public class CustomMapLayersDialog extends JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(jLabel4)
-                .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSetAsSelectedLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+                        .addGap(5, 5, 5))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addComponent(bntAddToAllLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnRemoveFromAllLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
-                .addContainerGap())
+                        .addGap(15, 15, 15)
+                        .addComponent(btnRemoveFromAllLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
+                        .addComponent(btnSetAsSelectedLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -255,7 +253,7 @@ public class CustomMapLayersDialog extends JDialog {
             }
         });
 
-        lsbSelectedLayers.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lsbSelectedLayers.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lsbSelectedLayers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lsbSelectedLayers.setFocusable(false);
         lsbSelectedLayers.setSelectionBackground(new java.awt.Color(94, 130, 59));
@@ -277,10 +275,10 @@ public class CustomMapLayersDialog extends JDialog {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("Active Layers:");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Selected Layers:");
 
-        btnRemoveFromSelectedLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
+        btnRemoveFromSelectedLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnRemoveFromSelectedLayer.setToolTipText("Remove the selected layer from the list.");
         btnRemoveFromSelectedLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemoveFromSelectedLayer.setFocusPainted(false);
@@ -291,45 +289,24 @@ public class CustomMapLayersDialog extends JDialog {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Bottom");
-        jLabel5.setToolTipText("Layers further up this list will be displayed below the other layers on the map.");
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Top");
-        jLabel6.setToolTipText("Layers further down this list will be displayed on top of the previous layers on the map.");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 116, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnMoveDown, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnMoveUp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(5, 5, 5))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnRemoveFromSelectedLayer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addComponent(jScrollPane2)))
-                .addContainerGap())
+                            .addComponent(btnMoveUp, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnMoveDown, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRemoveFromSelectedLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(5, 5, 5))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,18 +316,14 @@ public class CustomMapLayersDialog extends JDialog {
                 .addGap(5, 5, 5)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(jLabel5)
                         .addGap(5, 5, 5)
                         .addComponent(btnMoveUp, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
-                        .addComponent(btnMoveDown, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jLabel6)
-                        .addGap(40, 40, 40)
+                        .addComponent(btnMoveDown, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25)
                         .addComponent(btnRemoveFromSelectedLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
 
@@ -381,7 +354,7 @@ public class CustomMapLayersDialog extends JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)))
@@ -397,8 +370,8 @@ public class CustomMapLayersDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -437,7 +410,7 @@ public class CustomMapLayersDialog extends JDialog {
         fileChooser.setDialogTitle("Select the Map Layer to import.");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setFileFilter(new MapLayersFilter());
-        final CustomMapLayersDialog thisHandle = this;
+        final CustomLayersDialog thisHandle = this;
         int result = UtilsDialog.showDialogBackgroundWrapper(this, new UtilsDialog.DialogWrapper() {
             @Override
             public int showDialog() {
@@ -448,52 +421,45 @@ public class CustomMapLayersDialog extends JDialog {
             File file = fileChooser.getSelectedFile();
             if (Files.exists(file.toPath())) {
                 Path sourcePath = file.toPath();
-                if (sourcePath.getFileName().toString().toLowerCase().endsWith(".tif") 
-                        || sourcePath.getFileName().toString().toLowerCase().endsWith(".tiff")) {
-                    Path destinationPath = WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath().resolve(sourcePath.getFileName());
-                    if (!Files.exists(destinationPath) && !mapAllLayers.containsKey("[CUSTOM] " + destinationPath.getFileName().toString())) {
-                        // Copy the new GeoTiff layer
-                        UtilsFileProcessing.copyFile(sourcePath, destinationPath, false, false);
-                        // Add the layer to the map
-                        mapAllLayers.put("[CUSTOM] " + destinationPath.getFileName().toString(), destinationPath.toAbsolutePath());
-                        // Reload the list
-                        List<String> keys = new ArrayList<>(mapAllLayers.keySet());
-                        Collections.sort(keys);
-                        lsbAllLayers.setModel(new DefaultComboBoxModel<>(keys.toArray(new String[keys.size()])));
-                    }
-                    else {
-                        getGlassPane().setVisible(true);
-                        JOptionPane.showMessageDialog(this,
-                                "A similar layer already exists in this Workspace. Please rename the new layer and try again.",
-                                "Duplicate Layer", JOptionPane.ERROR_MESSAGE);
-                        getGlassPane().setVisible(false);
-                    }
+                String filename = sourcePath.getFileName().toString();
+                // Get the destination path
+                Path destinationPath = null;
+                if (filename.toLowerCase().endsWith(".tif") || filename.toLowerCase().endsWith(".tiff")) {
+                    destinationPath = WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath().resolve(filename);
                 }
                 else
-                if (sourcePath.getFileName().toString().toLowerCase().endsWith(".shp")) {
-                    String filename = sourcePath.getFileName().toString();
-                    Path destinationPath = WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath()
+                if (filename.toLowerCase().endsWith(".shp")) {
+                    destinationPath = WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath()
                             .resolve(filename.substring(0, filename.lastIndexOf('.'))).resolve(filename);
-                    if (!Files.exists(destinationPath) && !mapAllLayers.containsKey("[CUSTOM] " + destinationPath.getFileName().toString())) {
+                }
+                // If the file does not yet exist copy it
+                if (destinationPath != null && !Files.exists(destinationPath) && !mapAllLayers.containsKey("[CUSTOM] " + filename)) {
+                    if (filename.toLowerCase().endsWith(".tif") || filename.toLowerCase().endsWith(".tiff")) {
+                        // Copy the new GeoTiff layer
+                        UtilsFileProcessing.copyFile(sourcePath, destinationPath, false, false);
+                    }
+                    else
+                    if (filename.toLowerCase().endsWith(".shp")) {
                         // Copy the new Shapefile layer
                         UtilsFileProcessing.copyFile(sourcePath, destinationPath, false, false);
                         UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".dbf"), false, false);
                         UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".prj"), false, false);
                         UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".shx"), false, false);
-                        // Add the layer to the map
-                        mapAllLayers.put("[CUSTOM] " + destinationPath.getFileName().toString(), destinationPath.toAbsolutePath());
-                        // Reload the list
-                        List<String> keys = new ArrayList<>(mapAllLayers.keySet());
-                        Collections.sort(keys);
-                        lsbAllLayers.setModel(new DefaultComboBoxModel<>(keys.toArray(new String[keys.size()])));
                     }
-                    else {
-                        getGlassPane().setVisible(true);
-                        JOptionPane.showMessageDialog(this,
-                                "A similar layer already exists in this Workspace. Please rename the new layer and try again.",
-                                "Duplicate Layer", JOptionPane.ERROR_MESSAGE);
-                        getGlassPane().setVisible(false);
-                    }
+                }
+                else {
+                    getGlassPane().setVisible(true);
+                    JOptionPane.showMessageDialog(this,
+                            "A similar layer already exists in this Workspace. Please rename the new layer and try again.",
+                            "Duplicate Layer", JOptionPane.ERROR_MESSAGE);
+                    getGlassPane().setVisible(false);
+                }
+                // Add the layer to the hashmap nad reload the UI
+                if (destinationPath != null) {
+                    mapAllLayers.put("[CUSTOM] " + filename, destinationPath.toAbsolutePath());
+                    List<String> keys = new ArrayList<>(mapAllLayers.keySet());
+                    Collections.sort(keys);
+                    lsbAllLayers.setModel(new DefaultComboBoxModel<>(keys.toArray(new String[keys.size()])));
                 }
             }
         }
@@ -517,15 +483,23 @@ public class CustomMapLayersDialog extends JDialog {
     private void btnRemoveFromAllLayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFromAllLayerActionPerformed
         int index = lsbAllLayers.getSelectedIndex();
         String rowKey = lsbAllLayers.getModel().getElementAt(index);
-        if (rowKey != null && rowKey.startsWith("[CUSTOM]")) {
-            if (rowKey.toLowerCase().endsWith(".tif") || rowKey.toLowerCase().endsWith(".tiff")) {
+        if (rowKey != null) {
+            if (rowKey.startsWith("[CUSTOM]")) {
                 try {
-                    // Delete the file
-                    UtilsFileProcessing.deleteRecursive(mapAllLayers.get(rowKey).toFile());
+                    if (rowKey.toLowerCase().endsWith(".tif") || rowKey.toLowerCase().endsWith(".tiff")) {
+                        // Delete the file
+                        UtilsFileProcessing.deleteRecursive(mapAllLayers.get(rowKey).toFile());
+                    }
+                    else 
+                    if (rowKey.toLowerCase().endsWith(".shp")) {
+                        // Delete the files
+                        UtilsFileProcessing.deleteRecursive(mapAllLayers.get(rowKey).getParent().toFile());
+                    }
                     // Update the UI
                     ((DefaultComboBoxModel) lsbAllLayers.getModel()).removeElement(lsbAllLayers.getSelectedValue());
                     lsbAllLayers.setSelectedIndex(index);
-                    ((DefaultListModel) lsbSelectedLayers.getModel()).removeElement(rowKey);
+                    ((DefaultListModel) lsbAllLayers.getModel()).removeElement(rowKey);
+                    mapAllLayers.remove(rowKey);
                 }
                 catch (IOException ex) {
                     ex.printStackTrace(System.err);
@@ -536,32 +510,13 @@ public class CustomMapLayersDialog extends JDialog {
                     getGlassPane().setVisible(false);
                 }
             }
-            else
-            if (rowKey.toLowerCase().endsWith(".shp")) {
-                try {
-                    // Delete the files
-                    UtilsFileProcessing.deleteRecursive(mapAllLayers.get(rowKey).getParent().toFile());
-                    // Update the UI
-                    ((DefaultComboBoxModel) lsbAllLayers.getModel()).removeElement(lsbAllLayers.getSelectedValue());
-                    lsbAllLayers.setSelectedIndex(index);
-                    ((DefaultListModel) lsbSelectedLayers.getModel()).removeElement(rowKey);
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace(System.err);
-                    getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(this,
-                            "The layer could not be deleted successfully. Please make sure the file isn't in use and try again, or delete it manually.",
-                            "Could Not Delete", JOptionPane.ERROR_MESSAGE);
-                    getGlassPane().setVisible(false);
-                }
+            else {
+                getGlassPane().setVisible(true);
+                JOptionPane.showMessageDialog(this,
+                        "Only [CUSTOM] layers can be deleted from this dialog.",
+                        "Can't Deleted Layer", JOptionPane.WARNING_MESSAGE);
+                getGlassPane().setVisible(false);
             }
-        }
-        else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this,
-                    "Only [CUSTOM] layers can be deleted from this dialog.",
-                    "Can't Deleted Layer", JOptionPane.WARNING_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnRemoveFromAllLayerActionPerformed
 
@@ -603,8 +558,6 @@ public class CustomMapLayersDialog extends JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

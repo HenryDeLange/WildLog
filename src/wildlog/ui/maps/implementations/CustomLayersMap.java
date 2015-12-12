@@ -1,5 +1,6 @@
 package wildlog.ui.maps.implementations;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
-import wildlog.ui.maps.CustomMapLayersDialog;
+import wildlog.ui.maps.CustomLayersDialog;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 
@@ -42,10 +43,12 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
         btnLayers.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                CustomMapLayersDialog dialog = new CustomMapLayersDialog(baseDialog);
+                CustomLayersDialog dialog = new CustomLayersDialog(baseDialog);
                 dialog.setVisible(true);
                 lstLayers.clear();
-                lstLayers.addAll(dialog.getLstSelectedPaths());
+                if (dialog.getLstSelectedPaths() != null) {
+                    lstLayers.addAll(dialog.getLstSelectedPaths());
+                }
             }
         });
         lstCustomButtons.add(btnLayers);
@@ -84,8 +87,11 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
                     try {
                         FileDataStore shapeStore = FileDataStoreFinder.getDataStore(layerPath.toFile());
                         SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
+                        
 // FIXME: Set unique clours for each layer
-                        Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource));
+
+                        Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
+                                Color.BLACK, Color.BLACK, 1.0, 0.3));
                         map.addLayer(shapelayer);
                     }
                     catch (IOException ex) {
