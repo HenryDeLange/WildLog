@@ -170,7 +170,6 @@ public class GeoToolsMapJavaFX {
         
         @Override
         public void componentResized(ComponentEvent e) {
-System.out.println("   <Swing resize>   ");
             if (delayTimer == null) {
                 // Start waiting for DELAY to elapse.
                 delayTimer = new Timer(500, this);
@@ -195,7 +194,6 @@ System.out.println("   <Swing resize>   ");
     }
     
     private BufferedImage getMapAsImage() {
-System.out.println("GETTING MAP IMAGE");
         GTRenderer renderer = new StreamingRenderer();
         renderer.setMapContent(mapContent);
         ReferencedEnvelope mapBounds = mapContent.getViewport().getBounds();
