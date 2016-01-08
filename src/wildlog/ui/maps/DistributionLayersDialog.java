@@ -55,24 +55,26 @@ public class DistributionLayersDialog extends JDialog {
         UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
         UtilsDialog.addModalBackgroundPanel(this, null);
         // Load Species layers
-        try {
-            Files.walkFileTree(WildLogPaths.WILDLOG_MAPS_SPECIES.getAbsoluteFullPath(), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path inPath, BasicFileAttributes inAttributes) throws IOException {
-                    String filename = inPath.getFileName().toString().toUpperCase();
-                    if (filename.endsWith("SHP")) {
-                        mapAllLayers.put(inPath.getFileName().toString(), inPath.toAbsolutePath());
+        if (Files.exists(WildLogPaths.WILDLOG_MAPS_SPECIES.getAbsoluteFullPath())) {
+            try {
+                Files.walkFileTree(WildLogPaths.WILDLOG_MAPS_SPECIES.getAbsoluteFullPath(), new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path inPath, BasicFileAttributes inAttributes) throws IOException {
+                        String filename = inPath.getFileName().toString().toUpperCase();
+                        if (filename.endsWith("SHP")) {
+                            mapAllLayers.put(inPath.getFileName().toString(), inPath.toAbsolutePath());
+                        }
+                        else
+                        if (filename.endsWith("TIF") || filename.endsWith("TIFF")) {
+                            mapAllLayers.put(inPath.getFileName().toString(), inPath.toAbsolutePath());
+                        }
+                        return FileVisitResult.CONTINUE;
                     }
-                    else
-                    if (filename.endsWith("TIF") || filename.endsWith("TIFF")) {
-                        mapAllLayers.put(inPath.getFileName().toString(), inPath.toAbsolutePath());
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
+                });
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
         }
         // Load the layers table
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSpeciesLayers);
@@ -124,7 +126,7 @@ public class DistributionLayersDialog extends JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Species Distribution Layers");
 
-        jLabel2.setText("<html>Select the Distribution Layers to use for the map.<br/>WildLog will automatically link distribution maps in the Workspace to the scientific names of know Creatures.<br/>Layers marked in green is sucessfully linked to a Creature, layers in orange or red could not be linked.<br/>Use the Add and Remove buttons below to manage the layers, or manually copy the files to the 'Maps\\Species' folder in the Workspace.</html>");
+        jLabel2.setText("<html>Select the Distribution Layers to use for the map (maximum of 5 at once).<br/>WildLog will automatically link distribution maps in the Workspace to the scientific names of know Creatures.<br/>Layers marked in green is sucessfully linked to a Creature, layers in orange or red could not be linked.<br/>Use the Add and Remove buttons below to manage the layers, or manually copy the files to the 'Maps\\Species' folder in the Workspace.</html>");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -288,9 +290,12 @@ public class DistributionLayersDialog extends JDialog {
                     if (filename.toLowerCase().endsWith(".shp")) {
                         // Copy the new Shapefile layer
                         UtilsFileProcessing.copyFile(sourcePath, destinationPath, false, false);
-                        UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".dbf"), false, false);
-                        UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".prj"), false, false);
-                        UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".shx"), false, false);
+                        String shapefilename = filename.substring(0, filename.lastIndexOf('.')) + ".dbf";
+                        UtilsFileProcessing.copyFile(sourcePath.getParent().resolve(shapefilename), destinationPath.getParent().resolve(shapefilename), false, false);
+                        shapefilename = filename.substring(0, filename.lastIndexOf('.')) + ".prj";
+                        UtilsFileProcessing.copyFile(sourcePath.getParent().resolve(shapefilename), destinationPath.getParent().resolve(shapefilename), false, false);
+                        shapefilename = filename.substring(0, filename.lastIndexOf('.')) + ".shx";
+                        UtilsFileProcessing.copyFile(sourcePath.getParent().resolve(shapefilename), destinationPath.getParent().resolve(shapefilename), false, false);
                     }
                 }
                 else {
@@ -310,16 +315,25 @@ public class DistributionLayersDialog extends JDialog {
     }//GEN-LAST:event_bntAddSpeciesLayerActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        lstSelectedPaths = new ArrayList<>(tblSpeciesLayers.getSelectedRowCount());
-        int[] selectedRows = tblSpeciesLayers.getSelectedRows();
-        for (int t = 0; t < selectedRows.length; t++) {
-            Path path = mapAllLayers.get(tblSpeciesLayers.getModel().getValueAt(tblSpeciesLayers.convertRowIndexToModel(selectedRows[t]), 0));
-            if (path != null) {
-                lstSelectedPaths.add(path);
+        if (tblSpeciesLayers.getSelectedRowCount() <= 5) {
+            lstSelectedPaths = new ArrayList<>(tblSpeciesLayers.getSelectedRowCount());
+            int[] selectedRows = tblSpeciesLayers.getSelectedRows();
+            for (int t = 0; t < selectedRows.length; t++) {
+                Path path = mapAllLayers.get(tblSpeciesLayers.getModel().getValueAt(tblSpeciesLayers.convertRowIndexToModel(selectedRows[t]), 0));
+                if (path != null) {
+                    lstSelectedPaths.add(path);
+                }
             }
+            setVisible(false);
+            dispose();
         }
-        setVisible(false);
-        dispose();
+        else {
+            getGlassPane().setVisible(true);
+                    JOptionPane.showMessageDialog(this,
+                            "Please select only 5 (or fewer) Distribution Layers.",
+                            "Too Many Layers Selected", JOptionPane.WARNING_MESSAGE);
+                    getGlassPane().setVisible(false);
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnRemoveSpeciesLayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSpeciesLayerActionPerformed

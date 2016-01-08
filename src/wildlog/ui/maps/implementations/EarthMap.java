@@ -23,25 +23,23 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
     
     public EarthMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
         super("World Maps (Offline)", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(3);
+        lstCustomButtons = new ArrayList<>(5);
         // Maps
-        Button btnModernMap = new Button("Modern World");
+        Button btnModernMap = new Button("View Modern World");
         btnModernMap.setCursor(Cursor.HAND);
         btnModernMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.MODERN;
-                setupChartDescriptionLabel("<html>A map of the world in modern times.</html>");
             }
         });
         lstCustomButtons.add(btnModernMap);
-        Button btnHistoricMap = new Button("Historic/Ideal World");
+        Button btnHistoricMap = new Button("View Historic/Ideal World");
         btnHistoricMap.setCursor(Cursor.HAND);
         btnHistoricMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.HISTORIC;
-                setupChartDescriptionLabel("<html>A map of the ideal world before modern human development.</html>");
             }
         });
         lstCustomButtons.add(btnHistoricMap);
@@ -54,10 +52,12 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.MODERN)) {
+            setupChartDescriptionLabel("<html>A map of the world in modern times.</html>");
             createMapDefault(lstData, BundledMapLayers.EARTH_MODERN);
         }
         else
         if (activeMapType.equals(MapType.HISTORIC)) {
+            setupChartDescriptionLabel("<html>A map of the ideal modern world, uneffected by modern human development.</html>");
             createMapDefault(lstData, BundledMapLayers.EARTH_HISTORIC_IDEAL);
         }
     }

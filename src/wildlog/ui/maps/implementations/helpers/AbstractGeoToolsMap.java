@@ -80,7 +80,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                 if (map != null) {
                     bounds = map.getBounds();
                 }
-// FIXME: Daai bug is terug waar die map nie die eerste keer reg laai nie (ek glo omdat die width en hight nog nie beskikbaar is nie)
+// FIXME: Daai bug is terug waar die map nie die eerste keer reg laai nie (ek glo omdat die width en height nog nie beskikbaar is nie)
                 // Create the new map
                 map = new GeoToolsMapJavaFX(jfxPanel, enhanceContrast);
                 // Reapply the map position and zoom
@@ -108,7 +108,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
     }
     
     protected void setupEnchanceContrastButton() {
-        CheckBox chkEnhanceContrast = new CheckBox("Enhance Map Contrast");
+        CheckBox chkEnhanceContrast = new CheckBox("Enhance Contrast");
         chkEnhanceContrast.setCursor(Cursor.HAND);
         chkEnhanceContrast.setOnAction(new EventHandler() {
             @Override

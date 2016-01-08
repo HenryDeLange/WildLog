@@ -37,56 +37,48 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
         super("Climate Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(10);
         // Maps
-        Button btnTemperatureMinMap = new Button("Minimum Temperature");
+        Button btnTemperatureMinMap = new Button("Temperature (Monthly Minimum)");
         btnTemperatureMinMap.setCursor(Cursor.HAND);
         btnTemperatureMinMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.TEMPERATURE_MIN;
-                setupChartDescriptionLabel("<html><b><u>Minimum</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             }
         });
         lstCustomButtons.add(btnTemperatureMinMap);
-        Button btnTemperatureMeanMap = new Button("Mean Temperature");
+        Button btnTemperatureMeanMap = new Button("Temperature (Monthly Average)");
         btnTemperatureMeanMap.setCursor(Cursor.HAND);
         btnTemperatureMeanMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.TEMPERATURE_MEAN;
-                setupChartDescriptionLabel("<html><b><u>Mean</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             }
         });
         lstCustomButtons.add(btnTemperatureMeanMap);
-        Button btnTemperatureMaxMap = new Button("Maximum Temperature");
+        Button btnTemperatureMaxMap = new Button("Temperature (Monthly Maximum)");
         btnTemperatureMaxMap.setCursor(Cursor.HAND);
         btnTemperatureMaxMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.TEMPERATURE_MAX;
-                setupChartDescriptionLabel("<html><b><u>Maximum</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             }
         });
         lstCustomButtons.add(btnTemperatureMaxMap);
-        Button btnAridityMap = new Button("Annual Aridity");
+        Button btnAridityMap = new Button("Aridity (Annual Average)");
         btnAridityMap.setCursor(Cursor.HAND);
         btnAridityMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.PRECIPITATION_AVERAGE;
-                setupChartDescriptionLabel("<html><b>Average <u>Annual</u> Aridity.</b> Blue indicates low, green medium and white high aridity.</html>");
             }
         });
         lstCustomButtons.add(btnAridityMap);
-        Button btnPrecipitationMap = new Button("Monthly Precipitation");
+        Button btnPrecipitationMap = new Button("Precipitation (Monthly Average)");
         btnPrecipitationMap.setCursor(Cursor.HAND);
         btnPrecipitationMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.PRECIPITATION_MONTHLY;
-                setupChartDescriptionLabel("<html><b>Average <u>Monthly</u> Precipitation.</b> Blue indicates high, green medium and white low percipitation.</html>");
-                if (animateMonths) {
-                    doMonthAnimation(timer, 2500);
-                }
             }
         });
         lstCustomButtons.add(btnPrecipitationMap);
@@ -124,22 +116,27 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.TEMPERATURE_MIN)) {
+            setupChartDescriptionLabel("<html><b><u>Minimum</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_TEMPERATURE_MIN, activeMonth);
         }
         else
         if (activeMapType.equals(MapType.TEMPERATURE_MEAN)) {
+            setupChartDescriptionLabel("<html><b><u>Mean</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_TEMPERATURE_MEAN, activeMonth);
         }
         else
         if (activeMapType.equals(MapType.TEMPERATURE_MAX)) {
+            setupChartDescriptionLabel("<html><b><u>Maximum</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_TEMPERATURE_MAX, activeMonth);
         }
         else
         if (activeMapType.equals(MapType.PRECIPITATION_AVERAGE)) {
+            setupChartDescriptionLabel("<html><b>Average <u>Annual</u> Aridity.</b> Blue indicates low, green medium and white high aridity.</html>");
             createMapDefault(lstData, BundledMapLayers.CLIMATE_PRECIPITATION_AVERAGE);
         }
         else
         if (activeMapType.equals(MapType.PRECIPITATION_MONTHLY)) {
+            setupChartDescriptionLabel("<html><b>Mean <u>Monthly</u> Precipitation.</b> Blue indicates high, green medium and white low percipitation.</html>");
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_PERCIPITATION_MONTHLY, activeMonth);
         }
     }
@@ -155,8 +152,7 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
                         || BundledMapLayers.CLIMATE_PERCIPITATION_MONTHLY.equals(activeBaseLayer))
                         && baseDialog.getActiveMap() == thisHandle) {
                     long startTime = System.currentTimeMillis();
-// FIXME: Hierdie is nie baie smooth nie, maar werk OK vir nou. 
-//         - Kyk dalk later of dit smoother (vinniger en meer voorspelbaar kan wees) as ek die layers move en nie replace nie.
+// FIXME: Hierdie is nie baie smooth nie, maar werk OK vir nou. Kyk dalk later of dit smoother (vinniger en meer voorspelbaar kan wees) as ek die layers move en nie replace nie.
                     map.replaceLayer(0, getGeoTiffLayersForMonth(activeBaseLayer, activeMonth++));
                     if (activeMonth > 11) {
                         activeMonth = 0;

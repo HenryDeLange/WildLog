@@ -23,25 +23,24 @@ public class OtherMap extends AbstractGeoToolsMap<Sighting> {
     
     public OtherMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
         super("Other Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(3);
+        lstCustomButtons = new ArrayList<>(5);
         // Maps
-        Button btnBasicWorldMap = new Button("Basic World");
-        btnBasicWorldMap.setCursor(Cursor.HAND);
-        btnBasicWorldMap.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                activeMapType = MapType.BASIC_WORLD;
-                setupChartDescriptionLabel("<html>A basic map of the world with major rivers and lakes.</html>");
-            }
-        });
-        lstCustomButtons.add(btnBasicWorldMap);
-        Button btnAridityMap = new Button("Altitude");
+// TODO: Base world, rivers en lakes
+//        Button btnBasicWorldMap = new Button("Basic World");
+//        btnBasicWorldMap.setCursor(Cursor.HAND);
+//        btnBasicWorldMap.setOnAction(new EventHandler() {
+//            @Override
+//            public void handle(Event event) {
+//                activeMapType = MapType.BASIC_WORLD;
+//            }
+//        });
+//        lstCustomButtons.add(btnBasicWorldMap);
+        Button btnAridityMap = new Button("Show Altitude");
         btnAridityMap.setCursor(Cursor.HAND);
         btnAridityMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.ALTITUDE;
-                setupChartDescriptionLabel("<html>A map of the world indicating the altitude. The darker the colour the higher the altitude.</html>");
             }
         });
         lstCustomButtons.add(btnAridityMap);
@@ -54,12 +53,13 @@ public class OtherMap extends AbstractGeoToolsMap<Sighting> {
 
     @Override
     public void createMap(Scene inScene) {
-        if (activeMapType.equals(MapType.BASIC_WORLD)) {
-// TODO: Base world, rivers en lakes
-            createMapDefault(lstData, BundledMapLayers.ALTITUDE);
-        }
-        else 
+//        if (activeMapType.equals(MapType.BASIC_WORLD)) {
+//            setupChartDescriptionLabel("<html>A basic map of the world with major rivers and lakes.</html>");
+//            createMapDefault(lstData, BundledMapLayers.ALTITUDE);
+//        }
+//        else 
         if (activeMapType.equals(MapType.ALTITUDE)) {
+            setupChartDescriptionLabel("<html>A map of the world indicating the altitude. The darker the colour the higher the altitude.</html>");
             createMapDefault(lstData, BundledMapLayers.ALTITUDE);
         }
     }

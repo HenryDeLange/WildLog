@@ -41,7 +41,7 @@ public class HeatMap extends AbstractMap<Sighting> {
 
     
     public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Heat Maps", inLstData, inChartDescLabel);
+        super("Distribution Maps (Heat)", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(8);
         // Maps
         Button btnHeatMapClient = new Button("Heat Map");
@@ -50,7 +50,6 @@ public class HeatMap extends AbstractMap<Sighting> {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.HEAT_MAP_CLIENTSIDE;
-                setupChartDescriptionLabel("<html>...Map info...</html>");
             }
         });
         lstCustomButtons.add(btnHeatMapClient);
@@ -110,7 +109,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(rdbVeryLarge);
-        Hyperlink btnOpenInBrowser = new Hyperlink("Use External Web Browser");
+        Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
         btnOpenInBrowser.setCursor(Cursor.HAND);
         btnOpenInBrowser.setOnAction(new EventHandler() {
             @Override
@@ -132,6 +131,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             public void run() {
                 displayedMap = null;
                 if (activeMapType.equals(MapType.HEAT_MAP_CLIENTSIDE)) {
+                    setupChartDescriptionLabel("<html>This Heat Map can be used to show areas with higher or lower density of data points.</html>");
                     displayedMap = createHeatMapClient(lstData);
                 }
                 inScene.setRoot(displayedMap);

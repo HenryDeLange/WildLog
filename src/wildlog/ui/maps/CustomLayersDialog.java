@@ -68,44 +68,48 @@ public class CustomLayersDialog extends JDialog {
             }
         }
         // Load Available Layers
-        try {
-            Files.walkFileTree(WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath(), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path inPath, BasicFileAttributes inAttributes) throws IOException {
-                    String filename = inPath.getFileName().toString().toUpperCase();
-                    if (filename.endsWith("SHP")) {
-                        mapAllLayers.put("[CUSTOM] " + inPath.getFileName().toString(), inPath.toAbsolutePath());
+        if (Files.exists(WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath())) {
+            try {
+                Files.walkFileTree(WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath(), new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path inPath, BasicFileAttributes inAttributes) throws IOException {
+                        String filename = inPath.getFileName().toString().toUpperCase();
+                        if (filename.endsWith("SHP")) {
+                            mapAllLayers.put("[CUSTOM] " + inPath.getFileName().toString(), inPath.toAbsolutePath());
+                        }
+                        else
+                        if (filename.endsWith("TIF") || filename.endsWith("TIFF")) {
+                            mapAllLayers.put("[CUSTOM] " + inPath.getFileName().toString(), inPath.toAbsolutePath());
+                        }
+                        return FileVisitResult.CONTINUE;
                     }
-                    else
-                    if (filename.endsWith("TIF") || filename.endsWith("TIFF")) {
-                        mapAllLayers.put("[CUSTOM] " + inPath.getFileName().toString(), inPath.toAbsolutePath());
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
+                });
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
         }
         // Load Species layers
-        try {
-            Files.walkFileTree(WildLogPaths.WILDLOG_MAPS_SPECIES.getAbsoluteFullPath(), new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path inPath, BasicFileAttributes inAttributes) throws IOException {
-                    String filename = inPath.getFileName().toString().toUpperCase();
-                    if (filename.endsWith("SHP")) {
-                        mapAllLayers.put("[SPECIES] " + inPath.getFileName().toString(), inPath.toAbsolutePath());
+        if (Files.exists(WildLogPaths.WILDLOG_MAPS_SPECIES.getAbsoluteFullPath())) {
+            try {
+                Files.walkFileTree(WildLogPaths.WILDLOG_MAPS_SPECIES.getAbsoluteFullPath(), new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path inPath, BasicFileAttributes inAttributes) throws IOException {
+                        String filename = inPath.getFileName().toString().toUpperCase();
+                        if (filename.endsWith("SHP")) {
+                            mapAllLayers.put("[SPECIES] " + inPath.getFileName().toString(), inPath.toAbsolutePath());
+                        }
+                        else
+                        if (filename.endsWith("TIF") || filename.endsWith("TIFF")) {
+                            mapAllLayers.put("[SPECIES] " + inPath.getFileName().toString(), inPath.toAbsolutePath());
+                        }
+                        return FileVisitResult.CONTINUE;
                     }
-                    else
-                    if (filename.endsWith("TIF") || filename.endsWith("TIFF")) {
-                        mapAllLayers.put("[SPECIES] " + inPath.getFileName().toString(), inPath.toAbsolutePath());
-                    }
-                    return FileVisitResult.CONTINUE;
-                }
-            });
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
+                });
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
         }
         // Set the layers on the listbox
         List<String> keys = new ArrayList<>(mapAllLayers.keySet());
@@ -442,9 +446,12 @@ public class CustomLayersDialog extends JDialog {
                     if (filename.toLowerCase().endsWith(".shp")) {
                         // Copy the new Shapefile layer
                         UtilsFileProcessing.copyFile(sourcePath, destinationPath, false, false);
-                        UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".dbf"), false, false);
-                        UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".prj"), false, false);
-                        UtilsFileProcessing.copyFile(sourcePath, destinationPath.getParent().resolve(filename.substring(0, filename.lastIndexOf('.')) + ".shx"), false, false);
+                        String shapefilename = filename.substring(0, filename.lastIndexOf('.')) + ".dbf";
+                        UtilsFileProcessing.copyFile(sourcePath.getParent().resolve(shapefilename), destinationPath.getParent().resolve(shapefilename), false, false);
+                        shapefilename = filename.substring(0, filename.lastIndexOf('.')) + ".prj";
+                        UtilsFileProcessing.copyFile(sourcePath.getParent().resolve(shapefilename), destinationPath.getParent().resolve(shapefilename), false, false);
+                        shapefilename = filename.substring(0, filename.lastIndexOf('.')) + ".shx";
+                        UtilsFileProcessing.copyFile(sourcePath.getParent().resolve(shapefilename), destinationPath.getParent().resolve(shapefilename), false, false);
                     }
                 }
                 else {

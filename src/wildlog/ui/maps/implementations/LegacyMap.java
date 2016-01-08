@@ -28,16 +28,15 @@ public class LegacyMap extends AbstractMap<Sighting> {
 
     
     public LegacyMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Legacy Maps", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(9);
+        super("Old Legacy Maps", inLstData, inChartDescLabel);
+        lstCustomButtons = new ArrayList<>(1);
         // Maps
-        Button btnPointMapOpenStreetMap = new Button("OpenStreetMap");
+        Button btnPointMapOpenStreetMap = new Button("Old WildLog Online Map");
         btnPointMapOpenStreetMap.setCursor(Cursor.HAND);
         btnPointMapOpenStreetMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.POINT_MAP_OPENSTREETMAP;
-                setupChartDescriptionLabel("<html>...The old Online Map...</html>");
             }
         });
         lstCustomButtons.add(btnPointMapOpenStreetMap);
@@ -50,6 +49,7 @@ public class LegacyMap extends AbstractMap<Sighting> {
             public void run() {
                 displayedMap = null;
                 if (activeMapType.equals(MapType.POINT_MAP_OPENSTREETMAP)) {
+                    setupChartDescriptionLabel("<html>This is the old \"Online Map\" based on OpenStreetMap that was used in WildLog v4.2.2 and older.</html>");
                     displayedMap = createPointMapOSM(lstData);
                 }
                 inScene.setRoot(displayedMap);

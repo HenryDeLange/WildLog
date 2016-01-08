@@ -41,29 +41,27 @@ public class PointMap extends AbstractMap<Sighting> {
         super("World Maps (Online)", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(4);
         // Maps
-        Button btnPointMapGoogle = new Button("Google Maps");
+        Button btnPointMapGoogle = new Button("Show Points on Google Maps");
         btnPointMapGoogle.setCursor(Cursor.HAND);
         btnPointMapGoogle.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.POINT_MAP_GOOGLE;
-                setupChartDescriptionLabel("<html>...Map info...</html>");
             }
         });
         lstCustomButtons.add(btnPointMapGoogle);
-        Button btnPointMapBing = new Button("Microsoft Bing Maps");
+        Button btnPointMapBing = new Button("Show Points on Bing Maps");
         btnPointMapBing.setCursor(Cursor.HAND);
         btnPointMapBing.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.POINT_MAP_BING;
-                setupChartDescriptionLabel("<html>...Map info...</html>");
             }
         });
         lstCustomButtons.add(btnPointMapBing);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
-        Hyperlink btnOpenInBrowser = new Hyperlink("Use External Web Browser");
+        Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
         btnOpenInBrowser.setCursor(Cursor.HAND);
         btnOpenInBrowser.setOnAction(new EventHandler() {
             @Override
@@ -85,10 +83,12 @@ public class PointMap extends AbstractMap<Sighting> {
             public void run() {
                 displayedMap = null;
                 if (activeMapType.equals(MapType.POINT_MAP_GOOGLE)) {
+                    setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Google Earth and Google Maps. Click on a marker to see more details.</html>");
                     displayedMap = createPointMapGoogle(lstData);
                 }
                 else
                 if (activeMapType.equals(MapType.POINT_MAP_BING)) {
+                    setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Microsoft Bing Maps. Click on a marker to see more details.</html>");
                     displayedMap = createPointMapBing(lstData);
                 }
                 inScene.setRoot(displayedMap);

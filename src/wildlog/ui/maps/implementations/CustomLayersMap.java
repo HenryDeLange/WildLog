@@ -69,6 +69,7 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.CUSTOM)) {
+            setupChartDescriptionLabel("<html>This map displays the data points on a user defined list of custom layers.</html>");
             // Add selected layers
             for (Path layerPath : lstLayers) {
                 if (layerPath.getFileName().toString().toLowerCase().endsWith(".tif") 
@@ -87,9 +88,7 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
                     try {
                         FileDataStore shapeStore = FileDataStoreFinder.getDataStore(layerPath.toFile());
                         SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-                        
 // FIXME: Set unique clours for each layer
-
                         Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
                                 Color.BLACK, Color.BLACK, 1.0, 0.3));
                         map.addLayer(shapelayer);
