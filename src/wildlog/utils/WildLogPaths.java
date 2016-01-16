@@ -11,7 +11,7 @@ import java.nio.file.Paths;
  *  - All paths defined here will <b>end without File Separators</b>.
  */
 public enum WildLogPaths {
-    /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
+    /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*//** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
     DEFAUL_SETTINGS_FOLDER                (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
     OPEN_H2                               (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.4.187.jar")),
@@ -42,18 +42,20 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_KML                    (Paths.get("Export", "KML")),
     WILDLOG_EXPORT_KML_THUMBNAILS         (Paths.get("Export", "KML", "Thumbnails")),
     WILDLOG_EXPORT_CSV                    (Paths.get("Export", "Spreadsheet", "Complete")),
+    WILDLOG_EXPORT_CSV_ALL                (Paths.get("Export", "Spreadsheet", "Complete", "All")),
     WILDLOG_EXPORT_CSV_BASIC              (Paths.get("Export", "Spreadsheet", "Basic")),
     WILDLOG_EXPORT_REPORTS_PDF            (Paths.get("Export", "Reports", "PDF")),
     WILDLOG_EXPORT_REPORTS_PNG            (Paths.get("Export", "Reports", "Image")),
     WILDLOG_EXPORT_REPORTS_CSV            (Paths.get("Export", "Reports", "Spreadsheet")),
     WILDLOG_EXPORT_REPORTS_HTML           (Paths.get("Export", "Reports", "HTML")),
     WILDLOG_EXPORT_REPORTS_HTML_IMAGES    (Paths.get("Export", "Reports", "HTML", "Images")),
-    WILDLOG_EXPORT_HTML                   (Paths.get("Export", "HTML")),
-    WILDLOG_EXPORT_HTML_THUMBNAILS        (Paths.get("Export", "HTML", "Thumbnails")),
-    WILDLOG_EXPORT_HTML_FANCY             (Paths.get("Export", "HTML(Advanced)")),
-    WILDLOG_EXPORT_HTML_FANCY_RESOURCES   (Paths.get("Export", "HTML(Advanced)", "Scripts")),
-    WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS  (Paths.get("Export", "HTML(Advanced)", "Thumbnails")),
-    WILDLOG_EXPORT_HTML_TEMPORARY         (Paths.get("Export", "HTML(Temporary)")),
+    WILDLOG_EXPORT_HTML                   (Paths.get("Export", "WebPage")),
+    WILDLOG_EXPORT_HTML_BASIC             (Paths.get("Export", "WebPage", "Basic")),
+    WILDLOG_EXPORT_HTML_BASIC_THUMBNAILS  (Paths.get("Export", "WebPage", "Basic", "Thumbnails")),
+    WILDLOG_EXPORT_HTML_FANCY             (Paths.get("Export", "WebPage", "Advanced")),
+    WILDLOG_EXPORT_HTML_FANCY_RESOURCES   (Paths.get("Export", "WebPage", "Advanced", "Scripts")),
+    WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS  (Paths.get("Export", "WebPage", "Advanced", "Thumbnails")),
+    WILDLOG_EXPORT_HTML_TEMPORARY         (Paths.get("Export", "WebPage", "Temporary")),
     WILDLOG_EXPORT_WILDNOTE_SYNC          (Paths.get("Export", "WildNoteSync")),
     WILDLOG_EXPORT_SLIDESHOW              (Paths.get("Export", "Slideshow")),
     WILDLOG_EXPORT_FILES                  (Paths.get("Export", "OriginalFiles")),

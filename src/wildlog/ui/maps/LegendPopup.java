@@ -87,6 +87,7 @@ public class LegendPopup extends javax.swing.JDialog {
         jLabel2.setText("<html>Only 5 distribution maps can be shown together at the same time.<br/><b>The default colour have been assigned to the map layers as follows:<b><html>");
 
         pnlLegend1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlLegend1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlLegend1Layout = new javax.swing.GroupLayout(pnlLegend1);
         pnlLegend1.setLayout(pnlLegend1Layout);
@@ -103,6 +104,7 @@ public class LegendPopup extends javax.swing.JDialog {
         lblLegend1.setText("Unassigned");
 
         pnlLegend2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlLegend2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlLegend2Layout = new javax.swing.GroupLayout(pnlLegend2);
         pnlLegend2.setLayout(pnlLegend2Layout);
@@ -119,6 +121,7 @@ public class LegendPopup extends javax.swing.JDialog {
         lblLegend2.setText("Unassigned");
 
         pnlLegend3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlLegend3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlLegend3Layout = new javax.swing.GroupLayout(pnlLegend3);
         pnlLegend3.setLayout(pnlLegend3Layout);
@@ -135,6 +138,7 @@ public class LegendPopup extends javax.swing.JDialog {
         lblLegend3.setText("Unassigned");
 
         pnlLegend4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlLegend4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlLegend4Layout = new javax.swing.GroupLayout(pnlLegend4);
         pnlLegend4.setLayout(pnlLegend4Layout);
@@ -151,6 +155,7 @@ public class LegendPopup extends javax.swing.JDialog {
         lblLegend4.setText("Unassigned");
 
         pnlLegend5.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        pnlLegend5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout pnlLegend5Layout = new javax.swing.GroupLayout(pnlLegend5);
         pnlLegend5.setLayout(pnlLegend5Layout);

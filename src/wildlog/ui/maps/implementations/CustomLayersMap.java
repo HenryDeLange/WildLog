@@ -88,7 +88,9 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
                     try {
                         FileDataStore shapeStore = FileDataStoreFinder.getDataStore(layerPath.toFile());
                         SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-// FIXME: Set unique clours for each layer
+                        
+// FIXME: Set unique colours for each layer (Gebruik die JavaFX ColorPicker)
+
                         Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
                                 Color.BLACK, Color.BLACK, 1.0, 0.3));
                         map.addLayer(shapelayer);

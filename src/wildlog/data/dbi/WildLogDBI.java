@@ -14,6 +14,7 @@ public interface WildLogDBI extends DBI {
     public void doExportCSV(Path inPath, boolean inExportAll, Location inLocation, Visit inVisit, Element inElement, Sighting inSighting, List<Sighting> inLstSightings);
     public void doExportBasicCSV(Path inPath, Location inLocation, Visit inVisit, Element inElement, Sighting inSighting, List<Sighting> inLstSightings);
     public boolean doImportCSV(Path inPath, String inPrefix, boolean includeWildLogFilesTable);
+    public boolean doImportBasicCSV(Path inPath, String inPrefix);
     public boolean doImportIUCN(Path inPath, boolean inUpdatePrimaryName, boolean inAddNewElements, boolean inUpdateExistingElements);
 
 }

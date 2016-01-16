@@ -76,13 +76,13 @@ public class ExportDialog extends JDialog {
         btnExportFiles = new javax.swing.JButton();
         btnExportFilesObservations = new javax.swing.JButton();
         btnExportFilesSelectedObservations = new javax.swing.JButton();
-        btnExportWorkspace = new javax.swing.JButton();
-        btnExportHTML = new javax.swing.JButton();
-        btnExportHTMLAdvanced = new javax.swing.JButton();
         btnExportCSVBasic = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
+        btnExportHTML = new javax.swing.JButton();
+        btnExportHTMLAdvanced = new javax.swing.JButton();
         btnExportXML = new javax.swing.JButton();
         btnExportKML = new javax.swing.JButton();
+        btnExportWorkspace = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Exports");
@@ -149,65 +149,8 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportFilesSelectedObservations);
 
-        btnExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        btnExportWorkspace.setText("Export to New Workspace");
-        btnExportWorkspace.setToolTipText("Create a new Workspace containing only relevant data and linked records.");
-        btnExportWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportWorkspace.setFocusPainted(false);
-        btnExportWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportWorkspace.setIconTextGap(10);
-        btnExportWorkspace.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportWorkspace.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportWorkspace.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportWorkspace.setName("btnExportWorkspace"); // NOI18N
-        btnExportWorkspace.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportWorkspaceActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExportWorkspace);
-
-        btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTML.setText("Export as Offline Webpage (Basic)");
-        btnExportHTML.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
-        btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportHTML.setFocusPainted(false);
-        btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportHTML.setIconTextGap(10);
-        btnExportHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportHTML.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportHTML.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportHTML.setName("btnExportHTML"); // NOI18N
-        btnExportHTML.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportHTML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportHTMLActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExportHTML);
-
-        btnExportHTMLAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTMLAdvanced.setText("Export as Webpage (Advanced)");
-        btnExportHTMLAdvanced.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
-        btnExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportHTMLAdvanced.setFocusPainted(false);
-        btnExportHTMLAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportHTMLAdvanced.setIconTextGap(10);
-        btnExportHTMLAdvanced.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportHTMLAdvanced.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportHTMLAdvanced.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportHTMLAdvanced.setName("btnExportHTMLAdvanced"); // NOI18N
-        btnExportHTMLAdvanced.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportHTMLAdvanced.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportHTMLAdvancedActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExportHTMLAdvanced);
-
         btnExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSVBasic.setText("Export as Spreadsheet (Basic)");
+        btnExportCSVBasic.setText("Export as Spreadsheet (Basic format)");
         btnExportCSVBasic.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
         btnExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVBasic.setFocusPainted(false);
@@ -226,7 +169,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportCSVBasic);
 
         btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSV.setText("Export as Spreadsheet (Complete)");
+        btnExportCSV.setText("Export as Spreadsheet (WildLog format)");
         btnExportCSV.setToolTipText("Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc.");
         btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSV.setFocusPainted(false);
@@ -243,6 +186,44 @@ public class ExportDialog extends JDialog {
             }
         });
         getContentPane().add(btnExportCSV);
+
+        btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        btnExportHTML.setText("Export as Web Page (Basic)");
+        btnExportHTML.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
+        btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportHTML.setFocusPainted(false);
+        btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportHTML.setIconTextGap(10);
+        btnExportHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportHTML.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.setName("btnExportHTML"); // NOI18N
+        btnExportHTML.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportHTMLActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportHTML);
+
+        btnExportHTMLAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        btnExportHTMLAdvanced.setText("Export as Web Page (Advanced)");
+        btnExportHTMLAdvanced.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
+        btnExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportHTMLAdvanced.setFocusPainted(false);
+        btnExportHTMLAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportHTMLAdvanced.setIconTextGap(10);
+        btnExportHTMLAdvanced.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportHTMLAdvanced.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportHTMLAdvanced.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportHTMLAdvanced.setName("btnExportHTMLAdvanced"); // NOI18N
+        btnExportHTMLAdvanced.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportHTMLAdvanced.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportHTMLAdvancedActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportHTMLAdvanced);
 
         btnExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/XML.png"))); // NOI18N
         btnExportXML.setText("Export as XML");
@@ -281,6 +262,25 @@ public class ExportDialog extends JDialog {
             }
         });
         getContentPane().add(btnExportKML);
+
+        btnExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        btnExportWorkspace.setText("Export to New Workspace");
+        btnExportWorkspace.setToolTipText("Create a new Workspace containing only relevant data and linked records.");
+        btnExportWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportWorkspace.setFocusPainted(false);
+        btnExportWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportWorkspace.setIconTextGap(10);
+        btnExportWorkspace.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportWorkspace.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportWorkspace.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportWorkspace.setName("btnExportWorkspace"); // NOI18N
+        btnExportWorkspace.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportWorkspaceActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportWorkspace);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -333,7 +333,7 @@ public class ExportDialog extends JDialog {
                     }
                     setProgress(100);
                     setMessage("Done with the HTML Export for Observations");
-                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath());
+                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML_BASIC.getAbsoluteFullPath());
                     return null;
                 }
             });
@@ -575,39 +575,44 @@ public class ExportDialog extends JDialog {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Starting the CSV Export");
+                setMessage("Starting the CSV WildLog Export");
+                List<Sighting> lstSightingsToUse = lstSightings;
                 Path path;
                 if (location != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX)
-                            .resolve(location.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName());
+                    if (lstSightingsToUse == null) {
+                        lstSightingsToUse = app.getDBI().list(new Sighting(null, location.getName(), null), false);
+                    }
                 }
                 else
                 if (visit != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX)
-                            .resolve(visit.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName());
+                    if (lstSightingsToUse == null) {
+                        lstSightingsToUse = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+                    }
                 }
                 else
                 if (element != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX)
-                            .resolve(element.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName());
+                    if (lstSightingsToUse == null) {
+                        lstSightingsToUse = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
+                    }
                 }
                 else
                 if (sighting != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX)
-                            .resolve(sighting.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName());
                 }
                 else
                 if (lstSightings != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX)
-                            .resolve("Observations");
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations");
                 }
                 else {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath();
                 }
                 Files.createDirectories(path);
-                app.getDBI().doExportCSV(path, false, location, visit, element, sighting, lstSightings);
+                app.getDBI().doExportCSV(path, false, location, visit, element, sighting, lstSightingsToUse);
                 UtilsFileProcessing.openFile(path);
-                setMessage("Done with the CSV Export");
+                setMessage("Done with the CSV WildLog Export");
                 return null;
             }
         });
@@ -774,39 +779,34 @@ public class ExportDialog extends JDialog {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Starting the Basic CSV Export");
+                setMessage("Starting the CSV Basic Export");
                 Path path;
                 if (location != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX)
-                            .resolve(location.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName() + ".csv");
                 }
                 else
                 if (visit != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX)
-                            .resolve(visit.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName() + ".csv");
                 }
                 else
                 if (element != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX)
-                            .resolve(element.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName() + ".csv");
                 }
                 else
                 if (sighting != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX)
-                            .resolve(sighting.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName() + ".csv");
                 }
                 else
                 if (lstSightings != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX)
-                            .resolve("Observations");
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations.csv");
                 }
                 else {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath();
                 }
-                Files.createDirectories(path);
+                Files.createDirectories(path.getParent());
                 app.getDBI().doExportBasicCSV(path, location, visit, element, sighting, lstSightings);
                 UtilsFileProcessing.openFile(path);
-                setMessage("Done with the Basic CSV Export");
+                setMessage("Done with the CSV Basic Export");
                 return null;
             }
         });

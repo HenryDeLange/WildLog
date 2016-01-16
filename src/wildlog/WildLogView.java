@@ -330,15 +330,21 @@ public final class WildLogView extends JFrame {
         mnuBackupDatabase = new javax.swing.JMenuItem();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
-        mnuExportHTML = new javax.swing.JMenuItem();
+        mnuExportCSVBasic = new javax.swing.JMenuItem();
         mnuExportCSV = new javax.swing.JMenuItem();
+        jSeparator18 = new javax.swing.JPopupMenu.Separator();
+        mnuExportHTML = new javax.swing.JMenuItem();
+        mnuExportHTMLAdvanced = new javax.swing.JMenuItem();
+        jSeparator19 = new javax.swing.JPopupMenu.Separator();
         mnuExportXML = new javax.swing.JMenuItem();
+        jSeparator20 = new javax.swing.JPopupMenu.Separator();
         mnuExportKML = new javax.swing.JMenuItem();
         jSeparator10 = new javax.swing.JPopupMenu.Separator();
         mnuExportWildNoteSync = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
         mnuExportWorkspace = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
+        mnuImportCSVBasic = new javax.swing.JMenuItem();
         mnuImportCSV = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
         btnImportIUCNList = new javax.swing.JMenuItem();
@@ -838,8 +844,33 @@ public final class WildLogView extends JFrame {
             }
         });
 
+        mnuExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
+        mnuExportCSVBasic.setText("Export All to CSV (Basic format)");
+        mnuExportCSVBasic.setToolTipText("Export all data to CSV files using the Basic format. (Open in Excel, ArcGIS, etc.)");
+        mnuExportCSVBasic.setName("mnuExportCSVBasic"); // NOI18N
+        mnuExportCSVBasic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportCSVBasicActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportCSVBasic);
+
+        mnuExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
+        mnuExportCSV.setText("Export All to CSV (WildLog format)");
+        mnuExportCSV.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
+        mnuExportCSV.setName("mnuExportCSV"); // NOI18N
+        mnuExportCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportCSVActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportCSV);
+
+        jSeparator18.setName("jSeparator18"); // NOI18N
+        exportMenu.add(jSeparator18);
+
         mnuExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        mnuExportHTML.setText("Export All to HTML");
+        mnuExportHTML.setText("Export All to Web Page (Basic)");
         mnuExportHTML.setToolTipText("Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)");
         mnuExportHTML.setName("mnuExportHTML"); // NOI18N
         mnuExportHTML.addActionListener(new java.awt.event.ActionListener() {
@@ -849,16 +880,19 @@ public final class WildLogView extends JFrame {
         });
         exportMenu.add(mnuExportHTML);
 
-        mnuExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        mnuExportCSV.setText("Export All to CSV");
-        mnuExportCSV.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
-        mnuExportCSV.setName("mnuExportCSV"); // NOI18N
-        mnuExportCSV.addActionListener(new java.awt.event.ActionListener() {
+        mnuExportHTMLAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        mnuExportHTMLAdvanced.setText("Export All to Web Page (Advanced)");
+        mnuExportHTMLAdvanced.setToolTipText("Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)");
+        mnuExportHTMLAdvanced.setName("mnuExportHTMLAdvanced"); // NOI18N
+        mnuExportHTMLAdvanced.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExportCSVActionPerformed(evt);
+                mnuExportHTMLAdvancedActionPerformed(evt);
             }
         });
-        exportMenu.add(mnuExportCSV);
+        exportMenu.add(mnuExportHTMLAdvanced);
+
+        jSeparator19.setName("jSeparator19"); // NOI18N
+        exportMenu.add(jSeparator19);
 
         mnuExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/XML.png"))); // NOI18N
         mnuExportXML.setText("Export All to XML");
@@ -870,6 +904,9 @@ public final class WildLogView extends JFrame {
             }
         });
         exportMenu.add(mnuExportXML);
+
+        jSeparator20.setName("jSeparator20"); // NOI18N
+        exportMenu.add(jSeparator20);
 
         mnuExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
         mnuExportKML.setText("Export All to KML");
@@ -924,8 +961,19 @@ public final class WildLogView extends JFrame {
             }
         });
 
+        mnuImportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
+        mnuImportCSVBasic.setText("Import from CSV (Basic format)");
+        mnuImportCSVBasic.setToolTipText("<html>Import the data contained in the CSV files. <br/>All imported data will be prefixed by the provided value. <br/>(Note: This import uses the same format as files generated by the CSV Basic Export.)</html>");
+        mnuImportCSVBasic.setName("mnuImportCSVBasic"); // NOI18N
+        mnuImportCSVBasic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuImportCSVBasicActionPerformed(evt);
+            }
+        });
+        importMenu.add(mnuImportCSVBasic);
+
         mnuImportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        mnuImportCSV.setText("Import from CSV");
+        mnuImportCSV.setText("Import from CSV (WildLog format)");
         mnuImportCSV.setToolTipText("<html>Import the data contained in the CSV files. <br/>All imported data will be prefixed by the provided value. <br/>(Note: This import uses the same format as files generated by the CSV Export.)</html>");
         mnuImportCSV.setName("mnuImportCSV"); // NOI18N
         mnuImportCSV.addActionListener(new java.awt.event.ActionListener() {
@@ -1670,71 +1718,82 @@ public final class WildLogView extends JFrame {
 
     private void mnuImportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportCSVActionPerformed
         tabbedPanel.setSelectedIndex(0);
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
-            protected Object doInBackground() throws Exception {
-                setMessage("Starting the CSV Import");
-                final JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setDialogTitle("Select the directory with the CSV files to import");
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            return fileChooser.showOpenDialog(app.getMainFrame());
-                        }
-                    });
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    tabbedPanel.setSelectedIndex(0);
-                    Path path = fileChooser.getSelectedFile().toPath();
-                    app.getMainFrame().getGlassPane().setVisible(true);
-                    String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
-                            "<html>Please provide a prefix to use for the imported data. "
-                            + "<br>The prefix will be used to map the imported data to new unique records. "
-                            + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
-                            "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
-                    app.getMainFrame().getGlassPane().setVisible(false);
-                    if (prefix != null && !prefix.isEmpty()) {
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>It is strongly recommended that you first <b><u>backup your WildLog Database</u></b> before continuing. <br>"
+                        + "Press OK when you are ready to start the import process.</html>",
+                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                }
+            });
+        if (result == JOptionPane.OK_OPTION) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setMessage("Starting the CSV WildLog Import");
+                    final JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Select the directory with the CSV files to import");
+                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                return fileChooser.showOpenDialog(app.getMainFrame());
+                            }
+                        });
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        tabbedPanel.setSelectedIndex(0);
+                        Path path = fileChooser.getSelectedFile().toPath();
                         app.getMainFrame().getGlassPane().setVisible(true);
-                        int choice = JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                "<html><b>Would you like to exclude the WildLog File references</b>? "
-                                + "<br><br><hr>"
-                                + "<br>Note: The CSV Import can not import the actual files, but only the database links "
-                                + "<br>to the files. If you select NO, then you will have to manually copy the files into the correct folders."
-                                + "<br><br><hr>"
-                                + "<br>It is <b>strongly recommended</b> to select <b>YES</b> to prevent more than one record to be "
-                                + "<br>linked to the same file. The import will fail if a duplicate link is attempted.</html>",
-                                "Exclude Database File References", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
+                                "<html>Please provide a prefix to use for the imported data. "
+                                + "<br>The prefix will be used to map the imported data to new unique records. "
+                                + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
+                                "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
                         app.getMainFrame().getGlassPane().setVisible(false);
-                        boolean excludeWildLogFiles = false;
-                        if (choice == JOptionPane.YES_OPTION || choice == JOptionPane.CLOSED_OPTION) {
-                            excludeWildLogFiles = true;
-                        }
-                        boolean hasErrors = false;
-                        try {
-                            hasErrors = !app.getDBI().doImportCSV(path, prefix, !excludeWildLogFiles);
-                        }
-                        catch (Exception ex) {
-                            ex.printStackTrace(System.err);
-                            hasErrors = true;
-                        }
-                        if (hasErrors) {
-                            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                @Override
-                                public int showDialog() {
-                                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                                            "Not all of the data could be successfully imported.",
-                                            "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
-                                    return -1;
-                                }
-                            });
+                        if (prefix != null && !prefix.isEmpty()) {
+                            app.getMainFrame().getGlassPane().setVisible(true);
+                            int choice = JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                    "<html><b>Would you like to exclude the WildLog File references</b>? "
+                                    + "<br><br><hr>"
+                                    + "<br>Note: The CSV Import can not import the actual files, but only the database links "
+                                    + "<br>to the files. If you select NO, then you will have to manually copy the files into the correct folders."
+                                    + "<br><br><hr>"
+                                    + "<br>It is <b>strongly recommended</b> to select <b>YES</b> to prevent more than one record to be "
+                                    + "<br>linked to the same file. The import will fail if a duplicate link is attempted.</html>",
+                                    "Exclude Database File References", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            app.getMainFrame().getGlassPane().setVisible(false);
+                            boolean excludeWildLogFiles = false;
+                            if (choice == JOptionPane.YES_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+                                excludeWildLogFiles = true;
+                            }
+                            boolean hasErrors = false;
+                            try {
+                                hasErrors = !app.getDBI().doImportCSV(path, prefix, !excludeWildLogFiles);
+                            }
+                            catch (Exception ex) {
+                                ex.printStackTrace(System.err);
+                                hasErrors = true;
+                            }
+                            if (hasErrors) {
+                                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                                "Not all of the data could be successfully imported.",
+                                                "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
+                                        return -1;
+                                    }
+                                });
+                            }
                         }
                     }
+                    setMessage("Done with the CSV WildLog Import");
+                    tabHomeComponentShown(null);
+                    return null;
                 }
-                setMessage("Done with the CSV Import");
-                tabHomeComponentShown(null);
-                return null;
-            }
-        });
+            });
+        }
     }//GEN-LAST:event_mnuImportCSVActionPerformed
 
     private void mnuCreateSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateSlideshowActionPerformed
@@ -1795,15 +1854,15 @@ public final class WildLogView extends JFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 setProgress(0);
-                setMessage("Starting the CSV Export");
-                Path path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath();
+                setMessage("Starting the CSV WildLog Export");
+                Path path = WildLogPaths.WILDLOG_EXPORT_CSV_ALL.getAbsoluteFullPath();
                 Files.createDirectories(path);
                 setProgress(0);
-                setMessage("Busy with the CSV Export");
+                setMessage("Busy with the CSV WildLog Export");
                 app.getDBI().doExportCSV(path, true, null, null, null, null, null);
-                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath());
+                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_ALL.getAbsoluteFullPath());
                 setProgress(100);
-                setMessage("Done with the CSV Export");
+                setMessage("Done with the CSV WildLog Export");
                 return null;
             }
         });
@@ -1813,46 +1872,44 @@ public final class WildLogView extends JFrame {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Starting the HTML Export for All Records");
+                setMessage("Starting the HTML Basic Export for All Records");
                 setProgress(0);
                 // Elements
                 List<Element> listElements = app.getDBI().list(new Element());
                 for (int t = 0; t < listElements.size(); t++) {
-// TODO: Sal vinniger gaan as ek die multithreaded kan doen, maar dan moet ek weer die progressbar sync issue probeer fix... 
-//       (dink ek het toe 'n manier gekry om die progressbar beter te sync...)
                     UtilsHTML.exportHTML(listElements.get(t), app, null);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
-                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 }
                 setProgress(25);
                 // Locations
-                setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 List<Location> listLocations = app.getDBI().list(new Location());
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportHTML(listLocations.get(t), app, null);
                     setProgress(25 + (int)((t/(double)listLocations.size())*25));
-                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 }
-                setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 // Visits
                 List<Visit> listVisits = app.getDBI().list(new Visit());
                 for (int t = 0; t < listVisits.size(); t++) {
                     UtilsHTML.exportHTML(listVisits.get(t), app, null);
                     setProgress(50 + (int)((t/(double)listVisits.size())*25));
-                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 }
-                setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 // Sightings
                 List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsHTML.exportHTML(listSightings.get(t), app, null);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));
-                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 }
                 setProgress(100);
-                setMessage("Busy with the HTML Export for All Records " + getProgress());
-                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath());
-                setMessage("Done with the HTML Export for All Records");
+                setMessage("Busy with the HTML Basic Export for All Records " + getProgress());
+                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML_BASIC.getAbsoluteFullPath());
+                setMessage("Done with the HTML Basic Export for All Records");
                 return null;
             }
         });
@@ -2959,7 +3016,7 @@ public final class WildLogView extends JFrame {
             public int showDialog() {
                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
                         "<html>It is <b><u>very strongly</u></b> recommended that you <b><u>backup your Workspace</u></b> (WildLog folder) before continuing. <br>"
-                        + "Do you want to continue now?</html>",
+                        + "Press OK when you are ready to start the import process.</html>",
                         "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 }
             });
@@ -3690,6 +3747,176 @@ public final class WildLogView extends JFrame {
         }
     }//GEN-LAST:event_lblEmailMousePressed
 
+    private void mnuImportCSVBasicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportCSVBasicActionPerformed
+        tabbedPanel.setSelectedIndex(0);
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>It is strongly recommended that you first <b><u>backup your WildLog Database</u></b> before continuing. <br>"
+                        + "Press OK when you are ready to start the import process.</html>",
+                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                }
+            });
+        if (result == JOptionPane.OK_OPTION) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setMessage("Starting the CSV Basic Import");
+                    final JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Select the CSV file to import");
+                    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    fileChooser.setFileFilter(new CsvFilter());
+                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                return fileChooser.showOpenDialog(app.getMainFrame());
+                            }
+                        });
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        tabbedPanel.setSelectedIndex(0);
+                        Path path = fileChooser.getSelectedFile().toPath();
+                        app.getMainFrame().getGlassPane().setVisible(true);
+                        String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
+                                "<html>Please provide a prefix to use for the imported data. "
+                                + "<br>The prefix will be used to map the imported data to new unique records. "
+                                + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
+                                "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
+                        app.getMainFrame().getGlassPane().setVisible(false);
+                        if (prefix != null && !prefix.isEmpty()) {
+                            boolean hasErrors = false;
+                            try {
+                                hasErrors = !app.getDBI().doImportBasicCSV(path, prefix);
+                            }
+                            catch (Exception ex) {
+                                ex.printStackTrace(System.err);
+                                hasErrors = true;
+                            }
+                            if (hasErrors) {
+                                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                                "Not all of the data could be successfully imported.",
+                                                "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
+                                        return -1;
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    setMessage("Done with the CSV Basic Import");
+                    tabHomeComponentShown(null);
+                    return null;
+                }
+            });
+        }
+    }//GEN-LAST:event_mnuImportCSVBasicActionPerformed
+
+    private void mnuExportCSVBasicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportCSVBasicActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setProgress(0);
+                setMessage("Starting the CSV Basic Export");
+                Path path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath();
+                Files.createDirectories(path);
+                setProgress(0);
+                setMessage("Busy with the CSV Basic Export");
+                // Elements
+                List<Element> listElements = app.getDBI().list(new Element());
+                for (int t = 0; t < listElements.size(); t++) {
+                    Element element = listElements.get(t);
+                    Path tempPath = path.resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName() + ".csv");
+                    Files.createDirectories(tempPath.getParent());
+                    app.getDBI().doExportBasicCSV(tempPath, null, null, element, null, null);
+                    setProgress(0 + (int)((t/(double)listElements.size())*25));
+                    setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
+                }
+                setProgress(25);
+                // Locations
+                setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    Location location = listLocations.get(t);
+                    Path tempPath = path.resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName() + ".csv");
+                    Files.createDirectories(tempPath.getParent());
+                    app.getDBI().doExportBasicCSV(tempPath, location, null, null, null, null);
+                    setProgress(25 + (int)((t/(double)listLocations.size())*25));
+                    setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
+                }
+                setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
+                // Visits
+                List<Visit> listVisits = app.getDBI().list(new Visit());
+                for (int t = 0; t < listVisits.size(); t++) {
+                    Visit visit = listVisits.get(t);
+                    Path tempPath = path.resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName() + ".csv");
+                    Files.createDirectories(tempPath.getParent());
+                    app.getDBI().doExportBasicCSV(tempPath, null, visit, null, null, null);
+                    setProgress(50 + (int)((t/(double)listVisits.size())*25));
+                    setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
+                }
+                setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
+                // Sightings
+                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
+                Path tempPath = path.resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("AllObservations.csv");
+                Files.createDirectories(tempPath.getParent());
+                app.getDBI().doExportBasicCSV(tempPath, null, null, null, null, listSightings);
+                setProgress(100);
+                setMessage("Done with the CSV Basic Export");
+                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath());
+                return null;
+            }
+        });
+    }//GEN-LAST:event_mnuExportCSVBasicActionPerformed
+
+    private void mnuExportHTMLAdvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportHTMLAdvancedActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the HTML Advanced Export for All Records");
+                setProgress(0);
+                // Elements
+                List<Element> listElements = app.getDBI().list(new Element());
+                for (int t = 0; t < listElements.size(); t++) {
+                    UtilsHTML.exportFancyHTML(listElements.get(t), app, null);
+                    setProgress(0 + (int)((t/(double)listElements.size())*25));
+                    setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
+                }
+                setProgress(25);
+                // Locations
+                setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    UtilsHTML.exportFancyHTML(listLocations.get(t), app, null);
+                    setProgress(25 + (int)((t/(double)listLocations.size())*25));
+                    setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
+                }
+                setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
+                // Visits
+                List<Visit> listVisits = app.getDBI().list(new Visit());
+                for (int t = 0; t < listVisits.size(); t++) {
+                    UtilsHTML.exportFancyHTML(listVisits.get(t), app, null);
+                    setProgress(50 + (int)((t/(double)listVisits.size())*25));
+                    setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
+                }
+                setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
+                // Sightings
+                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
+                for (int t = 0; t < listSightings.size(); t++) {
+                    UtilsHTML.exportFancyHTML(listSightings.get(t), app, null);
+                    setProgress(75 + (int)((t/(double)listSightings.size())*25));
+                    setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
+                }
+                setProgress(100);
+                setMessage("Busy with the HTML Advanced Export for All Records " + getProgress());
+                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath());
+                setMessage("Done with the HTML Advanced Export for All Records");
+                return null;
+            }
+        });
+    }//GEN-LAST:event_mnuExportHTMLAdvancedActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3754,7 +3981,10 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator16;
     private javax.swing.JPopupMenu.Separator jSeparator17;
+    private javax.swing.JPopupMenu.Separator jSeparator18;
+    private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator20;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
@@ -3791,13 +4021,16 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem mnuExifMenuItem;
     private javax.swing.JMenuItem mnuExportCSV;
+    private javax.swing.JMenuItem mnuExportCSVBasic;
     private javax.swing.JMenuItem mnuExportHTML;
+    private javax.swing.JMenuItem mnuExportHTMLAdvanced;
     private javax.swing.JMenuItem mnuExportKML;
     private javax.swing.JMenuItem mnuExportWildNoteSync;
     private javax.swing.JMenuItem mnuExportWorkspace;
     private javax.swing.JMenuItem mnuExportXML;
     private javax.swing.JMenuItem mnuGPSInput;
     private javax.swing.JMenuItem mnuImportCSV;
+    private javax.swing.JMenuItem mnuImportCSVBasic;
     private javax.swing.JMenuItem mnuImportWildNote;
     private javax.swing.JMenuItem mnuImportWorkspace;
     private javax.swing.JMenuItem mnuMapStartMenuItem;

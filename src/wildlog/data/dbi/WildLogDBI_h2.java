@@ -7,6 +7,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.JOptionPane;
@@ -19,10 +23,19 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
+import wildlog.data.enums.GPSAccuracy;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.LifeStatus;
+import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
+import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsImageProcessing;
@@ -231,12 +244,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         " ((CASE WHEN L.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN L.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * L.LonDEGREES + (L.LonMINUTES + L.LonSECONDS /60.0)/60.0) AS PLACE_LONGITUDE, " +
                         " V.NAME AS PERIOD, V.VISITTYPE AS PERIOD_TYPE, V.STARTDATE AS PERIOD_START_DATE, V.ENDDATE AS PERIOD_END_DATE, V.DESCRIPTION AS PERIOD_DESCRIPTION, " +
                         " S.SIGHTINGCOUNTER AS OBSERVATION, S.CERTAINTY, S.SIGHTINGEVIDENCE AS EVIDENCE, " +
+                        " S.TIMEACCURACY AS TIME_ACCURACY, S.TIMEOFDAY AS TIME_OF_DAY, " +
                         " trunc(S.SIGHTINGDATE) OBSERVATION_DATE, cast(S.SIGHTINGDATE as time) OBSERVATION_TIME, " +
-                        " S.TIMEOFDAY AS TIME_OF_DAY, S.TIMEACCURACY AS TIME_ACCURACY, S.MOONPHASE, S.MOONLIGHT, " +
-                        " L.GPSACCURACY AS OBSERVATION_GPS_ACCURACY, " +
+                        " S.GPSACCURACY AS OBSERVATION_GPS_ACCURACY, " +
                         " ((CASE WHEN S.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN S.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * S.LatDEGREES + (S.LatMINUTES + S.LatSECONDS /60.0)/60.0) AS OBSERVATION_LATITUDE, " +
                         " ((CASE WHEN S.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN S.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * S.LonDEGREES + (S.LonMINUTES + S.LonSECONDS /60.0)/60.0) AS OBSERVATION_LONGITUDE, " +
-                        " S.DETAILS " +
+                        " S.NUMBEROFELEMENTS AS NUMBER_OF_CREATURES, S.LIFESTATUS AS LIFE_STATUS, S.TAG, S.DETAILS " +
                         " FROM SIGHTINGS S " +
                         " LEFT JOIN ELEMENTS E ON S.ELEMENTNAME = E.PRIMARYNAME " +
                         " LEFT JOIN LOCATIONS L ON S.LOCATIONNAME = L.NAME " +
@@ -265,7 +278,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 }
                 sql = sql.substring(0, sql.length() - 1) + ")";
             }
-            state.execute("CALL CSVWRITE('" + inPath.resolve("WildLogData.csv").toAbsolutePath().toString() + "', '" + sql + "')");
+            state.execute("CALL CSVWRITE('" + inPath.toAbsolutePath().toString() + "', '" + sql + "')");
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -300,6 +313,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 success = success && createOrUpdate(tempElement, null);
             }
             // Import Locations
+            results.close();
             results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Places.csv").toAbsolutePath().toString() + "')");
             while (results.next()) {
                 Location tempLocation = new Location();
@@ -308,6 +322,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 success = success && createOrUpdate(tempLocation, null);
             }
             // Import Visits
+            results.close();
             results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Periods.csv").toAbsolutePath().toString() + "')");
             while (results.next()) {
                 Visit tempVisit = new Visit();
@@ -317,6 +332,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 success = success && createOrUpdate(tempVisit, null);
             }
             // Import Sightings
+            results.close();
             results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Observations.csv").toAbsolutePath().toString() + "')");
             while (results.next()) {
                 Sighting tempSighting = new Sighting();
@@ -328,6 +344,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 success = success && createOrUpdate(tempSighting, false);
             }
             if (includeWildLogFilesTable) {
+                results.close();
                 results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
                 while (results.next()) {
                     WildLogFile wildLogFile = new WildLogFile();
@@ -347,6 +364,170 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 if (results != null) {
                     results.close();
                     results = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+        return success;
+    }
+    
+    @Override
+    public boolean doImportBasicCSV(Path inPath, String inPrefix) {
+        Statement state = null;
+        ResultSet resultSet = null;
+        boolean success = true;
+        try {
+            state = conn.createStatement();
+            resultSet = state.executeQuery("CALL CSVREAD('" + inPath.toAbsolutePath().toString() + "')");
+            while (resultSet.next()) {
+                // Import Elements
+                Element element = new Element();
+                element.setPrimaryName(inPrefix + resultSet.getString("CREATURE"));
+                element.setScientificName(resultSet.getString("SCIENTIFIC_NAME"));
+                element.setType(ElementType.getEnumFromText(resultSet.getString("CREATURE_TYPE")));
+                success = success && createOrUpdate(element, null);
+                // Import Locations
+                if (success) {
+                    Location location = new Location();
+                    location.setName(inPrefix + resultSet.getString("PLACE"));
+                    location.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("PLACE_GPS_ACCURACY")));
+                    double lat = resultSet.getDouble("PLACE_LATITUDE");
+                    if (lat != 0) {
+                        Latitudes latitude;
+                        if (lat < 0) {
+                            latitude = Latitudes.SOUTH;
+                        }
+                        else {
+                            latitude = Latitudes.NORTH;
+                        }
+                        location.setLatitude(latitude);
+                        location.setLatDegrees(UtilsGps.getDegrees(latitude, lat));
+                        location.setLatMinutes(UtilsGps.getMinutes(lat));
+                        location.setLatSeconds(UtilsGps.getSeconds(lat));
+                    }
+                    double lon = resultSet.getDouble("PLACE_LONGITUDE");
+                    if (lon != 0) {
+                        Longitudes longitude;
+                        if (lon < 0) {
+                            longitude = Longitudes.WEST;
+                        }
+                        else {
+                            longitude = Longitudes.EAST;
+                        }
+                        location.setLongitude(longitude);
+                        location.setLonDegrees(UtilsGps.getDegrees(longitude, lon));
+                        location.setLonMinutes(UtilsGps.getMinutes(lon));
+                        location.setLonSeconds(UtilsGps.getSeconds(lon));
+                    }
+                    success = success && createOrUpdate(location, null);
+                }
+                // Import Visits
+                if (success) {
+                    Visit visit = new Visit();
+                    visit.setName(inPrefix + resultSet.getString("PERIOD"));
+                    visit.setLocationName(inPrefix + resultSet.getString("PLACE"));
+                    visit.setType(VisitType.getEnumFromText(resultSet.getString("PERIOD_TYPE")));
+                    if (resultSet.getDate("PERIOD_START_DATE") != null) {
+                        visit.setStartDate(new Date(resultSet.getDate("PERIOD_START_DATE").getTime()));
+                    }
+                    else {
+                        visit.setStartDate(null);
+                    }
+                    if (resultSet.getDate("PERIOD_END_DATE") != null) {
+                        visit.setEndDate(new Date(resultSet.getDate("PERIOD_END_DATE").getTime()));
+                    }
+                    else {
+                        visit.setEndDate(null);
+                    }
+                    visit.setDescription(resultSet.getString("PERIOD_DESCRIPTION"));
+                    success = success && createOrUpdate(visit, null);
+                }
+                // Import Sightings
+                if (success) {
+                    Sighting sighting = new Sighting();
+                    sighting.setSightingCounter(0); // Indicate a new Sighting ID needs to be created
+                    sighting.setElementName(inPrefix + resultSet.getString("CREATURE"));
+                    sighting.setLocationName(inPrefix + resultSet.getString("PLACE"));
+                    sighting.setVisitName(inPrefix + resultSet.getString("PERIOD"));
+                    sighting.setCertainty(Certainty.getEnumFromText(resultSet.getString("CERTAINTY")));
+                    sighting.setSightingEvidence(SightingEvidence.getEnumFromText(resultSet.getString("EVIDENCE")));
+                    sighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(resultSet.getString("TIME_ACCURACY")));
+                    sighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(resultSet.getString("TIME_OF_DAY")));
+                    if (resultSet.getTimestamp("OBSERVATION_DATE") != null) {
+                        Timestamp timestamp = resultSet.getTimestamp("OBSERVATION_DATE");
+                        if (timestamp != null) {
+                            sighting.setDate(new Date(timestamp.getTime()));
+                        }
+                    }
+                    else {
+                        sighting.setDate(null);
+                    }
+                    if (resultSet.getTime("OBSERVATION_TIME") != null && sighting.getDate() != null) {
+                        Time time = resultSet.getTime("OBSERVATION_TIME");
+                        if (time != null) {
+                            LocalDateTime localDateTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
+                            sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime.with(time.toLocalTime())));
+                        }
+                    }
+                    sighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("OBSERVATION_GPS_ACCURACY")));
+                    double lat = resultSet.getDouble("OBSERVATION_LATITUDE");
+                    if (lat != 0) {
+                        Latitudes latitude;
+                        if (lat < 0) {
+                            latitude = Latitudes.SOUTH;
+                        }
+                        else {
+                            latitude = Latitudes.NORTH;
+                        }
+                        sighting.setLatitude(latitude);
+                        sighting.setLatDegrees(UtilsGps.getDegrees(latitude, lat));
+                        sighting.setLatMinutes(UtilsGps.getMinutes(lat));
+                        sighting.setLatSeconds(UtilsGps.getSeconds(lat));
+                    }
+                    double lon = resultSet.getDouble("OBSERVATION_LONGITUDE");
+                    if (lon != 0) {
+                        Longitudes longitude;
+                        if (lon < 0) {
+                            longitude = Longitudes.WEST;
+                        }
+                        else {
+                            longitude = Longitudes.EAST;
+                        }
+                        sighting.setLongitude(longitude);
+                        sighting.setLonDegrees(UtilsGps.getDegrees(longitude, lon));
+                        sighting.setLonMinutes(UtilsGps.getMinutes(lon));
+                        sighting.setLonSeconds(UtilsGps.getSeconds(lon));
+                    }
+                    sighting.setNumberOfElements(resultSet.getInt("NUMBER_OF_CREATURES"));
+                    sighting.setLifeStatus(LifeStatus.getEnumFromText(resultSet.getString("LIFE_STATUS")));
+                    sighting.setTag(resultSet.getString("TAG"));
+                    sighting.setDetails(resultSet.getString("DETAILS"));
+                    success = success && createOrUpdate(sighting, false);
+                }
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            // ResultSet
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                    resultSet = null;
                 }
             }
             catch (SQLException sqle) {

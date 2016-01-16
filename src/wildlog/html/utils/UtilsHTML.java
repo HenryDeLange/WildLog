@@ -40,7 +40,7 @@ public final class UtilsHTML {
         Path toFileAsRelativePath;
         if (UtilsHTMLExportTypes.ForHTML.equals(inExportType)) {
             // Create the directories
-            Path thumbnailFolder = WildLogPaths.WILDLOG_EXPORT_HTML_THUMBNAILS.getAbsoluteFullPath().resolve(inWildLogFile.getRelativePath().getParent());
+            Path thumbnailFolder = WildLogPaths.WILDLOG_EXPORT_HTML_BASIC_THUMBNAILS.getAbsoluteFullPath().resolve(inWildLogFile.getRelativePath().getParent());
             try {
                 Files.createDirectories(thumbnailFolder);
             }
@@ -51,7 +51,7 @@ public final class UtilsHTML {
             Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
             UtilsFileProcessing.copyFile(fromFile, thumbnailPath, false, true);
             // Get relative path
-            toFileAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath().relativize(thumbnailPath);
+            toFileAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_BASIC.getAbsoluteFullPath().relativize(thumbnailPath);
         }
         else
         if (UtilsHTMLExportTypes.ForKML.equals(inExportType)) {
@@ -91,18 +91,18 @@ public final class UtilsHTML {
 
     public static Path exportHTML(DataObjectWithHTML inDataObject, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         if (inProgressbarTask != null) {
-            inProgressbarTask.setMessage("Starting the HTML Export for '" + inDataObject.getDisplayName() + "' ");
+            inProgressbarTask.setMessage("Starting the HTML Basic Export for '" + inDataObject.getDisplayName() + "' ");
             inProgressbarTask.setTaskProgress(0);
         }
-        Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath().resolve(inDataObject.getExportPrefix()).resolve(inDataObject.getDisplayName() + ".html");
+        Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_BASIC.getAbsoluteFullPath().resolve(inDataObject.getExportPrefix()).resolve(inDataObject.getDisplayName() + ".html");
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(1);
-            inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' ");
+            inProgressbarTask.setMessage("Busy with the HTML Basic Export for '" + inDataObject.getDisplayName() + "' ");
         }
         UtilsFileProcessing.createFileFromBytes(inDataObject.toHTML(true, true, false, inApp, UtilsHTMLExportTypes.ForHTML, inProgressbarTask).getBytes(), toFile);
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(100);
-            inProgressbarTask.setMessage("Done with the HTML Export for '" + inDataObject.getDisplayName() + "' ");
+            inProgressbarTask.setMessage("Done with the HTML Basic Export for '" + inDataObject.getDisplayName() + "' ");
         }
         return toFile;
     }
@@ -231,14 +231,14 @@ public final class UtilsHTML {
 
     public static Path exportFancyHTML(DataObjectWithHTML inDataObject, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         if (inProgressbarTask != null) {
-            inProgressbarTask.setMessage("Starting the HTML (Advanced) Export for '" + inDataObject.getDisplayName() + "' ");
+            inProgressbarTask.setMessage("Starting the HTML Advanced Export for '" + inDataObject.getDisplayName() + "' ");
             inProgressbarTask.setTaskProgress(0);
         }
         // Copy the scripts and stylesheets
         UtilsHTML.copyFancyHtmlResources(WildLogPaths.WILDLOG_EXPORT_HTML_FANCY_RESOURCES.getAbsoluteFullPath());
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(3);
-            inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+            inProgressbarTask.setMessage("Busy with the HTML Advanced Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
         }
         // Get the template file
         final char[] buffer = new char[4096];
@@ -316,7 +316,7 @@ public final class UtilsHTML {
             // Update progress
             if (inProgressbarTask != null) {
                 inProgressbarTask.setTaskProgress((3 + (int)((double)t/(double)lstFiles.size()*22.0)));
-                inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+                inProgressbarTask.setMessage("Busy with the HTML Advanced Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
             }
         }
         // Set the HTML of the MainSlider
@@ -329,7 +329,7 @@ public final class UtilsHTML {
         template = template.replace(imageListTemplate, imageList.toString());
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(25);
-            inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+            inProgressbarTask.setMessage("Busy with the HTML Advanced Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
         }
         // Setup the Map and Related data
         List<Sighting> lstSightings;
@@ -477,7 +477,7 @@ public final class UtilsHTML {
         UtilsFileProcessing.createFileFromBytes(template.getBytes(), toFile);
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(100);
-            inProgressbarTask.setMessage("Done with the HTML (Advanced) Export for '" + inDataObject.getDisplayName() + "' ");
+            inProgressbarTask.setMessage("Done with the HTML Advanced Export for '" + inDataObject.getDisplayName() + "' ");
         }
         return toFile;
     }

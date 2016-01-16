@@ -58,7 +58,7 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
     }
 
     public String toHTML(UtilsHTMLExportTypes inExportType) {
-        String startTag = "<a href=\"../../../" + getRelativePath().toString().replace(File.separator, "/") + "\" target=\"_blank\">";
+        String startTag = "<a href=\"../../../../" + getRelativePath().toString().replace(File.separator, "/") + "\" target=\"_blank\">";
         if (fileType.equals(WildLogFileType.IMAGE)) {
             return startTag + UtilsHTML.generateHTMLImages(this, inExportType) + "</a>";
         }
