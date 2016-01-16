@@ -391,13 +391,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         try {
             state = conn.createStatement();
             resultSet = state.executeQuery("CALL CSVREAD('" + inPath.toAbsolutePath().toString() + "')");
-            while (resultSet.next()) {
+            while (resultSet.next() && success) {
                 // Import Elements
                 Element element = new Element();
                 element.setPrimaryName(inPrefix + resultSet.getString("CREATURE"));
                 element.setScientificName(resultSet.getString("SCIENTIFIC_NAME"));
                 element.setType(ElementType.getEnumFromText(resultSet.getString("CREATURE_TYPE")));
-                success = success && createOrUpdate(element, null);
+                if (count(element) == 0) {
+                    success = success && createOrUpdate(element, null);
+                }
                 // Import Locations
                 if (success) {
                     Location location = new Location();
@@ -431,7 +433,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         location.setLonMinutes(UtilsGps.getMinutes(lon));
                         location.setLonSeconds(UtilsGps.getSeconds(lon));
                     }
-                    success = success && createOrUpdate(location, null);
+                    if (count(location) == 0) {
+                        success = success && createOrUpdate(location, null);
+                    }
                 }
                 // Import Visits
                 if (success) {
@@ -452,7 +456,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         visit.setEndDate(null);
                     }
                     visit.setDescription(resultSet.getString("PERIOD_DESCRIPTION"));
-                    success = success && createOrUpdate(visit, null);
+                    if (count(visit) == 0) {
+                        success = success && createOrUpdate(visit, null);
+                    }
                 }
                 // Import Sightings
                 if (success) {
