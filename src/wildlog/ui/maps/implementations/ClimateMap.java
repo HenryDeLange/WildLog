@@ -7,7 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -33,8 +32,8 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
     private final Timer timer = new Timer("WL_MonthTimer_Climate", true);
 
     
-    public ClimateMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
-        super("Climate Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
+    public ClimateMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super("Climate Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(10);
         // Maps
         Button btnTemperatureMinMap = new Button("Temperature (Monthly Minimum)");
@@ -150,7 +149,7 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
                         || BundledMapLayers.CLIMATE_TEMPERATURE_MEAN.equals(activeBaseLayer) 
                         || BundledMapLayers.CLIMATE_TEMPERATURE_MAX.equals(activeBaseLayer)
                         || BundledMapLayers.CLIMATE_PERCIPITATION_MONTHLY.equals(activeBaseLayer))
-                        && baseDialog.getActiveMap() == thisHandle) {
+                        && mapsBaseDialog.getActiveMap() == thisHandle) {
                     long startTime = System.currentTimeMillis();
 // FIXME: Hierdie is nie baie smooth nie, maar werk OK vir nou. Kyk dalk later of dit smoother (vinniger en meer voorspelbaar kan wees) as ek die layers move en nie replace nie.
                     map.replaceLayer(0, getGeoTiffLayersForMonth(activeBaseLayer, activeMonth++));

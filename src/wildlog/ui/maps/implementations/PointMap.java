@@ -25,6 +25,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.maps.utils.UtilsGps;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -37,8 +38,8 @@ public class PointMap extends AbstractMap<Sighting> {
     private String displayedTemplate;
 
     
-    public PointMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("World Maps (Online)", inLstData, inChartDescLabel);
+    public PointMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super("World Maps (Online)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Maps
         Button btnPointMapGoogle = new Button("Show Points on Google Maps");

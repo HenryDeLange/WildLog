@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.maps.utils.UtilsGps;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -40,8 +41,8 @@ public class HeatMap extends AbstractMap<Sighting> {
     private String displayedTemplate;
 
     
-    public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Distribution Maps (Heat)", inLstData, inChartDescLabel);
+    public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super("Distribution Maps (Heat)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(8);
         // Maps
         Button btnHeatMapClient = new Button("Heat Map");

@@ -18,6 +18,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.MapFrameOnline;
 import wildlog.maps.utils.UtilsGps;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 
 
@@ -27,8 +28,8 @@ public class LegacyMap extends AbstractMap<Sighting> {
     private Parent displayedMap;
 
     
-    public LegacyMap(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Old Legacy Maps", inLstData, inChartDescLabel);
+    public LegacyMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super("Old Legacy Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(1);
         // Maps
         Button btnPointMapOpenStreetMap = new Button("Old WildLog Online Map");

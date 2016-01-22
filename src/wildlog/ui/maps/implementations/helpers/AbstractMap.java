@@ -10,30 +10,33 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import wildlog.ui.maps.MapsBaseDialog;
 
 
 public abstract class AbstractMap<T> {
     private final String mapButtonName;
+    protected final MapsBaseDialog mapsBaseDialog;
     protected List<T> lstData;
     protected List<Node> lstCustomButtons;
     protected JLabel lblMapDescription;
 
     
-    public AbstractMap(String inMapButtonName, List<T> inList, JLabel inChartDescLabel) {
+    public AbstractMap(String inMapButtonName, List<T> inList, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         mapButtonName = inMapButtonName;
         lstData = inList;
         lblMapDescription = inChartDescLabel;
+        mapsBaseDialog = inMapsBaseDialog;
     }
     
-    public void loadMap(Scene inScene) {
+    public void loadMap() {
         // Setup loading label
         final Label lblLoading = new Label("... LOADING ...");
         lblLoading.setPadding(new Insets(20));
         lblLoading.setFont(new Font(24));
         lblLoading.setTextAlignment(TextAlignment.CENTER);
         lblLoading.setAlignment(Pos.CENTER);
-        inScene.setRoot(lblLoading);
-        createMap(inScene);
+        mapsBaseDialog.getJFXMapPanel().getScene().setRoot(lblLoading);
+        createMap(mapsBaseDialog.getJFXMapPanel().getScene());
     }
     
     public abstract void createMap(Scene inScene);

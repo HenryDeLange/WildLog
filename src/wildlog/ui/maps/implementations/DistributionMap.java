@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -31,7 +30,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
 import wildlog.ui.maps.DistributionLayersDialog;
-import wildlog.ui.maps.LegendPopup;
+import wildlog.ui.maps.LegendDialog;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 
@@ -39,10 +38,13 @@ import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
     private enum MapType {SPECIES_DISTRIBUTION};
     private MapType activeMapType = MapType.SPECIES_DISTRIBUTION;
+    private final List<Path> lstLayers = new ArrayList<>(5);
+    private final Color[] lstDefaultMapColours = new Color[] {new Color(232, 70, 19), new Color(255, 126, 25), new Color(255, 64, 57), new Color(232, 158, 35), new Color(255, 203, 36)};
+    private final Map<String, Color> mapLegends = new HashMap<>(5);
     private enum Transparency {
-        Opaque      (1.0, 1.0), 
-        Normal      (0.85, 0.7), 
-        Transparent (0.3, 0.2);
+        OPAQUE      (1.0, 1.0), 
+        NORMAL      (0.85, 0.7), 
+        TRANSPARENT (0.3, 0.2);
         
         private final double lineOpacity;
         private final double fillOpacity;
@@ -59,21 +61,26 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
         public double getFillOpacity() {
             return fillOpacity;
         }
-        
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case OPAQUE:
+                    return "Not Transparent";
+                case NORMAL:
+                    return "Semi-Transparent";
+                case TRANSPARENT:
+                    return "Very Transparent";
+                default:
+                    return super.toString();
+            }
+        }
     };
-    private final ComboBox<Transparency> cmbColour;
-    private final List<Path> lstLayers = new ArrayList<>(5);
-    private final Color[] lstMapColours = new Color[] {
-                                            new Color(232, 70, 19), 
-                                            new Color(255, 126, 25), 
-                                            new Color(255, 64, 57), 
-                                            new Color(232, 158, 35), 
-                                            new Color(255, 203, 36)};
-    private final Map<String, Color> mapLegends = new HashMap<>(5);
+    private final ComboBox<Transparency> cmbTransparity;
 
     
-    public DistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
-        super("Distribution Maps (Species)", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
+    public DistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super("Distribution Maps (Species)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
         Button btnDistributionMap = new Button("Select Species Distribution Map");
@@ -97,7 +104,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
                 if (elementName != null) {
                     scientificName = WildLogApp.getApplication().getDBI().find(new Element(elementName)).getScientificName();
                 }
-                DistributionLayersDialog dialog = new DistributionLayersDialog(baseDialog, scientificName);
+                DistributionLayersDialog dialog = new DistributionLayersDialog(mapsBaseDialog, scientificName);
                 dialog.setVisible(true);
                 lstLayers.clear();
                 if (dialog.getLstSelectedPaths() != null) {
@@ -107,31 +114,31 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
                 mapLegends.clear();
                 int counter = 0;
                 for (Path path : lstLayers) {
-                    mapLegends.put(path.getFileName().toString(), lstMapColours[counter++]);
+                    mapLegends.put(path.getFileName().toString(), lstDefaultMapColours[counter++]);
                 }
             }
         });
         lstCustomButtons.add(btnDistributionMap);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
-        Button btnColour = new Button("Map Legend (Layer Colours)");
-        btnColour.setCursor(Cursor.HAND);
-        btnColour.setOnAction(new EventHandler() {
+        Button btnLegend = new Button("Map Legend (Layer Colours)");
+        btnLegend.setCursor(Cursor.HAND);
+        btnLegend.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                LegendPopup dialog = new LegendPopup(baseDialog, mapLegends);
+                LegendDialog dialog = new LegendDialog(mapsBaseDialog, mapLegends);
                 dialog.setVisible(true);
             }
         });
-        lstCustomButtons.add(btnColour);
-        cmbColour = new ComboBox<>(FXCollections.observableArrayList(Transparency.values()));
-        cmbColour.setVisibleRowCount(3);
-        cmbColour.setCursor(Cursor.HAND);
-        lstCustomButtons.add(cmbColour);
+        lstCustomButtons.add(btnLegend);
+        cmbTransparity = new ComboBox<>(FXCollections.observableArrayList(Transparency.values()));
+        cmbTransparity.setVisibleRowCount(3);
+        cmbTransparity.setCursor(Cursor.HAND);
+        lstCustomButtons.add(cmbTransparity);
         setupShowCountriesButton();
         setupEnchanceContrastButton();
         // Select the default transparency
-        cmbColour.getSelectionModel().select(Transparency.Normal);
+        cmbTransparity.getSelectionModel().select(Transparency.NORMAL);
     }
 
     @Override
@@ -166,8 +173,8 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
                                 shapeSource, 
                                 new Color(150, 60, 30), 
                                 mapLegends.get(layerPath.getFileName().toString()), 
-                                cmbColour.getSelectionModel().getSelectedItem().getLineOpacity(),
-                                cmbColour.getSelectionModel().getSelectedItem().getFillOpacity()));
+                                cmbTransparity.getSelectionModel().getSelectedItem().getLineOpacity(),
+                                cmbTransparity.getSelectionModel().getSelectedItem().getFillOpacity()));
                         map.addLayer(shapelayer);
                     }
                     catch (IOException ex) {

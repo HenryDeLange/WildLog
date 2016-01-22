@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -30,8 +29,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
     private MapType activeMapType = MapType.PROTECTED_AREAS_WORLD;
 
     
-    public LandStatusMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
-        super("Conservation Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
+    public LandStatusMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super("Conservation Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(9);
         // Maps
         Button btnProtectedWorldMap = new Button("View Protected Areas (World)");

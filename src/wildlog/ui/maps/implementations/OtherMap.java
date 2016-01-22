@@ -2,7 +2,6 @@ package wildlog.ui.maps.implementations;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -21,8 +20,8 @@ public class OtherMap extends AbstractGeoToolsMap<Sighting> {
     private MapType activeMapType = MapType.BASIC_WORLD;
 
     
-    public OtherMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
-        super("Other Maps", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
+    public OtherMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super("Other Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Maps
 // TODO: Base world, rivers en lakes

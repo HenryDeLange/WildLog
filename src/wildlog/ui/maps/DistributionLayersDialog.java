@@ -50,7 +50,7 @@ public class DistributionLayersDialog extends JDialog {
                     }
                 },
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        // Position the dialog
+        // Position the dialog and setup modal background
         UtilsDialog.setDialogToCenter(inParent, thisHandler);
         UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
         UtilsDialog.addModalBackgroundPanel(this, null);
@@ -126,7 +126,7 @@ public class DistributionLayersDialog extends JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Species Distribution Layers");
 
-        jLabel2.setText("<html>Select the Distribution Layers to use for the map (maximum of 5 at once).<br/>WildLog will automatically link distribution maps in the Workspace to the scientific names of know Creatures.<br/>Layers marked in green is sucessfully linked to a Creature, layers in orange or red could not be linked.<br/>Use the Add and Remove buttons below to manage the layers, or manually copy the files to the 'Maps\\Species' folder in the Workspace.</html>");
+        jLabel2.setText("<html>Select the Distribution Layers to use for the map (maximum of 5 at once).<br/>WildLog will automatically link distribution maps in the Workspace to the scientific names of know Creatures.<br/>Layers marked in green is sucessfully linked to a Creature, layers in orange or red could not be linked.</html>");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -225,9 +225,9 @@ public class DistributionLayersDialog extends JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10))))
         );
         layout.setVerticalGroup(
@@ -236,12 +236,12 @@ public class DistributionLayersDialog extends JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(jLabel1)
                         .addGap(4, 4, 4)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5))

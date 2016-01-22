@@ -277,8 +277,8 @@ public class GPSDialog extends JDialog {
 
         btnSave = new javax.swing.JButton();
         btnUsePrevious = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
         btnUseImage = new javax.swing.JButton();
-        btnUseMap = new javax.swing.JButton();
         btnUseGPX = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
@@ -300,6 +300,10 @@ public class GPSDialog extends JDialog {
         jLabel3 = new javax.swing.JLabel();
         cmbAccuracy = new javax.swing.JComboBox();
         btnRemoveGPS = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        btnUseOnlineMap = new javax.swing.JButton();
+        btnUseOfflineMap = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure GPS Point");
@@ -307,9 +311,6 @@ public class GPSDialog extends JDialog {
         setMinimumSize(new java.awt.Dimension(410, 210));
         setModal(true);
         setName("Form"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(415, 295));
-        setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnSave.setToolTipText("Confirm the GPS value.");
@@ -321,7 +322,6 @@ public class GPSDialog extends JDialog {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 110, 60));
 
         btnUsePrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         btnUsePrevious.setText("Use Previous GPS");
@@ -336,7 +336,19 @@ public class GPSDialog extends JDialog {
                 btnUsePreviousActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUsePrevious, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 130, 30));
+
+        btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Close.png"))); // NOI18N
+        btnClear.setText("Clear GPS Point");
+        btnClear.setToolTipText("Reset the GPS point to be empty.");
+        btnClear.setFocusPainted(false);
+        btnClear.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnClear.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnClear.setName("btnClear"); // NOI18N
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         btnUseImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
         btnUseImage.setText("<html><u>Load from Image</u></html>");
@@ -351,21 +363,6 @@ public class GPSDialog extends JDialog {
                 btnUseImageActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 45, 130, 30));
-
-        btnUseMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
-        btnUseMap.setText("Use Map");
-        btnUseMap.setEnabled(false);
-        btnUseMap.setFocusPainted(false);
-        btnUseMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnUseMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnUseMap.setName("btnUseMap"); // NOI18N
-        btnUseMap.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUseMapActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnUseMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 10, 130, 30));
 
         btnUseGPX.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPX.png"))); // NOI18N
         btnUseGPX.setText("<html><u>Load From GPX</u></html>");
@@ -380,15 +377,12 @@ public class GPSDialog extends JDialog {
                 btnUseGPXActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUseGPX, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 45, 130, 30));
 
         jSeparator1.setName("jSeparator1"); // NOI18N
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 390, -1));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Latitude:");
         jLabel1.setName("jLabel1"); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
         tglNorth.setText(Latitudes.NORTH.getText());
         tglNorth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -400,7 +394,6 @@ public class GPSDialog extends JDialog {
                 tglNorthActionPerformed(evt);
             }
         });
-        getContentPane().add(tglNorth, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 60, 30));
 
         tglSouth.setText(Latitudes.SOUTH.getText());
         tglSouth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -412,12 +405,10 @@ public class GPSDialog extends JDialog {
                 tglSouthActionPerformed(evt);
             }
         });
-        getContentPane().add(tglSouth, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 60, 30));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Logitude:");
         jLabel2.setName("jLabel2"); // NOI18N
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
 
         tglWest.setText(Longitudes.WEST.getText());
         tglWest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -429,7 +420,6 @@ public class GPSDialog extends JDialog {
                 tglWestActionPerformed(evt);
             }
         });
-        getContentPane().add(tglWest, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 60, 30));
 
         tglEast.setText(Longitudes.EAST.getText());
         tglEast.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -441,7 +431,6 @@ public class GPSDialog extends JDialog {
                 tglEastActionPerformed(evt);
             }
         });
-        getContentPane().add(tglEast, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 60, 30));
 
         tglDecimalDegrees.setText("DD");
         tglDecimalDegrees.setToolTipText("Decimal-Degrees");
@@ -453,7 +442,6 @@ public class GPSDialog extends JDialog {
                 tglDecimalDegreesActionPerformed(evt);
             }
         });
-        getContentPane().add(tglDecimalDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 60, 45));
 
         tglDegMinSec.setText("DMS");
         tglDegMinSec.setToolTipText("Degrees, Minutes and Decimal-Seconds");
@@ -465,68 +453,57 @@ public class GPSDialog extends JDialog {
                 tglDegMinSecActionPerformed(evt);
             }
         });
-        getContentPane().add(tglDegMinSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 155, 60, 45));
 
         spnLatDeg.setModel(new javax.swing.SpinnerNumberModel(0, 0, 90, 1));
         spnLatDeg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatDeg.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDeg, "#"));
         spnLatDeg.setName("spnLatDeg"); // NOI18N
-        getContentPane().add(spnLatDeg, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 50, 30));
 
         spnLatMin.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnLatMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatMin.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatMin, "#"));
         spnLatMin.setName("spnLatMin"); // NOI18N
-        getContentPane().add(spnLatMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 50, 30));
 
         spnLatSec.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.999999999d, 1.0E-4d));
         spnLatSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatSec.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatSec, "#.####"));
         spnLatSec.setName("spnLatSec"); // NOI18N
-        getContentPane().add(spnLatSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 70, 30));
 
         spnLatDecimal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         spnLatDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 90.0d, 1.0E-5d));
         spnLatDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatDecimal.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDecimal, "#.############"));
         spnLatDecimal.setName("spnLatDecimal"); // NOI18N
-        getContentPane().add(spnLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 190, 30));
 
         spnLonDeg.setModel(new javax.swing.SpinnerNumberModel(0, 0, 180, 1));
         spnLonDeg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonDeg.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonDeg, "#"));
         spnLonDeg.setName("spnLonDeg"); // NOI18N
-        getContentPane().add(spnLonDeg, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 50, 30));
 
         spnLonMin.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnLonMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonMin.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonMin, "#"));
         spnLonMin.setName("spnLonMin"); // NOI18N
-        getContentPane().add(spnLonMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 170, 50, 30));
 
         spnLonSec.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         spnLonSec.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.999999999d, 1.0E-4d));
         spnLonSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonSec.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonSec, "#.####"));
         spnLonSec.setName("spnLonSec"); // NOI18N
-        getContentPane().add(spnLonSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, 70, 30));
 
         spnLonDecimal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         spnLonDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 180.0d, 1.0E-5d));
         spnLonDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonDecimal.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonDecimal, "#.############"));
         spnLonDecimal.setName("spnLonDecimal"); // NOI18N
-        getContentPane().add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 190, 30));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Accuracy:");
         jLabel3.setName("jLabel3"); // NOI18N
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
 
         cmbAccuracy.setModel(new DefaultComboBoxModel(GPSAccuracy.values()));
         cmbAccuracy.setSelectedItem(GPSAccuracy.AVERAGE);
         cmbAccuracy.setName("cmbAccuracy"); // NOI18N
-        getContentPane().add(cmbAccuracy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 260, -1));
 
         btnRemoveGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnRemoveGPS.setText("Remove GPS");
@@ -538,7 +515,167 @@ public class GPSDialog extends JDialog {
                 btnRemoveGPSActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRemoveGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, 120, -1));
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+
+        btnUseOnlineMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnUseOnlineMap.setText("Online Map");
+        btnUseOnlineMap.setToolTipText("Reset the GPS point to be empty.");
+        btnUseOnlineMap.setFocusPainted(false);
+        btnUseOnlineMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnUseOnlineMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnUseOnlineMap.setName("btnUseOnlineMap"); // NOI18N
+        btnUseOnlineMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUseOnlineMapActionPerformed(evt);
+            }
+        });
+
+        btnUseOfflineMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnUseOfflineMap.setText("Offline Map");
+        btnUseOfflineMap.setToolTipText("Reset the GPS point to be empty.");
+        btnUseOfflineMap.setFocusPainted(false);
+        btnUseOfflineMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnUseOfflineMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnUseOfflineMap.setName("btnUseOfflineMap"); // NOI18N
+        btnUseOfflineMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUseOfflineMapActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setName("jPanel1"); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btnUseOnlineMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(15, 15, 15)
+                                .addComponent(btnUseOfflineMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jSeparator1)
+                            .addComponent(jSeparator2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tglNorth, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2)
+                                            .addComponent(tglEast, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tglSouth, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tglWest, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(10, 10, 10)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(spnLatDeg, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(10, 10, 10)
+                                                .addComponent(spnLatMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(10, 10, 10)
+                                                .addComponent(spnLatSec, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(spnLatDecimal, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(120, 120, 120)
+                                                .addComponent(spnLonSec, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(60, 60, 60)
+                                                .addComponent(spnLonMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(spnLonDecimal, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(spnLonDeg, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(10, 10, 10)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(tglDecimalDegrees, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(tglDegMinSec, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jLabel3)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cmbAccuracy, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnRemoveGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(1, 1, 1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnUsePrevious, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUseImage, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUseGPX, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUsePrevious, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnUseGPX, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUseImage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(jLabel1)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tglNorth, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel2)
+                        .addGap(5, 5, 5)
+                        .addComponent(tglEast, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tglSouth, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(tglWest, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spnLatDeg, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnLatMin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnLatSec, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnLatDecimal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spnLonSec, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnLonMin, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnLonDecimal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnLonDeg, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tglDecimalDegrees, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(tglDegMinSec, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10)
+                .addComponent(jLabel3)
+                .addGap(3, 3, 3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbAccuracy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRemoveGPS))
+                .addGap(11, 11, 11)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUseOnlineMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUseOfflineMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -715,9 +852,9 @@ public class GPSDialog extends JDialog {
         }
     }//GEN-LAST:event_btnUseImageActionPerformed
 
-    private void btnUseMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseMapActionPerformed
+    private void btnUseOfflineMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseOfflineMapActionPerformed
 // TODO: GPS point from map - Ek sal die deel later moet uitfigure en doen...
-    }//GEN-LAST:event_btnUseMapActionPerformed
+    }//GEN-LAST:event_btnUseOfflineMapActionPerformed
 
     private void btnRemoveGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveGPSActionPerformed
         UtilsGps.copyGpsBetweenDOs(dataObjectWithGPS, new DataObjectWithGPS() {});
@@ -725,6 +862,14 @@ public class GPSDialog extends JDialog {
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnRemoveGPSActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnUseOnlineMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseOnlineMapActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUseOnlineMapActionPerformed
 
     private void doGpxInput(Path inFile) {
         getGlassPane().setVisible(true);
@@ -876,17 +1021,21 @@ public class GPSDialog extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClear;
     private javax.swing.JButton btnRemoveGPS;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUseGPX;
     private javax.swing.JButton btnUseImage;
-    private javax.swing.JButton btnUseMap;
+    private javax.swing.JButton btnUseOfflineMap;
+    private javax.swing.JButton btnUseOnlineMap;
     private javax.swing.JButton btnUsePrevious;
     private javax.swing.JComboBox cmbAccuracy;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSpinner spnLatDecimal;
     private javax.swing.JSpinner spnLatDeg;
     private javax.swing.JSpinner spnLatMin;

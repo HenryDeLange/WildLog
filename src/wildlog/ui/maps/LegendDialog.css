@@ -1,0 +1,11 @@
+.color-picker .color-picker-label .text {
+    visibility: false;
+}
+.color-picker .color-picker-label .picker-color {
+    -fx-pref-width: 40;
+    -fx-pref-height: 30;
+}
+.color-picker .color-picker-label .picker-color .picker-color-rect {
+    -fx-scale-x: 3;
+    -fx-scale-y: 2;
+}

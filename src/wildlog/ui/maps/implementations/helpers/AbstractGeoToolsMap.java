@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -33,7 +32,6 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
-import org.geotools.styling.SLD;
 import org.geotools.styling.Style;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -47,28 +45,24 @@ import wildlog.utils.WildLogPaths;
 
 
 public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
-    protected final JFXPanel jfxPanel;
     protected GeoToolsMapJavaFX map = null;
     protected boolean showCountries = false;
     protected BundledMapLayers activeBaseLayer = null;
-    protected MapsBaseDialog baseDialog;
     protected boolean enhanceContrast = false;
 
-    public AbstractGeoToolsMap(String inMapButtonName, List<T> inList, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
-        super(inMapButtonName, inList, inChartDescLabel);
-        jfxPanel = inJFXPanel;
-        baseDialog = inMapsBaseDialog;
+    public AbstractGeoToolsMap(String inMapButtonName, List<T> inList, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super(inMapButtonName, inList, inChartDescLabel, inMapsBaseDialog);
     }
 
     @Override
-    public void loadMap(Scene inScene) {
+    public void loadMap() {
         // Setup loading label
         final Label lblLoading = new Label("... LOADING ...");
         lblLoading.setPadding(new Insets(20));
         lblLoading.setFont(new Font(24));
         lblLoading.setTextAlignment(TextAlignment.CENTER);
         lblLoading.setAlignment(Pos.CENTER);
-        inScene.setRoot(lblLoading);
+        mapsBaseDialog.getJFXMapPanel().getScene().setRoot(lblLoading);
         // Create the map
         Platform.runLater(new Runnable() {
             @Override
@@ -80,15 +74,14 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                 if (map != null) {
                     bounds = map.getBounds();
                 }
-// FIXME: Daai bug is terug waar die map nie die eerste keer reg laai nie (ek glo omdat die width en height nog nie beskikbaar is nie)
                 // Create the new map
-                map = new GeoToolsMapJavaFX(jfxPanel, enhanceContrast);
+                map = new GeoToolsMapJavaFX(mapsBaseDialog.getJFXMapPanel(), enhanceContrast);
                 // Reapply the map position and zoom
                 if (bounds != null) {
                     map.setBounds(bounds);
                 }
                 // Continue to create the layers for the map
-                createMap(inScene);
+                createMap(mapsBaseDialog.getJFXMapPanel().getScene());
                 // Refresh the map to display the added layers
                 map.reloadMap();
             }
@@ -213,9 +206,10 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
     }
     
     protected Layer getLayerForSightings(final List<Sighting> inLstSightings) {
+// TODO: Figure uit hoe om die map te zoom na waar die punte geplot is
         FeatureLayer pointLayer = null;
         try {
-            SimpleFeatureType type = DataUtilities.createType("MyPointType", "geom:Point,name:String,mydata:String");
+            SimpleFeatureType type = DataUtilities.createType("WildLogPointType", "geom:Point,name:String,mydata:String");
             SimpleFeatureBuilder builder = new SimpleFeatureBuilder(type);
             DefaultFeatureCollection collection = new DefaultFeatureCollection();
             GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
@@ -224,8 +218,9 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                 SimpleFeature feature = builder.buildFeature(Long.toString(sighting.getSightingCounter()), new Object[] {sighting.toString()});
                 collection.add(feature);
             }
-            Style pointStyle = SLD.createPointStyle("Circle", Color.DARK_GRAY, Color.LIGHT_GRAY, 0.7f, 10);
-            pointLayer = new FeatureLayer(collection, pointStyle, "TheLayerTitle");
+//            Style pointStyle = SLD.createPointStyle("Circle", new Color(80, 15, 5), new Color(175, 30, 20), 0.7f, 10);
+            Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 0.8, 0.5, 12);
+            pointLayer = new FeatureLayer(collection, pointStyle, "WildLogPointLayer");
 // FIXME: Make the points selectable... (Maybe too small, or something weird about the layer or feature types...)
         }
         catch (SchemaException | FactoryRegistryException ex) {

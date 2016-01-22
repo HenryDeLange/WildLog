@@ -2,7 +2,6 @@ package wildlog.ui.maps.implementations;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -21,8 +20,8 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
     private MapType activeMapType = MapType.MODERN;
 
     
-    public EarthMap(List<Sighting> inLstData, JLabel inChartDescLabel, JFXPanel inJFXPanel, MapsBaseDialog inMapsBaseDialog) {
-        super("World Maps (Offline)", inLstData, inChartDescLabel, inJFXPanel, inMapsBaseDialog);
+    public EarthMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+        super("World Maps (Offline)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Maps
         Button btnModernMap = new Button("View Modern World");

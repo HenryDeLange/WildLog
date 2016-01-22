@@ -125,15 +125,15 @@ public class MapsBaseDialog extends JFrame {
         lblMapDescription.setText("Additional information for the selected map will be shown in this area.");
         // Setup the default reports
         List<AbstractMap<Sighting>> lstMaps = new ArrayList<>(9);
-        lstMaps.add(new PointMap(lstFilteredData, lblMapDescription));
-        lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
-        lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
-        lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription));
-        lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
-        lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
-        lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
-        lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription));
-        lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, jfxMapPanel, this));
+        lstMaps.add(new PointMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, this));
         // Add the reports
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(10);
@@ -144,7 +144,7 @@ public class MapsBaseDialog extends JFrame {
                     @Override
                     public void handle(ActionEvent inEvent) {
                         setActiveMap(map);
-                        map.loadMap(jfxMapPanel.getScene());
+                        map.loadMap();
                     }
                 });
                 ((Control) node).setMaxWidth(500);
@@ -613,6 +613,10 @@ public class MapsBaseDialog extends JFrame {
             activeMap.setDataList(lstFilteredData);
             activeMap.createMap(jfxReportChartPanel.getScene());
         }
+    }
+
+    public JFXPanel getJFXMapPanel() {
+        return jfxMapPanel;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
