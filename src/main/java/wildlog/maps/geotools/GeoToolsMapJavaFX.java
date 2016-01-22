@@ -26,6 +26,7 @@ import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
 import org.geotools.renderer.GTRenderer;
 import org.geotools.renderer.lite.StreamingRenderer;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 public class GeoToolsMapJavaFX {
@@ -63,7 +64,7 @@ public class GeoToolsMapJavaFX {
         imageView.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent inScrollEvent) {
-// FIXME: Sit 'n delay in om nie te veel onnodige setBounds te doen terwyl daar baie gescroll word nie...?
+// FIXME: Sit miskien 'n delay in om nie te veel onnodige setBounds te doen terwyl daar baie gescroll word nie...? (Soos die resize)
                 final double ZOOM_SCALE = 0.9;
                 if (inScrollEvent.getDeltaY() == 0) {
                     return;
@@ -164,7 +165,7 @@ public class GeoToolsMapJavaFX {
         jfxPanel.addComponentListener(new ResizeComponentAdapter());
     }
     
-// TODO: Doen dalk iets soort gelyk vir die scrollwheel zoom
+// TODO: Doen dalk iets soortgelyk vir die scrollwheel zoom
     private class ResizeComponentAdapter extends ComponentAdapter implements ActionListener {
         private Timer delayTimer = null;
         
@@ -278,7 +279,16 @@ public class GeoToolsMapJavaFX {
     }
     
     public void setBounds(ReferencedEnvelope inReferencedEnvelope) {
-        mapContent.getViewport().setBounds(inReferencedEnvelope);
+         Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                mapContent.getViewport().setBounds(inReferencedEnvelope);
+            }
+         });
+    }
+    
+    public CoordinateReferenceSystem getMapCoordinateReferenceSystem() {
+        return mapContent.getCoordinateReferenceSystem();
     }
     
 }

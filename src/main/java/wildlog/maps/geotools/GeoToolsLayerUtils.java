@@ -110,10 +110,10 @@ public class GeoToolsLayerUtils {
         } 
         else 
         if (LineString.class.isAssignableFrom(geomType) || MultiLineString.class.isAssignableFrom(geomType)) {
-            return createLineStyle();
+            return createLineStyle(inLineColor, inLineOpacity);
         } 
         else {
-            return createPointStyle();
+            return createPointStyle(inLineColor, inFillColor, inLineOpacity, inFillOpacity, 10);
         }
     }
 
@@ -133,10 +133,10 @@ public class GeoToolsLayerUtils {
         return style;
     }
     
-    private static Style createLineStyle() {
+    private static Style createLineStyle(Color inLineColor, Double inLineOpacity) {
         StyleFactory styleFactory = CommonFactoryFinder.getStyleFactory();
         FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2();
-        Stroke stroke = styleFactory.createStroke(filterFactory.literal(Color.BLUE), filterFactory.literal(1));
+        Stroke stroke = styleFactory.createStroke(filterFactory.literal(inLineColor), filterFactory.literal(inLineOpacity));
         //Setting the geometryPropertyName arg to null signals that we want to draw the default geomettry of features
         Symbolizer sym = styleFactory.createLineSymbolizer(stroke, null);
         Rule rule = styleFactory.createRule();
@@ -147,16 +147,16 @@ public class GeoToolsLayerUtils {
         return style;
     }
 
-    private static Style createPointStyle() {
+    public static Style createPointStyle(Color inLineColor, Color inFillColor, Double inLineOpacity, Double inFillOpacity, int inSize) {
         StyleFactory styleFactory = CommonFactoryFinder.getStyleFactory();
         FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2();
         Graphic gr = styleFactory.createDefaultGraphic();
         Mark mark = styleFactory.getCircleMark();
-        mark.setStroke(styleFactory.createStroke(filterFactory.literal(Color.BLUE), filterFactory.literal(1)));
-        mark.setFill(styleFactory.createFill(filterFactory.literal(Color.CYAN)));
+        mark.setStroke(styleFactory.createStroke(filterFactory.literal(inLineColor), filterFactory.literal(inLineOpacity)));
+        mark.setFill(styleFactory.createFill(filterFactory.literal(inFillColor), filterFactory.literal(inFillOpacity)));
         gr.graphicalSymbols().clear();
         gr.graphicalSymbols().add(mark);
-        gr.setSize(filterFactory.literal(5));
+        gr.setSize(filterFactory.literal(inSize));
         // Setting the geometryPropertyName arg to null signals that we want to draw the default geomettry of features
         PointSymbolizer sym = styleFactory.createPointSymbolizer(gr, null);
         Rule rule = styleFactory.createRule();
@@ -168,7 +168,7 @@ public class GeoToolsLayerUtils {
     }
     
     public static Style createShapefileStyleFile(FeatureSource featureSource) {
-// TODO: Read the style from the config file bundled bundled in the shapefile
+// TODO: Read a style from the config file bundled with the shapefile
         return null;
     }
     
