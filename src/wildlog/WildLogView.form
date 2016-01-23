@@ -1027,10 +1027,6 @@
                                       <Component id="jSeparator6" alignment="0" min="-2" pref="455" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="184" max="-2" attributes="0"/>
-                                  <Component id="jButton1" min="-2" pref="168" max="-2" attributes="0"/>
-                              </Group>
                           </Group>
                           <EmptySpace min="160" pref="495" max="32767" attributes="0"/>
                       </Group>
@@ -1068,9 +1064,7 @@
                           <Component id="jSeparator5" min="-2" pref="10" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="lblWorkspaceName" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" pref="46" max="-2" attributes="0"/>
-                          <EmptySpace pref="17" max="32767" attributes="0"/>
+                          <EmptySpace pref="91" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel3" alignment="1" min="-2" pref="228" max="-2" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
@@ -1338,15 +1332,6 @@
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblSettingsPath" noResource="true"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JButton" name="jButton1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="NEW MAPS"/>
-                    <Property name="name" type="java.lang.String" value="jButton1" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
-                  </Events>
                 </Component>
               </SubComponents>
             </Container>

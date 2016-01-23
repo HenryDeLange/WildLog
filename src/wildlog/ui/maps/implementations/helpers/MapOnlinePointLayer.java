@@ -1,4 +1,4 @@
-package wildlog.maps.layers;
+package wildlog.ui.maps.implementations.helpers;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.JXMapViewer;
@@ -21,12 +22,8 @@ import org.jdesktop.swingx.mapviewer.WaypointRenderer;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
-import wildlog.maps.helpers.WildLogScrollPanel;
 
-/**
- *
- * @author Henry
- */
+
 public class MapOnlinePointLayer {
     class MapPoint {
         public double latitude;
@@ -46,9 +43,6 @@ public class MapOnlinePointLayer {
         points.clear();
         clickedPoints.clear();
         map.getMainMap().setOverlayPainter(null);
-//        for (MouseListener mouse : map.getMainMap().getMouseListeners())
-//            if (mouse instanceof WildLogMapMouseListener)
-//                map.getMainMap().removeMouseListener(mouse);
     }
 
     public void addPoint(final double inLatitude, final double inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
@@ -73,15 +67,16 @@ public class MapOnlinePointLayer {
                 clickedPoints.add(point);
             }
             else {
-                WildLogScrollPanel scrollPane = null;
+                JScrollPane scrollPane = null;
                 for (Component comp : map.getMainMap().getComponents()) {
-                    if (comp instanceof WildLogScrollPanel) {
-                        scrollPane = (WildLogScrollPanel)comp;
+                    if (comp instanceof JScrollPane) {
+                        scrollPane = (JScrollPane)comp;
                         break;
                     }
                 }
-                if (scrollPane != null)
+                if (scrollPane != null) {
                     scrollPane.setVisible(false);
+                }
             }
         }
         if (clickedPoints.size() > 0) {
@@ -93,24 +88,26 @@ public class MapOnlinePointLayer {
 
     public void loadNextClickedPoint(WildLogApp inApp) {
         clickedPointIndex++;
-        if (clickedPointIndex >= clickedPoints.size())
+        if (clickedPointIndex >= clickedPoints.size()) {
             clickedPointIndex = 0;
+        }
         loadClickedPoint(inApp);
     }
 
     public void loadPrevClickedPoint(WildLogApp inApp) {
         clickedPointIndex--;
-        if (clickedPointIndex < 0)
+        if (clickedPointIndex < 0) {
             clickedPointIndex = clickedPoints.size()-1;
+        }
         loadClickedPoint(inApp);
     }
 
     private void loadClickedPoint(WildLogApp inApp) {
         if (clickedPointIndex >= 0 && clickedPointIndex < clickedPoints.size()) {
-            WildLogScrollPanel scrollPane = null;
+            JScrollPane scrollPane = null;
             for (Component comp : map.getMainMap().getComponents()) {
-                if (comp instanceof WildLogScrollPanel) {
-                    scrollPane = (WildLogScrollPanel)comp;
+                if (comp instanceof JScrollPane) {
+                    scrollPane = (JScrollPane)comp;
                     JTextPane textPane = (JTextPane)scrollPane.getViewport().getComponent(0);
                     textPane.setText("Showing " + (clickedPointIndex+1) + " of " + clickedPoints.size() + "<br/>" + clickedPoints.get(clickedPointIndex).objectWithHTML.toHTML(false, true, true, inApp, UtilsHTMLExportTypes.ForMap, null));
                     break;
@@ -131,9 +128,7 @@ public class MapOnlinePointLayer {
         //create a WaypointPainter to draw the points
         WaypointPainter painter = new WaypointPainter();
         painter.setWaypoints(waypoints);
-        /* Optionele point painter. Ek kan dalk die WayPoint class extend en 'n
-         * custom ElementType filed by sit om die punte ander kleure te gee.
-         */
+        // Optionele point painter. Ek kan dalk die WayPoint class extend en 'n custom ElementType filed by sit om die punte ander kleure te gee.
         painter.setRenderer(new WaypointRenderer() {
             @Override
             public boolean paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint wp) {

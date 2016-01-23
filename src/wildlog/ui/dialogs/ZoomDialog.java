@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.nio.file.Path;
 import java.util.List;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import wildlog.WildLogApp;
@@ -17,7 +18,7 @@ import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
 
 
-public class ZoomDialog extends javax.swing.JDialog {
+public class ZoomDialog extends JDialog {
     private final List<Path> filesToView;
     private int fileIndex;
 

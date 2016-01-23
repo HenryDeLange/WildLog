@@ -124,7 +124,7 @@
                   </Group>
                   <Component id="imageLabel" min="-2" pref="180" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="21" max="32767" attributes="0"/>
+              <EmptySpace pref="29" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -202,7 +202,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblDescription">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;Use at own risk. WildLog is developed by Henry de Lange.&lt;br/&gt;WildLog is a Java application and makes use of third party libraries to help with some of the functionality: OpenMap, H2, SwingX, JMF, MetadataExtractor, MediaUtil and PDFBox. See the application folder for license details.&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;Use at own risk. WildLog is developed by Henry de Lange.&lt;br/&gt;WildLog is a Java application and makes use of third party libraries to help with some of the functionality: GeoTools, H2, SwingX, JMF, MetadataExtractor, MediaUtil and PDFBox. See the application folder for license details.&lt;/html&gt;"/>
         <Property name="name" type="java.lang.String" value="lblDescription" noResource="true"/>
       </Properties>
       <AuxValues>

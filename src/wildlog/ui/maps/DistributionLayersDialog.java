@@ -37,6 +37,7 @@ public class DistributionLayersDialog extends JDialog {
     
     public DistributionLayersDialog(JFrame inParent, String inSelectedSpecies) {
         super(inParent);
+        System.out.println("[DistributionLayersDialog]");
         selectedSpecies = inSelectedSpecies;
         initComponents();
         // Setup the escape key

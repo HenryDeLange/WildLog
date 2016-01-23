@@ -9,6 +9,7 @@ public class WildLogAboutBox extends JDialog {
 
     public WildLogAboutBox(WildLogApp inApp) {
         super();
+        System.out.println("[WildLogAboutBox]");
         initComponents();
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(inApp.getMainFrame(), this);
@@ -69,7 +70,7 @@ public class WildLogAboutBox extends JDialog {
         lblActiveVersion.setText(WildLogApp.WILDLOG_VERSION);
         lblActiveVersion.setName("lblActiveVersion"); // NOI18N
 
-        lblDescription.setText("<html>Use at own risk. WildLog is developed by Henry de Lange.<br/>WildLog is a Java application and makes use of third party libraries to help with some of the functionality: OpenMap, H2, SwingX, JMF, MetadataExtractor, MediaUtil and PDFBox. See the application folder for license details.</html>");
+        lblDescription.setText("<html>Use at own risk. WildLog is developed by Henry de Lange.<br/>WildLog is a Java application and makes use of third party libraries to help with some of the functionality: GeoTools, H2, SwingX, JMF, MetadataExtractor, MediaUtil and PDFBox. See the application folder for license details.</html>");
         lblDescription.setName("lblDescription"); // NOI18N
 
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/About.gif"))); // NOI18N
@@ -198,7 +199,7 @@ public class WildLogAboutBox extends JDialog {
                             .addComponent(lblWebsite)
                             .addComponent(lblWebsiteAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();

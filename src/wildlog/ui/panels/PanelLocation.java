@@ -29,7 +29,6 @@ import wildlog.data.utils.UtilsData;
 import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.GPSDialog;
-import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -38,6 +37,7 @@ import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
@@ -1309,7 +1309,8 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            MappingDialog dialog = new MappingDialog(app, locationWL, null, null, null, null);
+            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + locationWL.getDisplayName(), 
+                    app.getDBI().list(new Sighting(null, locationWL.getName(), null), true));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapActionPerformed

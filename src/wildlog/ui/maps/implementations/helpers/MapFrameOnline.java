@@ -1,30 +1,27 @@
-package wildlog.maps;
+package wildlog.ui.maps.implementations.helpers;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import javax.swing.JFrame;
+import java.awt.event.MouseListener;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import org.jdesktop.swingx.JXMapKit;
 import wildlog.WildLogApp;
-import wildlog.maps.helpers.WildLogMapMouseListener;
-import wildlog.maps.helpers.WildLogScrollPanel;
-import wildlog.maps.layers.MapOnlinePointLayer;
 
 
-public class MapFrameOnline extends JFrame {
+public class MapFrameOnline extends JPanel {
     private final JXMapKit map;
     private final MapOnlinePointLayer pointLayer;
 
-    public MapFrameOnline(String inTitle, JXMapKit inMap, final WildLogApp inApp) {
-        super(inTitle);
+    public MapFrameOnline(JXMapKit inMap, final WildLogApp inApp) {
         map = inMap;
         JTextPane textPane = new JTextPane();
         textPane.setEditable(false);
         textPane.setContentType("text/html");
         textPane.setPreferredSize(new Dimension(450, 550));
-        WildLogScrollPanel scrollPane = new WildLogScrollPanel(textPane);
+        JScrollPane scrollPane = new JScrollPane(textPane);
         map.getMainMap().add(scrollPane);
         textPane.setText("<u><b>Information Box:</b></u> "
                 + "<br/><br/>Click on a point on the map to view more details. "
@@ -45,7 +42,7 @@ public class MapFrameOnline extends JFrame {
     }
 
     private void setupMouseListener(final WildLogApp inApp) {
-        map.getMainMap().addMouseListener(new WildLogMapMouseListener() {
+        map.getMainMap().addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent event) {
                 pointLayer.showPopup(event, inApp);
@@ -63,12 +60,6 @@ public class MapFrameOnline extends JFrame {
             public void mouseExited(MouseEvent e) {
             }
         });
-    }
-
-    public void showMap(Color inColor) {
-        pointLayer.loadPoints(inColor);
-        this.setVisible(true);
-        this.toFront();
     }
 
 }

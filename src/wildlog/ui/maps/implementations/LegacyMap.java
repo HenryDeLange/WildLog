@@ -1,6 +1,10 @@
 package wildlog.ui.maps.implementations;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
@@ -12,11 +16,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.maps.MapFrameOnline;
+import wildlog.ui.maps.implementations.helpers.MapFrameOnline;
 import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
@@ -64,14 +72,14 @@ public class LegacyMap extends AbstractMap<Sighting> {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                MapFrameOnline map = WildLogApp.getApplication().getMapOnline();
+                MapFrameOnline map = getOldOnlineMap();
                 map.getPointLayer().clearPoints();
                 for (Sighting sighting : inLstSightings) {
                     map.getPointLayer().addPoint(UtilsGps.getLatDecimalDegree(sighting), UtilsGps.getLonDecimalDegree(sighting), 
                             Color.ORANGE, sighting, WildLogApp.getApplication());
                 }
                 map.getPointLayer().loadPoints(Color.YELLOW);
-                swingNode.setContent(map.getRootPane());
+                swingNode.setContent(map);
             }
         });
         AnchorPane.setTopAnchor(swingNode, 0.0);
@@ -80,6 +88,51 @@ public class LegacyMap extends AbstractMap<Sighting> {
         AnchorPane.setRightAnchor(swingNode, 0.0);
         parent.getChildren().add(swingNode);
         return parent;
+    }
+    
+    private MapFrameOnline getOldOnlineMap() {
+        final GeoPosition defaultPosition = new GeoPosition(
+                WildLogApp.getApplication().getWildLogOptions().getDefaultLatitude(), 
+                WildLogApp.getApplication().getWildLogOptions().getDefaultLongitude());
+        JXMapKit mapOnline = new JXMapKit();
+        MapFrameOnline mapOnlineFrame = new MapFrameOnline(mapOnline, WildLogApp.getApplication());
+        mapOnlineFrame.setPreferredSize(new Dimension(950, 650));
+        mapOnlineFrame.setLayout(new BorderLayout());
+        mapOnline.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
+        mapOnline.setAddressLocationShown(false);
+        mapOnline.setName("mapOnline");
+        mapOnline.setAddressLocation(defaultPosition);
+        mapOnline.setZoom(12);
+        mapOnlineFrame.add(mapOnline, BorderLayout.CENTER);
+        // Previous button
+        JButton btnPrevMapPoint = new JButton();
+        btnPrevMapPoint.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mapOnlineFrame.getPointLayer().loadPrevClickedPoint(WildLogApp.getApplication());
+            }
+        });
+        btnPrevMapPoint.setPreferredSize(new Dimension(60, 25));
+        btnPrevMapPoint.setFocusPainted(false);
+        btnPrevMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif")));
+        btnPrevMapPoint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPrevMapPoint.setToolTipText("Load the previous Observation in the information panel.");
+        mapOnlineFrame.add(btnPrevMapPoint, BorderLayout.WEST);
+        // Next button
+        JButton btnNextMapPoint = new JButton();
+        btnNextMapPoint.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mapOnlineFrame.getPointLayer().loadNextClickedPoint(WildLogApp.getApplication());
+            }
+        });
+        btnNextMapPoint.setPreferredSize(new Dimension(60, 25));
+        btnNextMapPoint.setFocusPainted(false);
+        btnNextMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif")));
+        btnNextMapPoint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNextMapPoint.setToolTipText("Load the next Observation in the information panel.");
+        mapOnlineFrame.add(btnNextMapPoint, BorderLayout.EAST);
+        return mapOnlineFrame;
     }
     
 }

@@ -63,11 +63,11 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.dialogs.ExportDialog;
-import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.LazyTreeNode;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.renderers.WildLogTreeCellRenderer;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.reports.ReportsBaseDialog;
@@ -1291,27 +1291,32 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     public void actionPerformed(ActionEvent e) {
                         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                MappingDialog mappingDialog = new MappingDialog(app, tempLocation, null, null, null, null);
-                                mappingDialog.setVisible(true);
+                                Location location = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + location.getDisplayName(), 
+                                        app.getDBI().list(new Sighting(null, location.getName(), null), true));
+                                dialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                MappingDialog mappingDialog = new MappingDialog(app, null, tempElement, null, null, null);
-                                mappingDialog.setVisible(true);
+                                Element element = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + element.getDisplayName(), 
+                                        app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), true));
+                                dialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                MappingDialog mappingDialog = new MappingDialog(app, null, null, tempVisit, null, null);
-                                mappingDialog.setVisible(true);
+                                Visit visit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
+                                        app.getDBI().list(new Sighting(null, null, visit.getName()), true));
+                                dialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                                MappingDialog mappingDialog = new MappingDialog(app, null, null, null, tempSighting, null);
-                                mappingDialog.setVisible(true);
+                                Sighting sighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
+                                List<Sighting> lstSightings = new ArrayList<>(1);
+                                lstSightings.add(sighting);
+                                MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + sighting.getDisplayName(), lstSightings);
+                                dialog.setVisible(true);
                             }
                         }
                     }

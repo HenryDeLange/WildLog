@@ -8,6 +8,7 @@ public class WildNoteAboutBox extends JDialog {
 
     public WildNoteAboutBox() {
         super();
+        System.out.println("[WildNoteAboutBox]");
         initComponents();
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);

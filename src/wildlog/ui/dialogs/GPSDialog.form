@@ -8,7 +8,7 @@
       <Connection code="new ImageIcon(app.getClass().getResource(&quot;resources/icons/GPS.png&quot;)).getImage()" type="code"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[410, 210]"/>
+      <Dimension value="[410, 510]"/>
     </Property>
     <Property name="modal" type="boolean" value="true"/>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
@@ -109,7 +109,7 @@
                       <EmptySpace min="15" pref="15" max="-2" attributes="0"/>
                       <Component id="btnSave" min="-2" pref="110" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="pnlMap" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
@@ -131,7 +131,7 @@
                           <Component id="btnUseImage" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="btnSave" min="-2" pref="64" max="-2" attributes="0"/>
+                  <Component id="btnSave" min="-2" pref="60" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
@@ -187,7 +187,7 @@
                   <Component id="btnUseOfflineMap" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-              <Component id="jPanel1" pref="245" max="32767" attributes="0"/>
+              <Component id="pnlMap" pref="245" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -238,6 +238,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Clear GPS Point"/>
         <Property name="toolTipText" type="java.lang.String" value="Reset the GPS point to be empty."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -583,6 +586,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Online Map"/>
         <Property name="toolTipText" type="java.lang.String" value="Reset the GPS point to be empty."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -601,6 +607,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Offline Map"/>
         <Property name="toolTipText" type="java.lang.String" value="Reset the GPS point to be empty."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -612,17 +621,17 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUseOfflineMapActionPerformed"/>
       </Events>
     </Component>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="pnlMap">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
             <EtchetBorder/>
           </Border>
         </Property>
-        <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="pnlMap" noResource="true"/>
       </Properties>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
     </Container>
   </SubComponents>
 </Form>

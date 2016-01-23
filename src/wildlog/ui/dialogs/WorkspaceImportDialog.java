@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -39,7 +40,7 @@ import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
 
-public class WorkspaceImportDialog extends javax.swing.JDialog {
+public class WorkspaceImportDialog extends JDialog {
     private WildLogApp app;
     private Path importWorkspace;
     private WildLogDBI importDBI = null;

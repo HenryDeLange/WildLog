@@ -100,7 +100,6 @@ import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.filters.CsvFilter;
 import wildlog.ui.helpers.filters.WildNoteSyncFilter;
-import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.PanelTabBrowse;
 import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
@@ -305,7 +304,6 @@ public final class WildLogView extends JFrame {
         jLabel21 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         lblSettingsPath = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         tabElement = new javax.swing.JPanel();
         tabSightings = new javax.swing.JPanel();
@@ -537,14 +535,6 @@ public final class WildLogView extends JFrame {
         lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString());
         lblSettingsPath.setName("lblSettingsPath"); // NOI18N
 
-        jButton1.setText("NEW MAPS");
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
         tabHome.setLayout(tabHomeLayout);
         tabHomeLayout.setHorizontalGroup(
@@ -594,10 +584,7 @@ public final class WildLogView extends JFrame {
                         .addGap(50, 50, 50)
                         .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
-                            .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addGap(184, 184, 184)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(160, 495, Short.MAX_VALUE))
         );
         tabHomeLayout.setVerticalGroup(
@@ -629,9 +616,7 @@ public final class WildLogView extends JFrame {
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
@@ -3702,12 +3687,6 @@ public final class WildLogView extends JFrame {
         }
     }//GEN-LAST:event_mnuUserGuideActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + "TODO: SOME NAME", 
-                app.getDBI().list(new Sighting(), true));
-        dialog.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void mnuCheckUpdatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCheckUpdatesActionPerformed
         ExecutorService executor = Executors.newSingleThreadExecutor(new NamedThreadFactory("WL_CheckForUpdates"));
         // Try to check the latest version
@@ -3964,7 +3943,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenu externalMenu;
     private javax.swing.JMenu extraMenu;
     private javax.swing.JMenu importMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

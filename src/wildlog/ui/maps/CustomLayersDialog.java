@@ -36,6 +36,7 @@ public class CustomLayersDialog extends JDialog {
     
     public CustomLayersDialog(JFrame inParent) {
         super(inParent);
+        System.out.println("[CustomLayersDialog]");
         initComponents();
         // Setup the escape key
         final CustomLayersDialog thisHandler = this;

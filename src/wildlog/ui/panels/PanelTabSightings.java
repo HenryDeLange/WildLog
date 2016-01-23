@@ -22,10 +22,10 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
-import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.reports.ReportsBaseDialog;
@@ -260,14 +260,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGap(0, 0, 0)
                 .addGroup(pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnGoElement, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pnlViewsLayout.createSequentialGroup()
-                        .addGroup(pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnGoVisit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, 0))
-                    .addGroup(pnlViewsLayout.createSequentialGroup()
-                        .addComponent(btnGoBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, 0))))
+                    .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGoVisit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGoBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         pnlViewsLayout.setVerticalGroup(
             pnlViewsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -416,6 +411,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterMap.setText("Filter by Map");
         btnFilterMap.setToolTipText("Filter the Observations according to an area on a map.");
         btnFilterMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterMap.setEnabled(false);
         btnFilterMap.setFocusPainted(false);
         btnFilterMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -805,7 +801,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void btnViewMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMapActionPerformed
         List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
         if (!lstSightingsToUse.isEmpty()) {
-            MappingDialog dialog = new MappingDialog(app, null, null, null, null, lstSightingsToUse);
+            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - Observations", lstSightingsToUse);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnViewMapActionPerformed

@@ -34,7 +34,9 @@ public class LegendDialog extends JDialog {
 
     public LegendDialog(JFrame inParent, Map<String, Color> inMapLegends) {
         // NOTE: This JDialog can't be modal because it breaks the nested JavaFX stuff...
+        //       See http://stackoverflow.com/questions/29264385/javafx-swing-window-does-not-open-after-update-to-java-1-8u40
         super(inParent);
+        System.out.println("[LegendDialog]");
         initComponents();
         mapLegends = inMapLegends;
         // Setup the escape key

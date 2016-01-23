@@ -27,13 +27,13 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.AdvancedDialog;
 import wildlog.ui.dialogs.ExportDialog;
-import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
@@ -1392,17 +1392,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            List<Sighting> lstSightings = null;
-            if (tblSightings.getSelectedRowCount() > 0) {
-                lstSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
-                for (int row : tblSightings.getSelectedRows())  {
-                    lstSightings.add(app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6))));
-                }
-            }
-            else {
-                lstSightings = app.getDBI().list(new Sighting(null, locationForVisit.getName(), visit.getName()), false);
-            }
-            MappingDialog dialog = new MappingDialog(app, null, null, visit, sighting, lstSightings);
+            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
+                    app.getDBI().list(new Sighting(null, null, visit.getName()), true));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapSightingActionPerformed

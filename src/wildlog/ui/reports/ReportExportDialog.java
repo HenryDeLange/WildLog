@@ -21,6 +21,7 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.maps.kml.UtilsKML;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
@@ -29,22 +30,26 @@ import wildlog.utils.WildLogPaths;
 
 
 public class ReportExportDialog extends JDialog {
-    private final BufferedImage chartImage;
-    private final Node chartNode;
-    private final String reportName;
+    private final BufferedImage bufferedImage;
+    private final Node node;
+    private final String name;
     private final List<Sighting> lstSightings;
     
     
-    public ReportExportDialog(JFrame inParent, BufferedImage inChartImage, Node inChartNode, String inReportName, List<Sighting> inLstSightings) {
+    public ReportExportDialog(JFrame inParent, BufferedImage inImage, Node inNode, String inName, List<Sighting> inLstSightings, boolean isForMap) {
         super(inParent);
         System.out.println("[ReportExportDialog]");
         // Set passed in values
-        chartImage = inChartImage;
-        chartNode = inChartNode;
-        reportName = inReportName;
+        bufferedImage = inImage;
+        node = inNode;
+        name = inName;
         lstSightings = inLstSightings;
         // Auto generated code
         initComponents();
+        // Hide the KML export when not working with maps
+        if (!isForMap) {
+            btnExportKML.setVisible(false);
+        }
         // Pack
         pack();
         // Setup the default behavior
@@ -67,6 +72,7 @@ public class ReportExportDialog extends JDialog {
         btnExportCSV = new javax.swing.JButton();
         btnExportPDF = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
+        btnExportKML = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Report Export Formats");
@@ -171,6 +177,25 @@ public class ReportExportDialog extends JDialog {
         });
         getContentPane().add(btnPrint);
 
+        btnExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
+        btnExportKML.setText("Export as KML");
+        btnExportKML.setToolTipText("Export a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc.");
+        btnExportKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportKML.setFocusPainted(false);
+        btnExportKML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportKML.setIconTextGap(11);
+        btnExportKML.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportKML.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportKML.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportKML.setName("btnExportKML"); // NOI18N
+        btnExportKML.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportKML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportKMLActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportKML);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -179,13 +204,13 @@ public class ReportExportDialog extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 setProgress(0);
-                setMessage("Exporting Report CSV for '" + reportName + "'");
-                Path filePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_CSV.getAbsoluteFullPath().resolve(reportName + " (" + System.currentTimeMillis() + ").csv");
+                setMessage("Exporting Report CSV for '" + name + "'");
+                Path filePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_CSV.getAbsoluteFullPath().resolve(name + " (" + System.currentTimeMillis() + ").csv");
                 Files.createDirectories(filePath.getParent());
                 WildLogApp.getApplication().getDBI().doExportCSV(filePath, false, null, null, null, null, lstSightings);
                 UtilsFileProcessing.openFile(filePath);
                 setProgress(100);
-                setMessage("Done Exporting Report CSV for '" + reportName + "'");
+                setMessage("Done Exporting Report CSV for '" + name + "'");
                 return null;
             }
         });
@@ -194,18 +219,18 @@ public class ReportExportDialog extends JDialog {
     }//GEN-LAST:event_btnExportCSVActionPerformed
 
     private void btnExportImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportImageActionPerformed
-        if (chartImage != null) {
+        if (bufferedImage != null) {
             UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
-                    setMessage("Exporting Report Image for '" + reportName + "'");
-                    Path filePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_PNG.getAbsoluteFullPath().resolve(reportName + " (" + System.currentTimeMillis() + ").png");
+                    setMessage("Exporting Report Image for '" + name + "'");
+                    Path filePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_PNG.getAbsoluteFullPath().resolve(name + " (" + System.currentTimeMillis() + ").png");
                     Files.createDirectories(filePath.getParent());
-                    ImageIO.write(chartImage, "png", filePath.toFile());
+                    ImageIO.write(bufferedImage, "png", filePath.toFile());
                     UtilsFileProcessing.openFile(filePath);
                     setProgress(100);
-                    setMessage("Done Exporting Report Image for '" + reportName + "'");
+                    setMessage("Done Exporting Report Image for '" + name + "'");
                     return null;
                 }
             });
@@ -215,21 +240,21 @@ public class ReportExportDialog extends JDialog {
     }//GEN-LAST:event_btnExportImageActionPerformed
 
     private void btnExportPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportPDFActionPerformed
-        if (chartImage != null) {
+        if (bufferedImage != null) {
             UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
-                    setMessage("Exporting Report PDF for '" + reportName + "'");
+                    setMessage("Exporting Report PDF for '" + name + "'");
                     PDDocument doc = null;
-                    Path pdfPath = WildLogPaths.WILDLOG_EXPORT_REPORTS_PDF.getAbsoluteFullPath().resolve(reportName + " (" + System.currentTimeMillis() + ").pdf");
+                    Path pdfPath = WildLogPaths.WILDLOG_EXPORT_REPORTS_PDF.getAbsoluteFullPath().resolve(name + " (" + System.currentTimeMillis() + ").pdf");
                     Files.createDirectories(pdfPath.getParent());
                     try {
                         doc = new PDDocument();
                         PDPage page = new PDPage(PDPage.PAGE_SIZE_A4);
                         doc.addPage(page);
                         PDPageContentStream content = new PDPageContentStream(doc, page);
-                        PDXObjectImage ximage = new PDPixelMap(doc, chartImage);
+                        PDXObjectImage ximage = new PDPixelMap(doc, bufferedImage);
                         Dimension scaledDim = getScaledDimension(new Dimension(ximage.getWidth(),  ximage.getHeight()), page.getMediaBox().createDimension());
                         content.drawXObject(ximage, 0, (page.getMediaBox().getHeight() - scaledDim.height), scaledDim.width, scaledDim.height);
                         content.close();
@@ -251,7 +276,7 @@ public class ReportExportDialog extends JDialog {
                     }
                     UtilsFileProcessing.openFile(pdfPath);
                     setProgress(100);
-                    setMessage("Done Exporting Report PDF for '" + reportName + "'");
+                    setMessage("Done Exporting Report PDF for '" + name + "'");
                     return null;
                 }
             });
@@ -296,7 +321,7 @@ public class ReportExportDialog extends JDialog {
         PrinterJob printerJob = PrinterJob.createPrinterJob();
         if (printerJob != null) {
             if (printerJob.showPageSetupDialog(null)) {
-                if (printerJob.printPage(chartNode)) {
+                if (printerJob.printPage(node)) {
                     printerJob.endJob();
                 }
                 else {
@@ -317,17 +342,17 @@ public class ReportExportDialog extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 setProgress(0);
-                setMessage("Exporting Report HTML for '" + reportName + "'");
+                setMessage("Exporting Report HTML for '" + name + "'");
                 // Create the image
-                Path imagePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_HTML_IMAGES.getAbsoluteFullPath().resolve(reportName + " (" + System.currentTimeMillis() + ").png");
+                Path imagePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_HTML_IMAGES.getAbsoluteFullPath().resolve(name + " (" + System.currentTimeMillis() + ").png");
                 Files.createDirectories(imagePath.getParent());
-                ImageIO.write(chartImage, "png", imagePath.toFile());
+                ImageIO.write(bufferedImage, "png", imagePath.toFile());
                 // Create the HTML content
-                Path filePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_HTML.getAbsoluteFullPath().resolve(reportName + " (" + System.currentTimeMillis() + ").HTML");
+                Path filePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_HTML.getAbsoluteFullPath().resolve(name + " (" + System.currentTimeMillis() + ").HTML");
                 Files.createDirectories(filePath.getParent());
                 final StringBuilder html = new StringBuilder(5000);
-                html.append("<html><head><title>").append(reportName).append("</title></head><body style='font-family:sans-serif;'>");
-                html.append("<H1 align='center'>").append(reportName).append("</H1><hr/>");
+                html.append("<html><head><title>").append(name).append("</title></head><body style='font-family:sans-serif;'>");
+                html.append("<H1 align='center'>").append(name).append("</H1><hr/>");
                 html.append("<table border='0' width='100%'><tr><td style=\"text-align: center; vertical-align: middle;\">");
                 html.append("<img src='").append(filePath.relativize(imagePath).toString().replace("..", ".")).append("' />");
                 html.append("</tr></td></table>");
@@ -355,7 +380,7 @@ public class ReportExportDialog extends JDialog {
                 // Open the file
                 UtilsFileProcessing.openFile(filePath);
                 setProgress(100);
-                setMessage("Done Exporting Report HTML for '" + reportName + "'");
+                setMessage("Done Exporting Report HTML for '" + name + "'");
                 return null;
             }
         });
@@ -363,11 +388,26 @@ public class ReportExportDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnExportHTMLActionPerformed
 
+    private void btnExportKMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportKMLActionPerformed
+        if (lstSightings != null && !lstSightings.isEmpty()) {
+            UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    UtilsKML.exportKML(null, lstSightings, Sighting.WILDLOG_FOLDER_PREFIX, "Observations", this, WildLogApp.getApplication(), true);
+                    return null;
+                }
+            });
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnExportKMLActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
     private javax.swing.JButton btnExportHTML;
     private javax.swing.JButton btnExportImage;
+    private javax.swing.JButton btnExportKML;
     private javax.swing.JButton btnExportPDF;
     private javax.swing.JButton btnPrint;
     // End of variables declaration//GEN-END:variables

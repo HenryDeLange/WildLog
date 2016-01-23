@@ -519,7 +519,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsKML.exportKML(location, this, app, true);
+                    UtilsKML.exportKML(location, null, location.getExportPrefix(), location.getDisplayName(), this, app, true);
                     return null;
                 }
             });
@@ -528,7 +528,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsKML.exportKML(element, this, app, true);
+                    UtilsKML.exportKML(element, null, element.getExportPrefix(), element.getDisplayName(), this, app, true);
                     return null;
                 }
             });
@@ -537,7 +537,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsKML.exportKML(visit, this, app, true);
+                    UtilsKML.exportKML(visit, null, visit.getExportPrefix(), visit.getDisplayName(), this, app, true);
                     return null;
                 }
             });
@@ -546,7 +546,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsKML.exportKML(sighting, this, app, true);
+                    UtilsKML.exportKML(sighting, null, sighting.getExportPrefix(), sighting.getDisplayName(), this, app, true);
                     return null;
                 }
             });
@@ -555,14 +555,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    setProgress(0);
-                    setMessage("Starting the KML Export for Observations");
-                    for (Sighting tempSighting : lstSightings) {
-                        UtilsKML.exportKML(tempSighting, this, app, false);
-                    }
-                    setProgress(100);
-                    setMessage("Done with the KML Export for Observations");
-                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_KML.getAbsoluteFullPath());
+                    UtilsKML.exportKML(null, lstSightings, Sighting.WILDLOG_FOLDER_PREFIX, "Observations", this, app, true);
                     return null;
                 }
             });

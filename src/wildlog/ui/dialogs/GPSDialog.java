@@ -1,22 +1,38 @@
 package wildlog.ui.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.maps.gpx.UtilsGPX;
 import wildlog.maps.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -24,6 +40,7 @@ import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.filters.GpxFilter;
 import wildlog.ui.helpers.filters.ImageFilter;
+import wildlog.ui.maps.implementations.PointMap;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -44,6 +61,7 @@ public class GPSDialog extends JDialog {
     private DataObjectWithGPS dataObjectWithGPS;
     private double uiLatitude = 0.0;
     private double uiLongitude = 0.0;
+    private static JFXPanel jfxPanel;
 
 
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
@@ -303,12 +321,12 @@ public class GPSDialog extends JDialog {
         jSeparator2 = new javax.swing.JSeparator();
         btnUseOnlineMap = new javax.swing.JButton();
         btnUseOfflineMap = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        pnlMap = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure GPS Point");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/GPS.png")).getImage());
-        setMinimumSize(new java.awt.Dimension(410, 210));
+        setMinimumSize(new java.awt.Dimension(410, 510));
         setModal(true);
         setName("Form"); // NOI18N
 
@@ -340,6 +358,7 @@ public class GPSDialog extends JDialog {
         btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Close.png"))); // NOI18N
         btnClear.setText("Clear GPS Point");
         btnClear.setToolTipText("Reset the GPS point to be empty.");
+        btnClear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClear.setFocusPainted(false);
         btnClear.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnClear.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -521,6 +540,7 @@ public class GPSDialog extends JDialog {
         btnUseOnlineMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
         btnUseOnlineMap.setText("Online Map");
         btnUseOnlineMap.setToolTipText("Reset the GPS point to be empty.");
+        btnUseOnlineMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseOnlineMap.setFocusPainted(false);
         btnUseOnlineMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseOnlineMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -534,6 +554,7 @@ public class GPSDialog extends JDialog {
         btnUseOfflineMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
         btnUseOfflineMap.setText("Offline Map");
         btnUseOfflineMap.setToolTipText("Reset the GPS point to be empty.");
+        btnUseOfflineMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseOfflineMap.setFocusPainted(false);
         btnUseOfflineMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseOfflineMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -544,8 +565,9 @@ public class GPSDialog extends JDialog {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jPanel1.setName("jPanel1"); // NOI18N
+        pnlMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnlMap.setName("pnlMap"); // NOI18N
+        pnlMap.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -611,7 +633,7 @@ public class GPSDialog extends JDialog {
                             .addComponent(btnUseGPX, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(15, 15, 15)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
@@ -627,7 +649,7 @@ public class GPSDialog extends JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnUseGPX, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnUseImage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -673,7 +695,7 @@ public class GPSDialog extends JDialog {
                     .addComponent(btnUseOnlineMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUseOfflineMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
 
@@ -868,7 +890,33 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnUseOnlineMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseOnlineMapActionPerformed
-        // TODO add your handling code here:
+        // Setup JavaFX panel
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (jfxPanel == null) {
+                    pnlMap.removeAll();
+                    jfxPanel = new JFXPanel();
+                    pnlMap.add(jfxPanel, BorderLayout.CENTER);
+                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                List<Sighting> lstSightings = new ArrayList<>();
+                                Sighting sighting = new Sighting(123);
+                                UtilsGps.copyGpsBetweenDOs(sighting, dataObjectWithGPS);
+                                lstSightings.add(sighting);
+                                jfxPanel.setScene(new Scene(new VBox()));
+                                jfxPanel.getScene().setRoot(createPointMapGoogle(lstSightings));
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }//GEN-LAST:event_btnUseOnlineMapActionPerformed
 
     private void doGpxInput(Path inFile) {
@@ -1019,6 +1067,52 @@ public class GPSDialog extends JDialog {
     public static void setPrevAccuracy(GPSAccuracy inPrevAccuracy) {
         prevAccuracy = inPrevAccuracy;
     }
+    
+    private WebView createPointMapGoogle(List<Sighting> inLstSightings) {
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        // Get the template file
+        final char[] buffer = new char[4096];
+        final StringBuilder builder = new StringBuilder(7500);
+        try (Reader in = new BufferedReader(new InputStreamReader(PointMap.class.getResourceAsStream("resources/pointmap_google.html"), "UTF-8"))) {
+            int length = 0;
+            while (length >= 0) {
+                length = in.read(buffer, 0, buffer.length);
+                if (length > 0) {
+                    builder.append(buffer, 0, length);
+                }
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        String template = builder.toString();
+        // Edit the template
+        int beginIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_START___") + "//___MAP_CLICKABLE_DATA_POINTS_START___".length();
+        int endIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_END___");
+        String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
+        StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
+        for (DataObjectWithHTML sighting : inLstSightings) {
+            if (UtilsGps.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGps.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
+                gpsBuilder.append(gpsPointTemplate.replace("var markerZZZ", "var marker" + sighting.getIDField())
+                                                  .replace("LatLng(44.5403, -78.5463)", "LatLng(" + UtilsGps.getLatDecimalDegree((DataObjectWithGPS) sighting) 
+                                                          + "," + UtilsGps.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")")
+                                                  .replace("ZZZ-title", sighting.getDisplayName().replaceAll("\"", "&quot;"))
+                                                  .replace("markerZZZ.desc", "marker" + sighting.getIDField() + ".desc")
+                                                  .replace("ZZZ-content", sighting.toHTML(false, true, true, WildLogApp.getApplication(), 
+                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;"))
+                                                  .replace("oms.addMarker(markerZZZ", "oms.addMarker(marker" + sighting.getIDField())
+                                                  .replace("bounds.extend(markerZZZ", "bounds.extend(marker" + sighting.getIDField()));
+                gpsBuilder.append(System.lineSeparator());
+            }
+        }
+        template = template.replace("//___MAP_CLICKABLE_DATA_POINTS_START___", "")
+                           .replace("//___MAP_CLICKABLE_DATA_POINTS_END___", "")
+                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        // Set the template
+        webEngine.loadContent(template);
+        return webView;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
@@ -1033,9 +1127,9 @@ public class GPSDialog extends JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JPanel pnlMap;
     private javax.swing.JSpinner spnLatDecimal;
     private javax.swing.JSpinner spnLatDeg;
     private javax.swing.JSpinner spnLatMin;

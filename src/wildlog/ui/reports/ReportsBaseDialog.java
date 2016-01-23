@@ -76,7 +76,6 @@ public class ReportsBaseDialog extends JFrame {
         UtilsDialog.setupGlassPaneOnMainFrame(this);
         UtilsDialog.addEscapeKeyListener(this);
         // Create the nested JavaFx panels
-        Platform.setImplicitExit(false);
         jfxReportChartPanel = new JFXPanel();
         jfxReportChartPanel.setBackground(pnlChartArea.getBackground());
         pnlChartArea.add(jfxReportChartPanel, BorderLayout.CENTER);
@@ -468,7 +467,7 @@ public class ReportsBaseDialog extends JFrame {
                             @Override
                             public void run() {
                                 ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage, jfxReportChartPanel.getScene().getRoot(), 
-                                        activeReport.getReportButtonName(), lstFilteredData);
+                                        activeReport.getReportButtonName(), lstFilteredData, false);
                                 dialog.setVisible(true);
                             }
                         });

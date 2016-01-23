@@ -76,7 +76,6 @@ public class MapsBaseDialog extends JFrame {
         UtilsDialog.setupGlassPaneOnMainFrame(this);
         UtilsDialog.addEscapeKeyListener(this);
         // Create the nested JavaFx panels
-        Platform.setImplicitExit(false);
         jfxMapPanel = new JFXPanel();
         jfxMapPanel.setBackground(pnlMapArea.getBackground());
         pnlMapArea.add(jfxMapPanel, BorderLayout.CENTER);
@@ -464,7 +463,7 @@ public class MapsBaseDialog extends JFrame {
                             @Override
                             public void run() {
                                 ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage, jfxMapPanel.getScene().getRoot(), 
-                                        activeMap.getMapButtonName(), lstFilteredData);
+                                        activeMap.getMapButtonName(), lstFilteredData, true);
                                 dialog.setVisible(true);
                             }
                         });

@@ -1,15 +1,9 @@
 package wildlog;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Desktop;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -39,15 +33,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
+import javafx.application.Platform;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.HyperlinkEvent;
@@ -56,8 +47,6 @@ import javax.swing.plaf.InsetsUIResource;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
-import org.jdesktop.swingx.JXMapKit;
-import org.jdesktop.swingx.mapviewer.GeoPosition;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -66,9 +55,7 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
-import wildlog.maps.MapFrameOffline;
-import wildlog.maps.MapFrameOnline;
-import wildlog.maps.utils.UtilsMapGenerator;
+import wildlog.ui.maps.implementations.helpers.UtilsMapGenerator;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
@@ -84,10 +71,6 @@ public class WildLogApp extends Application {
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static boolean useNimbusLF = false;
     private static boolean logToFile = false;
-    // Only open one MapFrame for the application (to reduce memory use)
-    private MapFrameOffline mapOffline;
-    private JXMapKit mapOnline;
-    private MapFrameOnline mapOnlineFrame;
     // Other settings
     private WildLogOptions wildLogOptions;
     private int threadCount;
@@ -297,6 +280,7 @@ public class WildLogApp extends Application {
      */
     @Override
     protected void startup() {
+        Platform.setImplicitExit(false);
         if (useNimbusLF) {
             // Try to set the Nimbus look and feel
             // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
@@ -562,97 +546,11 @@ public class WildLogApp extends Application {
         super.shutdown();
         System.out.println("SHUTTING DOWN WildLog - " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         System.out.println();
+        Platform.exit();
     }
 
     public WildLogDBI getDBI() {
         return dbi;
-    }
-
-    public MapFrameOffline getMapOffline() {
-        // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
-        if (mapOffline == null) {
-            mapOffline = new MapFrameOffline("WildLog Map - Offline", getWildLogOptions().getDefaultLatitude(), getWildLogOptions().getDefaultLongitude()/*, useOnlineMap*/);
-            // Setup the escape key
-            final JFrame mapHandler = (JFrame)mapOffline.getFrameForImageDrawing();
-            ActionListener escListiner = new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            mapHandler.setVisible(false);
-                        }
-                    };
-            mapHandler.getRootPane().registerKeyboardAction(
-                    escListiner,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                    JComponent.WHEN_IN_FOCUSED_WINDOW);
-            }
-        return mapOffline;
-    }
-
-    public MapFrameOnline getMapOnline() {
-        // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
-        if (mapOnlineFrame == null) {
-            final GeoPosition defaultPosition = new GeoPosition(getWildLogOptions().getDefaultLatitude(), getWildLogOptions().getDefaultLongitude());
-            mapOnline = new JXMapKit();
-            mapOnlineFrame = new MapFrameOnline("WildLog Map - Online", mapOnline, this);
-            mapOnlineFrame.setPreferredSize(new Dimension(950, 650));
-            mapOnlineFrame.setLayout(new BorderLayout());
-            mapOnlineFrame.setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Map Icon.gif")).getImage());
-            mapOnline.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
-//            mapOnline.setPreferredSize(new Dimension(950, 650));
-            mapOnline.setAddressLocationShown(false);
-            mapOnline.setName("mapOnline");
-            mapOnline.setAddressLocation(defaultPosition);
-            mapOnline.setZoom(12);
-            mapOnlineFrame.add(mapOnline, BorderLayout.CENTER);
-            final WildLogApp app = this;
-            // Previous button
-            JButton btnPrevMapPoint = new JButton();
-            btnPrevMapPoint.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    mapOnlineFrame.getPointLayer().loadPrevClickedPoint(app);
-                }
-            });
-            btnPrevMapPoint.setPreferredSize(new Dimension(60, 25));
-            btnPrevMapPoint.setFocusPainted(false);
-            btnPrevMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif")));
-            btnPrevMapPoint.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btnPrevMapPoint.setToolTipText("Load the previous Observation in the information panel.");
-            mapOnlineFrame.add(btnPrevMapPoint, BorderLayout.WEST);
-            // Next button
-            JButton btnNextMapPoint = new JButton();
-            btnNextMapPoint.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    mapOnlineFrame.getPointLayer().loadNextClickedPoint(app);
-                }
-            });
-            btnNextMapPoint.setPreferredSize(new Dimension(60, 25));
-            btnNextMapPoint.setFocusPainted(false);
-            btnNextMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif")));
-            btnNextMapPoint.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btnNextMapPoint.setToolTipText("Load the next Observation in the information panel.");
-            mapOnlineFrame.add(btnNextMapPoint, BorderLayout.EAST);
-            mapOnlineFrame.pack();
-//            mapOnlineFrame.setResizable(false);
-            // Setup the escape key
-            final JFrame mapHandler = (JFrame)mapOnlineFrame;
-            ActionListener escListiner = new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            mapHandler.setVisible(false);
-                        }
-                    };
-            mapHandler.getRootPane().registerKeyboardAction(
-                    escListiner,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                    JComponent.WHEN_IN_FOCUSED_WINDOW);
-        }
-        return mapOnlineFrame;
-    }
-
-    public void clearOnlinemap() {
-        mapOnlineFrame = null;
     }
 
     public WildLogOptions getWildLogOptions() {

@@ -37,12 +37,12 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.ExportDialog;
-import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.reports.ReportsBaseDialog;
@@ -1579,8 +1579,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            MappingDialog dialog = new MappingDialog(app,
-                    null, element, null, null, null);
+            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + element.getDisplayName(),
+                    app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), true));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapActionPerformed

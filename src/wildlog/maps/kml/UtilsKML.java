@@ -194,14 +194,14 @@ public final class UtilsKML {
         UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/mapping/Location.gif"), inIconPath.resolve("Location.gif"));
     }
 
-    public static void exportKML(DataObjectBasicInfo inDataObject, ProgressbarTask inProgressbarTask, WildLogApp inApp, boolean inOpenFile) throws IOException {
-        inProgressbarTask.setMessage("Starting the KML Export for '" + inDataObject.getDisplayName() + "'");
+    public static void exportKML(DataObjectBasicInfo inDataObject, List<Sighting> inLstSightings, String inExportPrefix, String inName, ProgressbarTask inProgressbarTask, WildLogApp inApp, boolean inOpenFile) throws IOException {
+        inProgressbarTask.setMessage("Starting the KML Export for '" + inName + "'");
         inProgressbarTask.setTaskProgress(0);
         // Make sure all folders, thumbnails and icons exist
         Path iconPath = WildLogPaths.WILDLOG_EXPORT_KML_THUMBNAILS.getAbsoluteFullPath().resolve(WildLogSystemFile.WILDLOG_FOLDER_PREFIX);
         Files.createDirectories(iconPath);
         UtilsKML.copyKmlIcons(iconPath);
-        Path finalPath = WildLogPaths.WILDLOG_EXPORT_KML.getAbsoluteFullPath().resolve(inDataObject.getExportPrefix()).resolve(inDataObject.getDisplayName() + ".kml");
+        Path finalPath = WildLogPaths.WILDLOG_EXPORT_KML.getAbsoluteFullPath().resolve(inExportPrefix).resolve(inName + ".kml");
         Files.createDirectories(finalPath.getParent());
         // Generate KML entries
         KmlGenerator kmlgen = new KmlGenerator();
@@ -212,26 +212,31 @@ public final class UtilsKML {
             groupByLocationName = true;
         }
         inProgressbarTask.setTaskProgress(5);
-        inProgressbarTask.setMessage("Busy with the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+        inProgressbarTask.setMessage("Busy with the KML Export for '" + inName + "' " + inProgressbarTask.getProgress() + "%");
         // Add Sighting entries
-        Sighting tempSighting = new Sighting();
-        if (inDataObject instanceof Location) {
-            tempSighting.setLocationName(inDataObject.getDisplayName());
-        }
-        else
-        if (inDataObject instanceof Element) {
-            tempSighting.setElementName(inDataObject.getDisplayName());
-        }
-        else
-        if (inDataObject instanceof Visit) {
-            tempSighting.setVisitName(inDataObject.getDisplayName());
+        List<Sighting> listSightings;
+        if (inLstSightings != null && !inLstSightings.isEmpty()) {
+            listSightings = inLstSightings;
         }
         else {
+            Sighting tempSighting = new Sighting();
+            if (inDataObject instanceof Location) {
+                tempSighting.setLocationName(inDataObject.getDisplayName());
+            }
+            else
+            if (inDataObject instanceof Element) {
+                tempSighting.setElementName(inDataObject.getDisplayName());
+            }
+            else
+            if (inDataObject instanceof Visit) {
+                tempSighting.setVisitName(inDataObject.getDisplayName());
+            }
+            else
             if (inDataObject instanceof Sighting) {
                 tempSighting = (Sighting) inDataObject;
             }
+            listSightings = inApp.getDBI().list(tempSighting, false);
         }
-        List<Sighting> listSightings = inApp.getDBI().list(tempSighting, false);
         Collections.sort(listSightings);
         Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>(50);
         for (int t = 0; t < listSightings.size(); t++) {
@@ -247,7 +252,7 @@ public final class UtilsKML {
              }
             entries.get(key).add(listSightings.get(t).toKML(t, inApp));
             inProgressbarTask.setTaskProgress(5 + (int)((t/(double)listSightings.size())*85));
-            inProgressbarTask.setMessage("Busy with the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+            inProgressbarTask.setMessage("Busy with the KML Export for '" + inName + "' " + inProgressbarTask.getProgress() + "%");
         }
         if (!groupByLocationName) {
             // Add Locations entries
@@ -275,11 +280,11 @@ public final class UtilsKML {
                  }
                 entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, inApp));
                 inProgressbarTask.setTaskProgress(90 + (int)((t/(double)listLocations.size())*5));
-                inProgressbarTask.setMessage("Busy with the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+                inProgressbarTask.setMessage("Busy with the KML Export for '" + inName + "' " + inProgressbarTask.getProgress() + "%");
             }
         }
         inProgressbarTask.setTaskProgress(95);
-        inProgressbarTask.setMessage("Busy with the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+        inProgressbarTask.setMessage("Busy with the KML Export for '" + inName + "' " + inProgressbarTask.getProgress() + "%");
         // Generate KML
         kmlgen.generateFile(entries, UtilsKML.getKmlStyles(iconPath));
         // Try to open the Kml file
@@ -287,7 +292,7 @@ public final class UtilsKML {
             UtilsFileProcessing.openFile(finalPath);
         }
         inProgressbarTask.setTaskProgress(100);
-        inProgressbarTask.setMessage("Done with the KML Export for '" + inDataObject.getDisplayName() + "'");
+        inProgressbarTask.setMessage("Done with the KML Export for '" + inName + "'");
     }
     
     public static String getXmlFriendlyString(String inString) {
