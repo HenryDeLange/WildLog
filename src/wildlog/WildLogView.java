@@ -371,13 +371,9 @@ public final class WildLogView extends JFrame {
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         externalMenu = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
-        mnuOpenMapApp = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
         mappingMenu = new javax.swing.JMenu();
-        chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
         mnuMapStartMenuItem = new javax.swing.JMenuItem();
-        otherMenu = new javax.swing.JMenu();
-        mnuGPSInput = new javax.swing.JMenuItem();
         slideshowMenu = new javax.swing.JMenu();
         mnuSetSlideshowSize = new javax.swing.JMenuItem();
         mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
@@ -1199,17 +1195,6 @@ public final class WildLogView extends JFrame {
         });
         externalMenu.add(mnuDBConsole);
 
-        mnuOpenMapApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Map Icon.gif"))); // NOI18N
-        mnuOpenMapApp.setText("Open OpenMap GIS Software");
-        mnuOpenMapApp.setToolTipText("Open the OpenMap application in standand alone mode.");
-        mnuOpenMapApp.setName("mnuOpenMapApp"); // NOI18N
-        mnuOpenMapApp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuOpenMapAppActionPerformed(evt);
-            }
-        });
-        externalMenu.add(mnuOpenMapApp);
-
         extraMenu.add(externalMenu);
 
         menuBar.add(extraMenu);
@@ -1230,18 +1215,7 @@ public final class WildLogView extends JFrame {
         mappingMenu.setText("Map Settings");
         mappingMenu.setName("mappingMenu"); // NOI18N
 
-        chkMnuUseWMS.setSelected(app.getWildLogOptions().isIsOnlinemapTheDefault());
-        chkMnuUseWMS.setText("Use Online Map");
-        chkMnuUseWMS.setToolTipText("Check to use the Online Map, uncheck to use the Offline Map instead.");
-        chkMnuUseWMS.setName("chkMnuUseWMS"); // NOI18N
-        chkMnuUseWMS.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                chkMnuUseWMSItemStateChanged(evt);
-            }
-        });
-        mappingMenu.add(chkMnuUseWMS);
-
-        mnuMapStartMenuItem.setText("Set Map Start Location");
+        mnuMapStartMenuItem.setText("Set Legacy Map Start Location");
         mnuMapStartMenuItem.setToolTipText("Select the GPS location where the map will open at by default.");
         mnuMapStartMenuItem.setName("mnuMapStartMenuItem"); // NOI18N
         mnuMapStartMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1252,22 +1226,6 @@ public final class WildLogView extends JFrame {
         mappingMenu.add(mnuMapStartMenuItem);
 
         settingsMenu.add(mappingMenu);
-
-        otherMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        otherMenu.setText("GPS Input Defaults");
-        otherMenu.setName("otherMenu"); // NOI18N
-
-        mnuGPSInput.setText("Select Default GPS Hemispheres");
-        mnuGPSInput.setToolTipText("Select the default values to use when adding new GPS points using the GPS Dialog.");
-        mnuGPSInput.setName("mnuGPSInput"); // NOI18N
-        mnuGPSInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuGPSInputActionPerformed(evt);
-            }
-        });
-        otherMenu.add(mnuGPSInput);
-
-        settingsMenu.add(otherMenu);
 
         slideshowMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         slideshowMenu.setText("Slideshow Settings");
@@ -1327,7 +1285,7 @@ public final class WildLogView extends JFrame {
         mnuOther.setText("Other Settings");
         mnuOther.setName("mnuOther"); // NOI18N
 
-        chkMnuUseScienteficName.setSelected(true);
+        chkMnuUseScienteficName.setSelected(app.getWildLogOptions().isUseScientificNames());
         chkMnuUseScienteficName.setText("Use Scientific Name On Tables");
         chkMnuUseScienteficName.setToolTipText("Select this option to show the Scientific Name for Creatures in the tables instead of the Other Name.");
         chkMnuUseScienteficName.setName("chkMnuUseScienteficName"); // NOI18N
@@ -1428,12 +1386,6 @@ public final class WildLogView extends JFrame {
         lblWorkspaceName.setText(app.getWildLogOptions().getWorkspaceName());
     }//GEN-LAST:event_tabHomeComponentShown
 
-    private void chkMnuUseWMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseWMSItemStateChanged
-        WildLogOptions options = app.getWildLogOptions();
-        options.setIsOnlinemapTheDefault(chkMnuUseWMS.isSelected());
-        app.setWildLogOptionsAndSave(options);
-    }//GEN-LAST:event_chkMnuUseWMSItemStateChanged
-
     private void mnuMapStartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMapStartMenuItemActionPerformed
         WildLogOptions options = app.getWildLogOptions();
         app.getMainFrame().getGlassPane().setVisible(true);
@@ -1530,37 +1482,6 @@ public final class WildLogView extends JFrame {
         }
         app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_mnuSetSlideshowSpeedActionPerformed
-
-    private void mnuGPSInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGPSInputActionPerformed
-        WildLogOptions options = app.getWildLogOptions();
-        app.getMainFrame().getGlassPane().setVisible(true);
-        int latOption = JOptionPane.showOptionDialog(app.getMainFrame(),
-                "Please select the Default Latitude to use for GPS input:",
-                "Default GPS Input Latitude",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                Latitudes.values(),
-                options.getDefaultInputLatitude());
-        app.getMainFrame().getGlassPane().setVisible(false);
-        if (latOption != JOptionPane.CLOSED_OPTION) {
-            options.setDefaultInputLatitude(Latitudes.values()[latOption]);
-        }
-        app.getMainFrame().getGlassPane().setVisible(true);
-        int lonOption = JOptionPane.showOptionDialog(app.getMainFrame(),
-                "Please select the Default Longitude to use for GPS input:",
-                "Default GPS Input Longitude",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                Longitudes.values(),
-                options.getDefaultInputLongitude());
-        app.getMainFrame().getGlassPane().setVisible(false);
-        if (lonOption != JOptionPane.CLOSED_OPTION) {
-            options.setDefaultInputLongitude(Longitudes.values()[lonOption]);
-        }
-        app.setWildLogOptionsAndSave(options);
-    }//GEN-LAST:event_mnuGPSInputActionPerformed
 
     private void mnuMergeElementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMergeElementsActionPerformed
         int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
@@ -1829,10 +1750,6 @@ public final class WildLogView extends JFrame {
     private void mnuDBConsoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuDBConsoleActionPerformed
         UtilsFileProcessing.openFile(WildLogPaths.OPEN_H2.getRelativePath());
     }//GEN-LAST:event_mnuDBConsoleActionPerformed
-
-    private void mnuOpenMapAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenMapAppActionPerformed
-        UtilsFileProcessing.openFile(WildLogPaths.OPEN_OPENMAP.getRelativePath());
-    }//GEN-LAST:event_mnuOpenMapAppActionPerformed
 
     private void mnuExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportCSVActionPerformed
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
@@ -3938,7 +3855,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
     private javax.swing.JCheckBoxMenuItem chkMnuUseIconTables;
     private javax.swing.JCheckBoxMenuItem chkMnuUseScienteficName;
-    private javax.swing.JCheckBoxMenuItem chkMnuUseWMS;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu externalMenu;
     private javax.swing.JMenu extraMenu;
@@ -4006,7 +3922,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuExportWildNoteSync;
     private javax.swing.JMenuItem mnuExportWorkspace;
     private javax.swing.JMenuItem mnuExportXML;
-    private javax.swing.JMenuItem mnuGPSInput;
     private javax.swing.JMenuItem mnuImportCSV;
     private javax.swing.JMenuItem mnuImportCSVBasic;
     private javax.swing.JMenuItem mnuImportWildNote;
@@ -4016,7 +3931,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuMergeLocations;
     private javax.swing.JMenuItem mnuMergeVisit;
     private javax.swing.JMenuItem mnuMoveVisits;
-    private javax.swing.JMenuItem mnuOpenMapApp;
     private javax.swing.JMenu mnuOther;
     private javax.swing.JMenu mnuPerformance;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
@@ -4024,7 +3938,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuSunAndMoon;
     private javax.swing.JMenuItem mnuSwitchElementNames;
     private javax.swing.JMenuItem mnuUserGuide;
-    private javax.swing.JMenu otherMenu;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu slideshowMenu;

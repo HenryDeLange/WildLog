@@ -133,7 +133,7 @@ public class LocationSelectionDialog extends JDialog {
         jPanel1.add(lblImageLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 90, 150, 150));
 
         btnSelect.setBackground(new java.awt.Color(230, 237, 220));
-        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSelect.setToolTipText("Confirm the selected Place.");
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelect.setFocusPainted(false);

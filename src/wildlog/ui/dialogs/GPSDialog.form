@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupLatitude">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupLongitude">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupFormat">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" value="Configure GPS Point"/>
@@ -8,7 +16,7 @@
       <Connection code="new ImageIcon(app.getClass().getResource(&quot;resources/icons/GPS.png&quot;)).getImage()" type="code"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[410, 510]"/>
+      <Dimension value="[410, 310]"/>
     </Property>
     <Property name="modal" type="boolean" value="true"/>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
@@ -35,7 +43,8 @@
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+                  <Component id="pnlMap" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="btnUseOnlineMap" max="32767" attributes="0"/>
@@ -44,72 +53,67 @@
                           </Group>
                           <Component id="jSeparator1" max="32767" attributes="0"/>
                           <Component id="jSeparator2" max="32767" attributes="0"/>
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="tglNorth" min="-2" pref="60" max="-2" attributes="0"/>
-                                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                          <Component id="tglEast" min="-2" pref="60" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="tglSouth" min="-2" pref="60" max="-2" attributes="0"/>
-                                          <Component id="tglWest" min="-2" pref="60" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" attributes="0">
-                                              <Component id="spnLatDeg" min="-2" pref="50" max="-2" attributes="0"/>
-                                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                                              <Component id="spnLatMin" min="-2" pref="50" max="-2" attributes="0"/>
-                                              <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                                              <Component id="spnLatSec" min="-2" pref="70" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="spnLatDecimal" min="-2" pref="190" max="-2" attributes="0"/>
-                                          <Group type="102" attributes="0">
-                                              <EmptySpace min="120" pref="120" max="-2" attributes="0"/>
-                                              <Component id="spnLonSec" min="-2" pref="70" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" attributes="0">
-                                              <EmptySpace min="60" pref="60" max="-2" attributes="0"/>
-                                              <Component id="spnLonMin" min="-2" pref="50" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="spnLonDecimal" min="-2" pref="190" max="-2" attributes="0"/>
-                                          <Component id="spnLonDeg" min="-2" pref="50" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="tglDecimalDegrees" min="-2" pref="60" max="-2" attributes="0"/>
-                                          <Component id="tglDegMinSec" min="-2" pref="60" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Component id="cmbAccuracy" min="-2" pref="260" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="btnRemoveGPS" min="-2" pref="120" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="tglNorth" min="-2" pref="60" max="-2" attributes="0"/>
+                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="tglEast" min="-2" pref="60" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="tglSouth" min="-2" pref="60" max="-2" attributes="0"/>
+                                  <Component id="tglWest" min="-2" pref="60" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="spnLatDeg" min="-2" pref="50" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <Component id="spnLatMin" min="-2" pref="50" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <Component id="spnLatSec" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Component id="spnLatDecimal" max="32767" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
+                                      <Component id="spnLonSec" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="60" pref="60" max="-2" attributes="0"/>
+                                      <Component id="spnLonMin" min="-2" pref="50" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="spnLonDecimal" max="32767" attributes="0"/>
+                                  <Component id="spnLonDeg" min="-2" pref="50" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="tglDecimalDegrees" min="-2" pref="60" max="-2" attributes="0"/>
+                                  <Component id="tglDegMinSec" min="-2" pref="60" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="cmbAccuracy" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="btnRemoveGPS" min="-2" pref="120" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="btnUsePrevious" min="-2" pref="130" max="-2" attributes="0"/>
+                                  <Component id="btnUseImage" min="-2" pref="130" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="btnUseRelated" min="-2" pref="130" max="-2" attributes="0"/>
+                                  <Component id="btnUseGPX" min="-2" pref="130" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="15" max="32767" attributes="0"/>
+                              <Component id="btnSave" min="-2" pref="110" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="btnUsePrevious" min="-2" pref="130" max="-2" attributes="0"/>
-                          <Component id="btnUseImage" min="-2" pref="130" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnClear" min="-2" pref="130" max="-2" attributes="0"/>
-                          <Component id="btnUseGPX" min="-2" pref="130" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="15" pref="15" max="-2" attributes="0"/>
-                      <Component id="btnSave" min="-2" pref="110" max="-2" attributes="0"/>
-                  </Group>
-                  <Component id="pnlMap" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
@@ -122,7 +126,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnClear" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="btnUseRelated" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="btnUsePrevious" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -196,14 +200,15 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="btnSave">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Update.png"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/OK.png"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Confirm the GPS value."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="btnSave" noResource="true"/>
       </Properties>
       <Events>
@@ -221,6 +226,7 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
@@ -231,25 +237,26 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUsePreviousActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnClear">
+    <Component class="javax.swing.JButton" name="btnUseRelated">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Close.png"/>
+          <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Clear GPS Point"/>
-        <Property name="toolTipText" type="java.lang.String" value="Reset the GPS point to be empty."/>
+        <Property name="text" type="java.lang.String" value="Find Related GPS"/>
+        <Property name="toolTipText" type="java.lang.String" value="Try to find a GPS point using the related Images or linked Place."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="btnClear" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="btnUseRelated" noResource="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClearActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUseRelatedActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnUseImage">
@@ -263,6 +270,7 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
@@ -278,12 +286,13 @@
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/GPX.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Load From GPX&lt;/u&gt;&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Load from GPX&lt;/u&gt;&lt;/html&gt;"/>
         <Property name="toolTipText" type="java.lang.String" value="Browse to a GPX file, or drag-and-drop the file onto the button."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
@@ -310,6 +319,9 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="tglNorth">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupLatitude"/>
+        </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="Latitudes.NORTH.getText()" type="code"/>
         </Property>
@@ -317,6 +329,7 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 2, 2, 2]"/>
         </Property>
@@ -328,6 +341,9 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="tglSouth">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupLatitude"/>
+        </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="Latitudes.SOUTH.getText()" type="code"/>
         </Property>
@@ -335,6 +351,7 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 2, 2, 2]"/>
         </Property>
@@ -355,6 +372,9 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="tglWest">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupLongitude"/>
+        </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="Longitudes.WEST.getText()" type="code"/>
         </Property>
@@ -362,6 +382,7 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 2, 2, 2]"/>
         </Property>
@@ -373,6 +394,9 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="tglEast">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupLongitude"/>
+        </Property>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="Longitudes.EAST.getText()" type="code"/>
         </Property>
@@ -380,6 +404,7 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 2, 2, 2]"/>
         </Property>
@@ -391,12 +416,16 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="tglDecimalDegrees">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupFormat"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="DD"/>
         <Property name="toolTipText" type="java.lang.String" value="Decimal-Degrees"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="tglDecimalDegrees" noResource="true"/>
       </Properties>
       <Events>
@@ -405,12 +434,16 @@
     </Component>
     <Component class="javax.swing.JToggleButton" name="tglDegMinSec">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroupFormat"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="DMS"/>
         <Property name="toolTipText" type="java.lang.String" value="Degrees, Minutes and Decimal-Seconds"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="tglDegMinSec" noResource="true"/>
       </Properties>
       <Events>
@@ -420,7 +453,7 @@
     <Component class="javax.swing.JSpinner" name="spnLatDeg">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="0" maximum="90" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+          <SpinnerModel initial="0" maximum="90" minimum="-90" numberType="java.lang.Integer" stepSize="1" type="number"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -448,7 +481,7 @@
     <Component class="javax.swing.JSpinner" name="spnLatSec">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="0.0" maximum="59.999999999" minimum="0.0" numberType="java.lang.Double" stepSize="1.0E-4" type="number"/>
+          <SpinnerModel initial="0.0" maximum="59.999999999" minimum="0.0" numberType="java.lang.Double" stepSize="0.01" type="number"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -465,7 +498,7 @@
           <Font name="Tahoma" size="12" style="0"/>
         </Property>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="0.0" maximum="90.0" minimum="0.0" numberType="java.lang.Double" stepSize="1.0E-5" type="number"/>
+          <SpinnerModel initial="0.0" maximum="90.0" minimum="-90.0" numberType="java.lang.Double" stepSize="0.01" type="number"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -479,7 +512,7 @@
     <Component class="javax.swing.JSpinner" name="spnLonDeg">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="0" maximum="180" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+          <SpinnerModel initial="0" maximum="180" minimum="-180" numberType="java.lang.Integer" stepSize="1" type="number"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -510,7 +543,7 @@
           <Font name="Tahoma" size="12" style="0"/>
         </Property>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="0.0" maximum="59.999999999" minimum="0.0" numberType="java.lang.Double" stepSize="1.0E-4" type="number"/>
+          <SpinnerModel initial="0.0" maximum="59.999999999" minimum="0.0" numberType="java.lang.Double" stepSize="0.01" type="number"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -527,7 +560,7 @@
           <Font name="Tahoma" size="12" style="0"/>
         </Property>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="0.0" maximum="180.0" minimum="0.0" numberType="java.lang.Double" stepSize="1.0E-5" type="number"/>
+          <SpinnerModel initial="0.0" maximum="180.0" minimum="-180.0" numberType="java.lang.Double" stepSize="0.01" type="number"/>
         </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -555,6 +588,7 @@
         <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="GPSAccuracy.AVERAGE" type="code"/>
         </Property>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="cmbAccuracy" noResource="true"/>
       </Properties>
     </Component>
@@ -568,6 +602,7 @@
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="btnRemoveGPS" noResource="true"/>
       </Properties>
       <Events>
@@ -584,13 +619,13 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Online Map"/>
+        <Property name="text" type="java.lang.String" value="Show on Map (Online)"/>
         <Property name="toolTipText" type="java.lang.String" value="Reset the GPS point to be empty."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
         </Property>
@@ -605,13 +640,13 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Offline Map"/>
+        <Property name="text" type="java.lang.String" value="Show on Map (Offline)"/>
         <Property name="toolTipText" type="java.lang.String" value="Reset the GPS point to be empty."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
         </Property>

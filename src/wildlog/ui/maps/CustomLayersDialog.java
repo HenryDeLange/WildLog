@@ -332,7 +332,7 @@ public class CustomLayersDialog extends JDialog {
                 .addGap(5, 5, 5))
         );
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSave.setToolTipText("Close this dialog and confirm the active layers to be displayed on the map.");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSave.setFocusPainted(false);

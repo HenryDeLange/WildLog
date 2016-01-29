@@ -239,7 +239,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             }
         });
 
-        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSelect.setToolTipText("Confirm the selection.");
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelect.setFocusPainted(false);

@@ -604,19 +604,6 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuDBConsoleActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuOpenMapApp">
-                  <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Map Icon.gif"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Open OpenMap GIS Software"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Open the OpenMap application in standand alone mode."/>
-                    <Property name="name" type="java.lang.String" value="mnuOpenMapApp" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuOpenMapAppActionPerformed"/>
-                  </Events>
-                </MenuItem>
               </SubComponents>
             </Menu>
           </SubComponents>
@@ -639,48 +626,14 @@
                 <Property name="name" type="java.lang.String" value="mappingMenu" noResource="true"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuUseWMS">
-                  <Properties>
-                    <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="app.getWildLogOptions().isIsOnlinemapTheDefault()" type="code"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Use Online Map"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Check to use the Online Map, uncheck to use the Offline Map instead."/>
-                    <Property name="name" type="java.lang.String" value="chkMnuUseWMS" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkMnuUseWMSItemStateChanged"/>
-                  </Events>
-                </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuMapStartMenuItem">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Set Map Start Location"/>
+                    <Property name="text" type="java.lang.String" value="Set Legacy Map Start Location"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select the GPS location where the map will open at by default."/>
                     <Property name="name" type="java.lang.String" value="mnuMapStartMenuItem" noResource="true"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuMapStartMenuItemActionPerformed"/>
-                  </Events>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <Menu class="javax.swing.JMenu" name="otherMenu">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="GPS Input Defaults"/>
-                <Property name="name" type="java.lang.String" value="otherMenu" noResource="true"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuGPSInput">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Select Default GPS Hemispheres"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select the default values to use when adding new GPS points using the GPS Dialog."/>
-                    <Property name="name" type="java.lang.String" value="mnuGPSInput" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuGPSInputActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
@@ -764,7 +717,9 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuUseScienteficName">
                   <Properties>
-                    <Property name="selected" type="boolean" value="true"/>
+                    <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="app.getWildLogOptions().isUseScientificNames()" type="code"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Use Scientific Name On Tables"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select this option to show the Scientific Name for Creatures in the tables instead of the Other Name."/>
                     <Property name="name" type="java.lang.String" value="chkMnuUseScienteficName" noResource="true"/>

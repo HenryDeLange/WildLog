@@ -1189,7 +1189,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         ResultSet results = null;
         try {
             state = conn.createStatement();
-            // The new ADHOC table will automatically be created
+            // NOTE: The new ADHOC table will automatically be created...
+            // Delete the WildLog Options that are nolonger used
+            state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTONLINEMAP");
+            state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLATOPTION");
+            state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLONOPTION");
             
 // TODO: Add more upgrade stuff here, as needed
             

@@ -55,6 +55,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private Location lastSavedLocation;
     private boolean isPopup = false;
     private PanelNeedsRefreshWhenDataChanges panelToRefresh;
+//    private GPSDialog dialog;
 
     public PanelLocation(WildLogApp inApp, Location inLocation, boolean inIsPopup, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         app = inApp;
