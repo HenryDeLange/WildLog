@@ -1,8 +1,5 @@
 package wildlog.data.dataobjects;
 
-import wildlog.data.enums.Latitudes;
-import wildlog.data.enums.Longitudes;
-
 
 public class WildLogOptions {
     private int databaseVersion;
@@ -10,9 +7,6 @@ public class WildLogOptions {
     private double defaultLongitude;
     private float defaultSlideshowSpeed;
     private int defaultSlideshowSize;
-    private Latitudes defaultInputLatitude;
-    private Longitudes defaultInputLongitude;
-    private boolean isOnlinemapTheDefault;
     private boolean useThumbnailTables;
     private boolean useThumnailBrowsing;
     private boolean enableSounds;
@@ -53,36 +47,12 @@ public class WildLogOptions {
         defaultSlideshowSpeed = inDefaultSlideshowSpeed;
     }
 
-    public Latitudes getDefaultInputLatitude() {
-        return defaultInputLatitude;
-    }
-
-    public void setDefaultInputLatitude(Latitudes inDefaultInputLatitude) {
-        defaultInputLatitude = inDefaultInputLatitude;
-    }
-
-    public Longitudes getDefaultInputLongitude() {
-        return defaultInputLongitude;
-    }
-
-    public void setDefaultInputLongitude(Longitudes inDefaultInputLongitude) {
-        defaultInputLongitude = inDefaultInputLongitude;
-    }
-
     public int getDefaultSlideshowSize() {
         return defaultSlideshowSize;
     }
 
     public void setDefaultSlideshowSize(int inDefaultSlideshowSize) {
         defaultSlideshowSize = inDefaultSlideshowSize;
-    }
-
-    public boolean isIsOnlinemapTheDefault() {
-        return isOnlinemapTheDefault;
-    }
-
-    public void setIsOnlinemapTheDefault(boolean inIsOnlinemapTheDefault) {
-        isOnlinemapTheDefault = inIsOnlinemapTheDefault;
     }
 
     public boolean isUseThumbnailTables() {
