@@ -4,6 +4,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,9 @@ import java.io.Reader;
 import java.nio.file.Path;
 import java.util.List;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -27,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
+import netscape.javascript.JSObject;
 import org.geotools.data.DataSourceException;
 import org.geotools.data.DataUtilities;
 import org.geotools.factory.FactoryRegistryException;
@@ -1176,19 +1181,42 @@ public class GPSDialog extends JDialog {
         int endIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_END___");
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50);
-        gpsBuilder.append(gpsPointTemplate.replace("var markerZZZ", "var marker")
-                                          .replace("LatLng(44.5403, -78.5463)", "LatLng(" + uiLatitude + "," + uiLongitude + ")")
-                                          .replace("ZZZ-title", "GPS Point")
-                                          .replace("markerZZZ.desc", "marker.desc")
-                                          .replace("ZZZ-content", "GPS Point")
-                                          .replace("bounds.extend(markerZZZ", "bounds.extend(marker"));
+        gpsBuilder.append(gpsPointTemplate.replace("LatLng(-32, 25)", "LatLng(" + uiLatitude + "," + uiLongitude + ")"));
         gpsBuilder.append(System.lineSeparator());
         template = template.replace("//___MAP_CLICKABLE_DATA_POINTS_START___", "")
                            .replace("//___MAP_CLICKABLE_DATA_POINTS_END___", "")
                            .replace(gpsPointTemplate, gpsBuilder.toString());
         // Set the template
         webEngine.loadContent(template);
+        // Add the code to perform the call from the JavaScript when the marker is moved
+        webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
+            @Override
+            public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
+              if (newState == State.SUCCEEDED) {
+                  JSObject window = (JSObject) webEngine.executeScript("window");
+                  window.setMember("JavaMethodExposer", new JavaMethodExposer());
+              }
+            }
+        });
+        
         return webView;
+    }
+    
+    // NOTE: Lyk my hierdie moet 'n regte public class wees, anders werk dinge nie reg nie...
+    public class JavaMethodExposer {
+        public void updateGPS(Object inLat, Object inLon) {
+            uiLatitude = (double) inLat;
+            uiLongitude = (double) inLon;
+            if (tglDecimalDegrees.isSelected()) {
+                setupDD();
+            }
+            else {
+                setupDMS();
+            }
+            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
     }
     
     private void createMapDefault(JFXPanel inJFXPanel) {
