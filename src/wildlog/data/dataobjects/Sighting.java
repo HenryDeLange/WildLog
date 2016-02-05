@@ -15,7 +15,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.xml.utils.UtilsXML;
@@ -77,8 +77,8 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Time of Day:</b><br/> ", timeOfDay, true);
         }
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Latitude:</b><br/> ", UtilsGps.getLatitudeString(this), true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Longitude:</b><br/> ", UtilsGps.getLongitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Latitude:</b><br/> ", UtilsGPS.getLatitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Longitude:</b><br/> ", UtilsGPS.getLongitudeString(this), true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>GPS Accuracy:</b><br/> ", gpsAccuracy, true);
         }
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Certainty:</b><br/> ", certainty, true);
@@ -279,8 +279,8 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             Location location = inApp.getDBI().find(new Location(locationName));
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(UtilsGps.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
-                    entry.setLongitude(UtilsGps.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
+                    entry.setLatitude(UtilsGPS.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
+                    entry.setLongitude(UtilsGPS.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
                 }
             }
             else {
@@ -293,8 +293,8 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             Location location = inApp.getDBI().find(new Location(locationName));
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(UtilsGps.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
-                    entry.setLongitude(UtilsGps.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
+                    entry.setLatitude(UtilsGPS.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
+                    entry.setLongitude(UtilsGPS.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
                 }
             }
             else {
@@ -303,8 +303,8 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             }
         }
         else {
-            entry.setLatitude(UtilsGps.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
-            entry.setLongitude(UtilsGps.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
+            entry.setLatitude(UtilsGPS.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
+            entry.setLongitude(UtilsGPS.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         }
         return entry;
     }

@@ -15,7 +15,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.TimeFormat;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 
 
 public final class UtilsTime {
@@ -121,8 +121,8 @@ public final class UtilsTime {
             // Check if GPS is usable
             if (sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
                     && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
-                double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                double latitude = UtilsGPS.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                double longitude = UtilsGPS.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                 // Sun Light
                 sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
                 // Moon Light

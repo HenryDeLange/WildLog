@@ -39,7 +39,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
 import wildlog.maps.geotools.GeoToolsMapJavaFX;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.utils.WildLogPaths;
 
@@ -73,6 +73,8 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                 ReferencedEnvelope bounds = null;
                 if (map != null) {
                     bounds = map.getBounds();
+                    // Dispose the old map
+                    map.dispose();
                 }
                 // Create the new map
                 map = new GeoToolsMapJavaFX(mapsBaseDialog.getJFXMapPanel(), enhanceContrast);
@@ -214,7 +216,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
             DefaultFeatureCollection collection = new DefaultFeatureCollection();
             GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
             for (Sighting sighting : inLstSightings) {
-                builder.add(geometryFactory.createPoint(new Coordinate(UtilsGps.getLonDecimalDegree(sighting), UtilsGps.getLatDecimalDegree(sighting))));
+                builder.add(geometryFactory.createPoint(new Coordinate(UtilsGPS.getLonDecimalDegree(sighting), UtilsGPS.getLatDecimalDegree(sighting))));
                 SimpleFeature feature = builder.buildFeature(Long.toString(sighting.getSightingCounter()), new Object[] {sighting.toString()});
                 collection.add(feature);
             }
@@ -227,6 +229,13 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
             ex.printStackTrace(System.err);
         }
         return pointLayer;
+    }
+    
+    @Override
+    public void dispose() {
+        if (map != null) {
+            map.dispose();
+        }
     }
     
 }

@@ -51,7 +51,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
@@ -227,8 +227,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
 
         // Lat Lon stuff
-        txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
-        txtLongitude.setText(UtilsGps.getLatitudeString(sighting));
+        txtLatitude.setText(UtilsGPS.getLatitudeString(sighting));
+        txtLongitude.setText(UtilsGPS.getLatitudeString(sighting));
 
         // Spinners stuff
         SpinnerFixer.configureSpinners(spnNumberOfElements);
@@ -341,8 +341,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
         cmbViewRating.setSelectedItem(sighting.getViewRating());
         cmbWeather.setSelectedItem(sighting.getWeather());
-        txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
-        txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+        txtLatitude.setText(UtilsGPS.getLatitudeString(sighting));
+        txtLongitude.setText(UtilsGPS.getLongitudeString(sighting));
         spnMoonPhase.setValue(sighting.getMoonPhase());
         cmbMoonlight.setSelectedItem(sighting.getMoonlight());
         spnTemperature.setValue(sighting.getTemperature());
@@ -1370,17 +1370,17 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     loadDateFromFile(compareFileList.get(0).originalFile.toPath());
                 }
                 // Setup GPS
-                if (UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(sighting))
-                        && UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(sighting))) {
+                if (UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLongitudeString(sighting))
+                        && UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLatitudeString(sighting))) {
                     for (ComparableFile comparableFile : compareFileList) {
                         if (WildLogFileExtentions.Images.isJPG(comparableFile.originalFile.toPath().toAbsolutePath())) {
                             DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(comparableFile.originalFile.toPath().toAbsolutePath());
                             if (temp != null) {
-                                if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
-                                        && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
-                                    UtilsGps.copyGpsBetweenDOs(sighting, temp);
-                                    txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
-                                    txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+                                if (!UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLongitudeString(temp))
+                                        && !UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLatitudeString(temp))) {
+                                    UtilsGPS.copyGpsBetweenDOs(sighting, temp);
+                                    txtLatitude.setText(UtilsGPS.getLatitudeString(sighting));
+                                    txtLongitude.setText(UtilsGPS.getLongitudeString(sighting));
                                     break;
                                 }
                             }
@@ -1553,10 +1553,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             // Process the fields that require a GPS
             if (sighting.getLatitude() != null && sighting.getLongitude() != null
                     && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())
-                    && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
-                    && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
-                double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                    && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !UtilsGPS.NO_GPS_POINT.equals(txtLatitude.getText())
+                    && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !UtilsGPS.NO_GPS_POINT.equals(txtLongitude.getText())) {
+                double latitude = UtilsGPS.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                double longitude = UtilsGPS.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                 // Sun
                 cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
                 // Moon
@@ -1569,16 +1569,16 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     // If the location has a GPS point, as whether it should be used for the calculation.
                     if (locationWL.getLatitude() != null && locationWL.getLongitude() != null
                             && !Latitudes.NONE.equals(locationWL.getLatitude()) && !Longitudes.NONE.equals(locationWL.getLongitude())
-                            && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(locationWL))
-                            && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(locationWL))) {
+                            && !UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLatitudeString(locationWL))
+                            && !UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLongitudeString(locationWL))) {
                         getGlassPane().setVisible(true);
                         int result = JOptionPane.showConfirmDialog(this,
                                 "This Observation does not have a GPS point. Would you like to use the GPS point associated with the Place for the calculation?",
                                 "Use The GPS Point From The Place?", JOptionPane.YES_NO_OPTION);
                         getGlassPane().setVisible(false);
                         if (result == JOptionPane.YES_OPTION) {
-                            double latitude = UtilsGps.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSeconds());
-                            double longitude = UtilsGps.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSeconds());
+                            double latitude = UtilsGPS.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSeconds());
+                            double longitude = UtilsGPS.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSeconds());
                             // Sun
                             cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
                             // Moon
@@ -1612,8 +1612,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         GPSDialog dialog = new GPSDialog(app, this, sighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
-            txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
-            txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+            txtLatitude.setText(UtilsGPS.getLatitudeString(sighting));
+            txtLongitude.setText(UtilsGPS.getLongitudeString(sighting));
             btnUpdateSightingActionPerformed(null);
         }
         // Setup Sun and Moon
@@ -1748,11 +1748,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             if (WildLogFileType.IMAGE.equals(files.get(imageIndex).getFileType())) {
                 hasRelevantFiles = true;
                 DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(files.get(imageIndex).getAbsolutePath());
-                if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
-                        && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
-                    UtilsGps.copyGpsBetweenDOs(sighting, temp);
-                    txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
-                    txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+                if (!UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLongitudeString(temp))
+                        && !UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLatitudeString(temp))) {
+                    UtilsGPS.copyGpsBetweenDOs(sighting, temp);
+                    txtLatitude.setText(UtilsGPS.getLatitudeString(sighting));
+                    txtLongitude.setText(UtilsGPS.getLongitudeString(sighting));
                 }
                 else {
                     getGlassPane().setVisible(true);

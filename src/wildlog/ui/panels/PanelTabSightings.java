@@ -21,6 +21,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.FilterDataListDialog;
+import wildlog.ui.dialogs.FilterGPSDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsPanelGenerator;
@@ -44,6 +45,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private List<Visit> lstFilteredVisits;
     private FilterProperties filterProperties;
     private int imageIndex;
+    private double northEast_Latitude;
+    private double northEast_Longitude;
+    private double southWest_Latitude;
+    private double southWest_Longitude;
 
     public PanelTabSightings(WildLogApp inApp, JTabbedPane inTabbedPanel) {
         app = inApp;
@@ -411,7 +416,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterMap.setText("Filter by Map");
         btnFilterMap.setToolTipText("Filter the Observations according to an area on a map.");
         btnFilterMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterMap.setEnabled(false);
         btnFilterMap.setFocusPainted(false);
         btnFilterMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -719,7 +723,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         }
         // Load the table
         UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
+                filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
     }//GEN-LAST:event_formComponentShown
 
     @Override
@@ -754,7 +759,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             filterProperties = dialog.getSelectedFilterProperties();
             // Filter the original results using the provided values
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
+                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
         }
     }
     
@@ -766,7 +772,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             lstFilteredElements = dialog.getSelectedData();
             // Filter the original results using the provided values
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
+                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
         }
     }//GEN-LAST:event_btnFilterElementsActionPerformed
 
@@ -778,7 +785,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             lstFilteredLocations = dialog.getSelectedData();
             // Filter the original results using the provided values
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
+                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
         }
     }//GEN-LAST:event_btnFilterLocationActionPerformed
 
@@ -794,7 +802,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             lstFilteredVisits = dialog.getSelectedData();
             // Filter the original results using the provided values
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
+                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
@@ -825,7 +834,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void btnResetFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetFiltersActionPerformed
         setupDefaultFilters();
         UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements);
+                filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
 
     private void btnGoBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBrowseActionPerformed
@@ -852,7 +862,15 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnNextFileActionPerformed
 
     private void btnFilterMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterMapActionPerformed
-        // TODO add your handling code here:
+        FilterGPSDialog dialog = new FilterGPSDialog(app.getMainFrame());
+        dialog.setVisible(true);
+        northEast_Latitude = dialog.getNorthEast_Latitude();
+        northEast_Longitude = dialog.getNorthEast_Longitude();
+        southWest_Latitude = dialog.getSouthWest_Latitude();
+        southWest_Longitude = dialog.getSouthWest_Longitude();
+        UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
+                filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
     }//GEN-LAST:event_btnFilterMapActionPerformed
 
     private List<Sighting> getListOfSightingsFromTable() {
@@ -866,8 +884,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 @Override
                 public int showDialog() {
                     return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "No Observations were selected, do you want to use all Observations in the table instead?",
-                            "No Observations Selected",
+                            "<html>No Observations were selected, do you want to <b>use all Observations</b> listed in the table instead?</html>",
+                            "Use All Observations?",
                             JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 }
             });
@@ -889,16 +907,40 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         }
         else {
-            // Use selected Sightings
-            lstSightingsToMap = new ArrayList<>(tblSightings.getSelectedRowCount());
-            for (int row : tblSightings.getSelectedRows()) {
-                Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 8)));
-                sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 4));
-                sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 5));
-                lstSightingsToMap.add(sighting);
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "<html>Some Observations were selected, do you want to <b>use all Observations</b> listed in the table instead?</html>",
+                            "Use All Observations?",
+                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.YES_OPTION) {
+                // Use all Sightings
+                lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
+                for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
+                    Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 8)));
+                    sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 4));
+                    sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 5));
+                    lstSightingsToMap.add(sighting);
+                }
+            }
+            else {
+                // Use selected Sightings
+                lstSightingsToMap = new ArrayList<>(tblSightings.getSelectedRowCount());
+                for (int row : tblSightings.getSelectedRows()) {
+                    Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 8)));
+                    sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 4));
+                    sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 5));
+                    lstSightingsToMap.add(sighting);
+                }
             }
         }
         return lstSightingsToMap;
@@ -912,6 +954,11 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         lstFilteredLocations = app.getDBI().list(new Location());
         lstFilteredVisits = app.getDBI().list(new Visit());
         lstFilteredElements = app.getDBI().list(new Element());
+        // Reset the GPS box
+        northEast_Latitude = 0.0;
+        northEast_Longitude = 0.0;
+        southWest_Latitude = 0.0;
+        southWest_Longitude = 0.0;
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

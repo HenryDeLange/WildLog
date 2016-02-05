@@ -25,7 +25,7 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.maps.implementations.helpers.MapFrameOnline;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 
@@ -75,7 +75,7 @@ public class LegacyMap extends AbstractMap<Sighting> {
                 MapFrameOnline map = getOldOnlineMap();
                 map.getPointLayer().clearPoints();
                 for (Sighting sighting : inLstSightings) {
-                    map.getPointLayer().addPoint(UtilsGps.getLatDecimalDegree(sighting), UtilsGps.getLonDecimalDegree(sighting), 
+                    map.getPointLayer().addPoint(UtilsGPS.getLatDecimalDegree(sighting), UtilsGPS.getLonDecimalDegree(sighting), 
                             Color.ORANGE, sighting, WildLogApp.getApplication());
                 }
                 map.getPointLayer().loadPoints(Color.YELLOW);

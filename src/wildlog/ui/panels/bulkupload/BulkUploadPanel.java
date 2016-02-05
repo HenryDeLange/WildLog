@@ -37,7 +37,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.ZoomDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -786,8 +786,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 if (sightingWrapper.getDate() != null && sightingWrapper.getTimeAccuracy() != null && sightingWrapper.getTimeAccuracy().isUsableTime()) {
                                     if (sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
                                             && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
-                                        double latitude = UtilsGps.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSeconds());
-                                        double longitude = UtilsGps.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSeconds());
+                                        double latitude = UtilsGPS.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSeconds());
+                                        double longitude = UtilsGPS.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSeconds());
                                         // Sun
                                         if (sightingWrapper.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sightingWrapper.getTimeOfDay())) {
                                             sightingWrapper.setTimeOfDay(AstroCalculator.getSunCategory(sightingWrapper.getDate(), latitude, longitude));

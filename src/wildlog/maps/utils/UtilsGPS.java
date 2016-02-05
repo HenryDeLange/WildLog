@@ -6,7 +6,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 
 
-public final class UtilsGps {
+public final class UtilsGPS {
     public static final String NO_GPS_POINT = "No GPS";
     public static final ThreadLocal<DecimalFormat> DECIMAL_FORMAT = new ThreadLocal<DecimalFormat>() {
          @Override
@@ -15,11 +15,9 @@ public final class UtilsGps {
          } 
     };
 
-    private UtilsGps() {
+    private UtilsGPS() {
     }
 
-// TODO: Maak 'n nuwe method hasGPSData(..) wat boolean return
-    
     public static double getLatDecimalDegree(DataObjectWithGPS inDataObjectWithGPS) {
         return getDecimalDegree(
                 inDataObjectWithGPS.getLatitude(),
@@ -148,6 +146,24 @@ public final class UtilsGps {
             inToGpsDO.setLonMinutes(inFromGpsDO.getLonMinutes());
             inToGpsDO.setLonSeconds(inFromGpsDO.getLonSeconds());
         }
+    }
+    
+    public static boolean hasGPSData(DataObjectWithGPS inDataObject) {
+        return inDataObject != null && getLatDecimalDegree(inDataObject) != 0 && getLonDecimalDegree(inDataObject) != 0;
+    }
+    
+    public static boolean isSightingInBox(DataObjectWithGPS inDataObject, double inNorthEast_Lat, double inNorthEast_Lon, double inSouthWest_Lat, double inSouthWest_Lon) {
+        if (!UtilsGPS.hasGPSData(inDataObject)) {
+            return false;
+        }
+        // Adjust all the GPS values to make sure they are positive numbers, then it is simpler to do the comparisons
+        double lat = getLatDecimalDegree(inDataObject) + 1000;
+        double lon = getLonDecimalDegree(inDataObject) + 1000;
+        if ((lat <= (inNorthEast_Lat + 1000)) && (lat >= (inSouthWest_Lat + 1000))
+                && (lon <= (inNorthEast_Lon + 1000)) && (lon >= (inSouthWest_Lon + 1000))) {
+            return true;
+        }
+        return false;
     }
 
 }

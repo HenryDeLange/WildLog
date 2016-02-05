@@ -8,7 +8,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 
 
 public class UtilsGPX {
@@ -34,12 +34,12 @@ public class UtilsGPX {
             // Get the values
             double decimalLat = waypoint.getLat().doubleValue();
             double decimalLon = waypoint.getLon().doubleValue();
-            inDataObjectWithGPS.setLatDegrees(UtilsGps.getDegrees(Latitudes.NONE, decimalLat));
-            inDataObjectWithGPS.setLonDegrees(UtilsGps.getDegrees(Longitudes.NONE, decimalLon));
-            inDataObjectWithGPS.setLatMinutes(UtilsGps.getMinutes(decimalLat));
-            inDataObjectWithGPS.setLonMinutes(UtilsGps.getMinutes(decimalLon));
-            inDataObjectWithGPS.setLatSeconds(UtilsGps.getSeconds(decimalLat));
-            inDataObjectWithGPS.setLonSeconds(UtilsGps.getSeconds(decimalLon));
+            inDataObjectWithGPS.setLatDegrees(UtilsGPS.getDegrees(Latitudes.NONE, decimalLat));
+            inDataObjectWithGPS.setLonDegrees(UtilsGPS.getDegrees(Longitudes.NONE, decimalLon));
+            inDataObjectWithGPS.setLatMinutes(UtilsGPS.getMinutes(decimalLat));
+            inDataObjectWithGPS.setLonMinutes(UtilsGPS.getMinutes(decimalLon));
+            inDataObjectWithGPS.setLatSeconds(UtilsGPS.getSeconds(decimalLat));
+            inDataObjectWithGPS.setLonSeconds(UtilsGPS.getSeconds(decimalLon));
             // Get the accuracy (There doen't seem to be a standard value for accuracy in GPX 1.1). Assuming it's decent.
             inDataObjectWithGPS.setGPSAccuracy(GPSAccuracy.GOOD);
         }

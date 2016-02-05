@@ -19,7 +19,7 @@ import wildlog.astro.MoonTimes;
 import wildlog.astro.SunTimes;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.TimeFormat;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.utils.UtilsTime;
@@ -44,11 +44,11 @@ public class SunMoonDialog extends JDialog {
         // Moennie die oorspronklikke gebruik nie want ek wil nie die GPS punt laat verander nie
         dataObjectWithGPS = new DataObjectWithGPS() {};
         if (inDataObjectWithGPS != null) {
-            UtilsGps.copyGpsBetweenDOs(dataObjectWithGPS, inDataObjectWithGPS);
+            UtilsGPS.copyGpsBetweenDOs(dataObjectWithGPS, inDataObjectWithGPS);
         }
         // Populate the initial UI values
-        txtLatitude.setText(UtilsGps.getLatitudeString(dataObjectWithGPS));
-        txtLongitude.setText(UtilsGps.getLongitudeString(dataObjectWithGPS));
+        txtLatitude.setText(UtilsGPS.getLatitudeString(dataObjectWithGPS));
+        txtLongitude.setText(UtilsGPS.getLongitudeString(dataObjectWithGPS));
 
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
@@ -79,17 +79,17 @@ public class SunMoonDialog extends JDialog {
         updateTimeFromUI();
 
         // If a GPS is provided then do the loading, otherwise skip it to avoid the error
-        if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
-            && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
+        if (!UtilsGPS.NO_GPS_POINT.equals(txtLatitude.getText())
+            && !UtilsGPS.NO_GPS_POINT.equals(txtLongitude.getText())) {
             populateUI();
         }
     }
 
     private void populateUI() {
-        if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
-                && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
-            double lat = UtilsGps.getLatDecimalDegree(dataObjectWithGPS);
-            double lon = UtilsGps.getLonDecimalDegree(dataObjectWithGPS);
+        if (!UtilsGPS.NO_GPS_POINT.equals(txtLatitude.getText())
+                && !UtilsGPS.NO_GPS_POINT.equals(txtLongitude.getText())) {
+            double lat = UtilsGPS.getLatDecimalDegree(dataObjectWithGPS);
+            double lon = UtilsGPS.getLonDecimalDegree(dataObjectWithGPS);
             if (date != null) {
                 // Sun
                 lblSunlight.setText(AstroCalculator.getSunCategory(date, lat, lon).toString());
@@ -383,8 +383,8 @@ public class SunMoonDialog extends JDialog {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    txtLatitude.setText(UtilsGps.getLatitudeString(dataObjectWithGPS));
-                    txtLongitude.setText(UtilsGps.getLongitudeString(dataObjectWithGPS));
+                    txtLatitude.setText(UtilsGPS.getLatitudeString(dataObjectWithGPS));
+                    txtLongitude.setText(UtilsGPS.getLongitudeString(dataObjectWithGPS));
                     populateUI();
                 }
             });
@@ -396,8 +396,8 @@ public class SunMoonDialog extends JDialog {
         date = dtpDate.getDate();
         updateTimeFromUI();
         // If a GPS is provided then do the loading, otherwise skip it to avoid the error
-        if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
-            && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
+        if (!UtilsGPS.NO_GPS_POINT.equals(txtLatitude.getText())
+            && !UtilsGPS.NO_GPS_POINT.equals(txtLongitude.getText())) {
             populateUI();
         }
     }//GEN-LAST:event_dtpDateActionPerformed
@@ -405,8 +405,8 @@ public class SunMoonDialog extends JDialog {
     private void spnHoursStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnHoursStateChanged
         updateTimeFromUI();
         // If a GPS is provided then do the loading, otherwise skip it to avoid the error
-        if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
-            && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
+        if (!UtilsGPS.NO_GPS_POINT.equals(txtLatitude.getText())
+            && !UtilsGPS.NO_GPS_POINT.equals(txtLongitude.getText())) {
             populateUI();
         }
     }//GEN-LAST:event_spnHoursStateChanged
@@ -414,8 +414,8 @@ public class SunMoonDialog extends JDialog {
     private void spnMinutesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnMinutesStateChanged
         updateTimeFromUI();
         // If a GPS is provided then do the loading, otherwise skip it to avoid the error
-        if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
-            && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
+        if (!UtilsGPS.NO_GPS_POINT.equals(txtLatitude.getText())
+            && !UtilsGPS.NO_GPS_POINT.equals(txtLongitude.getText())) {
             populateUI();
         }
     }//GEN-LAST:event_spnMinutesStateChanged
@@ -425,8 +425,8 @@ public class SunMoonDialog extends JDialog {
         prevTimeFormat = (TimeFormat) cmbTimeFormat.getSelectedItem();
         updateTimeFromUI();
         // If a GPS is provided then do the loading, otherwise skip it to avoid the error
-        if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
-            && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
+        if (!UtilsGPS.NO_GPS_POINT.equals(txtLatitude.getText())
+            && !UtilsGPS.NO_GPS_POINT.equals(txtLongitude.getText())) {
             populateUI();
         }
     }//GEN-LAST:event_cmbTimeFormatActionPerformed

@@ -1,6 +1,8 @@
 package wildlog.ui.maps;
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +87,16 @@ public class MapsBaseDialog extends JFrame {
             @Override
             public void run() {
                 setupReportList();
+            }
+        });
+        // Dispose the map when the window closes
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+                if (activeMap != null) {
+                    activeMap.dispose();
+                }
             }
         });
     }

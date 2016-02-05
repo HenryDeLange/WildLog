@@ -41,7 +41,7 @@ import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.helpers.renderers.ButtonTableRenderer;
 import wildlog.ui.helpers.renderers.DateCellRenderer;
@@ -275,11 +275,11 @@ public final class UtilsTableGenerator {
                                 data[finalT][2] = tempLocation.getRating();
                                 data[finalT][3] = tempLocation.getGameViewingRating();
                                 data[finalT][4] = new WildLogTableModelDataWrapper(
-                                        UtilsGps.getLatitudeString(tempLocation), 
-                                        UtilsGps.getLatDecimalDegree(tempLocation));
+                                        UtilsGPS.getLatitudeString(tempLocation), 
+                                        UtilsGPS.getLatDecimalDegree(tempLocation));
                                 data[finalT][5] = new WildLogTableModelDataWrapper(
-                                        UtilsGps.getLongitudeString(tempLocation), 
-                                        UtilsGps.getLonDecimalDegree(tempLocation));
+                                        UtilsGPS.getLongitudeString(tempLocation), 
+                                        UtilsGPS.getLonDecimalDegree(tempLocation));
                                 data[finalT][6] = inApp.getDBI().count(new Sighting(null, tempLocation.getName(), null));
                                 return null;
                             }
@@ -681,8 +681,9 @@ public final class UtilsTableGenerator {
     }
     
     public static void setupSightingTableForMainTab(final WildLogApp inApp, final JTable inTable, final JLabel inLblFilterDetails,
-            final FilterProperties inFilterProperties, 
-            final List<Location> inActiveLocations, final List<Visit> inActiveVisits, final List<Element> inActiveElements) {
+            final FilterProperties inFilterProperties, final List<Location> inActiveLocations, 
+            final List<Visit> inActiveVisits, final List<Element> inActiveElements, 
+            final double inNorthEast_Lat, final double inNorthEast_Lon, final double inSouthWest_Lat, final double inSouthWest_Lon) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 8);
         // Setup header
@@ -706,9 +707,22 @@ public final class UtilsTableGenerator {
                                         "GPS"
                                         };
                 // Load data from DB (filtering on date and lists)
+                LocalDateTime startDateTime;
+                if (inFilterProperties.getStartDate() != null) {
+                    startDateTime = LocalDateTime.of(inFilterProperties.getStartDate(), LocalTime.MIN);
+                }
+                else {
+                    startDateTime = null;
+                }
+                LocalDateTime endDateTime;
+                if (inFilterProperties.getEndDate() != null) {
+                    endDateTime = LocalDateTime.of(inFilterProperties.getStartDate(), LocalTime.MAX);
+                }
+                else {
+                    endDateTime = null;
+                }
                 final List<Sighting> listSightings = inApp.getDBI().searchSightings(
-                        UtilsTime.getDateFromLocalDate(inFilterProperties.getStartDate()), 
-                        UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(inFilterProperties.getEndDate(), LocalTime.MAX)), 
+                        UtilsTime.getDateFromLocalDateTime(startDateTime), UtilsTime.getDateFromLocalDateTime(endDateTime), 
                         inActiveLocations, inActiveVisits, inActiveElements, true, Sighting.class);
                 if (!listSightings.isEmpty()) {
                     Collection<Callable<Object>> listCallables = Collections.synchronizedList(new ArrayList<>(listSightings.size()));
@@ -720,8 +734,17 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Sighting tempSighting = listSightings.get(finalT);
+                                // Do filtering on GPS point
+                                boolean excludeBecauseOfGPS = false;
+                                if (inNorthEast_Lat != 0.0 || inNorthEast_Lon != 0.0 || inSouthWest_Lat != 0.0 || inSouthWest_Lon != 0.0) {
+                                    if (!UtilsGPS.isSightingInBox(tempSighting, inNorthEast_Lat, inNorthEast_Lon, inSouthWest_Lat, inSouthWest_Lon)) {
+                                        // Skip this record because it was not inside the provided GPS box
+                                        excludeBecauseOfGPS = true;
+                                    }
+                                }
                                 // Do additional filtering on Sighting properties
-                                if (FilterPropertiesDialog.checkFilterPropertiesMatch(inFilterProperties, tempSighting)) {
+                                if (!excludeBecauseOfGPS && FilterPropertiesDialog.checkFilterPropertiesMatch(inFilterProperties, tempSighting)) {
+                                    // If all filters passed, then continue to add the row to the data list
                                     Object[] rowData = new Object[columnNames.length];
                                     rowData[0] = tempSighting.getDate();
                                     rowData[1] = tempSighting.getElementName();
@@ -827,6 +850,10 @@ public final class UtilsTableGenerator {
                             }
                             if (inFilterProperties.getEndDate() != null) {
                                 text = text + " to " + inFilterProperties.getEndDate().format(UtilsTime.WL_DATE_FORMATTER);
+                            }
+                            if (inNorthEast_Lat != 0.0 || inNorthEast_Lon != 0.0 || inSouthWest_Lat != 0.0 || inSouthWest_Lon != 0.0) {
+                                text = text + "." 
+                                    + "<br/>Filtering on GPS coordinates";
                             }
                             text = text + "."
                                     + "<br/>The current filters are using"

@@ -20,7 +20,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
@@ -385,9 +385,9 @@ public final class UtilsHTML {
             sliderScriptBuilder.append(System.lineSeparator());
             // Mapping Points
             if (relatedData instanceof DataObjectWithGPS) {
-                if (UtilsGps.getLatDecimalDegree((DataObjectWithGPS) relatedData) != 0 && UtilsGps.getLonDecimalDegree((DataObjectWithGPS) relatedData) != 0) {
+                if (UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) relatedData) != 0 && UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) relatedData) != 0) {
                     mapBuilder.append(mapTemplate.replace("var markerZZZ", "var marker" + relatedData.getIDField())
-                                                 .replace("LatLng(44.5403, -78.5463)", "LatLng(" + UtilsGps.getLatDecimalDegree((DataObjectWithGPS) relatedData) + "," + UtilsGps.getLonDecimalDegree((DataObjectWithGPS) relatedData) + ")")
+                                                 .replace("LatLng(44.5403, -78.5463)", "LatLng(" + UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) relatedData) + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) relatedData) + ")")
                                                  .replace("ZZZ-title", relatedData.getDisplayName().replaceAll("\"", "&quot;"))
                                                  .replace("markerZZZ.desc", "marker" + relatedData.getIDField() + ".desc")
                                                  .replace("ZZZ-content", relatedData.toHTML(false, false, true, inApp, UtilsHTMLExportTypes.ForHTML, null).replaceAll("\"", "&quot;"))

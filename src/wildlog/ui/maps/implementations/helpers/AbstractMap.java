@@ -64,4 +64,8 @@ public abstract class AbstractMap<T> {
         return lstCustomButtons;
     }
     
+    public void dispose() {
+        // Be default do nothing...
+    }
+    
 }

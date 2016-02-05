@@ -24,7 +24,7 @@ import javafx.scene.web.WebView;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.utils.UtilsFileProcessing;
@@ -165,9 +165,9 @@ public class HeatMap extends AbstractMap<Sighting> {
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
         for (Sighting sighting : inLstSightings) {
-            if (UtilsGps.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGps.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
-                gpsBuilder.append(gpsPointTemplate.replace("(11.111,", "(" + Double.toString(UtilsGps.getLatDecimalDegree(sighting)) + ",")
-                                                  .replace(", 22.222)", ", " + Double.toString(UtilsGps.getLonDecimalDegree(sighting)) + ")"));
+            if (UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
+                gpsBuilder.append(gpsPointTemplate.replace("(-32,", "(" + Double.toString(UtilsGPS.getLatDecimalDegree(sighting)) + ",")
+                                                  .replace(", 22)", ", " + Double.toString(UtilsGPS.getLonDecimalDegree(sighting)) + ")"));
                 gpsBuilder.append(System.lineSeparator());
             }
         }

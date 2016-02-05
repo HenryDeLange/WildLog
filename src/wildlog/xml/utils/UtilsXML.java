@@ -5,7 +5,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -43,8 +43,8 @@ public final class UtilsXML {
         builder.append("<latDegrees>").append(inDataObjectWithGPS.getLatDegrees()).append("</latDegrees>");
         builder.append("<latMinutes>").append(inDataObjectWithGPS.getLatMinutes()).append("</latMinutes>");
         builder.append("<latSeconds>").append(inDataObjectWithGPS.getLatSeconds()).append("</latSeconds>");
-        builder.append("<latitudeAsText>").append(UtilsGps.getLatitudeString(inDataObjectWithGPS)).append("</latitudeAsText>");
-        builder.append("<latDesimalDegrees>").append(UtilsGps.getDecimalDegree(inDataObjectWithGPS.getLatitude(), 
+        builder.append("<latitudeAsText>").append(UtilsGPS.getLatitudeString(inDataObjectWithGPS)).append("</latitudeAsText>");
+        builder.append("<latDesimalDegrees>").append(UtilsGPS.getDecimalDegree(inDataObjectWithGPS.getLatitude(), 
                 inDataObjectWithGPS.getLatDegrees(), inDataObjectWithGPS.getLatMinutes(), inDataObjectWithGPS.getLatSeconds()))
                 .append("</latDesimalDegrees>");
         builder.append("</Latitude>");
@@ -53,8 +53,8 @@ public final class UtilsXML {
         builder.append("<lonDegrees>").append(inDataObjectWithGPS.getLonDegrees()).append("</lonDegrees>");
         builder.append("<lonMinutes>").append(inDataObjectWithGPS.getLonMinutes()).append("</lonMinutes>");
         builder.append("<lonSeconds>").append(inDataObjectWithGPS.getLonSeconds()).append("</lonSeconds>");
-        builder.append("<longitudeAsText>").append(UtilsGps.getLongitudeString(inDataObjectWithGPS)).append("</longitudeAsText>");
-        builder.append("<lonDesimalDegrees>").append(UtilsGps.getDecimalDegree(inDataObjectWithGPS.getLongitude(), 
+        builder.append("<longitudeAsText>").append(UtilsGPS.getLongitudeString(inDataObjectWithGPS)).append("</longitudeAsText>");
+        builder.append("<lonDesimalDegrees>").append(UtilsGPS.getDecimalDegree(inDataObjectWithGPS.getLongitude(), 
                 inDataObjectWithGPS.getLonDegrees(), inDataObjectWithGPS.getLonMinutes(), inDataObjectWithGPS.getLonSeconds()))
                 .append("</lonDesimalDegrees>");
         builder.append("</Longitude>");

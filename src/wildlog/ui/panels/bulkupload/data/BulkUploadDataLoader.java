@@ -25,7 +25,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
@@ -115,7 +115,7 @@ public class BulkUploadDataLoader {
                 // Set the GPS details (if not already set)
                 if ((sightingKey.getLatitude() == null || Latitudes.NONE.equals(sightingKey.getLatitude()))
                         && (sightingKey.getLongitude() == null || Longitudes.NONE.equals(sightingKey.getLongitude()))) {
-                    UtilsGps.copyGpsBetweenDOs(sightingKey, temp.getDataObjectWithGPS());
+                    UtilsGPS.copyGpsBetweenDOs(sightingKey, temp.getDataObjectWithGPS());
                 }
                 // Add the image to the sighting
                 finalMap.get(sightingKey).getImageList().add(temp);

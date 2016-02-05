@@ -83,7 +83,7 @@ import wildlog.html.utils.UtilsHTML;
 import wildlog.maps.kml.UtilsKML;
 import wildlog.maps.kml.generator.KmlEntry;
 import wildlog.maps.kml.generator.KmlGenerator;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.MergeElementsDialog;
@@ -1583,8 +1583,8 @@ public final class WildLogView extends JFrame {
                                     }
                                     if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
                                             && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
-                                        double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                                        double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                                        double lat = UtilsGPS.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                                        double lon = UtilsGPS.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                                         if (sighting.getMoonlight() == null || Moonlight.NONE.equals(sighting.getMoonlight()) || Moonlight.UNKNOWN.equals(sighting.getMoonlight())) {
                                             sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
                                         }

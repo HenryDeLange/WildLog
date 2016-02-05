@@ -35,7 +35,7 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsImageProcessing;
@@ -415,9 +415,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             latitude = Latitudes.NORTH;
                         }
                         location.setLatitude(latitude);
-                        location.setLatDegrees(UtilsGps.getDegrees(latitude, lat));
-                        location.setLatMinutes(UtilsGps.getMinutes(lat));
-                        location.setLatSeconds(UtilsGps.getSeconds(lat));
+                        location.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
+                        location.setLatMinutes(UtilsGPS.getMinutes(lat));
+                        location.setLatSeconds(UtilsGPS.getSeconds(lat));
                     }
                     double lon = resultSet.getDouble("PLACE_LONGITUDE");
                     if (lon != 0) {
@@ -429,9 +429,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             longitude = Longitudes.EAST;
                         }
                         location.setLongitude(longitude);
-                        location.setLonDegrees(UtilsGps.getDegrees(longitude, lon));
-                        location.setLonMinutes(UtilsGps.getMinutes(lon));
-                        location.setLonSeconds(UtilsGps.getSeconds(lon));
+                        location.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
+                        location.setLonMinutes(UtilsGPS.getMinutes(lon));
+                        location.setLonSeconds(UtilsGPS.getSeconds(lon));
                     }
                     if (count(location) == 0) {
                         success = success && createOrUpdate(location, null);
@@ -498,9 +498,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             latitude = Latitudes.NORTH;
                         }
                         sighting.setLatitude(latitude);
-                        sighting.setLatDegrees(UtilsGps.getDegrees(latitude, lat));
-                        sighting.setLatMinutes(UtilsGps.getMinutes(lat));
-                        sighting.setLatSeconds(UtilsGps.getSeconds(lat));
+                        sighting.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
+                        sighting.setLatMinutes(UtilsGPS.getMinutes(lat));
+                        sighting.setLatSeconds(UtilsGPS.getSeconds(lat));
                     }
                     double lon = resultSet.getDouble("OBSERVATION_LONGITUDE");
                     if (lon != 0) {
@@ -512,9 +512,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             longitude = Longitudes.EAST;
                         }
                         sighting.setLongitude(longitude);
-                        sighting.setLonDegrees(UtilsGps.getDegrees(longitude, lon));
-                        sighting.setLonMinutes(UtilsGps.getMinutes(lon));
-                        sighting.setLonSeconds(UtilsGps.getSeconds(lon));
+                        sighting.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
+                        sighting.setLonMinutes(UtilsGPS.getMinutes(lon));
+                        sighting.setLonSeconds(UtilsGPS.getSeconds(lon));
                     }
                     sighting.setNumberOfElements(resultSet.getInt("NUMBER_OF_CREATURES"));
                     sighting.setLifeStatus(LifeStatus.getEnumFromText(resultSet.getString("LIFE_STATUS")));
@@ -1196,6 +1196,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLONOPTION");
             
 // TODO: Add more upgrade stuff here, as needed
+
+// FIXME:Die upgrade proses werk steeds nie lekker nie...
             
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=7");

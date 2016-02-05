@@ -13,7 +13,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
@@ -50,8 +50,8 @@ public class InfoBox extends JPanel {
             lblTime.setText(timeFormater.format(sightingWrapper.getDate()));
         }
         lblElementName.setText(sightingWrapper.getElementName());
-        lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
-        lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
+        lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
+        lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
         lblImage.setIcon(sightingWrapper.getIcon());
     }
 
@@ -265,8 +265,8 @@ public class InfoBox extends JPanel {
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             table.getCellEditor().stopCellEditing();
-            lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
-            lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
+            lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
+            lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
         }
     }//GEN-LAST:event_btnGPSActionPerformed
 
@@ -296,21 +296,21 @@ public class InfoBox extends JPanel {
             temp.setLonMinutes(GPSDialog.getPrevLonMin());
             temp.setLonSeconds(GPSDialog.getPrevLonSec());
             temp.setGPSAccuracy(GPSDialog.getPrevAccuracy());
-            UtilsGps.copyGpsBetweenDOs(sightingWrapper, temp);
-            lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
-            lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
+            UtilsGPS.copyGpsBetweenDOs(sightingWrapper, temp);
+            lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
+            lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
         }
         else
         if (SwingUtilities.isMiddleMouseButton(evt)) {
             BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)table.getModel().getValueAt(table.getEditingRow(), 1);
             for (BulkUploadImageFileWrapper imageFileWrapper : listWrapper.getImageList()) {
                 DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(imageFileWrapper.getFile());
-                if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))
-                        && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))) {
+                if (!UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLatitudeString(temp))
+                        && !UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLongitudeString(temp))) {
                     table.getCellEditor().stopCellEditing();
-                    UtilsGps.copyGpsBetweenDOs(sightingWrapper, temp);
-                    lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
-                    lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
+                    UtilsGPS.copyGpsBetweenDOs(sightingWrapper, temp);
+                    lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
+                    lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
                 }
             }
         }

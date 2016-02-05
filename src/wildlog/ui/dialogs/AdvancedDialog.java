@@ -16,7 +16,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.PanelVisit;
 import wildlog.ui.utils.UtilsTime;
@@ -317,14 +317,14 @@ public class AdvancedDialog extends JDialog {
                                 // Only 600000 milliseconds (10 minutes) appart
                                 rating = rating + 2;
                             }
-                            if (UtilsGps.getLatitudeString(sighting).equals(UtilsGps.getLatitudeString(tempSighting))
-                                    && UtilsGps.getLongitudeString(sighting).equals(UtilsGps.getLongitudeString(tempSighting))) {
+                            if (UtilsGPS.getLatitudeString(sighting).equals(UtilsGPS.getLatitudeString(tempSighting))
+                                    && UtilsGPS.getLongitudeString(sighting).equals(UtilsGPS.getLongitudeString(tempSighting))) {
                                 // The same place
                                 rating = rating + 5;
                             }
                             else
-                            if (Math.abs((int)(UtilsGps.getLatDecimalDegree(sighting)*100) - (int)(UtilsGps.getLatDecimalDegree(tempSighting)*100)) <= 1
-                                    && Math.abs((int)(UtilsGps.getLonDecimalDegree(sighting)*100) - (int)(UtilsGps.getLonDecimalDegree(tempSighting)*100)) <= 1) {
+                            if (Math.abs((int)(UtilsGPS.getLatDecimalDegree(sighting)*100) - (int)(UtilsGPS.getLatDecimalDegree(tempSighting)*100)) <= 1
+                                    && Math.abs((int)(UtilsGPS.getLonDecimalDegree(sighting)*100) - (int)(UtilsGPS.getLonDecimalDegree(tempSighting)*100)) <= 1) {
                                 // GPS values close together
                                 rating = rating + 2;
                             }

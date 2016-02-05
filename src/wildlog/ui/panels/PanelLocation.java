@@ -26,7 +26,7 @@ import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
@@ -1185,8 +1185,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
-        txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
+        txtLatitude.setText(UtilsGPS.getLatitudeString(locationWL));
+        txtLongitude.setText(UtilsGPS.getLongitudeString(locationWL));
         if (locationWL.getName() != null) {
             lblNumberOfSightings.setText(Integer.toString(app.getDBI().count(new Sighting(null, locationWL.getName(), null))));
             lblNumberOfVisits.setText(Integer.toString(app.getDBI().count(new Visit(null, locationWL.getName()))));
@@ -1247,8 +1247,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
-            txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
-            txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
+            txtLatitude.setText(UtilsGPS.getLatitudeString(locationWL));
+            txtLongitude.setText(UtilsGPS.getLongitudeString(locationWL));
             btnUpdateActionPerformed(null);
         }
         btnUpdate.requestFocus();

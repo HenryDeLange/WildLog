@@ -555,7 +555,7 @@ public class ReportsBaseDialog extends JFrame {
             FilterProperties inLilterProperties, JLabel inLblFilteredRecords, AbstractReport inActiveReport, JFXPanel inJfxReportChartPanel) {
         // NOTE: Don't create a new ArrayList (clear existing instead), because the reports are holding on to the reference 
         //       and will be stuck with an old list otherwise. Easiest to just keep the reference constant than to try and 
-        //       update the all reports everytime (the active report already gets updated explicitly).
+        //       update all the reports everytime (the active report already gets updated explicitly).
         inLstFilteredData.clear();
         // All filters need to be taken into account all the time, even if only one was changed the results must still fullfill the other filters...
         for (Sighting sighting : inLstOriginalData) {

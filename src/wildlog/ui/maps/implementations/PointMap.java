@@ -24,7 +24,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.utils.UtilsFileProcessing;
@@ -75,6 +75,8 @@ public class PointMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnOpenInBrowser);
+// TODO: Include Thumbnails checkbox (performance)
+// TODO: Include sighting details checkbox (performance)
     }
 
     @Override
@@ -125,14 +127,15 @@ public class PointMap extends AbstractMap<Sighting> {
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
         for (DataObjectWithHTML sighting : inLstSightings) {
-            if (UtilsGps.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGps.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
+            if (UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
                 gpsBuilder.append(gpsPointTemplate.replace("var markerZZZ", "var marker" + sighting.getIDField())
-                                                  .replace("LatLng(44.5403, -78.5463)", "LatLng(" + UtilsGps.getLatDecimalDegree((DataObjectWithGPS) sighting) 
-                                                          + "," + UtilsGps.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")")
+                                                  .replace("LatLng(-31, 29)", "LatLng(" + UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) 
+                                                          + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")")
                                                   .replace("ZZZ-title", sighting.getDisplayName().replaceAll("\"", "&quot;"))
                                                   .replace("markerZZZ.desc", "marker" + sighting.getIDField() + ".desc")
-                                                  .replace("ZZZ-content", sighting.toHTML(false, true, true, WildLogApp.getApplication(), 
-                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;"))
+// FIXME: Hierdie is stukkend
+                                                  /*.replace("ZZZ-content", sighting.toHTML(false, true, true, WildLogApp.getApplication(), 
+                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;"))*/
                                                   .replace("oms.addMarker(markerZZZ", "oms.addMarker(marker" + sighting.getIDField())
                                                   .replace("bounds.extend(markerZZZ", "bounds.extend(marker" + sighting.getIDField()));
                 gpsBuilder.append(System.lineSeparator());
@@ -172,10 +175,10 @@ public class PointMap extends AbstractMap<Sighting> {
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
         for (DataObjectWithHTML sighting : inLstSightings) {
-            if (UtilsGps.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGps.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
+            if (UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
                 gpsBuilder.append(gpsPointTemplate.replace("var locationZZZ", "var location" + sighting.getIDField())
-                                                  .replace("Location(11.111, 22.222)", "Location(" + UtilsGps.getLatDecimalDegree((DataObjectWithGPS) sighting) 
-                                                          + "," + UtilsGps.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")")
+                                                  .replace("Location(-33, 23)", "Location(" + UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) 
+                                                          + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")")
                                                   .replace("var pinZZZ", "var pin" + sighting.getIDField())
                                                   .replace("Pushpin(locationZZZ", "Pushpin(location" + sighting.getIDField())
                                                   .replace("push(pinZZZ", "push(pin" + sighting.getIDField())

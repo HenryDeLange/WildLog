@@ -8,7 +8,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
-import wildlog.maps.utils.UtilsGps;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.xml.utils.UtilsXML;
 
@@ -36,8 +36,8 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         htmlLocation.append("<br/>");
         UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Description:</b><br/> ", description, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/> ", UtilsGps.getLatitudeString(this), true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/> ", UtilsGps.getLongitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/> ", UtilsGPS.getLatitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/> ", UtilsGPS.getLongitudeString(this), true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy:</b><br/> ", gpsAccuracy, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/> ", rating, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/> ", gameViewingRating, true);
@@ -107,8 +107,8 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         entry.setName(name);
         entry.setDescription(toHTML(false, true, true, inApp, UtilsHTMLExportTypes.ForKML, null));
         entry.setStyle("locationStyle");
-        entry.setLatitude(UtilsGps.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
-        entry.setLongitude(UtilsGps.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
+        entry.setLatitude(UtilsGPS.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
+        entry.setLongitude(UtilsGPS.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         return entry;
     }
 
