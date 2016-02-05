@@ -291,4 +291,8 @@ public class GeoToolsMapJavaFX {
         return mapContent.getCoordinateReferenceSystem();
     }
     
+    public void dispose() {
+        mapContent.dispose();
+    }
+    
 }
