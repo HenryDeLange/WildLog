@@ -35,12 +35,12 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         htmlVisit.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlVisit.append("<b><u>").append(name).append("</u></b>");
         htmlVisit.append("<br/>");
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Start Date:</b><br/> ", UtilsHTML.formatDateAsString(startDate, false), true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>End Date:</b><br/> ", UtilsHTML.formatDateAsString(endDate, false), true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Type of Visit:</b><br/> ", type, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Description:</b><br/> ", description, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Start Date:</b><br/>", UtilsHTML.formatDateAsString(startDate, false), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>End Date:</b><br/>", UtilsHTML.formatDateAsString(endDate, false), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Type of Visit:</b><br/>", type, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Description:</b><br/>", description, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Game Watching:</b><br/> ", gameWatchingIntensity, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Game Watching:</b><br/>", gameWatchingIntensity, true);
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);

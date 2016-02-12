@@ -878,69 +878,47 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (tblSightings.getColumnCount() == 1) {
             lstSightingsToMap = new ArrayList<>(0);
         }
-        else
-        if (tblSightings.getSelectedRowCount() == 0) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "<html>No Observations were selected, do you want to <b>use all Observations</b> listed in the table instead?</html>",
-                            "Use All Observations?",
-                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                }
-            });
-            if (result == JOptionPane.YES_OPTION) {
-                // Use all Sightings
-                lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
-                for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
-                    Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 8)));
-                    sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 4));
-                    sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 5));
-                    lstSightingsToMap.add(sighting);
-                }
-            }
-            else {
-                lstSightingsToMap = new ArrayList<>(0);
-            }
-        }
         else {
             int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "<html>Some Observations were selected, do you want to <b>use all Observations</b> listed in the table instead?</html>",
-                            "Use All Observations?",
-                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    return JOptionPane.showOptionDialog(app.getMainFrame(),
+                            "Please select which subset of Observations should be used.",
+                            "Which Observations to use?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, 
+                            new String[]{"All active Observations (" + tblSightings.getRowCount() + ")", 
+                                         "Only selected Observations (" + tblSightings.getSelectedRowCount() + ")"}, null);
                 }
             });
-            if (result == JOptionPane.YES_OPTION) {
-                // Use all Sightings
-                lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
-                for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
-                    Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 8)));
-                    sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 4));
-                    sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 5));
-                    lstSightingsToMap.add(sighting);
+            if (result != JOptionPane.CLOSED_OPTION) {
+                if (result == 0) {
+                    // Use all Sightings
+                    lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
+                    for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
+                        Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                                tblSightings.convertRowIndexToModel(row), 8)));
+                        sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                                tblSightings.convertRowIndexToModel(row), 4));
+                        sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                                tblSightings.convertRowIndexToModel(row), 5));
+                        lstSightingsToMap.add(sighting);
+                    }
+                }
+                else {
+                    // Use selected Sightings
+                    lstSightingsToMap = new ArrayList<>(tblSightings.getSelectedRowCount());
+                    for (int row : tblSightings.getSelectedRows()) {
+                        Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                                tblSightings.convertRowIndexToModel(row), 8)));
+                        sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                                tblSightings.convertRowIndexToModel(row), 4));
+                        sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                                tblSightings.convertRowIndexToModel(row), 5));
+                        lstSightingsToMap.add(sighting);
+                    }
                 }
             }
             else {
-                // Use selected Sightings
-                lstSightingsToMap = new ArrayList<>(tblSightings.getSelectedRowCount());
-                for (int row : tblSightings.getSelectedRows()) {
-                    Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 8)));
-                    sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 4));
-                    sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 5));
-                    lstSightingsToMap.add(sighting);
-                }
+                lstSightingsToMap = new ArrayList<>(0);
             }
         }
         return lstSightingsToMap;

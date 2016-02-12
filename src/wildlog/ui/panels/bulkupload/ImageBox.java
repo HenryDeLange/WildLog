@@ -277,15 +277,37 @@ public class ImageBox extends JPanel {
                     return JOptionPane.showOptionDialog(WildLogApp.getApplication().getMainFrame(), 
                             "Choose where the file should be moved.", 
                             "Duplicate And Move", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                            null, new String[]{"Same Observation", "Move Up", "Move Down"}, null);
+                            null, new String[]{"Duplicate to a New Observation", "Duplicate to the Same Observation", 
+                                               "Duplicate and move Up", "Duplicate and move Down"}, null);
                 }
             });
             if (option != JOptionPane.CLOSED_OPTION) {
                 if (option == 0) {
-                    btnCloneActionPerformed(null);
+                    // Make sure to call stop editing after getting the row and col
+                    int row = table.getEditingRow();
+                    table.getCellEditor().stopCellEditing();
+                    // Perform the add and remember to let the model know
+                    DefaultTableModel model = ((DefaultTableModel)table.getModel());
+                    BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
+                    BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
+                    BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper);
+                    newSightingWrapper.setDate(imageWrapper.getDate());
+                    UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
+                    BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper();
+                    newListWrapper.getImageList().add(imageWrapper.getClone());
+                    if (imageWrapper.getDate().before(currentSightingWrapper.getDate())) {
+                        model.insertRow(row, new Object[]{newSightingWrapper, newListWrapper});
+                    }
+                    else {
+                        model.insertRow(row + 1, new Object[]{newSightingWrapper, newListWrapper});
+                    }
                 }
                 else
                 if (option == 1) {
+                    btnCloneActionPerformed(null);
+                }
+                else
+                if (option == 2) {
                     // Make sure to call stop editing after getting the row and col
                     int row = table.getEditingRow();
                     if (row > 0) {
@@ -299,7 +321,7 @@ public class ImageBox extends JPanel {
                     }
                 }
                 else 
-                if (option == 2) {
+                if (option == 3) {
                     // Make sure to call stop editing after getting the row and col
                     int row = table.getEditingRow();
                     if (row < (table.getRowCount()-1)) {

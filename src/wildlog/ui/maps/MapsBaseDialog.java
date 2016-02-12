@@ -48,6 +48,7 @@ import wildlog.ui.maps.implementations.LandStatusMap;
 import wildlog.ui.maps.implementations.LegacyMap;
 import wildlog.ui.maps.implementations.OtherMap;
 import wildlog.ui.maps.implementations.PointMap;
+import wildlog.ui.maps.implementations.WebDistributionMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.ui.reports.ReportExportDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
@@ -135,16 +136,18 @@ public class MapsBaseDialog extends JFrame {
         // Add default map description
         lblMapDescription.setText("Additional information for the selected map will be shown in this area.");
         // Setup the default reports
-        List<AbstractMap<Sighting>> lstMaps = new ArrayList<>(9);
+        List<AbstractMap<Sighting>> lstMaps = new ArrayList<>(10);
         lstMaps.add(new PointMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new WebDistributionMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, this));
+// TODO: Biomes map
         // Add the reports
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(10);

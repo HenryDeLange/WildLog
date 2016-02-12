@@ -1,6 +1,5 @@
 package wildlog.data.dataobjects;
 
-import wildlog.maps.kml.generator.KmlEntry;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
@@ -8,6 +7,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
+import wildlog.maps.kml.generator.KmlEntry;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.xml.utils.UtilsXML;
@@ -34,30 +34,30 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         htmlLocation.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlLocation.append("<b><u>").append(name).append("</u></b>");
         htmlLocation.append("<br/>");
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Description:</b><br/> ", description, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Description:</b><br/>", description, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/> ", UtilsGPS.getLatitudeString(this), true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/> ", UtilsGPS.getLongitudeString(this), true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy:</b><br/> ", gpsAccuracy, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/> ", rating, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/> ", gameViewingRating, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Habitat:</b><br/> ", habitatType, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Directions:</b><br/> ", directions, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/>", UtilsGPS.getLatitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/>", UtilsGPS.getLongitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy:</b><br/>", gpsAccuracy, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/>", rating, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/>", gameViewingRating, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Habitat:</b><br/>", habitatType, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Directions:</b><br/>", directions, true);
             if (website != null) {
                 if (website.length() > 0) {
-                    UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", "<a href=\"" + website + "\">" + website + "</a>", true);
+                    UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/>", "<a href=\"" + website + "\">" + website + "</a>", true);
                 }
                 else {
-                    UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", website, true);
+                    UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/>", website, true);
                 }
             }
             else {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", website, true);
+                UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/>", website, true);
             }
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Email:</b><br/> ", email, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Phone Number:</b><br/> ", contactNumbers, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Catering:</b><br/> ", catering, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Accomodation:</b><br/> ", accommodationType, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Email:</b><br/>", email, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Phone Number:</b><br/>", contactNumbers, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Catering:</b><br/>", catering, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Accomodation:</b><br/>", accommodationType, true);
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);

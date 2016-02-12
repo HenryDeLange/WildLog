@@ -80,7 +80,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
 
     
     public DistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
-        super("Distribution Maps (Species)", inLstData, inChartDescLabel, inMapsBaseDialog);
+        super("Distribution Maps (Workspace)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
         Button btnDistributionMap = new Button("Select Species Distribution Map");
@@ -88,6 +88,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
         btnDistributionMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
+                activeMapType = MapType.SPECIES_DISTRIBUTION;
                 String elementName = null;
                 for (Sighting sighting : lstData) {
                     if (elementName == null) {

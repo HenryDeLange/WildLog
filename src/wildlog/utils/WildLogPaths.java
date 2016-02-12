@@ -15,12 +15,14 @@ public enum WildLogPaths {
     DEFAUL_SETTINGS_FOLDER                (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
     OPEN_H2                               (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.4.187.jar")),
-    /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
-    OPEN_OPENMAP                          (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
+//    /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
+//    OPEN_OPENMAP                          (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.
      * The workspacePrefix already has this value appended. */
     DEFAULT_WORKSPACE_NAME                (Paths.get("WildLog")),
-    /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the database name. */
+    /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the file used to indicate a workspace. */
+    DEFAULT_WORKSPACE_INDICATOR_FILE      (Paths.get("wildlog.workspace")),
+    /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the database. */
     DEFAULT_DATABASE_NAME                 (Paths.get("wildlog")),
     // These are the values that can be reused.
     WILDLOG_DATA                          (Paths.get("Data")),

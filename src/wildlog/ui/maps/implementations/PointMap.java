@@ -14,6 +14,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.web.WebEngine;
@@ -36,11 +37,13 @@ public class PointMap extends AbstractMap<Sighting> {
     private MapType activeMapType = MapType.POINT_MAP_GOOGLE;
     private Parent displayedMap;
     private String displayedTemplate;
+    private boolean showDetails;
+    private boolean showThumbnails;
 
     
     public PointMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         super("World Maps (Online)", inLstData, inChartDescLabel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(4);
+        lstCustomButtons = new ArrayList<>(6);
         // Maps
         Button btnPointMapGoogle = new Button("Show Points on Google Maps");
         btnPointMapGoogle.setCursor(Cursor.HAND);
@@ -75,8 +78,26 @@ public class PointMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnOpenInBrowser);
-// TODO: Include Thumbnails checkbox (performance)
-// TODO: Include sighting details checkbox (performance)
+        // Include sighting details (performance)
+        CheckBox chkShowDetails = new CheckBox("Include Observation Details");
+        chkShowDetails.setCursor(Cursor.HAND);
+        chkShowDetails.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                showDetails = chkShowDetails.isSelected();
+            }
+        });
+        lstCustomButtons.add(chkShowDetails);
+        // Include Thumbnails (performance)
+        CheckBox chkShowFileThumbnails = new CheckBox("Include Observation Thumbnails");
+        chkShowFileThumbnails.setCursor(Cursor.HAND);
+        chkShowFileThumbnails.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                showThumbnails = chkShowFileThumbnails.isSelected();
+            }
+        });
+        lstCustomButtons.add(chkShowFileThumbnails);
     }
 
     @Override
@@ -133,9 +154,8 @@ public class PointMap extends AbstractMap<Sighting> {
                                                           + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")")
                                                   .replace("ZZZ-title", sighting.getDisplayName().replaceAll("\"", "&quot;"))
                                                   .replace("markerZZZ.desc", "marker" + sighting.getIDField() + ".desc")
-// FIXME: Hierdie is stukkend
-                                                  /*.replace("ZZZ-content", sighting.toHTML(false, true, true, WildLogApp.getApplication(), 
-                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;"))*/
+                                                  .replace("ZZZ-content", sighting.toHTML(false, showThumbnails, !showDetails, WildLogApp.getApplication(), 
+                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;").replaceAll("\n", "<br/>").replaceAll("\r", ""))
                                                   .replace("oms.addMarker(markerZZZ", "oms.addMarker(marker" + sighting.getIDField())
                                                   .replace("bounds.extend(markerZZZ", "bounds.extend(marker" + sighting.getIDField()));
                 gpsBuilder.append(System.lineSeparator());
@@ -184,7 +204,7 @@ public class PointMap extends AbstractMap<Sighting> {
                                                   .replace("push(pinZZZ", "push(pin" + sighting.getIDField())
                                                   .replace("Infobox(locationZZZ", "Infobox(location" + sighting.getIDField())
                                                   .replace("ZZZ-title", sighting.getDisplayName().replaceAll("\"", "&quot;"))
-                                                  .replace("ZZZ-content", sighting.toHTML(false, true, true, WildLogApp.getApplication(), 
+                                                  .replace("ZZZ-content", sighting.toHTML(false, showThumbnails, !showDetails, WildLogApp.getApplication(), 
                                                           UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;"))
                                                   .replace("pushpin: pinZZZ", "pushpin: pin" + sighting.getIDField()));
                 gpsBuilder.append(System.lineSeparator());

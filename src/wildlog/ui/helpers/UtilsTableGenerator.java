@@ -716,7 +716,7 @@ public final class UtilsTableGenerator {
                 }
                 LocalDateTime endDateTime;
                 if (inFilterProperties.getEndDate() != null) {
-                    endDateTime = LocalDateTime.of(inFilterProperties.getStartDate(), LocalTime.MAX);
+                    endDateTime = LocalDateTime.of(inFilterProperties.getEndDate(), LocalTime.MAX);
                 }
                 else {
                     endDateTime = null;
@@ -843,26 +843,35 @@ public final class UtilsTableGenerator {
                             if (inTable.getRowHeight() == 50) {
                                 rowCount = 0;
                             }
-                            String text = "<html>"
-                                    + "Showing " + rowCount + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations.";
+                            // Total count
+                            String text = "<html>Showing " + rowCount + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations.";
+                            // Date range
+                            if (inFilterProperties.getStartDate() != null || inFilterProperties.getEndDate() != null) {
+                                text = text + "<br/>Filtering on all Observations ";
+                            }
                             if (inFilterProperties.getStartDate() != null) {
-                                text = text + "<br/>Filtering on all Observations from " + inFilterProperties.getStartDate().format(UtilsTime.WL_DATE_FORMATTER);
+                                text = text + "starting from " + inFilterProperties.getStartDate().format(UtilsTime.WL_DATE_FORMATTER);
+                            }
+                            if (inFilterProperties.getStartDate() != null && inFilterProperties.getEndDate() != null) {
+                                text = text + " and ";
                             }
                             if (inFilterProperties.getEndDate() != null) {
-                                text = text + " to " + inFilterProperties.getEndDate().format(UtilsTime.WL_DATE_FORMATTER);
+                                text = text + "before " + inFilterProperties.getEndDate().format(UtilsTime.WL_DATE_FORMATTER);
                             }
+                            if (inFilterProperties.getStartDate() != null || inFilterProperties.getEndDate() != null) {
+                                text = text + ".";
+                            }
+                            // Map
                             if (inNorthEast_Lat != 0.0 || inNorthEast_Lon != 0.0 || inSouthWest_Lat != 0.0 || inSouthWest_Lon != 0.0) {
-                                text = text + "." 
-                                    + "<br/>Filtering on GPS coordinates";
+                                text = text + "<br/>Filtering on GPS coordinates.";
                             }
-                            text = text + "."
-                                    + "<br/>The current filters are using"
+                            // Location, Visit and Creature filters
+                            text = text + "<br/>The current filters are using"
                                     + " " + inActiveLocations.size() + " (of " + inApp.getDBI().count(new Location()) + ") Places"
                                     + ", " + inActiveVisits.size() + " (of " + inApp.getDBI().count(new Visit()) + ") Periods "
-                                    + " and " + inActiveElements.size() + " (of " + inApp.getDBI().count(new Element()) + ") Creatures";
-                            text = text + "." 
-                                    + "<br/>Additional Observation properties may also be active."
-                                    + "</html>";
+                                    + " and " + inActiveElements.size() + " (of " + inApp.getDBI().count(new Element()) + ") Creatures.";
+                            // Other
+                            text = text + "<br/>Additional Observation properties may also be active.</html>";
                             inLblFilterDetails.setText(text);
                         }
                     });

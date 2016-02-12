@@ -1,5 +1,7 @@
 package wildlog.ui.panels;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -8,6 +10,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -36,6 +43,7 @@ import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
+import wildlog.data.wrappers.json.iucn.IUCNSpeciesData;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -288,6 +296,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel60 = new javax.swing.JLabel();
         jScrollPane17 = new javax.swing.JScrollPane();
         txtDiagnosticDescription = new javax.swing.JTextArea();
+        btnCheckIUCN = new javax.swing.JButton();
         pnlInfo2 = new javax.swing.JPanel();
         jLabel72 = new javax.swing.JLabel();
         jScrollPane18 = new javax.swing.JScrollPane();
@@ -807,6 +816,18 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtDiagnosticDescription.setName("txtDiagnosticDescription"); // NOI18N
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
+        btnCheckIUCN.setText("IUCN");
+        btnCheckIUCN.setToolTipText("Try to load the endangered status from the IUCN web services.");
+        btnCheckIUCN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCheckIUCN.setFocusPainted(false);
+        btnCheckIUCN.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnCheckIUCN.setName("btnCheckIUCN"); // NOI18N
+        btnCheckIUCN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckIUCNActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlInfo1Layout = new javax.swing.GroupLayout(pnlInfo1);
         pnlInfo1.setLayout(pnlInfo1Layout);
         pnlInfo1Layout.setHorizontalGroup(
@@ -815,19 +836,23 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addGap(10, 10, 10)
                 .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel66, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel68, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel64, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel62, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel70, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)))
                 .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfo1Layout.createSequentialGroup()
                         .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cmbAddFrequency, 0, 184, Short.MAX_VALUE)
                             .addComponent(cmbActiveTime, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbWaterDependance, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbEndangeredStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(pnlInfo1Layout.createSequentialGroup()
+                                .addComponent(cmbEndangeredStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCheckIUCN)))
                         .addGap(10, 10, 10)
                         .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -873,7 +898,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                             .addGap(4, 4, 4)
                             .addComponent(txtbreedingDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(5, 5, 5)
-                            .addComponent(txtBreedingNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtBreedingNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCheckIUCN, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(pnlInfo1Layout.createSequentialGroup()
                             .addGap(48, 48, 48)
@@ -920,7 +946,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtBehaviourDescription.setName("txtBehaviourDescription"); // NOI18N
         jScrollPane18.setViewportView(txtBehaviourDescription);
 
-        spnSizeMaleMax.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnSizeMaleMax.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
         spnSizeMaleMax.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnSizeMaleMax.setName("spnSizeMaleMax"); // NOI18N
         spnSizeMaleMax.setValue(element.getSizeMaleMax());
@@ -937,7 +963,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel4.setText("Units:");
         jLabel4.setName("jLabel4"); // NOI18N
 
-        spnWeightFemaleMax.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnWeightFemaleMax.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
         spnWeightFemaleMax.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnWeightFemaleMax.setName("spnWeightFemaleMax"); // NOI18N
         spnWeightFemaleMax.setValue(element.getWeightFemaleMax());
@@ -973,7 +999,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel7.setText("Min");
         jLabel7.setName("jLabel7"); // NOI18N
 
-        spnSizeFemaleMax.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnSizeFemaleMax.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
         spnSizeFemaleMax.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnSizeFemaleMax.setName("spnSizeFemaleMax"); // NOI18N
         spnSizeFemaleMax.setValue(element.getSizeFemaleMax());
@@ -994,12 +1020,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbWeightUnits.setFocusable(false);
         cmbWeightUnits.setName("cmbWeightUnits"); // NOI18N
 
-        spnSizeFemaleMin.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnSizeFemaleMin.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
         spnSizeFemaleMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnSizeFemaleMin.setName("spnSizeFemaleMin"); // NOI18N
         spnSizeFemaleMin.setValue(element.getSizeFemaleMin());
 
-        spnSizeMaleMin.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnSizeMaleMin.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
         spnSizeMaleMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnSizeMaleMin.setName("spnSizeMaleMin"); // NOI18N
         spnSizeMaleMin.setValue(element.getSizeMaleMin());
@@ -1007,7 +1033,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel69.setText("Food / Nutrition:");
         jLabel69.setName("jLabel69"); // NOI18N
 
-        spnWeightMaleMin.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnWeightMaleMin.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
         spnWeightMaleMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnWeightMaleMin.setName("spnWeightMaleMin"); // NOI18N
         spnWeightMaleMin.setValue(element.getWeightMaleMin());
@@ -1018,7 +1044,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel5.setText("Units:");
         jLabel5.setName("jLabel5"); // NOI18N
 
-        spnWeightFemaleMin.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnWeightFemaleMin.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
         spnWeightFemaleMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnWeightFemaleMin.setName("spnWeightFemaleMin"); // NOI18N
         spnWeightFemaleMin.setValue(element.getWeightFemaleMin());
@@ -1026,7 +1052,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel73.setText("Male Weight:");
         jLabel73.setName("jLabel73"); // NOI18N
 
-        spnWeightMaleMax.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnWeightMaleMax.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 0.1d));
         spnWeightMaleMax.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnWeightMaleMax.setName("spnWeightMaleMax"); // NOI18N
         spnWeightMaleMax.setValue(element.getWeightMaleMax());
@@ -1159,7 +1185,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         .addGap(5, 5, 5)
                         .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel59)
-                            .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                            .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
                             .addGroup(pnlInfo2Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addGap(6, 6, 6)
@@ -1535,7 +1561,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         public int showDialog() {
                             JOptionPane.showMessageDialog(app.getMainFrame(),
                                     "Please choose one Observation to view.",
-                                    "Slect Observation To View", JOptionPane.INFORMATION_MESSAGE);
+                                    "Select Observation To View", JOptionPane.INFORMATION_MESSAGE);
                             return -1;
                         }
                     });
@@ -1673,6 +1699,66 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
+    private void btnCheckIUCNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckIUCNActionPerformed
+        if (txtScienceName.getText() != null && !txtScienceName.getText().isEmpty()) {
+            IUCNSpeciesData data = null;
+            try {
+                app.getMainFrame().getGlassPane().setVisible(true);
+                app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                InputStream inputStream = new URL("http://apiv3.iucnredlist.org/api/v3/species/"
+                        + URLEncoder.encode(txtScienceName.getText(), "UTF-8").replace("+", "%20")
+// TODO: Get real token once IUCN replies to my request
+                        + "?token=9bb4facb6d23f48efbf424bb05c0c1ef1cf6f468393bc745d42179ac4aca5fee").openStream();
+                data = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), IUCNSpeciesData.class);
+            }
+            catch (IOException | JsonIOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            finally {
+                app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                app.getMainFrame().getGlassPane().setVisible(false);
+            }
+            if (data != null && data.getResult() != null && !data.getResult().isEmpty()) {
+                EndangeredStatus status = EndangeredStatus.getEnumFromText(data.getResult().get(0).getCategory());
+                cmbEndangeredStatus.setSelectedItem(status);
+                if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
+                app.getMainFrame().getGlassPane().setVisible(true);
+                JOptionPane.showMessageDialog(app.getMainFrame(),
+                        "<html>A match was found for the Scientific Name at the IUCN Red List web site."
+                        + "<br/>Common Name: " + data.getResult().get(0).getMain_common_name()
+                        + "<br/>Category: " + data.getResult().get(0).getCategory()
+                        + "<br/>Year: " + data.getResult().get(0).getPublished_year() 
+                        + "<br/>Results: " + data.getResult().size() + "</html>",
+                        "Found Red List Category", JOptionPane.INFORMATION_MESSAGE);
+                app.getMainFrame().getGlassPane().setVisible(false);
+            }
+            else {
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "No threatened category was found at the IUCN Red List web site for current Scientific Name.",
+                                "No Red List Category Found", JOptionPane.WARNING_MESSAGE);
+                        return -1;
+                    }
+                });
+            }
+        }
+        else {
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Please provide a Scientific Name to use and then try again.",
+                            "Scientific Name Required", JOptionPane.WARNING_MESSAGE);
+                    return -1;
+                }
+            });
+        }
+    }//GEN-LAST:event_btnCheckIUCNActionPerformed
+
 
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().count(new WildLogFile(element.getWildLogFileID()));
@@ -1712,6 +1798,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnBrowse;
+    private javax.swing.JButton btnCheckIUCN;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnHTML;

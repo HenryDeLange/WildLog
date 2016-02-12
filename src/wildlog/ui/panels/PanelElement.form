@@ -737,11 +737,13 @@
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabel66" min="-2" pref="90" max="-2" attributes="0"/>
-                          <Component id="jLabel70" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
                           <Component id="jLabel68" alignment="0" max="32767" attributes="0"/>
                           <Component id="jLabel64" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel62" alignment="0" min="-2" pref="67" max="-2" attributes="0"/>
                           <Component id="jLabel60" alignment="0" min="-2" pref="83" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="jLabel62" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel70" alignment="0" pref="80" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -749,8 +751,12 @@
                                   <Component id="cmbAddFrequency" pref="184" max="32767" attributes="0"/>
                                   <Component id="cmbActiveTime" max="32767" attributes="0"/>
                                   <Component id="cmbWaterDependance" max="32767" attributes="0"/>
-                                  <Component id="cmbEndangeredStatus" max="32767" attributes="0"/>
                                   <Component id="cmbType" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cmbEndangeredStatus" max="32767" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="btnCheckIUCN" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -808,6 +814,7 @@
                                   <EmptySpace min="5" pref="5" max="5" attributes="0"/>
                                   <Component id="txtBreedingNumber" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="btnCheckIUCN" min="-2" pref="20" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
@@ -1060,6 +1067,23 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JButton" name="btnCheckIUCN">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="IUCN"/>
+                <Property name="toolTipText" type="java.lang.String" value="Try to load the endangered status from the IUCN web services."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+                <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                  <Insets value="[2, 4, 2, 4]"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="btnCheckIUCN" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCheckIUCNActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pnlInfo2">
@@ -1208,7 +1232,7 @@
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel59" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane16" pref="79" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane16" pref="82" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>

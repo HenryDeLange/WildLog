@@ -1,6 +1,5 @@
 package wildlog.data.dataobjects;
 
-import wildlog.maps.kml.generator.KmlEntry;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -15,6 +14,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
+import wildlog.maps.kml.generator.KmlEntry;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsTime;
@@ -66,50 +66,50 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         StringBuilder htmlSighting = new StringBuilder(1000);
         htmlSighting.append("<b><u>Observation ID: ").append(UtilsHTML.formatObjectAsString(sightingCounter)).append("</u></b>");
         htmlSighting.append("<br/>");
-        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Creature:</b><br/> ", elementName, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Place:</b><br/> ", locationName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Creature:</b><br/>", elementName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Place:</b><br/>", locationName, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Period:</b><br/> ", visitName, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Period:</b><br/>", visitName, true);
         }
-        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date:</b><br/> ", UtilsHTML.formatDateAsString(date, true), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date:</b><br/>", UtilsHTML.formatDateAsString(date, true), true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date and Time Accuracy:</b><br/> ", timeAccuracy, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Time of Day:</b><br/> ", timeOfDay, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date and Time Accuracy:</b><br/>", timeAccuracy, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Time of Day:</b><br/>", timeOfDay, true);
         }
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Latitude:</b><br/> ", UtilsGPS.getLatitudeString(this), true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Longitude:</b><br/> ", UtilsGPS.getLongitudeString(this), true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>GPS Accuracy:</b><br/> ", gpsAccuracy, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Latitude:</b><br/>", UtilsGPS.getLatitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Longitude:</b><br/>", UtilsGPS.getLongitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>GPS Accuracy:</b><br/>", gpsAccuracy, true);
         }
-        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Certainty:</b><br/> ", certainty, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Life Status:</b><br/> ", lifeStatus, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Certainty:</b><br/>", certainty, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Life Status:</b><br/>", lifeStatus, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Evidence:</b><br/> ", sightingEvidence, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Evidence:</b><br/>", sightingEvidence, true);
         }
         if (numberOfElements > 0) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Number of Creatures:</b><br/> ", numberOfElements, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Number of Creatures:</b><br/>", numberOfElements, true);
         }
-        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Details:</b><br/> ", details, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Details:</b><br/>", details, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Sex:</b><br/> ", sex, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Age:</b><br/> ", age, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Sex:</b><br/>", sex, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Age:</b><br/>", age, true);
             if (moonPhase >= 0) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moon Phase:</b><br/> ", moonPhase + " % Full", true);
+                UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moon Phase:</b><br/>", moonPhase + " % Full", true);
             }
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moonlight:</b><br/> ", moonlight, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Weather:</b><br/> ", weather, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moonlight:</b><br/>", moonlight, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Weather:</b><br/>", weather, true);
             if (unitsTemperature != null && !UnitsTemperature.NONE.equals(unitsTemperature)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Temperature:</b><br/> ", temperature + " " + unitsTemperature, true);
+                UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Temperature:</b><br/>", temperature + " " + unitsTemperature, true);
             }
             if (durationMinutes > 0 || durationSeconds > 0) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Duration:</b><br/> ", durationMinutes + " minutes, " + durationSeconds + " seconds", true);
+                UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Duration:</b><br/>", durationMinutes + " minutes, " + durationSeconds + " seconds", true);
             }
         }
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>View Rating:</b><br/> ", viewRating, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>View Rating:</b><br/>", viewRating, true);
         }
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Tag:</b><br/> ", tag, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Tag:</b><br/>", tag, true);
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(500);
