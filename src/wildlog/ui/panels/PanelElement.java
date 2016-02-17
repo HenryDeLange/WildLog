@@ -1715,7 +1715,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 ex.printStackTrace(System.err);
             }
             finally {
-                app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
                 app.getMainFrame().getGlassPane().setVisible(false);
             }
             if (data != null && data.getResult() != null && !data.getResult().isEmpty()) {

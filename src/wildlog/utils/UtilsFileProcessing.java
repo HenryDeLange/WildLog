@@ -33,6 +33,7 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.filters.MovieFilter;
+import wildlog.ui.maps.implementations.helpers.UtilsMapGenerator;
 
 public final class UtilsFileProcessing {
     private static final ExecutorService executorService = 
@@ -145,7 +146,8 @@ public final class UtilsFileProcessing {
         }
         if (inWithSlowProcessPopup) {
             // Wait to finish the work
-            UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, inRunWhenDone, inParent);
+            UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, inRunWhenDone, inParent, 
+                    "  Busy processing. Please wait...  ");
         }
         else {
             UtilsConcurency.waitForExecutorToRunTasks(executorService, listCallables);
@@ -391,6 +393,18 @@ public final class UtilsFileProcessing {
     public static String getAlphaNumericVersion(String inString) {
         // Regex black magic van die web af...
         return inString.replaceAll("[^A-Za-z0-9.]+", "");
+    }
+    
+    public static void copyMapLayersWithPopup() {
+        Collection<Callable<Object>> listCallables = new ArrayList<>(1);
+        listCallables.add(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                UtilsMapGenerator.copyMapLayers();
+                return null;
+            }
+        });
+        UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, null, null, "  Setting up initial mapping data...  ");
     }
 
 }

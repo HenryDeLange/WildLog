@@ -710,7 +710,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+
 // FIXME: Daar is steeds 'n probleem as nuwe visits, sightings ens ge-add was of die name was verander, want dan is hulle nie in die lyste nie...
+
         // Setup full lists for the first time if they were null
         if (lstFilteredLocations == null) {
             lstFilteredLocations = app.getDBI().list(new Location());

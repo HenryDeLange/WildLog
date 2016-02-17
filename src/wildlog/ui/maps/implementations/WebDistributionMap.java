@@ -67,9 +67,9 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     private boolean showWorkspaceMap;
     private boolean showSightings;
     private final int PAGE_LIMIT_INATURALIST = 200;
-    private List<INaturalistData> lstAllINaturalistResults;
+    private List<INaturalistData> lstAllINaturalistResults = new ArrayList<>(0);
     private final int PAGE_LIMIT_GBIF = 300;
-    private List<GBIFOccurence> lstAllGBIFResults;
+    private List<GBIFOccurence> lstAllGBIFResults = new ArrayList<>(0);
     private String scientificName;
 
     
@@ -96,6 +96,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 showSightings = chkShowSightings.isSelected();
             }
         });
+        chkShowSightings.setSelected(true);
         lstCustomButtons.add(chkShowSightings);
         CheckBox chkShowWorkspaceMap = new CheckBox("Include Distribution Map");
         chkShowWorkspaceMap.setCursor(Cursor.HAND);
@@ -113,9 +114,6 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.SPECIES_DISTRIBUTION)) {
-            // Setup the info panel
-            setupChartDescriptionLabel("<html>This map tries to find observation records for the active species from online datasets. "
-                    + "Currently iNaturalist (red) and GBIF (orange) are used.</html>");
             // Get the scientific name
             String elementName = null;
             for (Sighting sighting : lstData) {
@@ -204,8 +202,14 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 if (showSightings) {
                     map.addLayer(getLayerForSightings(lstData));
                 }
+                // Setup the info panel
+                setupChartDescriptionLabel("<html>This map shows observation records for <b><u>" + scientificName + "</u></b> from the following online datasets:"
+                    + "<br/> - For <b>iNaturalist</b> <u>" + lstAllINaturalistResults.size() + " records</u> are shown in Teal. "
+                    + "<br/> - For <b>GBIF</b> <u>" + lstAllGBIFResults.size() + " records</u> are shown in Purple.</html>");
             }
             else {
+                // Add base layer (to prevent the map from showing an empty screen which messes up the zoom)
+                map.addLayer(getGeoTiffLayers(BundledMapLayers.EARTH_MODERN));
                 UtilsDialog.showDialogBackgroundWrapper(mapsBaseDialog, new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
@@ -268,7 +272,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                     SimpleFeature feature = builder.buildFeature(Long.toString(data.getId()), new Object[] {data.getId()});
                     collection.add(feature);
                 }
-                Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(40, 158, 125), new Color(50, 170, 140), 0.7, 0.5, 12);
+                Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(0, 40, 40), new Color(0, 90, 90), 0.8, 0.5, 14);
                 FeatureLayer pointLayer = new FeatureLayer(collection, pointStyle, "iNaturalistLayer");
                 map.addLayer(pointLayer);
             }
@@ -310,7 +314,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                     SimpleFeature feature = builder.buildFeature(Long.toString(data.getKey()), new Object[] {data.getKey()});
                     collection.add(feature);
                 }
-                Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(40, 158, 225), new Color(50, 170, 240), 0.7, 0.5, 12);
+                Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(40, 0, 40), new Color(90, 0, 90), 0.8, 0.5, 14);
                 FeatureLayer pointLayer = new FeatureLayer(collection, pointStyle, "GBIFLayer");
                 map.addLayer(pointLayer);
             }

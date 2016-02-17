@@ -1,5 +1,6 @@
 package wildlog.ui.maps.implementations.helpers;
 
+import java.awt.Cursor;
 import java.util.List;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,6 +30,9 @@ public abstract class AbstractMap<T> {
     }
     
     public void loadMap() {
+        // Setup waiting cursor
+        mapsBaseDialog.getGlassPane().setVisible(true);
+        mapsBaseDialog.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         // Setup loading label
         final Label lblLoading = new Label("... LOADING ...");
         lblLoading.setPadding(new Insets(20));
@@ -37,6 +41,9 @@ public abstract class AbstractMap<T> {
         lblLoading.setAlignment(Pos.CENTER);
         mapsBaseDialog.getJFXMapPanel().getScene().setRoot(lblLoading);
         createMap(mapsBaseDialog.getJFXMapPanel().getScene());
+        // Hide waiting cursor
+        mapsBaseDialog.getGlassPane().setVisible(false);
+        mapsBaseDialog.getGlassPane().setCursor(Cursor.getDefaultCursor());
     }
     
     public abstract void createMap(Scene inScene);

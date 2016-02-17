@@ -33,7 +33,7 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnModernMap);
-        Button btnHistoricMap = new Button("View Historic/Ideal World");
+        Button btnHistoricMap = new Button("View Historic / Ideal World");
         btnHistoricMap.setCursor(Cursor.HAND);
         btnHistoricMap.setOnAction(new EventHandler() {
             @Override

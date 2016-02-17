@@ -8,6 +8,7 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -394,6 +395,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         WildLogDBI newDBI = null;
                         try {
                             Path destinationWorkspace = destination.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
+                            Files.write(destinationWorkspace.resolve(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getRelativePath()).toAbsolutePath(), 
+                                    WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
                             newDBI = new WildLogDBI_h2("jdbc:h2:"
                                 + (destinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath()
                                 + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);

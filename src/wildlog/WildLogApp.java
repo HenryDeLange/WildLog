@@ -29,7 +29,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.EventObject;
 import java.util.Properties;
 import java.util.TimeZone;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -55,8 +54,8 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
-import wildlog.ui.maps.implementations.helpers.UtilsMapGenerator;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.filters.WorkspaceFilter;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.WildLogPaths;
@@ -99,15 +98,8 @@ public class WildLogApp extends Application {
             Files.createDirectories(WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath());
             Files.createDirectories(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath());
             Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
-            // Copy the bundled maps to the WorkSpace
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    UtilsMapGenerator.copyMapLayers();
-                }
-            });
-            executor.shutdown();
+            Files.write(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getAbsoluteFullPath(), 
+                    WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -118,17 +110,23 @@ public class WildLogApp extends Application {
         do {
             openedWorkspace = openWorkspace();
             if (openedWorkspace == false) {
-                UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {
+                int choice = UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
-                        JOptionPane.showMessageDialog(getMainFrame(),
-// TODO: Gee 'n tip dat die probleem dalk net met die lock file is wat manually delete moet word?? (of sê hulle moet in manula kyk vir hulp)
-                                "The WildLog Workspace could not be opened. It might be in use or broken. Please select another Workspace to open.",
-                                "WildLog Workspace Error", JOptionPane.ERROR_MESSAGE);
-                        return -1;
+                        return JOptionPane.showConfirmDialog(getMainFrame(),
+                                "<html>The WildLog Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> could not be opened. "
+                                    + "<br/>It is likely that another instance of WildLog already has this Workspace open."
+                                    + "<br/>If the problem persists please consult the Manual or contact support@mywild.co.za for help."
+                                    + "<br/><br/>You can <b>press OK to select another Workspace</b>, or press Cancel to close this instance of WildLog.</html>",
+                                "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
                     }
                 });
-                configureWildLogHomeBasedOnFileBrowser(null, true);
+                if (choice == JOptionPane.OK_OPTION) {
+                    configureWildLogHomeBasedOnFileBrowser(null, true);
+                }
+                else {
+                    quit(null);
+                }
             }
         }
         while (openedWorkspace == false);
@@ -147,6 +145,7 @@ public class WildLogApp extends Application {
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println("WEB CALL: Start checking for new version...");
                     checkForUpdates();
                 }
             }, 10, TimeUnit.SECONDS);
@@ -154,6 +153,7 @@ public class WildLogApp extends Application {
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println("WEB CALL: Start uploading log file...");
                     try {
                         // Open a connection to the site
                         URL url = new URL("http://www.mywild.co.za/wildlog/uploadWildLogInfo.php");
@@ -180,14 +180,9 @@ public class WildLogApp extends Application {
                                 try {
                                     byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt"));
                                     String logInfo = new String(fileBytes, Charset.defaultCharset());
-                                    int logLength = 99999;
-                                    if (logInfo.length() > logLength) {
-                                        
-                                        
-// FIXME: Daar is erns steeds fout met die log file upload/truncate/etc. besigheid...
-                                        
-                                        
-                                        logFileSnippit = "...\n...\n" + logInfo.substring(logInfo.length() - logLength);
+                                    int logCharacterLength = 99999;
+                                    if (logInfo.length() > logCharacterLength) {
+                                        logFileSnippit = "...\n...\n" + logInfo.substring(logInfo.length() - logCharacterLength);
                                     }
                                     else {
                                         logFileSnippit = logInfo;
@@ -236,6 +231,7 @@ public class WildLogApp extends Application {
                 executor.schedule(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("WEB CALL: Start truncating log file...");
                         Path logFile = ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt");
                         if (logFile.toFile().length() > 131072) {
                             try {
@@ -245,11 +241,9 @@ public class WildLogApp extends Application {
                                 int logLength = 99999;
                                 if (logInfo.length() > logLength) {
                                     logFileSnippit = "...FILE TRUNCATED..." + System.lineSeparator() + logInfo.substring(logInfo.length() - logLength);
+                                    Files.write(logFile, logFileSnippit.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+                                    System.out.println("Trancated errorlog.txt - " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
                                 }
-                                else {
-                                    logFileSnippit = logInfo;
-                                }
-                                Files.write(logFile, logFileSnippit.getBytes(), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
                             }
                             catch (IOException ex) {
                                 ex.printStackTrace(System.err);
@@ -518,11 +512,12 @@ public class WildLogApp extends Application {
 
     public static boolean configureWildLogHomeBasedOnFileBrowser(final JFrame inParent, boolean inTerminateIfNotSelected) {
         final JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setDialogTitle("Please select the WildLog Workspace to use.");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fileChooser.setFileFilter(new WorkspaceFilter());
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setMultiSelectionEnabled(false);
         int result = UtilsDialog.showDialogBackgroundWrapper(inParent, new UtilsDialog.DialogWrapper() {
             @Override
             public int showDialog() {
@@ -530,7 +525,14 @@ public class WildLogApp extends Application {
             }
         });
         if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
-            WildLogPaths.setWorkspacePrefix(fileChooser.getSelectedFile().getAbsolutePath());
+            Path selectedPath;
+            if (fileChooser.getSelectedFile().isDirectory()) {
+                selectedPath = fileChooser.getSelectedFile().toPath();
+            }
+            else {
+                selectedPath = fileChooser.getSelectedFile().getParentFile().toPath();
+            }
+            WildLogPaths.setWorkspacePrefix(selectedPath.toAbsolutePath().toString());
             return true;
         }
         else {

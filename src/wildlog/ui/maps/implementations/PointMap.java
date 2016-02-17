@@ -121,8 +121,8 @@ public class PointMap extends AbstractMap<Sighting> {
     }
     
     private Parent createPointMapGoogle(List<Sighting> inLstSightings) {
-// FIXME: Die Spiderfier werk mooi in die web, en half decent in JavaFX WebView, 
-//        maar in die WebView clear die pointers nie altyd mooi nadat mens 'n spiderfy event trigger nie...
+// FIXME: Die Spiderfier werk mooi in die web, maar net half decent in JavaFX WebView, 
+//        In die WebView clear die pointers nie altyd mooi nadat mens 'n spiderfy event trigger nie...
 //        Dalk kan ek later die JavaScript source bekyk en edit om beter te werk????
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
@@ -205,7 +205,7 @@ public class PointMap extends AbstractMap<Sighting> {
                                                   .replace("Infobox(locationZZZ", "Infobox(location" + sighting.getIDField())
                                                   .replace("ZZZ-title", sighting.getDisplayName().replaceAll("\"", "&quot;"))
                                                   .replace("ZZZ-content", sighting.toHTML(false, showThumbnails, !showDetails, WildLogApp.getApplication(), 
-                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;"))
+                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;").replaceAll("\n", "<br/>").replaceAll("\r", ""))
                                                   .replace("pushpin: pinZZZ", "pushpin: pin" + sighting.getIDField()));
                 gpsBuilder.append(System.lineSeparator());
             }

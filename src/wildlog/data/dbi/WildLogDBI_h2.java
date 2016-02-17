@@ -799,14 +799,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 @Override
                                 public int showDialog() {
                                     return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(),
-                                            "The Workspace you are opening needs to be upgraded to work with the current version of the "
-                                            + "WildLog application. "
-                                            + System.lineSeparator() 
-                                            + "It is recommended to first manually backup (make a copy) of the Workspace before continuing, "
+                                            "<html>The Workspace at " + WildLogPaths.getFullWorkspacePrefix().toString() + " needs to be upgraded. "
+                                            + "<br/>It is recommended to first make a manual backup (make a copy) of the Workspace before continuing, "
                                             + "in particular the WildLog\\Data and WildLog\\Files folders."
-                                            + System.lineSeparator() + System.lineSeparator() 
-                                            + "Press OK when you are ready for the WildLog application to upgrade the Workspace.",
-                                            "WildLog Database Structure Upgrade", 
+                                            + "<br/>Note that the upgrade can take a while to complete. WildLog will open automatically once the upgrade is complete."
+                                            + "<br/><b>Press OK when you are ready to upgrade the Workspace.</b></html>",
+                                            "Upgrade WildLog Database Structure", 
                                             JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
                                 }
                             });
@@ -863,13 +861,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             @Override
                             public int showDialog() {
                                 JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                        "The Workspace has been upgraded to be compatible with the current WildLog application. "
-                                        + System.lineSeparator() 
-                                        + "Please consider running the 'Check and Clean the Workspace' process as well. "
-                                        + System.lineSeparator() 
-                                        + "(The feature is accessable from the 'Application' menu at the top of the window.)",
-                                        "WildLog Major Upgrade Complete", 
-                                        JOptionPane.INFORMATION_MESSAGE);
+                                        "<html>The Workspace has been upgraded to be compatible with the current WildLog application. "
+                                            + "<br/>Please consider running the 'Check and Clean the Workspace' process as well. "
+                                            + "<br/>(The feature is accessable from the 'Application' menu at the top of the window.)</html>",
+                                        "WildLog Major Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
                                 return -1;
                             }
                         });
@@ -880,8 +875,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             public int showDialog() {
                                 JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
                                         "The Workspace has been upgraded to be compatible with the current WildLog application. ",
-                                        "WildLog Minor Upgrade Complete", 
-                                        JOptionPane.INFORMATION_MESSAGE);
+                                        "WildLog Minor Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
                                 return -1;
                             }
                         });
@@ -892,11 +886,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
-// TODO: Gee 'n tip dat die probleem dalk net met die lock file is wat manually delete moet word?? (of sê hulle moet in manula kyk vir hulp)
                         JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                "The database could not be fully updated. Make sure it is not in use or broken "
-                                + "and that you are running the latest version of the application.",
-                                "WildLog Error: Can't Initialize Database", JOptionPane.ERROR_MESSAGE);
+                                "<thml>The database could not be successfully updated!"
+                                    + "<br/>Make sure that you are running the latest version of WildLog."
+                                    + "<br/>Confirm that the Workspace isn't already open by another WildLog instance."
+                                    + "<bt/>It is possible that the datbase might be broken or corrupted. "
+                                    + "If this is the case you can restore a backup copy and try again, please consult the Manual for details."
+                                    + "<br/>Contact support@mywild.co.za if the problmes persist.</html>",
+                                "WildLog Upgrade Error", JOptionPane.ERROR_MESSAGE);
                         return -1;
                     }
                 });

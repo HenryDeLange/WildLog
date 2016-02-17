@@ -56,6 +56,10 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
 
     @Override
     public void loadMap() {
+// FIXME: Hierdie werk nie vanaf die filter popups nie...
+        // Setup waiting cursor
+        mapsBaseDialog.getGlassPane().setVisible(true);
+        mapsBaseDialog.getGlassPane().setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         // Setup loading label
         final Label lblLoading = new Label("... LOADING ...");
         lblLoading.setPadding(new Insets(20));
@@ -86,6 +90,9 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                 createMap(mapsBaseDialog.getJFXMapPanel().getScene());
                 // Refresh the map to display the added layers
                 map.reloadMap();
+                // Hide waiting cursor
+                mapsBaseDialog.getGlassPane().setVisible(false);
+                mapsBaseDialog.getGlassPane().setCursor(java.awt.Cursor.getDefaultCursor());
             }
         });
     }
@@ -221,7 +228,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                 collection.add(feature);
             }
 //            Style pointStyle = SLD.createPointStyle("Circle", new Color(80, 15, 5), new Color(175, 30, 20), 0.7f, 10);
-            Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 0.8, 0.5, 12);
+            Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 0.8, 0.5, 14);
             pointLayer = new FeatureLayer(collection, pointStyle, "WildLogPointLayer");
 // FIXME: Make the points selectable... (Maybe too small, or something weird about the layer or feature types...)
         }

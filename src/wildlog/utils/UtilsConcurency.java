@@ -188,7 +188,7 @@ public final class UtilsConcurency {
     }
 
     /**
-     *This method will block the current thread and wait to try and run all the submitted tasks. 
+     * This method will block the current thread and wait to try and run all the submitted tasks. 
      * <b>The ExecutorService is not shutdown.</b>
      * If the timeout expires it will cancel all remaining tasks and log an error.
      * Tasks will be allowed about 10 minutes to complete, which should really be enough unless something went very wrong. <br/>
@@ -198,11 +198,12 @@ public final class UtilsConcurency {
      * @param inTaskList - The tasks to run
      * @param inRunWhenDone - Code that needs to run after the SwingWorker is done (to update the UI)
      * @param inJDialogUsesAsParent - If the parent is a JDialog pass it in, otherwise use null to use the application's main frame.
+     * @param inMessage - The message to show in the popup
      * @return
      */
     public static <T> boolean waitForExecutorToRunTasksWithPopup(final ExecutorService inExecutorService, 
             final Collection<? extends Callable<T>> inTaskList, final Runnable inRunWhenDone, 
-            final JDialog inJDialogUsesAsParent) {
+            final JDialog inJDialogUsesAsParent, final String inMessage) {
         // Create the popup
         JDialog popup;
         if (inJDialogUsesAsParent instanceof JDialog) {
@@ -216,7 +217,7 @@ public final class UtilsConcurency {
         popup.setEnabled(false);
         ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif"));
         popup.setIconImage(icon.getImage());
-        popup.add(new Label("  Busy processing. Please wait..."));
+        popup.add(new Label(inMessage));
         popup.setMinimumSize(new Dimension(250, 100));
         popup.pack();
         // Create a swing worker that will do the running

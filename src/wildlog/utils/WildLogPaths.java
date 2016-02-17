@@ -20,11 +20,10 @@ public enum WildLogPaths {
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.
      * The workspacePrefix already has this value appended. */
     DEFAULT_WORKSPACE_NAME                (Paths.get("WildLog")),
-    /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the file used to indicate a workspace. */
-    DEFAULT_WORKSPACE_INDICATOR_FILE      (Paths.get("wildlog.workspace")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the database. */
     DEFAULT_DATABASE_NAME                 (Paths.get("wildlog")),
     // These are the values that can be reused.
+    WILDLOG_WORKSPACE_INDICATOR           (Paths.get("workspace.wildlog")),
     WILDLOG_DATA                          (Paths.get("Data")),
     WILDLOG_FILES                         (Paths.get("Files")),
     WILDLOG_FILES_IMAGES                  (Paths.get("Files", "Images")),
@@ -118,6 +117,7 @@ public enum WildLogPaths {
 
     /**
      * Returns the Path (relative to the WildLog folder).
+     * @return 
      */
     @Override
     public String toString() {

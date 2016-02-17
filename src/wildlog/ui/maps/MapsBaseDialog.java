@@ -52,6 +52,7 @@ import wildlog.ui.maps.implementations.WebDistributionMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.ui.reports.ReportExportDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
+import wildlog.utils.UtilsFileProcessing;
 
 
 public class MapsBaseDialog extends JFrame {
@@ -100,6 +101,9 @@ public class MapsBaseDialog extends JFrame {
                 }
             }
         });
+        // Copy the bundled maps to the WorkSpace
+        // Note: Dit mag lank vat die eerste keer, maar dis hopelik steeds beter om dit hier te doen en te wag (vs. multihtreaded as die program begin)
+        UtilsFileProcessing.copyMapLayersWithPopup();
     }
     
     private void setupReportList() {
@@ -499,7 +503,7 @@ public class MapsBaseDialog extends JFrame {
             // Filter the original results using the provided values
             doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, activeMap, jfxMapPanel);
+                    lblFilteredRecords, activeMap);
         }
     }//GEN-LAST:event_btnFilterElementActionPerformed
 
@@ -511,7 +515,7 @@ public class MapsBaseDialog extends JFrame {
             // Filter the original results using the provided values
             doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, activeMap, jfxMapPanel);
+                    lblFilteredRecords, activeMap);
         }
     }//GEN-LAST:event_btnFilterLocationActionPerformed
 
@@ -523,7 +527,7 @@ public class MapsBaseDialog extends JFrame {
             // Filter the original results using the provided values
             doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, activeMap, jfxMapPanel);
+                    lblFilteredRecords, activeMap);
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
@@ -535,7 +539,7 @@ public class MapsBaseDialog extends JFrame {
             // Filter the original results using the provided values
             doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, activeMap, jfxMapPanel);
+                    lblFilteredRecords, activeMap);
         }
     }//GEN-LAST:event_btnFilterPropertiesActionPerformed
 
@@ -546,7 +550,7 @@ public class MapsBaseDialog extends JFrame {
         filterProperties = null;
         doFiltering(lstOriginalData, lstFilteredData, 
                 lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                lblFilteredRecords, activeMap, jfxMapPanel);
+                lblFilteredRecords, activeMap);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
     
     private List<Sighting> getCopiedList(List<Sighting> inList) {
@@ -567,7 +571,7 @@ public class MapsBaseDialog extends JFrame {
     
     private void doFiltering(final List<Sighting> lstOriginalData, List<Sighting> lstFilteredData, 
             List<Element> lstFilteredElements, List<Location> lstFilteredLocations, List<Visit> lstFilteredVisits,
-            FilterProperties filterProperties, JLabel lblFilteredRecords, AbstractMap activeMap, JFXPanel jfxReportChartPanel) {
+            FilterProperties filterProperties, JLabel lblFilteredRecords, AbstractMap activeMap) {
         // NOTE: Don't create a new ArrayList (clear existing instead), because the reports are holding on to the reference 
         //       and will be stuck with an old list otherwise. Easiest to just keep the reference constant than to try and 
         //       update the all reports everytime (the active report already gets updated explicitly).
@@ -622,11 +626,16 @@ public class MapsBaseDialog extends JFrame {
             lstFilteredData.add(sighting.cloneShallow());
         }
         lblFilteredRecords.setText(Integer.toString(lstFilteredData.size()));
-        // Redraw the chart
-        if (activeMap != null) {
-            activeMap.setDataList(lstFilteredData);
-            activeMap.createMap(jfxReportChartPanel.getScene());
-        }
+        // Redraw the map
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (activeMap != null) {
+                    activeMap.setDataList(lstFilteredData);
+                    activeMap.loadMap();
+                }
+            }
+        });
     }
 
     public JFXPanel getJFXMapPanel() {

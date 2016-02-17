@@ -100,6 +100,7 @@ import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.filters.CsvFilter;
 import wildlog.ui.helpers.filters.WildNoteSyncFilter;
+import wildlog.ui.helpers.filters.WorkspaceFilter;
 import wildlog.ui.panels.PanelTabBrowse;
 import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
@@ -2926,7 +2927,9 @@ public final class WildLogView extends JFrame {
             final JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Select the Workspace folder to import");
             fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            fileChooser.setFileFilter(new WorkspaceFilter());
+            fileChooser.setAcceptAllFileFilterUsed(false);
             fileChooser.setMultiSelectionEnabled(false);
             result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
@@ -3053,7 +3056,7 @@ public final class WildLogView extends JFrame {
                         // Setup export DB
                         setTaskProgress(10);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
-// FIXME: Die WildLogOptions gee 'n probleem met die upgrade  omdat dit missing is. Maak dat WildNote die Options ook create sodat die updates kan werk.
+// FIXME: Die WildLogOptions gee 'n probleem met die upgrade omdat dit missing is. Maak dat WildNote die Options ook create sodat die updates kan werk.
                         syncDBI = new WildLogDBI_h2("jdbc:h2:" + fileChooser.getSelectedFile().toPath().toAbsolutePath().getParent()
                                 .resolve(WildLogConstants.WILDNOTE_SYNC_DATABASE).toString()
                                     + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
