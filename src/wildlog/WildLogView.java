@@ -2111,7 +2111,8 @@ public final class WildLogView extends JFrame {
                         }
                         final CleanupHelper cleanupHelper = new CleanupHelper();
                         // Do a quick DB backup
-                        app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS_CHECK_AND_CLEAN.getAbsoluteFullPath());
+                        app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS_CHECK_AND_CLEAN.getAbsoluteFullPath()
+                                .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now())));
                         setProgress(1);
                         // ---------------------1---------------------
                         // First check database files

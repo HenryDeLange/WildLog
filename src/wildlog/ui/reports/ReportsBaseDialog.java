@@ -31,6 +31,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.ui.dialogs.ExportDialogForReportsAndMaps;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -466,8 +467,9 @@ public class ReportsBaseDialog extends JFrame {
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
-                                ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage, jfxReportChartPanel.getScene().getRoot(), 
-                                        activeReport.getReportButtonName(), lstFilteredData, false);
+                                ExportDialogForReportsAndMaps dialog = new ExportDialogForReportsAndMaps(parent, bufferedImage, 
+                                        jfxReportChartPanel.getScene().getRoot(), activeReport.getReportButtonName(), lstFilteredData, 
+                                        ExportDialogForReportsAndMaps.ExportType.REPORTS);
                                 dialog.setVisible(true);
                             }
                         });

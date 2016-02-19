@@ -741,12 +741,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         return true;
     }
 
-// TODO: Gaan weer deur die logika en maak seker dit werk reg in alle gevalle (Dat die regte popups wys en alle upgrades gebeur)
-// TODO: Maak ook seker dat as mens 'n workspace inport wat ouer is, dat die pre=upgrade backups nie die regte DM sin vervang nie die backups moet in die externe workspace gedoen word...
     private void doUpdates() {
-
-// FIXME: Die storie werk nou nie meer as mens 'n nuwe wrokspace skep nie!!!
-        
         Statement state = null;
         ResultSet results = null;
         try {
@@ -779,7 +774,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Read the row
             boolean databaseAndApplicationInSync = false;
             boolean wasMajorUpgrade = false;
-            boolean willPerformUpgrades = false;
+            boolean upgradeWasDone = false;
+            int choice = JOptionPane.CANCEL_OPTION;
             for (int t = 0; t <= WILDLOG_DB_VERSION; t++) {
                 results = state.executeQuery("SELECT VERSION FROM WILDLOG");
                 if (results.next()) {
@@ -795,21 +791,23 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             break;
                         }
                         else {
-                            int result = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                @Override
-                                public int showDialog() {
-                                    return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(),
-                                            "<html>The Workspace at " + WildLogPaths.getFullWorkspacePrefix().toString() + " needs to be upgraded. "
-                                            + "<br/>It is recommended to first make a manual backup (make a copy) of the Workspace before continuing, "
-                                            + "in particular the WildLog\\Data and WildLog\\Files folders."
-                                            + "<br/>Note that the upgrade can take a while to complete. WildLog will open automatically once the upgrade is complete."
-                                            + "<br/><b>Press OK when you are ready to upgrade the Workspace.</b></html>",
-                                            "Upgrade WildLog Database Structure", 
-                                            JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-                                }
-                            });
-                            if (result == JOptionPane.OK_OPTION) {
-                                willPerformUpgrades = true;
+                            // Only show the popup once
+                            if (!upgradeWasDone) {
+                                choice = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(),
+                                                "<html>The Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> needs to be upgraded. "
+                                                + "<br/>It is recommended to first make a manual backup (make a copy) of the Workspace before continuing, "
+                                                + "in particular the WildLog\\Data and WildLog\\Files folders."
+                                                + "<br/>Note that the upgrade can take a while to complete. WildLog will open automatically once the upgrade is complete."
+                                                + "<br/><b>Press OK when you are ready to upgrade the Workspace.</b></html>",
+                                                "Upgrade WildLog Database Structure", 
+                                                JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+                                    }
+                                });
+                            }
+                            if (choice == JOptionPane.OK_OPTION) {
                                 // Procede with the needed updates
                                 if (results.getInt("VERSION") == 0) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
@@ -846,6 +844,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v6  (before upgrade to 7)"));
                                     doUpdate7();
                                 }
+                                // Set the flag to indicate that an upgrade took place
+                                upgradeWasDone = true;
                             }
                             else {
                                 WildLogApp.getApplication().exit();
@@ -855,7 +855,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 }
             }
             if (databaseAndApplicationInSync) {
-                if (willPerformUpgrades) {
+                if (upgradeWasDone) {
                     if (wasMajorUpgrade) {
                         UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
                             @Override
@@ -1191,11 +1191,6 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTONLINEMAP");
             state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLATOPTION");
             state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTLONOPTION");
-            
-// TODO: Add more upgrade stuff here, as needed
-
-// FIXME:Die upgrade proses werk steeds nie lekker nie...
-            
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=7");
         }

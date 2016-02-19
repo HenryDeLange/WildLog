@@ -36,6 +36,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.ui.dialogs.ExportDialogForReportsAndMaps;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -50,7 +51,6 @@ import wildlog.ui.maps.implementations.OtherMap;
 import wildlog.ui.maps.implementations.PointMap;
 import wildlog.ui.maps.implementations.WebDistributionMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
-import wildlog.ui.reports.ReportExportDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.utils.UtilsFileProcessing;
 
@@ -481,8 +481,9 @@ public class MapsBaseDialog extends JFrame {
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
-                                ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage, jfxMapPanel.getScene().getRoot(), 
-                                        activeMap.getMapButtonName(), lstFilteredData, true);
+                                ExportDialogForReportsAndMaps dialog = new ExportDialogForReportsAndMaps(parent, bufferedImage, 
+                                        jfxMapPanel.getScene().getRoot(), activeMap.getMapButtonName(), lstFilteredData, 
+                                        ExportDialogForReportsAndMaps.ExportType.MAPS);
                                 dialog.setVisible(true);
                             }
                         });

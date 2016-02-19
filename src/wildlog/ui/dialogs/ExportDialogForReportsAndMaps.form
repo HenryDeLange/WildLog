@@ -3,7 +3,7 @@
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" value="Available Report Export Formats"/>
+    <Property name="title" type="java.lang.String" value="Export Formats"/>
     <Property name="iconImage" type="java.awt.Image" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new ImageIcon(WildLogApp.getApplication().getClass().getResource(&quot;resources/icons/Export.png&quot;)).getImage()" type="code"/>
     </Property>
@@ -38,7 +38,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/Image.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as Image (Recommended)"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a PNG image file of the active report. This is the recommened way to export a report."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PNG image file of the active report or map. This is the recommened way to export a report or map."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -69,7 +69,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/HTML Icon.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as Offline Webpage"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a basic HTML web page that can be viewed offline to show the active report and the Observations it uses."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a basic HTML web page that can be viewed offline to show theObservations used by the active report or map."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -100,7 +100,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as Spreadsheet"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a CSV file of all relevant Observations used by this report. Can be opened in Excel, etc."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a CSV file of all relevant Observations used by this report or map. Can be opened in Excel, etc."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -131,7 +131,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/PDF.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as PDF"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a PDF file of the active report."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PDF file of the active report or map."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -162,7 +162,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Print the Report"/>
-        <Property name="toolTipText" type="java.lang.String" value="Try to print the report using your default installed printer."/>
+        <Property name="toolTipText" type="java.lang.String" value="Try to print the report or map using your default installed printer."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

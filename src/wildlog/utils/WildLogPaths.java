@@ -14,7 +14,7 @@ public enum WildLogPaths {
     /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*//** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
     DEFAUL_SETTINGS_FOLDER                (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
-    OPEN_H2                               (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.4.187.jar")),
+    OPEN_H2                               (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.4.191.jar")),
 //    /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
 //    OPEN_OPENMAP                          (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.
@@ -50,6 +50,11 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_REPORTS_CSV            (Paths.get("Export", "Reports", "Spreadsheet")),
     WILDLOG_EXPORT_REPORTS_HTML           (Paths.get("Export", "Reports", "HTML")),
     WILDLOG_EXPORT_REPORTS_HTML_IMAGES    (Paths.get("Export", "Reports", "HTML", "Images")),
+    WILDLOG_EXPORT_MAPS_PDF               (Paths.get("Export", "Maps", "PDF")),
+    WILDLOG_EXPORT_MAPS_PNG               (Paths.get("Export", "Maps", "Image")),
+    WILDLOG_EXPORT_MAPS_CSV               (Paths.get("Export", "Maps", "Spreadsheet")),
+    WILDLOG_EXPORT_MAPS_HTML              (Paths.get("Export", "Maps", "HTML")),
+    WILDLOG_EXPORT_MAPS_HTML_IMAGES       (Paths.get("Export", "Maps", "HTML", "Images")),
     WILDLOG_EXPORT_HTML                   (Paths.get("Export", "WebPage")),
     WILDLOG_EXPORT_HTML_BASIC             (Paths.get("Export", "WebPage", "Basic")),
     WILDLOG_EXPORT_HTML_BASIC_THUMBNAILS  (Paths.get("Export", "WebPage", "Basic", "Thumbnails")),
