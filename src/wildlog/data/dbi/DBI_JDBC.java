@@ -194,7 +194,7 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableAdhocData);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FIELDID_DATAKEY ON FILES (FIELDID, DATAKEY)");
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FIELDID_DATAKEY ON ADHOC (FIELDID, DATAKEY)");
                 closeStatement(state);
             }
             closeResultset(results);
