@@ -2,6 +2,7 @@ package wildlog.ui.reports.implementations;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -33,14 +34,14 @@ import wildlog.ui.reports.utils.UtilsReports;
 
 
 public class ElementsChart extends AbstractReport<Sighting> {
-    private enum ChartType {PIE_CHART_SIGHTINGS, PIE_CHART_ELEMENT_TYPES, BAR_CHART_SIGHTINGS, BAR_CHART_LOCATIONS};
+    private enum ChartType {PIE_CHART_SIGHTINGS, PIE_CHART_ELEMENT_TYPES, BAR_CHART_SIGHTINGS, BAR_CHART_ABUNDANCE, BAR_CHART_LOCATIONS};
     private ChartType chartType;
     private Chart displayedChart;
     
     
     public ElementsChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Creature Reports", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(4);
+        lstCustomButtons = new ArrayList<>(5);
         // Pie charts
         Button btnPieChartElementTypes = new Button("Creatures per Type (Pie)");
         btnPieChartElementTypes.setCursor(Cursor.HAND);
@@ -58,7 +59,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART_SIGHTINGS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature as a pie chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature.</html>");
             }
         });
         lstCustomButtons.add(btnPieChartSightings);
@@ -69,7 +70,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_SIGHTINGS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature as a bar chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature. It can be used as a simple indication of Relative Abundance.</html>");
             }
         });
         lstCustomButtons.add(btnBarChartSightings);
@@ -131,6 +132,18 @@ public class ElementsChart extends AbstractReport<Sighting> {
             data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }
+        // Sort the results
+        Collections.sort(allSightings, new Comparator<BarChart.Data<String, Number>>() {
+            @Override
+            public int compare(BarChart.Data<String, Number> inData1, BarChart.Data<String, Number> inData2) {
+                int compare = Double.compare(inData2.getYValue().doubleValue(), inData1.getYValue().doubleValue());
+                if (compare == 0) {
+                    compare = inData1.getXValue().compareTo(inData2.getXValue());
+                }
+                return compare;
+            }
+        });
+        // Add the results to the final series
         chartData.add(new BarChart.Series<String, Number>("Creatures (" + mapData.keySet().size() + ")", allSightings));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
@@ -141,9 +154,10 @@ public class ElementsChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Observations for each Creature");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
-    
+
     private Chart createBarChartElements(List<Sighting> inSightings) {
         Map<String, Set<String>> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
@@ -163,6 +177,18 @@ public class ElementsChart extends AbstractReport<Sighting> {
             data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }
+        // Sort the results
+        Collections.sort(allSightings, new Comparator<BarChart.Data<String, Number>>() {
+            @Override
+            public int compare(BarChart.Data<String, Number> inData1, BarChart.Data<String, Number> inData2) {
+                int compare = Double.compare(inData2.getYValue().doubleValue(), inData1.getYValue().doubleValue());
+                if (compare == 0) {
+                    compare = inData1.getXValue().compareTo(inData2.getXValue());
+                }
+                return compare;
+            }
+        });
+        // Add the results to the final series
         chartData.add(new BarChart.Series<String, Number>("Creatures (" + mapData.keySet().size() + ")", allSightings));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
@@ -173,6 +199,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Places where each Creature has been observed.");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     
@@ -196,6 +223,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Creature");
+        UtilsReports.setupChartTooltips(chart);
         return chart;
     }
 
@@ -221,6 +249,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Creatures for each Creature Type");
+        UtilsReports.setupChartTooltips(chart);
         return chart;
     }
     

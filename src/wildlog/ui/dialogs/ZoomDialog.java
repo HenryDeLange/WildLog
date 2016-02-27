@@ -152,7 +152,7 @@ public class ZoomDialog extends JDialog {
     private void setupFile(Path inPath) {
         setTitle("Zoom Popup - " + inPath.toString());
         if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
-            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.VERY_LARGE.getSize()));
+            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.VERY_LARGE.getSize(), true));
         }
         else
         if (WildLogFileExtentions.Movies.isKnownExtention(inPath)) {

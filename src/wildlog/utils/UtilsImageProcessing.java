@@ -1,13 +1,19 @@
 package wildlog.utils;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,18 +43,16 @@ import wildlog.ui.utils.UtilsTime;
 
 
 public class UtilsImageProcessing {
-    private static final DateTimeFormatter dateFormatter1 = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
-    private static final DateTimeFormatter dateFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter EXIF_DATE_FORMAT_1 = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
+    private static final DateTimeFormatter EXIF_DATE_FORMAT_2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private UtilsImageProcessing() {
     }
 
-    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize) {
+    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate) {
         ImageReader imageReader = null;
         FileImageInputStream inputStream = null;
         try {
-//            long startTime = Calendar.getInstance().getTimeInMillis();
-// TODO: Kyk impak van die log met al die errors wat hier gebeur... Return dalk 'n nuwe "File Error" system image
             inputStream = new FileImageInputStream(inAbsolutePathToScale.toFile());
             Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
             imageReader = imageReaderList.next();
@@ -77,18 +81,85 @@ public class UtilsImageProcessing {
                     finalHeight = (int)(imageHeight*ratio);
                 }
             }
-//            System.out.println("----Size calculations took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
             // Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou,
             // maar ek sal in elk geval moet uitwerk of dit landscape of portriate is, so vir eers hou ek maar die kode soos hierbo.
             Image image = Toolkit.getDefaultToolkit().createImage(inAbsolutePathToScale.toAbsolutePath().normalize().toString());
-//            System.out.println("---Loading took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
-            Image img = getScaledImage(image, finalWidth, finalHeight);
-//            System.out.println("**Before new ImageIcon " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
-// TODO: verander al die JLabels om eerder JavaFx se ImageView te gebruik. 'n Vinnige toets wys dat dit dalk vinniger mag wees... Die ImageIcon is baie stadig om die icon te maak vir die label, veral sekere nonstandard colour modes in jpg files.
-            ImageIcon temp = new ImageIcon(img);
-//            System.out.println("**After new ImageIcon " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
-//            System.out.println("--Calculating scale " + inSize + "px took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
-            return temp;
+            Image scaledImage = getScaledImage(image, finalWidth, finalHeight);
+            // Rotate the image
+            if (inDoAutoRotate) {
+                try {
+                    Metadata metadata = ImageMetadataReader.readMetadata(inAbsolutePathToScale.toFile());
+                    Collection<ExifIFD0Directory> directories = metadata.getDirectoriesOfType(ExifIFD0Directory.class);
+                    int orientation = 0;
+                    if (directories != null) {
+                        for (ExifIFD0Directory directory : directories) {
+                            if (directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+                            }
+                        }
+                    }
+                    if (orientation > 1) {
+                        AffineTransform transform = new AffineTransform();
+                        switch (orientation) {
+                            case 1:
+                                // No rotation
+                                break;
+                            case 2: 
+                                // Flip X
+                                transform.scale(-1.0, 1.0);
+                                transform.translate(-1 * finalWidth, 0);
+                                break;
+                            case 3: 
+                                // PI rotation 
+                                transform.translate(finalWidth, finalHeight);
+                                transform.rotate(Math.PI);
+                                break;
+                            case 4: 
+                                // Flip Y
+                                transform.scale(1.0, -1.0);
+                                transform.translate(0, -1 * finalHeight);
+                                break;
+                            case 5: 
+                                // - PI/2 and Flip X
+                                transform.rotate(-Math.PI / 2);
+                                transform.scale(-1.0, 1.0);
+                                break;
+                            case 6: 
+                                // -PI/2 and -width
+                                transform.translate(finalWidth, 0);
+                                transform.rotate(Math.PI / 2);
+                                break;
+                            case 7: 
+                                // PI/2 and Flip
+                                transform.scale(-1.0, 1.0);
+                                transform.translate(-1 * finalHeight, 0);
+                                transform.translate(0, finalWidth);
+                                transform.rotate(3 * Math.PI / 2);
+                                break;
+                            case 8: 
+                                // PI / 2
+                                transform.translate(0, finalWidth);
+                                transform.rotate(3 * Math.PI / 2);
+                                break;
+                        }
+                        // Get BufferedImage of scaled image
+                        BufferedImage bufferedImage = new BufferedImage(inSize, inSize, BufferedImage.TYPE_INT_RGB);
+                        Graphics2D bufferedImageG2D = bufferedImage.createGraphics();
+                        // Maak 'n ImageIcon sodat die scaledImage actually klaar gelees word (nie net blank bly nie)
+                        new ImageIcon(scaledImage).paintIcon(null, bufferedImageG2D, (inSize - finalWidth) / 2, (inSize - finalHeight) / 2);
+                        // Rotate the thumbnail
+                        AffineTransformOp transformOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
+                        BufferedImage rotatedImage = transformOp.createCompatibleDestImage(bufferedImage, bufferedImage.getColorModel());
+                        rotatedImage = transformOp.filter(bufferedImage, rotatedImage);
+                        return new ImageIcon(rotatedImage);
+                    }
+                }
+                catch (MetadataException | ImageProcessingException e) {
+                    e.printStackTrace(System.err);
+                }
+            }
+            // Return final ImageIcon
+            return new ImageIcon(scaledImage);
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -119,21 +190,6 @@ public class UtilsImageProcessing {
     private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
         return inImage.getScaledInstance(inWidth, inHeight, Image.SCALE_SMOOTH);
     }
-
-//    public static ImageIcon getScaledIcon(String inPath, int inSize) {
-//        return getScaledIcon(Paths.get(inPath).normalize().toAbsolutePath(), inSize);
-//    }
-
-    // Die URI's werk nie lekker met die nuwe Java 7 Path nie (NIO)
-//    public static ImageIcon getScaledIcon(URL inURL, int inSize) {
-//        try {
-//            return getScaledIcon(Paths.get(inURL.toURI()), inSize);
-//        }
-//        catch (URISyntaxException ex) {
-//            ex.printStackTrace(System.err);
-//        }
-//        return getScaledIcon(Paths.get(inURL.getPath()), inSize);
-//    }
 
     public static ImageIcon getScaledIconForBrokenFiles(WildLogThumbnailSizes inSize) {
         return getScaledIconForPlaceholder(WildLogSystemImages.BROKEN_FILES.getWildLogFile(), inSize);
@@ -365,7 +421,7 @@ public class UtilsImageProcessing {
                             // Try 1:
                             try {
                                 // This seems to be by far the most used format
-                                LocalDateTime localDateTime = LocalDateTime.parse(tag.getDescription().trim(), dateFormatter1);
+                                LocalDateTime localDateTime = LocalDateTime.parse(tag.getDescription().trim(), EXIF_DATE_FORMAT_1);
                                 return UtilsTime.getDateFromLocalDateTime(localDateTime);
                             }
                             catch (DateTimeParseException ex) {
@@ -375,7 +431,7 @@ public class UtilsImageProcessing {
                             // Try 2:
                             try {
                                 // Wierd format used by Samsung Galaxy Gio (Android)
-                                LocalDateTime localDateTime = LocalDateTime.parse(tag.getDescription().trim(), dateFormatter2);
+                                LocalDateTime localDateTime = LocalDateTime.parse(tag.getDescription().trim(), EXIF_DATE_FORMAT_2);
                                 return UtilsTime.getDateFromLocalDateTime(localDateTime);
                             }
                             catch (DateTimeParseException ex) {
@@ -470,8 +526,7 @@ public class UtilsImageProcessing {
      */
     private static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
         // Resize the file and then save the thumbnail to into WildLog's folders
-// TODO: Soek 'n beter manier om die image te save wat nie dependant is op die ImageIcon nie...
-        ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalAbsolutePath, inSize.getSize());
+        ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalAbsolutePath, inSize.getSize(), true);
         try {
             // Make the folder
             Files.createDirectories(inThumbnailAbsolutePath.getParent());

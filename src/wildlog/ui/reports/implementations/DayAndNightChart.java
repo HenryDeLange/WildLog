@@ -155,6 +155,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         chart.getStylesheets().add("wildlog/ui/reports/chart/styling/ChartsDayNightTwilight.css");
         chart.getStyleClass().add("wl-pie-day-night-color");
         chart.setTitle("Number of Observations per Day, Night and Twilight period");
+        UtilsReports.setupChartTooltips(chart);
         return chart;
     }
     
@@ -238,6 +239,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-line-day-night-color");
         chart.setLegendVisible(true);
         chart.setTitle("Number of Observations per Day, Night and Twilight period");
+        UtilsReports.setupChartTooltips(chart, true, true);
         return chart;
     }
     
@@ -323,6 +325,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-line-day-night-color");
         chart.setLegendVisible(true);
         chart.setTitle("Number of Observations per Day, Night and Twilight period");
+        UtilsReports.setupChartTooltips(chart, true, true);
         return chart;
     }
     

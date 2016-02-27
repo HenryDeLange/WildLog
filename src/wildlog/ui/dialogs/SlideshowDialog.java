@@ -321,7 +321,7 @@ public class SlideshowDialog extends JDialog {
                         try {
                             output = new FileImageOutputStream(outputPath.toFile());
                             int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
-                            ImageIcon image = UtilsImageProcessing.getScaledIcon(WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), thumbnailSize);
+                            ImageIcon image = UtilsImageProcessing.getScaledIcon(WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), thumbnailSize, false);
                             BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
                             Graphics2D graphics2D = bufferedImage.createGraphics();
                             graphics2D.drawImage(image.getImage(),
@@ -336,7 +336,7 @@ public class SlideshowDialog extends JDialog {
                             setProgress(2);
                             setMessage("Creating the Animated GIF for '" + inTempName + "' " + getProgress() + "%");
                             for (int t = 0; t < slideshowList.size(); t++) {
-                                image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize);
+                                image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize, true);
                                 bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
                                 graphics2D = bufferedImage.createGraphics();
                                 graphics2D.drawImage(image.getImage(),

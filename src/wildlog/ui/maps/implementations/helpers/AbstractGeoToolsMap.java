@@ -56,7 +56,6 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
 
     @Override
     public void loadMap() {
-// FIXME: Hierdie werk nie vanaf die filter popups nie...
         // Setup waiting cursor
         mapsBaseDialog.getGlassPane().setVisible(true);
         mapsBaseDialog.getGlassPane().setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));

@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.AdhocData;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.reports.helpers.FilterProperties;
+import wildlog.data.dataobjects.adhoc.FilterProperties;
 
 
 public class FilterTemplatesDialog extends JDialog {

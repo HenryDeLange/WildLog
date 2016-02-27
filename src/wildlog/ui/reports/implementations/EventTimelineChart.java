@@ -42,10 +42,10 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
 
     
     public EventTimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Daily Timeline Reports", inLstData, inChartDescLabel);
+        super("Timeline Reports (Date Range)", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
-        Button btnLineChart = new Button("Observations Daily Timeline (Line)");
+        Button btnLineChart = new Button("Timeline for All Observations (Line)");
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
@@ -56,16 +56,16 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnLineChart);
         // Timeline per element
-        Button btnStackedBarChart = new Button("Creatures Daily Timeline (Line)");
-        btnStackedBarChart.setCursor(Cursor.HAND);
-        btnStackedBarChart.setOnAction(new EventHandler() {
+        Button btnStackedLineChart = new Button("Timeline per Creature (Line)");
+        btnStackedLineChart.setCursor(Cursor.HAND);
+        btnStackedLineChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.TIMELINE_PER_ELEMENT;
                 setupChartDescriptionLabel("<html>This chart shows the number of Observations per Creature over time during a spesified time interval.</html>");
             }
         });
-        lstCustomButtons.add(btnStackedBarChart);
+        lstCustomButtons.add(btnStackedLineChart);
         // Time interval size
         lstCustomButtons.add(new Label("Timeline interval size:"));
         cmbIntervalSize = new ComboBox<>(FXCollections.observableArrayList(options));
@@ -178,6 +178,7 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
             chart.setLegendVisible(true);
         }
         chart.setTitle("Number of Observations during Time Interval");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     

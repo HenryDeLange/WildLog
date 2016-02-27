@@ -694,6 +694,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             if (!Files.exists(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath())) {
                                 Files.createDirectories(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath());
                             }
+                            
+// FIXME: Die storie doen nou snaakse goed (dalk tedoen met die nuwe EXIF rotate stuff). Lyk my die exif data wys nog dat dit 'n rotate kort...
+                            
                             OutputStream out = new BufferedOutputStream(new FileOutputStream(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve("vmirror.jpg").toFile()));
                             // Turn off OPT_WRITE_APPXS flag to Skip writing Exif.
                             options = LLJTran.OPT_DEFAULTS & ~LLJTran.OPT_WRITE_APPXS;
@@ -1830,10 +1833,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     public void run() {
                                         Image tempConcImage;
                                         if (WildLogApp.getApplication().getWildLogOptions().isUseThumnailBrowsing()) {
-                                            tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE), inFinalSize).getImage();
+                                            tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE), inFinalSize, true).getImage();
                                         }
                                         else {
-                                            tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsolutePath(), inFinalSize).getImage();
+                                            tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsolutePath(), inFinalSize, true).getImage();
                                         }
                                         // Load die image in altwee maps sodat al die verskillende "contains" reg werk...
                                         inNewPreloadedImages.put(tempKey, tempConcImage);

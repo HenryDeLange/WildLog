@@ -51,7 +51,7 @@ import wildlog.ui.maps.implementations.OtherMap;
 import wildlog.ui.maps.implementations.PointMap;
 import wildlog.ui.maps.implementations.WebDistributionMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
-import wildlog.ui.reports.helpers.FilterProperties;
+import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.utils.UtilsFileProcessing;
 
 

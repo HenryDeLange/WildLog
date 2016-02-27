@@ -124,6 +124,7 @@ public class LocationChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Observations for each Place");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     
@@ -156,6 +157,7 @@ public class LocationChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Creatures observed at each Place");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     
@@ -179,6 +181,7 @@ public class LocationChart extends AbstractReport<Sighting> {
         PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Place");
+        UtilsReports.setupChartTooltips(chart);
         return chart;
     }
 

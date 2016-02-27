@@ -123,6 +123,11 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnOpenInBrowser);
+        
+// TODO: Maak 'n "Abundance of Observations heat map wat die ratio gebruik van obs per duration van period. 
+
+// TODO: Maak offline heatmaps ook (sien http://stackoverflow.com/questions/13299045/geotools-render-a-gridcoverage2d-to-a-heat-map)
+        
     }
 
     @Override

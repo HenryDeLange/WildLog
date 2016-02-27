@@ -106,7 +106,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         lstCustomButtons.add(btnBarChart2);
         // Chart options
         lstCustomButtons.add(new Label("Chart Options:"));
-        CheckBox chkShowDetails = new CheckBox("Show Day/Night/Twilight");
+        CheckBox chkShowDetails = new CheckBox("Show Day, Night and Twilight");
         chkShowDetails.setCursor(Cursor.HAND);
         chkShowDetails.setSelected(false);
         chkShowDetails.setOnAction(new EventHandler() {
@@ -116,7 +116,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(chkShowDetails);
-        CheckBox chkShowMoonlight = new CheckBox("Show Moon Shining/No Moon");
+        CheckBox chkShowMoonlight = new CheckBox("Show Moon Shining or No Moon");
         chkShowMoonlight.setCursor(Cursor.HAND);
         chkShowMoonlight.setSelected(false);
         chkShowMoonlight.setOnAction(new EventHandler() {
@@ -218,7 +218,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             for (String mapKey : mapChartData.keySet()) {
                 int count = mapChartData.get(mapKey).count;
                 total = total + count;
-                series.getData().add(new StackedBarChart.Data<String, Number>(mapKey, count));
+                series.getData().add(new StackedBarChart.Data<String, Number>(mapKey, count, key));
             }
             series.setName(key + " (" + total + ")");
             lstChartSeries.add(series);
@@ -232,6 +232,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         StackedBarChart<String, Number> chart = UtilsReports.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
         chart.getStyleClass().add("wl-stacked-bar-30-color");
         chart.setTitle("Number of Observations for each Moon Phase");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     
@@ -299,6 +300,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Moon Phase");
+        UtilsReports.setupChartTooltips(chart);
         return chart;
     }
     
@@ -377,6 +379,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(true);
         chart.setTitle("Number of Observations for each Moon Phase");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     

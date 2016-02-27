@@ -24,8 +24,10 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.utils.UtilsData;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
+import wildlog.ui.reports.utils.UtilsReports;
 
 
 public class SightingPropertiesChart extends AbstractReport<Sighting> {
@@ -33,7 +35,8 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     private ChartType chartType;
     private Chart displayedChart;
     private final ComboBox<String> cmbCategories;
-    private final String[] options = new String[] {"Number of Individuals", "Sex", "Age", "Life Status", "Evidence", "Certainty", "Rating", "Info Tag", "Creature Type"};
+    private final String[] options = new String[] {"Number of Individuals", "Sex", "Age", "Life Status", 
+        "Evidence", "Certainty", "Rating", "Info Tag", "Creature Type", "Has GPS"};
     private Scene scene = null;
     
     
@@ -88,53 +91,92 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     
     private Chart createPieChart(List<Sighting> inSightings) {
         String title = "";
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[0])) {
+            title = "Number of Observations with the specified Number of Individuals";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[1])) {
+            title = "Number of Observations with the specified Sex";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[2])) {
+            title = "Number of Observations with the specified Age";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[3])) {
+            title = "Number of Observations with the specified Life Status";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[4])) {
+            title = "Number of Observations with the specified Evidence";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[5])) {
+            title = "Number of Observations with the specified Certainty";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[6])) {
+            title = "Number of Observations with the specified Rating";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[7])) {
+            title = "Number of Observations with the specified Tag";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[8])) {
+            title = "Number of Observations per Creature Type";
+        }
+        else
+        if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[9])) {
+            title = "Number of Observations with GPS Coordinates";
+        }
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
             String categoryValue = null;
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[0])) {
                 categoryValue = "Observed " + Integer.toString(sighting.getNumberOfElements()) + " individuals";
-                title = "Number of Observations with the specified Number of Individuals";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[1])) {
                 categoryValue = UtilsData.stringFromObject(sighting.getSex());
-                title = "Number of Observations with the specified Sex";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[2])) {
                 categoryValue = UtilsData.stringFromObject(sighting.getAge());
-                title = "Number of Observations with the specified Age";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[3])) {
                 categoryValue = UtilsData.stringFromObject(sighting.getLifeStatus());
-                title = "Number of Observations with the specified Life Status";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[4])) {
                 categoryValue = UtilsData.stringFromObject(sighting.getSightingEvidence());
-                title = "Number of Observations with the specified Evidence";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[5])) {
                 categoryValue = UtilsData.stringFromObject(sighting.getCertainty());
-                title = "Number of Observations with the specified Certainty";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[6])) {
                 categoryValue = UtilsData.stringFromObject(sighting.getViewRating());
-                title = "Number of Observations with the specified Rating";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[7])) {
                 categoryValue = UtilsData.stringFromObject(sighting.getTag());
-                title = "Number of Observations with the specified Tag";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[8])) {
                 Element element = WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName()));
                 categoryValue = UtilsData.stringFromObject(element.getType());
-                title = "Number of Observations per Creature Type";
+            }
+            else
+            if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[9])) {
+                if (UtilsGPS.hasGPSData(sighting)) {
+                    categoryValue = "Has GPS";
+                }
+                else {
+                    categoryValue = "No GPS";
+                }
             }
             // Group records with unknown category values
             if (categoryValue == null || categoryValue.isEmpty()) {
@@ -163,6 +205,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         PieChart chart = new PieChart(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle(title);
+        UtilsReports.setupChartTooltips(chart);
         return chart;
     }
     

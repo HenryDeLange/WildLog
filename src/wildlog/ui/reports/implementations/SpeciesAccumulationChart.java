@@ -45,7 +45,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
 
     
     public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Accumulation Reports", inLstData, inChartDescLabel);
+        super("Recording Rate Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Line charts
         Button btnLineChart = new Button("Creature Accumulation (Line)");
@@ -64,7 +64,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.DAILY_OBSERVATION_LINE_CHART;
-                setupChartDescriptionLabel("<html>This chart illustrates the rate at which new Creatures were recorded over time.</html>");
+                setupChartDescriptionLabel("<html>This chart illustrates the number of Observations recorded per day (calendar day, not the real day-night cycle).</html>");
             }
         });
         lstCustomButtons.add(btnDailyObsLineChart);
@@ -74,12 +74,12 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.DAILY_CREATURE_LINE_CHART;
-                setupChartDescriptionLabel("<html>This chart illustrates the rate at which new Creatures were recorded over time.</html>");
+                setupChartDescriptionLabel("<html>This chart illustrates the number of Creatures recorded per day (calendar day, not the real day-night cycle).</html>");
             }
         });
         lstCustomButtons.add(btnDailyLineChart);
         lstCustomButtons.add(new Label("Chart Options:"));
-        CheckBox chkShowDetails = new CheckBox("Show Day/Night/Twilight");
+        CheckBox chkShowDetails = new CheckBox("Show Day, Night or Twilight");
         chkShowDetails.setCursor(Cursor.HAND);
         chkShowDetails.setSelected(false);
         chkShowDetails.setOnAction(new EventHandler() {
@@ -159,6 +159,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of new Creatures observed over Time");
+        UtilsReports.setupChartTooltips(chart, true, true);
         return chart;
     }
     
@@ -278,6 +279,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
             chart.setLegendVisible(true);
         }
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     

@@ -44,7 +44,7 @@ public class DurationChart extends AbstractReport<Sighting> {
         super("Duration Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
-        Button btnLineChart = new Button("All Observations Duration (Line)");
+        Button btnLineChart = new Button("Duration for All Observations (Line)");
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
@@ -55,16 +55,16 @@ public class DurationChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnLineChart);
         // Timeline per element
-        Button btnStackedBarChart = new Button("Creatures Duration (Line)");
-        btnStackedBarChart.setCursor(Cursor.HAND);
-        btnStackedBarChart.setOnAction(new EventHandler() {
+        Button btnStackedLineChart = new Button("Duration per Creature (Line)");
+        btnStackedLineChart.setCursor(Cursor.HAND);
+        btnStackedLineChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.TIMELINE_PER_ELEMENT;
-                setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific duration.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations that lasted a specific duration for each Creature.</html>");
             }
         });
-        lstCustomButtons.add(btnStackedBarChart);
+        lstCustomButtons.add(btnStackedLineChart);
         // Time interval size
         lstCustomButtons.add(new Label("Duration interval size:"));
         cmbIntervalSize = new ComboBox<>(FXCollections.observableArrayList(options));
@@ -81,7 +81,7 @@ public class DurationChart extends AbstractReport<Sighting> {
                     }
                     else
                     if (chartType == ChartType.TIMELINE_PER_ELEMENT) {
-                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations that lasted a specific duration.</html>");
+                        setupChartDescriptionLabel("<html>This chart shows the number of Observations that lasted a specific duration for each Creature.</html>");
                     }
                 }
             }
@@ -143,6 +143,7 @@ public class DurationChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Observations for each Duration Interval");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     
@@ -204,6 +205,7 @@ public class DurationChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(true);
         chart.setTitle("Number of Observations for each Duration Interval, per Creature");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     

@@ -36,7 +36,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.CtrlClickSelectionModel;
 import wildlog.ui.helpers.SpinnerFixer;
-import wildlog.ui.reports.helpers.FilterProperties;
+import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -100,6 +100,13 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         buttonGroupIDs = new javax.swing.ButtonGroup();
         btnSelect = new javax.swing.JButton();
         jLabel20 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        txaSightingIDs = new javax.swing.JTextArea();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        rdbInclude = new javax.swing.JRadioButton();
+        rdbExclude = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
         dtpStartDate = new org.jdesktop.swingx.JXDatePicker();
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
@@ -109,6 +116,10 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jLabel22 = new javax.swing.JLabel();
         spnStartTime = new javax.swing.JSpinner();
         spnEndTime = new javax.swing.JSpinner();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        lsbMonths = new javax.swing.JList();
+        jLabel28 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane10 = new javax.swing.JScrollPane();
         lsbCertainty = new javax.swing.JList();
@@ -120,29 +131,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jScrollPane11 = new javax.swing.JScrollPane();
         lsbTimeAccuracy = new javax.swing.JList();
         jLabel5 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txaTag = new javax.swing.JTextArea();
-        jLabel11 = new javax.swing.JLabel();
-        spnNumberOfElements = new javax.swing.JSpinner();
-        jLabel12 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        lsbSex = new javax.swing.JList();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        lsbAge = new javax.swing.JList();
-        jLabel13 = new javax.swing.JLabel();
-        chkIndividualsLess = new javax.swing.JCheckBox();
-        chkIndividualsMore = new javax.swing.JCheckBox();
-        chkIncludeEmptyTags = new javax.swing.JCheckBox();
-        jLabel24 = new javax.swing.JLabel();
-        spnDurationMinutes = new javax.swing.JSpinner();
-        chkDurationLess = new javax.swing.JCheckBox();
-        chkDurationMore = new javax.swing.JCheckBox();
-        spnDurationSeconds = new javax.swing.JSpinner();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
@@ -169,16 +157,32 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jLabel21 = new javax.swing.JLabel();
         chkMoonlightMore = new javax.swing.JCheckBox();
         chkMoonlightLess = new javax.swing.JCheckBox();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txaTag = new javax.swing.JTextArea();
+        jLabel11 = new javax.swing.JLabel();
+        spnNumberOfElements = new javax.swing.JSpinner();
+        jLabel12 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        lsbSex = new javax.swing.JList();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        lsbAge = new javax.swing.JList();
+        jLabel13 = new javax.swing.JLabel();
+        chkIndividualsLess = new javax.swing.JCheckBox();
+        chkIndividualsMore = new javax.swing.JCheckBox();
+        chkIncludeEmptyTags = new javax.swing.JCheckBox();
+        jLabel24 = new javax.swing.JLabel();
+        spnDurationMinutes = new javax.swing.JSpinner();
+        chkDurationLess = new javax.swing.JCheckBox();
+        chkDurationMore = new javax.swing.JCheckBox();
+        spnDurationSeconds = new javax.swing.JSpinner();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         btnTemplates = new javax.swing.JButton();
         btnSelectAll = new javax.swing.JButton();
         btnClearAll = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jScrollPane13 = new javax.swing.JScrollPane();
-        txaSightingIDs = new javax.swing.JTextArea();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        rdbInclude = new javax.swing.JRadioButton();
-        rdbExclude = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Filter Properties");
@@ -199,6 +203,67 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel20.setText("Select the properties to filter on:");
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Observation ID"));
+
+        txaSightingIDs.setColumns(20);
+        txaSightingIDs.setRows(2);
+        jScrollPane13.setViewportView(txaSightingIDs);
+
+        jLabel7.setText("Observation IDs:");
+
+        jLabel23.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel23.setText("(separate by newline)");
+
+        buttonGroupIDs.add(rdbInclude);
+        rdbInclude.setSelected(true);
+        rdbInclude.setText("Include");
+        rdbInclude.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        buttonGroupIDs.add(rdbExclude);
+        rdbExclude.setText("Exclude");
+        rdbExclude.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel7))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel23)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rdbInclude)
+                    .addComponent(rdbExclude))
+                .addGap(5, 5, 5))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel23))
+                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(rdbInclude)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(rdbExclude)))
+                .addGap(3, 3, 3))
+        );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Dates and Times"));
 
@@ -267,7 +332,44 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 .addGap(5, 5, 5))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Certainty"));
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Months"));
+
+        lsbMonths.setBackground(new java.awt.Color(230, 226, 224));
+        lsbMonths.setForeground(new java.awt.Color(176, 153, 145));
+        lsbMonths.setModel(new DefaultComboBoxModel(FilterProperties.MONTHS));
+        lsbMonths.setFocusable(false);
+        lsbMonths.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbMonths.setSelectionForeground(new java.awt.Color(23, 38, 4));
+        lsbMonths.setSelectionModel(new CtrlClickSelectionModel());
+        lsbMonths.setVisibleRowCount(12);
+        jScrollPane14.setViewportView(lsbMonths);
+
+        jLabel28.setText("Months:");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(jLabel28)
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+                .addGap(5, 5, 5))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel28)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(5, 5, 5))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Certainties"));
 
         lsbCertainty.setBackground(new java.awt.Color(230, 226, 224));
         lsbCertainty.setForeground(new java.awt.Color(176, 153, 145));
@@ -321,9 +423,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addComponent(jLabel9)))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane12)
-                    .addComponent(jScrollPane11)
-                    .addComponent(jScrollPane10))
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
         jPanel2Layout.setVerticalGroup(
@@ -343,6 +445,213 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel6)
                     .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Categories"));
+
+        jLabel15.setText("Evidence:");
+
+        lsbEvidence.setBackground(new java.awt.Color(230, 226, 224));
+        lsbEvidence.setForeground(new java.awt.Color(176, 153, 145));
+        lsbEvidence.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(SightingEvidence.values())));
+        lsbEvidence.setFocusable(false);
+        lsbEvidence.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbEvidence.setSelectionForeground(new java.awt.Color(23, 38, 4));
+        lsbEvidence.setSelectionModel(new CtrlClickSelectionModel());
+        jScrollPane7.setViewportView(lsbEvidence);
+
+        lsbLifeStatus.setBackground(new java.awt.Color(230, 226, 224));
+        lsbLifeStatus.setForeground(new java.awt.Color(176, 153, 145));
+        lsbLifeStatus.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(LifeStatus.values())));
+        lsbLifeStatus.setFocusable(false);
+        lsbLifeStatus.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbLifeStatus.setSelectionForeground(new java.awt.Color(23, 38, 4));
+        lsbLifeStatus.setSelectionModel(new CtrlClickSelectionModel());
+        jScrollPane6.setViewportView(lsbLifeStatus);
+
+        jLabel14.setText("Life Status:");
+
+        lsbVisitType.setBackground(new java.awt.Color(230, 226, 224));
+        lsbVisitType.setForeground(new java.awt.Color(176, 153, 145));
+        lsbVisitType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(VisitType.values())));
+        lsbVisitType.setFocusable(false);
+        lsbVisitType.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbVisitType.setSelectionForeground(new java.awt.Color(23, 38, 4));
+        lsbVisitType.setSelectionModel(new CtrlClickSelectionModel());
+        jScrollPane1.setViewportView(lsbVisitType);
+
+        jLabel3.setText("Period Types:");
+
+        jLabel8.setText("Creature Type:");
+
+        lsbElementType.setBackground(new java.awt.Color(230, 226, 224));
+        lsbElementType.setForeground(new java.awt.Color(176, 153, 145));
+        lsbElementType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(ElementType.values())));
+        lsbElementType.setFocusable(false);
+        lsbElementType.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbElementType.setSelectionForeground(new java.awt.Color(23, 38, 4));
+        lsbElementType.setSelectionModel(new CtrlClickSelectionModel());
+        jScrollPane3.setViewportView(lsbElementType);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel15))
+                .addGap(15, 15, 15)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel14))
+                .addGap(3, 3, 3)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(5, 5, 5))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(3, 3, 3))
+        );
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Sun and Moon Phase"));
+
+        jLabel19.setText("Moonlight:");
+
+        lsbTimeOfDay.setBackground(new java.awt.Color(230, 226, 224));
+        lsbTimeOfDay.setForeground(new java.awt.Color(176, 153, 145));
+        lsbTimeOfDay.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(ActiveTimeSpesific.values())));
+        lsbTimeOfDay.setFocusable(false);
+        lsbTimeOfDay.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbTimeOfDay.setSelectionForeground(new java.awt.Color(23, 38, 4));
+        lsbTimeOfDay.setSelectionModel(new CtrlClickSelectionModel());
+        jScrollPane8.setViewportView(lsbTimeOfDay);
+
+        spnMoonphase.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        spnMoonphase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        lsbMoonlight.setBackground(new java.awt.Color(230, 226, 224));
+        lsbMoonlight.setForeground(new java.awt.Color(176, 153, 145));
+        lsbMoonlight.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Moonlight.values())));
+        lsbMoonlight.setFocusable(false);
+        lsbMoonlight.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbMoonlight.setSelectionForeground(new java.awt.Color(23, 38, 4));
+        lsbMoonlight.setSelectionModel(new CtrlClickSelectionModel());
+        jScrollPane9.setViewportView(lsbMoonlight);
+
+        jLabel17.setText("Time of Day:");
+
+        jLabel18.setText("Moonphase:");
+
+        lblTimeOfDayInfo.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        lblTimeOfDayInfo.setForeground(new java.awt.Color(102, 102, 102));
+        lblTimeOfDayInfo.setText("More Info...");
+        lblTimeOfDayInfo.setToolTipText("Click here to see the definitions for each category.");
+        lblTimeOfDayInfo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        lblTimeOfDayInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblTimeOfDayInfo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblTimeOfDayInfoMousePressed(evt);
+            }
+        });
+
+        jLabel21.setText("% full");
+
+        chkMoonlightMore.setText("and more");
+        chkMoonlightMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkMoonlightMore.setFocusPainted(false);
+
+        chkMoonlightLess.setText("and less");
+        chkMoonlightLess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkMoonlightLess.setFocusPainted(false);
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel17)
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblTimeOfDayInfo)
+                        .addGap(18, 18, 18)))
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jLabel18)
+                                .addGap(8, 8, 8)
+                                .addComponent(spnMoonphase, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel21))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(chkMoonlightLess)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(chkMoonlightMore)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                .addGap(5, 5, 5))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(3, 3, 3)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel17)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTimeOfDayInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel19)
+                            .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel18)
+                            .addComponent(spnMoonphase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel21))
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(chkMoonlightLess)
+                            .addComponent(chkMoonlightMore))))
                 .addGap(3, 3, 3))
         );
 
@@ -472,7 +781,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addComponent(chkDurationLess)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(chkDurationMore)))
-                .addGap(0, 30, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -511,213 +820,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addComponent(chkIncludeEmptyTags)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel27)))
-                .addGap(3, 3, 3))
-        );
-
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Categories"));
-
-        jLabel15.setText("Evidence:");
-
-        lsbEvidence.setBackground(new java.awt.Color(230, 226, 224));
-        lsbEvidence.setForeground(new java.awt.Color(176, 153, 145));
-        lsbEvidence.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(SightingEvidence.values())));
-        lsbEvidence.setFocusable(false);
-        lsbEvidence.setSelectionBackground(new java.awt.Color(193, 209, 179));
-        lsbEvidence.setSelectionForeground(new java.awt.Color(23, 38, 4));
-        lsbEvidence.setSelectionModel(new CtrlClickSelectionModel());
-        jScrollPane7.setViewportView(lsbEvidence);
-
-        lsbLifeStatus.setBackground(new java.awt.Color(230, 226, 224));
-        lsbLifeStatus.setForeground(new java.awt.Color(176, 153, 145));
-        lsbLifeStatus.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(LifeStatus.values())));
-        lsbLifeStatus.setFocusable(false);
-        lsbLifeStatus.setSelectionBackground(new java.awt.Color(193, 209, 179));
-        lsbLifeStatus.setSelectionForeground(new java.awt.Color(23, 38, 4));
-        lsbLifeStatus.setSelectionModel(new CtrlClickSelectionModel());
-        jScrollPane6.setViewportView(lsbLifeStatus);
-
-        jLabel14.setText("Life Status:");
-
-        lsbVisitType.setBackground(new java.awt.Color(230, 226, 224));
-        lsbVisitType.setForeground(new java.awt.Color(176, 153, 145));
-        lsbVisitType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(VisitType.values())));
-        lsbVisitType.setFocusable(false);
-        lsbVisitType.setSelectionBackground(new java.awt.Color(193, 209, 179));
-        lsbVisitType.setSelectionForeground(new java.awt.Color(23, 38, 4));
-        lsbVisitType.setSelectionModel(new CtrlClickSelectionModel());
-        jScrollPane1.setViewportView(lsbVisitType);
-
-        jLabel3.setText("Period Types:");
-
-        jLabel8.setText("Creature Type:");
-
-        lsbElementType.setBackground(new java.awt.Color(230, 226, 224));
-        lsbElementType.setForeground(new java.awt.Color(176, 153, 145));
-        lsbElementType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(ElementType.values())));
-        lsbElementType.setFocusable(false);
-        lsbElementType.setSelectionBackground(new java.awt.Color(193, 209, 179));
-        lsbElementType.setSelectionForeground(new java.awt.Color(23, 38, 4));
-        lsbElementType.setSelectionModel(new CtrlClickSelectionModel());
-        jScrollPane3.setViewportView(lsbElementType);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel15))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel14))
-                .addGap(3, 3, 3)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(5, 5, 5))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(3, 3, 3)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(5, 5, 5)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(5, 5, 5)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15)
-                            .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(3, 3, 3))
-        );
-
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Sun And Moon Phase"));
-
-        jLabel19.setText("Moonlight:");
-
-        lsbTimeOfDay.setBackground(new java.awt.Color(230, 226, 224));
-        lsbTimeOfDay.setForeground(new java.awt.Color(176, 153, 145));
-        lsbTimeOfDay.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(ActiveTimeSpesific.values())));
-        lsbTimeOfDay.setFocusable(false);
-        lsbTimeOfDay.setSelectionBackground(new java.awt.Color(193, 209, 179));
-        lsbTimeOfDay.setSelectionForeground(new java.awt.Color(23, 38, 4));
-        lsbTimeOfDay.setSelectionModel(new CtrlClickSelectionModel());
-        jScrollPane8.setViewportView(lsbTimeOfDay);
-
-        spnMoonphase.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
-        spnMoonphase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        lsbMoonlight.setBackground(new java.awt.Color(230, 226, 224));
-        lsbMoonlight.setForeground(new java.awt.Color(176, 153, 145));
-        lsbMoonlight.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Moonlight.values())));
-        lsbMoonlight.setFocusable(false);
-        lsbMoonlight.setSelectionBackground(new java.awt.Color(193, 209, 179));
-        lsbMoonlight.setSelectionForeground(new java.awt.Color(23, 38, 4));
-        lsbMoonlight.setSelectionModel(new CtrlClickSelectionModel());
-        jScrollPane9.setViewportView(lsbMoonlight);
-
-        jLabel17.setText("Time of Day:");
-
-        jLabel18.setText("Moonphase:");
-
-        lblTimeOfDayInfo.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        lblTimeOfDayInfo.setForeground(new java.awt.Color(102, 102, 102));
-        lblTimeOfDayInfo.setText("More Info...");
-        lblTimeOfDayInfo.setToolTipText("Click here to see the definitions for each category.");
-        lblTimeOfDayInfo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        lblTimeOfDayInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblTimeOfDayInfo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                lblTimeOfDayInfoMousePressed(evt);
-            }
-        });
-
-        jLabel21.setText("% full");
-
-        chkMoonlightMore.setText("and more");
-        chkMoonlightMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkMoonlightMore.setFocusPainted(false);
-
-        chkMoonlightLess.setText("and less");
-        chkMoonlightLess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkMoonlightLess.setFocusPainted(false);
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel17)
-                        .addGap(21, 21, 21))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblTimeOfDayInfo)
-                        .addGap(18, 18, 18)))
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jLabel18)
-                                .addGap(8, 8, 8)
-                                .addComponent(spnMoonphase, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel21))
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(chkMoonlightLess)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(chkMoonlightMore)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel19)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGap(5, 5, 5))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(3, 3, 3)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTimeOfDayInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel19)
-                            .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel18)
-                            .addComponent(spnMoonphase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel21))
-                        .addGap(3, 3, 3)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(chkMoonlightLess)
-                            .addComponent(chkMoonlightMore))))
                 .addGap(3, 3, 3))
         );
 
@@ -760,67 +862,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
             }
         });
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Observation ID"));
-
-        txaSightingIDs.setColumns(20);
-        txaSightingIDs.setRows(2);
-        jScrollPane13.setViewportView(txaSightingIDs);
-
-        jLabel7.setText("Observation IDs:");
-
-        jLabel23.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel23.setText("(separate by newline)");
-
-        buttonGroupIDs.add(rdbInclude);
-        rdbInclude.setSelected(true);
-        rdbInclude.setText("Include");
-        rdbInclude.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        buttonGroupIDs.add(rdbExclude);
-        rdbExclude.setText("Exclude");
-        rdbExclude.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel7))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(jLabel23)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rdbInclude)
-                    .addComponent(rdbExclude))
-                .addGap(5, 5, 5))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(5, 5, 5)
-                                .addComponent(jLabel23))
-                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(rdbInclude)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(rdbExclude)))
-                .addGap(3, 3, 3))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -837,10 +878,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnTemplates, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -848,8 +888,15 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
@@ -869,7 +916,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                                         .addComponent(btnTemplates, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(15, 15, 15)))
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(2, 2, 2)
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -946,6 +995,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         inFilterProperties.setDurationSeconds((int) spnDurationSeconds.getValue());
         inFilterProperties.setDurationIsLess(chkDurationLess.isSelected());
         inFilterProperties.setDurationIsMore(chkDurationMore.isSelected());
+        inFilterProperties.setMonths(lsbMonths.getSelectedValuesList());
     }
 
     private void lblTimeOfDayInfoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimeOfDayInfoMousePressed
@@ -997,6 +1047,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         inFilterProperties.setDurationSeconds(0);
         inFilterProperties.setDurationIsLess(true);
         inFilterProperties.setDurationIsMore(true);
+        inFilterProperties.setMonths(Arrays.asList(FilterProperties.MONTHS));
     }
 
     private void btnClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllActionPerformed
@@ -1029,6 +1080,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         filterProperties.setDurationSeconds(0);
         filterProperties.setDurationIsLess(true);
         filterProperties.setDurationIsMore(true);
+        filterProperties.setMonths(new ArrayList<>(0));
         populateToUI(filterProperties);
     }//GEN-LAST:event_btnClearAllActionPerformed
 
@@ -1100,6 +1152,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         spnDurationSeconds.setValue(inFilterProperties.getDurationSeconds());
         chkDurationLess.setSelected(inFilterProperties.isDurationIsLess());
         chkDurationMore.setSelected(inFilterProperties.isDurationIsMore());
+        selectValuesInJList(lsbMonths, inFilterProperties.getMonths());
     }
     
     private void selectValuesInJList(JList inList, List inValues) {
@@ -1454,6 +1507,23 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     return false;
                 }
             }
+            // Month
+            if (inFilterProperties.getMonths() != null && !inFilterProperties.getMonths().isEmpty()) {
+                boolean found = false;
+                all: for (String monthString : inFilterProperties.getMonths()) {
+                    for (int monthInt = 0; monthInt < FilterProperties.MONTHS.length; monthInt++) {
+                        if (FilterProperties.MONTHS[monthInt].equals(monthString)) {
+                            if (UtilsTime.getLocalDateFromDate(inSighting.getDate()).getMonthValue() - 1 == monthInt) {
+                                found = true;
+                                break all;
+                            }
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -1493,6 +1563,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1506,11 +1577,13 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane13;
+    private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -1526,6 +1599,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private javax.swing.JList lsbEvidence;
     private javax.swing.JList lsbGPSAccuracy;
     private javax.swing.JList lsbLifeStatus;
+    private javax.swing.JList lsbMonths;
     private javax.swing.JList lsbMoonlight;
     private javax.swing.JList lsbSex;
     private javax.swing.JList lsbTimeAccuracy;

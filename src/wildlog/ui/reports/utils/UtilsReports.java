@@ -2,24 +2,32 @@ package wildlog.ui.reports.utils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.implementations.helpers.IntegerTickLabelFormatter;
+import wildlog.ui.utils.UtilsTime;
 
 
 public final class UtilsReports {
@@ -178,6 +186,59 @@ public final class UtilsReports {
             }
         };
         return chart;
+    }
+    
+    public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate) {
+        for (XYChart.Series<Object, Object> series : (List<XYChart.Series<Object, Object>>) inChart.getData()) {
+            for (XYChart.Data<Object, Object> data : series.getData()) {
+                data.getNode().setOnMousePressed(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent inEvent) {
+                        String text = "";
+                        if (data.getExtraValue() != null && !data.getExtraValue().toString().isEmpty()) {
+                            text = text + data.getExtraValue().toString() + System.lineSeparator();
+                        }
+                        String name;
+                        String value;
+                        if (inValueAxisIsY) {
+                            name = data.getXValue().toString();
+                            value = data.getYValue().toString();
+                        }
+                        else {
+                            name = data.getYValue().toString();
+                            value = data.getXValue().toString();
+                        }
+                        if (inFormatLongAsDate) {
+                            name = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(new Date(Long.parseLong(name))));
+                        }
+                        text = text + name + System.lineSeparator();
+                        text = text + "[Value = " + value + "]";
+                        Tooltip tooltip = new Tooltip(text);
+                        tooltip.setFont(Font.font(14));
+                        tooltip.setAutoHide(true);
+                        tooltip.show((Node) inEvent.getSource(), inEvent.getScreenX(), inEvent.getScreenY());
+                    }
+                });
+                data.getNode().setCursor(Cursor.HAND);
+// FIXME: bug met line charts wat oor mekaar teken, dan kan sommige van die nodes nie geclick word nie want die area onder die lyn het hoer z-order...
+            }
+        }
+    }
+    
+    public static void setupChartTooltips(PieChart inChart) {
+        for (PieChart.Data data : inChart.getData()) {
+            data.getNode().setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent inEvent) {
+                    String text = data.getName() + System.lineSeparator() + "[Value = " + data.getPieValue() + "]";
+                    Tooltip tooltip = new Tooltip(text);
+                    tooltip.setFont(Font.font(14));
+                    tooltip.setAutoHide(true);
+                    tooltip.show((Node) inEvent.getSource(), inEvent.getScreenX(), inEvent.getScreenY());
+                }
+            });
+            data.getNode().setCursor(Cursor.HAND);
+        }
     }
     
 }

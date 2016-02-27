@@ -42,10 +42,10 @@ public class TimelineChart extends AbstractReport<Sighting> {
 
     
     public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Hourly Timeline Reports", inLstData, inChartDescLabel);
+        super("Timeline Reports (24 Hours)", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
-        Button btnLineChart = new Button("Observations Hourly Timeline (Line)");
+        Button btnLineChart = new Button("Timeline for All Observations (Line)");
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
@@ -57,7 +57,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnLineChart);
         // Timeline per element
-        Button btnStackedBarChart = new Button("Creatures Hourly Timeline (Line)");
+        Button btnStackedBarChart = new Button("Timeline per Creature (Line)");
         btnStackedBarChart.setCursor(Cursor.HAND);
         btnStackedBarChart.setOnAction(new EventHandler() {
             @Override
@@ -145,6 +145,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Observations during Time Interval");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     
@@ -203,6 +204,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(true);
         chart.setTitle("Number of Observations during Time Interval for each Creature");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     

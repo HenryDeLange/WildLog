@@ -37,17 +37,6 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
     public TimeOfDayChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Time of Day Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(4);
-        // Pie charts
-        Button btnPieChart = new Button("Observation Time of Day (Pie)");
-        btnPieChart.setCursor(Cursor.HAND);
-        btnPieChart.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                chartType = ChartType.PIE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category as a pie chart.</html>");
-            }
-        });
-        lstCustomButtons.add(btnPieChart);
         // Bar charts
         Button btnBarChart = new Button("Observation Time of Day (Bar)");
         btnBarChart.setCursor(Cursor.HAND);
@@ -59,6 +48,17 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChart);
+        // Pie charts
+        Button btnPieChart = new Button("Observation Time of Day (Pie)");
+        btnPieChart.setCursor(Cursor.HAND);
+        btnPieChart.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.PIE_CHART;
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category as a pie chart.</html>");
+            }
+        });
+        lstCustomButtons.add(btnPieChart);
         // Line charts
         Button btnLineChart = new Button("Creature Time of Day (Line)");
         btnLineChart.setCursor(Cursor.HAND);
@@ -148,6 +148,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         chart.getStyleClass().add("wl-bar-custom-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Observations per Time Of Day category");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     
@@ -238,6 +239,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         chart.getStylesheets().add("wildlog/ui/reports/chart/styling/ChartsTimeOfDay.css");
         chart.getStyleClass().add("wl-pie-time-of-day-color");
         chart.setTitle("Number of Observations per Time Of Day category");
+        UtilsReports.setupChartTooltips(chart);
         return chart;
     }
     
@@ -303,6 +305,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-line-30-color");
         chart.setTitle("Number of Observations per Time Of Day category for each Creature");
+        UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
     

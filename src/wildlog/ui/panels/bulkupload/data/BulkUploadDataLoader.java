@@ -72,7 +72,7 @@ public class BulkUploadDataLoader {
                 public void run() {
                     loadFileData(tempFile.toPath(), imageList);
                     try {
-                        inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, files.size());
+                        inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, files.size() + 1); // Prevent the progress bar from reaching 100%
                     }
                     catch (Exception e) {
                         e.printStackTrace(System.err);
@@ -86,7 +86,7 @@ public class BulkUploadDataLoader {
         // The images must be sorted according to date to make sure they are grouped correctly into sightings
         Collections.sort(imageList);
         inProgressbarTask.setMessage("Bulk Import Preparation: Process files...");
-        inProgressbarTask.setTaskProgress(95);
+        inProgressbarTask.setTaskProgress(99);
         long timeDiffInMiliseconds = inSightingDurationInSeconds*1000;
         // Next calculate the sightings and build the Object[][]
         Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> finalMap =
@@ -158,18 +158,18 @@ public class BulkUploadDataLoader {
         if (date != null) {
             ImageIcon imageIcon;
             if (WildLogFileExtentions.Images.isKnownExtention(inFile)) {
-                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, WildLogThumbnailSizes.MEDIUM.getSize());
+                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, WildLogThumbnailSizes.MEDIUM.getSize(), true);
             }
             else 
             if (WildLogFileExtentions.Movies.isKnownExtention(inFile)) {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
                         WildLogSystemImages.MOVIES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM),
-                        WildLogThumbnailSizes.MEDIUM.getSize());
+                        WildLogThumbnailSizes.MEDIUM.getSize(), false);
             }
             else {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
                         WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM),
-                        WildLogThumbnailSizes.MEDIUM.getSize());
+                        WildLogThumbnailSizes.MEDIUM.getSize(), false);
             }
             BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(
                     inFile, imageIcon, date);

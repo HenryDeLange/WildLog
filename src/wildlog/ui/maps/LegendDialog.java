@@ -77,7 +77,7 @@ public class LegendDialog extends JDialog {
             ColorPicker colorPicker = new ColorPicker(new javafx.scene.paint.Color(color.getRed()/255.0, color.getGreen()/255.0, color.getBlue()/255.0, 1.0));
             colorPicker.setPrefWidth(70);
             colorPicker.setPrefHeight(40);
-            colorPicker.getStylesheets().add("wildlog/ui/maps/LegendDialog.css");
+            colorPicker.getStylesheets().add("wildlog/ui/maps/styling/LegendDialog.css");
             row.getChildren().add(colorPicker);
             Label label = new Label(layer);
             label.setFont(Font.font(12));

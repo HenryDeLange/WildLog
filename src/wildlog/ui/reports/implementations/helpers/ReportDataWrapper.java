@@ -4,13 +4,13 @@ package wildlog.ui.reports.implementations.helpers;
 public class ReportDataWrapper {
     // Making variables public to make it a little easier (less code) to use this data wrapper
     public String key = "";
-    public String value = "";
+    public Object value = "";
     public int count;
 
     public ReportDataWrapper() {
     }
 
-    public ReportDataWrapper(String inKey, String inValue, int inCount) {
+    public ReportDataWrapper(String inKey, Object inValue, int inCount) {
         key = inKey;
         value = inValue;
         count = inCount;
@@ -24,11 +24,11 @@ public class ReportDataWrapper {
         key = inKey;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(String inValue) {
+    public void setValue(Object inValue) {
         value = inValue;
     }
 
