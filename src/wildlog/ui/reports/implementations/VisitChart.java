@@ -39,14 +39,14 @@ import wildlog.ui.utils.UtilsTime;
 
 
 public class VisitChart extends AbstractReport<Sighting> {
-    private enum ChartType {PIE_CHART_SIGHTING_COUNT, BAR_CHART_SIGHTING_COUNT, BAR_CHART_ABUNDANCE, BAR_CHART_ELEMENT_ABUNDANCE, BAR_CHART_ELEMENT_COUNT, BAR_CHART_RICHNESS, PIE_CHART_TYPE, PIE_CHART_DURATION};
+    private enum ChartType {PIE_CHART_SIGHTING_COUNT, BAR_CHART_SIGHTING_COUNT, BAR_CHART_ABUNDANCE, BAR_CHART_ELEMENT_ABUNDANCE, BAR_CHART_ELEMENT_COUNT, BAR_CHART_RICHNESS, PIE_CHART_TYPE, BAR_CHART_COMBINED_DURATION, BAR_CHART_DURATION};
     private ChartType chartType;
     private Chart displayedChart;
 
     
     public VisitChart(List<Sighting> inLstData,JLabel inChartDescLabel) {
         super("Period Reports", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(8);
+        lstCustomButtons = new ArrayList<>(9);
         // Pie charts
         Button btnPieChartSightingCount = new Button("Observations per Period (Pie)");
         btnPieChartSightingCount.setCursor(Cursor.HAND);
@@ -93,18 +93,29 @@ public class VisitChart extends AbstractReport<Sighting> {
         btnBarChartDuration.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                chartType = ChartType.PIE_CHART_DURATION;
-                setupChartDescriptionLabel("<html>This chart shows the number of Periods with a specific duration (based on the start and end dates).</html>");
+                chartType = ChartType.BAR_CHART_DURATION;
+                setupChartDescriptionLabel("<html>This chart shows the duration of each Period (based on the start and end dates).</html>");
             }
         });
         lstCustomButtons.add(btnBarChartDuration);
+         Button btnBarChartDurationCombined = new Button("Period Combined Duration (Bar)");
+        btnBarChartDurationCombined.setCursor(Cursor.HAND);
+        btnBarChartDurationCombined.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.BAR_CHART_COMBINED_DURATION;
+                setupChartDescriptionLabel("<html>This chart shows the number of Periods with a specific duration (based on the start and end dates).</html>");
+            }
+        });
+        lstCustomButtons.add(btnBarChartDurationCombined);
         Button btnBarChartAbundance = new Button("Abundance of Observations (Bar)");
         btnBarChartAbundance.setCursor(Cursor.HAND);
         btnBarChartAbundance.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_ABUNDANCE;
-                setupChartDescriptionLabel("<html>This chart can be used as a simplified Observation Abundance report. It shows the number of Observations devided by the number of active days for each Period (based on the start and end dates)."
+                setupChartDescriptionLabel("<html>This chart can be used as a simplified Observation Abundance report. "
+                                        + "<br/>It shows the number of Observations devided by the number of active days for each Period (based on the start and end dates)."
                                         + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
             }
         });
@@ -115,7 +126,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_ELEMENT_ABUNDANCE;
-                setupChartDescriptionLabel("<html>This chart can be used as a simplified Creature Abundance report. It shows the number of Observations devided by the number of active days for each Period (based on the start and end dates), per Creature."
+                setupChartDescriptionLabel("<html>This chart can be used as a simplified Creature Abundance report. "
+                                        + "<br/>It shows the number of Observations devided by the number of active days for each Period (based on the start and end dates), per Creature."
                                         + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
             }
         });
@@ -126,7 +138,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_RICHNESS;
-                setupChartDescriptionLabel("<html>This chart can be used as a simplified Creature Richness report. It shows the number of Creatures devided by the number of active days for each Period (based on the start and end dates)."
+                setupChartDescriptionLabel("<html>This chart can be used as a simplified Creature Richness report. "
+                                        + "<br/>It shows the number of Creatures devided by the number of active days for each Period (based on the start and end dates)."
                                         + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
             }
         });
@@ -151,7 +164,11 @@ public class VisitChart extends AbstractReport<Sighting> {
                     displayedChart = createBarChartSightingCount(lstData);
                 }
                 else
-                if (chartType.equals(ChartType.PIE_CHART_DURATION)) {
+                if (chartType.equals(ChartType.BAR_CHART_COMBINED_DURATION)) {
+                    displayedChart = createBarChartDurationCombined(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.BAR_CHART_DURATION)) {
                     displayedChart = createBarChartDuration(lstData);
                 }
                 else
@@ -231,6 +248,52 @@ public class VisitChart extends AbstractReport<Sighting> {
     
     private Chart createBarChartDuration(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
+        for (Sighting sighting : inSightings) {
+            ReportDataWrapper dataWrapper = mapData.get(sighting.getVisitName());
+            if (dataWrapper == null) {
+                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
+                dataWrapper = new ReportDataWrapper();
+                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
+                    dataWrapper.count = (int) ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                }
+                else {
+                     dataWrapper.count = 0;
+                }
+                mapData.put(sighting.getVisitName(), dataWrapper);
+            }
+        }
+        ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
+        ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
+        List<String> keys = new ArrayList<>(mapData.keySet());
+        for (String key : keys) {
+            BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).count);
+            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
+            allSightings.add(data);
+        }
+        // Sort the results
+        Collections.sort(allSightings, new Comparator<XYChart.Data<String, Number>>() {
+            @Override
+            public int compare(XYChart.Data<String, Number> inData1, XYChart.Data<String, Number> inData2) {
+                return Integer.compare(inData2.getYValue().intValue(), inData1.getYValue().intValue());
+            }
+        });
+        // Add the resutls to the final series
+        chartData.add(new BarChart.Series<String, Number>("Periods (" + mapData.keySet().size() + ")", allSightings));
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, false);
+        CategoryAxis catAxis = new CategoryAxis();
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), true);
+        BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-bar-single-color");
+        chart.setLegendVisible(false);
+        chart.setTitle("Number of days between start and end dates per Period");
+        UtilsReports.setupChartTooltips(chart, true, false);
+        return chart;
+    }
+    
+    private Chart createBarChartDurationCombined(List<Sighting> inSightings) {
+        Map<String, ReportDataWrapper> mapData = new HashMap<>();
         Set<String> processedVisits = new HashSet<>();
         for (Sighting sighting : inSightings) {
             if (!processedVisits.contains(sighting.getVisitName())) {
@@ -243,9 +306,13 @@ public class VisitChart extends AbstractReport<Sighting> {
                 }
                 ReportDataWrapper dataWrapper = mapData.get(duration);
                 if (dataWrapper == null) {
-                    dataWrapper = new ReportDataWrapper(duration, null, 0);
+                    dataWrapper = new ReportDataWrapper(duration, "", 0);
                     mapData.put(duration, dataWrapper);
                 }
+                if (!dataWrapper.value.toString().isEmpty()) {
+                    dataWrapper.value = dataWrapper.value + ", ";
+                }
+                dataWrapper.value = dataWrapper.value + sighting.getVisitName();
                 dataWrapper.increaseCount();
             }
         }
@@ -253,7 +320,8 @@ public class VisitChart extends AbstractReport<Sighting> {
         ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapData.keySet());
         for (String key : keys) {
-            BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).count);
+            ReportDataWrapper dataWrapper = mapData.get(key);
+            BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, dataWrapper.count, dataWrapper.value);
             data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }

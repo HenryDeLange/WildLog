@@ -223,17 +223,16 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                         String dateString = UtilsTime.WL_DATE_FORMATTER.format(loopDate);
                         ReportDataWrapper reportDataWrapper = mapColumnData.get(dateString);
                         if (reportDataWrapper != null) {
-                            lstChartData.add(new AreaChart.Data<String, Number>(dateString, reportDataWrapper.count));
+                            lstChartData.add(new AreaChart.Data<String, Number>(dateString, reportDataWrapper.count, key));
                             seriesDataCount = seriesDataCount + reportDataWrapper.count;
                         }
                         else {
-                            lstChartData.add(new AreaChart.Data<String, Number>(dateString, 0));
+                            lstChartData.add(new AreaChart.Data<String, Number>(dateString, 0, key));
                         }
                         loopDate = loopDate.plusDays(1);
                     }
                     AreaChart.Series<String, Number> series = new AreaChart.Series<String, Number>(
-                            key + " (" + seriesDataCount + ")", 
-                            lstChartData);
+                            key + " (" + seriesDataCount + ")", lstChartData);
                     chartData.add(series);
                 }
                 else {

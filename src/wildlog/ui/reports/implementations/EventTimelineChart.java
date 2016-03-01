@@ -147,7 +147,7 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
             for (String key : keys) {
                 int entryCount = 0;
                 ObservableList<AreaChart.Data<String, Number>> lstData = FXCollections.observableArrayList();
-                setupEmtyIntervals(lstData, firstDate, lastDate);
+                setupEmtyIntervals(lstData, firstDate, lastDate, key);
                 Map<String, ReportDataWrapper> mapSpeciesData = mapDataPerElement.get(key);
                 for (AreaChart.Data<String, Number> data : lstData) {
                     ReportDataWrapper dataWrapper = mapSpeciesData.get(data.getXValue());
@@ -192,10 +192,10 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
         return FXCollections.observableList(new ArrayList<String>(timeCategories));
     }
 
-    private void setupEmtyIntervals(ObservableList<XYChart.Data<String, Number>> lstElementData, LocalDateTime inStartDate, LocalDateTime inEndDate) {
+    private void setupEmtyIntervals(ObservableList<XYChart.Data<String, Number>> lstElementData, LocalDateTime inStartDate, LocalDateTime inEndDate, String inSeriesName) {
         List<String> lstTimes = getAllTimesAsList(inStartDate, inEndDate);
         for (String time : lstTimes) {
-            lstElementData.add(new AreaChart.Data<String, Number>(time, 0));
+            lstElementData.add(new AreaChart.Data<String, Number>(time, 0, inSeriesName));
         }
     }
     

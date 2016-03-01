@@ -114,9 +114,9 @@ public class ReportsBaseDialog extends JFrame {
         Label lblInfo = new Label("Please select the report you would like to view from the list on the left.\n\n"
                 + "You can filter the number of Observations that are used in the report by using the buttons in the Report Data Filters section.\n\n"
                 + "Reports can be exported using the Export Report button.\n\n"
-                + "You can click on the charts to view the data values at that point.\n\n"
+                + "You can click on the report to view the data values at the selected point.\n\n"
                 + "Warning: \n"
-                + "The charts may display incorrectly when there are too many data series to fit on the chart area.\n"
+                + "The reports may display incorrectly when there are too many data series to fit on the chart area.\n"
                 + "Displaying some charts with very large datasets can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.");
         lblInfo.setPadding(new Insets(20));
         lblInfo.setFont(new Font(18));

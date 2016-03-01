@@ -196,7 +196,26 @@ public final class UtilsReports {
                     public void handle(MouseEvent inEvent) {
                         String text = "";
                         if (data.getExtraValue() != null && !data.getExtraValue().toString().isEmpty()) {
-                            text = text + data.getExtraValue().toString() + System.lineSeparator();
+                            // If the list of Element names get too long split it into multiple lines
+                            text = text + data.getExtraValue().toString();
+                            final int LINE_LIMIT = 100;
+                            if (text.length() > LINE_LIMIT) {
+                                StringBuilder builder = new StringBuilder(text.length() + 30);
+                                int currentLineLength = 0;
+                                for (String entry : text.split(",", -1)) {
+                                    if (currentLineLength > LINE_LIMIT) {
+                                        builder.append(System.lineSeparator()).append("   ");
+                                        currentLineLength = 0;
+                                    }
+                                    builder.append(entry).append(",");
+                                    currentLineLength = currentLineLength + entry.length() + 2;
+                                }
+                                text = builder.toString();
+                                if (text.endsWith(",")) {
+                                    text = text.substring(0, text.length() - 2);
+                                }
+                            }
+                            text = text + System.lineSeparator();
                         }
                         String name;
                         String value;
@@ -220,7 +239,10 @@ public final class UtilsReports {
                     }
                 });
                 data.getNode().setCursor(Cursor.HAND);
-// FIXME: bug met line charts wat oor mekaar teken, dan kan sommige van die nodes nie geclick word nie want die area onder die lyn het hoer z-order...
+            }
+            // For Line / Area Charts make the area fill transparent to clicks (otherwise the first points can't be clicked)
+            if (series.getNode() != null) {
+                series.getNode().setMouseTransparent(true);
             }
         }
     }

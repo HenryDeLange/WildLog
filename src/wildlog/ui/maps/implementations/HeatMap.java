@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Path;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -22,17 +25,19 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.JLabel;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.data.dataobjects.Visit;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
 public class HeatMap extends AbstractMap<Sighting> {
-    private enum MapType {HEAT_MAP_CLIENTSIDE};
+    private enum MapType {HEAT_MAP_CLIENTSIDE, ABUNDANCE_MAP_CLIENTSIDE, RICHNESS_MAP_CLIENTSIDE, SAMPLE_EFFORT_MAP_CLIENTSIDE};
     private enum HeatMapSize {SMALL, MEDIUM, LARGE, VERY_LARGE};
     private MapType activeMapType = MapType.HEAT_MAP_CLIENTSIDE;
     private HeatMapSize activeHeatMapSize = HeatMapSize.MEDIUM;
@@ -43,9 +48,9 @@ public class HeatMap extends AbstractMap<Sighting> {
     
     public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         super("Distribution Maps (Heat)", inLstData, inChartDescLabel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(8);
+        lstCustomButtons = new ArrayList<>(11);
         // Maps
-        Button btnHeatMapClient = new Button("Heat Map");
+        Button btnHeatMapClient = new Button("Observation Heat Map");
         btnHeatMapClient.setCursor(Cursor.HAND);
         btnHeatMapClient.setOnAction(new EventHandler() {
             @Override
@@ -54,6 +59,33 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnHeatMapClient);
+        Button btnAbundanceMapClient = new Button("Basic Abundance Map");
+        btnAbundanceMapClient.setCursor(Cursor.HAND);
+        btnAbundanceMapClient.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                activeMapType = MapType.ABUNDANCE_MAP_CLIENTSIDE;
+            }
+        });
+        lstCustomButtons.add(btnAbundanceMapClient);
+        Button btnRichnessMapClient = new Button("Basic Richness Map");
+        btnRichnessMapClient.setCursor(Cursor.HAND);
+        btnRichnessMapClient.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                activeMapType = MapType.RICHNESS_MAP_CLIENTSIDE;
+            }
+        });
+        lstCustomButtons.add(btnRichnessMapClient);
+        Button btnSampleEffortMapClient = new Button("Basic Sampling Effort Map");
+        btnSampleEffortMapClient.setCursor(Cursor.HAND);
+        btnSampleEffortMapClient.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                activeMapType = MapType.SAMPLE_EFFORT_MAP_CLIENTSIDE;
+            }
+        });
+        lstCustomButtons.add(btnSampleEffortMapClient);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
         CheckBox chkTransparent = new CheckBox("Semi-Transparent");
@@ -123,8 +155,6 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnOpenInBrowser);
-        
-// TODO: Maak 'n "Abundance of Observations heat map wat die ratio gebruik van obs per duration van period. 
 
 // TODO: Maak offline heatmaps ook (sien http://stackoverflow.com/questions/13299045/geotools-render-a-gridcoverage2d-to-a-heat-map)
         
@@ -139,6 +169,30 @@ public class HeatMap extends AbstractMap<Sighting> {
                 if (activeMapType.equals(MapType.HEAT_MAP_CLIENTSIDE)) {
                     setupChartDescriptionLabel("<html>This Heat Map can be used to show areas with higher or lower density of data points.</html>");
                     displayedMap = createHeatMapClient(lstData);
+                }
+                else
+                if (activeMapType.equals(MapType.ABUNDANCE_MAP_CLIENTSIDE)) {
+                    setupChartDescriptionLabel("<html>This map can be used as a simplified Observation Abundance Map."
+                            + "<br/>It shows the number of Observations, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
+                            + "<br/><b>Note:</b> This map works best when comparing data where each Observations for a Period have the same GPS location "
+                            + "and all Periods have similar durations. Such as camera trapping data.</html>");
+                    displayedMap = createAbundanceMapClient(lstData);
+                }
+                else
+                if (activeMapType.equals(MapType.RICHNESS_MAP_CLIENTSIDE)) {
+                    setupChartDescriptionLabel("<html>This map can be used as a simplified Creature Richness Map."
+                            + "<br/>It shows the number of Creatures, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
+                            + "<br/><b>Note:</b> This map works best when comparing data where each Observations for a Period have the same GPS location "
+                            + "and all Periods have similar durations. Such as camera trapping data.</html>");
+                    displayedMap = createRichnessMapClient(lstData);
+                }
+                else
+                if (activeMapType.equals(MapType.SAMPLE_EFFORT_MAP_CLIENTSIDE)) {
+                    setupChartDescriptionLabel("<html>This map can be used as a simplified Sampling Effort Map."
+                            + "<br/>It shows the duration of the Period (based on the start and end dates) associated with an Observation at a specific GPS location."
+                            + "<br/><b>Note:</b> This map works best when comparing data where each Observations for a Period have the same GPS location. "
+                            + "Such as camera trapping data.</html>");
+                    displayedMap = createSampleEffortMapClient(lstData);
                 }
                 inScene.setRoot(displayedMap);
             }
@@ -169,12 +223,28 @@ public class HeatMap extends AbstractMap<Sighting> {
         int endIndex = template.indexOf("//___POINTS_END___");
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
+        Map<String, HeatPoint> mapHeatPoints = new HashMap<>();
         for (Sighting sighting : inLstSightings) {
-            if (UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
-                gpsBuilder.append(gpsPointTemplate.replace("(-32,", "(" + Double.toString(UtilsGPS.getLatDecimalDegree(sighting)) + ",")
-                                                  .replace(", 22)", ", " + Double.toString(UtilsGPS.getLonDecimalDegree(sighting)) + ")"));
-                gpsBuilder.append(System.lineSeparator());
+            if (UtilsGPS.hasGPSData(sighting)) {
+                double lat = UtilsGPS.getLatDecimalDegree(sighting);
+                double lon = UtilsGPS.getLonDecimalDegree(sighting);
+                String key = lat + ":" + lon;
+                HeatPoint heatPoint = mapHeatPoints.get(key);
+                if (heatPoint == null) {
+                    heatPoint = new HeatPoint();
+                    heatPoint.lat = lat;
+                    heatPoint.lon = lon;
+                    mapHeatPoints.put(key, heatPoint);
+                }
+                heatPoint.weight++;
             }
+        }
+        for (HeatPoint  heatPoint : mapHeatPoints.values()) {
+            String point = replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
+            point = replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
+            point = replace(point, "weight: 1.0}", "weight: " + heatPoint.weight + "}");
+            gpsBuilder.append(point);
+            gpsBuilder.append(System.lineSeparator());
         }
         template = template.replace("//___POINTS_START___", "")
                            .replace("//___POINTS_END___", "")
@@ -209,6 +279,325 @@ public class HeatMap extends AbstractMap<Sighting> {
         webEngine.loadContent(template);
         displayedTemplate = template;
         return webView;
+    }
+    
+    private Parent createAbundanceMapClient(List<Sighting> inLstSightings) {
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        // Get the template file
+        final char[] buffer = new char[4096];
+        final StringBuilder builder = new StringBuilder(7500);
+        try (Reader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("resources/heatmap.html"), "UTF-8"))) {
+            int length = 0;
+            while (length >= 0) {
+                length = in.read(buffer, 0, buffer.length);
+                if (length > 0) {
+                    builder.append(buffer, 0, length);
+                }
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        String template = builder.toString();
+        // Edit the template
+        int beginIndex = template.indexOf("//___POINTS_START___") + "//___POINTS_START___".length();
+        int endIndex = template.indexOf("//___POINTS_END___");
+        String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
+        StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
+        Map<String, HeatPoint> mapHeatPoints = new HashMap<>();
+        Map<String, Long> mapVisitDuration = new HashMap<>();
+        for (Sighting sighting : inLstSightings) {
+            if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
+                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
+                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                    mapVisitDuration.put(sighting.getVisitName(), days);
+                }
+                else {
+                    // If this visit does not have a valid date range, then don't process it, continue to the next record instead
+                    continue;
+                }
+            }
+            if (UtilsGPS.hasGPSData(sighting)) {
+                double lat = UtilsGPS.getLatDecimalDegree(sighting);
+                double lon = UtilsGPS.getLonDecimalDegree(sighting);
+                String key = sighting.getVisitName() + ":" + lat + ":" + lon;
+                HeatPoint heatPoint = mapHeatPoints.get(key);
+                if (heatPoint == null) {
+                    heatPoint = new HeatPoint();
+                    heatPoint.lat = lat;
+                    heatPoint.lon = lon;
+                    heatPoint.value = sighting.getVisitName();
+                    mapHeatPoints.put(key, heatPoint);
+                }
+                heatPoint.weight++;
+            }
+        }
+        for (HeatPoint  heatPoint : mapHeatPoints.values()) {
+            String point = replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
+            point = replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
+            point = replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.value) * 1000.0) / 1000.0) + "}");
+            gpsBuilder.append(point);
+            gpsBuilder.append(System.lineSeparator());
+        }
+        template = template.replace("//___POINTS_START___", "")
+                           .replace("//___POINTS_END___", "")
+                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        // Setup options
+        StringBuilder options = new StringBuilder();
+        if (isTransparent) {
+            options.append("heatmap.set('opacity', 0.2);");
+            options.append(System.lineSeparator());
+        }
+        if (activeHeatMapSize == HeatMapSize.SMALL) {
+            options.append("heatmap.set('radius', 10);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.MEDIUM) {
+            options.append("heatmap.set('radius', 25);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.LARGE) {
+            options.append("heatmap.set('radius', 45);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.VERY_LARGE) {
+            options.append("heatmap.set('radius', 90);");
+            options.append(System.lineSeparator());
+        }
+        template = template.replace("//___OPTIONS___", options);
+        // Set the template
+        webEngine.loadContent(template);
+        displayedTemplate = template;
+        return webView;
+    }
+    
+    private Parent createRichnessMapClient(List<Sighting> inLstSightings) {
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        // Get the template file
+        final char[] buffer = new char[4096];
+        final StringBuilder builder = new StringBuilder(7500);
+        try (Reader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("resources/heatmap.html"), "UTF-8"))) {
+            int length = 0;
+            while (length >= 0) {
+                length = in.read(buffer, 0, buffer.length);
+                if (length > 0) {
+                    builder.append(buffer, 0, length);
+                }
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        String template = builder.toString();
+        // Edit the template
+        int beginIndex = template.indexOf("//___POINTS_START___") + "//___POINTS_START___".length();
+        int endIndex = template.indexOf("//___POINTS_END___");
+        String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
+        StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
+        Map<String, HeatPoint> mapHeatPoints = new HashMap<>();
+        Map<String, Long> mapVisitDuration = new HashMap<>();
+        for (Sighting sighting : inLstSightings) {
+            if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
+                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
+                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                    mapVisitDuration.put(sighting.getVisitName(), days);
+                }
+                else {
+                    // If this visit does not have a valid date range, then don't process it, continue to the next record instead
+                    continue;
+                }
+            }
+            if (UtilsGPS.hasGPSData(sighting)) {
+                double lat = UtilsGPS.getLatDecimalDegree(sighting);
+                double lon = UtilsGPS.getLonDecimalDegree(sighting);
+                String key = sighting.getElementName() + ":" + sighting.getVisitName() + ":" + lat + ":" + lon;
+                HeatPoint heatPoint = mapHeatPoints.get(key);
+                if (heatPoint == null) {
+                    heatPoint = new HeatPoint();
+                    heatPoint.lat = lat;
+                    heatPoint.lon = lon;
+                    heatPoint.value = sighting.getVisitName();
+                    heatPoint.weight = 1;
+                    mapHeatPoints.put(key, heatPoint);
+                }
+            }
+        }
+        for (HeatPoint  heatPoint : mapHeatPoints.values()) {
+            String point = replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
+            point = replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
+            point = replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.value) * 1000.0) / 1000.0) + "}");
+            gpsBuilder.append(point);
+            gpsBuilder.append(System.lineSeparator());
+        }
+        template = template.replace("//___POINTS_START___", "")
+                           .replace("//___POINTS_END___", "")
+                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        // Setup options
+        StringBuilder options = new StringBuilder();
+        if (isTransparent) {
+            options.append("heatmap.set('opacity', 0.2);");
+            options.append(System.lineSeparator());
+        }
+        if (activeHeatMapSize == HeatMapSize.SMALL) {
+            options.append("heatmap.set('radius', 10);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.MEDIUM) {
+            options.append("heatmap.set('radius', 25);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.LARGE) {
+            options.append("heatmap.set('radius', 45);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.VERY_LARGE) {
+            options.append("heatmap.set('radius', 90);");
+            options.append(System.lineSeparator());
+        }
+        template = template.replace("//___OPTIONS___", options);
+        // Set the template
+        webEngine.loadContent(template);
+        displayedTemplate = template;
+        return webView;
+    }
+    
+    private Parent createSampleEffortMapClient(List<Sighting> inLstSightings) {
+        WebView webView = new WebView();
+        WebEngine webEngine = webView.getEngine();
+        // Get the template file
+        final char[] buffer = new char[4096];
+        final StringBuilder builder = new StringBuilder(7500);
+        try (Reader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("resources/heatmap.html"), "UTF-8"))) {
+            int length = 0;
+            while (length >= 0) {
+                length = in.read(buffer, 0, buffer.length);
+                if (length > 0) {
+                    builder.append(buffer, 0, length);
+                }
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        String template = builder.toString();
+        // Edit the template
+        int beginIndex = template.indexOf("//___POINTS_START___") + "//___POINTS_START___".length();
+        int endIndex = template.indexOf("//___POINTS_END___");
+        String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
+        StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
+        Map<String, HeatPoint> mapHeatPoints = new HashMap<>();
+        Map<String, Long> mapVisitDuration = new HashMap<>();
+        for (Sighting sighting : inLstSightings) {
+            if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
+                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
+                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                    mapVisitDuration.put(sighting.getVisitName(), days);
+                }
+                else {
+                    // If this visit does not have a valid date range, then don't process it, continue to the next record instead
+                    continue;
+                }
+            }
+            if (UtilsGPS.hasGPSData(sighting)) {
+                double lat = UtilsGPS.getLatDecimalDegree(sighting);
+                double lon = UtilsGPS.getLonDecimalDegree(sighting);
+                String key = sighting.getVisitName() + ":" + lat + ":" + lon;
+                HeatPoint heatPoint = mapHeatPoints.get(key);
+                if (heatPoint == null) {
+                    heatPoint = new HeatPoint();
+                    heatPoint.lat = lat;
+                    heatPoint.lon = lon;
+                    heatPoint.value = sighting.getVisitName();
+                    mapHeatPoints.put(key, heatPoint);
+                }
+            }
+        }
+        for (HeatPoint  heatPoint : mapHeatPoints.values()) {
+            String point = replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
+            point = replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
+            point = replace(point, "weight: 1.0}", "weight: " + mapVisitDuration.get(heatPoint.value) + "}");
+            gpsBuilder.append(point);
+            gpsBuilder.append(System.lineSeparator());
+        }
+        template = template.replace("//___POINTS_START___", "")
+                           .replace("//___POINTS_END___", "")
+                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        // Setup options
+        StringBuilder options = new StringBuilder();
+        if (isTransparent) {
+            options.append("heatmap.set('opacity', 0.2);");
+            options.append(System.lineSeparator());
+        }
+        if (activeHeatMapSize == HeatMapSize.SMALL) {
+            options.append("heatmap.set('radius', 10);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.MEDIUM) {
+            options.append("heatmap.set('radius', 25);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.LARGE) {
+            options.append("heatmap.set('radius', 45);");
+            options.append(System.lineSeparator());
+        }
+        else
+        if (activeHeatMapSize == HeatMapSize.VERY_LARGE) {
+            options.append("heatmap.set('radius', 90);");
+            options.append(System.lineSeparator());
+        }
+        template = template.replace("//___OPTIONS___", options);
+        // Set the template
+        webEngine.loadContent(template);
+        displayedTemplate = template;
+        return webView;
+    }
+    
+// TODO: Toets of hierdie vinniger is as die ander manier (behoort te wees)
+    private static String replace(String inText, String inOldString, String inNewString) {
+        if (inText == null) {
+            return null;
+        }
+// FIXME: Net gecopy vanas stackoverflow, ek kan dit seker self beter code later
+        int i = inText.indexOf(inOldString, 0);
+        if (i >= 0) {
+            char[] sourceArray = inText.toCharArray();
+            char[] nsArray = inNewString.toCharArray();
+            int oLength = inOldString.length();
+            StringBuilder buf = new StringBuilder(sourceArray.length);
+            buf.append(sourceArray, 0, i).append(nsArray);
+            i += oLength;
+            int j = i;
+            // Replace all remaining instances of oldString with newString.
+            while ((i = inText.indexOf(inOldString, i)) > 0) {
+                buf.append(sourceArray, j, i - j).append(nsArray);
+                i += oLength;
+                j = i;
+            }
+            buf.append(sourceArray, j, sourceArray.length - j);
+            inText = buf.toString();
+            buf.setLength(0);
+        }
+        return inText;
+    }
+    
+    private class HeatPoint {
+        public double lat;
+        public double lon;
+        public int weight = 0;
+        public String value;
     }
     
 }

@@ -14,7 +14,7 @@
         // Adding Data Points
         var lstGPSPoints = [
 //___POINTS_START___
-            new google.maps.LatLng(-32, 22),
+            {location: new google.maps.LatLng(-32, 22), weight: 1.0},
 //___POINTS_END___
         ];
         function initialize() {
@@ -31,7 +31,7 @@
             // Set the map bounds
             var bounds = new google.maps.LatLngBounds();
             for (var t = 0; t < lstGPSPoints.length; t++) {
-                bounds.extend(lstGPSPoints[t]);
+                bounds.extend(lstGPSPoints[t].location);
             }
             map.fitBounds(bounds);
             // Heat Map options

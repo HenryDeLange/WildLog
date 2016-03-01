@@ -125,7 +125,7 @@ public class DurationChart extends AbstractReport<Sighting> {
                 maxMinutes = sighting.getDurationMinutes();
             }
         }
-        setupEmtyIntervals(allSightings, maxMinutes);
+        setupEmtyIntervals(allSightings, maxMinutes, null);
         for (AreaChart.Data<String, Number> data : allSightings) {
             ReportDataWrapper dataWrapper = mapCounter.get(data.getXValue());
             if (dataWrapper != null) {
@@ -172,7 +172,7 @@ public class DurationChart extends AbstractReport<Sighting> {
         for (String elementName : mapTotalElements.keySet()) {
             ObservableList<AreaChart.Data<String, Number>> lstElementData = FXCollections.observableArrayList();
             mapDataPerElement.put(elementName, lstElementData);
-            setupEmtyIntervals(lstElementData, maxMinutes);
+            setupEmtyIntervals(lstElementData, maxMinutes, elementName);
         }
         // Set the DataWrapper values in an ObservableList
         for (ReportDataWrapper dataWrapper : mapInitialCountedData.values()) {
@@ -219,7 +219,7 @@ public class DurationChart extends AbstractReport<Sighting> {
         return FXCollections.observableList(new ArrayList<String>(timeCategories));
     }
 
-    private void setupEmtyIntervals(ObservableList<XYChart.Data<String, Number>> lstElementData, int inMaxMinutes) {
+    private void setupEmtyIntervals(ObservableList<XYChart.Data<String, Number>> lstElementData, int inMaxMinutes, String inSeriesName) {
         List<String> lstTimes;
         if (inMaxMinutes <= maxMinutesCap) {
             lstTimes = getAllTimesAsList(inMaxMinutes);
@@ -228,7 +228,7 @@ public class DurationChart extends AbstractReport<Sighting> {
             lstTimes = getAllTimesAsList(maxMinutesCap + 1);
         }
         for (String time : lstTimes) {
-            lstElementData.add(new AreaChart.Data<String, Number>(time, 0));
+            lstElementData.add(new AreaChart.Data<String, Number>(time, 0, inSeriesName));
         }
     }
     

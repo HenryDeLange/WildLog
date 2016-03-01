@@ -695,8 +695,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 Files.createDirectories(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath());
                             }
                             
+                            
 // FIXME: Die storie doen nou snaakse goed (dalk tedoen met die nuwe EXIF rotate stuff). Lyk my die exif data wys nog dat dit 'n rotate kort...
                             
+
                             OutputStream out = new BufferedOutputStream(new FileOutputStream(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve("vmirror.jpg").toFile()));
                             // Turn off OPT_WRITE_APPXS flag to Skip writing Exif.
                             options = LLJTran.OPT_DEFAULTS & ~LLJTran.OPT_WRITE_APPXS;

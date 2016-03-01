@@ -271,7 +271,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             ObservableList<AreaChart.Data<String, Number>> lstElementData = FXCollections.observableArrayList();
             mapDataPerElement.put(elementName, lstElementData);
             for (String activeTimeSpesific : lstActiveTimeSpesific) {
-                lstElementData.add(new AreaChart.Data<String, Number>(activeTimeSpesific, 0));
+                lstElementData.add(new AreaChart.Data<String, Number>(activeTimeSpesific, 0, elementName));
             }
         }
         // Set the DataWrapper values in an ObservableList
@@ -291,8 +291,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             AreaChart.Series<String, Number> series = new AreaChart.Series<String, Number>(
-                    key + " (" + mapTotalElements.get(key) + ")", 
-                    mapDataPerElement.get(key));
+                    key + " (" + mapTotalElements.get(key) + ")", mapDataPerElement.get(key));
             chartData.add(series);
         }
         // Setup axis and chart

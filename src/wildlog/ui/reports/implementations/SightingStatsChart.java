@@ -455,28 +455,9 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         for (int count = 1; count <= maxCount; count++) {
             ReportDataWrapper dataWrapper = mapGroupedCounts.get(count);
             if (dataWrapper != null) {
-                // If the list of Element names get too long split it into multiple lines
-                String listOfSpecies = dataWrapper.value.toString();
-                final int LINE_LIMIT = 100;
-                if (listOfSpecies.length() > LINE_LIMIT) {
-                    StringBuilder builder = new StringBuilder(listOfSpecies.length() + 30);
-                    int currentLineLength = 0;
-                    for (String entry : listOfSpecies.split(",", -1)) {
-                        if (currentLineLength > LINE_LIMIT) {
-                            builder.append(System.lineSeparator()).append("   ");
-                            currentLineLength = 0;
-                        }
-                        builder.append(entry).append(",");
-                        currentLineLength = currentLineLength + entry.length() + 2;
-                    }
-                    listOfSpecies = builder.toString();
-                    if (listOfSpecies.endsWith(",")) {
-                        listOfSpecies = listOfSpecies.substring(0, listOfSpecies.length() - 2);
-                    }
-                }
                 // Add the data to the chart
 // TODO: Ek dink hulle gebruik Log of iets om die groter getalle saam te groepeer, sodat daar nie sulke groot gate is nie...
-                lstSeriesData.add(new BarChart.Data<String, Number>(count + " Obs", dataWrapper.count, listOfSpecies));
+                lstSeriesData.add(new BarChart.Data<String, Number>(count + " Obs", dataWrapper.count, dataWrapper.value));
             }
             else {
                 lstSeriesData.add(new BarChart.Data<String, Number>(count + " Obs", 0, "<No Data>"));

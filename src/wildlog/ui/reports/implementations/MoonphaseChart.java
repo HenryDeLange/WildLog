@@ -345,7 +345,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             ObservableList<AreaChart.Data<String, Number>> lstChartDataForElement = FXCollections.observableArrayList();
             mapDataPerElement.put(seriesName, lstChartDataForElement);
             for (int percentage = 0; percentage <= 100/PERCENTAGES_PER_INTERVAL; percentage++) {
-                lstChartDataForElement.add(new AreaChart.Data<String, Number>(getMoonIntervalPercentage(percentage*PERCENTAGES_PER_INTERVAL), 0));
+                lstChartDataForElement.add(new AreaChart.Data<String, Number>(getMoonIntervalPercentage(percentage*PERCENTAGES_PER_INTERVAL), 0, seriesName));
             }
         }
         // Set the DataWrapper values in an ObservableList

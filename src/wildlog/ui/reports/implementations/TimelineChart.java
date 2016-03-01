@@ -116,7 +116,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
     private Chart createTimelineForAllChart(List<Sighting> inSightings) {
         // Get the data in the correct structure
         ObservableList<AreaChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
-        setupEmtyIntervals(allSightings);
+        setupEmtyIntervals(allSightings, null);
         ObservableList<AreaChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
         Map<String, ReportDataWrapper> mapCounter = new HashMap<>();
         for (Sighting sighting : inSightings) {
@@ -170,7 +170,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         for (String elementName : mapTotalElements.keySet()) {
             ObservableList<AreaChart.Data<String, Number>> lstElementData = FXCollections.observableArrayList();
             mapDataPerElement.put(elementName, lstElementData);
-            setupEmtyIntervals(lstElementData);
+            setupEmtyIntervals(lstElementData, elementName);
         }
         // Set the DataWrapper values in an ObservableList
         for (ReportDataWrapper dataWrapper : mapInitialCountedData.values()) {
@@ -218,10 +218,10 @@ public class TimelineChart extends AbstractReport<Sighting> {
         return FXCollections.observableList(new ArrayList<String>(timeCategories));
     }
 
-    private void setupEmtyIntervals(ObservableList<XYChart.Data<String, Number>> lstElementData) {
+    private void setupEmtyIntervals(ObservableList<XYChart.Data<String, Number>> lstElementData, String inSeriesName) {
         List<String> lstTimes = getAllTimesAsList();
         for (String time : lstTimes) {
-            lstElementData.add(new AreaChart.Data<String, Number>(time, 0));
+            lstElementData.add(new AreaChart.Data<String, Number>(time, 0, inSeriesName));
         }
     }
     
