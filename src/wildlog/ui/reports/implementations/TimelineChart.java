@@ -52,7 +52,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
             public void handle(Event event) {
                 chartType = ChartType.TIMELINE_FOR_ALL;
                 setupChartDescriptionLabel("<html>This chart shows the number of all Observations during a specific time period. "
-                    + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
+                    + "The real time intervals are good for comparing related data from the same location during a short time period (a few weeks).</html>");
             }
         });
         lstCustomButtons.add(btnLineChart);
@@ -64,7 +64,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
             public void handle(Event event) {
                 chartType = ChartType.TIMELINE_PER_ELEMENT;
                 setupChartDescriptionLabel("<html>This chart shows the number of all Observations per Creature during a specific time period. "
-                    + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
+                    + "The real time intervals are good for comparing related data from the same location during a short time period (a few weeks).</html>");
             }
         });
         lstCustomButtons.add(btnStackedBarChart);
@@ -81,12 +81,12 @@ public class TimelineChart extends AbstractReport<Sighting> {
                 if (!cmbIntervalSize.getSelectionModel().isEmpty()) {
                     if (chartType == ChartType.TIMELINE_FOR_ALL) {
                         setupChartDescriptionLabel("<html>This chart shows the number of all Observations during a specific time period. "
-                            + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
+                            + "The real time intervals are good for comparing related data from the same location during a short time period (a few weeks).</html>");
                     }
                     else
                     if (chartType == ChartType.TIMELINE_PER_ELEMENT) {
                         setupChartDescriptionLabel("<html>This chart shows the number of all Observations during a specific time period. "
-                            + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
+                            + "The real time intervals are good for comparing related data from the same location during a short time period (a few weeks).</html>");
                     }
                 }
             }

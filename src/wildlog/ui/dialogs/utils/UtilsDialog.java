@@ -125,7 +125,7 @@ public final class UtilsDialog {
                 try {
                     Metadata meta = JpegMetadataReader.readMetadata(inFile.toFile());
                     Iterator<Directory> directories = meta.getDirectories().iterator();
-                    breakAllWhiles: while (directories.hasNext()) {
+                    while (directories.hasNext()) {
                         Directory directory = directories.next();
                         Collection<Tag> tags = directory.getTags();
                         for (Tag tag : tags) {

@@ -408,7 +408,7 @@ public class UtilsImageProcessing {
     }
 
     private static Date getExifDateFromJpeg(Metadata inMeta) {
-// FIXME: Die ou Moultrie images het 'n issue waar hulle 'n EXIF value het wat altyd na dieselfde datum point, ek moet 'n reel maak wat daai files kan optel en dan die file.lastmodified gebruik...
+        // NOTE: Die ou Moultrie images het 'n issue waar hulle altyd 'n EXIF datum het van "01 Jan 2000 00:00:01" (die Last Modified datum werk nie as 'n alternatief nie)
         if (inMeta != null) {
             Iterator<Directory> directories = inMeta.getDirectories().iterator();
             while (directories.hasNext()) {
@@ -539,9 +539,9 @@ public class UtilsImageProcessing {
             graphics2D.dispose();
         }
         catch (IOException ex) {
-            // FIXME: This can generate "Access is denied" IO exceptions when multiple threads try to create the icons for the first time. 
-            //        I'm OK with that and don't want to add sync blocks just to handle that initial posible scenario. 
-            //        If it continues or gives problems with "real" files, then fix it properly...
+            // This can generate "Access is denied" IO exceptions when multiple threads try to create the icons for the first time. 
+            // I'm OK with that and don't want to add sync blocks just to handle that initial posible scenario. 
+            // If it continues or gives problems with "real" files, then fix it properly...
             ex.printStackTrace(System.err);
             System.err.println("Current thread name was -> " + Thread.currentThread().getName());
         }

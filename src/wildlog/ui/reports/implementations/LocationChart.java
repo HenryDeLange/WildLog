@@ -45,7 +45,7 @@ public class LocationChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART_SIGHITNGS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations that have been recorded at each Place as a pie chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations that have been recorded at each Place.</html>");
             }
         });
         lstCustomButtons.add(btnPieChartSightings);
@@ -56,7 +56,7 @@ public class LocationChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_SIGHITNGS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations that have been recorded at each Place as a bar chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations that have been recorded at each Place.</html>");
             }
         });
         lstCustomButtons.add(btnBarChartSightings);

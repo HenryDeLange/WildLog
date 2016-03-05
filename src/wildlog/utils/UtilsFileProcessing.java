@@ -33,7 +33,7 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.filters.MovieFilter;
-import wildlog.ui.maps.implementations.helpers.UtilsMapGenerator;
+import wildlog.ui.maps.implementations.helpers.UtilsMaps;
 
 public final class UtilsFileProcessing {
     private static final ExecutorService executorService = 
@@ -400,7 +400,7 @@ public final class UtilsFileProcessing {
         listCallables.add(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
-                UtilsMapGenerator.copyMapLayers();
+                UtilsMaps.copyMapLayers();
                 return null;
             }
         });

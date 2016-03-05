@@ -284,8 +284,9 @@ public class WildLogApp extends Application {
                     if ("Nimbus".equals(info.getName())) {
                         UIManager.setLookAndFeel(info.getClassName());
                         // Make the global button margins smaller, because Nimbus ignores the setting on the buttons
-                        UIManager.getLookAndFeelDefaults().put("Button.contentMargins", new InsetsUIResource(0,0,0,0));
-                        UIManager.getLookAndFeelDefaults().put("ToggleButton.contentMargins", new InsetsUIResource(0,0,0,0));
+                        UIManager.getLookAndFeelDefaults().put("Button.contentMargins", new InsetsUIResource(2,2,2,2));
+                        UIManager.getLookAndFeelDefaults().put("ToggleButton.contentMargins", new InsetsUIResource(2,2,2,2));
+                        UIManager.getLookAndFeelDefaults().put("OptionPane.sameSizeButtons", true);
                         break;
                     }
                 }

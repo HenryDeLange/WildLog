@@ -94,11 +94,11 @@ public class VisitChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_DURATION;
-                setupChartDescriptionLabel("<html>This chart shows the duration of each Period (based on the start and end dates).</html>");
+                setupChartDescriptionLabel("<html>This chart shows the duration, in days, of each Period (based on the start and end dates).</html>");
             }
         });
         lstCustomButtons.add(btnBarChartDuration);
-         Button btnBarChartDurationCombined = new Button("Period Combined Duration (Bar)");
+         Button btnBarChartDurationCombined = new Button("Grouped Period Duration (Bar)");
         btnBarChartDurationCombined.setCursor(Cursor.HAND);
         btnBarChartDurationCombined.setOnAction(new EventHandler() {
             @Override
@@ -548,7 +548,7 @@ public class VisitChart extends AbstractReport<Sighting> {
         UtilsReports.setupCategoryAxis(catAxis, mapChartDataGroupedForSeries.size(), true);
         StackedBarChart<String, Number> chart = UtilsReports.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
         chart.getStyleClass().add("wl-stacked-bar-30-color");
-        chart.setTitle("Ratio of Observations over the Duration of each Period and Creature");
+        chart.setTitle("Ratio of Observations over the Duration for each Period and Creature");
         UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }

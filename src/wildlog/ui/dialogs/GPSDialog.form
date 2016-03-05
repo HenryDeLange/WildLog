@@ -155,7 +155,7 @@
     <Component class="javax.swing.JButton" name="btnUseRelated">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
+          <Image iconType="3" name="/wildlog/resources/icons/RelatedGPS.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Find Related"/>
         <Property name="toolTipText" type="java.lang.String" value="Try to find a GPS point using the related Images or linked Place."/>
@@ -294,7 +294,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Show on Map (Online)"/>
-        <Property name="toolTipText" type="java.lang.String" value="Reset the GPS point to be empty."/>
+        <Property name="toolTipText" type="java.lang.String" value="Show the GPS point on an online map. Dragging the marker on the map will update the GPS value."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -315,7 +315,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Show on Map (Offline)"/>
-        <Property name="toolTipText" type="java.lang.String" value="Reset the GPS point to be empty."/>
+        <Property name="toolTipText" type="java.lang.String" value="Show the GPS point on an offline map."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

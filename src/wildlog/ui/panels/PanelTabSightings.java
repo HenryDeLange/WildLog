@@ -16,6 +16,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
@@ -30,7 +31,6 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.reports.ReportsBaseDialog;
-import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -711,7 +711,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
 
-// FIXME: Daar is steeds 'n probleem as nuwe visits, sightings ens ge-add was of die name was verander, want dan is hulle nie in die lyste nie...
+        
+// FIXME: Daar is steeds 'n probleem as nuwe visits, sightings ens ge-add was of die name was verander, want dan is hulle nie in die lyste nie... Maak dit reg wanneer die DBI geupgrade word.
+
 
         // Setup full lists for the first time if they were null
         if (lstFilteredLocations == null) {

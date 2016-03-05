@@ -32,6 +32,18 @@
             });
             // Set the map location and zoom to fit all markers
             map.fitBounds(bounds);
+            // Prevent the bounds from zooming in too much
+            var center = bounds.getCenter();
+            if (center.lat() === 0 && center.lng() === 0) {
+                // For some reason the (0, 0) point doesn't seem to return a result from the MaxZoomService
+                center = new google.maps.LatLng(0.1, 0.1);
+            }
+            maxZoomService = new google.maps.MaxZoomService();
+            maxZoomService.getMaxZoomAtLatLng(center, function(response) {
+                if (map.getZoom() > response.zoom) {
+                    map.setZoom(response.zoom);
+                }
+            });
         }
         // Load the map
         google.maps.event.addDomListener(window, 'load', initializeMap);

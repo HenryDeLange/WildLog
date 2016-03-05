@@ -31,6 +31,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
+import wildlog.ui.maps.implementations.helpers.UtilsMaps;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -59,7 +60,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnHeatMapClient);
-        Button btnAbundanceMapClient = new Button("Basic Abundance Map");
+        Button btnAbundanceMapClient = new Button("Abundance of Observations Map");
         btnAbundanceMapClient.setCursor(Cursor.HAND);
         btnAbundanceMapClient.setOnAction(new EventHandler() {
             @Override
@@ -68,7 +69,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnAbundanceMapClient);
-        Button btnRichnessMapClient = new Button("Basic Richness Map");
+        Button btnRichnessMapClient = new Button("Richness of Creatures Map");
         btnRichnessMapClient.setCursor(Cursor.HAND);
         btnRichnessMapClient.setOnAction(new EventHandler() {
             @Override
@@ -77,7 +78,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnRichnessMapClient);
-        Button btnSampleEffortMapClient = new Button("Basic Sampling Effort Map");
+        Button btnSampleEffortMapClient = new Button("Sampling Effort Map");
         btnSampleEffortMapClient.setCursor(Cursor.HAND);
         btnSampleEffortMapClient.setOnAction(new EventHandler() {
             @Override
@@ -174,24 +175,26 @@ public class HeatMap extends AbstractMap<Sighting> {
                 if (activeMapType.equals(MapType.ABUNDANCE_MAP_CLIENTSIDE)) {
                     setupChartDescriptionLabel("<html>This map can be used as a simplified Observation Abundance Map."
                             + "<br/>It shows the number of Observations, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
-                            + "<br/><b>Note:</b> This map works best when comparing data where each Observations for a Period have the same GPS location "
-                            + "and all Periods have similar durations. Such as camera trapping data.</html>");
+                            + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location "
+                            + "and all Periods have similar durations. "
+                            + "Such as camera trapp data.</html>");
                     displayedMap = createAbundanceMapClient(lstData);
                 }
                 else
                 if (activeMapType.equals(MapType.RICHNESS_MAP_CLIENTSIDE)) {
                     setupChartDescriptionLabel("<html>This map can be used as a simplified Creature Richness Map."
                             + "<br/>It shows the number of Creatures, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
-                            + "<br/><b>Note:</b> This map works best when comparing data where each Observations for a Period have the same GPS location "
-                            + "and all Periods have similar durations. Such as camera trapping data.</html>");
+                            + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location "
+                            + "and all Periods have similar durations. "
+                            + "Such as camera trap data.</html>");
                     displayedMap = createRichnessMapClient(lstData);
                 }
                 else
                 if (activeMapType.equals(MapType.SAMPLE_EFFORT_MAP_CLIENTSIDE)) {
                     setupChartDescriptionLabel("<html>This map can be used as a simplified Sampling Effort Map."
-                            + "<br/>It shows the duration of the Period (based on the start and end dates) associated with an Observation at a specific GPS location."
-                            + "<br/><b>Note:</b> This map works best when comparing data where each Observations for a Period have the same GPS location. "
-                            + "Such as camera trapping data.</html>");
+                            + "<br/>It shows for each GPS point how many days the associated Period was active. (The list of unique GPS points is based on the active Obseravations. The duration is based on the Period's start and end dates.)"
+                            + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location. "
+                            + "Such as camera trap data.</html>");
                     displayedMap = createSampleEffortMapClient(lstData);
                 }
                 inScene.setRoot(displayedMap);
@@ -240,17 +243,17 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         }
         for (HeatPoint  heatPoint : mapHeatPoints.values()) {
-            String point = replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
-            point = replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
-            point = replace(point, "weight: 1.0}", "weight: " + heatPoint.weight + "}");
+            String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
+            point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
+            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + heatPoint.weight + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
         }
-        template = template.replace("//___POINTS_START___", "")
-                           .replace("//___POINTS_END___", "")
-                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        template = UtilsMaps.replace(template, "//___POINTS_START___", "");
+        template = UtilsMaps.replace(template, "//___POINTS_END___", "");
+        template = UtilsMaps.replace(template, gpsPointTemplate, gpsBuilder.toString());
         // Setup options
-        StringBuilder options = new StringBuilder();
+        StringBuilder options = new StringBuilder(60);
         if (isTransparent) {
             options.append("heatmap.set('opacity', 0.2);");
             options.append(System.lineSeparator());
@@ -274,7 +277,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             options.append("heatmap.set('radius', 90);");
             options.append(System.lineSeparator());
         }
-        template = template.replace("//___OPTIONS___", options);
+        template = UtilsMaps.replace(template, "//___OPTIONS___", options.toString());
         // Set the template
         webEngine.loadContent(template);
         displayedTemplate = template;
@@ -335,17 +338,17 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         }
         for (HeatPoint  heatPoint : mapHeatPoints.values()) {
-            String point = replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
-            point = replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
-            point = replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.value) * 1000.0) / 1000.0) + "}");
+            String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
+            point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
+            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.value) * 1000.0) / 1000.0) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
         }
-        template = template.replace("//___POINTS_START___", "")
-                           .replace("//___POINTS_END___", "")
-                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        template = UtilsMaps.replace(template, "//___POINTS_START___", "");
+        template = UtilsMaps.replace(template, "//___POINTS_END___", "");
+        template = UtilsMaps.replace(template, gpsPointTemplate, gpsBuilder.toString());
         // Setup options
-        StringBuilder options = new StringBuilder();
+        StringBuilder options = new StringBuilder(60);
         if (isTransparent) {
             options.append("heatmap.set('opacity', 0.2);");
             options.append(System.lineSeparator());
@@ -369,7 +372,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             options.append("heatmap.set('radius', 90);");
             options.append(System.lineSeparator());
         }
-        template = template.replace("//___OPTIONS___", options);
+        template = UtilsMaps.replace(template, "//___OPTIONS___", options.toString());
         // Set the template
         webEngine.loadContent(template);
         displayedTemplate = template;
@@ -430,17 +433,17 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         }
         for (HeatPoint  heatPoint : mapHeatPoints.values()) {
-            String point = replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
-            point = replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
-            point = replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.value) * 1000.0) / 1000.0) + "}");
+            String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
+            point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
+            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.value) * 1000.0) / 1000.0) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
         }
-        template = template.replace("//___POINTS_START___", "")
-                           .replace("//___POINTS_END___", "")
-                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        template = UtilsMaps.replace(template, "//___POINTS_START___", "");
+        template = UtilsMaps.replace(template, "//___POINTS_END___", "");
+        template = UtilsMaps.replace(template, gpsPointTemplate, gpsBuilder.toString());
         // Setup options
-        StringBuilder options = new StringBuilder();
+        StringBuilder options = new StringBuilder(60);
         if (isTransparent) {
             options.append("heatmap.set('opacity', 0.2);");
             options.append(System.lineSeparator());
@@ -464,7 +467,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             options.append("heatmap.set('radius', 90);");
             options.append(System.lineSeparator());
         }
-        template = template.replace("//___OPTIONS___", options);
+        template = UtilsMaps.replace(template, "//___OPTIONS___", options.toString());
         // Set the template
         webEngine.loadContent(template);
         displayedTemplate = template;
@@ -524,17 +527,17 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         }
         for (HeatPoint  heatPoint : mapHeatPoints.values()) {
-            String point = replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
-            point = replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
-            point = replace(point, "weight: 1.0}", "weight: " + mapVisitDuration.get(heatPoint.value) + "}");
+            String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
+            point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
+            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + mapVisitDuration.get(heatPoint.value) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
         }
-        template = template.replace("//___POINTS_START___", "")
-                           .replace("//___POINTS_END___", "")
-                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        template = UtilsMaps.replace(template, "//___POINTS_START___", "");
+        template = UtilsMaps.replace(template, "//___POINTS_END___", "");
+        template = UtilsMaps.replace(template, gpsPointTemplate, gpsBuilder.toString());
         // Setup options
-        StringBuilder options = new StringBuilder();
+        StringBuilder options = new StringBuilder(60);
         if (isTransparent) {
             options.append("heatmap.set('opacity', 0.2);");
             options.append(System.lineSeparator());
@@ -558,39 +561,11 @@ public class HeatMap extends AbstractMap<Sighting> {
             options.append("heatmap.set('radius', 90);");
             options.append(System.lineSeparator());
         }
-        template = template.replace("//___OPTIONS___", options);
+        template = UtilsMaps.replace(template, "//___OPTIONS___", options.toString());
         // Set the template
         webEngine.loadContent(template);
         displayedTemplate = template;
         return webView;
-    }
-    
-// TODO: Toets of hierdie vinniger is as die ander manier (behoort te wees)
-    private static String replace(String inText, String inOldString, String inNewString) {
-        if (inText == null) {
-            return null;
-        }
-// FIXME: Net gecopy vanas stackoverflow, ek kan dit seker self beter code later
-        int i = inText.indexOf(inOldString, 0);
-        if (i >= 0) {
-            char[] sourceArray = inText.toCharArray();
-            char[] nsArray = inNewString.toCharArray();
-            int oLength = inOldString.length();
-            StringBuilder buf = new StringBuilder(sourceArray.length);
-            buf.append(sourceArray, 0, i).append(nsArray);
-            i += oLength;
-            int j = i;
-            // Replace all remaining instances of oldString with newString.
-            while ((i = inText.indexOf(inOldString, i)) > 0) {
-                buf.append(sourceArray, j, i - j).append(nsArray);
-                i += oLength;
-                j = i;
-            }
-            buf.append(sourceArray, j, sourceArray.length - j);
-            inText = buf.toString();
-            buf.setLength(0);
-        }
-        return inText;
     }
     
     private class HeatPoint {

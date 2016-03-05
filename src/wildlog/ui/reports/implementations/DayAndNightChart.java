@@ -34,13 +34,13 @@ import wildlog.ui.utils.UtilsTime;
 
 
 public class DayAndNightChart extends AbstractReport<Sighting> {
-    private enum ChartType {PIE_CHART, LINE_CHART, STACKED_LINE_CHART/*, STACKED_LINE_100_PERCENT_CHART*/};
+    private enum ChartType {PIE_CHART, LINE_CHART, STACKED_LINE_CHART};
     private ChartType chartType = ChartType.PIE_CHART;
     private Chart displayedChart;
 
     
     public DayAndNightChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Day and Night Cycles Reports", inLstData, inChartDescLabel);
+        super("Day and Night Cycle Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(4);
         // Area/Line Chart
         Button btnPieChart = new Button("Day/Night Observations (Pie)");
@@ -49,7 +49,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight as a pie chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight.</html>");
             }
         });
         lstCustomButtons.add(btnPieChart);
@@ -59,7 +59,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight as a line chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight.</html>");
             }
         });
         lstCustomButtons.add(btnLineAllChart);
@@ -69,31 +69,10 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.STACKED_LINE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight as a stacked line chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight.</html>");
             }
         });
         lstCustomButtons.add(btnLineCreatureChart);
-// FIXME: Vir eers gebruik ek nie die chart nie, want hy is nog nie "lekker" nie...
-//        // Area/Line Chart
-//        JButton btnLine100CreatureChart = new JButton("100% Stacked Line Chart");
-//        btnLine100CreatureChart.setFocusPainted(false);
-//        btnLine100CreatureChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-//        btnLine100CreatureChart.setMargin(new Insets(2, 4, 2, 4));
-//        btnLine100CreatureChart.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                chartType = ChartType.STACKED_LINE_100_PERCENT_CHART;
-//                if (displayedChart != null) {
-//                    Platform.runLater(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            scene.setRoot(createChart());
-//                        }
-//                    });
-//                }
-//            }
-//        });
-//        lstCustomButtons.add(btnLine100CreatureChart);
     }
 
     @Override
@@ -113,10 +92,6 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                 if (chartType.equals(ChartType.STACKED_LINE_CHART)) {
                     displayedChart = createStackedChartForAll(lstData);
                 }
-//                else
-//                if (chartType.equals(ChartType.STACKED_LINE_100_PERCENT_CHART)) {
-//                    displayedChart = create100PercentStackedChartForAll(lstData);
-//                }
                 displayedChart.setBackground(Background.EMPTY);
                 inScene.setRoot(displayedChart);
             }
@@ -329,132 +304,4 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         return chart;
     }
     
-    // FIXME: Ek comment die chart vir eers uit... 
-    //    Dit is nog nie regtig handig nie, en dis misleidend omdat die punte aand die einde 'n kleiner impak het op die 
-    //    grafiek as die eerste punte. Basies begin die storie net uit-average en 'n mens verloor die impak van klein veranderings oor
-    //    tyd. Dit is maklikker om die pie chart en line chart te gebruik en te filter op datums en dan die grafieke te vergelyk...
-//    private Chart create100PercentStackedChartForAll(List<Sighting> inSightings) {
-//        NumberAxis axisY = new NumberAxis();
-//        axisY.setLabel("Number of Observations");
-//        axisY.setAutoRanging(true);
-//        // Sort sightings (by date)
-//        Collections.sort(inSightings);
-//        // Get the data in the correct structure
-//        Map<String, LinkedHashMap<Long, ReportDataWrapper>> mapGroupedData = new HashMap<>(4);
-//        Map<String, ReportDataWrapper> mapCategoryCounter = new HashMap<>(4);
-//        Map<Long, ReportDataWrapper> mapTotalCounter = new HashMap<>();
-//        int totalCount = 0;
-//        for (Sighting sighting : inSightings) {
-//            String categoryKey = ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()).toString();
-//            LinkedHashMap<Long, ReportDataWrapper> mapChartData = mapGroupedData.get(categoryKey);
-//            if (mapChartData == null) {
-//                mapChartData = new LinkedHashMap<>();
-//                mapGroupedData.put(categoryKey, mapChartData);
-//            }
-//            // Keep track of the amount of entries for each category
-//            ReportDataWrapper categoryDataWrapper = mapCategoryCounter.get(categoryKey);
-//            if (categoryDataWrapper == null) {
-//                categoryDataWrapper = new ReportDataWrapper(null, null, 0);
-//                mapCategoryCounter.put(categoryKey, categoryDataWrapper);
-//            }
-//            categoryDataWrapper.increaseCount();
-//            // Set the value of the category for this particular time
-//            ReportDataWrapper dataWrapper = mapChartData.get(sighting.getDate().getTime());
-//            if (dataWrapper == null) {
-//                dataWrapper = new ReportDataWrapper(null, null, categoryDataWrapper.count);
-//                mapChartData.put(sighting.getDate().getTime(), dataWrapper);
-//            }
-//            else {
-//                dataWrapper.count = categoryDataWrapper.count;
-//            }
-//            // Keep track of the total number of records for all categories by this time
-//            ReportDataWrapper dataTotalWrapper = mapTotalCounter.get(sighting.getDate().getTime());
-//            if (dataTotalWrapper == null) {
-//                dataTotalWrapper = new ReportDataWrapper(null, null, 0);
-//                mapTotalCounter.put(sighting.getDate().getTime(), dataTotalWrapper);
-//            }
-//            dataTotalWrapper.count = ++totalCount;
-//            // Now make sure that the other categories have a value as well for this Sighting's time
-//            if (!ActiveTime.DAY.equals(ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()))) {
-//                ReportDataWrapper otherCategoryDataWrapper = mapCategoryCounter.get(ActiveTime.DAY.toString());
-//                if (otherCategoryDataWrapper == null) {
-//                    otherCategoryDataWrapper = new ReportDataWrapper(null, null, 0);
-//                    mapCategoryCounter.put(ActiveTime.DAY.toString(), otherCategoryDataWrapper);
-//                }
-//                LinkedHashMap<Long, ReportDataWrapper> mapOtherCategoryData = mapGroupedData.get(ActiveTime.DAY.toString());
-//                if (mapOtherCategoryData == null) {
-//                    mapOtherCategoryData = new LinkedHashMap<>();
-//                }
-//                mapOtherCategoryData.putIfAbsent(sighting.getDate().getTime(), new ReportDataWrapper(null, null, otherCategoryDataWrapper.count));
-//                mapGroupedData.put(ActiveTime.DAY.toString(), mapOtherCategoryData);
-//            }
-//            if (!ActiveTime.NIGHT.equals(ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()))) {
-//                ReportDataWrapper otherCategoryDataWrapper = mapCategoryCounter.get(ActiveTime.NIGHT.toString());
-//                if (otherCategoryDataWrapper == null) {
-//                    otherCategoryDataWrapper = new ReportDataWrapper(null, null, 0);
-//                    mapCategoryCounter.put(ActiveTime.NIGHT.toString(), otherCategoryDataWrapper);
-//                }
-//                LinkedHashMap<Long, ReportDataWrapper> mapOtherCategoryData = mapGroupedData.get(ActiveTime.NIGHT.toString());
-//                if (mapOtherCategoryData == null) {
-//                    mapOtherCategoryData = new LinkedHashMap<>();
-//                }
-//                mapOtherCategoryData.putIfAbsent(sighting.getDate().getTime(), new ReportDataWrapper(null, null, otherCategoryDataWrapper.count));
-//                mapGroupedData.put(ActiveTime.NIGHT.toString(), mapOtherCategoryData);
-//            }
-//            if (!ActiveTime.DAWN_OR_DUST.equals(ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()))) {
-//                ReportDataWrapper otherCategoryDataWrapper = mapCategoryCounter.get(ActiveTime.DAWN_OR_DUST.toString());
-//                if (otherCategoryDataWrapper == null) {
-//                    otherCategoryDataWrapper = new ReportDataWrapper(null, null, 0);
-//                    mapCategoryCounter.put(ActiveTime.DAWN_OR_DUST.toString(), otherCategoryDataWrapper);
-//                }
-//                LinkedHashMap<Long, ReportDataWrapper> mapOtherCategoryData = mapGroupedData.get(ActiveTime.DAWN_OR_DUST.toString());
-//                if (mapOtherCategoryData == null) {
-//                    mapOtherCategoryData = new LinkedHashMap<>();
-//                }
-//                mapOtherCategoryData.putIfAbsent(sighting.getDate().getTime(), new ReportDataWrapper(null, null, otherCategoryDataWrapper.count));
-//                mapGroupedData.put(ActiveTime.DAWN_OR_DUST.toString(), mapOtherCategoryData);
-//            }
-//        }
-//        // Setup the final chart data
-//        long startTime = inSightings.get(0).getDate().getTime();
-//        long endTime = inSightings.get(inSightings.size() - 1).getDate().getTime();
-//        ObservableList<StackedAreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
-//        List<String> keys = new ArrayList<>(mapGroupedData.keySet());
-//        Collections.sort(keys);
-//        for (String key : keys) {
-//            Map<Long, ReportDataWrapper> mapTimeData = mapGroupedData.get(key);
-//            ObservableList<StackedAreaChart.Data<Number, Number>> lstChartData = FXCollections.observableArrayList();
-//            lstChartData.add(new StackedAreaChart.Data<>(startTime, 0, null));
-//            for (long time : mapTimeData.keySet()) {
-//                ReportDataWrapper dataWrapper = mapTimeData.get(time);
-//                lstChartData.add(new StackedAreaChart.Data<>(time, 
-//                        (int)((((double)dataWrapper.count)/((double)mapTotalCounter.get(time).count))*100.0), null));
-//            }
-//            lstChartData.add(new StackedAreaChart.Data<>(endTime, lstChartData.get(lstChartData.size() - 1).getYValue(), null));
-//            chartData.add(new StackedAreaChart.Series<>(key + " (" + lstChartData.size() + ")", lstChartData));
-//        }
-//        // Setup the axis
-//        double tick = (endTime - startTime)/7;
-//        NumberAxis axisX = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
-//        axisX.setTickLabelFormatter(new StringConverter<Number>() {
-//            @Override
-//            public String toString(Number object) {
-//                return UtilsReports.dateFormat.format(object);
-//            }
-//            @Override
-//            public Number fromString(String string) {
-//                try {
-//                    return UtilsReports.dateFormat.parse(string).getTime();
-//                }
-//                catch (ParseException ex) {
-//                    ex.printStackTrace(System.err);
-//                }
-//                return 0;
-//            }
-//        });
-//        // Add an entry to the front and back to make the first and last entry more visible
-//        StackedAreaChart<Number, Number> chart = new StackedAreaChart<Number, Number>(axisX, axisY, chartData);
-//        return chart;
-//    }
-   
 }

@@ -420,7 +420,7 @@ public class GPSDialog extends JDialog {
             }
         });
 
-        btnUseRelated.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        btnUseRelated.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/RelatedGPS.png"))); // NOI18N
         btnUseRelated.setText("Find Related");
         btnUseRelated.setToolTipText("Try to find a GPS point using the related Images or linked Place.");
         btnUseRelated.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -512,7 +512,7 @@ public class GPSDialog extends JDialog {
 
         btnUseOnlineMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
         btnUseOnlineMap.setText("Show on Map (Online)");
-        btnUseOnlineMap.setToolTipText("Reset the GPS point to be empty.");
+        btnUseOnlineMap.setToolTipText("Show the GPS point on an online map. Dragging the marker on the map will update the GPS value.");
         btnUseOnlineMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseOnlineMap.setFocusPainted(false);
         btnUseOnlineMap.setFocusable(false);
@@ -526,7 +526,7 @@ public class GPSDialog extends JDialog {
 
         btnUseOfflineMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
         btnUseOfflineMap.setText("Show on Map (Offline)");
-        btnUseOfflineMap.setToolTipText("Reset the GPS point to be empty.");
+        btnUseOfflineMap.setToolTipText("Show the GPS point on an offline map.");
         btnUseOfflineMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseOfflineMap.setFocusPainted(false);
         btnUseOfflineMap.setFocusable(false);

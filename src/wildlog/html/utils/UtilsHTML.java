@@ -396,7 +396,6 @@ public final class UtilsHTML {
                 }
                 mapBuilder.append(System.lineSeparator());
             }
-// TODO: Maak die deel optioneel, want sommige plekke kan vrek baie observations hê...
             // Observation Info
             List<WildLogFile> lstSightingFiles = inApp.getDBI().list(new WildLogFile(relatedData.getWildLogFileID()));
             StringBuilder sliderBuilder = new StringBuilder(200 * lstSightingFiles.size());

@@ -7,9 +7,9 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
-public final class UtilsMapGenerator {
+public final class UtilsMaps {
 
-    private UtilsMapGenerator() {
+    private UtilsMaps() {
     }
 
      public static void copyMapLayers() {
@@ -80,6 +80,35 @@ public final class UtilsMapGenerator {
         else {
             System.err.println("Problem copying Map Layer (can't find in JAR): " + inPath);
         }
+    }
+    
+    /**
+     * Hierdie replace behoort baie vinniger te wees as die String.replace() method van Java wat onderliggend regular expressions gebruik.
+     */
+    public static String replace(String inText, String inOldString, String inNewString) {
+        if (inText != null) {
+            int foundIndex = inText.indexOf(inOldString, 0);
+            if (foundIndex >= 0) {
+                char[] sourceArray = inText.toCharArray();
+                StringBuilder builder = new StringBuilder(sourceArray.length);
+                int startIndex = 0;
+                // Replace all the occurences
+                do {
+                    builder.append(sourceArray, startIndex, foundIndex - startIndex)
+                           .append(inNewString);
+                    startIndex = foundIndex + inOldString.length();
+                    foundIndex = inText.indexOf(inOldString, startIndex);
+                }
+                while (foundIndex > 0);
+                // Add the last part
+                builder.append(sourceArray, startIndex, sourceArray.length - startIndex);
+                return builder.toString();
+            }
+            else {
+                return inText;
+            }
+        }
+        return null;
     }
 
 }

@@ -44,7 +44,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category as a bar chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category.</html>");
             }
         });
         lstCustomButtons.add(btnBarChart);
@@ -55,7 +55,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category as a pie chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category.</html>");
             }
         });
         lstCustomButtons.add(btnPieChart);
@@ -66,21 +66,10 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature for every Time Of Day category as a line chart.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature for every Time Of Day category.</html>");
             }
         });
         lstCustomButtons.add(btnLineChart);
-//        // Stacked Bar Chart
-//        Button btnStackedBarChart = new Button("Bar Chart (Per Creature)");
-//        btnStackedBarChart.setCursor(Cursor.HAND);
-//        btnStackedBarChart.setOnAction(new EventHandler() {
-//            @Override
-//            public void handle(Event event) {
-//                chartType = ChartType.STACKED_BAR_CHART;
-//                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature for every Time Of Day category.</html>");
-//            }
-//        });
-//        lstCustomButtons.add(btnStackedBarChart);
     }
 
     @Override
@@ -92,10 +81,6 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
                 if (chartType.equals(ChartType.LINE_CHART)) {
                     displayedChart = createLineChart(lstData);
                 }
-//                else
-//                if (chartType.equals(ChartType.STACKED_BAR_CHART)) {
-//                    displayedChart = createStackedBarChart(lstData);
-//                }
                 else
                 if (chartType.equals(ChartType.BAR_CHART)) {
                     displayedChart = createBarChart(lstData);
@@ -152,55 +137,6 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         return chart;
     }
     
-    // TODO: Die chart werk nie lekker nie want ek mors te veel tyd om die CSS en kleure reg gelaai te kry. Die Area/Line chart doen in elk gevbal dieselfde en lyk beter
-//    private Chart createStackedBarChart(List<Sighting> inSightings) {
-//        ObservableList<StackedBarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
-//        Map<String, Map<ActiveTimeSpesific, ReportDataWrapper>> mapData = new HashMap<>();
-//        for (Sighting sighting : inSightings) {
-//            Map<ActiveTimeSpesific, ReportDataWrapper> mapTimeOfDayForElements = mapData.get(sighting.getElementName());
-//            if (mapTimeOfDayForElements == null) {
-//                mapTimeOfDayForElements = new HashMap<>();
-//                mapData.put(sighting.getElementName(), mapTimeOfDayForElements);
-//            }
-//            ReportDataWrapper dataWrapper = mapTimeOfDayForElements.get(sighting.getTimeOfDay());
-//            if (dataWrapper == null) {
-//                dataWrapper = new ReportDataWrapper(sighting.getTimeOfDay().toString(), sighting.getElementName(), 0);
-//                mapTimeOfDayForElements.put(sighting.getTimeOfDay(), dataWrapper);
-//            }
-//            dataWrapper.increaseCount();
-//        }
-//        List<String> keys = new ArrayList<>(mapData.keySet());
-//        Collections.sort(keys);
-//        for (String key : keys) {
-//            int total = 0;
-//            ObservableList<StackedBarChart.Data<String, Number>> lstSeriesData = FXCollections.observableArrayList();
-//            Map<ActiveTimeSpesific, ReportDataWrapper> mapTimeOfDayForElements = mapData.get(key);
-//            for (ActiveTimeSpesific activeTimeSpesific : mapTimeOfDayForElements.keySet()) {
-//                int count = mapTimeOfDayForElements.get(activeTimeSpesific).count;
-//                StackedBarChart.Data<String, Number> data = new StackedBarChart.Data<String, Number>(key, count);
-//                data.nodeProperty().addListener(new CustomColourBarChartChangeListener<>(mapData.size(), data, UtilsReports.COLOURS_TIME_OF_DAY, activeTimeSpesific.getText()));
-//                lstSeriesData.add(data);
-//                total = total + count;
-//            }
-//            StackedBarChart.Series<String, Number> series = new StackedBarChart.Series<String, Number>(
-//                    key + " (" + total + ")", 
-//                    lstSeriesData);
-//            chartData.add(series);
-//        }
-//        // Setup axis and chart
-//        NumberAxis numAxis = new NumberAxis();
-//        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
-//        CategoryAxis catAxis = new CategoryAxis();
-//        catAxis.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
-//        catAxis.setTickLabelRotation(-90);
-//        catAxis.setTickLabelFont(Font.font(15));
-//        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(catAxis, numAxis, chartData);
-//        chart.getStyleClass().add("wl-bar-custom-color");
-//        chart.setLegendVisible(true);
-//        chart.setTitle("Number of Observations per Time Of Day category for each Creature");
-//        return chart;
-//    }
-    
     private Chart createPieChart(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
@@ -221,7 +157,6 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             }
             if (mapGroupedData.containsKey(key)) {
                 PieChart.Data data = new PieChart.Data(text + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount());
-//                data.nodeProperty().addListener(new PieChartChangeListener<>(key, UtilsReports.COLOURS_TIME_OF_DAY));
                 chartData.add(data);
             }
             else {
@@ -229,7 +164,6 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
                 if (!ActiveTimeSpesific.UNKNOWN.equals(ActiveTimeSpesific.getEnumFromText(key))
                         && !ActiveTimeSpesific.NONE.equals(ActiveTimeSpesific.getEnumFromText(key))) {
                     PieChart.Data data = new PieChart.Data(text + " (0)", 0);
-//                    data.nodeProperty().addListener(new PieChartChangeListener<>(key, null));
                     chartData.add(data);
                 }
             }

@@ -536,7 +536,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="View Maps"/>
-                <Property name="toolTipText" type="java.lang.String" value="Show available maps for this Creature."/>
+                <Property name="toolTipText" type="java.lang.String" value="Show maps for this Creature."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
@@ -621,15 +621,19 @@
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtOtherName" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="txtScienceName" pref="196" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtScienceName" max="32767" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="txtReferenceID" min="-2" pref="192" max="-2" attributes="0"/>
+                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtReferenceID" min="-2" pref="163" max="-2" attributes="0"/>
                           </Group>
                           <Component id="txtPrimaryName" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="txtOtherName" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Component id="btnCheckIUCNOtherName" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
@@ -643,12 +647,13 @@
                           <Component id="txtPrimaryName" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel55" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel56" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                           <Component id="txtOtherName" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnCheckIUCNOtherName" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="txtScienceName" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel57" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
@@ -720,6 +725,23 @@
                 <Property name="name" type="java.lang.String" value="jLabel56" noResource="true"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JButton" name="btnCheckIUCNOtherName">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="IUCN"/>
+                <Property name="toolTipText" type="java.lang.String" value="Try to load the main common name from the IUCN web services."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+                <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                  <Insets value="[2, 4, 2, 4]"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="btnCheckIUCNOtherName" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCheckIUCNOtherNameActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pnlInfo1">
@@ -734,14 +756,22 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jLabel66" min="-2" pref="90" max="-2" attributes="0"/>
-                          <Component id="jLabel68" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel64" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel60" alignment="0" min="-2" pref="83" max="-2" attributes="0"/>
-                          <Component id="jLabel62" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jLabel70" alignment="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jLabel66" min="-2" pref="90" max="-2" attributes="0"/>
+                                  <Component id="jLabel68" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel64" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel60" alignment="0" min="-2" pref="83" max="-2" attributes="0"/>
+                                  <Component id="jLabel70" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel62" min="-2" pref="90" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
@@ -756,15 +786,23 @@
                                       <Component id="btnCheckIUCN" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel67" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel75" min="-2" pref="80" max="-2" attributes="0"/>
-                                  <Component id="jLabel77" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel76" alignment="0" min="-2" pref="56" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel67" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jLabel75" min="-2" pref="80" max="-2" attributes="0"/>
+                                          <Component id="jLabel76" alignment="0" min="-2" pref="56" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabel77" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="txtLifespan" max="32767" attributes="0"/>
                                   <Component id="txtbreedingDuration" max="32767" attributes="0"/>
@@ -789,60 +827,58 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jLabel1" min="-2" pref="18" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel67" min="-2" pref="18" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel75" min="-2" pref="18" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel76" min="-2" pref="19" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel77" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="cmbFeedingClass" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                  <Component id="cmbWishList" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                                  <Component id="txtLifespan" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                                  <Component id="txtbreedingDuration" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                                  <Component id="txtBreedingNumber" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="btnCheckIUCN" min="-2" pref="20" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jLabel1" min="-2" pref="18" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel67" min="-2" pref="18" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel75" min="-2" pref="18" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel76" min="-2" pref="19" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-                                  <Component id="jLabel64" min="-2" pref="18" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel68" min="-2" pref="19" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jLabel62" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="cmbFeedingClass" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                              <Component id="cmbWishList" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                              <Component id="txtLifespan" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                              <Component id="txtbreedingDuration" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="txtBreedingNumber" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel77" alignment="3" max="32767" attributes="0"/>
                               </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="cmbType" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel60" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="cmbAddFrequency" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel66" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                                  <Component id="cmbActiveTime" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                                  <Component id="cmbWaterDependance" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                                  <Component id="cmbEndangeredStatus" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                              <Component id="jLabel64" min="-2" pref="18" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLabel68" min="-2" pref="19" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="cmbType" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel60" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="cmbAddFrequency" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel66" alignment="3" min="-2" pref="18" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                              <Component id="cmbActiveTime" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                              <Component id="cmbWaterDependance" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="cmbEndangeredStatus" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel62" alignment="3" max="32767" attributes="0"/>
+                                  <Component id="btnCheckIUCN" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel70" min="-2" pref="18" max="-2" attributes="0"/>
                           <Component id="jScrollPane17" max="32767" attributes="0"/>

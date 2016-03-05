@@ -111,7 +111,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
         }
         else
         if (activeMapType.equals(MapType.HUMAN_POPULATION)) {
-            setupChartDescriptionLabel("<html>This map indicates areas with high human populations. The darker the red is the higher the human population is.</html>");
+            setupChartDescriptionLabel("<html>This map indicates areas with high human populations. The darker the red is the higher the human population.</html>");
             createMapDefault(lstData, BundledMapLayers.HUMAN_POPULATION);
         }
         else

@@ -36,6 +36,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.ui.dialogs.ExportDialogForReportsAndMaps;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
@@ -51,7 +52,6 @@ import wildlog.ui.maps.implementations.OtherMap;
 import wildlog.ui.maps.implementations.PointMap;
 import wildlog.ui.maps.implementations.WebDistributionMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
-import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.utils.UtilsFileProcessing;
 
 
@@ -124,13 +124,15 @@ public class MapsBaseDialog extends JFrame {
         VBox vbox = new VBox();
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
         Label lblInfo = new Label("Please select the map you would like to view from the list on the left.\n\n"
+                + "A description of the active map is provided at the bottom of the window.\n\n"
                 + "You can filter the number of Observations that are used in the map by using the buttons in the Map Data Filters section.\n\n"
                 + "Maps can be exported using the Export Map button.\n\n"
                 + "Warning: \n"
-                + "The maps may display incorrectly when there are too much data points on the map.\n"
-                + "Displaying some maps with very large data points can make the application become unresponsive for a while, try to limit the amount of data displayed at a time.\n"
-                + "Also be aware that this is not a full GIS solution and some large map layers may not display or render effeciently. "
-                + "If you experience problems, please try to a smaller layer instead.");
+                + "Some maps may display incorrectly when there is too much data to represent visually on the map.\n"
+                + "Using very large datasets with some maps can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.\n\n"
+                + "Note: \n"
+                + "This is not a full GIS solution and some large map layers may not display or render correctly. "
+                + "If you experience problems loading custom layers, please try to use smaller layers instead.");
         lblInfo.setPadding(new Insets(20));
         lblInfo.setFont(new Font(18));
         lblInfo.setWrapText(true);
@@ -143,9 +145,9 @@ public class MapsBaseDialog extends JFrame {
         List<AbstractMap<Sighting>> lstMaps = new ArrayList<>(10);
         lstMaps.add(new PointMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new WebDistributionMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, this));

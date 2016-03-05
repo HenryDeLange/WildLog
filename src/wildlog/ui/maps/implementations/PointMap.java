@@ -28,6 +28,7 @@ import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
+import wildlog.ui.maps.implementations.helpers.UtilsMaps;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
@@ -107,7 +108,7 @@ public class PointMap extends AbstractMap<Sighting> {
             public void run() {
                 displayedMap = null;
                 if (activeMapType.equals(MapType.POINT_MAP_GOOGLE)) {
-                    setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Google Earth and Google Maps. Click on a marker to see more details.</html>");
+                    setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Google Earth. Click on a marker to see more details.</html>");
                     displayedMap = createPointMapGoogle(lstData);
                 }
                 else
@@ -148,22 +149,22 @@ public class PointMap extends AbstractMap<Sighting> {
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
         for (DataObjectWithHTML sighting : inLstSightings) {
-            if (UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
-                gpsBuilder.append(gpsPointTemplate.replace("var markerZZZ", "var marker" + sighting.getIDField())
-                                                  .replace("LatLng(-31, 29)", "LatLng(" + UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) 
-                                                          + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")")
-                                                  .replace("ZZZ-title", sighting.getDisplayName().replaceAll("\"", "&quot;"))
-                                                  .replace("markerZZZ.desc", "marker" + sighting.getIDField() + ".desc")
-                                                  .replace("ZZZ-content", sighting.toHTML(false, showThumbnails, !showDetails, WildLogApp.getApplication(), 
-                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;").replaceAll("\n", "<br/>").replaceAll("\r", ""))
-                                                  .replace("oms.addMarker(markerZZZ", "oms.addMarker(marker" + sighting.getIDField())
-                                                  .replace("bounds.extend(markerZZZ", "bounds.extend(marker" + sighting.getIDField()));
+            if (UtilsGPS.hasGPSData((DataObjectWithGPS) sighting)) {
+                String point = UtilsMaps.replace(gpsPointTemplate, "var markerZZZ", "var marker" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "LatLng(-31, 29)", "LatLng(" + UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")");
+                point = UtilsMaps.replace(point, "markerZZZ.desc", "marker" + sighting.getIDField() + ".desc");
+                point = UtilsMaps.replace(point, "oms.addMarker(markerZZZ", "oms.addMarker(marker" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "bounds.extend(markerZZZ", "bounds.extend(marker" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "ZZZ-title", UtilsMaps.replace(sighting.getDisplayName(), "\"", "&quot;"));
+                String html = sighting.toHTML(false, showThumbnails, !showDetails, WildLogApp.getApplication(), UtilsHTMLExportTypes.ForMap, null);
+                point = UtilsMaps.replace(point, "ZZZ-content", UtilsMaps.replace(UtilsMaps.replace(UtilsMaps.replace(html, "\"", "&quot;"), "\n", "<br/>"), "\r", ""));
+                gpsBuilder.append(point);
                 gpsBuilder.append(System.lineSeparator());
             }
         }
-        template = template.replace("//___MAP_CLICKABLE_DATA_POINTS_START___", "")
-                           .replace("//___MAP_CLICKABLE_DATA_POINTS_END___", "")
-                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        template = UtilsMaps.replace(template, "//___MAP_CLICKABLE_DATA_POINTS_START___", "");
+        template = UtilsMaps.replace(template, "//___MAP_CLICKABLE_DATA_POINTS_END___", "");
+        template = UtilsMaps.replace(template, gpsPointTemplate, gpsBuilder.toString());
         // Set the template
         webEngine.loadContent(template);
         displayedTemplate = template;
@@ -194,25 +195,27 @@ public class PointMap extends AbstractMap<Sighting> {
         int endIndex = template.indexOf("//___PINS_END___");
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
+        long time = System.currentTimeMillis();
         for (DataObjectWithHTML sighting : inLstSightings) {
-            if (UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) != 0 && UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) != 0) {
-                gpsBuilder.append(gpsPointTemplate.replace("var locationZZZ", "var location" + sighting.getIDField())
-                                                  .replace("Location(-33, 23)", "Location(" + UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) 
-                                                          + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")")
-                                                  .replace("var pinZZZ", "var pin" + sighting.getIDField())
-                                                  .replace("Pushpin(locationZZZ", "Pushpin(location" + sighting.getIDField())
-                                                  .replace("push(pinZZZ", "push(pin" + sighting.getIDField())
-                                                  .replace("Infobox(locationZZZ", "Infobox(location" + sighting.getIDField())
-                                                  .replace("ZZZ-title", sighting.getDisplayName().replaceAll("\"", "&quot;"))
-                                                  .replace("ZZZ-content", sighting.toHTML(false, showThumbnails, !showDetails, WildLogApp.getApplication(), 
-                                                          UtilsHTMLExportTypes.ForMap, null).replaceAll("\"", "&quot;").replaceAll("\n", "<br/>").replaceAll("\r", ""))
-                                                  .replace("pushpin: pinZZZ", "pushpin: pin" + sighting.getIDField()));
+            if (UtilsGPS.hasGPSData((DataObjectWithGPS) sighting)) {
+                String point = UtilsMaps.replace(gpsPointTemplate, "var locationZZZ", "var location" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "Location(-33, 23)", "Location(" + UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")");
+                point = UtilsMaps.replace(point, "var pinZZZ", "var pin" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "Pushpin(locationZZZ", "Pushpin(location" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "push(pinZZZ", "push(pin" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "Infobox(locationZZZ", "Infobox(location" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "pushpin: pinZZZ", "pushpin: pin" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "ZZZ-title", UtilsMaps.replace(sighting.getDisplayName(), "\"", "&quot;"));
+                String html = sighting.toHTML(false, showThumbnails, !showDetails, WildLogApp.getApplication(), UtilsHTMLExportTypes.ForMap, null);
+                point = UtilsMaps.replace(point, "ZZZ-content", UtilsMaps.replace(UtilsMaps.replace(UtilsMaps.replace(html, "\"", "&quot;"), "\n", "<br/>"), "\r", ""));
+                gpsBuilder.append(point);
                 gpsBuilder.append(System.lineSeparator());
             }
         }
-        template = template.replace("//___PINS_START___", "")
-                           .replace("//___PINS_END___", "")
-                           .replace(gpsPointTemplate, gpsBuilder.toString());
+        template = UtilsMaps.replace(template, "//___PINS_START___", "");
+        template = UtilsMaps.replace(template, "//___PINS_END___", "");
+        template = UtilsMaps.replace(template, gpsPointTemplate, gpsBuilder.toString());
+        System.out.println("time = " + (System.currentTimeMillis() - time));
         // Set the template
         webEngine.loadContent(template);
         displayedTemplate = template;

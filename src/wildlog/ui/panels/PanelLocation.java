@@ -754,7 +754,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnMap.setBackground(new java.awt.Color(233, 239, 244));
         btnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
         btnMap.setText("View Maps");
-        btnMap.setToolTipText("Show available maps for this Place.");
+        btnMap.setToolTipText("Show maps for this Place.");
         btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMap.setFocusPainted(false);
         btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

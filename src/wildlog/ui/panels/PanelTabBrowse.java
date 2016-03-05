@@ -89,7 +89,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         + "</i></div></html>";
     private final int CACHE_LIMIT_FOR_SELECTED_NODE = 5;
     private final int CACHE_LIMIT_FOR_NEIGHBOURING_NODES = 3;
-// TODO: Not the sexiest code, but it seems to work now... Maybe oneday I can waste more time on it and try to get rid of some of the lists I'm keeping track off...
+// TODO: Not the sexiest code, but it seems to work now... Maybe someday I can waste more time on it and try to get rid of some of the lists I'm keeping track off...
     private Map<String, Image> preloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
     private final Map<String, Future> submittedTasks = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
     private Set<String> preloadedImageNames = new HashSet<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
@@ -224,6 +224,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementTypesBrowseTab.setSelectedItem(ElementType.NONE);
         cmbElementTypesBrowseTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmbElementTypesBrowseTab.setFocusable(false);
         cmbElementTypesBrowseTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbElementTypesBrowseTabActionPerformed(evt);
@@ -246,7 +247,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnRotate.setBackground(new java.awt.Color(204, 213, 186));
         btnRotate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnRotate.setText("Rotate Image");
-        btnRotate.setToolTipText("Rotate the image counter clockwise.");
+        btnRotate.setToolTipText("Rotate the image clockwise.");
         btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRotate.setFocusPainted(false);
         btnRotate.setFocusable(false);
@@ -457,7 +458,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnViewEXIF.setBackground(new java.awt.Color(204, 213, 186));
         btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
-        btnViewEXIF.setText("Image Metadata");
+        btnViewEXIF.setText("Show EXIF Data");
         btnViewEXIF.setToolTipText("View the EXIF metadata for the image.");
         btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewEXIF.setFocusPainted(false);
@@ -510,7 +511,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3)
-                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 185, 375)
+                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 186, 375)
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -681,30 +682,13 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         try {
                             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                             app.getMainFrame().getGlassPane().setVisible(true);
-                            // Raise the Debug Level which is normally LEVEL_INFO. Only Warning messages will be printed by MediaUtil.
-                            Log.debugLevel = Log.LEVEL_WARNING;
+                            // Raise the Debug Level which is normally LEVEL_INFO. Only Error messages will be printed by MediaUtil.
+                            Log.debugLevel = Log.LEVEL_ERROR;
                             // Initialize LLJTran and Read the entire Image including Appx markers
-                            LLJTran llj = new LLJTran(wildLogFile.getAbsolutePath().toFile());
+                            LLJTran lljTran = new LLJTran(wildLogFile.getAbsolutePath().toFile());
                             // If you pass the 2nd parameter as false, Exif information is not loaded and hence will not be written.
-                            llj.read(LLJTran.READ_ALL, true);
-                            // Transform the image using default options along with transformation of the Orientation tags.
-                            int options = LLJTran.OPT_DEFAULTS | LLJTran.OPT_XFORM_ORIENTATION;
-                            llj.transform(LLJTran.ROT_90, options);
-                            // Save the Vertical mirror of the Transformed image without Exif header.
-                            if (!Files.exists(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath())) {
-                                Files.createDirectories(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath());
-                            }
-                            
-                            
-// FIXME: Die storie doen nou snaakse goed (dalk tedoen met die nuwe EXIF rotate stuff). Lyk my die exif data wys nog dat dit 'n rotate kort...
-                            
-
-                            OutputStream out = new BufferedOutputStream(new FileOutputStream(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve("vmirror.jpg").toFile()));
-                            // Turn off OPT_WRITE_APPXS flag to Skip writing Exif.
-                            options = LLJTran.OPT_DEFAULTS & ~LLJTran.OPT_WRITE_APPXS;
-                            // Save with vertical transformation without changing the llj image.
-                            llj.transform(out, LLJTran.FLIP_V, options);
-                            out.close();
+                            lljTran.read(LLJTran.READ_ALL, true);
+                            lljTran.transform(LLJTran.ROT_90);
                             // Get a new name for the file (because if the same name is used the ImageIcons don't get refreshed if they have been viewed already since Java chaches them)
                             WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), wildLogFile.getDBFilePath(), wildLogFile.getFileType());
                             newWildLogFile.setDefaultFile(wildLogFile.isDefaultFile());
@@ -725,16 +709,16 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 newWildLogFile.setFilename(newFilename);
                             }
                             // Save the Image which is already transformed as specified by the input transformation earlier, along with the Exif header.
-                            out = new BufferedOutputStream(new FileOutputStream(newWildLogFile.getAbsolutePath().toFile()));
-                            llj.save(out, LLJTran.OPT_WRITE_ALL);
-                            out.close();
+                            try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newWildLogFile.getAbsolutePath().toFile()))) {
+                                lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
+                            }
                             // Delete old DB file enrty and save new one
                             app.getDBI().delete(wildLogFile);
                             newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(newWildLogFile.getAbsolutePath()));
                             newWildLogFile.setFileSize(Files.size(newWildLogFile.getAbsolutePath()));
                             app.getDBI().createOrUpdate(newWildLogFile, false);
                             // Cleanup
-                            llj.freeMemory();
+                            lljTran.freeMemory();
                             // Stop any future tasks that might be submitted to prefent us loading the file unnessesarily
                             Future future = submittedTasks.remove(wildLogFile.getAbsolutePath().toString());
                             if (future != null) {

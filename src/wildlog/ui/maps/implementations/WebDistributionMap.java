@@ -73,6 +73,9 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     private String scientificName;
 
     
+// FIXME: Hierdie map kort nog bietjie fine tuning... Wys dalk 'n popup wat die progress aandui (soos "Loading 50-60 of 200"). Gee dit ook 'n cancel button om dinge "mooi" te stop as dit te lank vat of skeef loop...
+    
+    
     public WebDistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         super("Distribution Maps (Web Datasets)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);

@@ -112,12 +112,13 @@ public class ReportsBaseDialog extends JFrame {
         VBox vbox = new VBox();
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
         Label lblInfo = new Label("Please select the report you would like to view from the list on the left.\n\n"
+                + "A description of the active report is provided at the bottom of the window.\n\n"
                 + "You can filter the number of Observations that are used in the report by using the buttons in the Report Data Filters section.\n\n"
                 + "Reports can be exported using the Export Report button.\n\n"
                 + "You can click on the report to view the data values at the selected point.\n\n"
                 + "Warning: \n"
-                + "The reports may display incorrectly when there are too many data series to fit on the chart area.\n"
-                + "Displaying some charts with very large datasets can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.");
+                + "Some reports may display incorrectly when there is too much data to represent visually on the chart.\n"
+                + "Using very large datasets with some reports can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.");
         lblInfo.setPadding(new Insets(20));
         lblInfo.setFont(new Font(18));
         lblInfo.setWrapText(true);
@@ -218,7 +219,7 @@ public class ReportsBaseDialog extends JFrame {
         bntExport.setBackground(new java.awt.Color(179, 198, 172));
         bntExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
         bntExport.setText("Export Report");
-        bntExport.setToolTipText("Export the shown report to one of many export formats.");
+        bntExport.setToolTipText("Export the active report to one of many export formats.");
         bntExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bntExport.setFocusPainted(false);
         bntExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

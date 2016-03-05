@@ -55,7 +55,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase as a pie chart."
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase."
                         + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });
@@ -66,7 +66,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_ALL;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase as a bar chart."
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase."
                         + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });
@@ -77,7 +77,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART_ALL;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase as a line chart."
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase."
                         + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });
@@ -88,7 +88,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_ELEMENTS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded for each Creature during a certain Moon Phase as a bar chart."
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded for each Creature during a certain Moon Phase."
                         + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });
@@ -99,7 +99,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART_ELEMENTS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded for each Creature during a certain Moon Phase as a bar chart."
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded for each Creature during a certain Moon Phase."
                         + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });

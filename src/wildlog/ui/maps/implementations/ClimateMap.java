@@ -63,15 +63,6 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnTemperatureMaxMap);
-        Button btnAridityMap = new Button("Aridity (Annual Average)");
-        btnAridityMap.setCursor(Cursor.HAND);
-        btnAridityMap.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                activeMapType = MapType.PRECIPITATION_AVERAGE;
-            }
-        });
-        lstCustomButtons.add(btnAridityMap);
         Button btnPrecipitationMap = new Button("Precipitation (Monthly Average)");
         btnPrecipitationMap.setCursor(Cursor.HAND);
         btnPrecipitationMap.setOnAction(new EventHandler() {
@@ -81,6 +72,15 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnPrecipitationMap);
+        Button btnAridityMap = new Button("Aridity (Annual Average)");
+        btnAridityMap.setCursor(Cursor.HAND);
+        btnAridityMap.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                activeMapType = MapType.PRECIPITATION_AVERAGE;
+            }
+        });
+        lstCustomButtons.add(btnAridityMap);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
         cmbMonths = new ComboBox<>(FXCollections.observableArrayList(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}));

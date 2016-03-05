@@ -582,7 +582,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnMapSighting.setBackground(new java.awt.Color(230, 228, 240));
         btnMapSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
         btnMapSighting.setText("View Maps");
-        btnMapSighting.setToolTipText("Show available maps for this Period.");
+        btnMapSighting.setToolTipText("Show maps for this Period.");
         btnMapSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMapSighting.setFocusPainted(false);
         btnMapSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

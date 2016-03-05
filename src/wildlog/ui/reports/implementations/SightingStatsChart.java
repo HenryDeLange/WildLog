@@ -50,7 +50,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         super("Observation Statistics Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(7);
         // Bar charts
-        Button btnSightingsPerDayBarChart = new Button("Observations per Day (Bar)");
+        Button btnSightingsPerDayBarChart = new Button("Observations per Day-Cycle (Bar)");
         btnSightingsPerDayBarChart.setCursor(Cursor.HAND);
         btnSightingsPerDayBarChart.setOnAction(new EventHandler() {
             @Override
@@ -89,7 +89,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.ABUNDANCE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Creatures with a specified number of total Observations. This is a basic analysis of Relative Species Abundance.</html>");
+                setupChartDescriptionLabel("<html>This chart can be used as a basic analysis of Relative Species Abundance. It shows the number of Creatures with the specified number of total Observations.</html>");
             }
         });
         lstCustomButtons.add(btnBarChartRelativeAbundance);
