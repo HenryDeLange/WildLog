@@ -47,7 +47,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         }
         UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Creature Type:</b><br/>", type, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Feeding Class:</b><br/>", feedingClass, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Endangered Status:</b><br/>", endangeredStatus, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Threat Status:</b><br/>", endangeredStatus, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Identification:</b><br/>", diagnosticDescription, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Habitat:</b><br/>", description, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Distribution:</b><br/>", distribution, true);

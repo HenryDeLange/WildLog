@@ -788,7 +788,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbWaterDependance.setFocusable(false);
         cmbWaterDependance.setName("cmbWaterDependance"); // NOI18N
 
-        jLabel62.setText("Endangered:");
+        jLabel62.setText("Threat Status:");
         jLabel62.setName("jLabel62"); // NOI18N
 
         cmbType.setMaximumRowCount(11);
@@ -834,7 +834,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
         btnCheckIUCN.setText("IUCN");
-        btnCheckIUCN.setToolTipText("Try to load the endangered status from the IUCN web services.");
+        btnCheckIUCN.setToolTipText("Try to load the threat status from the IUCN web services.");
         btnCheckIUCN.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCheckIUCN.setFocusPainted(false);
         btnCheckIUCN.setMargin(new java.awt.Insets(2, 4, 2, 4));
@@ -859,10 +859,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                             .addComponent(jLabel64, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel70, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfo1Layout.createSequentialGroup()
+                    .addGroup(pnlInfo1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(jLabel62)))
                 .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfo1Layout.createSequentialGroup()
                         .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

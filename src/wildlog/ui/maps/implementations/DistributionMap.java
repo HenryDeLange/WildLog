@@ -24,8 +24,6 @@ import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
-import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
@@ -80,32 +78,16 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
 
     
     public DistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
-        super("Distribution Maps (Workspace)", inLstData, inChartDescLabel, inMapsBaseDialog);
+        super("Distribution Maps (Layer)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
-        Button btnDistributionMap = new Button("Select Species Distribution Map");
+        Button btnDistributionMap = new Button("Creature Distribution Map");
         btnDistributionMap.setCursor(Cursor.HAND);
         btnDistributionMap.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.SPECIES_DISTRIBUTION;
-                String elementName = null;
-                for (Sighting sighting : lstData) {
-                    if (elementName == null) {
-                        elementName = sighting.getElementName();
-                        continue;
-                    }
-                    if (!elementName.equalsIgnoreCase(sighting.getElementName())) {
-                        // The list contains more than one Creature
-                        elementName = null;
-                        break;
-                    }
-                }
-                String scientificName = null;
-                if (elementName != null) {
-                    scientificName = WildLogApp.getApplication().getDBI().find(new Element(elementName)).getScientificName();
-                }
-                DistributionLayersDialog dialog = new DistributionLayersDialog(mapsBaseDialog, scientificName);
+                DistributionLayersDialog dialog = new DistributionLayersDialog(mapsBaseDialog, lstData);
                 dialog.setVisible(true);
                 lstLayers.clear();
                 if (dialog.getLstSelectedPaths() != null) {

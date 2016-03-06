@@ -20,8 +20,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.filters.MapLayersFilter;
@@ -33,12 +38,12 @@ import wildlog.utils.WildLogPaths;
 public class DistributionLayersDialog extends JDialog {
     private Map<String, Path> mapAllLayers = new HashMap<>(25);
     private List<Path> lstSelectedPaths = null;
-    private final String selectedSpecies;
+    private List<Sighting> lstData;
     
-    public DistributionLayersDialog(JFrame inParent, String inSelectedSpecies) {
+    public DistributionLayersDialog(JFrame inParent, List<Sighting> inLstData) {
         super(inParent);
         System.out.println("[DistributionLayersDialog]");
-        selectedSpecies = inSelectedSpecies;
+        lstData = inLstData;
         initComponents();
         // Setup the escape key
         final DistributionLayersDialog thisHandler = this;
@@ -81,13 +86,33 @@ public class DistributionLayersDialog extends JDialog {
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSpeciesLayers);
         UtilsTableGenerator.setupDistributionMapLayerTable(WildLogApp.getApplication(), tblSpeciesLayers, mapAllLayers.keySet());
         // If we are dealing with only one species, then automatically select it
-        if (selectedSpecies != null && !selectedSpecies.trim().isEmpty()) {
+        String elementName = null;
+        for (Sighting sighting : lstData) {
+            if (elementName == null) {
+                elementName = sighting.getElementName();
+                continue;
+            }
+            if (!elementName.equalsIgnoreCase(sighting.getElementName())) {
+                // The list contains more than one Creature
+                elementName = null;
+                break;
+            }
+        }
+        String scientificName;
+        if (elementName != null) {
+            scientificName = WildLogApp.getApplication().getDBI().find(new Element(elementName)).getScientificName();
+        }
+        else {
+            scientificName = null;
+        }
+        if (scientificName != null && !scientificName.trim().isEmpty()) {
             // Wag eers vir die table om klaar te load voor ek iets probeer select
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     for (int t = 0; t < tblSpeciesLayers.getRowCount(); t++) {
-                        if (tblSpeciesLayers.getValueAt(t, 1).equals(selectedSpecies)) {
+                        Object cell = tblSpeciesLayers.getValueAt(t, 1);
+                        if (cell != null && cell.equals(scientificName)) {
                             tblSpeciesLayers.getSelectionModel().setSelectionInterval(t, t);
                             int scrollRow = t;
                             if (t < (tblSpeciesLayers.getRowCount()) - 1) {
@@ -100,6 +125,52 @@ public class DistributionLayersDialog extends JDialog {
                 }
             });
         }
+        // Setup row sorter for the checkboxes (nadat die table data klaar geload het)
+        applyTableFilter();
+    }
+
+    private void applyTableFilter() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                TableRowSorter<TableModel> sorter = new TableRowSorter<>(tblSpeciesLayers.getModel());
+                sorter.setRowFilter(new RowFilter<TableModel, Integer>() {
+                    @Override
+                    public boolean include(RowFilter.Entry<? extends TableModel, ? extends Integer> inEntry) {
+                        boolean include = true;
+                        if (chkOnlyLinkedLayers.isSelected()) {
+                            if (inEntry == null || inEntry.getStringValue(1) == null || inEntry.getStringValue(2) == null 
+                                    || inEntry.getStringValue(1).isEmpty() || inEntry.getStringValue(2).isEmpty()) {
+                                include = false;
+                            }
+                            else {
+                                include = true;
+                            }
+                        }
+                        if (include == true && chkOnlyActiveCreatures.isSelected()) {
+                            Map<String, Element> mapLoadedElements = new HashMap<>();
+                            for (Sighting sighting : lstData) {
+                                Element element = mapLoadedElements.get(sighting.getElementName());
+                                if (element == null) {
+                                    element = WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName()));
+                                    mapLoadedElements.put(sighting.getElementName(), element);
+                                }
+                                if (inEntry != null && element.getScientificName() != null && !element.getScientificName().trim().isEmpty() 
+                                        && inEntry.getStringValue(1).equalsIgnoreCase(element.getScientificName())) {
+                                    include = true;
+                                    break;
+                                }
+                                else {
+                                    include = false;
+                                }
+                            }
+                        }
+                        return include;
+                    }
+                });
+                tblSpeciesLayers.setRowSorter(sorter);
+            }
+        });
     }
 
     /**
@@ -118,6 +189,9 @@ public class DistributionLayersDialog extends JDialog {
         jScrollPane12 = new javax.swing.JScrollPane();
         tblSpeciesLayers = new javax.swing.JTable();
         btnSave = new javax.swing.JButton();
+        pnlOptions = new javax.swing.JPanel();
+        chkOnlyLinkedLayers = new javax.swing.JCheckBox();
+        chkOnlyActiveCreatures = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Species Distribution Layers");
@@ -179,7 +253,7 @@ public class DistributionLayersDialog extends JDialog {
                             .addComponent(btnRemoveSpeciesLayer, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(bntAddSpeciesLayer, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane12)))
+                        .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
         jPanel1Layout.setVerticalGroup(
@@ -193,7 +267,7 @@ public class DistributionLayersDialog extends JDialog {
                         .addComponent(bntAddSpeciesLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
                         .addComponent(btnRemoveSpeciesLayer, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(405, Short.MAX_VALUE))
+                        .addContainerGap(364, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(jScrollPane12)
@@ -211,39 +285,85 @@ public class DistributionLayersDialog extends JDialog {
             }
         });
 
+        pnlOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        chkOnlyLinkedLayers.setSelected(true);
+        chkOnlyLinkedLayers.setText("Show only linked layers");
+        chkOnlyLinkedLayers.setToolTipText("Show only the Distribution Layers that can be linked to Creatures.");
+        chkOnlyLinkedLayers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkOnlyLinkedLayers.setFocusPainted(false);
+        chkOnlyLinkedLayers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkOnlyLinkedLayersActionPerformed(evt);
+            }
+        });
+
+        chkOnlyActiveCreatures.setSelected(true);
+        chkOnlyActiveCreatures.setText("Show only active Creatures");
+        chkOnlyActiveCreatures.setToolTipText("Show only the Distribution Layers of the active Creatures.");
+        chkOnlyActiveCreatures.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkOnlyActiveCreatures.setFocusPainted(false);
+        chkOnlyActiveCreatures.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkOnlyActiveCreaturesActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlOptionsLayout = new javax.swing.GroupLayout(pnlOptions);
+        pnlOptions.setLayout(pnlOptionsLayout);
+        pnlOptionsLayout.setHorizontalGroup(
+            pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlOptionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(chkOnlyLinkedLayers)
+                .addGap(18, 18, 18)
+                .addComponent(chkOnlyActiveCreatures)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlOptionsLayout.setVerticalGroup(
+            pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlOptionsLayout.createSequentialGroup()
+                .addGroup(pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkOnlyLinkedLayers)
+                    .addComponent(chkOnlyActiveCreatures))
+                .addGap(0, 0, 0))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(5, 5, 5))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10))))
+                        .addGap(10, 10, 10))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(pnlOptions, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(5, 5, 5))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(jLabel1)
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5)
+                        .addGap(8, 8, 8)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
@@ -310,6 +430,8 @@ public class DistributionLayersDialog extends JDialog {
                 if (destinationPath != null) {
                     mapAllLayers.put(filename, destinationPath.toAbsolutePath());
                     UtilsTableGenerator.setupDistributionMapLayerTable(WildLogApp.getApplication(), tblSpeciesLayers, mapAllLayers.keySet());
+                    // Setup row sorter for the checkboxes (nadat die table data klaar geload het)
+                    applyTableFilter();
                 }
             }
         }
@@ -320,7 +442,7 @@ public class DistributionLayersDialog extends JDialog {
             lstSelectedPaths = new ArrayList<>(tblSpeciesLayers.getSelectedRowCount());
             int[] selectedRows = tblSpeciesLayers.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                Path path = mapAllLayers.get(tblSpeciesLayers.getModel().getValueAt(tblSpeciesLayers.convertRowIndexToModel(selectedRows[t]), 0));
+                Path path = mapAllLayers.get(tblSpeciesLayers.getModel().getValueAt(tblSpeciesLayers.convertRowIndexToModel(selectedRows[t]), 2));
                 if (path != null) {
                     lstSelectedPaths.add(path);
                 }
@@ -339,7 +461,7 @@ public class DistributionLayersDialog extends JDialog {
 
     private void btnRemoveSpeciesLayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSpeciesLayerActionPerformed
         if (tblSpeciesLayers.getSelectedRowCount() == 1) {
-            String layerName = tblSpeciesLayers.getModel().getValueAt(tblSpeciesLayers.convertRowIndexToModel(tblSpeciesLayers.getSelectedRow()), 0).toString();
+            String layerName = tblSpeciesLayers.getModel().getValueAt(tblSpeciesLayers.convertRowIndexToModel(tblSpeciesLayers.getSelectedRow()), 2).toString();
             if (layerName != null && !layerName.trim().isEmpty()) {
                 try {
                     if (layerName.toLowerCase().endsWith(".tif") || layerName.toLowerCase().endsWith(".tiff")) {
@@ -354,6 +476,8 @@ public class DistributionLayersDialog extends JDialog {
                     // Update the UI
                     mapAllLayers.remove(layerName);
                     UtilsTableGenerator.setupDistributionMapLayerTable(WildLogApp.getApplication(), tblSpeciesLayers, mapAllLayers.keySet());
+                    // Setup row sorter for the checkboxes (nadat die table data klaar geload het)
+                    applyTableFilter();
                 }
                 catch (IOException ex) {
                     ex.printStackTrace(System.err);
@@ -381,6 +505,14 @@ public class DistributionLayersDialog extends JDialog {
         }
     }//GEN-LAST:event_btnRemoveSpeciesLayerActionPerformed
 
+    private void chkOnlyActiveCreaturesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOnlyActiveCreaturesActionPerformed
+        ((TableRowSorter) tblSpeciesLayers.getRowSorter()).sort();
+    }//GEN-LAST:event_chkOnlyActiveCreaturesActionPerformed
+
+    private void chkOnlyLinkedLayersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkOnlyLinkedLayersActionPerformed
+        ((TableRowSorter) tblSpeciesLayers.getRowSorter()).sort();
+    }//GEN-LAST:event_chkOnlyLinkedLayersActionPerformed
+
     public List<Path> getLstSelectedPaths() {
         return lstSelectedPaths;
     }
@@ -389,11 +521,14 @@ public class DistributionLayersDialog extends JDialog {
     private javax.swing.JButton bntAddSpeciesLayer;
     private javax.swing.JButton btnRemoveSpeciesLayer;
     private javax.swing.JButton btnSave;
+    private javax.swing.JCheckBox chkOnlyActiveCreatures;
+    private javax.swing.JCheckBox chkOnlyLinkedLayers;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane12;
+    private javax.swing.JPanel pnlOptions;
     private javax.swing.JTable tblSpeciesLayers;
     // End of variables declaration//GEN-END:variables
 }

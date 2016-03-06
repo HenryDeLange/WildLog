@@ -44,12 +44,12 @@ public class DistributionLayerCellRenderer extends DefaultTableCellRenderer {
             this.setEnabled(false);
         }
         if (!inIsSelected) {
-            if (inTable.getValueAt(inRow, 0) == null || inTable.getValueAt(inRow, 0).toString().isEmpty()) {
+            if (inTable.getValueAt(inRow, 2) == null || inTable.getValueAt(inRow, 2).toString().isEmpty()) {
                 // Creature present, but not linked (red)
                 setBackground(new Color(248, 238, 237));
             }
             else {
-                if (inTable.getValueAt(inRow, 1) == null || inTable.getValueAt(inRow, 1).toString().isEmpty()) {
+                if (inTable.getValueAt(inRow, 0) == null || inTable.getValueAt(inRow, 0).toString().isEmpty()) {
                     // Layer present, but not linked (orange)
                     setBackground(new Color(245, 238, 224));
                 }

@@ -35,6 +35,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Certainty;
@@ -54,7 +55,6 @@ import wildlog.ui.helpers.renderers.WildLogTableModel;
 import wildlog.ui.helpers.renderers.WildLogTableModelDataWrapper;
 import wildlog.ui.helpers.renderers.editors.ButtonTableEditor;
 import wildlog.ui.maps.implementations.helpers.DistributionLayerCellRenderer;
-import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
@@ -830,7 +830,7 @@ public final class UtilsTableGenerator {
                 if (inTable.getModel().getRowCount() == 0) {
                     inTable.setRowHeight(50);
                     inTable.setModel(new DefaultTableModel(new String[]{"No Observations were found that match the currently active filters."}, 1));
-                    inTable.getModel().setValueAt("Filter Observations. (Click here to open the Filter Observations dialog "
+                    inTable.getModel().setValueAt("Filter on Properties. (Click here to open the Filter Properties dialog "
                             + "or use the buttons below to refine the criteria.)", 0, 0);
                     inTable.setDefaultRenderer(Object.class, new ButtonTableRenderer());
                     inTable.setDefaultEditor(Object.class, new ButtonTableEditor());
@@ -1610,35 +1610,40 @@ public final class UtilsTableGenerator {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                final Object removeLock = new Object();
                 List<Element> lstElementData = WildLogApp.getApplication().getDBI().list(new Element());
                 Set<String> localSetOfLayers = new HashSet<>(inSetAvailableLayers); // Need to make a copy because removing from the orignal will effect the HashMap's keys
-                if (lstElementData != null && !lstElementData.isEmpty() && localSetOfLayers != null && !localSetOfLayers.isEmpty()) {
+                if (lstElementData != null && !lstElementData.isEmpty() && !localSetOfLayers.isEmpty()) {
                     // Setup column names
                     String[] columnNames = new String[] {
-                                                    "Layer Name", 
-                                                    "Scientific Name", 
                                                     "Creature Name",
+                                                    "Scientific Name", 
+                                                    "Layer Name", 
                                                     "Type"
                                                     };
                     Collection<Callable<Object>> listCallables = new ArrayList<>(lstElementData.size());
                     // Setup new table data
                     final Object[][] data = new Object[lstElementData.size()][columnNames.length];
+                    Collections.sort(lstElementData);
                     for (int t = 0; t < lstElementData.size(); t++) {
                         final int finalT = t;
                         listCallables.add(new Callable<Object>() {
                             @Override
                             public Object call() throws Exception {
                                 Element dataObject = lstElementData.get(finalT);
-                                data[finalT][0] = "";
-                                for (String layer : localSetOfLayers) {
-                                    if (layer.substring(0, layer.lastIndexOf('.')).equalsIgnoreCase(dataObject.getScientificName())) {
-                                        data[finalT][0] = layer;
-                                        localSetOfLayers.remove(layer);
-                                        break;
+                                data[finalT][0] = dataObject.getDisplayName();
+                                data[finalT][1] = dataObject.getScientificName();
+                                data[finalT][2] = "";
+                                synchronized(removeLock) { // Needs to be synchronized, otherwise the HashSet gets confused
+                                    for (String layer : localSetOfLayers) {
+                                        if (layer.substring(0, layer.lastIndexOf('.')).equalsIgnoreCase(dataObject.getScientificName())) {
+                                            data[finalT][2] = layer;
+                                            // Remove the layer from the set, because the layers that remain is later added as unlinked
+                                            localSetOfLayers.remove(layer);
+                                            break;
+                                        }
                                     }
                                 }
-                                data[finalT][1] = dataObject.getScientificName();
-                                data[finalT][2] = dataObject.getDisplayName();
                                 data[finalT][3] = dataObject.getType();
                                 return null;
                             }
@@ -1654,7 +1659,7 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, data, columnNames);
                     // Add the layers that wasn't linked yet
                     for (String layer : localSetOfLayers) {
-                        ((WildLogTableModel) inTable.getModel()).addRow(new Object[] {layer, "", ""});
+                        ((WildLogTableModel) inTable.getModel()).addRow(new Object[] {"", "", layer, ""});
                     }
                     // Set the cutom renderer
                     inTable.setDefaultRenderer(Object.class, new DistributionLayerCellRenderer(0, 0, 1, 2));
@@ -1669,8 +1674,6 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(3).setMinWidth(50);
                     inTable.getColumnModel().getColumn(3).setPreferredWidth(60);
                     inTable.getColumnModel().getColumn(3).setMaxWidth(70);
-                    // Setup default sorting
-                    setupRowSorter(inTable, 1);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Data"}, 0));

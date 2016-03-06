@@ -1956,7 +1956,7 @@ public final class WildLogView extends JFrame {
                 public int showDialog() {
                     JOptionPane.showMessageDialog(app.getMainFrame(),
                             "The WildLog Workspace has been changed. Please restart the application.",
-                            "Done!", JOptionPane.INFORMATION_MESSAGE);
+                            "Workspace Changed!", JOptionPane.INFORMATION_MESSAGE);
                     return -1;
                 }
             });
@@ -3220,7 +3220,7 @@ public final class WildLogView extends JFrame {
                 public int showDialog() {
                     JOptionPane.showMessageDialog(app.getMainFrame(),
                             "The WildLog Workspace has been created. Please restart the application.",
-                            "Done!", JOptionPane.INFORMATION_MESSAGE);
+                            "Workspace Created!", JOptionPane.INFORMATION_MESSAGE);
                     return -1;
                 }
             });

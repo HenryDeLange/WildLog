@@ -64,8 +64,8 @@ import wildlog.utils.WildLogPaths;
 public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     private enum MapType {SPECIES_DISTRIBUTION};
     private MapType activeMapType = MapType.SPECIES_DISTRIBUTION;
-    private boolean showWorkspaceMap;
-    private boolean showSightings;
+    private boolean showWorkspaceMap = true;
+    private boolean showSightings = true;
     private final int PAGE_LIMIT_INATURALIST = 200;
     private List<INaturalistData> lstAllINaturalistResults = new ArrayList<>(0);
     private final int PAGE_LIMIT_GBIF = 300;
@@ -77,10 +77,10 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     
     
     public WebDistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
-        super("Distribution Maps (Web Datasets)", inLstData, inChartDescLabel, inMapsBaseDialog);
+        super("Distribution Maps (Web)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
-        Button btnDistributionMap = new Button("Distribution Map");
+        Button btnDistributionMap = new Button("Creature Distribution Map");
         btnDistributionMap.setCursor(Cursor.HAND);
         btnDistributionMap.setOnAction(new EventHandler() {
             @Override
@@ -99,7 +99,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 showSightings = chkShowSightings.isSelected();
             }
         });
-        chkShowSightings.setSelected(true);
+        chkShowSightings.setSelected(showSightings);
         lstCustomButtons.add(chkShowSightings);
         CheckBox chkShowWorkspaceMap = new CheckBox("Include Distribution Map");
         chkShowWorkspaceMap.setCursor(Cursor.HAND);
@@ -109,6 +109,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 showWorkspaceMap = chkShowWorkspaceMap.isSelected();
             }
         });
+        chkShowWorkspaceMap.setSelected(showWorkspaceMap);
         lstCustomButtons.add(chkShowWorkspaceMap);
         setupShowCountriesButton();
         setupEnchanceContrastButton();

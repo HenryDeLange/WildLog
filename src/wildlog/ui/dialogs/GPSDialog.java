@@ -88,6 +88,7 @@ public class GPSDialog extends JDialog {
     private double uiLatitude = 0.0;
     private double uiLongitude = 0.0;
     private GeoToolsMapJavaFX map;
+    private boolean dmsHasBeenLoaded = false;
 
 
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
@@ -864,13 +865,17 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void tglDecimalDegreesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglDecimalDegreesActionPerformed
-        loadValuesFromDMS();
-        setupDD();
+        // Need this if to prevent loading the DMS info which hasn't been populated yet...
+        if (dmsHasBeenLoaded) {
+            loadValuesFromDMS();
+            setupDD();
+        }
     }//GEN-LAST:event_tglDecimalDegreesActionPerformed
 
     private void tglDegMinSecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglDegMinSecActionPerformed
         loadValuesFromDD();
         setupDMS();
+        dmsHasBeenLoaded = true;
     }//GEN-LAST:event_tglDegMinSecActionPerformed
 
     private void btnUseGPXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseGPXActionPerformed

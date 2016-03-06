@@ -399,7 +399,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
         btnFilterProperties.setBackground(new java.awt.Color(235, 233, 221));
         btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/FilterSightings.png"))); // NOI18N
-        btnFilterProperties.setText("Filter Observations");
+        btnFilterProperties.setText("Filter on Properties");
         btnFilterProperties.setToolTipText("Filter the Observations according to the value of its data fields.");
         btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterProperties.setFocusPainted(false);
