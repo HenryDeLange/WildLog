@@ -107,5 +107,6 @@
             </plugin>
         </plugins>
     </build>
-    
+    <description>This library encapsulates the core GeoTools functionality to make it easier for WildLog to import and use.
+(It is also easier to use GeoTools with Maven and I don't want to move WildLog to Maven at this point in time.)</description>
 </project>
