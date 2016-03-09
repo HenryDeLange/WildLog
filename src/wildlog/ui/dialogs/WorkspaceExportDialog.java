@@ -395,6 +395,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         WildLogDBI newDBI = null;
                         try {
                             Path destinationWorkspace = destination.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
+                            Files.createDirectories(destinationWorkspace);
                             Files.write(destinationWorkspace.resolve(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getRelativePath()).toAbsolutePath(), 
                                     WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
                             newDBI = new WildLogDBI_h2("jdbc:h2:"

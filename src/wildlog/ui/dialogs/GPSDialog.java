@@ -68,6 +68,7 @@ import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.maps.implementations.PointMap;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
 
@@ -1085,14 +1086,16 @@ public class GPSDialog extends JDialog {
                             // Search in the Files
                             List<WildLogFile> lstFiles = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
                             for (WildLogFile wildLogFile : lstFiles) {
-                                DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
-                                if (UtilsGPS.hasGPSData(temp)) {
-                                    showNothingFoundDialog = false;
-                                    loadUIValues(temp);
-                                    if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                                        Toolkit.getDefaultToolkit().beep();
+                                if (WildLogFileExtentions.Images.isKnownExtention(wildLogFile.getAbsolutePath())) {
+                                    DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
+                                    if (UtilsGPS.hasGPSData(temp)) {
+                                        showNothingFoundDialog = false;
+                                        loadUIValues(temp);
+                                        if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                            Toolkit.getDefaultToolkit().beep();
+                                        }
+                                        break;
                                     }
-                                    break;
                                 }
                             }
                         }
@@ -1115,14 +1118,16 @@ public class GPSDialog extends JDialog {
                             if (location != null) {
                                 List<WildLogFile> lstFiles = app.getDBI().list(new WildLogFile(location.getWildLogFileID()));
                                 for (WildLogFile wildLogFile : lstFiles) {
-                                    DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
-                                    if (UtilsGPS.hasGPSData(temp)) {
-                                        showNothingFoundDialog = false;
-                                        loadUIValues(temp);
-                                        if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                                            Toolkit.getDefaultToolkit().beep();
+                                    if (WildLogFileExtentions.Images.isKnownExtention(wildLogFile.getAbsolutePath())) {
+                                        DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
+                                        if (UtilsGPS.hasGPSData(temp)) {
+                                            showNothingFoundDialog = false;
+                                            loadUIValues(temp);
+                                            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                                Toolkit.getDefaultToolkit().beep();
+                                            }
+                                            break;
                                         }
-                                        break;
                                     }
                                 }
                             }
@@ -1149,14 +1154,16 @@ public class GPSDialog extends JDialog {
                             // Search in the Files
                             List<WildLogFile> lstFiles = app.getDBI().list(new WildLogFile(location.getWildLogFileID()));
                             for (WildLogFile wildLogFile : lstFiles) {
-                                DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
-                                if (UtilsGPS.hasGPSData(temp)) {
-                                    showNothingFoundDialog = false;
-                                    loadUIValues(temp);
-                                    if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                                        Toolkit.getDefaultToolkit().beep();
+                                if (WildLogFileExtentions.Images.isKnownExtention(wildLogFile.getAbsolutePath())) {
+                                    DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
+                                    if (UtilsGPS.hasGPSData(temp)) {
+                                        showNothingFoundDialog = false;
+                                        loadUIValues(temp);
+                                        if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                            Toolkit.getDefaultToolkit().beep();
+                                        }
+                                        break;
                                     }
-                                    break;
                                 }
                             }
                         }
@@ -1176,22 +1183,25 @@ public class GPSDialog extends JDialog {
                         }
                         else
                         if (option == 2) {
-                            // Use the Location's Files
+                            // Use the Sightings' Files
                             List<Sighting> lstSightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
                             for (Sighting sighting : lstSightings) {
                                 List<WildLogFile> lstFiles = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
                                 for (WildLogFile wildLogFile : lstFiles) {
-                                    DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
-                                    if (UtilsGPS.hasGPSData(temp)) {
-                                        showNothingFoundDialog = false;
-                                        loadUIValues(temp);
-                                        if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                                            Toolkit.getDefaultToolkit().beep();
+                                    if (WildLogFileExtentions.Images.isKnownExtention(wildLogFile.getAbsolutePath())) {
+                                        DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
+                                        if (UtilsGPS.hasGPSData(temp)) {
+                                            showNothingFoundDialog = false;
+                                            loadUIValues(temp);
+                                            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                                Toolkit.getDefaultToolkit().beep();
+                                            }
+                                            break;
                                         }
-                                        break;
                                     }
                                 }
-                                if (showNothingFoundDialog) {
+                                // Die ander Sightings kan geskiep word as ons reeds 'n GPS gevind het
+                                if (!showNothingFoundDialog) {
                                     break;
                                 }
                             }

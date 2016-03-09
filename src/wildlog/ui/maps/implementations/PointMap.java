@@ -195,7 +195,6 @@ public class PointMap extends AbstractMap<Sighting> {
         int endIndex = template.indexOf("//___PINS_END___");
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
-        long time = System.currentTimeMillis();
         for (DataObjectWithHTML sighting : inLstSightings) {
             if (UtilsGPS.hasGPSData((DataObjectWithGPS) sighting)) {
                 String point = UtilsMaps.replace(gpsPointTemplate, "var locationZZZ", "var location" + sighting.getIDField());
@@ -215,7 +214,6 @@ public class PointMap extends AbstractMap<Sighting> {
         template = UtilsMaps.replace(template, "//___PINS_START___", "");
         template = UtilsMaps.replace(template, "//___PINS_END___", "");
         template = UtilsMaps.replace(template, gpsPointTemplate, gpsBuilder.toString());
-        System.out.println("time = " + (System.currentTimeMillis() - time));
         // Set the template
         webEngine.loadContent(template);
         displayedTemplate = template;

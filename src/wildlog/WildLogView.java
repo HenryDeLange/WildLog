@@ -533,7 +533,6 @@ public final class WildLogView extends JFrame {
         lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString());
         lblSettingsPath.setName("lblSettingsPath"); // NOI18N
 
-        lblSwitchWorkspace.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblSwitchWorkspace.setForeground(new java.awt.Color(71, 87, 53));
         lblSwitchWorkspace.setText("<html>Click <u>here</u> to select a different Workspace...</html>");
         lblSwitchWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -630,7 +629,7 @@ public final class WildLogView extends JFrame {
                 .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblSwitchWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(tabHomeLayout.createSequentialGroup()
@@ -3631,7 +3630,14 @@ public final class WildLogView extends JFrame {
         executor.submit(new Runnable() {
             @Override
             public void run() {
-                app.checkForUpdates();
+                String latestVersion = app.checkForUpdates();
+                // The checkForUpdates() call will show a popup if the versions are out of sync
+                if (WildLogApp.WILDLOG_VERSION.equalsIgnoreCase(latestVersion)) {
+                    JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
+                        "You are using the latest official release of WildLog (v" + latestVersion + ").", 
+                        "WildLog is up to date", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
         executor.shutdown();

@@ -84,6 +84,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
                 state.close();
                 System.out.println("Database username and password updated.");
+                
+// TODO: Hier kort 'n form van databse recovery s dinge skeep loop...
+// DOEN MISKIEN IETS SOOS HIERDIE:
+//   Verander die error popup om opsies te wys: "Open Different Workspace", "Try to restore from backup", Cancel"
+//   Vir die restore opsie, delete (rename na _datestamp_broken) die stukkende DB en 
+//   laat die user dan browse na 'n SQL dump (maak die file browser oop by the backups folder).
+//   Maak dan 'n uwe DB (met ander password) en run die SCRIPT FROM command om die DB te laai.
+//   Wanneer dit klaar is delete die temp username.
+
             }
             // Create table, indexes, etc.
             started = initialize(inCreateDefaultRecords);
@@ -861,10 +870,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             @Override
                             public int showDialog() {
                                 JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                        "<html>The Workspace has been upgraded to be compatible with the current WildLog application. "
-                                            + "<br/>Please consider running the 'Check and Clean the Workspace' process as well. "
+                                        "<html>The Workspace has been <b>successfully upgraded</b> to be compatible with <b>WildLog v" + WildLogApp.WILDLOG_VERSION + "</b>. "
+                                            + "<br/>Please consider running the <i>'Check and Clean the Workspace'</i> process as well. "
                                             + "<br/>(The feature is accessable from the 'Application' menu at the top of the window.)</html>",
-                                        "WildLog Major Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
+                                        "WildLog v" + WildLogApp.WILDLOG_VERSION + " - Major Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
                                 return -1;
                             }
                         });
@@ -874,8 +883,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             @Override
                             public int showDialog() {
                                 JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                        "The Workspace has been upgraded to be compatible with the current WildLog application. ",
-                                        "WildLog Minor Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
+                                        "<html>The Workspace has been <b>successfully upgraded</b> upgraded to be compatible with <b>WildLog v" + WildLogApp.WILDLOG_VERSION + "</b>.</html>",
+                                        "WildLog v" + WildLogApp.WILDLOG_VERSION + " - Minor Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
                                 return -1;
                             }
                         });

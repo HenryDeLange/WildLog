@@ -145,8 +145,7 @@ public class WildLogApp extends Application {
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("WEB CALL: Start checking for new version...");
-                    checkForUpdates();
+                    System.out.println("WEB CALL: Start checking for new version... " + checkForUpdates());
                 }
             }, 10, TimeUnit.SECONDS);
             // Try to upload log data
@@ -581,7 +580,7 @@ public class WildLogApp extends Application {
         return view;
     }
     
-    public void checkForUpdates() {
+    public String checkForUpdates() {
         try {
             // Open a connection to the site
             URL url = new URL("http://www.mywild.co.za/wildlog/getLatestWildLogVersion.php");
@@ -627,11 +626,13 @@ public class WildLogApp extends Application {
                             "A new WildLog update is available!", 
                             JOptionPane.INFORMATION_MESSAGE);
                 }
+                return response.toString();
             }
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
+        return "Unknown";
     }
 
 }

@@ -222,9 +222,11 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
             DefaultFeatureCollection collection = new DefaultFeatureCollection();
             GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
             for (Sighting sighting : inLstSightings) {
-                builder.add(geometryFactory.createPoint(new Coordinate(UtilsGPS.getLonDecimalDegree(sighting), UtilsGPS.getLatDecimalDegree(sighting))));
-                SimpleFeature feature = builder.buildFeature(Long.toString(sighting.getSightingCounter()), new Object[] {sighting.toString()});
-                collection.add(feature);
+                if (UtilsGPS.hasGPSData(sighting)) {
+                    builder.add(geometryFactory.createPoint(new Coordinate(UtilsGPS.getLonDecimalDegree(sighting), UtilsGPS.getLatDecimalDegree(sighting))));
+                    SimpleFeature feature = builder.buildFeature(Long.toString(sighting.getSightingCounter()), new Object[] {sighting.toString()});
+                    collection.add(feature);
+                }
             }
 //            Style pointStyle = SLD.createPointStyle("Circle", new Color(80, 15, 5), new Color(175, 30, 20), 0.7f, 10);
             Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 0.8, 0.5, 14);
