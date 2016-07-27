@@ -24,6 +24,8 @@ public enum WildLogPaths {
     DEFAULT_DATABASE_NAME                 (Paths.get("wildlog")),
     // These are the values that can be reused.
     WILDLOG_WORKSPACE_INDICATOR           (Paths.get("workspace.wildlog")),
+// TODO: Automatically create this file in each workspace if absent
+    WILDLOG_WORKSPACE_DATA_LICENSE        (Paths.get("WildLog_Workspace_Data_License.txt")),
     WILDLOG_DATA                          (Paths.get("Data")),
     WILDLOG_FILES                         (Paths.get("Files")),
     WILDLOG_FILES_IMAGES                  (Paths.get("Files", "Images")),

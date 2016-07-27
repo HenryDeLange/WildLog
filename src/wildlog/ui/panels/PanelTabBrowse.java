@@ -191,6 +191,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         rdbBrowseLocation.setText("By Places");
         rdbBrowseLocation.setToolTipText("Sort the tree according to Places.");
         rdbBrowseLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbBrowseLocation.setFocusPainted(false);
+        rdbBrowseLocation.setFocusable(false);
         rdbBrowseLocation.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbBrowseLocationItemStateChanged(evt);
@@ -214,6 +216,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         rdbBrowseElement.setText("By Creatures");
         rdbBrowseElement.setToolTipText("Sort the tree according to Creatures.");
         rdbBrowseElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbBrowseElement.setFocusPainted(false);
+        rdbBrowseElement.setFocusable(false);
         rdbBrowseElement.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbBrowseElementItemStateChanged(evt);
@@ -231,6 +235,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
+        dtpStartDate.setFocusable(false);
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
         rdbBrowseDate.setBackground(new java.awt.Color(204, 213, 186));
@@ -238,6 +243,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         rdbBrowseDate.setText("By Date");
         rdbBrowseDate.setToolTipText("Sort the tree based on the Observations Dates.");
         rdbBrowseDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbBrowseDate.setFocusPainted(false);
+        rdbBrowseDate.setFocusable(false);
         rdbBrowseDate.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbBrowseDateItemStateChanged(evt);
@@ -281,6 +288,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnRefreshDates.setToolTipText("Refresh the tree based on the provided values.");
         btnRefreshDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRefreshDates.setFocusPainted(false);
+        btnRefreshDates.setFocusable(false);
         btnRefreshDates.setIconTextGap(0);
         btnRefreshDates.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnRefreshDates.addActionListener(new java.awt.event.ActionListener() {
@@ -382,6 +390,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        dtpEndDate.setFocusable(false);
         dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
         btnGoBrowseSelection.setBackground(new java.awt.Color(204, 213, 186));
@@ -563,12 +572,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 .addComponent(btnBrowseNext, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                                 .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnCopyImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnCopyImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(2, 2, 2)
                         .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -586,7 +595,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(3, 3, 3)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
                                 .addGap(3, 3, 3))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(25, 25, 25)

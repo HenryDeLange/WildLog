@@ -24,7 +24,8 @@ public class WildNoteSyncFilter extends FileFilter implements FilenameFilter {
 
     @Override
     public boolean accept(File inFileDirectory, String inName) {
-        return (WildLogConstants.WILDNOTE_SYNC_DATABASE + ".h2.db").equalsIgnoreCase(inName);
+        return (WildLogConstants.WILDNOTE_SYNC_DATABASE + ".mv.db").equalsIgnoreCase(inName)
+                || (WildLogConstants.WILDNOTE_SYNC_DATABASE + ".h2.db").equalsIgnoreCase(inName);
     }
 
 }

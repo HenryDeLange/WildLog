@@ -1674,10 +1674,10 @@ public final class WildLogView extends JFrame {
                                 + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
                                 "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
                         app.getMainFrame().getGlassPane().setVisible(false);
-                        if (prefix != null && !prefix.isEmpty()) {
+                        if (prefix != null) {
                             app.getMainFrame().getGlassPane().setVisible(true);
                             int choice = JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                    "<html><b>Would you like to exclude the WildLog File references</b>? "
+                                    "<html><b>Would you like to <u>exclude</u> the WildLog File references</b>? "
                                     + "<br><br><hr>"
                                     + "<br>Note: The CSV Import can not import the actual files, but only the database links "
                                     + "<br>to the files. If you select NO, then you will have to manually copy the files into the correct folders."
@@ -3706,7 +3706,7 @@ public final class WildLogView extends JFrame {
                                 + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
                                 "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
                         app.getMainFrame().getGlassPane().setVisible(false);
-                        if (prefix != null && !prefix.isEmpty()) {
+                        if (prefix != null) {
                             boolean hasErrors = false;
                             try {
                                 hasErrors = !app.getDBI().doImportBasicCSV(path, prefix);

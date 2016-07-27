@@ -187,6 +187,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblImage.setFocusable(false);
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
         lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
         lblImage.setOpaque(true);
@@ -489,6 +490,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnPrevFile.setToolTipText("Load previous file.");
         btnPrevFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPrevFile.setFocusPainted(false);
+        btnPrevFile.setFocusable(false);
         btnPrevFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnPrevFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -501,6 +503,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnNextFile.setToolTipText("Load next file.");
         btnNextFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNextFile.setFocusPainted(false);
+        btnNextFile.setFocusable(false);
         btnNextFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnNextFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

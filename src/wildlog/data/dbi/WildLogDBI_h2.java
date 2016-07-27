@@ -51,7 +51,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     public WildLogDBI_h2() throws Exception {
         this("jdbc:h2:"
                 + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=30", true);
+                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=50", true);
     }
 
     /**
@@ -314,52 +314,62 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         try {
             state = conn.createStatement();
             // Import Elements
-            results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Creatures.csv").toAbsolutePath().toString() + "')");
-            while (results.next()) {
-                Element tempElement = new Element();
-                populateElement(results, tempElement);
-                tempElement.setPrimaryName(inPrefix + results.getString("PRIMARYNAME"));
-                success = success && createOrUpdate(tempElement, null);
+            if (Files.exists(inPath.resolve("Creatures.csv").toAbsolutePath())) {
+                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Creatures.csv").toAbsolutePath().toString() + "')");
+                while (results.next()) {
+                    Element tempElement = new Element();
+                    populateElement(results, tempElement);
+                    tempElement.setPrimaryName(inPrefix + results.getString("PRIMARYNAME"));
+                    success = success && createOrUpdate(tempElement, null);
+                }
+                results.close();
             }
             // Import Locations
-            results.close();
-            results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Places.csv").toAbsolutePath().toString() + "')");
-            while (results.next()) {
-                Location tempLocation = new Location();
-                populateLocation(results, tempLocation);
-                tempLocation.setName(inPrefix + results.getString("NAME"));
-                success = success && createOrUpdate(tempLocation, null);
+            if (Files.exists(inPath.resolve("Places.csv").toAbsolutePath())) {
+                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Places.csv").toAbsolutePath().toString() + "')");
+                while (results.next()) {
+                    Location tempLocation = new Location();
+                    populateLocation(results, tempLocation);
+                    tempLocation.setName(inPrefix + results.getString("NAME"));
+                    success = success && createOrUpdate(tempLocation, null);
+                }
+                results.close();
             }
             // Import Visits
-            results.close();
-            results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Periods.csv").toAbsolutePath().toString() + "')");
-            while (results.next()) {
-                Visit tempVisit = new Visit();
-                populateVisit(results, tempVisit);
-                tempVisit.setName(inPrefix + results.getString("NAME"));
-                tempVisit.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
-                success = success && createOrUpdate(tempVisit, null);
+            if (Files.exists(inPath.resolve("Periods.csv").toAbsolutePath())) {
+                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Periods.csv").toAbsolutePath().toString() + "')");
+                while (results.next()) {
+                    Visit tempVisit = new Visit();
+                    populateVisit(results, tempVisit);
+                    tempVisit.setName(inPrefix + results.getString("NAME"));
+                    tempVisit.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
+                    success = success && createOrUpdate(tempVisit, null);
+                }
+                results.close();
             }
             // Import Sightings
-            results.close();
-            results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Observations.csv").toAbsolutePath().toString() + "')");
-            while (results.next()) {
-                Sighting tempSighting = new Sighting();
-                populateSighting(results, tempSighting);
-                tempSighting.setSightingCounter(0);
-                tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
-                tempSighting.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
-                tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
-                success = success && createOrUpdate(tempSighting, false);
+            if (Files.exists(inPath.resolve("Observations.csv").toAbsolutePath())) {
+                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Observations.csv").toAbsolutePath().toString() + "')");
+                while (results.next()) {
+                    Sighting tempSighting = new Sighting();
+                    populateSighting(results, tempSighting);
+                    tempSighting.setSightingCounter(0);
+                    tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
+                    tempSighting.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
+                    tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
+                    success = success && createOrUpdate(tempSighting, false);
+                }
+                results.close();
             }
             if (includeWildLogFilesTable) {
-                results.close();
-                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
-                while (results.next()) {
-                    WildLogFile wildLogFile = new WildLogFile();
-                    populateWildLogFile(results, wildLogFile);
-                    wildLogFile.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
-                    success = success && createOrUpdate(wildLogFile, false);
+                if (Files.exists(inPath.resolve("Files.csv").toAbsolutePath())) {
+                    results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
+                    while (results.next()) {
+                        WildLogFile wildLogFile = new WildLogFile();
+                        populateWildLogFile(results, wildLogFile);
+                        wildLogFile.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
+                        success = success && createOrUpdate(wildLogFile, false);
+                    }
                 }
             }
         }
@@ -896,7 +906,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     @Override
                     public int showDialog() {
                         JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                "<thml>The database could not be successfully updated!"
+                                "<html>The database could not be successfully updated!"
                                     + "<br/>Make sure that you are running the latest version of WildLog."
                                     + "<br/>Confirm that the Workspace isn't already open by another WildLog instance."
                                     + "<bt/>It is possible that the datbase might be broken or corrupted. "

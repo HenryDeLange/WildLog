@@ -113,14 +113,14 @@
                               <Component id="btnBrowseNext" pref="35" max="32767" attributes="0"/>
                               <Component id="lblNumberOfImages" alignment="0" min="-2" pref="33" max="-2" attributes="0"/>
                           </Group>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="btnViewImage" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="btnCopyImage" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                          </Group>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="btnZoomOut" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                               <Component id="btnZoomIn" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                               <Component id="btnRotate" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                              <Group type="103" alignment="3" groupAlignment="3" attributes="0">
-                                  <Component id="btnViewImage" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                                  <Component id="btnCopyImage" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
@@ -145,7 +145,7 @@
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="jScrollPane4" pref="351" max="32767" attributes="0"/>
+                              <Component id="jScrollPane4" pref="352" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -182,6 +182,8 @@
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="rdbBrowseLocationItemStateChanged"/>
@@ -219,6 +221,8 @@
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="rdbBrowseElementItemStateChanged"/>
@@ -244,6 +248,7 @@
     </Component>
     <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpStartDate">
       <Properties>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="formats" type="[Ljava.text.DateFormat;" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN)" type="code"/>
         </Property>
@@ -262,6 +267,8 @@
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="rdbBrowseDateItemStateChanged"/>
@@ -335,6 +342,7 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="iconTextGap" type="int" value="0"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[0, 0, 0, 0]"/>
@@ -513,6 +521,7 @@
     </Container>
     <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpEndDate">
       <Properties>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="formats" type="[Ljava.text.DateFormat;" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN)" type="code"/>
         </Property>
