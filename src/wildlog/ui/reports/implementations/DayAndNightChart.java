@@ -82,17 +82,17 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.PIE_CHART)) {
-                    setActiveSubCategoryTitle("Day/Night Observations (Pie)");
+                    setActiveSubCategoryTitle("Day and Night Observations (Pie)");
                     displayedChart = createPieChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.LINE_CHART)) {
-                    setActiveSubCategoryTitle("Day/Night Observations (Line)");
+                    setActiveSubCategoryTitle("Day and Night Observations (Line)");
                     displayedChart = createLineChartForAll(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.STACKED_LINE_CHART)) {
-                    setActiveSubCategoryTitle("Day/Night Observations (Stacked)");
+                    setActiveSubCategoryTitle("Day and Night Observations (Stacked)");
                     displayedChart = createStackedChartForAll(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

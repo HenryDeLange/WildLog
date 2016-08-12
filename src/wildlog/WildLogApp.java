@@ -58,6 +58,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 /**
@@ -98,8 +99,15 @@ public class WildLogApp extends Application {
             Files.createDirectories(WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath());
             Files.createDirectories(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath());
             Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
+            // Create the workspace indicator file
             Files.write(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getAbsoluteFullPath(), 
                     WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
+            // Create the workspace license file that applies to the actual data captured in the workspace
+            if (Files.notExists(WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getAbsoluteFullPath())) {
+                UtilsFileProcessing.createFileFromStream(
+                        WildLogApp.class.getResourceAsStream("/" + WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getRelativePath().toString()), 
+                        WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getAbsoluteFullPath());
+            }
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
