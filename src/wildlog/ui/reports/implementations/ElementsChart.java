@@ -93,18 +93,22 @@ public class ElementsChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.PIE_CHART_SIGHTINGS)) {
+                    setActiveSubCategoryTitle("Observations per Creature (Pie)");
                     displayedChart = createPieChartSightings(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.PIE_CHART_ELEMENT_TYPES)) {
+                    setActiveSubCategoryTitle("Creatures per Type (Pie)");
                     displayedChart = createPieChartElementType(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_SIGHTINGS)) {
+                    setActiveSubCategoryTitle("Observations per Creature (Bar)");
                     displayedChart = createBarChartSightings(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_LOCATIONS)) {
+                    setActiveSubCategoryTitle("Places per Creature (Bar)");
                     displayedChart = createBarChartElements(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

@@ -151,14 +151,14 @@ public class ReportsBaseDialog extends JFrame {
         for (final AbstractReport<Sighting> report : reports) {
             VBox vBox = new VBox(5);
             vBox.setFillWidth(true);
-            TitledPane reportButton = new TitledPane(report.getReportButtonName(), vBox);
+            TitledPane reportButton = new TitledPane(report.getReportCategoryTitle(), vBox);
             for (Node node : report.getLstCustomButtons()) {
                 node.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                     @Override
-                    public void handle(ActionEvent event) {
-                        setActiveReport(report);
+                    public void handle(ActionEvent inEvent) {
+                        activeReport = report;
                         jfxReportChartPanel.getScene().setRoot(lblLoading);
-                        report.createReport(jfxReportChartPanel.getScene());
+                        activeReport.createReport(jfxReportChartPanel.getScene());
                     }
                 });
                 ((Control) node).setMaxWidth(500);
@@ -478,8 +478,9 @@ public class ReportsBaseDialog extends JFrame {
                             @Override
                             public void run() {
                                 ExportDialogForReportsAndMaps dialog = new ExportDialogForReportsAndMaps(parent, bufferedImage, 
-                                        jfxReportChartPanel.getScene().getRoot(), activeReport.getReportButtonName(), lstFilteredData, 
-                                        ExportDialogForReportsAndMaps.ExportType.REPORTS);
+                                        jfxReportChartPanel.getScene().getRoot(), 
+                                        activeReport.getReportCategoryTitle() + " - " + activeReport.getActiveSubCategoryTitle() + " - ", 
+                                        lstFilteredData, ExportDialogForReportsAndMaps.ExportType.REPORTS);
                                 dialog.setVisible(true);
                             }
                         });
@@ -556,10 +557,6 @@ public class ReportsBaseDialog extends JFrame {
             list.add(sighting.cloneShallow());
         }
         return list;
-    }
-    
-    public void setActiveReport(AbstractReport inAbstractReport) {
-        activeReport = inAbstractReport;
     }
     
     private void doFiltering(final List<Sighting> inLstOriginalData, List<Sighting> inLstFilteredData, 

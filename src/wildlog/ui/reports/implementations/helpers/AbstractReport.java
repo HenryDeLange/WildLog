@@ -8,14 +8,15 @@ import javax.swing.SwingUtilities;
 
 
 public abstract class AbstractReport<T> {
-    private final String reportButtonName;
+    private final String reportCategoryTitle;
+    private String activeSubCategoryTitle = "Default Report";
     protected List<T> lstData;
     protected List<Node> lstCustomButtons;
     protected JLabel lblReportDescription;
 
     
-    public AbstractReport(String inReportButtonName, List<T> inList, JLabel inChartDescLabel) {
-        reportButtonName = inReportButtonName;
+    public AbstractReport(String inReportCategoryTitle, List<T> inList, JLabel inChartDescLabel) {
+        reportCategoryTitle = inReportCategoryTitle;
         lstData = inList;
         lblReportDescription = inChartDescLabel;
     }
@@ -33,8 +34,16 @@ public abstract class AbstractReport<T> {
         }
     }
 
-    public String getReportButtonName() {
-        return reportButtonName;
+    public String getReportCategoryTitle() {
+        return reportCategoryTitle;
+    }
+
+    public String getActiveSubCategoryTitle() {
+        return activeSubCategoryTitle;
+    }
+
+    public void setActiveSubCategoryTitle(String inActiveSubCategoryTitle) {
+        activeSubCategoryTitle = inActiveSubCategoryTitle;
     }
     
     public void setDataList(List<T> inList) {

@@ -80,6 +80,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
                 displayedChart = null;
                 if (chartType != null) {
                     if (chartType.equals(ChartType.PIE_CHART)) {
+                        setActiveSubCategoryTitle(cmbCategories.getSelectionModel().getSelectedItem());
                         displayedChart = createPieChart(lstData);
                     }
                     displayedChart.setBackground(Background.EMPTY);

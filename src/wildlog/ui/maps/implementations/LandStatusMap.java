@@ -33,7 +33,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
         super("Conservation Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(9);
         // Maps
-        Button btnProtectedWorldMap = new Button("View Protected Areas (World)");
+        Button btnProtectedWorldMap = new Button("Protected Areas (World)");
         btnProtectedWorldMap.setCursor(Cursor.HAND);
         btnProtectedWorldMap.setOnAction(new EventHandler() {
             @Override
@@ -42,7 +42,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnProtectedWorldMap);
-        Button btnProtectedLocalMap = new Button("View Protected Areas (Local)");
+        Button btnProtectedLocalMap = new Button("Protected Areas (Local)");
         btnProtectedLocalMap.setCursor(Cursor.HAND);
         btnProtectedLocalMap.setOnAction(new EventHandler() {
             @Override
@@ -51,7 +51,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnProtectedLocalMap);
-        Button btnForestsMap = new Button("View Forested Areas");
+        Button btnForestsMap = new Button("Forested Areas");
         btnForestsMap.setCursor(Cursor.HAND);
         btnForestsMap.setOnAction(new EventHandler() {
             @Override
@@ -60,7 +60,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnForestsMap);
-        Button btnHumanInfluenceMap = new Button("Show Human Influence");
+        Button btnHumanInfluenceMap = new Button("Human Influence");
         btnHumanInfluenceMap.setCursor(Cursor.HAND);
         btnHumanInfluenceMap.setOnAction(new EventHandler() {
             @Override
@@ -69,7 +69,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnHumanInfluenceMap);
-        Button btnPopulationMap = new Button("Show Human Population");
+        Button btnPopulationMap = new Button("Human Population");
         btnPopulationMap.setCursor(Cursor.HAND);
         btnPopulationMap.setOnAction(new EventHandler() {
             @Override
@@ -96,31 +96,37 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.FORESTS)) {
+            setActiveSubCategoryTitle("Forested Areas");
             setupChartDescriptionLabel("<html>A world map showing forested areas in dark green.</html>");
             createMapDefault(lstData, BundledMapLayers.FORESTS);
         }
         else
         if (activeMapType.equals(MapType.FARMING)) {
+            setActiveSubCategoryTitle("Crop Farming Areas");
             setupChartDescriptionLabel("<html>This map indicates land areas used for crop farming. The darker the red is the higher the farming footprint.</html>");
             createMapDefault(lstData, BundledMapLayers.FARMING_CROPS);
         }
         else
         if (activeMapType.equals(MapType.HUMAN_INFLUENCE)) {
+            setActiveSubCategoryTitle("Human Influence");
             setupChartDescriptionLabel("<html>This map shows areas with high human influence throughout the world. Red areas indicate high human influence, yellow is medium and green is low influence.</html>");
             createMapDefault(lstData, BundledMapLayers.HUMAN_INFLUENCE);
         }
         else
         if (activeMapType.equals(MapType.HUMAN_POPULATION)) {
+            setActiveSubCategoryTitle("Human Population");
             setupChartDescriptionLabel("<html>This map indicates areas with high human populations. The darker the red is the higher the human population.</html>");
             createMapDefault(lstData, BundledMapLayers.HUMAN_POPULATION);
         }
         else
         if (activeMapType.equals(MapType.PROTECTED_AREAS_WORLD)) {
+            setActiveSubCategoryTitle("Protected Areas (World)");
             setupChartDescriptionLabel("<html>A map showing protected natural areas across the world.</html>");
             createMapDefault(lstData, BundledMapLayers.PROTECTED_AREAS_WORLD);
         }
         else
         if (activeMapType.equals(MapType.PROTECTED_AREAS_LOCAL)) {
+            setActiveSubCategoryTitle("Protected Areas (Local)");
             setupChartDescriptionLabel("<html>A map showing protected natural areas within a specific local context (for example South Africa).</html>");
             createProtectedAreasLocalMap(lstData);
         }

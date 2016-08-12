@@ -97,10 +97,12 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.TIMELINE_FOR_ALL)) {
+                    setActiveSubCategoryTitle("Timeline for All Observations (Line)");
                     displayedChart = createTimelineForAllChart(lstData, true);
                 }
                 else
                 if (chartType.equals(ChartType.TIMELINE_PER_ELEMENT)) {
+                    setActiveSubCategoryTitle("Timeline per Creature (Line)");
                     displayedChart = createTimelineForAllChart(lstData, false);
                 }
                 displayedChart.setBackground(Background.EMPTY);

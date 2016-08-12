@@ -127,6 +127,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.SPECIES_DISTRIBUTION)) {
+            setActiveSubCategoryTitle("Creature Distribution Map");
             setupChartDescriptionLabel("<html>This map shows the data points in WildLog on top of the selected species distribution map.</html>");
             // Add base layer
             map.addLayer(getGeoTiffLayers(BundledMapLayers.EARTH_MODERN));

@@ -46,7 +46,7 @@ public class PointMap extends AbstractMap<Sighting> {
         super("World Maps (Online)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
-        Button btnPointMapGoogle = new Button("Show Points on Google Maps");
+        Button btnPointMapGoogle = new Button("Markers on Google Maps");
         btnPointMapGoogle.setCursor(Cursor.HAND);
         btnPointMapGoogle.setOnAction(new EventHandler() {
             @Override
@@ -55,7 +55,7 @@ public class PointMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnPointMapGoogle);
-        Button btnPointMapBing = new Button("Show Points on Bing Maps");
+        Button btnPointMapBing = new Button("Markers on Bing Maps");
         btnPointMapBing.setCursor(Cursor.HAND);
         btnPointMapBing.setOnAction(new EventHandler() {
             @Override
@@ -108,11 +108,13 @@ public class PointMap extends AbstractMap<Sighting> {
             public void run() {
                 displayedMap = null;
                 if (activeMapType.equals(MapType.POINT_MAP_GOOGLE)) {
+                    setActiveSubCategoryTitle("Markers on Google Maps");
                     setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Google Earth. Click on a marker to see more details.</html>");
                     displayedMap = createPointMapGoogle(lstData);
                 }
                 else
                 if (activeMapType.equals(MapType.POINT_MAP_BING)) {
+                    setActiveSubCategoryTitle("Markers on Bing Maps");
                     setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Microsoft Bing Maps. Click on a marker to see more details.</html>");
                     displayedMap = createPointMapBing(lstData);
                 }

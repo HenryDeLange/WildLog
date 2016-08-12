@@ -24,7 +24,7 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
         super("World Maps (Offline)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Maps
-        Button btnModernMap = new Button("View Modern World");
+        Button btnModernMap = new Button("Modern World");
         btnModernMap.setCursor(Cursor.HAND);
         btnModernMap.setOnAction(new EventHandler() {
             @Override
@@ -33,7 +33,7 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnModernMap);
-        Button btnHistoricMap = new Button("View Historic / Ideal World");
+        Button btnHistoricMap = new Button("Pre-industrial World");
         btnHistoricMap.setCursor(Cursor.HAND);
         btnHistoricMap.setOnAction(new EventHandler() {
             @Override
@@ -51,11 +51,13 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.MODERN)) {
+            setActiveSubCategoryTitle("Modern World");
             setupChartDescriptionLabel("<html>A map of the world in modern times.</html>");
             createMapDefault(lstData, BundledMapLayers.EARTH_MODERN);
         }
         else
         if (activeMapType.equals(MapType.HISTORIC)) {
+            setActiveSubCategoryTitle("Pre-industrial World");
             setupChartDescriptionLabel("<html>A map of the ideal modern world, uneffected by modern human development.</html>");
             createMapDefault(lstData, BundledMapLayers.EARTH_HISTORIC_IDEAL);
         }

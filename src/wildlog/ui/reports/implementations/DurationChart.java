@@ -96,10 +96,12 @@ public class DurationChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.TIMELINE_FOR_ALL)) {
+                    setActiveSubCategoryTitle("Duration for All Observations (Line)");
                     displayedChart = createTimelineForAllChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.TIMELINE_PER_ELEMENT)) {
+                    setActiveSubCategoryTitle("Duration per Creature (Line)");
                     displayedChart = createTimelinePerElementChart(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

@@ -158,13 +158,13 @@ public class MapsBaseDialog extends JFrame {
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(10);
             vBox.setFillWidth(true);
-            TitledPane mapButton = new TitledPane(map.getMapButtonName(), vBox);
+            TitledPane mapButton = new TitledPane(map.getMapCategoryTitle(), vBox);
             for (Node node : map.getLstCustomButtons()) {
                 node.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent inEvent) {
-                        setActiveMap(map);
-                        map.loadMap();
+                        activeMap = map;
+                        activeMap.loadMap();
                     }
                 });
                 ((Control) node).setMaxWidth(500);
@@ -484,8 +484,9 @@ public class MapsBaseDialog extends JFrame {
                             @Override
                             public void run() {
                                 ExportDialogForReportsAndMaps dialog = new ExportDialogForReportsAndMaps(parent, bufferedImage, 
-                                        jfxMapPanel.getScene().getRoot(), activeMap.getMapButtonName(), lstFilteredData, 
-                                        ExportDialogForReportsAndMaps.ExportType.MAPS);
+                                        jfxMapPanel.getScene().getRoot(), 
+                                        activeMap.getMapCategoryTitle() + " - " + activeMap.getActiveSubCategoryTitle() + " - ", 
+                                        lstFilteredData, ExportDialogForReportsAndMaps.ExportType.MAPS);
                                 dialog.setVisible(true);
                             }
                         });
@@ -564,10 +565,6 @@ public class MapsBaseDialog extends JFrame {
         return list;
     }
     
-    public void setActiveMap(AbstractMap inAbstractMap) {
-        activeMap = inAbstractMap;
-    }
-
     public AbstractMap getActiveMap() {
         return activeMap;
     }

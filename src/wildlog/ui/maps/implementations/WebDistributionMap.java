@@ -118,6 +118,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.SPECIES_DISTRIBUTION)) {
+            setActiveSubCategoryTitle("Creature Distribution Map");
             // Get the scientific name
             String elementName = null;
             for (Sighting sighting : lstData) {

@@ -98,14 +98,17 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.ACCUMULATION_LINE_CHART)) {
+                    setActiveSubCategoryTitle("Creature Accumulation (Line)");
                     displayedChart = createAccumulationReport(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.DAILY_CREATURE_LINE_CHART)) {
+                    setActiveSubCategoryTitle("Daily Creature Count (Line)");
                     displayedChart = createDailyReport(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.DAILY_OBSERVATION_LINE_CHART)) {
+                    setActiveSubCategoryTitle("Daily Observation Count (Line)");
                     displayedChart = createDailyReport(lstData, true);
                 }
                 displayedChart.setBackground(Background.EMPTY);

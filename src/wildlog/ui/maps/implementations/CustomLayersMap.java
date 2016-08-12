@@ -87,6 +87,7 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.CUSTOM)) {
+            setActiveSubCategoryTitle("Custom Layers");
             setupChartDescriptionLabel("<html>This map displays the data points on a user defined list of custom layers.</html>");
             // Add selected layers
             for (Path layerPath : lstLayers) {

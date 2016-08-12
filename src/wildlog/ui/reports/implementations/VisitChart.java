@@ -153,38 +153,47 @@ public class VisitChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.PIE_CHART_TYPE)) {
+                    setActiveSubCategoryTitle("Observations per Period Type (Pie)");
                     displayedChart = createPieChartVisitTypes(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.PIE_CHART_SIGHTING_COUNT)) {
+                    setActiveSubCategoryTitle("Observations per Period (Pie)");
                     displayedChart = createPieChartSightingCount(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_SIGHTING_COUNT)) {
+                    setActiveSubCategoryTitle("Observations per Period (Bar)");
                     displayedChart = createBarChartSightingCount(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_COMBINED_DURATION)) {
+                    setActiveSubCategoryTitle("Grouped Period Duration (Bar)");
                     displayedChart = createBarChartDurationCombined(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_DURATION)) {
+                    setActiveSubCategoryTitle("Period Duration (Bar)");
                     displayedChart = createBarChartDuration(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ABUNDANCE)) {
+                    setActiveSubCategoryTitle("Abundance of Observations (Bar)");
                     displayedChart = createBarChartAbundance(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENT_ABUNDANCE)) {
+                    setActiveSubCategoryTitle("Abundance of Creatures (Bar)");
                     displayedChart = createBarChartElementAbundance(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENT_COUNT)) {
+                    setActiveSubCategoryTitle("Creatures per Period (Bar)");
                     displayedChart = createBarChartElementCount(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_RICHNESS)) {
+                    setActiveSubCategoryTitle("Richness of Creatures (Bar)");
                     displayedChart = createBarChartRichness(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

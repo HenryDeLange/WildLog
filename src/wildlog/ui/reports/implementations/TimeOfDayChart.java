@@ -79,14 +79,17 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.LINE_CHART)) {
+                    setActiveSubCategoryTitle("Creature Time of Day (Line)");
                     displayedChart = createLineChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART)) {
+                    setActiveSubCategoryTitle("Observation Time of Day (Bar)");
                     displayedChart = createBarChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.PIE_CHART)) {
+                    setActiveSubCategoryTitle("Observation Time of Day (Pie)");
                     displayedChart = createPieChart(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

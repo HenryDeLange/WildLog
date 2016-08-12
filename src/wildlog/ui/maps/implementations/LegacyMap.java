@@ -24,10 +24,10 @@ import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.ui.maps.implementations.helpers.MapFrameOnline;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
+import wildlog.ui.maps.implementations.helpers.MapFrameOnline;
 
 
 public class LegacyMap extends AbstractMap<Sighting> {
@@ -58,6 +58,7 @@ public class LegacyMap extends AbstractMap<Sighting> {
             public void run() {
                 displayedMap = null;
                 if (activeMapType.equals(MapType.POINT_MAP_OPENSTREETMAP)) {
+                    setActiveSubCategoryTitle("Old WildLog Online Map");
                     setupChartDescriptionLabel("<html>This is the old \"Online Map\" based on OpenStreetMap that was used in WildLog v4.2.2 and older.</html>");
                     displayedMap = createPointMapOSM(lstData);
                 }

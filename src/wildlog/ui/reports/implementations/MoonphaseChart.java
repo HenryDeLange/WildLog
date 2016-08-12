@@ -135,22 +135,27 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.BAR_CHART_ALL)) {
+                    setActiveSubCategoryTitle("All Observations Together (Bar)");
                     displayedChart = createBarChart(lstData, true);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
+                    setActiveSubCategoryTitle("Grouped by Creatures (Bar)");
                     displayedChart = createBarChart(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.LINE_CHART_ALL)) {
+                    setActiveSubCategoryTitle("All Observations Together (Line)");
                     displayedChart = createLineChart(lstData, true);
                 }
                 else
                 if (chartType.equals(ChartType.LINE_CHART_ELEMENTS)) {
+                    setActiveSubCategoryTitle("Grouped by Creatures (Line)");
                     displayedChart = createLineChart(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.PIE_CHART)) {
+                    setActiveSubCategoryTitle("All Observations Together (Pie)");
                     displayedChart = createPieChart(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);
@@ -177,11 +182,11 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
             if (sighting.getMoonPhase() >= 0) {
                 if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() < 50) {
-                    increaseCountInMap(mapChartData, "Moon 0-50% Full");
+                    increaseCountInMap(mapChartData, "Half Moon 0-50%");
                 } 
                 else
                 if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 100) {
-                    increaseCountInMap(mapChartData, "Moon 50-100% Full");
+                    increaseCountInMap(mapChartData, "Full Moon 50-100%");
                 } 
                 else
                 // If the moon is 50% then base it on whether the moon is growing or shrinking.
@@ -189,11 +194,11 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     LocalDateTime futureTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).plusDays(2);
                     int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
                     if (testMoonphase >= 0 && testMoonphase < 50) {
-                        increaseCountInMap(mapChartData, "Moon 0-50% Full");
+                        increaseCountInMap(mapChartData, "Half Moon 0-50%");
                     } 
                     else
                     if (testMoonphase > 50 && testMoonphase <= 100) {
-                        increaseCountInMap(mapChartData, "Moon 50-100% Full");
+                        increaseCountInMap(mapChartData, "Full Moon 50-100%");
                     } 
                     else {
                         increaseCountInMap(mapChartData, "Unknown");
@@ -228,7 +233,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         UtilsReports.setupCategoryAxis(catAxis, 3, true);
-        catAxis.setCategories(FXCollections.<String>observableArrayList(new String[]{"Moon 0-50% Full", "Moon 50-100% Full", "Unknown"}));
+        catAxis.setCategories(FXCollections.<String>observableArrayList(new String[]{"Half Moon 0-50%", "Full Moon 50-100%", "Unknown"}));
         StackedBarChart<String, Number> chart = UtilsReports.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
         chart.getStyleClass().add("wl-stacked-bar-30-color");
         chart.setTitle("Number of Observations for each Moon Phase");
@@ -251,11 +256,11 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             String key = "";
             if (sighting.getMoonPhase() >= 0) {
                 if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() < 50) {
-                    key = "Moon 0-50% Full" + getDetailsString(sighting);
+                    key = "Half Moon 0-50%" + getDetailsString(sighting);
                 } 
                 else
                 if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 100) {
-                    key = "Moon 50-100% Full" + getDetailsString(sighting);
+                    key = "Full Moon 50-100%" + getDetailsString(sighting);
                 } 
                 else
                 // If the moon is 50% then base it on whether the moon is growing or shrinking.
@@ -263,11 +268,11 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     LocalDateTime futureTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).plusDays(2);
                     int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
                     if (testMoonphase >= 0 && testMoonphase < 50) {
-                        key = "Moon 0-50% Full" + getDetailsString(sighting);
+                        key = "Half Moon 0-50%" + getDetailsString(sighting);
                     } 
                     else
                     if (testMoonphase > 50 && testMoonphase <= 100) {
-                        key = "Moon 50-100% Full" + getDetailsString(sighting);
+                        key = "Full Moon 50-100%" + getDetailsString(sighting);
                     } 
                     else {
                         key = "Unknown";

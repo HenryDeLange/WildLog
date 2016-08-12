@@ -120,18 +120,22 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.NUMBER_PER_SIGHTING_CHART)) {
+                    setActiveSubCategoryTitle("Number of Individuals (Bar)");
                     displayedChart = createNumOfElementsPerSightingBarChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.SUBSEQUENT_CHART)) {
+                    setActiveSubCategoryTitle("Subsequent Observations (Bar)");
                     displayedChart = createSubsequentSightingBarChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.SIGHTINGS_PER_DAY_CHART)) {
+                    setActiveSubCategoryTitle("Observations per Day-Cycle (Bar)");
                     displayedChart = createSightingPerDayBarChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.ABUNDANCE_CHART)) {
+                    setActiveSubCategoryTitle("Relative Abundance (Bar)");
                     displayedChart = createAbundanceBarChart(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

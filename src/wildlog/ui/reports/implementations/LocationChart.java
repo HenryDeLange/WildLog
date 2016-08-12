@@ -79,14 +79,17 @@ public class LocationChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.PIE_CHART_SIGHITNGS)) {
+                    setActiveSubCategoryTitle("Observations per Place (Pie)");
                     displayedChart = createPieChartSightings(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_SIGHITNGS)) {
+                    setActiveSubCategoryTitle("Observations per Place (Bar)");
                     displayedChart = createBarChartSightings(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
+                    setActiveSubCategoryTitle("Creatures per Place (Bar)");
                     displayedChart = createBarChartElements(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

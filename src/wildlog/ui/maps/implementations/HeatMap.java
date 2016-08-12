@@ -168,11 +168,13 @@ public class HeatMap extends AbstractMap<Sighting> {
             public void run() {
                 displayedMap = null;
                 if (activeMapType.equals(MapType.HEAT_MAP_CLIENTSIDE)) {
+                    setActiveSubCategoryTitle("Observation Heat Map");
                     setupChartDescriptionLabel("<html>This Heat Map can be used to show areas with higher or lower density of data points.</html>");
                     displayedMap = createHeatMapClient(lstData);
                 }
                 else
                 if (activeMapType.equals(MapType.ABUNDANCE_MAP_CLIENTSIDE)) {
+                    setActiveSubCategoryTitle("Abundance of Observations Map");
                     setupChartDescriptionLabel("<html>This map can be used as a simplified Observation Abundance Map."
                             + "<br/>It shows the number of Observations, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
                             + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location "
@@ -182,6 +184,7 @@ public class HeatMap extends AbstractMap<Sighting> {
                 }
                 else
                 if (activeMapType.equals(MapType.RICHNESS_MAP_CLIENTSIDE)) {
+                    setActiveSubCategoryTitle("Richness of Creatures Map");
                     setupChartDescriptionLabel("<html>This map can be used as a simplified Creature Richness Map."
                             + "<br/>It shows the number of Creatures, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
                             + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location "
@@ -191,6 +194,7 @@ public class HeatMap extends AbstractMap<Sighting> {
                 }
                 else
                 if (activeMapType.equals(MapType.SAMPLE_EFFORT_MAP_CLIENTSIDE)) {
+                    setActiveSubCategoryTitle("Sampling Effort Map");
                     setupChartDescriptionLabel("<html>This map can be used as a simplified Sampling Effort Map."
                             + "<br/>It shows for each GPS point how many days the associated Period was active. (The list of unique GPS points is based on the active Obseravations. The duration is based on the Period's start and end dates.)"
                             + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location. "

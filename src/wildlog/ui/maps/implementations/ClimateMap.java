@@ -115,26 +115,31 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.TEMPERATURE_MIN)) {
+            setActiveSubCategoryTitle("Temperature (Monthly Minimum)");
             setupChartDescriptionLabel("<html><b><u>Minimum</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_TEMPERATURE_MIN, activeMonth);
         }
         else
         if (activeMapType.equals(MapType.TEMPERATURE_MEAN)) {
+            setActiveSubCategoryTitle("Temperature (Monthly Average)");
             setupChartDescriptionLabel("<html><b><u>Mean</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_TEMPERATURE_MEAN, activeMonth);
         }
         else
         if (activeMapType.equals(MapType.TEMPERATURE_MAX)) {
+            setActiveSubCategoryTitle("Temperature (Monthly Maximum)");
             setupChartDescriptionLabel("<html><b><u>Maximum</u> Temperature.</b> Red is high, yellow medium and blue is low temperature.</html>");
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_TEMPERATURE_MAX, activeMonth);
         }
         else
         if (activeMapType.equals(MapType.PRECIPITATION_AVERAGE)) {
+            setActiveSubCategoryTitle("Aridity (Annual Average)");
             setupChartDescriptionLabel("<html><b>Average <u>Annual</u> Aridity.</b> Blue indicates low, green medium and white high aridity.</html>");
             createMapDefault(lstData, BundledMapLayers.CLIMATE_PRECIPITATION_AVERAGE);
         }
         else
         if (activeMapType.equals(MapType.PRECIPITATION_MONTHLY)) {
+            setActiveSubCategoryTitle("Precipitation (Monthly Average)");
             setupChartDescriptionLabel("<html><b>Mean <u>Monthly</u> Precipitation.</b> Blue indicates high, green medium and white low percipitation.</html>");
             createMapDefaultForMonth(lstData, BundledMapLayers.CLIMATE_PERCIPITATION_MONTHLY, activeMonth);
         }

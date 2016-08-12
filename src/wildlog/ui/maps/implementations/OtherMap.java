@@ -43,6 +43,7 @@ public class OtherMap extends AbstractGeoToolsMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         if (activeMapType.equals(MapType.ALTITUDE)) {
+            setActiveSubCategoryTitle("Altitude");
             setupChartDescriptionLabel("<html>A map of the world indicating the altitude. The darker the colour the higher the altitude.</html>");
             createMapDefault(lstData, BundledMapLayers.ALTITUDE);
         }

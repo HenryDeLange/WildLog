@@ -15,7 +15,8 @@ import wildlog.ui.maps.MapsBaseDialog;
 
 
 public abstract class AbstractMap<T> {
-    private final String mapButtonName;
+    private final String mapCategoryTitle;
+    private String activeSubCategoryTitle = "Default Report";
     protected final MapsBaseDialog mapsBaseDialog;
     protected List<T> lstData;
     protected List<Node> lstCustomButtons;
@@ -23,7 +24,7 @@ public abstract class AbstractMap<T> {
 
     
     public AbstractMap(String inMapButtonName, List<T> inList, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
-        mapButtonName = inMapButtonName;
+        mapCategoryTitle = inMapButtonName;
         lstData = inList;
         lblMapDescription = inChartDescLabel;
         mapsBaseDialog = inMapsBaseDialog;
@@ -59,8 +60,16 @@ public abstract class AbstractMap<T> {
         }
     }
 
-    public String getMapButtonName() {
-        return mapButtonName;
+    public String getMapCategoryTitle() {
+        return mapCategoryTitle;
+    }
+    
+    public String getActiveSubCategoryTitle() {
+        return activeSubCategoryTitle;
+    }
+
+    public void setActiveSubCategoryTitle(String inActiveSubCategoryTitle) {
+        activeSubCategoryTitle = inActiveSubCategoryTitle;
     }
     
     public void setDataList(List<T> inList) {
