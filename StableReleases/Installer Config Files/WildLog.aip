@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="8.1.1" version="12.7.2" Modules="simple" RootPath="." Language="en" Id="{CCD0E87A-8D5F-4A5F-9A35-4EB613D6A9D4}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="8.1.1" version="13.1" Modules="simple" RootPath="." Language="en" Id="{CCD0E87A-8D5F-4A5F-9A35-4EB613D6A9D4}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiValidationComponent">
     <ROW Table="File" Column="Sequence" MinValue="1" MaxValue="2147483647" Description="Sequence with respect to the media images; order must track cabinet order." Options="0" ColumnType="3" ColumnIndex="7" ColumnSize="4" MsiKey="File#Sequence"/>
     <ROW Table="Media" Column="LastSequence" MinValue="0" MaxValue="2147483647" Description="File sequence number for the last file for this media." Options="0" ColumnType="3" ColumnIndex="1" ColumnSize="4" MsiKey="Media#LastSequence"/>
@@ -21,10 +21,10 @@
     <ROW Property="CTRLS" Value="3"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
     <ROW Property="Manufacturer" Value="MyWild" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{110724AE-8896-421B-8C32-9845504CD211} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{E663F352-D8AC-4C06-899B-A60D298AECBE} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="WildLog" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="4.3.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="4.3.2" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{46872473-716E-4D94-B617-046B7C8FED5C}"/>
@@ -34,6 +34,8 @@
     <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
     <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
     <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003 RTM, Windows XP/2003 SP1, Windows XP SP2 x86" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003 RTM, Windows XP/2003 SP1, Windows XP SP2 x86" ValueLocId="-"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
@@ -63,124 +65,124 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AbsoluteLayout.jar" ComponentId="{D6EFE6A2-A59B-4163-9685-E77878583C5B}" Directory_="lib_1_Dir" Attributes="0" KeyPath="AbsoluteLayout.jar" Type="0"/>
-    <ROW Component="CIEXYZ.pf" ComponentId="{697D4593-3A6F-4A6A-9C0C-A5A093EBD03D}" Directory_="cmm_Dir" Attributes="0" KeyPath="CIEXYZ.pf" Type="0"/>
-    <ROW Component="COPYRIGHT" ComponentId="{C172A21F-7186-448A-BFE0-F270EC295FBB}" Directory_="jre_Dir" Attributes="0" KeyPath="COPYRIGHT" Type="0"/>
+    <ROW Component="CIEXYZ.pf" ComponentId="{2C5DCF7A-743D-44C0-8022-4E27744D42A9}" Directory_="cmm_Dir" Attributes="0" KeyPath="CIEXYZ.pf" Type="0"/>
+    <ROW Component="COPYRIGHT" ComponentId="{A5EEFB87-6396-4DA2-99FD-030190A96C74}" Directory_="jre_Dir" Attributes="0" KeyPath="COPYRIGHT" Type="0"/>
     <ROW Component="GeoToolsLicense.txt" ComponentId="{65957083-D521-4C0D-8F77-AF394DFE9D9D}" Directory_="licenses_Dir" Attributes="0" KeyPath="GeoToolsLicense.txt" Type="0"/>
     <ROW Component="HowtorunWildLog.txt" ComponentId="{322C6C67-5135-40D8-8334-3EFDB9BB1ED2}" Directory_="documentation_Dir" Attributes="0" KeyPath="HowtorunWildLog.txt" Type="0"/>
-    <ROW Component="JAWTAccessBridge.dll" ComponentId="{2F1C5672-0A8E-41E5-BF64-3599E65C90A1}" Directory_="bin_Dir" Attributes="0" KeyPath="JAWTAccessBridge.dll"/>
-    <ROW Component="JAWTAccessBridge32.dll" ComponentId="{8F54DFB6-13E3-4B58-8954-2BF695EA10D2}" Directory_="bin_Dir" Attributes="0" KeyPath="JAWTAccessBridge32.dll"/>
-    <ROW Component="JavaAccessBridge.dll" ComponentId="{398E6BE7-1192-4803-BA4F-1C56317A08DD}" Directory_="bin_Dir" Attributes="0" KeyPath="JavaAccessBridge.dll"/>
-    <ROW Component="JavaAccessBridge32.dll" ComponentId="{231A5C26-52C8-48D5-8919-C5BEB9FB46DF}" Directory_="bin_Dir" Attributes="0" KeyPath="JavaAccessBridge32.dll"/>
-    <ROW Component="LucidaBrightDemiBold.ttf" ComponentId="{0230CD90-34AD-462F-8DC5-1C1A6651699E}" Directory_="fonts_Dir" Attributes="0" Type="0"/>
+    <ROW Component="JAWTAccessBridge.dll" ComponentId="{396F9759-59B5-4A6E-BD32-84C1F1B80367}" Directory_="bin_Dir" Attributes="0" KeyPath="JAWTAccessBridge.dll"/>
+    <ROW Component="JAWTAccessBridge32.dll" ComponentId="{B8F2116A-DFCD-4584-AB3F-86081A0C0AEE}" Directory_="bin_Dir" Attributes="0" KeyPath="JAWTAccessBridge32.dll"/>
+    <ROW Component="JavaAccessBridge.dll" ComponentId="{A84A15C7-A737-4B44-B841-4A5EFF350EC6}" Directory_="bin_Dir" Attributes="0" KeyPath="JavaAccessBridge.dll"/>
+    <ROW Component="JavaAccessBridge32.dll" ComponentId="{462662E9-61CB-4052-983F-65632C8BFAAE}" Directory_="bin_Dir" Attributes="0" KeyPath="JavaAccessBridge32.dll"/>
+    <ROW Component="LucidaBrightDemiBold.ttf" ComponentId="{C4184DF9-9786-4893-85E2-9A4B941BA822}" Directory_="fonts_Dir" Attributes="0" Type="0"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{D139B584-3C2C-42D0-819F-A2D651F0A22D}" Directory_="SHORTCUTDIR" Attributes="0"/>
     <ROW Component="UninstallNotes.txt" ComponentId="{A251D5E6-9C21-4B71-AC96-9424BB6A0F8C}" Directory_="documentation_Dir" Attributes="0" KeyPath="UninstallNotes.txt"/>
-    <ROW Component="WILDLOG_README_v4.3.1.txt" ComponentId="{2416B0C1-2197-46E1-8A5F-E1F719D3D28B}" Directory_="APPDIR" Attributes="0" KeyPath="WILDLOG_README_v4.3.1.txt" Type="0"/>
+    <ROW Component="WILDLOG_README_v4.3.2.txt" ComponentId="{BCEF617C-ED85-4612-98E8-F047241FC967}" Directory_="APPDIR" Attributes="0" KeyPath="WILDLOG_README_v4.3.2.txt" Type="0"/>
     <ROW Component="WildLog.exe" ComponentId="{FD8E7268-F4F7-4E26-84BC-D9DF7506549A}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog.exe"/>
     <ROW Component="WildLog.jar" ComponentId="{9A58234B-164A-472B-BA04-CCE69386D361}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog.jar" Type="0"/>
     <ROW Component="WildLogLicense.txt" ComponentId="{C66967C9-CAD6-4C68-9BBC-2919196E37A6}" Directory_="licenses_Dir" Attributes="0" KeyPath="WildLogLicense.txt"/>
     <ROW Component="WildLogUserGuide.pdf" ComponentId="{5961DA33-978A-4CD2-9C60-268C7A3D035A}" Directory_="documentation_Dir" Attributes="0" KeyPath="WildLogUserGuide.pdf"/>
     <ROW Component="WildLog_Portable.exe" ComponentId="{CBA4FB36-0D1D-48F3-B7A2-88EB9DE27076}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog_Portable.exe"/>
-    <ROW Component="WindowsAccessBridge.dll" ComponentId="{46989311-1F4F-4C29-8EAA-BEBB9848B7C0}" Directory_="bin_Dir" Attributes="0" KeyPath="WindowsAccessBridge.dll"/>
-    <ROW Component="WindowsAccessBridge32.dll" ComponentId="{AD4C0AE0-3E39-4DFB-A68A-1E4FE8233A82}" Directory_="bin_Dir" Attributes="0" KeyPath="WindowsAccessBridge32.dll"/>
-    <ROW Component="Xusage.txt" ComponentId="{199D3812-34EC-4A00-9FBD-9D6B1437A43B}" Directory_="client_Dir" Attributes="0" KeyPath="Xusage.txt" Type="0"/>
-    <ROW Component="accessbridge32.jar" ComponentId="{D82482EA-7FAB-4A91-9F80-09623C67FA5B}" Directory_="ext_Dir" Attributes="0" KeyPath="accessbridge32.jar" Type="0"/>
-    <ROW Component="accessibility.properties" ComponentId="{CB3728FF-0F87-4757-9247-EB2043B2D237}" Directory_="lib_Dir" Attributes="0" KeyPath="accessibility.properties" Type="0"/>
-    <ROW Component="awt.dll" ComponentId="{AA9DF987-E85B-4D8D-BD25-D7B939BCE9C6}" Directory_="bin_Dir" Attributes="0" KeyPath="awt.dll"/>
-    <ROW Component="bci.dll" ComponentId="{E881D161-441F-470E-90F3-3D80FBD7DBD6}" Directory_="bin_Dir" Attributes="0" KeyPath="bci.dll"/>
-    <ROW Component="blacklist" ComponentId="{7267F1C9-1646-4BEC-AC92-16B17EDA852C}" Directory_="security_Dir" Attributes="0" KeyPath="blacklist" Type="0"/>
-    <ROW Component="cursors.properties" ComponentId="{441908C8-B9E8-460E-9DA3-44E84D1C7AAE}" Directory_="cursors_Dir" Attributes="0" KeyPath="cursors.properties" Type="0"/>
-    <ROW Component="dcpr.dll" ComponentId="{5B9A9BEE-60AF-457B-8072-C93CA29E2089}" Directory_="bin_Dir" Attributes="0" KeyPath="dcpr.dll"/>
-    <ROW Component="decora_sse.dll" ComponentId="{B387FEBC-8011-402F-9976-00FFCA0D1A5A}" Directory_="bin_Dir" Attributes="0" KeyPath="decora_sse.dll"/>
-    <ROW Component="default.jfc" ComponentId="{D8AD849B-5398-43E7-867D-04E7B012047C}" Directory_="jfr_Dir" Attributes="0" KeyPath="default.jfc" Type="0"/>
-    <ROW Component="deploy.dll" ComponentId="{91A6E908-2C70-4EC0-BFAE-8164EA5CC15B}" Directory_="bin_Dir" Attributes="0" KeyPath="deploy.dll"/>
-    <ROW Component="deployJava1.dll" ComponentId="{7A1E78D2-6DD7-498C-AC67-0626C00B2849}" Directory_="dtplugin_Dir" Attributes="0" KeyPath="deployJava1.dll"/>
-    <ROW Component="dt_shmem.dll" ComponentId="{10B1D5BF-9346-476A-ACEF-7E10B3C62A97}" Directory_="bin_Dir" Attributes="0" KeyPath="dt_shmem.dll"/>
-    <ROW Component="dt_socket.dll" ComponentId="{089657FC-B34C-49E4-A155-7EE6C6BE4355}" Directory_="bin_Dir" Attributes="0" KeyPath="dt_socket.dll"/>
-    <ROW Component="eula.dll" ComponentId="{C2C377B4-7681-4A1C-B184-D5B238CE3AA1}" Directory_="bin_Dir" Attributes="0" KeyPath="eula.dll"/>
-    <ROW Component="ffjcext.zip" ComponentId="{F82C678A-093A-497A-B361-DD839D87F4F2}" Directory_="deploy_Dir" Attributes="0" KeyPath="ffjcext.zip" Type="0"/>
-    <ROW Component="fontmanager.dll" ComponentId="{D27C0CA0-207C-44FB-AE3D-A3A5E7FAAFC0}" Directory_="bin_Dir" Attributes="0" KeyPath="fontmanager.dll"/>
-    <ROW Component="fxplugins.dll" ComponentId="{6A3FD0F6-7FFB-41A0-A36E-43158867633B}" Directory_="bin_Dir" Attributes="0" KeyPath="fxplugins.dll"/>
-    <ROW Component="glass.dll" ComponentId="{2483962E-1A04-404E-8564-D3E5A04B371C}" Directory_="bin_Dir" Attributes="0" KeyPath="glass.dll"/>
-    <ROW Component="gliblite.dll" ComponentId="{8D2AFEE6-1EC7-474A-B67A-541A11121E3B}" Directory_="bin_Dir" Attributes="0" KeyPath="gliblite.dll"/>
-    <ROW Component="gstreamerlite.dll" ComponentId="{BFCB952D-6D2E-4F59-B02B-1EF9CDC408A1}" Directory_="bin_Dir" Attributes="0" KeyPath="gstreamerlite.dll"/>
-    <ROW Component="hprof.dll" ComponentId="{BC274FC0-E3EB-4C3B-A0DD-8B836B8771AC}" Directory_="bin_Dir" Attributes="0" KeyPath="hprof.dll"/>
-    <ROW Component="instrument.dll" ComponentId="{290EE6DB-8B8C-422B-A167-0B743E216085}" Directory_="bin_Dir" Attributes="0" KeyPath="instrument.dll"/>
-    <ROW Component="j2pcsc.dll" ComponentId="{4AA6807F-40FF-4EBE-A098-6098DD01DAA8}" Directory_="bin_Dir" Attributes="0" KeyPath="j2pcsc.dll"/>
-    <ROW Component="j2pkcs11.dll" ComponentId="{C5851242-0279-4EE3-A828-2EC7C1DE6727}" Directory_="bin_Dir" Attributes="0" KeyPath="j2pkcs11.dll"/>
-    <ROW Component="jaas_nt.dll" ComponentId="{945D3ABC-640A-4A0A-8219-B11FE3C830D1}" Directory_="bin_Dir" Attributes="0" KeyPath="jaas_nt.dll"/>
-    <ROW Component="jabswitch.exe" ComponentId="{6DA11CE4-C093-4646-BA2D-2F3A1151FBCC}" Directory_="bin_Dir" Attributes="0" KeyPath="jabswitch.exe"/>
-    <ROW Component="java.dll" ComponentId="{06C2179B-D726-42B2-A340-2B953AF42A94}" Directory_="bin_Dir" Attributes="0" KeyPath="java.dll"/>
-    <ROW Component="java.exe" ComponentId="{E7AC8257-EF4B-428B-A3DC-26AA10E36087}" Directory_="bin_Dir" Attributes="0" KeyPath="java.exe"/>
-    <ROW Component="java_crw_demo.dll" ComponentId="{DE7A5E5F-7D91-443E-BBBE-4E3A6EEECD28}" Directory_="bin_Dir" Attributes="0" KeyPath="java_crw_demo.dll"/>
-    <ROW Component="javacpl.cpl" ComponentId="{8E94B471-B99A-4B51-8938-0CF820710F1D}" Directory_="bin_Dir" Attributes="0" KeyPath="javacpl.cpl" Type="0"/>
-    <ROW Component="javacpl.exe" ComponentId="{045AADC7-A510-495A-906E-E08793A41B97}" Directory_="bin_Dir" Attributes="0" KeyPath="javacpl.exe"/>
-    <ROW Component="javafx_font.dll" ComponentId="{5F5A26C4-F36B-472E-BAC1-872BF1E4E76F}" Directory_="bin_Dir" Attributes="0" KeyPath="javafx_font.dll"/>
-    <ROW Component="javafx_font_t2k.dll" ComponentId="{53E51225-999A-4B8F-8C02-CEF4E024AD81}" Directory_="bin_Dir" Attributes="0" KeyPath="javafx_font_t2k.dll"/>
-    <ROW Component="javafx_iio.dll" ComponentId="{9362514F-6265-4FAF-90A5-204E8946D6EF}" Directory_="bin_Dir" Attributes="0" KeyPath="javafx_iio.dll"/>
-    <ROW Component="javarmi.exe" ComponentId="{A2A2368E-4129-4DFC-8812-FAB6F38F809B}" Directory_="bin_Dir" Attributes="0" KeyPath="javarmi.exe"/>
-    <ROW Component="javaw.exe" ComponentId="{1D54F004-D8AB-4913-8518-5AC440182EA0}" Directory_="bin_Dir" Attributes="0" KeyPath="javaw.exe"/>
-    <ROW Component="javaws.exe" ComponentId="{3896DAFB-3871-4CF0-AA2B-7B7D70EBFB15}" Directory_="bin_Dir" Attributes="0" KeyPath="javaws.exe"/>
-    <ROW Component="jawt.dll" ComponentId="{B6576FFC-1B6B-4EB6-AA95-FC172AAF57EA}" Directory_="bin_Dir" Attributes="0" KeyPath="jawt.dll"/>
-    <ROW Component="jdwp.dll" ComponentId="{C2445411-3887-4721-B80D-B61E5CBAEE4E}" Directory_="bin_Dir" Attributes="0" KeyPath="jdwp.dll"/>
-    <ROW Component="jfr.dll" ComponentId="{2197130A-D043-4203-BF2F-8D94D3B0D53E}" Directory_="bin_Dir" Attributes="0" KeyPath="jfr.dll"/>
-    <ROW Component="jfxmedia.dll" ComponentId="{F28322B5-1FA5-48F7-A66A-C2831F840F12}" Directory_="bin_Dir" Attributes="0" KeyPath="jfxmedia.dll"/>
-    <ROW Component="jfxwebkit.dll" ComponentId="{75D1F626-0475-4980-A71B-B87BA585F899}" Directory_="bin_Dir" Attributes="0" KeyPath="jfxwebkit.dll"/>
-    <ROW Component="jjs.exe" ComponentId="{A793E289-8924-4240-86D4-3E1191C1A71F}" Directory_="bin_Dir" Attributes="0" KeyPath="jjs.exe"/>
-    <ROW Component="jli.dll" ComponentId="{DBEA23AB-E81B-424B-ACD9-2585C27ACA34}" Directory_="bin_Dir" Attributes="0" KeyPath="jli.dll"/>
-    <ROW Component="jmxremote.access" ComponentId="{AD5631AE-5EE9-4B97-9C30-495610F23AB4}" Directory_="management_Dir" Attributes="0" KeyPath="jmxremote.access" Type="0"/>
-    <ROW Component="jp2iexp.dll" ComponentId="{9C09E9BB-6E31-4726-80FE-F12D31346227}" Directory_="bin_Dir" Attributes="0" KeyPath="jp2iexp.dll"/>
-    <ROW Component="jp2launcher.exe" ComponentId="{FA16A43F-5C21-43ED-82BC-202B9121F97D}" Directory_="bin_Dir" Attributes="0" KeyPath="jp2launcher.exe"/>
-    <ROW Component="jp2native.dll" ComponentId="{F16F46A4-9E62-40B0-9F3F-4F3D0637F778}" Directory_="bin_Dir" Attributes="0" KeyPath="jp2native.dll"/>
-    <ROW Component="jp2ssv.dll" ComponentId="{96E97091-D524-4BCA-9691-FB90EDF194EE}" Directory_="bin_Dir" Attributes="0" KeyPath="jp2ssv.dll"/>
-    <ROW Component="jpeg.dll" ComponentId="{1C1F773E-6F84-4DFA-B741-C5E016061245}" Directory_="bin_Dir" Attributes="0" KeyPath="jpeg.dll"/>
-    <ROW Component="jsdt.dll" ComponentId="{7926D856-F301-4628-AD12-889B81DF55C1}" Directory_="bin_Dir" Attributes="0" KeyPath="jsdt.dll"/>
-    <ROW Component="jsound.dll" ComponentId="{2005C6DD-8B83-4A19-8FF3-190A68092EEA}" Directory_="bin_Dir" Attributes="0" KeyPath="jsound.dll"/>
-    <ROW Component="jsoundds.dll" ComponentId="{FBBD88BC-7F2B-4390-8264-09A2AD44A09E}" Directory_="bin_Dir" Attributes="0" KeyPath="jsoundds.dll"/>
-    <ROW Component="jvm.cfg" ComponentId="{BF8E98DD-1333-45B7-A831-FEB00FF7AF76}" Directory_="i386_Dir" Attributes="0" KeyPath="jvm.cfg" Type="0"/>
-    <ROW Component="jvm.dll" ComponentId="{BFA137E0-8D05-48EF-AFC5-40B201499E1F}" Directory_="client_Dir" Attributes="0" KeyPath="jvm.dll"/>
-    <ROW Component="kcms.dll" ComponentId="{FF0B47BE-C574-4E8D-8989-5A7DC88DB609}" Directory_="bin_Dir" Attributes="0" KeyPath="kcms.dll"/>
-    <ROW Component="keytool.exe" ComponentId="{B039A857-FC0E-494E-8E9C-419537DA46A1}" Directory_="bin_Dir" Attributes="0" KeyPath="keytool.exe"/>
-    <ROW Component="kinit.exe" ComponentId="{2E0EA21F-19BA-4805-BD4F-8A2DAED7BA00}" Directory_="bin_Dir" Attributes="0" KeyPath="kinit.exe"/>
-    <ROW Component="klist.exe" ComponentId="{4F7E0D31-3015-4E22-AB70-895D55602FCE}" Directory_="bin_Dir" Attributes="0" KeyPath="klist.exe"/>
-    <ROW Component="ktab.exe" ComponentId="{5FDC0FDC-96DF-4866-8D92-681364F66D7B}" Directory_="bin_Dir" Attributes="0" KeyPath="ktab.exe"/>
-    <ROW Component="lcms.dll" ComponentId="{454B4985-E6B9-4C55-92ED-9799203C8A23}" Directory_="bin_Dir" Attributes="0" KeyPath="lcms.dll"/>
-    <ROW Component="management.dll" ComponentId="{9F1B7AA4-9AA3-4443-8A90-2C9CC0B93F32}" Directory_="bin_Dir" Attributes="0" KeyPath="management.dll"/>
-    <ROW Component="mlib_image.dll" ComponentId="{4AF8C8FA-AFBC-4F44-A011-177DB6D068C5}" Directory_="bin_Dir" Attributes="0" KeyPath="mlib_image.dll"/>
-    <ROW Component="msvcp120.dll" ComponentId="{B062D5F6-D6C0-49D7-83BD-A30D5124BBB8}" Directory_="bin_Dir" Attributes="0" KeyPath="msvcp120.dll"/>
-    <ROW Component="msvcr100.dll" ComponentId="{B45AC51B-644F-4FBA-9F92-54F9EAB11153}" Directory_="bin_Dir" Attributes="0" KeyPath="msvcr100.dll"/>
-    <ROW Component="msvcr100.dll_1" ComponentId="{2D1F3F27-46E7-4317-9045-C17F2B75A45B}" Directory_="plugin2_Dir" Attributes="0" KeyPath="msvcr100.dll_1"/>
-    <ROW Component="msvcr120.dll" ComponentId="{19A3C029-2561-45D2-A172-5A6E6BF54456}" Directory_="bin_Dir" Attributes="0" KeyPath="msvcr120.dll"/>
-    <ROW Component="net.dll" ComponentId="{A6D1801D-3E58-4F15-B3A8-907AE0336A87}" Directory_="bin_Dir" Attributes="0" KeyPath="net.dll"/>
-    <ROW Component="nio.dll" ComponentId="{60D439DF-672A-47B8-B962-6D3199E11F01}" Directory_="bin_Dir" Attributes="0" KeyPath="nio.dll"/>
-    <ROW Component="npdeployJava1.dll" ComponentId="{10880527-F43D-42E1-BEDE-756B919B412A}" Directory_="dtplugin_Dir" Attributes="0" KeyPath="npdeployJava1.dll"/>
-    <ROW Component="npjp2.dll" ComponentId="{1225ADE3-7789-485B-9939-E4896B85000A}" Directory_="plugin2_Dir" Attributes="0" KeyPath="npjp2.dll"/>
-    <ROW Component="npt.dll" ComponentId="{A9E6E8EE-49E7-43A8-A107-B61E9E0FABDC}" Directory_="bin_Dir" Attributes="0" KeyPath="npt.dll"/>
-    <ROW Component="orbd.exe" ComponentId="{24E8B35B-0BE0-4EFB-8F0B-61C2C541805D}" Directory_="bin_Dir" Attributes="0" KeyPath="orbd.exe"/>
-    <ROW Component="pack200.exe" ComponentId="{42D936D8-E00F-417B-B51B-954232A1C4FF}" Directory_="bin_Dir" Attributes="0" KeyPath="pack200.exe"/>
-    <ROW Component="policytool.exe" ComponentId="{F7B7609F-6294-4B14-81F4-0586F8E4E52F}" Directory_="bin_Dir" Attributes="0" KeyPath="policytool.exe"/>
-    <ROW Component="prism_common.dll" ComponentId="{70B235C9-FF65-44BC-8A6C-25F02B6CBAC6}" Directory_="bin_Dir" Attributes="0" KeyPath="prism_common.dll"/>
-    <ROW Component="prism_d3d.dll" ComponentId="{FF8EDC96-902C-49BA-9806-9FFC9C2112F6}" Directory_="bin_Dir" Attributes="0" KeyPath="prism_d3d.dll"/>
-    <ROW Component="prism_sw.dll" ComponentId="{CBADF96E-10ED-4071-AC26-109DDBDA8BFA}" Directory_="bin_Dir" Attributes="0" KeyPath="prism_sw.dll"/>
-    <ROW Component="resource.dll" ComponentId="{1A3A98A0-C0F5-443A-B6B0-75237802EAF9}" Directory_="bin_Dir" Attributes="0" KeyPath="resource.dll"/>
-    <ROW Component="rmid.exe" ComponentId="{124B69A1-744E-4E46-8C50-0532E12D1464}" Directory_="bin_Dir" Attributes="0" KeyPath="rmid.exe"/>
-    <ROW Component="rmiregistry.exe" ComponentId="{2884FAE5-3162-473B-97B3-78AF3B7ACCB0}" Directory_="bin_Dir" Attributes="0" KeyPath="rmiregistry.exe"/>
-    <ROW Component="servertool.exe" ComponentId="{F4BE6142-DB0C-44FA-B08E-6DACA54C8BCD}" Directory_="bin_Dir" Attributes="0" KeyPath="servertool.exe"/>
-    <ROW Component="splashscreen.dll" ComponentId="{BD86BCB3-AF97-4882-BA3E-6E69CCDF4B00}" Directory_="bin_Dir" Attributes="0" KeyPath="splashscreen.dll"/>
-    <ROW Component="ssv.dll" ComponentId="{43C47E20-AA22-4AEC-8FFE-E82E844FC4B2}" Directory_="bin_Dir" Attributes="0" KeyPath="ssv.dll"/>
-    <ROW Component="ssvagent.exe" ComponentId="{764E5350-6343-46DB-B337-CCD16C66C299}" Directory_="bin_Dir" Attributes="0" KeyPath="ssvagent.exe"/>
-    <ROW Component="sunec.dll" ComponentId="{24B6FD92-BFD0-4A3F-99F5-73EC3FF46B8F}" Directory_="bin_Dir" Attributes="0" KeyPath="sunec.dll"/>
-    <ROW Component="sunmscapi.dll" ComponentId="{6CB6A6E3-F1A6-412C-A059-61E83B73E91E}" Directory_="bin_Dir" Attributes="0" KeyPath="sunmscapi.dll"/>
-    <ROW Component="t2k.dll" ComponentId="{B9A2AEFE-B36C-4E1C-9015-6D46C98B03EE}" Directory_="bin_Dir" Attributes="0" KeyPath="t2k.dll"/>
-    <ROW Component="tnameserv.exe" ComponentId="{7DF692A6-24AC-4391-B78F-CCA8AE732120}" Directory_="bin_Dir" Attributes="0" KeyPath="tnameserv.exe"/>
-    <ROW Component="unpack.dll" ComponentId="{24F005C9-A312-44F0-8127-31D46F96E221}" Directory_="bin_Dir" Attributes="0" KeyPath="unpack.dll"/>
-    <ROW Component="unpack200.exe" ComponentId="{1E5C597D-588F-444C-A0D7-E84117EEDC45}" Directory_="bin_Dir" Attributes="0" KeyPath="unpack200.exe"/>
-    <ROW Component="verify.dll" ComponentId="{F34EBC15-C3FE-428A-9D9D-C58663C7BD77}" Directory_="bin_Dir" Attributes="0" KeyPath="verify.dll"/>
-    <ROW Component="w2k_lsa_auth.dll" ComponentId="{EBF83EB8-C005-4CBA-8D06-0C9001F322B4}" Directory_="bin_Dir" Attributes="0" KeyPath="w2k_lsa_auth.dll"/>
-    <ROW Component="wsdetect.dll" ComponentId="{818B498D-EF1C-4D1A-8CC9-43DAD360AD77}" Directory_="bin_Dir" Attributes="0" KeyPath="wsdetect.dll"/>
-    <ROW Component="zip.dll" ComponentId="{8CC3359D-95C3-419E-81F7-48C8598BEE17}" Directory_="bin_Dir" Attributes="0" KeyPath="zip.dll"/>
+    <ROW Component="WindowsAccessBridge.dll" ComponentId="{8B4590EB-7CB6-417A-9F32-1CDBDA3F43B9}" Directory_="bin_Dir" Attributes="0" KeyPath="WindowsAccessBridge.dll"/>
+    <ROW Component="WindowsAccessBridge32.dll" ComponentId="{86AD9809-009A-4CC0-B9A4-6F41C1DB6C83}" Directory_="bin_Dir" Attributes="0" KeyPath="WindowsAccessBridge32.dll"/>
+    <ROW Component="Xusage.txt" ComponentId="{CDE1A0DF-2DE3-466E-882A-45D670F01F49}" Directory_="client_Dir" Attributes="0" KeyPath="Xusage.txt" Type="0"/>
+    <ROW Component="accessbridge32.jar" ComponentId="{CF76527E-0932-4C12-B497-E3678DA800E4}" Directory_="ext_Dir" Attributes="0" KeyPath="accessbridge32.jar" Type="0"/>
+    <ROW Component="accessibility.properties" ComponentId="{06C338E1-FF97-4995-892B-22AAEA7A507F}" Directory_="lib_Dir" Attributes="0" KeyPath="accessibility.properties" Type="0"/>
+    <ROW Component="awt.dll" ComponentId="{FBCEF026-1BDE-4537-BA37-74CA712B7B80}" Directory_="bin_Dir" Attributes="0" KeyPath="awt.dll"/>
+    <ROW Component="bci.dll" ComponentId="{E8370646-B555-4D44-B9DD-6447BBE5879E}" Directory_="bin_Dir" Attributes="0" KeyPath="bci.dll"/>
+    <ROW Component="blacklist" ComponentId="{B3EC4699-FF6A-4623-8C5F-F5A39ABDB015}" Directory_="security_Dir" Attributes="0" KeyPath="blacklist" Type="0"/>
+    <ROW Component="cursors.properties" ComponentId="{CB0F8348-C73F-4669-ACC4-732CAD94ED24}" Directory_="cursors_Dir" Attributes="0" KeyPath="cursors.properties" Type="0"/>
+    <ROW Component="dcpr.dll" ComponentId="{C924E214-D7BB-4549-9F39-1BF7062CE2AD}" Directory_="bin_Dir" Attributes="0" KeyPath="dcpr.dll"/>
+    <ROW Component="decora_sse.dll" ComponentId="{69C2A821-6ED7-4F1B-AE6C-063C9D39FA58}" Directory_="bin_Dir" Attributes="0" KeyPath="decora_sse.dll"/>
+    <ROW Component="default.jfc" ComponentId="{36EC0BAE-F3F3-4DBC-BB01-9982F753ADE4}" Directory_="jfr_Dir" Attributes="0" KeyPath="default.jfc" Type="0"/>
+    <ROW Component="deploy.dll" ComponentId="{D73D8D68-9121-4B01-908B-603D381DEA80}" Directory_="bin_Dir" Attributes="0" KeyPath="deploy.dll"/>
+    <ROW Component="deployJava1.dll" ComponentId="{4F19C008-F15A-4440-A088-DD00539F7D1B}" Directory_="dtplugin_Dir" Attributes="0" KeyPath="deployJava1.dll"/>
+    <ROW Component="dt_shmem.dll" ComponentId="{EBD0B6C3-58CC-4114-B956-F96F1029FC2B}" Directory_="bin_Dir" Attributes="0" KeyPath="dt_shmem.dll"/>
+    <ROW Component="dt_socket.dll" ComponentId="{5992861A-D32D-4BB5-A3E2-F141B0008B84}" Directory_="bin_Dir" Attributes="0" KeyPath="dt_socket.dll"/>
+    <ROW Component="eula.dll" ComponentId="{D81E6B66-A94C-48D7-BD15-F35D309CFA71}" Directory_="bin_Dir" Attributes="0" KeyPath="eula.dll"/>
+    <ROW Component="ffjcext.zip" ComponentId="{2F5E7906-69AB-4653-B348-60BC519608F6}" Directory_="deploy_Dir" Attributes="0" KeyPath="ffjcext.zip" Type="0"/>
+    <ROW Component="fontmanager.dll" ComponentId="{606BF3CA-7425-4990-9A90-285013456189}" Directory_="bin_Dir" Attributes="0" KeyPath="fontmanager.dll"/>
+    <ROW Component="fxplugins.dll" ComponentId="{5AFEDF5D-8361-4605-A0CD-894E67171023}" Directory_="bin_Dir" Attributes="0" KeyPath="fxplugins.dll"/>
+    <ROW Component="glass.dll" ComponentId="{79DA90B1-0687-49E1-9A65-4D9708ADC945}" Directory_="bin_Dir" Attributes="0" KeyPath="glass.dll"/>
+    <ROW Component="gliblite.dll" ComponentId="{0557F7DE-17F1-4286-8EF1-6490611A2445}" Directory_="bin_Dir" Attributes="0" KeyPath="gliblite.dll"/>
+    <ROW Component="gstreamerlite.dll" ComponentId="{F51FA43B-3C21-4BD1-992E-4AF97947B12C}" Directory_="bin_Dir" Attributes="0" KeyPath="gstreamerlite.dll"/>
+    <ROW Component="hprof.dll" ComponentId="{AC51372C-2822-4989-8D3D-6F22C16D1F18}" Directory_="bin_Dir" Attributes="0" KeyPath="hprof.dll"/>
+    <ROW Component="instrument.dll" ComponentId="{0DD7FAB5-6BEA-4D05-9FE7-745F39227A83}" Directory_="bin_Dir" Attributes="0" KeyPath="instrument.dll"/>
+    <ROW Component="j2pcsc.dll" ComponentId="{79AA8CBE-41A4-4B25-AD98-97692625DE26}" Directory_="bin_Dir" Attributes="0" KeyPath="j2pcsc.dll"/>
+    <ROW Component="j2pkcs11.dll" ComponentId="{D7E6CC29-EDC7-4426-8A15-AB1F23F248DF}" Directory_="bin_Dir" Attributes="0" KeyPath="j2pkcs11.dll"/>
+    <ROW Component="jaas_nt.dll" ComponentId="{2EB20E4F-E4A7-4EC5-BD07-2DF2D759ECAB}" Directory_="bin_Dir" Attributes="0" KeyPath="jaas_nt.dll"/>
+    <ROW Component="jabswitch.exe" ComponentId="{D08D4E82-7570-4BE5-B1F3-4B0799302B78}" Directory_="bin_Dir" Attributes="0" KeyPath="jabswitch.exe"/>
+    <ROW Component="java.dll" ComponentId="{FFF722DB-9CD2-442E-BE7D-A35087301064}" Directory_="bin_Dir" Attributes="0" KeyPath="java.dll"/>
+    <ROW Component="java.exe" ComponentId="{90D01E10-9485-4E6D-96CE-2D1EB060EB8B}" Directory_="bin_Dir" Attributes="0" KeyPath="java.exe"/>
+    <ROW Component="java_crw_demo.dll" ComponentId="{4A7FBE2E-7141-49EA-A896-D0A3F5D9E37D}" Directory_="bin_Dir" Attributes="0" KeyPath="java_crw_demo.dll"/>
+    <ROW Component="javacpl.cpl" ComponentId="{231F1014-7722-41F3-BE18-7571097FC481}" Directory_="bin_Dir" Attributes="0" KeyPath="javacpl.cpl" Type="0"/>
+    <ROW Component="javacpl.exe" ComponentId="{3E8134A0-B79A-4F37-AC8B-DEC352BCA0D6}" Directory_="bin_Dir" Attributes="0" KeyPath="javacpl.exe"/>
+    <ROW Component="javafx_font.dll" ComponentId="{E7A3E10A-494C-47AE-9C58-29FBC273F574}" Directory_="bin_Dir" Attributes="0" KeyPath="javafx_font.dll"/>
+    <ROW Component="javafx_font_t2k.dll" ComponentId="{EA74C242-CE96-4445-8AAC-2FE74FDC6517}" Directory_="bin_Dir" Attributes="0" KeyPath="javafx_font_t2k.dll"/>
+    <ROW Component="javafx_iio.dll" ComponentId="{B99FB308-DDDD-45F3-B3AE-6C866FD969AB}" Directory_="bin_Dir" Attributes="0" KeyPath="javafx_iio.dll"/>
+    <ROW Component="javarmi.exe" ComponentId="{D5634A51-690A-41F1-9F9D-1B44FC9D4BF8}" Directory_="bin_Dir" Attributes="0" KeyPath="javarmi.exe"/>
+    <ROW Component="javaw.exe" ComponentId="{06C247F9-CC7B-4C9A-A9A9-3D6E603D1591}" Directory_="bin_Dir" Attributes="0" KeyPath="javaw.exe"/>
+    <ROW Component="javaws.exe" ComponentId="{F2AA75BD-3287-4C73-B699-AC181523D104}" Directory_="bin_Dir" Attributes="0" KeyPath="javaws.exe"/>
+    <ROW Component="jawt.dll" ComponentId="{53B69933-8420-4554-B0A3-53D9E4512F73}" Directory_="bin_Dir" Attributes="0" KeyPath="jawt.dll"/>
+    <ROW Component="jdwp.dll" ComponentId="{07B41A1E-330C-4E1D-8478-5E3F30B96EA4}" Directory_="bin_Dir" Attributes="0" KeyPath="jdwp.dll"/>
+    <ROW Component="jfr.dll" ComponentId="{8729A9E2-CB63-4596-9831-0099E6807308}" Directory_="bin_Dir" Attributes="0" KeyPath="jfr.dll"/>
+    <ROW Component="jfxmedia.dll" ComponentId="{404F02BA-328D-4436-B44C-A0DCCFEFFD8F}" Directory_="bin_Dir" Attributes="0" KeyPath="jfxmedia.dll"/>
+    <ROW Component="jfxwebkit.dll" ComponentId="{22514255-CD1E-48E1-BA0B-C796B631BCDD}" Directory_="bin_Dir" Attributes="0" KeyPath="jfxwebkit.dll"/>
+    <ROW Component="jjs.exe" ComponentId="{4E357BED-3940-4A73-8B32-ED8A4D7D167A}" Directory_="bin_Dir" Attributes="0" KeyPath="jjs.exe"/>
+    <ROW Component="jli.dll" ComponentId="{D610E5D8-1014-463F-B410-F57227098C8C}" Directory_="bin_Dir" Attributes="0" KeyPath="jli.dll"/>
+    <ROW Component="jmxremote.access" ComponentId="{A6E0B924-C94A-4830-9747-E665A96D44E8}" Directory_="management_Dir" Attributes="0" KeyPath="jmxremote.access" Type="0"/>
+    <ROW Component="jp2iexp.dll" ComponentId="{6E583C0F-FB57-4D51-B4A5-B5B6EE201F0A}" Directory_="bin_Dir" Attributes="0" KeyPath="jp2iexp.dll"/>
+    <ROW Component="jp2launcher.exe" ComponentId="{48455FA2-C11D-463F-A18B-ECA33D161726}" Directory_="bin_Dir" Attributes="0" KeyPath="jp2launcher.exe"/>
+    <ROW Component="jp2native.dll" ComponentId="{38052CD1-634D-4BD3-B2C1-B6FE75CA0701}" Directory_="bin_Dir" Attributes="0" KeyPath="jp2native.dll"/>
+    <ROW Component="jp2ssv.dll" ComponentId="{6D4B4937-1851-4601-9A7F-90A394EBA67A}" Directory_="bin_Dir" Attributes="0" KeyPath="jp2ssv.dll"/>
+    <ROW Component="jpeg.dll" ComponentId="{614BC247-5B2B-49D0-A5F0-646BBFA35784}" Directory_="bin_Dir" Attributes="0" KeyPath="jpeg.dll"/>
+    <ROW Component="jsdt.dll" ComponentId="{FEBCE7BA-88A6-4027-A02F-23F865B24FBA}" Directory_="bin_Dir" Attributes="0" KeyPath="jsdt.dll"/>
+    <ROW Component="jsound.dll" ComponentId="{550ED13D-0392-4933-A2A2-2D21634BD19E}" Directory_="bin_Dir" Attributes="0" KeyPath="jsound.dll"/>
+    <ROW Component="jsoundds.dll" ComponentId="{81132C46-543D-4603-89EA-38DD382AC93A}" Directory_="bin_Dir" Attributes="0" KeyPath="jsoundds.dll"/>
+    <ROW Component="jvm.cfg" ComponentId="{747A59DE-CE7B-4930-BD28-D98C1D0D0C3E}" Directory_="i386_Dir" Attributes="0" KeyPath="jvm.cfg" Type="0"/>
+    <ROW Component="jvm.dll" ComponentId="{F61BD032-824B-4E64-9F6E-3A7AB6319F76}" Directory_="client_Dir" Attributes="0" KeyPath="jvm.dll"/>
+    <ROW Component="kcms.dll" ComponentId="{72437982-057B-4D09-B8CA-006ED0C8E338}" Directory_="bin_Dir" Attributes="0" KeyPath="kcms.dll"/>
+    <ROW Component="keytool.exe" ComponentId="{35849B1D-3961-4526-B037-97460AFC1188}" Directory_="bin_Dir" Attributes="0" KeyPath="keytool.exe"/>
+    <ROW Component="kinit.exe" ComponentId="{7C1100DA-BFAC-4174-8F41-EE6866C91A7C}" Directory_="bin_Dir" Attributes="0" KeyPath="kinit.exe"/>
+    <ROW Component="klist.exe" ComponentId="{87DE9FF0-5AB8-41A5-B8EE-B46E9D28B985}" Directory_="bin_Dir" Attributes="0" KeyPath="klist.exe"/>
+    <ROW Component="ktab.exe" ComponentId="{193D713D-75CD-4789-A07E-C593A9F9186E}" Directory_="bin_Dir" Attributes="0" KeyPath="ktab.exe"/>
+    <ROW Component="lcms.dll" ComponentId="{70BA4B08-6336-4E36-B834-DEA7BC1D5895}" Directory_="bin_Dir" Attributes="0" KeyPath="lcms.dll"/>
+    <ROW Component="management.dll" ComponentId="{61E62212-5562-4F66-A807-FA90917CFFEB}" Directory_="bin_Dir" Attributes="0" KeyPath="management.dll"/>
+    <ROW Component="mlib_image.dll" ComponentId="{60F674F3-0938-496F-BAA5-D3A3BB338174}" Directory_="bin_Dir" Attributes="0" KeyPath="mlib_image.dll"/>
+    <ROW Component="msvcp120.dll" ComponentId="{48167814-5ECF-4080-9099-8B1C84544276}" Directory_="bin_Dir" Attributes="0" KeyPath="msvcp120.dll"/>
+    <ROW Component="msvcr100.dll" ComponentId="{65B276D0-5AAD-4E70-B8F3-E8CDF625F3EC}" Directory_="bin_Dir" Attributes="0" KeyPath="msvcr100.dll"/>
+    <ROW Component="msvcr100.dll_1" ComponentId="{1C9C5CBF-BF91-4213-9115-4BE666B8692A}" Directory_="plugin2_Dir" Attributes="0" KeyPath="msvcr100.dll_1"/>
+    <ROW Component="msvcr120.dll" ComponentId="{18811EBA-1F68-477B-8F84-B6CDA53B2143}" Directory_="bin_Dir" Attributes="0" KeyPath="msvcr120.dll"/>
+    <ROW Component="net.dll" ComponentId="{20E238A3-2240-496B-9ECD-C8E0FD26269E}" Directory_="bin_Dir" Attributes="0" KeyPath="net.dll"/>
+    <ROW Component="nio.dll" ComponentId="{103474C4-59D8-4969-A5FF-381952504AC2}" Directory_="bin_Dir" Attributes="0" KeyPath="nio.dll"/>
+    <ROW Component="npdeployJava1.dll" ComponentId="{0BBC2BCB-E1CE-470C-ACB8-432C11B6210C}" Directory_="dtplugin_Dir" Attributes="0" KeyPath="npdeployJava1.dll"/>
+    <ROW Component="npjp2.dll" ComponentId="{FC56F1B3-89E8-406A-993A-2545900641D1}" Directory_="plugin2_Dir" Attributes="0" KeyPath="npjp2.dll"/>
+    <ROW Component="npt.dll" ComponentId="{D022E77C-D6AA-4F94-BC83-1B4AB87029CA}" Directory_="bin_Dir" Attributes="0" KeyPath="npt.dll"/>
+    <ROW Component="orbd.exe" ComponentId="{5B9D9661-0E51-4C27-8654-540F6B553C93}" Directory_="bin_Dir" Attributes="0" KeyPath="orbd.exe"/>
+    <ROW Component="pack200.exe" ComponentId="{17CFF1B1-2079-4F4E-A884-FB1602DC67D1}" Directory_="bin_Dir" Attributes="0" KeyPath="pack200.exe"/>
+    <ROW Component="policytool.exe" ComponentId="{E0838B30-1C66-403A-9D0E-3E82CCFE3E3B}" Directory_="bin_Dir" Attributes="0" KeyPath="policytool.exe"/>
+    <ROW Component="prism_common.dll" ComponentId="{4A0F91BB-BD8F-406E-8B26-BAABB9CF3F81}" Directory_="bin_Dir" Attributes="0" KeyPath="prism_common.dll"/>
+    <ROW Component="prism_d3d.dll" ComponentId="{5F956D0D-FFC5-474B-A95C-DDB2EABCCA70}" Directory_="bin_Dir" Attributes="0" KeyPath="prism_d3d.dll"/>
+    <ROW Component="prism_sw.dll" ComponentId="{A0298378-3283-462B-9996-026D8CEB6CC0}" Directory_="bin_Dir" Attributes="0" KeyPath="prism_sw.dll"/>
+    <ROW Component="resource.dll" ComponentId="{B6706B9C-D528-4D8F-8E52-0F8B7BC71D44}" Directory_="bin_Dir" Attributes="0" KeyPath="resource.dll"/>
+    <ROW Component="rmid.exe" ComponentId="{24EB4323-F815-4ECD-9CAE-49771CBB79F7}" Directory_="bin_Dir" Attributes="0" KeyPath="rmid.exe"/>
+    <ROW Component="rmiregistry.exe" ComponentId="{887E1D3E-8B07-401A-8AD8-20190FBF9B42}" Directory_="bin_Dir" Attributes="0" KeyPath="rmiregistry.exe"/>
+    <ROW Component="servertool.exe" ComponentId="{5A1805CC-61E4-4DF7-84AD-06C86932425A}" Directory_="bin_Dir" Attributes="0" KeyPath="servertool.exe"/>
+    <ROW Component="splashscreen.dll" ComponentId="{D008B920-326D-4317-847C-E22585A0CAC9}" Directory_="bin_Dir" Attributes="0" KeyPath="splashscreen.dll"/>
+    <ROW Component="ssv.dll" ComponentId="{C50E7837-2E25-4B4D-9B08-CE456B644C1A}" Directory_="bin_Dir" Attributes="0" KeyPath="ssv.dll"/>
+    <ROW Component="ssvagent.exe" ComponentId="{DB2467CF-EFAC-482C-BFF6-7AFFB51630AD}" Directory_="bin_Dir" Attributes="0" KeyPath="ssvagent.exe"/>
+    <ROW Component="sunec.dll" ComponentId="{4C146CB2-BFD2-4412-AF07-1E188B645535}" Directory_="bin_Dir" Attributes="0" KeyPath="sunec.dll"/>
+    <ROW Component="sunmscapi.dll" ComponentId="{4F570A29-F2AB-43E0-A118-8522596C98D4}" Directory_="bin_Dir" Attributes="0" KeyPath="sunmscapi.dll"/>
+    <ROW Component="t2k.dll" ComponentId="{B7F1B1C5-FA17-445F-8D55-5677B9CE8D01}" Directory_="bin_Dir" Attributes="0" KeyPath="t2k.dll"/>
+    <ROW Component="tnameserv.exe" ComponentId="{5A052F89-DFCE-4A27-BAB7-20D4436115F7}" Directory_="bin_Dir" Attributes="0" KeyPath="tnameserv.exe"/>
+    <ROW Component="unpack.dll" ComponentId="{A8AF5BED-100D-4DF5-A676-5CCC3B5080C7}" Directory_="bin_Dir" Attributes="0" KeyPath="unpack.dll"/>
+    <ROW Component="unpack200.exe" ComponentId="{3FCC19AB-A61F-4DE0-B332-5A48263DED05}" Directory_="bin_Dir" Attributes="0" KeyPath="unpack200.exe"/>
+    <ROW Component="verify.dll" ComponentId="{4E595930-1C4D-470C-877C-CFAB72AECD3E}" Directory_="bin_Dir" Attributes="0" KeyPath="verify.dll"/>
+    <ROW Component="w2k_lsa_auth.dll" ComponentId="{7CE454AE-D7F2-4B41-B208-3F6D7C684365}" Directory_="bin_Dir" Attributes="0" KeyPath="w2k_lsa_auth.dll"/>
+    <ROW Component="wsdetect.dll" ComponentId="{CEF98CF5-A010-47F7-96DE-CD9C4CA1CE32}" Directory_="bin_Dir" Attributes="0" KeyPath="wsdetect.dll"/>
+    <ROW Component="zip.dll" ComponentId="{BBAF61E4-611E-4B26-A311-9FD9F9EFBE4F}" Directory_="bin_Dir" Attributes="0" KeyPath="zip.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AbsoluteLayout.jar CIEXYZ.pf COPYRIGHT GeoToolsLicense.txt HowtorunWildLog.txt JAWTAccessBridge.dll JAWTAccessBridge32.dll JavaAccessBridge.dll JavaAccessBridge32.dll LucidaBrightDemiBold.ttf SHORTCUTDIR UninstallNotes.txt WILDLOG_README_v4.3.1.txt WildLog.exe WildLog.jar WildLogLicense.txt WildLogUserGuide.pdf WildLog_Portable.exe WindowsAccessBridge.dll WindowsAccessBridge32.dll Xusage.txt accessbridge32.jar accessibility.properties awt.dll bci.dll blacklist cursors.properties dcpr.dll decora_sse.dll default.jfc deploy.dll deployJava1.dll dt_shmem.dll dt_socket.dll eula.dll ffjcext.zip fontmanager.dll fxplugins.dll glass.dll gliblite.dll gstreamerlite.dll hprof.dll instrument.dll j2pcsc.dll j2pkcs11.dll jaas_nt.dll jabswitch.exe java.dll java.exe java_crw_demo.dll javacpl.cpl javacpl.exe javafx_font.dll javafx_font_t2k.dll javafx_iio.dll javarmi.exe javaw.exe javaws.exe jawt.dll jdwp.dll jfr.dll jfxmedia.dll jfxwebkit.dll jjs.exe jli.dll jmxremote.access jp2iexp.dll jp2launcher.exe jp2native.dll jp2ssv.dll jpeg.dll jsdt.dll jsound.dll jsoundds.dll jvm.cfg jvm.dll kcms.dll keytool.exe kinit.exe klist.exe ktab.exe lcms.dll management.dll mlib_image.dll msvcp120.dll msvcr100.dll msvcr100.dll_1 msvcr120.dll net.dll nio.dll npdeployJava1.dll npjp2.dll npt.dll orbd.exe pack200.exe policytool.exe prism_common.dll prism_d3d.dll prism_sw.dll resource.dll rmid.exe rmiregistry.exe servertool.exe splashscreen.dll ssv.dll ssvagent.exe sunec.dll sunmscapi.dll t2k.dll tnameserv.exe unpack.dll unpack200.exe verify.dll w2k_lsa_auth.dll wsdetect.dll zip.dll"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AbsoluteLayout.jar CIEXYZ.pf COPYRIGHT GeoToolsLicense.txt HowtorunWildLog.txt JAWTAccessBridge.dll JAWTAccessBridge32.dll JavaAccessBridge.dll JavaAccessBridge32.dll LucidaBrightDemiBold.ttf SHORTCUTDIR UninstallNotes.txt WILDLOG_README_v4.3.2.txt WildLog.exe WildLog.jar WildLogLicense.txt WildLogUserGuide.pdf WildLog_Portable.exe WindowsAccessBridge.dll WindowsAccessBridge32.dll Xusage.txt accessbridge32.jar accessibility.properties awt.dll bci.dll blacklist cursors.properties dcpr.dll decora_sse.dll default.jfc deploy.dll deployJava1.dll dt_shmem.dll dt_socket.dll eula.dll ffjcext.zip fontmanager.dll fxplugins.dll glass.dll gliblite.dll gstreamerlite.dll hprof.dll instrument.dll j2pcsc.dll j2pkcs11.dll jaas_nt.dll jabswitch.exe java.dll java.exe java_crw_demo.dll javacpl.cpl javacpl.exe javafx_font.dll javafx_font_t2k.dll javafx_iio.dll javarmi.exe javaw.exe javaws.exe jawt.dll jdwp.dll jfr.dll jfxmedia.dll jfxwebkit.dll jjs.exe jli.dll jmxremote.access jp2iexp.dll jp2launcher.exe jp2native.dll jp2ssv.dll jpeg.dll jsdt.dll jsound.dll jsoundds.dll jvm.cfg jvm.dll kcms.dll keytool.exe kinit.exe klist.exe ktab.exe lcms.dll management.dll mlib_image.dll msvcp120.dll msvcr100.dll msvcr100.dll_1 msvcr120.dll net.dll nio.dll npdeployJava1.dll npjp2.dll npt.dll orbd.exe pack200.exe policytool.exe prism_common.dll prism_d3d.dll prism_sw.dll resource.dll rmid.exe rmiregistry.exe servertool.exe splashscreen.dll ssv.dll ssvagent.exe sunec.dll sunmscapi.dll t2k.dll tnameserv.exe unpack.dll unpack200.exe verify.dll w2k_lsa_auth.dll wsdetect.dll zip.dll"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
@@ -219,15 +221,15 @@
     <ROW File="THIRDPARTYLICENSEREADMEJAVAFX.txt" Component_="COPYRIGHT" FileName="THIRDP~1.TXT|THIRDPARTYLICENSEREADME-JAVAFX.txt" Attributes="0" SourcePath="WildLog\application\jre\THIRDPARTYLICENSEREADME-JAVAFX.txt" SelfReg="false" NextFile="THIRDPARTYLICENSEREADME.txt"/>
     <ROW File="US_export_policy.jar" Component_="blacklist" FileName="US_EXP~1.JAR|US_export_policy.jar" Attributes="0" SourcePath="WildLog\application\jre\lib\security\US_export_policy.jar" SelfReg="false" NextFile="sound.properties"/>
     <ROW File="UninstallNotes.txt" Component_="UninstallNotes.txt" FileName="UNINST~1.TXT|Uninstall Notes.txt" Attributes="0" SourcePath="WildLog\documentation\Uninstall Notes.txt" SelfReg="false" NextFile="GeoToolsLicense.txt"/>
-    <ROW File="WILDLOG_README_v4.3.1.txt" Component_="WILDLOG_README_v4.3.1.txt" FileName="WILDLO~1.TXT|WILDLOG_README_v4.3.1.txt" Attributes="0" SourcePath="WildLog\WILDLOG_README_v4.3.1.txt" SelfReg="false" NextFile="h21.4.187.jar"/>
-    <ROW File="Welcome.html" Component_="COPYRIGHT" FileName="WELCOM~1.HTM|Welcome.html" Attributes="0" SourcePath="WildLog\application\jre\Welcome.html" SelfReg="false" NextFile="AbsoluteLayout.jar"/>
-    <ROW File="WildLog.exe" Component_="WildLog.exe" FileName="WildLog.exe" Attributes="0" SourcePath="WildLog\application\WildLog.exe" SelfReg="false" NextFile="awt.dll" DigSign="true"/>
+    <ROW File="WILDLOG_README_v4.3.2.txt" Component_="WILDLOG_README_v4.3.2.txt" FileName="WILDLO~1.TXT|WILDLOG_README_v4.3.2.txt" Attributes="0" SourcePath="WildLog\WILDLOG_README_v4.3.2.txt" SelfReg="false" NextFile="awt.dll"/>
+    <ROW File="Welcome.html" Component_="COPYRIGHT" FileName="WELCOM~1.HTM|Welcome.html" Attributes="0" SourcePath="WildLog\application\jre\Welcome.html" SelfReg="false"/>
+    <ROW File="WildLog.exe" Component_="WildLog.exe" FileName="WildLog.exe" Attributes="0" SourcePath="WildLog\application\WildLog.exe" SelfReg="false" NextFile="AbsoluteLayout.jar" DigSign="true"/>
     <ROW File="WildLog.jar" Component_="WildLog.jar" FileName="WildLog.jar" Attributes="0" SourcePath="WildLog\application\WildLog.jar" SelfReg="false" NextFile="wildlog.properties"/>
     <ROW File="WildLogDataCore.jar" Component_="AbsoluteLayout.jar" FileName="WILDLO~1.JAR|WildLogDataCore.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogDataCore.jar" SelfReg="false" NextFile="WildLogGeoTools1.0SNAPSHOT.jar"/>
     <ROW File="WildLogGeoTools1.0SNAPSHOT.jar" Component_="AbsoluteLayout.jar" FileName="WILDLO~2.JAR|WildLogGeoTools-1.0-SNAPSHOT.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogGeoTools-1.0-SNAPSHOT.jar" SelfReg="false" NextFile="WildLogHTMLTemplates.jar"/>
     <ROW File="WildLogHTMLTemplates.jar" Component_="AbsoluteLayout.jar" FileName="WILDLO~3.JAR|WildLogHTMLTemplates.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogHTMLTemplates.jar" SelfReg="false" NextFile="WildLogMapData.jar"/>
     <ROW File="WildLogLicense.rtf" Component_="GeoToolsLicense.txt" FileName="WILDLO~1.RTF|WildLog License.rtf" Attributes="0" SourcePath="WildLog\licenses\WildLog License.rtf" SelfReg="false" NextFile="WildLogLicense.txt"/>
-    <ROW File="WildLogLicense.txt" Component_="WildLogLicense.txt" FileName="WILDLO~1.TXT|WildLog License.txt" Attributes="0" SourcePath="WildLog\licenses\WildLog License.txt" SelfReg="false" NextFile="WILDLOG_README_v4.3.1.txt"/>
+    <ROW File="WildLogLicense.txt" Component_="WildLogLicense.txt" FileName="WILDLO~1.TXT|WildLog License.txt" Attributes="0" SourcePath="WildLog\licenses\WildLog License.txt" SelfReg="false" NextFile="h21.4.187.jar"/>
     <ROW File="WildLogMapData.jar" Component_="AbsoluteLayout.jar" FileName="WILDLO~4.JAR|WildLogMapData.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogMapData.jar" SelfReg="false" NextFile="xmpbox2.0.0RC3.jar"/>
     <ROW File="WildLogUserGuide.pdf" Component_="WildLogUserGuide.pdf" FileName="WILDLO~1.PDF|WildLog - User Guide.pdf" Attributes="0" SourcePath="WildLog\documentation\WildLog - User Guide.pdf" SelfReg="false" NextFile="WildLog.exe"/>
     <ROW File="WildLog_Portable.exe" Component_="WildLog_Portable.exe" FileName="WILDLO~1.EXE|WildLog_Portable.exe" Attributes="0" SourcePath="WildLog\application\WildLog_Portable.exe" SelfReg="false" NextFile="WildLog_Windows.bat" DigSign="true"/>
@@ -286,7 +288,7 @@
     <ROW File="gtreferencing11.5.jar" Component_="AbsoluteLayout.jar" FileName="GT-REF~1.JAR|gt-referencing-11.5.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-referencing-11.5.jar" SelfReg="false" NextFile="gtrender11.5.jar"/>
     <ROW File="gtrender11.5.jar" Component_="AbsoluteLayout.jar" FileName="GT-REN~1.JAR|gt-render-11.5.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-render-11.5.jar" SelfReg="false" NextFile="gtshapefile11.5.jar"/>
     <ROW File="gtshapefile11.5.jar" Component_="AbsoluteLayout.jar" FileName="GT-SHA~1.JAR|gt-shapefile-11.5.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-shapefile-11.5.jar" SelfReg="false" NextFile="hsqldb2.2.8.jar"/>
-    <ROW File="h21.4.187.jar" Component_="AbsoluteLayout.jar" FileName="H2-141~1.JAR|h2-1.4.187.jar" Attributes="0" SourcePath="WildLog\application\lib\h2-1.4.187.jar" SelfReg="false"/>
+    <ROW File="h21.4.187.jar" Component_="AbsoluteLayout.jar" FileName="H2-141~1.JAR|h2-1.4.187.jar" Attributes="0" SourcePath="WildLog\application\lib\h2-1.4.187.jar" SelfReg="false" NextFile="WILDLOG_README_v4.3.2.txt"/>
     <ROW File="hijrahconfigumalqura.properties" Component_="accessibility.properties" FileName="HIJRAH~1.PRO|hijrah-config-umalqura.properties" Attributes="0" SourcePath="WildLog\application\jre\lib\hijrah-config-umalqura.properties" SelfReg="false" NextFile="jvm.cfg"/>
     <ROW File="hprof.dll" Component_="hprof.dll" FileName="hprof.dll" Attributes="0" SourcePath="WildLog\application\jre\bin\hprof.dll" SelfReg="false" NextFile="instrument.dll"/>
     <ROW File="hsqldb2.2.8.jar" Component_="AbsoluteLayout.jar" FileName="HSQLDB~1.JAR|hsqldb-2.2.8.jar" Attributes="0" SourcePath="WildLog\application\lib\hsqldb-2.2.8.jar" SelfReg="false" NextFile="imageioexttiff1.1.10.jar"/>
@@ -456,7 +458,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
     <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." PackageFileName="WildLog Setup" Languages="en" InstallationType="4"/>
-    <ATTRIBUTE name="CurrentBuild" value="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -521,6 +522,7 @@
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
     <ROW Action="AI_DetectSoftware" Type="257" Source="SoftwareDetector.dll" Target="OnDetectSoftware"/>
     <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
     <ROW Action="AI_LaunchApp" Type="1" Source="aicustact.dll" Target="[#WildLog.exe]"/>
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
@@ -540,31 +542,34 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_STORE_LOCATION" Condition="Not Installed" Sequence="1501"/>
     <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
-    <ROW Action="AI_ResolveKnownFolders" Sequence="51"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="201"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
-    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
-    <ROW Action="AI_DpiContentScale" Sequence="51"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="(AI_DETECTED_SCREEN_RESOLUTION_X &gt;= AI_REQUIRED_SCREEN_RESOLUTION_X) AND (AI_DETECTED_SCREEN_RESOLUTION_Y &gt;= AI_REQUIRED_SCREEN_RESOLUTION_Y)" Description="[ProductName] cannot be installed on systems with screen resolution smaller than [AI_REQUIRED_SCREEN_RESOLUTION_X] x [AI_REQUIRED_SCREEN_RESOLUTION_Y]." DescriptionLocId="AI.LaunchCondition.Resolution" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on the following Windows versions: [WindowsTypeNT40Display]" DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT64 OR ((VersionNT &lt;&gt; 501) OR (ServicePackLevel = 3))) AND ((VersionNT &lt;&gt; 502) OR (ServicePackLevel = 2))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="AI_DETECTED_PHYSICAL_MEMORY &gt;= AI_REQUIRED_PHYSICAL_MEMORY" Description="[ProductName] cannot be installed on systems with less physical memory than [AI_REQUIRED_PHYSICAL_MEMORY] MB." DescriptionLocId="AI.LaunchCondition.RAM" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="Uninstall" Directory_="SHORTCUTDIR" Name="UNINST~1.1|Uninstall WildLog v4.3.1" Component_="UninstallNotes.txt" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFoldermsiexec.exe" IconIndex="0" ShowCmd="1"/>
+    <ROW Shortcut="Uninstall" Directory_="SHORTCUTDIR" Name="UNINST~1.2|Uninstall WildLog v4.3.2" Component_="UninstallNotes.txt" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFoldermsiexec.exe" IconIndex="0" ShowCmd="1"/>
     <ROW Shortcut="UninstallNotes" Directory_="SHORTCUTDIR" Name="UNINST~1|Uninstall Notes" Component_="UninstallNotes.txt" Target="[#UninstallNotes.txt]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="documentation_Dir"/>
     <ROW Shortcut="WildLog" Directory_="DesktopFolder" Name="WildLog" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="application_Dir"/>
     <ROW Shortcut="WildLogLicense" Directory_="SHORTCUTDIR" Name="WILDLO~2|WildLog License" Component_="WildLogLicense.txt" Target="[#WildLogLicense.txt]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="licenses_Dir"/>
     <ROW Shortcut="WildLogUserGuide" Directory_="SHORTCUTDIR" Name="WILDLO~1.1US|WildLog v4.3.1 User Guide" Component_="WildLogUserGuide.pdf" Target="[#WildLogUserGuide.pdf]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="documentation_Dir"/>
-    <ROW Shortcut="WildLog_1" Directory_="SHORTCUTDIR" Name="WILDLO~1.1|WildLog v4.3.1" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="application_Dir"/>
+    <ROW Shortcut="WildLog_1" Directory_="SHORTCUTDIR" Name="WILDLO~1.2|WildLog v4.3.2" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="application_Dir"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>

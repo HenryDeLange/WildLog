@@ -11,7 +11,7 @@
   <downloadUrl>http://java.com/download</downloadUrl>
   <supportUrl>http://www.mywild.co.za</supportUrl>
   <stayAlive>false</stayAlive>
-  <restartOnCrash>false</restartOnCrash>
+  <restartOnCrash>true</restartOnCrash>
   <manifest></manifest>
   <icon>C:\Users\Henry\Documents\NetBeansProjects\WildLog\StableReleases\Installer Config Files\misc files\WildLog.ico</icon>
   <jre>
@@ -22,8 +22,8 @@
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
-    <initialHeapSize>384</initialHeapSize>
-    <maxHeapSize>768</maxHeapSize>
+    <initialHeapSize>448</initialHeapSize>
+    <maxHeapSize>896</maxHeapSize>
     <maxHeapPercent>75</maxHeapPercent>
   </jre>
   <splash>
@@ -33,15 +33,17 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>4.3.1.0</fileVersion>
-    <txtFileVersion>WildLog v4.2.2 Launcher</txtFileVersion>
+    <fileVersion>4.3.2.0</fileVersion>
+    <txtFileVersion>WildLog v4.3.2 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
     <copyright>2016</copyright>
-    <productVersion>4.3.1.0</productVersion>
-    <txtProductVersion>WildLog v4.3.1</txtProductVersion>
+    <productVersion>4.3.2.0</productVersion>
+    <txtProductVersion>WildLog v4.3.2</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>
     <originalFilename>WildLog.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>ENGLISH_US</language>
   </versionInfo>
 </launch4jConfig>
