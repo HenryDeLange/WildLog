@@ -91,7 +91,7 @@ public class GPSDialog extends JDialog {
     private GeoToolsMapJavaFX map;
     private boolean dmsHasBeenLoaded = false;
 
-
+    
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
         System.out.println("[GPSDialog]");

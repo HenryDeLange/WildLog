@@ -37,16 +37,21 @@ public final class UtilsGPS {
     public static double getDecimalDegree(Latitudes inLatitudes, int inDegrees, int inMinutes, double inSeconds) {
         if (inLatitudes != null) {
             if (inLatitudes.equals(Latitudes.SOUTH)) {
-                return -1*(inDegrees + (inMinutes + inSeconds/60.0)/60.0);
+                return -1.0*(inDegrees + (inMinutes + inSeconds/60.0)/60.0);
             }
             if (inLatitudes.equals(Latitudes.NORTH)) {
                 return inDegrees + (inMinutes + inSeconds/60.0)/60.0;
             }
             if (inLatitudes.equals(Latitudes.NONE)) {
-                return inDegrees + (inMinutes + inSeconds/60.0)/60.0;
+                if (inDegrees < 0.0) {
+                    return -1.0*(Math.abs(inDegrees) + (inMinutes + inSeconds/60.0)/60.0);
+                }
+                else {
+                    return inDegrees + (inMinutes + inSeconds/60.0)/60.0;
+                }
             }
         }
-        return 0;
+        return 0.0;
     }
 
     public static double getDecimalDegree(Longitudes inLongitudes, int inDegrees, int inMinutes, double inSeconds) {
@@ -55,13 +60,18 @@ public final class UtilsGPS {
                 return inDegrees + (inMinutes + inSeconds/60.0)/60.0;
             }
             if (inLongitudes.equals(Longitudes.WEST)) {
-                return -1*(inDegrees + (inMinutes + inSeconds/60.0)/60.0);
+                return -1.0*(inDegrees + (inMinutes + inSeconds/60.0)/60.0);
             }
             if (inLongitudes.equals(Longitudes.NONE)) {
-                return inDegrees + (inMinutes + inSeconds/60.0)/60.0;
+                if (inDegrees < 0.0) {
+                    return -1.0*(Math.abs(inDegrees) + (inMinutes + inSeconds/60.0)/60.0);
+                }
+                else {
+                    return inDegrees + (inMinutes + inSeconds/60.0)/60.0;
+                }
             }
         }
-        return 0;
+        return 0.0;
     }
 
     public static int getDegrees(Latitudes inLatitudes, double inDecimalDegree) {
@@ -89,7 +99,7 @@ public final class UtilsGPS {
         double degrees = (int)Math.abs(inDecimalDegree);
         double ddMinutes = (Math.abs(inDecimalDegree) - Math.abs(degrees));
         double minutes = (int)(ddMinutes * 60);
-        return (double)((ddMinutes * 60.0 - minutes) * 60.0);
+        return (ddMinutes * 60.0 - minutes) * 60.0;
     }
 
     public static int getDegrees(Longitudes inLongitudes, double inDecimalDegree) {
