@@ -118,6 +118,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     }
     
     private Chart createAccumulationReport(List<Sighting> inSightings) {
+// TODO: Include an option to include the start and end date of the first and last Visits, repectively, in the cart, to get an idea of how it slowed down toward the end...
         // Get the data in the correct structure
         // Get sorted (by date) Sightings list
         Collections.sort(inSightings);

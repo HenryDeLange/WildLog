@@ -91,6 +91,7 @@ public class GPSDialog extends JDialog {
     private GeoToolsMapJavaFX map;
     private boolean dmsHasBeenLoaded = false;
 
+// FIXME: Hierdie popup werk steeds nie lekker nie...
     
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
@@ -903,6 +904,9 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_btnUseGPXActionPerformed
 
     private void btnUsePreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsePreviousActionPerformed
+        
+// FIXME: Ek dink nie die storie werk lekker nie. dit copy dalk nie die + / - sign nie...
+        
         DataObjectWithGPS temp = new DataObjectWithGPS() {};
         temp.setLatitude(getPrevLat());
         temp.setLatDegrees(getPrevLatDeg());
@@ -1501,6 +1505,10 @@ public class GPSDialog extends JDialog {
         public void updateGPS(Object inLat, Object inLon) {
             uiLatitude = (double) inLat;
             uiLongitude = (double) inLon;
+            
+// FIXME: Hierdie storie werk skielik nie meer reg nie... Of Google maps update, maar tien teen een 'n Java JRE update wat dinge gebreek het...
+// FIXME: Om een of ander vreemde rede hou dit net keilik op werk, dit sal 3 keer reg update en dan net skielik ophou update...
+
             if (tglDecimalDegrees.isSelected()) {
                 setupDD();
             }
