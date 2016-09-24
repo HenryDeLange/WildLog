@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -25,6 +26,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
+import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
@@ -36,7 +38,7 @@ public class LegendDialog extends JDialog {
         // NOTE: This JDialog can't be modal because it breaks the nested JavaFX stuff...
         //       See http://stackoverflow.com/questions/29264385/javafx-swing-window-does-not-open-after-update-to-java-1-8u40
         super(inParent);
-        System.out.println("[LegendDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[LegendDialog]");
         initComponents();
         mapLegends = inMapLegends;
         // Setup the escape key

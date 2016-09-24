@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -25,7 +26,7 @@ public class ZoomDialog extends JDialog {
     
     public ZoomDialog(JFrame inParent, List<Path> inFilesToView, int inStartIndex) {
         super(inParent, true);
-        System.out.println("[ZoomDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ZoomDialog]");
         filesToView = inFilesToView;
         fileIndex = inStartIndex;
         initComponents();

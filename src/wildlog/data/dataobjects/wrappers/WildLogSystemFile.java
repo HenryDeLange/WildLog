@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
+import java.util.logging.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
@@ -70,32 +71,32 @@ public class WildLogSystemFile extends WildLogFile {
 
     @Override
     public void setDBFilePath(String inOriginalFileAsRelativePathForWorkspace) {
-        System.out.println("Don't try to change a WildLogSystemFile...");
+        WildLogApp.LOGGER.log(Level.WARNING, "Don't try to change a WildLogSystemFile...");
     }
 
     @Override
     public void setDefaultFile(boolean defaultFile) {
-        System.out.println("Don't try to change a WildLogSystemFile...");
+        WildLogApp.LOGGER.log(Level.WARNING, "Don't try to change a WildLogSystemFile...");
     }
 
     @Override
     public void setFileType(WildLogFileType inFileType) {
-        System.out.println("Don't try to change a WildLogSystemFile...");
+        WildLogApp.LOGGER.log(Level.WARNING, "Don't try to change a WildLogSystemFile...");
     }
 
     @Override
     public void setFilename(String filename) {
-        System.out.println("Don't try to change a WildLogSystemFile...");
+        WildLogApp.LOGGER.log(Level.WARNING, "Don't try to change a WildLogSystemFile...");
     }
 
     @Override
     public void setId(String id) {
-        System.out.println("Don't try to change a WildLogSystemFile...");
+        WildLogApp.LOGGER.log(Level.WARNING, "Don't try to change a WildLogSystemFile...");
     }
 
     @Override
     public void setUploadDate(Date inDate) {
-        System.out.println("Don't try to change a WildLogSystemFile...");
+        WildLogApp.LOGGER.log(Level.WARNING, "Don't try to change a WildLogSystemFile...");
     }
 
 }

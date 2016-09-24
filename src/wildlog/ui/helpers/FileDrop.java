@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.TooManyListenersException;
+import java.util.logging.Level;
+import wildlog.WildLogApp;
 
 /**
  * This class makes it easy to drag and drop files from the operating
@@ -43,7 +45,8 @@ public class FileDrop {
                 if (isDragedDataAFileList(evt)) {
                     // Acknowledge that it's okay to enter
                     evt.acceptDrag(DnDConstants.ACTION_COPY);
-                } else {
+                } 
+                else {
                     // Reject the drag event
                     evt.rejectDrag();
                 }
@@ -105,11 +108,13 @@ public class FileDrop {
                     evt.rejectDrop();
                     }
                     }*/
-                } catch (IOException io) {
-                    io.printStackTrace(System.err);
+                } 
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     evt.rejectDrop();
-                } catch (UnsupportedFlavorException ufe) {
-                    ufe.printStackTrace(System.err);
+                } 
+                catch (UnsupportedFlavorException ex) {
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     evt.rejectDrop();
                 }
             }
@@ -140,8 +145,9 @@ public class FileDrop {
         final DropTarget dropTarget = new DropTarget();
         try {
             dropTarget.addDropTargetListener(inDropListener);
-        } catch (TooManyListenersException e) {
-            e.printStackTrace(System.err);
+        } 
+        catch (TooManyListenersException ex) {
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
 
         // Listen for hierarchy changes and remove the drop target when the parent gets cleared out.
@@ -152,7 +158,8 @@ public class FileDrop {
                 Component parent = inComponent.getParent();
                 if (parent == null) {
                     inComponent.setDropTarget(null);
-                } else {
+                } 
+                else {
                     new DropTarget(inComponent, inDropListener);
                 }
             }

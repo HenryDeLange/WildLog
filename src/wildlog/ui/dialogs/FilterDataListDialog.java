@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -39,7 +40,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
      */
     public FilterDataListDialog(JFrame inParent, List<Sighting> inLstOriginalData, List<T> inLstOldSelectedData, Class<T> inClassType) {
         super(inParent);
-        System.out.println("[FilterDataListDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[FilterDataListDialog]");
         // Do the initial shared setup
         doSharedSetup_pre(inParent);
         // Load table content
@@ -47,7 +48,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             typeInstance = inClassType.newInstance();
         }
         catch (IllegalAccessException | InstantiationException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         if (typeInstance instanceof Element) {
             setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Element.gif")).getImage());
@@ -107,7 +108,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
      */
     public FilterDataListDialog(JFrame inParent, List<T> inLstOriginalData, List<T> inLstOldSelectedData) {
         super(inParent);
-        System.out.println("[FilterDataListDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[FilterDataListDialog]");
         // Do the initial shared setup
         doSharedSetup_pre(inParent);
         // Load table content
@@ -385,7 +386,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                 lstSelectedValues.add((T) typeInstance);
             }
             catch (IllegalAccessException | InstantiationException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         setVisible(false);

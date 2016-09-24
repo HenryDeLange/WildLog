@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
@@ -23,6 +24,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import wildlog.WildLogApp;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.filters.MapLayersFilter;
@@ -36,7 +38,7 @@ public class CustomLayersDialog extends JDialog {
     
     public CustomLayersDialog(JFrame inParent) {
         super(inParent);
-        System.out.println("[CustomLayersDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[CustomLayersDialog]");
         initComponents();
         // Setup the escape key
         final CustomLayersDialog thisHandler = this;
@@ -87,7 +89,7 @@ public class CustomLayersDialog extends JDialog {
                 });
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         // Load Species layers
@@ -109,7 +111,7 @@ public class CustomLayersDialog extends JDialog {
                 });
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         // Set the layers on the listbox
@@ -510,7 +512,7 @@ public class CustomLayersDialog extends JDialog {
                     mapAllLayers.remove(rowKey);
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     getGlassPane().setVisible(true);
                     JOptionPane.showMessageDialog(this,
                             "The layer could not be deleted successfully. Please make sure the file isn't in use and try again, or delete it manually.",

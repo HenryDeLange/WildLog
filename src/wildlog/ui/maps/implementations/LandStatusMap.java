@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -16,6 +17,7 @@ import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.Layer;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
@@ -145,7 +147,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 map.addLayer(shapelayer);
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             try {
                 FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
@@ -156,7 +158,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 map.addLayer(shapelayer);
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             map.addLayer(getLayerForSightings(inLstSightings));
             if (showCountries) {
@@ -174,7 +176,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 map.replaceLayer(1, shapelayer);
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             try {
                 FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
@@ -185,7 +187,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 map.replaceLayer(2, shapelayer);
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             map.replaceLayer(3, getLayerForSightings(inLstSightings));
             if (showCountries) {

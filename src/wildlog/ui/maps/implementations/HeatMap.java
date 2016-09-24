@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -225,7 +226,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         String template = builder.toString();
         // Edit the template
@@ -307,7 +308,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         String template = builder.toString();
         // Edit the template
@@ -402,7 +403,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         String template = builder.toString();
         // Edit the template
@@ -497,7 +498,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         String template = builder.toString();
         // Edit the template

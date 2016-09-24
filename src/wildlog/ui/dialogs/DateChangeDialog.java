@@ -2,6 +2,7 @@ package wildlog.ui.dialogs;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -21,7 +22,7 @@ public class DateChangeDialog extends JDialog {
     
     public DateChangeDialog(WildLogApp inApp, JFrame inParent, Visit inVisit) {
         super(inParent);
-        System.out.println("[DateChangeDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[DateChangeDialog]");
         visit = inVisit;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp);
@@ -32,7 +33,7 @@ public class DateChangeDialog extends JDialog {
 
     public DateChangeDialog(WildLogApp inApp, JDialog inParent, Visit inVisit) {
         super(inParent);
-        System.out.println("[DateChangeDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[DateChangeDialog]");
         visit = inVisit;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp);

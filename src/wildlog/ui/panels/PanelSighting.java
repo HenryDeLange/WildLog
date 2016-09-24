@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -104,7 +105,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             boolean inTreatAsNewSighting, boolean inDisableEditing, boolean inBulkUploadMode) {
         super(inOwner, inTitle);
         if (inSighting == null) {
-            System.err.println("PanelSighting: The passed in Sighting is not allowed to be null.");
+            WildLogApp.LOGGER.log(Level.SEVERE, "PanelSighting: The passed in Sighting is not allowed to be null.");
             this.closeThisDialog();
         }
         sighting = inSighting;
@@ -1566,8 +1567,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             try {
                 sighting.setNumberOfElements(Integer.parseInt(spnNumberOfElements.getValue().toString()));
             }
-            catch (NumberFormatException e) {
-                e.printStackTrace(System.err);
+            catch (NumberFormatException ex) {
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         sighting.setTimeOfDay((ActiveTimeSpesific)cmbTimeOfDay.getSelectedItem());
@@ -1577,8 +1578,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             try {
                 sighting.setTemperature(Double.parseDouble(spnTemperature.getValue().toString()));
             }
-            catch (NumberFormatException e) {
-                e.printStackTrace(System.err);
+            catch (NumberFormatException ex) {
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         sighting.setUnitsTemperature((UnitsTemperature)cmbTemperatureUnits.getSelectedItem());
@@ -1700,7 +1701,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_formWindowClosed
 
     private void btnUpdateSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSightingActionPerformed
-        System.out.println("[PanelSighting-Save]");
+        WildLogApp.LOGGER.log(Level.INFO, "[PanelSighting-Save]");
         // Check the required fields' borders
         Color green = new Color(0,204,51);
         if (element == null) {

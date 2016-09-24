@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -155,12 +156,12 @@ public final class UtilsDialog {
                     frame.setVisible(true);
                 }
                 catch (IOException ex) {
-                    System.err.println("Error showing EXIF data for: " + inFile);
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inFile);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
                 catch (JpegProcessingException ex) {
-                    System.err.println("Error showing EXIF data for: " + inFile);
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inFile);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                         @Override
                         public int showDialog() {
@@ -173,7 +174,7 @@ public final class UtilsDialog {
                 }
             }
             else {
-                System.err.println("Error showing EXIF data for: " + inFile);
+                WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inFile);
                 UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
@@ -186,7 +187,7 @@ public final class UtilsDialog {
             }
         }
         else {
-            System.err.println("Error showing EXIF data for: " + inFile);
+            WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inFile);
             UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {

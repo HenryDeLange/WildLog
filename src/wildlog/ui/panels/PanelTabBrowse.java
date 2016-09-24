@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
@@ -121,7 +122,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         Desktop.getDesktop().browse(hyperlinkEvent.getURL().toURI());
                     }
                     catch (IOException | URISyntaxException ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             }
@@ -611,7 +612,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }// </editor-fold>//GEN-END:initComponents
 
     private void rdbBrowseLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseLocationItemStateChanged
-        System.out.println("[PanelTabBrowse-Locations]");
+        WildLogApp.LOGGER.log(Level.INFO, "[PanelTabBrowse-Locations]");
         if (rdbBrowseLocation.isSelected()) {
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
@@ -623,7 +624,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             browseByLocation();
         }
@@ -636,7 +637,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnRefreshBrowseTreeActionPerformed
 
     private void rdbBrowseElementItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseElementItemStateChanged
-        System.out.println("[PanelTabBrowse-Elements]");
+        WildLogApp.LOGGER.log(Level.INFO, "[PanelTabBrowse-Elements]");
         if (rdbBrowseElement.isSelected()) {
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
@@ -648,7 +649,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             browseByElement();
         }
@@ -660,7 +661,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_cmbElementTypesBrowseTabActionPerformed
 
     private void rdbBrowseDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseDateItemStateChanged
-        System.out.println("[PanelTabBrowse-Date]");
+        WildLogApp.LOGGER.log(Level.INFO, "[PanelTabBrowse-Date]");
         if (rdbBrowseDate.isSelected()) {
             dtpStartDate.setVisible(true);
             dtpEndDate.setVisible(true);
@@ -672,7 +673,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             browseByDate();
         }
@@ -743,7 +744,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE);
                         }
                         catch (LLJTranException | IOException ex) {
-                            ex.printStackTrace(System.err);
+                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                                 @Override
                                 public int showDialog() {
@@ -1713,7 +1714,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             imgBrowsePhotos.setToolTipText("");
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
     }
 
@@ -1865,7 +1866,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
                 finally {
                     imgBrowsePhotos.setToolTipText(inFotos.get(imageIndex).getFilename());
@@ -1878,7 +1879,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     lookupCachedImage(inFotos);
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
                 finally {
                     imgBrowsePhotos.setToolTipText("");
@@ -1891,7 +1892,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             finally {
                 imgBrowsePhotos.setToolTipText("");

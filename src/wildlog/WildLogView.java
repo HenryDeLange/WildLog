@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
@@ -1695,7 +1696,7 @@ public final class WildLogView extends JFrame {
                                 hasErrors = !app.getDBI().doImportCSV(path, prefix, !excludeWildLogFiles);
                             }
                             catch (Exception ex) {
-                                ex.printStackTrace(System.err);
+                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                 hasErrors = true;
                             }
                             if (hasErrors) {
@@ -1937,7 +1938,7 @@ public final class WildLogView extends JFrame {
                 writer.flush();
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             finally {
                 if (writer != null) {
@@ -1945,7 +1946,7 @@ public final class WildLogView extends JFrame {
                         writer.close();
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             }
@@ -1966,7 +1967,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
-        System.out.println("[CleanWorkspace]");
+        WildLogApp.LOGGER.log(Level.INFO, "[CleanWorkspace]");
         // Popup 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
         int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
@@ -2303,7 +2304,7 @@ public final class WildLogView extends JFrame {
                             cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER, filesNotInDB, countOther, (int)(countOther/(double)fileProcessCounter*20));
                         }
                         catch (IOException ex) {
-                            ex.printStackTrace(System.err);
+                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             finalHandleFeedback.println("ERROR:       Could not check all files on disk.");
                             finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
                         }
@@ -2351,7 +2352,7 @@ public final class WildLogView extends JFrame {
                             UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(WildLogPaths.WILDLOG_FILES.getAbsoluteFullPath().toFile());
                         }
                         catch (final IOException ex) {
-                            ex.printStackTrace(System.err);
+                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             finalHandleFeedback.println("ERROR:       Could not delete all empty folders.");
                             finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
                         }
@@ -2366,7 +2367,7 @@ public final class WildLogView extends JFrame {
                             UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT.getAbsoluteFullPath().toFile());
                         }
                         catch (final IOException ex) {
-                            ex.printStackTrace(System.err);
+                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             finalHandleFeedback.println("ERROR:       Could not delete export folders.");
                             finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
                         }
@@ -2376,7 +2377,7 @@ public final class WildLogView extends JFrame {
                             UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
                         }
                         catch (final IOException ex) {
-                            ex.printStackTrace(System.err);
+                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             finalHandleFeedback.println("ERROR:       Could not delete thumbnail folders.");
                             finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
                         }
@@ -2647,26 +2648,26 @@ public final class WildLogView extends JFrame {
                         int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
                         feedback.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
                         // Print info to logs aswell (for upload)
-                        System.out.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
-                        System.out.println("Files on disk moved to new folder: " + filesMoved.counter);
-                        System.out.println("Database file records with no reference to a file on disk: " + filesWithoutPath);
-                        System.out.println("Database file records with a reference to a file on disk, but the file was not found: " + filesNotOnDisk);
-                        System.out.println("Database file records with no ID: " + filesWithoutID);
-                        System.out.println("Database file records with incorrect ID: " + filesWithBadID);
-                        System.out.println("Database file records with incorrect type: " + filesWithBadType);
-                        System.out.println("Database file records with missing non-essential data: " + filesWithMissingData);
-                        System.out.println("Workspace files not found in the database: " + filesNotInDB.counter);
-                        System.out.println("Database file records with an incorrect File Modified Date: " + filesWithIncorrectDate);
-                        System.out.println("Database file records with an incorrect File Size: " + filesWithIncorrectSize);
-                        System.out.println("Incorrect links between database records: " + badDataLinks);
-                        System.out.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
-                        System.out.println("+++++++++++++++++++ DURATION +++++++++++++++++++");
-                        System.out.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
+                        WildLogApp.LOGGER.log(Level.INFO, "+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
+                        WildLogApp.LOGGER.log(Level.INFO, "Files on disk moved to new folder: {0}", filesMoved.counter);
+                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with no reference to a file on disk: {0}", filesWithoutPath);
+                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with a reference to a file on disk, but the file was not found: {0}", filesNotOnDisk);
+                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with no ID: {0}", filesWithoutID);
+                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with incorrect ID: {0}", filesWithBadID);
+                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with incorrect type: {0}", filesWithBadType);
+                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with missing non-essential data: {0}", filesWithMissingData);
+                        WildLogApp.LOGGER.log(Level.INFO, "Workspace files not found in the database: {0}", filesNotInDB.counter);
+                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with an incorrect File Modified Date: {0}", filesWithIncorrectDate);
+                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with an incorrect File Size: {0}", filesWithIncorrectSize);
+                        WildLogApp.LOGGER.log(Level.INFO, "Incorrect links between database records: {0}", badDataLinks);
+                        WildLogApp.LOGGER.log(Level.INFO, "Records with incorrect GPS Accuracy: {0}", badGPSAccuracy);
+                        WildLogApp.LOGGER.log(Level.INFO, "+++++++++++++++++++ DURATION +++++++++++++++++++");
+                        WildLogApp.LOGGER.log(Level.INFO, "{0} hours, {1} minutes, {2} seconds", new Object[]{hours, minutes, seconds});
                         setMessage("Finished Workspace Cleanup...");
                         setProgress(100);
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                         if (feedback != null) {
                             feedback.println("ERROR:       An exception occured while cleaning the Workspace!!");
                             feedback.println("-UNRESOLVED: Unexpected error... " + ex.getMessage());
@@ -2856,7 +2857,7 @@ public final class WildLogView extends JFrame {
                                 graphics2D.dispose();
                             }
                             catch (IOException ex) {
-                                ex.printStackTrace(System.err);
+                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             }
                             // Create the WildLogFile entry in the DB
                             syncDBI.createOrUpdate(wildLogFile, false);
@@ -2866,7 +2867,7 @@ public final class WildLogView extends JFrame {
                     }
                 }
                 catch (Exception ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
                 finally {
                     if (syncDBI != null) {
@@ -3142,7 +3143,7 @@ public final class WildLogView extends JFrame {
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                     }
                     catch (Exception ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                     finally {
                         if (syncDBI != null) {
@@ -3201,7 +3202,7 @@ public final class WildLogView extends JFrame {
                 writer.flush();
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             finally {
                 if (writer != null) {
@@ -3209,7 +3210,7 @@ public final class WildLogView extends JFrame {
                         writer.close();
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             }
@@ -3305,7 +3306,7 @@ public final class WildLogView extends JFrame {
                                     hasErrors = !app.getDBI().doImportIUCN(importFile, updatePrimaryName, addNewElements, updateExistingElements);
                                 }
                                 catch (Exception ex) {
-                                    ex.printStackTrace(System.err);
+                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                     hasErrors = true;
                                 }
                                 if (hasErrors) {
@@ -3527,7 +3528,7 @@ public final class WildLogView extends JFrame {
                                 gifWriter.finishGIF();
                             }
                             catch (IOException ex) {
-                                ex.printStackTrace(System.err);
+                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             }
                             finally {
                                 if (output != null) {
@@ -3535,13 +3536,13 @@ public final class WildLogView extends JFrame {
                                         output.flush();
                                     }
                                     catch (IOException ex) {
-                                        ex.printStackTrace(System.err);
+                                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                     }
                                     try {
                                         output.close();
                                     }
                                     catch (IOException ex) {
-                                        ex.printStackTrace(System.err);
+                                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                     }
                                 }
                             }
@@ -3557,35 +3558,35 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuCreateGIFActionPerformed
 
     private void exportMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_exportMenuMenuSelected
-        System.out.println("[ExportMenu]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ExportMenu]");
     }//GEN-LAST:event_exportMenuMenuSelected
 
     private void backupMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_backupMenuMenuSelected
-        System.out.println("[BackupMenu]");
+        WildLogApp.LOGGER.log(Level.INFO, "[BackupMenu]");
     }//GEN-LAST:event_backupMenuMenuSelected
 
     private void fileMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_fileMenuMenuSelected
-        System.out.println("[ApplicationMenu]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ApplicationMenu]");
     }//GEN-LAST:event_fileMenuMenuSelected
 
     private void importMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_importMenuMenuSelected
-        System.out.println("[ImportMenu]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ImportMenu]");
     }//GEN-LAST:event_importMenuMenuSelected
 
     private void advancedMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_advancedMenuMenuSelected
-        System.out.println("[AdvancedMenu]");
+        WildLogApp.LOGGER.log(Level.INFO, "[AdvancedMenu]");
     }//GEN-LAST:event_advancedMenuMenuSelected
 
     private void extraMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_extraMenuMenuSelected
-        System.out.println("[ExtraMenu]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ExtraMenu]");
     }//GEN-LAST:event_extraMenuMenuSelected
 
     private void settingsMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_settingsMenuMenuSelected
-        System.out.println("[SettingsMenu]");
+        WildLogApp.LOGGER.log(Level.INFO, "[SettingsMenu]");
     }//GEN-LAST:event_settingsMenuMenuSelected
 
     private void helpMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_helpMenuMenuSelected
-        System.out.println("[HelpMenu]");
+        WildLogApp.LOGGER.log(Level.INFO, "[HelpMenu]");
     }//GEN-LAST:event_helpMenuMenuSelected
 
     private void mnuUserGuideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUserGuideActionPerformed
@@ -3610,7 +3611,7 @@ public final class WildLogView extends JFrame {
                                 Desktop.getDesktop().browse(inHyperlinkEvent.getURL().toURI());
                             }
                             catch (IOException | URISyntaxException ex) {
-                                ex.printStackTrace(System.err);
+                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             }
                         }
                     }
@@ -3648,7 +3649,7 @@ public final class WildLogView extends JFrame {
             Desktop.getDesktop().browse(URI.create(lblBlog.getText().trim()));
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
     }//GEN-LAST:event_lblBlogMousePressed
 
@@ -3657,7 +3658,7 @@ public final class WildLogView extends JFrame {
             Desktop.getDesktop().browse(URI.create(lblMyWild.getText().trim()));
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
     }//GEN-LAST:event_lblMyWildMousePressed
 
@@ -3666,7 +3667,7 @@ public final class WildLogView extends JFrame {
             Desktop.getDesktop().mail(URI.create("mailto:" + lblEmail.getText().trim()));
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
     }//GEN-LAST:event_lblEmailMousePressed
 
@@ -3712,7 +3713,7 @@ public final class WildLogView extends JFrame {
                                 hasErrors = !app.getDBI().doImportBasicCSV(path, prefix);
                             }
                             catch (Exception ex) {
-                                ex.printStackTrace(System.err);
+                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                 hasErrors = true;
                             }
                             if (hasErrors) {

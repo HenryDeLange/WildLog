@@ -5,6 +5,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -135,7 +136,7 @@ public class SpinnerFixer {
                     }
                 }
                 catch (BadLocationException ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
             }
         });

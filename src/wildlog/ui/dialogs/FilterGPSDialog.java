@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -36,7 +37,7 @@ public class FilterGPSDialog extends JDialog {
 
     public FilterGPSDialog(JFrame inParent) {
         super(inParent);
-        System.out.println("[FilterGPSDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[FilterGPSDialog]");
         initComponents();
         // Setup the escape key
         final FilterGPSDialog thisHandler = this;
@@ -222,7 +223,7 @@ public class FilterGPSDialog extends JDialog {
                 // Ignore these errors which can happen when pressing the OK button before the page was loaded
             }
             catch (Exception ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         return 0.0;
@@ -244,7 +245,7 @@ public class FilterGPSDialog extends JDialog {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         String template = builder.toString();
         // Set the template

@@ -10,14 +10,15 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.AdhocData;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class FilterTemplatesDialog extends JDialog {
@@ -27,7 +28,7 @@ public class FilterTemplatesDialog extends JDialog {
     
     public FilterTemplatesDialog(JDialog inParent, FilterProperties inFilterProperties) {
         super();
-        System.out.println("[FilterTemplatesDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[FilterTemplatesDialog]");
         filterProperties = inFilterProperties;
         app = WildLogApp.getApplication();
         // Initialize the auto generated code
@@ -175,7 +176,7 @@ public class FilterTemplatesDialog extends JDialog {
                 filterProperties = (FilterProperties) serializer.readObject();
             }
             catch (ClassNotFoundException | IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             finally {
                 if (serializer != null) {
@@ -183,7 +184,7 @@ public class FilterTemplatesDialog extends JDialog {
                         serializer.close();
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
                 if (inputStream != null) {
@@ -191,7 +192,7 @@ public class FilterTemplatesDialog extends JDialog {
                         inputStream.close();
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             }
@@ -224,7 +225,7 @@ public class FilterTemplatesDialog extends JDialog {
                 loadData();
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             finally {
                 if (serializer != null) {
@@ -232,7 +233,7 @@ public class FilterTemplatesDialog extends JDialog {
                         serializer.close();
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
                 if (outputStream != null) {
@@ -240,7 +241,7 @@ public class FilterTemplatesDialog extends JDialog {
                         outputStream.close();
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             }

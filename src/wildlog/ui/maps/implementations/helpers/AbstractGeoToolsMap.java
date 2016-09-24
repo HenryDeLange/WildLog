@@ -5,6 +5,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -35,6 +36,7 @@ import org.geotools.map.Layer;
 import org.geotools.styling.Style;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
@@ -180,7 +182,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
             gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader));
         }
         catch (DataSourceException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         return gridLayer;
     }
@@ -193,7 +195,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
             gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader));
         }
         catch (DataSourceException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         return gridLayer;
     }
@@ -208,7 +210,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                     Color.BLACK, Color.BLACK, 0.8, 0.0));
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         return shapelayer;
     }
@@ -234,7 +236,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
 // FIXME: Make the points selectable... (Maybe too small, or something weird about the layer or feature types...)
         }
         catch (SchemaException | FactoryRegistryException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         return pointLayer;
     }

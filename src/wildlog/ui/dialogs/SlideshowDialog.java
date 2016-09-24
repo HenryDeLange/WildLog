@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
@@ -41,7 +42,7 @@ public class SlideshowDialog extends JDialog {
     
     public SlideshowDialog(WildLogApp inApp, Visit inVisit, Location inLocation, Element inElement, List<Sighting> inLstSightings) {
         super();
-        System.out.println("[SlideshowDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[SlideshowDialog]");
         // Set passed in values
         app = inApp;
         visit = inVisit;
@@ -352,7 +353,7 @@ public class SlideshowDialog extends JDialog {
                             gifWriter.finishGIF();
                         }
                         catch (IOException ex) {
-                            ex.printStackTrace(System.err);
+                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                         }
                         finally {
                             if (output != null) {
@@ -360,13 +361,13 @@ public class SlideshowDialog extends JDialog {
                                     output.flush();
                                 }
                                 catch (IOException ex) {
-                                    ex.printStackTrace(System.err);
+                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                 }
                                 try {
                                     output.close();
                                 }
                                 catch (IOException ex) {
-                                    ex.printStackTrace(System.err);
+                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                 }
                             }
                         }

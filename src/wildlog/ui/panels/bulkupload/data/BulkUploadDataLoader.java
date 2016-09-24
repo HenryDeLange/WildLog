@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
@@ -74,8 +75,8 @@ public class BulkUploadDataLoader {
                     try {
                         inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, files.size() + 1); // Prevent the progress bar from reaching 100%
                     }
-                    catch (Exception e) {
-                        e.printStackTrace(System.err);
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             });
@@ -148,11 +149,11 @@ public class BulkUploadDataLoader {
             }
         }
         catch (JpegProcessingException ex) {
-            System.err.println("Error reading EXIF data for: " + inFile);
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, "Error reading EXIF data for: {0}", inFile);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         Date date = UtilsImageProcessing.getDateFromImage(metadata, inFile);
         if (date != null) {
@@ -177,7 +178,7 @@ public class BulkUploadDataLoader {
             inImageList.add(wrapper);
         }
         else {
-            System.out.println("Could not determine date for image file: " + inFile.toAbsolutePath());
+            WildLogApp.LOGGER.log(Level.INFO, "Could not determine date for image file: {0}", inFile.toAbsolutePath());
         }
     }
 

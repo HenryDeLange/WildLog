@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.RootPaneContainer;
@@ -165,7 +166,7 @@ public final class UtilsFileProcessing {
             Files.createDirectories(toFolder);
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         WildLogFile wildLogFile;
         if (inTheLock != null) {
@@ -216,7 +217,7 @@ public final class UtilsFileProcessing {
             fileSize = Files.size(inFromFile);
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         WildLogFile wildLogFile = new WildLogFile(
                 inID,
@@ -243,8 +244,8 @@ public final class UtilsFileProcessing {
                 Desktop.getDesktop().open(inPath.normalize().toAbsolutePath().toFile());
             }
             catch (IOException ex) {
-                System.out.println("Problem opening file in the OS. Trying other method now...");
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.INFO, "Problem opening file in the OS. Trying other method now...");
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 // Backup Plan - Because of Java 6 bug for avi files
                 try {
                     String os = System.getProperty("os.name").toLowerCase();
@@ -266,8 +267,8 @@ public final class UtilsFileProcessing {
                         Runtime.getRuntime().exec(commands);
                     }
                 }
-                catch (IOException e) {
-                    e.printStackTrace(System.err);
+                catch (IOException ex2) {
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex2.toString(), ex2);
                 }
             }
         }
@@ -299,7 +300,7 @@ public final class UtilsFileProcessing {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
     }
 
@@ -324,7 +325,7 @@ public final class UtilsFileProcessing {
                 }
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             finally {
                 try {
@@ -333,7 +334,7 @@ public final class UtilsFileProcessing {
                     }
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
             }
         }
@@ -350,7 +351,7 @@ public final class UtilsFileProcessing {
             Files.write(inFileToWrite, inBytesToWrite, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
     }
 

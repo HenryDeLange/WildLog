@@ -1,5 +1,6 @@
 package wildlog.ui.dialogs;
 
+import java.util.logging.Level;
 import javax.swing.JDialog;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -8,7 +9,7 @@ public class WildNoteAboutBox extends JDialog {
 
     public WildNoteAboutBox() {
         super();
-        System.out.println("[WildNoteAboutBox]");
+        WildLogApp.LOGGER.log(Level.INFO, "[WildNoteAboutBox]");
         initComponents();
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);

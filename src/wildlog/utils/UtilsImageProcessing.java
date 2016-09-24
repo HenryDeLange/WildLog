@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.FileImageInputStream;
@@ -154,15 +155,15 @@ public class UtilsImageProcessing {
                         return new ImageIcon(rotatedImage);
                     }
                 }
-                catch (MetadataException | ImageProcessingException e) {
-                    e.printStackTrace(System.err);
+                catch (MetadataException | ImageProcessingException ex) {
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
             }
             // Return final ImageIcon
             return new ImageIcon(scaledImage);
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             WildLogThumbnailSizes thumbnailSize = WildLogThumbnailSizes.NORMAL;
             for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
                 if (inSize == size.getSize()) {
@@ -181,7 +182,7 @@ public class UtilsImageProcessing {
                     inputStream.close();
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
             }
         }
@@ -328,9 +329,9 @@ public class UtilsImageProcessing {
             }
         }
         catch (JpegProcessingException | IOException ex) {
-            System.err.println("Error showing EXIF data for: " + inPath);
-            System.err.println("The file extention might be wrong...");
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inPath);
+            WildLogApp.LOGGER.log(Level.SEVERE, "The file extention might be wrong...");
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         return getDateFromImage(metadata, inPath);
     }
@@ -349,8 +350,8 @@ public class UtilsImageProcessing {
                 date = new Date(inPath.toFile().lastModified());
             }
             catch (Exception ex) {
-                System.err.println("Error reading EXIF data for: " + inPath);
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, "Error reading EXIF data for: {0}", inPath);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         return date;
@@ -425,8 +426,8 @@ public class UtilsImageProcessing {
                                 return UtilsTime.getDateFromLocalDateTime(localDateTime);
                             }
                             catch (DateTimeParseException ex) {
-                                System.out.println("Try1: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
-                                ex.printStackTrace(System.out);
+                                WildLogApp.LOGGER.log(Level.INFO, "Try1: [THIS DATE ({0}) COULD NOT BE PARSED USING ''yyyy:MM:dd HH:mm:ss'']", tag.getDescription());
+                                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
                             }
                             // Try 2:
                             try {
@@ -435,14 +436,14 @@ public class UtilsImageProcessing {
                                 return UtilsTime.getDateFromLocalDateTime(localDateTime);
                             }
                             catch (DateTimeParseException ex) {
-                                System.out.println("Try2: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
-                                ex.printStackTrace(System.out);
+                                WildLogApp.LOGGER.log(Level.INFO, "Try2: [THIS DATE ({0}) COULD NOT BE PARSED USING ''yyyy-MM-dd HH:mm:ss '']", tag.getDescription());
+                                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
                             }
                         }
                     }
                     catch (NumberFormatException ex) {
-                        System.err.println("Could not parse Date info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, "Could not parse Date info from image EXIF data: {0} = {1}", new Object[]{tag.getTagName(), tag.getDescription()});
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             }
@@ -491,8 +492,8 @@ public class UtilsImageProcessing {
                         tempDataObjectWithGPS.setGPSAccuracy(GPSAccuracy.GOOD);
                     }
                     catch (NumberFormatException ex) {
-                        System.err.println("Could not parse GPS info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, "Could not parse GPS info from image EXIF data: {0} = {1}", new Object[]{tag.getTagName(), tag.getDescription()});
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             }
@@ -505,15 +506,15 @@ public class UtilsImageProcessing {
             return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inPath.toFile()));
         }
         catch (JpegProcessingException ex) {
-            System.err.println("Error reading EXIF data for non-JPG file: " + inPath);
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, "Error reading EXIF data for non-JPG file: {0}", inPath);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         catch (Exception ex) {
-            System.err.println("Error reading GPS EXIF data for: " + inPath);
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, "Error reading GPS EXIF data for: {0}", inPath);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         return null;
     }
@@ -542,8 +543,8 @@ public class UtilsImageProcessing {
             // This can generate "Access is denied" IO exceptions when multiple threads try to create the icons for the first time. 
             // I'm OK with that and don't want to add sync blocks just to handle that initial posible scenario. 
             // If it continues or gives problems with "real" files, then fix it properly...
-            ex.printStackTrace(System.err);
-            System.err.println("Current thread name was -> " + Thread.currentThread().getName());
+            WildLogApp.LOGGER.log(Level.SEVERE, "Current thread name was -> {0}", Thread.currentThread().getName());
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
     }
 

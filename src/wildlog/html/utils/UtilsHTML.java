@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -45,7 +46,7 @@ public final class UtilsHTML {
                 Files.createDirectories(thumbnailFolder);
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             // Copy the file. (Don't replace files, but if it already exists use that copy.)
             Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
@@ -61,7 +62,7 @@ public final class UtilsHTML {
                 Files.createDirectories(thumbnailFolder);
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             // Copy the file. (Don't replace files, but if it already exists use that copy.)
             Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
@@ -253,7 +254,7 @@ public final class UtilsHTML {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         String template = builder.toString();
         // Replace the placeholders in the template with actual content
@@ -277,7 +278,7 @@ public final class UtilsHTML {
                 Files.createDirectories(thumbnailFolder);
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
             Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
@@ -409,7 +410,7 @@ public final class UtilsHTML {
                     Files.createDirectories(thumbnailFolder);
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
                 Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM);
                 Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());

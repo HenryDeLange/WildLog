@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -95,7 +96,7 @@ public class GPSDialog extends JDialog {
     
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
-        System.out.println("[GPSDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[GPSDialog]");
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JFrames)
@@ -105,7 +106,7 @@ public class GPSDialog extends JDialog {
 
     public GPSDialog(WildLogApp inApp, JDialog inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
-        System.out.println("[GPSDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[GPSDialog]");
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JDialogs)
@@ -1471,7 +1472,7 @@ public class GPSDialog extends JDialog {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         String template = builder.toString();
         // Edit the template
@@ -1534,7 +1535,7 @@ public class GPSDialog extends JDialog {
             map.addLayer(new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader)));
         }
         catch (DataSourceException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         // Point layer
         try {
@@ -1549,7 +1550,7 @@ public class GPSDialog extends JDialog {
             map.addLayer(new FeatureLayer(collection, pointStyle, "WildLogPointLayer"));
         }
         catch (SchemaException | FactoryRegistryException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         // Reload the map to make sure the layers are added correctly, etc.
         map.reloadMap();

@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -48,7 +49,7 @@ public class WorkspaceImportDialog extends JDialog {
 
     public WorkspaceImportDialog(WildLogApp inApp, Path inImportPath) {
         super();
-        System.out.println("[WorkspaceImportDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[WorkspaceImportDialog]");
         app = inApp;
         importWorkspace = inImportPath;
         try {
@@ -57,7 +58,7 @@ public class WorkspaceImportDialog extends JDialog {
                 + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
         }
         catch (Exception ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         initComponents();
         // Setup the tree
@@ -399,7 +400,7 @@ public class WorkspaceImportDialog extends JDialog {
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             getGlassPane().setVisible(true);
             JOptionPane.showMessageDialog(app.getMainFrame(),
                     "Could not import the Workspace successfully.",
@@ -578,7 +579,7 @@ public class WorkspaceImportDialog extends JDialog {
                                 Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(fileToImport, size));
                             }
                             catch (IOException ex) {
-                                ex.printStackTrace(System.err);
+                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             }
                         }
                         // Create new thumbnails

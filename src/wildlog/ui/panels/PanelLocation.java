@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -1406,7 +1407,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        System.out.println("[PanelLocation-Save]");
+        WildLogApp.LOGGER.log(Level.INFO, "[PanelLocation-Save]");
         if (UtilsData.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = lastSavedLocation.getName();

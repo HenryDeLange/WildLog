@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
@@ -70,7 +71,7 @@ public class ReportsBaseDialog extends JFrame {
     
     public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
         super(inTitle);
-        System.out.println("[ReportsBaseDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ReportsBaseDialog]");
         lstOriginalData = inSightings;
         // Get a copy for the filter list
         lstFilteredData = getCopiedList(lstOriginalData);
@@ -486,7 +487,7 @@ public class ReportsBaseDialog extends JFrame {
                         });
                     }
                     catch (Exception ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             });

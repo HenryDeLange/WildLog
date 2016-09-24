@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -33,7 +34,7 @@ public class AdvancedDialog extends JDialog {
 
     public AdvancedDialog(WildLogApp inApp, Visit inVisit, PanelVisit inPanelVisit) {
         super(inApp.getMainFrame());
-        System.out.println("[AdvancedDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[AdvancedDialog]");
         // Set passed in values
         app = inApp;
         visit = inVisit;
@@ -350,7 +351,7 @@ public class AdvancedDialog extends JDialog {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         finally {
             if (feedback != null) {

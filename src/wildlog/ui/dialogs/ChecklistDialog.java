@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -38,7 +39,7 @@ public class ChecklistDialog extends JDialog {
     
     public ChecklistDialog(WildLogApp inApp, JDialog inParent, Location inLocation, Visit inVisit, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         super(inParent);
-        System.out.println("[ChecklistDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ChecklistDialog]");
         app = inApp;
         initComponents();
         loadElementList();

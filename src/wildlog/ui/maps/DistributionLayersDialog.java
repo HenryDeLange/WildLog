@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -42,7 +43,7 @@ public class DistributionLayersDialog extends JDialog {
     
     public DistributionLayersDialog(JFrame inParent, List<Sighting> inLstData) {
         super(inParent);
-        System.out.println("[DistributionLayersDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[DistributionLayersDialog]");
         lstData = inLstData;
         initComponents();
         // Setup the escape key
@@ -79,7 +80,7 @@ public class DistributionLayersDialog extends JDialog {
                 });
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         // Load the layers table
@@ -480,7 +481,7 @@ public class DistributionLayersDialog extends JDialog {
                     applyTableFilter();
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace(System.err);
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     getGlassPane().setVisible(true);
                     JOptionPane.showMessageDialog(this,
                             "The layer could not be deleted successfully. Please make sure the file isn't in use and try again, or delete it manually.",

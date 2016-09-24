@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -82,7 +83,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, String inLocationName, String inExistingVisitName, 
             Path inImportPath, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
-        System.out.println("[BulkUploadPanel]");
+        WildLogApp.LOGGER.log(Level.INFO, "[BulkUploadPanel]");
         app = inApp;
         selectedLocationName = inLocationName;
         existingVisitName = inExistingVisitName;
@@ -110,7 +111,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         }
                     }
                     catch (Exception ex) {
-                        ex.printStackTrace(System.err);
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                 }
             }
@@ -855,7 +856,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     progressbarHandle.setTaskProgress(counter.getAndIncrement(), 0, model.getRowCount());
                                 }
                                 catch (Exception e) {
-                                    e.printStackTrace(System.out);
+                                    WildLogApp.LOGGER.log(Level.SEVERE, e.toString(), e);
                                 }
                             }
                         });

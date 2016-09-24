@@ -2,6 +2,7 @@ package wildlog.ui.dialogs;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -18,7 +19,7 @@ public class MergeElementsDialog extends JDialog {
 
     public MergeElementsDialog(WildLogApp inApp) {
         super();
-        System.out.println("[MergeElementsDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[MergeElementsDialog]");
         app = inApp;
         initComponents();
         loadLists();

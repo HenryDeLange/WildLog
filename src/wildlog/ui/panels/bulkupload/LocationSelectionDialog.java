@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -30,7 +31,7 @@ public class LocationSelectionDialog extends JDialog {
 
     public LocationSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedLocation) {
         super(inParent);
-        System.out.println("[LocationSelectionDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[LocationSelectionDialog]");
         app = inApp;
         initComponents();
         // Setup the escape key

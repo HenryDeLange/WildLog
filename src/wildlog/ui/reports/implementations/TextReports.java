@@ -117,7 +117,7 @@ public class TextReports extends AbstractReport<Sighting> {
                 Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
                 if (visit != null) {
                     data.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
-                    data.startDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    data.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
                     data.gpsPoints = new HashSet<>();
                     data.totalSightings = 0;
                     data.mapElementsAndCount = new HashMap<>();
@@ -149,12 +149,14 @@ public class TextReports extends AbstractReport<Sighting> {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         TableColumn<VisitData, String> colVisitName = new TableColumn<>("Period Name");
         colVisitName.setCellValueFactory(new PropertyValueFactory<>("visitName"));
+        colVisitName.setStyle("-fx-alignment: center-left;");
         colVisitName.setMinWidth(135);
         colVisitName.setPrefWidth(180);
         colVisitName.setMaxWidth(325);
         table.getColumns().add(colVisitName);
         TableColumn<VisitData, LocalDate> colStartDate = new TableColumn<>("Start Date");
         colStartDate.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+        colStartDate.setStyle("-fx-alignment: center;");
         colStartDate.setCellFactory(new Callback<TableColumn<VisitData, LocalDate>, TableCell<VisitData, LocalDate>>() {
             public TableCell<VisitData, LocalDate> call(TableColumn<VisitData, LocalDate> inCol) {
                 return new TextFieldTableCell<VisitData, LocalDate>(new StringConverter<LocalDate>() {
@@ -177,6 +179,7 @@ public class TextReports extends AbstractReport<Sighting> {
         table.getColumns().add(colStartDate);
         TableColumn<VisitData, LocalDate> colEndDate = new TableColumn<>("End Date");
         colEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+        colEndDate.setStyle("-fx-alignment: center;");
         colEndDate.setCellFactory(new Callback<TableColumn<VisitData, LocalDate>, TableCell<VisitData, LocalDate>>() {
             public TableCell<VisitData, LocalDate> call(TableColumn<VisitData, LocalDate> inCol) {
                 return new TextFieldTableCell<VisitData, LocalDate>(new StringConverter<LocalDate>() {
@@ -199,6 +202,7 @@ public class TextReports extends AbstractReport<Sighting> {
         table.getColumns().add(colEndDate);
         TableColumn<VisitData, Set<String>> colGPS = new TableColumn<>("GPS Positions");
         colGPS.setCellValueFactory(new PropertyValueFactory<>("gpsPoints"));
+        colGPS.setStyle("-fx-alignment: center;");
         colGPS.setCellFactory(new Callback<TableColumn<VisitData, Set<String>>, TableCell<VisitData, Set<String>>>() {
             public TableCell<VisitData, Set<String>> call(TableColumn<VisitData, Set<String>> inCol) {
                 return new TextFieldTableCell<VisitData, Set<String>>(new StringConverter<Set<String>>() {
@@ -229,8 +233,16 @@ public class TextReports extends AbstractReport<Sighting> {
         colGPS.setMinWidth(100);
         colGPS.setMaxWidth(115);
         table.getColumns().add(colGPS);
+        TableColumn<VisitData, Integer> colTotalSightings = new TableColumn<>("Observations");
+        colTotalSightings.setCellValueFactory(new PropertyValueFactory<>("totalSightings"));
+        colTotalSightings.setStyle("-fx-alignment: center;");
+        colTotalSightings.setMinWidth(80);
+        colTotalSightings.setPrefWidth(80);
+        colTotalSightings.setMaxWidth(90);
+        table.getColumns().add(colTotalSightings);
         TableColumn<VisitData, Map<String, Integer>> colTotalElements = new TableColumn<>("Creatures");
         colTotalElements.setCellValueFactory(new PropertyValueFactory<>("mapElementsAndCount"));
+        colTotalElements.setStyle("-fx-alignment: center;");
         colTotalElements.setCellFactory(new Callback<TableColumn<VisitData, Map<String, Integer>>, TableCell<VisitData, Map<String, Integer>>>() {
             public TableCell<VisitData, Map<String, Integer>> call(TableColumn<VisitData, Map<String, Integer>> inCol) {
                 return new TextFieldTableCell<VisitData, Map<String, Integer>>(new StringConverter<Map<String, Integer>>() {
@@ -249,14 +261,9 @@ public class TextReports extends AbstractReport<Sighting> {
         colTotalElements.setPrefWidth(65);
         colTotalElements.setMaxWidth(70);
         table.getColumns().add(colTotalElements);
-        TableColumn<VisitData, Integer> colTotalSightings = new TableColumn<>("Observations");
-        colTotalSightings.setCellValueFactory(new PropertyValueFactory<>("totalSightings"));
-        colTotalSightings.setMinWidth(80);
-        colTotalSightings.setPrefWidth(80);
-        colTotalSightings.setMaxWidth(90);
-        table.getColumns().add(colTotalSightings);
         TableColumn<VisitData, Map<String, Integer>> colElements = new TableColumn<>("Details");
         colElements.setCellValueFactory(new PropertyValueFactory<>("mapElementsAndCount"));
+        colElements.setStyle("-fx-alignment: center-left;");
         colElements.setCellFactory(new Callback<TableColumn<VisitData, Map<String, Integer>>, TableCell<VisitData, Map<String, Integer>>>() {
             public TableCell<VisitData, Map<String, Integer>> call(TableColumn<VisitData, Map<String, Integer>> inCol) {
                 return new TextFieldTableCell<VisitData, Map<String, Integer>>(new StringConverter<Map<String, Integer>>() {

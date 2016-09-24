@@ -7,9 +7,11 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.Latitudes;
@@ -105,7 +107,7 @@ public final class UtilsTime {
             calendar.set(Calendar.MINUTE, (Integer)inSpnMinutes.getValue());
         }
         catch (NumberFormatException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             calendar.set(Calendar.HOUR_OF_DAY, -1);
             calendar.set(Calendar.MINUTE, -1);
             inCmbTimeFormat.setSelectedItem(TimeFormat.NONE);

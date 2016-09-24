@@ -2,8 +2,12 @@ package wildlog.ui.dialogs;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
@@ -36,7 +40,7 @@ public class ExportDialog extends JDialog {
     
     public ExportDialog(WildLogApp inApp, Location inLocation, Element inElement, Visit inVisit, Sighting inSighting, List<Sighting> inLstSightings) {
         super(inApp.getMainFrame());
-        System.out.println("[ExportDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ExportDialog]");
         // Set passed in values
         app = inApp;
         location = inLocation;
@@ -76,11 +80,12 @@ public class ExportDialog extends JDialog {
         btnExportFiles = new javax.swing.JButton();
         btnExportFilesObservations = new javax.swing.JButton();
         btnExportFilesSelectedObservations = new javax.swing.JButton();
+        btnExportTXTList = new javax.swing.JButton();
         btnExportCSVBasic = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
+        btnExportXML = new javax.swing.JButton();
         btnExportHTML = new javax.swing.JButton();
         btnExportHTMLAdvanced = new javax.swing.JButton();
-        btnExportXML = new javax.swing.JButton();
         btnExportKML = new javax.swing.JButton();
         btnExportWorkspace = new javax.swing.JButton();
 
@@ -149,6 +154,25 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportFilesSelectedObservations);
 
+        btnExportTXTList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/TXT.png"))); // NOI18N
+        btnExportTXTList.setText("Export as Text File (Data Summary)");
+        btnExportTXTList.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
+        btnExportTXTList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportTXTList.setFocusPainted(false);
+        btnExportTXTList.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportTXTList.setIconTextGap(10);
+        btnExportTXTList.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportTXTList.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportTXTList.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportTXTList.setName("btnExportTXTList"); // NOI18N
+        btnExportTXTList.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportTXTList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportTXTListActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportTXTList);
+
         btnExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         btnExportCSVBasic.setText("Export as Spreadsheet (Basic format)");
         btnExportCSVBasic.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
@@ -187,6 +211,25 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportCSV);
 
+        btnExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/XML.png"))); // NOI18N
+        btnExportXML.setText("Export as XML");
+        btnExportXML.setToolTipText("Export a XML file for all relevant Observations and linked records.");
+        btnExportXML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportXML.setFocusPainted(false);
+        btnExportXML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportXML.setIconTextGap(10);
+        btnExportXML.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportXML.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportXML.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportXML.setName("btnExportXML"); // NOI18N
+        btnExportXML.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportXMLActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportXML);
+
         btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         btnExportHTML.setText("Export as Web Page (Basic)");
         btnExportHTML.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
@@ -224,25 +267,6 @@ public class ExportDialog extends JDialog {
             }
         });
         getContentPane().add(btnExportHTMLAdvanced);
-
-        btnExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/XML.png"))); // NOI18N
-        btnExportXML.setText("Export as XML");
-        btnExportXML.setToolTipText("Export a XML file for all relevant Observations and linked records.");
-        btnExportXML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportXML.setFocusPainted(false);
-        btnExportXML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportXML.setIconTextGap(10);
-        btnExportXML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportXML.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportXML.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportXML.setName("btnExportXML"); // NOI18N
-        btnExportXML.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportXMLActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnExportXML);
 
         btnExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
         btnExportKML.setText("Export as KML");
@@ -902,6 +926,89 @@ public class ExportDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnExportFilesSelectedObservationsActionPerformed
 
+    private void btnExportTXTListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportTXTListActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the TXT Export");
+                Path path;
+// TODO: Skuif hierdie na die DOA self toe en doen dit dan generies soos die HTML en XML en CSv
+// TODO: Maak ook dan 'n Export All menu item
+                if (location != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName() + ".txt");
+                    List<Sighting> lstSightingsToUse = app.getDBI().list(new Sighting(null, location.getName(), null), false);
+                    Files.createDirectories(path.getParent());
+                    Files.write(path, ("The following Creatures were observed at " + location.getName() + ":" + System.lineSeparator()).getBytes());
+                    Set<String> uniqueNames = new HashSet<>();
+                    for (Sighting tempsighting : lstSightingsToUse) {
+                        if (!uniqueNames.contains(tempsighting.getElementName())) {
+                            Files.write(path, (tempsighting.getElementName() + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+                            uniqueNames.add(tempsighting.getElementName());
+                        }
+                    }
+                }
+                else
+                if (visit != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName() + ".txt");
+                    List<Sighting> lstSightingsToUse = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+                    Files.createDirectories(path.getParent());
+                    Files.write(path, ("The following Creatures were observed during " + visit.getName() + ":" + System.lineSeparator()).getBytes());
+                    Set<String> uniqueNames = new HashSet<>();
+                    for (Sighting tempsighting : lstSightingsToUse) {
+                        if (!uniqueNames.contains(tempsighting.getElementName())) {
+                            Files.write(path, (tempsighting.getElementName() + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+                            uniqueNames.add(tempsighting.getElementName());
+                        }
+                    }
+                }
+                else
+                if (element != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName() + ".txt");
+                    List<Sighting> lstSightingsToUse = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
+                    Files.createDirectories(path.getParent());
+                    Files.write(path, (element.getPrimaryName() + " was observed at the following Places:" + System.lineSeparator()).getBytes());
+                    Set<String> uniqueNames = new HashSet<>();
+                    for (Sighting tempsighting : lstSightingsToUse) {
+                        if (!uniqueNames.contains(tempsighting.getLocationName())) {
+                            Files.write(path, (tempsighting.getLocationName() + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+                            uniqueNames.add(tempsighting.getLocationName());
+                        }
+                    }
+                }
+                else
+                if (sighting != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName() + ".txt");
+                    Files.createDirectories(path.getParent());
+                    Files.write(path, ("Observation " + sighting.getSightingCounter() + " details:" + System.lineSeparator()).getBytes());
+                    Files.write(path, ("Creature = " + sighting.getElementName()+ System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+                    Files.write(path, ("Date = " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(sighting.getDate())) + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+                    Files.write(path, ("Place = " + sighting.getLocationName() + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+                    Files.write(path, ("Period = " + sighting.getVisitName()+ System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+                }
+                else
+                if (lstSightings != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations.txt");
+                    Files.write(path, ("Observation List:" + System.lineSeparator()).getBytes());
+                    for (Sighting tempsighting : lstSightings) {
+                        Files.write(path, ("[" + tempsighting.getSightingCounter() + "] | " 
+                                + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(tempsighting.getDate())) + " | " 
+                                + tempsighting.getElementName() + " | " 
+                                + tempsighting.getLocationName()
+                                + System.lineSeparator()).getBytes(), StandardOpenOption.APPEND);
+                    }
+                }
+                else {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath();
+                }
+                UtilsFileProcessing.openFile(path);
+                setMessage("Done with the TXT Basic Export");
+                return null;
+            }
+        });
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnExportTXTListActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
@@ -912,6 +1019,7 @@ public class ExportDialog extends JDialog {
     private javax.swing.JButton btnExportHTML;
     private javax.swing.JButton btnExportHTMLAdvanced;
     private javax.swing.JButton btnExportKML;
+    private javax.swing.JButton btnExportTXTList;
     private javax.swing.JButton btnExportWorkspace;
     private javax.swing.JButton btnExportXML;
     // End of variables declaration//GEN-END:variables

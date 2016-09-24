@@ -2,6 +2,8 @@ package wildlog.ui.maps.implementations.helpers;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.logging.Level;
+import wildlog.WildLogApp;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -13,7 +15,7 @@ public final class UtilsMaps {
     }
 
      public static void copyMapLayers() {
-        System.out.println("Start copying Map Layers");
+        WildLogApp.LOGGER.log(Level.INFO, "Start copying Map Layers");
         // GeoTiffs
         copyGeoTiff(BundledMapLayers.ALTITUDE);
         copyGeoTiff(BundledMapLayers.CLIMATE_PRECIPITATION_AVERAGE);
@@ -35,7 +37,7 @@ public final class UtilsMaps {
         copyShapefiles(BundledMapLayers.BASE_WORLD);
         copyShapefiles(BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL);
         copyShapefiles(BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL);
-        System.out.println("Done copying Map Layers");
+        WildLogApp.LOGGER.log(Level.INFO, "Done copying Map Layers");
     }
     
     private static void copyGeoTiff(BundledMapLayers inBundledMapLayers) {
@@ -78,7 +80,7 @@ public final class UtilsMaps {
             UtilsFileProcessing.createFileFromStream(inputStream, WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(inPath));
         }
         else {
-            System.err.println("Problem copying Map Layer (can't find in JAR): " + inPath);
+            WildLogApp.LOGGER.log(Level.SEVERE, "Problem copying Map Layer (can''t find in JAR): {0}", inPath);
         }
     }
     

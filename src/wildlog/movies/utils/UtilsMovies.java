@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
@@ -55,7 +56,7 @@ public final class UtilsMovies {
             Files.createDirectories(WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath());
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         // Now create the slideshow
         JpgToMovie jpgToMovie = new JpgToMovie();

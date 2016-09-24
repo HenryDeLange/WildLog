@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -35,7 +36,7 @@ public class SunMoonDialog extends JDialog {
     /** Creates new form GPSDialog */
     public SunMoonDialog(WildLogApp inApp, DataObjectWithGPS inDataObjectWithGPS) {
         super();
-        System.out.println("[SunMoonDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[SunMoonDialog]");
         app = inApp;
         // Initialize the auto generated code
         initComponents();

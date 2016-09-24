@@ -13,6 +13,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
@@ -54,19 +55,19 @@ public final class UtilsConcurency {
                 int count = 0;
                 while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < TOTAL_RETRIES_ALLOWED) {
                     count++;
-                    System.out.println("ExecutorService expired while shutting down... Retry: " + count + " of " + TOTAL_RETRIES_ALLOWED);
+                    WildLogApp.LOGGER.log(Level.INFO, "ExecutorService expired while shutting down... Retry: {0} of {1}", new Object[]{count, TOTAL_RETRIES_ALLOWED});
                 }
                 if (!inExecutorService.isTerminated()) {
                     List<Runnable> terminationList  = inExecutorService.shutdownNow();
                     if (terminationList == null) {
                         terminationList = new ArrayList<>(0);
                     }
-                    System.err.println("ExecutorService Shutdown Error... Unexecuted tasks remaining: " + terminationList.size());
+                    WildLogApp.LOGGER.log(Level.SEVERE, "ExecutorService Shutdown Error... Unexecuted tasks remaining: {0}", terminationList.size());
                     return false;
                 }
             }
             catch (InterruptedException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         return true;
@@ -123,11 +124,11 @@ public final class UtilsConcurency {
                             try {
                                 while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < TOTAL_RETRIES_ALLOWED) {
                                     count++;
-                                    System.out.println("ExecutorService expired while shutting down... Retry: " + count + " of " + TOTAL_RETRIES_ALLOWED);
+                                    WildLogApp.LOGGER.log(Level.INFO, "ExecutorService expired while shutting down... Retry: {0} of {1}", new Object[]{count, TOTAL_RETRIES_ALLOWED});
                                 }
                             }
                             catch (InterruptedException ex) {
-                                ex.printStackTrace(System.err);
+                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                 resultWrapper.result = false;
                             }
                             if (!inExecutorService.isTerminated()) {
@@ -135,7 +136,7 @@ public final class UtilsConcurency {
                                 if (terminationList == null) {
                                     terminationList = new ArrayList<>(0);
                                 }
-                                System.err.println("ExecutorService Shutdown Error... Unexecuted tasks remaining: " + terminationList.size());
+                                WildLogApp.LOGGER.log(Level.SEVERE, "ExecutorService Shutdown Error... Unexecuted tasks remaining: {0}", terminationList.size());
                                 resultWrapper.result = false;
                             }
                             popup.setVisible(false);
@@ -148,7 +149,7 @@ public final class UtilsConcurency {
                 }
             }
             catch (InterruptedException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 return false;
             }
         }
@@ -170,17 +171,17 @@ public final class UtilsConcurency {
                 List<Future<T>> listResults = inExecutorService.invokeAll(inTaskList, 10, TimeUnit.MINUTES);
                 for (Future<T> future : listResults) {
                     if (future.isCancelled()) {
-                        System.err.println("ExecutorService Error... Due to the timeout some tasks were cancled.");
+                        WildLogApp.LOGGER.log(Level.SEVERE, "ExecutorService Error... Due to the timeout some tasks were cancled.");
                         return false;
                     }
                 }
             }
             catch (CancellationException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 return false;
             }
             catch (InterruptedException | RejectedExecutionException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 return false;
             }
         }
@@ -249,7 +250,7 @@ public final class UtilsConcurency {
             return ((Boolean) swingWorkerUpload.get(1150, TimeUnit.MILLISECONDS));
         }
         catch (InterruptedException | ExecutionException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         catch (TimeoutException ex) {
             // The upload is taking long, so show the popup

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javax.imageio.ImageIO;
@@ -41,7 +42,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
     
     public ExportDialogForReportsAndMaps(JFrame inParent, BufferedImage inImage, Node inNode, String inName, List<Sighting> inLstSightings, ExportType inType) {
         super(inParent);
-        System.out.println("[ReportExportDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ReportExportDialog]");
         // Set passed in values
         bufferedImage = inImage;
         node = inNode;

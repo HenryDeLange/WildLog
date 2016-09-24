@@ -28,7 +28,6 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
-import wildlog.ui.reports.implementations.helpers.BarChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
 
@@ -127,38 +126,39 @@ public class ElementsChart extends AbstractReport<Sighting> {
             }
             dataWrapper.increaseCount();
         }
-        ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
-        ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
+        ObservableList<BarChart.Series<Number, String>> chartData = FXCollections.observableArrayList();
+        ObservableList<BarChart.Data<Number, String>> allSightings = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapData.keySet());
         Collections.sort(keys);
         for (String key : keys) {
-            BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).count);
-            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
+            BarChart.Data<Number, String> data = new BarChart.Data<>(mapData.get(key).count, key);
+// TODO: Implement die nommer lang die bar chart vir horisontale charts...
+//            data.nodeProperty().addListener(new BarChartChangeListener<Number, String>(mapData.size(), data));
             allSightings.add(data);
         }
         // Sort the results
-        Collections.sort(allSightings, new Comparator<BarChart.Data<String, Number>>() {
+        Collections.sort(allSightings, new Comparator<BarChart.Data<Number, String>>() {
             @Override
-            public int compare(BarChart.Data<String, Number> inData1, BarChart.Data<String, Number> inData2) {
-                int compare = Double.compare(inData2.getYValue().doubleValue(), inData1.getYValue().doubleValue());
+            public int compare(BarChart.Data<Number, String> inData1, BarChart.Data<Number, String> inData2) {
+                int compare = Double.compare(inData1.getXValue().doubleValue(), inData2.getXValue().doubleValue());
                 if (compare == 0) {
-                    compare = inData1.getXValue().compareTo(inData2.getXValue());
+                    compare = inData2.getYValue().compareTo(inData1.getYValue());
                 }
                 return compare;
             }
         });
         // Add the results to the final series
-        chartData.add(new BarChart.Series<String, Number>("Creatures (" + mapData.keySet().size() + ")", allSightings));
+        chartData.add(new BarChart.Series<Number, String>("Creatures (" + mapData.keySet().size() + ")", allSightings));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
         UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
-        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), true);
-        BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), false);
+        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, catAxis, chartData);
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Observations for each Creature");
-        UtilsReports.setupChartTooltips(chart, true, false);
+        UtilsReports.setupChartTooltips(chart, false, false);
         return chart;
     }
 
@@ -172,38 +172,39 @@ public class ElementsChart extends AbstractReport<Sighting> {
             }
             set.add(sighting.getLocationName());
         }
-        ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
-        ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
+        ObservableList<BarChart.Series<Number, String>> chartData = FXCollections.observableArrayList();
+        ObservableList<BarChart.Data<Number, String>> allSightings = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapData.keySet());
         Collections.sort(keys);
         for (String key : keys) {
-            BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).size());
-            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
+            BarChart.Data<Number, String> data = new BarChart.Data<>(mapData.get(key).size(), key);
+// TODO: Implement die nommer lang die bar chart vir horisontale charts...
+//            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }
         // Sort the results
-        Collections.sort(allSightings, new Comparator<BarChart.Data<String, Number>>() {
+        Collections.sort(allSightings, new Comparator<BarChart.Data<Number, String>>() {
             @Override
-            public int compare(BarChart.Data<String, Number> inData1, BarChart.Data<String, Number> inData2) {
-                int compare = Double.compare(inData2.getYValue().doubleValue(), inData1.getYValue().doubleValue());
+            public int compare(BarChart.Data<Number, String> inData1, BarChart.Data<Number, String> inData2) {
+                int compare = Double.compare(inData1.getXValue().doubleValue(), inData2.getXValue().doubleValue());
                 if (compare == 0) {
-                    compare = inData1.getXValue().compareTo(inData2.getXValue());
+                    compare = inData2.getYValue().compareTo(inData1.getYValue());
                 }
                 return compare;
             }
         });
         // Add the results to the final series
-        chartData.add(new BarChart.Series<String, Number>("Creatures (" + mapData.keySet().size() + ")", allSightings));
+        chartData.add(new BarChart.Series<Number, String>("Creatures (" + mapData.keySet().size() + ")", allSightings));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
         UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
-        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), true);
-        BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), false);
+        BarChart<Number, String> chart = new BarChart<>(numAxis, catAxis, chartData);
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Places where each Creature has been observed.");
-        UtilsReports.setupChartTooltips(chart, true, false);
+        UtilsReports.setupChartTooltips(chart, false, false);
         return chart;
     }
     

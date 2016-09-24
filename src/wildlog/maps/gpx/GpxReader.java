@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -20,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import wildlog.WildLogApp;
 
 
 public final class GpxReader {
@@ -45,7 +47,7 @@ public final class GpxReader {
             gpx = root.getValue();
         }
         catch(JAXBException ex) {
-           ex.printStackTrace(System.err);
+           WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         if (gpx != null) {
             return gpx.getWpt();
@@ -94,7 +96,7 @@ public final class GpxReader {
             }
         }
         catch (XPathExpressionException | IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         return null;
     }

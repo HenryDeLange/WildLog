@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -60,7 +61,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     public WorkspaceExportDialog(WildLogApp inApp, Path inDefaultDestination, List<Sighting> inLimitedList) {
         super();
-        System.out.println("[WorkspaceExportDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[WorkspaceExportDialog]");
         app = inApp;
         defaultDestination = inDefaultDestination;
         lstSightings = inLimitedList;
@@ -469,7 +470,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             }
         }
         catch (Exception ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             getGlassPane().setVisible(true);
             JOptionPane.showMessageDialog(app.getMainFrame(),
                     "Could not export the Workspace successfully.",

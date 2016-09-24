@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -21,6 +22,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
@@ -36,7 +38,6 @@ import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.CtrlClickSelectionModel;
 import wildlog.ui.helpers.SpinnerFixer;
-import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -49,7 +50,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     
     public FilterPropertiesDialog(JFrame inParent, List<T> inLstOriginalData, FilterProperties inFilterProperties) {
         super(inParent);
-        System.out.println("[FilterPropertiesDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[FilterPropertiesDialog]");
         initComponents();
         filterProperties = inFilterProperties;
         // Setup the escape key

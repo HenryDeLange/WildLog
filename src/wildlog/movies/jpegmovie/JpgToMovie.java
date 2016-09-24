@@ -2,6 +2,7 @@ package wildlog.movies.jpegmovie;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import javax.media.ConfigureCompleteEvent;
 import javax.media.ControllerEvent;
 import javax.media.ControllerListener;
@@ -22,6 +23,7 @@ import javax.media.datasink.EndOfStreamEvent;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.DataSource;
 import javax.media.protocol.FileTypeDescriptor;
+import wildlog.WildLogApp;
 
 
 public class JpgToMovie implements ControllerListener, DataSinkListener {
@@ -37,9 +39,9 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
         try {
             processor = Manager.createProcessor(new ImageDataSource(inSize, inFrameRate, inFiles));
         }
-        catch (Exception e) {
-            System.err.println("Yikes!  Cannot create a processor from the data source. ");
-            e.printStackTrace(System.err);
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.SEVERE, "Yikes!  Cannot create a processor from the data source. ");
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             return false;
         }
         // Add controllerListener
@@ -48,7 +50,7 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
         // Put the Processor into configured state so we can set some processing options on the processor.
         processor.configure();
         if (!waitForState(processor, Processor.Configured)) {
-            System.err.println("Failed to configure the processor.");
+            WildLogApp.LOGGER.log(Level.SEVERE, "Failed to configure the processor.");
             return false;
         }
 
@@ -58,7 +60,7 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
         TrackControl trackControl[] = processor.getTrackControls();
         Format format[] = trackControl[0].getSupportedFormats();
         if (format == null || format.length <= 0) {
-            System.err.println("The mux does not support the input format: " + trackControl[0].getFormat());
+            WildLogApp.LOGGER.log(Level.SEVERE, "The mux does not support the input format: {0}", trackControl[0].getFormat());
             return false;
         }
         trackControl[0].setFormat(format[0]);
@@ -66,21 +68,21 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
         // We are done with configuring the processor. Now realize it.
         processor.realize();
         if (!waitForState(processor, Processor.Realized)) {
-            System.err.println("Failed to realize the processor.");
+            WildLogApp.LOGGER.log(Level.SEVERE, "Failed to realize the processor.");
             return false;
         }
 
         // Generate the output media locators.
         MediaLocator mediaLocator;
         if ((mediaLocator = createMediaLocator(outputURL)) == null) {
-            System.err.println("Cannot build media locator from: " + outputURL);
+            WildLogApp.LOGGER.log(Level.SEVERE, "Cannot build media locator from: {0}", outputURL);
             return false;
         }
 
         // Now, we'll need to create a DataSink.
         DataSink dataSink;
         if ((dataSink = createDataSink(processor, mediaLocator)) == null) {
-            System.err.println("Failed to create a DataSink for the given output MediaLocator: " + mediaLocator);
+            WildLogApp.LOGGER.log(Level.SEVERE, "Failed to create a DataSink for the given output MediaLocator: {0}", mediaLocator);
             return false;
         }
         dataSink.addDataSinkListener(this);
@@ -91,9 +93,9 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
         try {
             dataSink.start();
         }
-        catch (IOException e) {
-            System.err.println("IO error during processing: ");
-            e.printStackTrace(System.err);
+        catch (IOException ex) {
+            WildLogApp.LOGGER.log(Level.SEVERE, "IO error during processing: ");
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             return false;
         }
 
@@ -104,9 +106,9 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
         try {
             dataSink.close();
         }
-        catch (Exception e) {
-            System.err.println("Error closing dataSink: ");
-            e.printStackTrace(System.err);
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.SEVERE, "Error closing dataSink: ");
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         // Remove the controllerListener
         processor.removeControllerListener(this);
@@ -122,7 +124,7 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
     private DataSink createDataSink(Processor inProcessor, MediaLocator inMediaLocator) {
         DataSource dataSource;
         if ((dataSource = inProcessor.getDataOutput()) == null) {
-            System.err.println("Something is really wrong: the processor does not have an output DataSource");
+            WildLogApp.LOGGER.log(Level.SEVERE, "Something is really wrong: the processor does not have an output DataSource");
             return null;
         }
         DataSink dataSink;
@@ -130,9 +132,9 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
             dataSink = Manager.createDataSink(dataSource, inMediaLocator);
             dataSink.open();
         }
-        catch (Exception e) {
-            System.err.println("Cannot create the DataSink: ");
-            e.printStackTrace(System.err);
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.SEVERE, "Cannot create the DataSink: ");
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             return null;
         }
         return dataSink;
@@ -152,7 +154,7 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
             catch(InterruptedException ex) {
                 // I thinks this exception is propabily not a big deal in this case,
                 // just logging it for the record and to troubleshoot possible future problems
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         return stateTransitionOK;
@@ -172,7 +174,7 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
             catch(InterruptedException ex) {
                 // I thinks this exception is propabily not a big deal in this case,
                 // just logging it for the record and to troubleshoot possible future problems
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         return fileSuccess;

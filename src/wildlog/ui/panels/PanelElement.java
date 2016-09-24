@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -1412,7 +1413,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        System.out.println("[PanelElement-Save]");
+        WildLogApp.LOGGER.log(Level.INFO, "[PanelElement-Save]");
         if (UtilsData.checkCharacters(txtPrimaryName.getText().trim())) {
             if (txtPrimaryName.getText().length() > 0) {
                 String oldName = lastSavedElement.getPrimaryName();
@@ -1735,7 +1736,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 data = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), IUCNSpeciesData.class);
             }
             catch (IOException | JsonIOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             finally {
                 app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
@@ -1795,7 +1796,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 data = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), IUCNSpeciesData.class);
             }
             catch (IOException | JsonIOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
             finally {
                 app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());

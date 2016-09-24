@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import org.h2.jdbc.JdbcSQLException;
 import wildlog.WildLogApp;
@@ -75,15 +76,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 conn = DriverManager.getConnection(inConnectionURL, props);
             }
             catch (JdbcSQLException ex) {
-                System.out.println("Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
-                ex.printStackTrace(System.out);
+                WildLogApp.LOGGER.log(Level.INFO, "Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
+                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
                 // Might be trying to use the wrong password, try again with old password and update it
                 props = new Properties();
                 conn = DriverManager.getConnection(inConnectionURL, props);
                 state = conn.createStatement();
                 state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
                 state.close();
-                System.out.println("Database username and password updated.");
+                WildLogApp.LOGGER.log(Level.INFO, "Database username and password updated.");
                 
 // TODO: Hier kort 'n form van databse recovery s dinge skeep loop...
 // DOEN MISKIEN IETS SOOS HIERDIE:
@@ -100,20 +101,20 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // This also creates the WildLogOptions row the first time
             doUpdates();
         }
-        catch (ClassNotFoundException cnfe) {
-            System.err.println("\nUnable to load the JDBC driver.");
-            System.err.println("Please check your CLASSPATH.");
-            cnfe.printStackTrace(System.err);
+        catch (ClassNotFoundException ex) {
+            WildLogApp.LOGGER.log(Level.SEVERE, "\nUnable to load the JDBC driver.");
+            WildLogApp.LOGGER.log(Level.SEVERE, "Please check your CLASSPATH.");
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             started = false;
         }
-        catch (InstantiationException ie) {
-            System.err.println("\nUnable to instantiate the JDBC driver.");
-            ie.printStackTrace(System.err);
+        catch (InstantiationException ex) {
+            WildLogApp.LOGGER.log(Level.SEVERE, "\nUnable to instantiate the JDBC driver.");
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             started = false;
         }
-        catch (IllegalAccessException iae) {
-            System.err.println("\nNot allowed to access the JDBC driver.");
-            iae.printStackTrace(System.err);
+        catch (IllegalAccessException ex) {
+            WildLogApp.LOGGER.log(Level.SEVERE, "\nNot allowed to access the JDBC driver.");
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             started = false;
         }
         catch (SQLException sqle) {
@@ -122,7 +123,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (Exception ex) {
             started = false;
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         finally {
             closeStatementAndResultset(state, results);
@@ -149,7 +150,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             printSQLException(ex);
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         finally {
             // Statement
@@ -738,7 +739,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         // Then, try to delete the "default/known" thumbnails.
         for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
@@ -754,7 +755,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 }
             }
             catch (IOException ex) {
-                ex.printStackTrace(System.err);
+                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
         return true;
@@ -929,7 +930,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
     // Private update methods
     private void doUpdate1() {
-        System.out.println("Starting update 1");
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 1");
         // This update recreates the tables with IGNORECASE enabled
         // This update might only be relevant for H2, but it is the main
         // supported database...
@@ -972,11 +973,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         finally {
             closeStatementAndResultset(state, results);
         }
-        System.out.println("Finished update 1");
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 1");
     }
 
     private void doUpdate2() {
-        System.out.println("Starting update 2");
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 2");
         // This update adds a column to the options table
         Statement state = null;
         ResultSet results = null;
@@ -997,11 +998,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         finally {
             closeStatementAndResultset(state, results);
         }
-        System.out.println("Finished update 2");
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 2");
     }
 
     private void doUpdate3() {
-        System.out.println("Starting update 3");
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 3");
         // This update removes and alters some tables and adds new wildlog options
         Statement state = null;
         ResultSet results = null;
@@ -1050,11 +1051,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         finally {
             closeStatementAndResultset(state, results);
         }
-        System.out.println("Finished update 3");
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 3");
     }
 
     private void doUpdate4() {
-        System.out.println("Starting update 4");
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 4");
         // This update removes and alters some tables and adds new wildlog options
         Statement state = null;
         ResultSet results = null;
@@ -1104,7 +1105,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
             }
             catch (SQLException ex) {
-                ex.printStackTrace(System.out);
+                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
                 // Try again to create the index, but settle for non-unique
                 state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
             }
@@ -1139,11 +1140,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         finally {
             closeStatementAndResultset(state, results);
         }
-        System.out.println("Finished update 4");
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 4");
     }
     
     private void doUpdate5() {
-        System.out.println("Starting update 5");
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 5");
         // This update adds new wildlog options
         Statement state = null;
         ResultSet results = null;
@@ -1173,11 +1174,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         finally {
             closeStatementAndResultset(state, results);
         }
-        System.out.println("Finished update 5");
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 5");
     }
     
     private void doUpdate6() {
-        System.out.println("Starting update 6");
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 6");
         // This update adds new wildlog options
         Statement state = null;
         ResultSet results = null;
@@ -1195,11 +1196,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         finally {
             closeStatementAndResultset(state, results);
         }
-        System.out.println("Finished update 6");
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 6");
     }
     
     private void doUpdate7() {
-        System.out.println("Starting update 7");
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 7");
         // This update adds new wildlog options
         Statement state = null;
         ResultSet results = null;
@@ -1219,7 +1220,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         finally {
             closeStatementAndResultset(state, results);
         }
-        System.out.println("Finished update 7");
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 7");
     }
 
 }
