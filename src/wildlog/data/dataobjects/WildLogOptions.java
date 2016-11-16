@@ -13,6 +13,7 @@ public class WildLogOptions {
     private boolean useScientificNames;
     private String workspaceName;
     private long workspaceID;
+    private boolean uploadLogs;
 
 
     public int getDatabaseVersion() {
@@ -101,6 +102,14 @@ public class WildLogOptions {
 
     public void setWorkspaceID(long inWorkspaceID) {
         workspaceID = inWorkspaceID;
+    }
+
+    public boolean isUploadLogs() {
+        return uploadLogs;
+    }
+
+    public void setUploadLogs(boolean inUploadLogs) {
+        uploadLogs = inUploadLogs;
     }
 
 }
