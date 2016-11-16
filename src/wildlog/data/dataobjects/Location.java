@@ -1,9 +1,12 @@
 package wildlog.data.dataobjects;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithTXT;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
@@ -13,7 +16,7 @@ import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.xml.utils.UtilsXML;
 
 
-public class Location extends LocationCore implements DataObjectWithHTML, DataObjectWithKML, DataObjectWithXML {
+public class Location extends LocationCore implements DataObjectWithHTML, DataObjectWithKML, DataObjectWithXML, DataObjectWithTXT {
 
     public Location() {
         super();
@@ -157,6 +160,21 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             builder.append("<Observations>").append(sightingString).append("</Observations>");
         }
         builder.append("</Place>");
+        return builder.toString();
+    }
+    
+    @Override
+    public String toTXT(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+        StringBuilder builder = new StringBuilder(50);
+        List<Sighting> lstSightingsToUse = inApp.getDBI().list(new Sighting(null, name, null), false);
+        builder.append("The following Creatures were observed at ").append(name).append(":").append(System.lineSeparator());
+        Set<String> uniqueNames = new HashSet<>();
+        for (Sighting tempsighting : lstSightingsToUse) {
+            if (!uniqueNames.contains(tempsighting.getElementName())) {
+                builder.append(tempsighting.getElementName()).append(System.lineSeparator());
+                uniqueNames.add(tempsighting.getElementName());
+            }
+        }
         return builder.toString();
     }
 

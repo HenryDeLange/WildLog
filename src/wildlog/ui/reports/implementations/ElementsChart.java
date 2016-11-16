@@ -213,11 +213,10 @@ public class ElementsChart extends AbstractReport<Sighting> {
         for (Sighting sighting : inSightings) {
             ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getElementName());
             if (dataWrapper == null) {
-                mapGroupedData.put(sighting.getElementName(), new ReportDataWrapper("", "", 1));
+                dataWrapper = new ReportDataWrapper("", "", 0);
+                mapGroupedData.put(sighting.getElementName(), dataWrapper);
             }
-            else {
-                dataWrapper.increaseCount();
-            }
+            dataWrapper.increaseCount();
         }
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapGroupedData.keySet());
@@ -238,11 +237,10 @@ public class ElementsChart extends AbstractReport<Sighting> {
             Element element = WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName()));
             Set<String> setElements = mapGroupedData.get(UtilsData.stringFromObject(element.getType()));
             if (setElements == null) {
-                mapGroupedData.put(UtilsData.stringFromObject(element.getType()), new HashSet<>());
+                setElements = new HashSet<>();
+                mapGroupedData.put(UtilsData.stringFromObject(element.getType()), setElements);
             }
-            else {
-                setElements.add(sighting.getElementName());
-            }
+            setElements.add(sighting.getElementName());
         }
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapGroupedData.keySet());

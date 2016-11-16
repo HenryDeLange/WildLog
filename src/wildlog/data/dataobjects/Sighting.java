@@ -6,6 +6,7 @@ import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithTXT;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.FeedingClass;
@@ -21,7 +22,7 @@ import wildlog.ui.utils.UtilsTime;
 import wildlog.xml.utils.UtilsXML;
 
 
-public class Sighting extends SightingCore implements DataObjectWithHTML, DataObjectWithKML, DataObjectWithXML {
+public class Sighting extends SightingCore implements DataObjectWithHTML, DataObjectWithKML, DataObjectWithXML, DataObjectWithTXT {
 
     public Sighting() {
         super();
@@ -351,6 +352,22 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         }
         builder.append("<Files>").append(filesString).append("</Files>");
         builder.append("</Observation>");
+        return builder.toString();
+    }
+    
+    @Override
+    public String toTXT(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+        StringBuilder builder = new StringBuilder(50);
+        builder.append("Observation ").append(sightingCounter).append(" details:").append(System.lineSeparator());
+        if (date != null) {
+            builder.append("Date = ").append(UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(date))).append(System.lineSeparator());
+        }
+        else {
+            builder.append("Date = ").append(System.lineSeparator());
+        }
+        builder.append("Creature = ").append(elementName).append(System.lineSeparator());
+        builder.append("Place = ").append(locationName).append(System.lineSeparator());
+        builder.append("Period = ").append(visitName).append(System.lineSeparator());
         return builder.toString();
     }
 

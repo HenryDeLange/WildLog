@@ -44,6 +44,8 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     private boolean showDayOrNight = false;
 
     
+// Nuwe chart wat die species accumulation curvevan verskillende periods gelyk op die mak kan wys om te vergelyk
+    
     public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Recording Rate Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);

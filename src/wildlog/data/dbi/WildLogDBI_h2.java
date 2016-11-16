@@ -199,8 +199,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Export Sightings
             if (inExportAll || inSighting != null) {
                 sql = "SELECT * "
-                    + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0) LatDecDeg"
-                    + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0) LonDecDeg"
+                    + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
+                    + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
                     + " FROM SIGHTINGS";
                 if (inSighting != null && inSighting.getSightingCounter() > 0) {
                     sql = sql + " WHERE SIGHTINGCOUNTER = " +  inSighting.getSightingCounter();
@@ -210,8 +210,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Export List of Sightings
             if (inLstSightings != null && !inLstSightings.isEmpty()) {
                 sql = "SELECT * "
-                    + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0) LatDecDeg"
-                    + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0) LonDecDeg"
+                    + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
+                    + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
                     + " FROM SIGHTINGS";
                 sql = sql + " WHERE SIGHTINGCOUNTER in (";
                 for (Sighting tempSighting : inLstSightings) {
@@ -250,15 +250,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             String sql = "SELECT " +
                         " E.PRIMARYNAME AS CREATURE, E.SCIENTIFICNAME AS SCIENTIFIC_NAME, E.ELEMENTTYPE AS CREATURE_TYPE, " +
                         " L.NAME AS PLACE, L.GPSACCURACY AS PLACE_GPS_ACCURACY, " +
-                        " ((CASE WHEN L.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN L.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * L.LatDEGREES + (L.LatMINUTES + L.LatSECONDS /60.0)/60.0) AS PLACE_LATITUDE, " +
-                        " ((CASE WHEN L.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN L.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * L.LonDEGREES + (L.LonMINUTES + L.LonSECONDS /60.0)/60.0) AS PLACE_LONGITUDE, " +
+                        " ((CASE WHEN L.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN L.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (L.LatDEGREES + (L.LatMINUTES + L.LatSECONDS /60.0)/60.0)) AS PLACE_LATITUDE, " +
+                        " ((CASE WHEN L.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN L.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (L.LonDEGREES + (L.LonMINUTES + L.LonSECONDS /60.0)/60.0)) AS PLACE_LONGITUDE, " +
                         " V.NAME AS PERIOD, V.VISITTYPE AS PERIOD_TYPE, V.STARTDATE AS PERIOD_START_DATE, V.ENDDATE AS PERIOD_END_DATE, V.DESCRIPTION AS PERIOD_DESCRIPTION, " +
                         " S.SIGHTINGCOUNTER AS OBSERVATION, S.CERTAINTY, S.SIGHTINGEVIDENCE AS EVIDENCE, " +
                         " S.TIMEACCURACY AS TIME_ACCURACY, S.TIMEOFDAY AS TIME_OF_DAY, " +
                         " trunc(S.SIGHTINGDATE) OBSERVATION_DATE, cast(S.SIGHTINGDATE as time) OBSERVATION_TIME, " +
                         " S.GPSACCURACY AS OBSERVATION_GPS_ACCURACY, " +
-                        " ((CASE WHEN S.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN S.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * S.LatDEGREES + (S.LatMINUTES + S.LatSECONDS /60.0)/60.0) AS OBSERVATION_LATITUDE, " +
-                        " ((CASE WHEN S.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN S.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * S.LonDEGREES + (S.LonMINUTES + S.LonSECONDS /60.0)/60.0) AS OBSERVATION_LONGITUDE, " +
+                        " ((CASE WHEN S.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN S.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (S.LatDEGREES + (S.LatMINUTES + S.LatSECONDS /60.0)/60.0)) AS OBSERVATION_LATITUDE, " +
+                        " ((CASE WHEN S.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN S.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (S.LonDEGREES + (S.LonMINUTES + S.LonSECONDS /60.0)/60.0)) AS OBSERVATION_LONGITUDE, " +
                         " S.NUMBEROFELEMENTS AS NUMBER_OF_CREATURES, S.LIFESTATUS AS LIFE_STATUS, S.TAG, S.DETAILS " +
                         " FROM SIGHTINGS S " +
                         " LEFT JOIN ELEMENTS E ON S.ELEMENTNAME = E.PRIMARYNAME " +
@@ -850,19 +850,24 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 }
                                 else
                                 if (results.getInt("VERSION") == 4) {
-                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4  (before upgrade to 5)"));
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4 (before upgrade to 5)"));
                                     doUpdate5();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 5) {
-                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v5  (before upgrade to 6)"));
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v5 (before upgrade to 6)"));
                                     doUpdate6();
                                     wasMajorUpgrade = true;
                                 }
                                 else
                                 if (results.getInt("VERSION") == 6) {
-                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v6  (before upgrade to 7)"));
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v6 (before upgrade to 7)"));
                                     doUpdate7();
+                                }
+                                else
+                                if (results.getInt("VERSION") == 7) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v7 (before upgrade to 8)"));
+                                    doUpdate8();
                                 }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
@@ -894,7 +899,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             @Override
                             public int showDialog() {
                                 JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                        "<html>The Workspace has been <b>successfully upgraded</b> upgraded to be compatible with <b>WildLog v" + WildLogApp.WILDLOG_VERSION + "</b>.</html>",
+                                        "<html>The Workspace has been <b>successfully upgraded</b> to be compatible with <b>WildLog v" + WildLogApp.WILDLOG_VERSION + "</b>.</html>",
                                         "WildLog v" + WildLogApp.WILDLOG_VERSION + " - Minor Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
                                 return -1;
                             }
@@ -1221,6 +1226,27 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 7");
+    }
+    
+    private void doUpdate8() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 8");
+        // This update adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Add the new column
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN UPLOADLOGS smallint DEFAULT true");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=8");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 8");
     }
 
 }

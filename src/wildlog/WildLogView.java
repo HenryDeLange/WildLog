@@ -386,6 +386,7 @@ public final class WildLogView extends JFrame {
         mnuOther = new javax.swing.JMenu();
         chkMnuUseScienteficName = new javax.swing.JCheckBoxMenuItem();
         chkMnuEnableSounds = new javax.swing.JCheckBoxMenuItem();
+        chkMnuUploadLogs = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         mnuAboutWildNote = new javax.swing.JMenuItem();
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
@@ -1324,6 +1325,17 @@ public final class WildLogView extends JFrame {
             }
         });
         mnuOther.add(chkMnuEnableSounds);
+
+        chkMnuUploadLogs.setSelected(app.getWildLogOptions().isUploadLogs());
+        chkMnuUploadLogs.setText("Automatically Upload Error Logs");
+        chkMnuUploadLogs.setToolTipText("If this option is selected then WildLog will periodically attempt to upload the error log to a web server. The log will be used to identify bugs and areas in need of improvement.");
+        chkMnuUploadLogs.setName("chkMnuUploadLogs"); // NOI18N
+        chkMnuUploadLogs.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuUploadLogsItemStateChanged(evt);
+            }
+        });
+        mnuOther.add(chkMnuUploadLogs);
 
         settingsMenu.add(mnuOther);
 
@@ -3845,6 +3857,12 @@ public final class WildLogView extends JFrame {
         mnuChangeWorkspaceMenuItemActionPerformed(null);
     }//GEN-LAST:event_lblSwitchWorkspaceMousePressed
 
+    private void chkMnuUploadLogsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUploadLogsItemStateChanged
+        WildLogOptions options = app.getWildLogOptions();
+        options.setUploadLogs(chkMnuUploadLogs.isSelected());
+        app.setWildLogOptionsAndSave(options);
+    }//GEN-LAST:event_chkMnuUploadLogsItemStateChanged
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3885,6 +3903,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem btnImportIUCNList;
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
+    private javax.swing.JCheckBoxMenuItem chkMnuUploadLogs;
     private javax.swing.JCheckBoxMenuItem chkMnuUseIconTables;
     private javax.swing.JCheckBoxMenuItem chkMnuUseScienteficName;
     private javax.swing.JMenu exportMenu;

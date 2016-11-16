@@ -43,6 +43,7 @@ public class VisitChart extends AbstractReport<Sighting> {
     private ChartType chartType;
     private Chart displayedChart;
 
+// TODO: Klompie van hierdie charts sal beter werk as line (area) charts
     
     public VisitChart(List<Sighting> inLstData,JLabel inChartDescLabel) {
         super("Period Reports", inLstData, inChartDescLabel);
@@ -557,7 +558,7 @@ public class VisitChart extends AbstractReport<Sighting> {
         UtilsReports.setupCategoryAxis(catAxis, mapChartDataGroupedForSeries.size(), true);
         StackedBarChart<String, Number> chart = UtilsReports.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
         chart.getStyleClass().add("wl-stacked-bar-30-color");
-        chart.setTitle("Ratio of Observations over the Duration for each Period and Creature");
+        chart.setTitle("Ratio of Observations over the Duration for each Period, per Creature");
         UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }

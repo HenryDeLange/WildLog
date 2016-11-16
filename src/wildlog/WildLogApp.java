@@ -162,83 +162,85 @@ public class WildLogApp extends Application {
                 }
             }, 10, TimeUnit.SECONDS);
             // Try to upload log data
-            executor.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    WildLogApp.LOGGER.log(Level.INFO, "WEB CALL: Start uploading log file...");
-                    try {
-                        // Open a connection to the site
-                        URL url = new URL("http://www.mywild.co.za/wildlog/uploadWildLogInfo.php");
-                        URLConnection con = url.openConnection();
-                        // Activate the output
-                        con.setDoOutput(true);
-                        try (PrintStream printStream = new PrintStream(con.getOutputStream())) {
-                            // Load some of the info needed
-                            long maxMemory = Runtime.getRuntime().maxMemory();
-                            GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-                            int width = graphicsDevice.getDisplayMode().getWidth();
-                            int height = graphicsDevice.getDisplayMode().getHeight();
-                            String info = "OS Name    : " + System.getProperty("os.name") + "\n"
-                                        + "OS version : " + System.getProperty("os.version") + "\n"
-                                        + "OS Arch    : " + System.getProperty("os.arch") + "\n"
-                                        + "Timezone   : " + TimeZone.getDefault().getDisplayName() + " [" + ZonedDateTime.now().format(DateTimeFormatter.ofPattern("(z) VV")) + "]\n"
-                                        + "JVM CPU cores   : " + Runtime.getRuntime().availableProcessors() + "\n"
-                                        + "JVM Used Memory : " + Math.round((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024.0*1024.0) * 100) / 100.0 + " MB" + "\n"
-                                        + "JVM Max Memory  : " + (maxMemory == Long.MAX_VALUE ? "no limit" : Math.round((maxMemory) / (1024.0*1024.0) * 100) / 100.0) + " MB" + "\n"
-                                        + "Screen Size : " + width + "x" + height + "\n"
-                                        + "Screen Count: " + GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
-                            String logFileSnippit = "(Not using logfile)";
-                            if (logToFile) {
-                                try {
-                                    byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog0.txt")); // The first (main) log file
-                                    String logInfo = new String(fileBytes, Charset.defaultCharset());
-                                    int logCharacterLength = 99999;
-                                    if (logInfo.length() > logCharacterLength) {
-                                        logFileSnippit = "...\n...\n" + logInfo.substring(logInfo.length() - logCharacterLength);
+            if (wildLogOptions.isUploadLogs()) {
+                executor.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        WildLogApp.LOGGER.log(Level.INFO, "WEB CALL: Start uploading log file...");
+                        try {
+                            // Open a connection to the site
+                            URL url = new URL("http://www.mywild.co.za/wildlog/uploadWildLogInfo.php");
+                            URLConnection con = url.openConnection();
+                            // Activate the output
+                            con.setDoOutput(true);
+                            try (PrintStream printStream = new PrintStream(con.getOutputStream())) {
+                                // Load some of the info needed
+                                long maxMemory = Runtime.getRuntime().maxMemory();
+                                GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+                                int width = graphicsDevice.getDisplayMode().getWidth();
+                                int height = graphicsDevice.getDisplayMode().getHeight();
+                                String info = "OS Name    : " + System.getProperty("os.name") + "\n"
+                                            + "OS version : " + System.getProperty("os.version") + "\n"
+                                            + "OS Arch    : " + System.getProperty("os.arch") + "\n"
+                                            + "Timezone   : " + TimeZone.getDefault().getDisplayName() + " [" + ZonedDateTime.now().format(DateTimeFormatter.ofPattern("(z) VV")) + "]\n"
+                                            + "JVM CPU cores   : " + Runtime.getRuntime().availableProcessors() + "\n"
+                                            + "JVM Used Memory : " + Math.round((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024.0*1024.0) * 100) / 100.0 + " MB" + "\n"
+                                            + "JVM Max Memory  : " + (maxMemory == Long.MAX_VALUE ? "no limit" : Math.round((maxMemory) / (1024.0*1024.0) * 100) / 100.0) + " MB" + "\n"
+                                            + "Screen Size : " + width + "x" + height + "\n"
+                                            + "Screen Count: " + GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
+                                String logFileSnippit = "(Not using logfile)";
+                                if (logToFile) {
+                                    try {
+                                        byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog0.txt")); // The first (main) log file
+                                        String logInfo = new String(fileBytes, Charset.defaultCharset());
+                                        int logCharacterLength = 99999;
+                                        if (logInfo.length() > logCharacterLength) {
+                                            logFileSnippit = "...\n...\n" + logInfo.substring(logInfo.length() - logCharacterLength);
+                                        }
+                                        else {
+                                            logFileSnippit = logInfo;
+                                        }
+                                        // Om die file se path beter te lees in die uploaded log (want dit haal die snaakse karakters uit)
+                                        logFileSnippit = logFileSnippit.replace(File.separatorChar, '^');
                                     }
-                                    else {
-                                        logFileSnippit = logInfo;
+                                    catch (IOException  ex) {
+                                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                                     }
-                                    // Om die file se path beter te lees in die uploaded log (want dit haal die snaakse karakters uit)
-                                    logFileSnippit = logFileSnippit.replace(File.separatorChar, '^');
                                 }
-                                catch (IOException  ex) {
-                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                // Send the parameters to the site
+                                //printStream.print("DateAndTime=" + "set by server");
+                                printStream.print("&WildLogVersion=" + WILDLOG_VERSION);
+                                printStream.print("&WorkspaceDatabaseVersion=" + wildLogOptions.getDatabaseVersion());
+                                printStream.print("&WorkspaceID=" + wildLogOptions.getWorkspaceID());
+                                printStream.print("&WorkspaceName=" + wildLogOptions.getWorkspaceName());
+                                //printStream.print("&IP=" + "set by server");
+                                printStream.print("&SystemUsername=" + System.getProperty("user.name"));
+                                printStream.print("&SystemInfo=" + info);
+                                printStream.print("&NumberOfElements=" + dbi.count(new Element()));
+                                printStream.print("&NumberOfLocations=" + dbi.count(new Location()));
+                                printStream.print("&NumberOfVisits=" + dbi.count(new Visit()));
+                                printStream.print("&NumberOfSightings=" + dbi.count(new Sighting()));
+                                printStream.print("&NumberOfFiles=" + dbi.count(new WildLogFile()));
+                                printStream.print("&PartialLog=" + logFileSnippit);
+                                // Have to get the input stream in order to actually send the request
+                                try (InputStream inputStream = con.getInputStream()) {
+                                    StringBuilder response = new StringBuilder(35);
+                                    byte[] respBuffer = new byte[1096];
+                                    while (inputStream.read(respBuffer) >= 0) {
+                                        response.append(new String(respBuffer).trim());
+                                        respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
+                                    }
+                                    WildLogApp.LOGGER.log(Level.INFO, "WEB RESPONSE (uploadWildLogInfo): {0}", response.toString());
                                 }
-                            }
-                            // Send the parameters to the site
-                            //printStream.print("DateAndTime=" + "set by server");
-                            printStream.print("&WildLogVersion=" + WILDLOG_VERSION);
-                            printStream.print("&WorkspaceDatabaseVersion=" + wildLogOptions.getDatabaseVersion());
-                            printStream.print("&WorkspaceID=" + wildLogOptions.getWorkspaceID());
-                            printStream.print("&WorkspaceName=" + wildLogOptions.getWorkspaceName());
-                            //printStream.print("&IP=" + "set by server");
-                            printStream.print("&SystemUsername=" + System.getProperty("user.name"));
-                            printStream.print("&SystemInfo=" + info);
-                            printStream.print("&NumberOfElements=" + dbi.count(new Element()));
-                            printStream.print("&NumberOfLocations=" + dbi.count(new Location()));
-                            printStream.print("&NumberOfVisits=" + dbi.count(new Visit()));
-                            printStream.print("&NumberOfSightings=" + dbi.count(new Sighting()));
-                            printStream.print("&NumberOfFiles=" + dbi.count(new WildLogFile()));
-                            printStream.print("&PartialLog=" + logFileSnippit);
-                            // Have to get the input stream in order to actually send the request
-                            try (InputStream inputStream = con.getInputStream()) {
-                                StringBuilder response = new StringBuilder(35);
-                                byte[] respBuffer = new byte[1096];
-                                while (inputStream.read(respBuffer) >= 0) {
-                                    response.append(new String(respBuffer).trim());
-                                    respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
-                                }
-                                WildLogApp.LOGGER.log(Level.INFO, "WEB RESPONSE (uploadWildLogInfo): {0}", response.toString());
                             }
                         }
+                        catch (Exception ex) {
+                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        }
                     }
-                    catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
-                    }
-                }
-            }, 20, TimeUnit.SECONDS);
-            executor.shutdown();
+                }, 20, TimeUnit.SECONDS);
+                executor.shutdown();
+            }
         }
     }
 

@@ -67,6 +67,8 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_SLIDESHOW              (Paths.get("Export", "Slideshow")),
     WILDLOG_EXPORT_FILES                  (Paths.get("Export", "OriginalFiles")),
     WILDLOG_EXPORT_XML                    (Paths.get("Export", "XML")),
+    WILDLOG_EXPORT_XLS                    (Paths.get("Export", "Excel")),
+    WILDLOG_EXPORT_XLS_PAARL              (Paths.get("Export", "Excel", "Paarl Format")),
     WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace")),
     WILDLOG_BUNDLED_APPLICATION           (Paths.get("WildLogApplication"));
 
