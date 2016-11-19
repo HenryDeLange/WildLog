@@ -1426,12 +1426,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             tempFile.setDefaultFile(false);
                             app.getDBI().createOrUpdate(tempFile, true);
                         }
-                        UtilsFileProcessing.performFileUpload(
-                            Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(),
+                        UtilsFileProcessing.performFileUpload(new Element(sightingWrapper.getSighting().getElementName()),
                             Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getElementName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
-                            app, true, null, true, false);
+                            app, true, null, true, true);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(), wildLogFile.getFilename(),
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
@@ -1459,12 +1458,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             tempFile.setDefaultFile(false);
                             app.getDBI().createOrUpdate(tempFile, true);
                         }
-                        UtilsFileProcessing.performFileUpload(
-                            Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(),
+                        UtilsFileProcessing.performFileUpload(new Location(sightingWrapper.getSighting().getLocationName()),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
-                            app, true, null, true, false);
+                            app, true, null, true, true);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(), wildLogFile.getFilename(),
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
@@ -1488,12 +1486,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             tempFile.setDefaultFile(false);
                             app.getDBI().createOrUpdate(tempFile, true);
                         }
-                        UtilsFileProcessing.performFileUpload(
-                            Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(),
+                        UtilsFileProcessing.performFileUpload(new Location(visit.getLocationName()),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
-                            app, true, null, true, false);
+                            app, true, null, true, true);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(), wildLogFile.getFilename(),
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
@@ -1521,12 +1518,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             tempFile.setDefaultFile(false);
                             app.getDBI().createOrUpdate(tempFile, true);
                         }
-                        UtilsFileProcessing.performFileUpload(
-                            Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(),
+                        UtilsFileProcessing.performFileUpload(new Visit(sightingWrapper.getSighting().getVisitName()),
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getVisitName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
-                            app, true, null, true, false);
+                            app, true, null, true, true);
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(), wildLogFile.getFilename(),
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(

@@ -28,7 +28,9 @@ import javax.swing.JFrame;
 import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -101,8 +103,12 @@ public final class UtilsFileProcessing {
 //        return Arrays.asList(fileChooser.getSelectedFiles());
         return Arrays.asList(fileChooser.getFiles());
     }
+    
+    private static class SequenceCounter {
+        public int counter = 0;
+    }
 
-    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, 
+    public static void performFileUpload(final DataObjectWithWildLogFile inDAOWithID, final Path inPrefixFolder, final File[] inFiles, 
             final Runnable inRunWhenDone, 
             final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, 
             final boolean inCreateThumbnails, final boolean inHandleSyncIssuesForPossibleDuplicatesInList) {
@@ -115,6 +121,7 @@ public final class UtilsFileProcessing {
         }
         // Submit the work to the executor
         Collection<Callable<Object>> listCallables = new ArrayList<>(inFiles.length);
+        final SequenceCounter sequenceCounter = new SequenceCounter();
         for (File inFile : inFiles) {
             if (inFile != null) {
                 final File fromFile = inFile;
@@ -126,18 +133,18 @@ public final class UtilsFileProcessing {
                             lastFilePath = fromPath;
                             // Is an image
                             if (WildLogFileExtentions.Images.isKnownExtention(fromPath)) {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inPrefixFolder, fromPath, inApp, inID, 
-                                        inCreateThumbnails, theLock);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inPrefixFolder, fromPath, 
+                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, theLock);
                             }
                             else
                             // Is a movie
                             if (WildLogFileExtentions.Movies.isKnownExtention(fromPath)) {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inPrefixFolder, fromPath, inApp, inID, 
-                                        inCreateThumbnails, theLock);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inPrefixFolder, fromPath, 
+                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, theLock);
                             }
                             else {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inPrefixFolder, fromPath, inApp, inID, 
-                                        inCreateThumbnails, theLock);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inPrefixFolder, fromPath, 
+                                        sequenceCounter.counter++, inApp, inDAOWithID, inCreateThumbnails, theLock);
                             }
                         }
                         return null;
@@ -159,7 +166,7 @@ public final class UtilsFileProcessing {
     }
 
     private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, Path inFromFile, 
-            WildLogApp inApp, String inID, boolean inCreateThumbnails, Object inTheLock) {
+            int inSequenceIndex, WildLogApp inApp, DataObjectWithWildLogFile inDAOWithID, boolean inCreateThumbnails, Object inTheLock) {
         // Make the folder
         Path toFolder = inWorkspacePath.getAbsoluteFullPath().resolve(inPrefixFolder).normalize().toAbsolutePath();
         try {
@@ -171,11 +178,11 @@ public final class UtilsFileProcessing {
         WildLogFile wildLogFile;
         if (inTheLock != null) {
             synchronized (inTheLock) {
-                wildLogFile = doTheFileSave(toFolder, inFromFile, inID, inFileType, inApp);
+                wildLogFile = doTheFileSave(toFolder, inFromFile, inDAOWithID, inFileType, inSequenceIndex, inApp);
             }
         }
         else {
-            wildLogFile = doTheFileSave(toFolder, inFromFile, inID, inFileType, inApp);
+            wildLogFile = doTheFileSave(toFolder, inFromFile, inDAOWithID, inFileType, inSequenceIndex, inApp);
         }
         // Create the default thumbnails if it is an image
         // (Dit sal dan hopelik 'n beter user experience gee as die thumbnails klaar daar is teen die tyd dat mens dit in die app view...)
@@ -201,12 +208,29 @@ public final class UtilsFileProcessing {
         }
     }
 
-    private static WildLogFile doTheFileSave(Path toFolder, Path inFromFile, String inID, WildLogFileType inFileType, WildLogApp inApp) {
+    private static WildLogFile doTheFileSave(Path toFolder, Path inFromFile, DataObjectWithWildLogFile inDAOWithID, 
+            WildLogFileType inFileType, int inSequenceIndex, WildLogApp inApp) {
         // Setup the output files
-        Path toFile = toFolder.resolve(inFromFile.getFileName());
+        String fileName = inFromFile.getFileName().toString();
+        if (inDAOWithID instanceof Sighting && fileName.lastIndexOf('.') > 0) {
+            // Rename the Sighting files to reflect the date of the Sighting (useful for external camera trap data tools)
+            String tempFileName = ((Sighting) inDAOWithID).getCustomFileName();
+            if (inSequenceIndex > 0) {
+                tempFileName = tempFileName + " [" + inSequenceIndex + "]";
+            }
+            fileName = tempFileName + fileName.substring(fileName.lastIndexOf('.'));
+        }
+        Path toFile = toFolder.resolve(fileName);
         // Check that the filename is unique
         while (Files.exists(toFile)) {
-            toFile = toFolder.resolve("wl_" + toFile.getFileName());
+            String tempFileName;
+            if (inDAOWithID instanceof Sighting && fileName.lastIndexOf('.') > 0) {
+                tempFileName = ((Sighting) inDAOWithID).getCustomFileName();
+            }
+            else {
+                tempFileName = fileName.substring(0, fileName.lastIndexOf('.'));
+            }
+            toFile = toFolder.resolve(tempFileName + " [" + ++inSequenceIndex + "]" + fileName.substring(fileName.lastIndexOf('.')));
         }
         // Copy the original file into WildLog's folders. (Don't overwrite other files, and give an error if it already exists.)
         copyFile(inFromFile, toFile, false, false);
@@ -220,7 +244,7 @@ public final class UtilsFileProcessing {
             WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
         WildLogFile wildLogFile = new WildLogFile(
-                inID,
+                inDAOWithID.getWildLogFileID(),
                 toFile.getFileName().toString(),
                 WildLogPaths.getFullWorkspacePrefix().relativize(toFile).toString(),
                 inFileType,

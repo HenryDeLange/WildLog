@@ -808,7 +808,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 Date startDate = listWrapper.getImageList().get(0).getDate();
                                 Date endDate = listWrapper.getImageList().get(listWrapper.getImageList().size()-1).getDate();
                                 List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
-                                boolean uploadListContainsDuplicates = false;
+                                boolean uploadListContainsDuplicates = true;
                                 for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
                                     // Confirm the correct start and end times
                                     if (imageWrapper.getDate().getTime() < startDate.getTime()) {
@@ -818,14 +818,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     if (imageWrapper.getDate().getTime() > endDate.getTime()) {
                                         endDate = imageWrapper.getDate();
                                     }
-                                    if (!uploadListContainsDuplicates) {
-                                        for (File testDuplicateFiles : files) {
-                                            if (testDuplicateFiles.equals(imageWrapper.getFile().toFile())) {
-                                                uploadListContainsDuplicates = true;
-                                                break;
-                                            }
-                                        }
-                                    }
+//                                    if (!uploadListContainsDuplicates) {
+//                                        for (File testDuplicateFiles : files) {
+//                                            if (testDuplicateFiles.equals(imageWrapper.getFile().toFile())) {
+//                                                uploadListContainsDuplicates = true;
+//                                                break;
+//                                            }
+//                                        }
+//                                    }
                                     // Prepare file uploadlist
                                     files.add(imageWrapper.getFile().toFile());
                                 }
@@ -844,8 +844,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     app.getDBI().createOrUpdate(sightingWrapper, false);
                                 }
                                 // Save the corresponding images
-                                UtilsFileProcessing.performFileUpload(
-                                        sightingWrapper.getWildLogFileID(),
+                                UtilsFileProcessing.performFileUpload(sightingWrapper,
                                         Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.toPath()),
                                         files.toArray(new File[files.size()]),
                                         null, 
@@ -888,12 +887,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     for (int t = 0; t < lstVisitFiles.size(); t++) {
                         visitFiles[t] = lstVisitFiles.get(t).toFile();
                     }
-                    UtilsFileProcessing.performFileUpload(
-                            visit.getWildLogFileID(),
+                    UtilsFileProcessing.performFileUpload(visit,
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()),
                             visitFiles,
                             null, 
-                            app, false, null, true, false);
+                            app, false, null, true, true);
                     // Saving is done, now open the visits's tab
                     this.setMessage("Saving the Bulk Import: Finished");
                     this.setTaskProgress(100);

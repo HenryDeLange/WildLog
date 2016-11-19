@@ -166,8 +166,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }
 
     private void uploadFiles(List<File> inFiles) {
-        UtilsFileProcessing.performFileUpload(
-                element.getWildLogFileID(),
+        UtilsFileProcessing.performFileUpload(element,
                 Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getPrimaryName()),
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
@@ -180,7 +179,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         btnUpdateActionPerformed(null);
                     }
                 },
-                app, true, null, true, false);
+                app, true, null, true, true);
     }
 
     public Element getElement() {

@@ -297,8 +297,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }
 
     private void uploadFiles(List<File> inFiles) {
-        UtilsFileProcessing.performFileUpload(
-                sighting.getWildLogFileID(),
+        UtilsFileProcessing.performFileUpload(sighting,
                 Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
@@ -317,7 +316,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         btnUpdateSightingActionPerformed(null);
                     }
                 }, 
-                app, true, this, true, false);
+                app, true, this, true, true);
     }
 
     private void setupSightingInfo() {

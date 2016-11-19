@@ -2,6 +2,7 @@ package wildlog.data.dataobjects;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
@@ -40,11 +41,20 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     /**
      * Return the Path representing the folder names where the files for this sighting should be stored.
      * This path is relative to the normal prefix, such as 'Files/Images/Observation'
-     * and does not include the filename. For example: "Rooibok/Kruger/[id]".
+     * and does not include the filename.
      * @return
      */
     public Path toPath() {
-        return Paths.get(elementName, locationName, UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(UtilsTime.getLocalDateTimeFromDate(date)) + "-Observation[" + sightingCounter + "]");
+        return Paths.get(locationName, visitName, elementName, Integer.toString(numberOfElements));
+    }
+    
+    public String getCustomFileName() {
+        if (date != null) {
+            return UtilsTime.WL_DATE_FORMATTER_FOR_FILES_CAMERATRAP_TIMESTAMP.format(UtilsTime.getLocalDateTimeFromDate(date));
+        }
+        else {
+            return UtilsTime.WL_DATE_FORMATTER_FOR_FILES_CAMERATRAP_TIMESTAMP.format(LocalDateTime.now());
+        }
     }
 
     @Override

@@ -23,6 +23,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.Sex;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.maps.kml.UtilsKML;
 import wildlog.maps.utils.UtilsGPS;
@@ -1008,44 +1009,41 @@ public class ExportDialog extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the Paarl Excel Export");
-                
-// TODO: Beter progress indicator
-                
                 Path path;
                 List<Sighting> lstSightingsToUse;
                 String sheetName;
                 if (location != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName() 
-                            + "_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName()) 
+                            .resolve(location.getDisplayName() + ".xls");
                     lstSightingsToUse = app.getDBI().list(new Sighting(null, location.getName(), null), false);
                     sheetName = location.getDisplayName();
                 }
                 else
                 if (visit != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName()
-                            + "_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName())
+                            .resolve(visit.getDisplayName() + ".xls");
                     lstSightingsToUse = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
                     sheetName = visit.getDisplayName();
                 }
                 else
                 if (element != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName()
-                            + "_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName())
+                            .resolve(element.getDisplayName() + ".xls");
                     lstSightingsToUse = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
                     sheetName = element.getDisplayName();
                 }
                 else
                 if (sighting != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName()
-                            + "_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName())
+                            .resolve(sighting.getDisplayName() + ".xls");
                     lstSightingsToUse = new ArrayList<>(1);
                     lstSightingsToUse.add(sighting);
                     sheetName = sighting.getDisplayName();
                 }
                 else
                 if (lstSightings != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations"
-                    + "_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations")
+                            .resolve("Observations" + ".xls");
                     lstSightingsToUse = lstSightings;
                     sheetName = "Observations";
                 }
@@ -1054,6 +1052,8 @@ public class ExportDialog extends JDialog {
                     lstSightingsToUse = new ArrayList<>(0);
                     sheetName = "Unknown";
                 }
+                setTaskProgress(5);
+                setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
                 Files.createDirectories(path.getParent());
                 // OBSERVATIONS FILE
                 // Create workbook and sheet
@@ -1062,16 +1062,19 @@ public class ExportDialog extends JDialog {
                 // Setup header row
                 Row row = sheet.createRow(0);
                 int col = 0;
-                row.createCell(col++).setCellValue("No.");
+                row.createCell(col++).setCellValue("Row");
                 row.createCell(col++).setCellValue("Site");
                 row.createCell(col++).setCellValue("Files");
                 row.createCell(col++).setCellValue("Species");
                 row.createCell(col++).setCellValue("Date");
                 row.createCell(col++).setCellValue("Comments");
+                row.createCell(col++).setCellValue("Latitude");
+                row.createCell(col++).setCellValue("Longitude");
                 // Add content rows
                 int rowCount = 1;
                 Map<String, Element> mapElements = new HashMap<>();
                 Map<String, Visit> mapVisits = new HashMap<>();
+                int counter = 0;
                 for (Sighting tempSighting : lstSightingsToUse) {
                     col = 0;
                     row = sheet.createRow(rowCount);
@@ -1079,11 +1082,17 @@ public class ExportDialog extends JDialog {
                     row.createCell(col++).setCellValue(tempSighting.getVisitName());
                     List<WildLogFile> lstFiles = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
                     String files = "";
+                    int counterFiles = 1;
                     for (WildLogFile wildLogFile : lstFiles) {
-                        files = files + ", " + wildLogFile.getDBFilePath();
+                        String fileName = wildLogFile.getRelativePath().getFileName().toString();
+                        fileName = tempSighting.getElementName()
+                                .concat(" [row ").concat(Integer.toString(rowCount))
+                                .concat(" no. ").concat(Integer.toString(counterFiles++))
+                                .concat("]")
+                                .concat(fileName.substring(fileName.lastIndexOf('.')));
+                        files = files + ", " + fileName;
                         UtilsFileProcessing.copyFile(wildLogFile.getAbsolutePath(), 
-                                WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(wildLogFile.getRelativePath()), 
-                                true, true);
+                                path.getParent().resolve("Files").toAbsolutePath().resolve(fileName), true, true);
                     }
                     if (files.length() >= 2) {
                         files = files.substring(2, files.length());
@@ -1100,7 +1109,20 @@ public class ExportDialog extends JDialog {
                     row.createCell(col++).setCellValue(tempElement.getScientificName() + " (" + tempSighting.getElementName() + ")");
                     row.createCell(col++).setCellValue(UtilsTime.WL_DATE_FORMATTER_WITH_HHMM.format(
                             UtilsTime.getLocalDateTimeFromDate(tempSighting.getDate())));
-                    row.createCell(col++).setCellValue(tempSighting.getDetails());
+                    String comment = tempSighting.getDetails();
+                    if (tempSighting.getNumberOfElements() > 0) {
+                        comment = comment + ", " + tempSighting.getNumberOfElements() + " Individuals";
+                    }
+                    if (tempSighting.getSex() != Sex.NONE && tempSighting.getSex() != Sex.UNKNOWN) {
+                        comment = comment + ", " + tempSighting.getSex().toString();
+                    }
+                    comment = comment.trim();
+                    if (!comment.isEmpty() && comment.charAt(0) == ',') {
+                        comment = comment.substring(1).trim();
+                    }
+                    row.createCell(col++).setCellValue(comment);
+                    row.createCell(col++).setCellValue(UtilsGPS.getLatDecimalDegree(tempSighting));
+                    row.createCell(col++).setCellValue(UtilsGPS.getLonDecimalDegree(tempSighting));
                     rowCount++;
                     // Keep track of the GPS points and Visits for the second file
                     String gps = UtilsGPS.getLatitudeString(tempSighting) + " " + UtilsGPS.getLongitudeString(tempSighting);
@@ -1108,7 +1130,12 @@ public class ExportDialog extends JDialog {
                     if (tempVisit == null) {
                         mapVisits.put(gps, app.getDBI().find(new Visit(tempSighting.getVisitName())));
                     }
+                    // Update progress
+                    setTaskProgress(5 + (int)((counter/(double)lstSightingsToUse.size())*85));
+                    setMessage(getMessage().substring(0, getMessage().lastIndexOf(' ')) + " " + getProgress() + "%");
                 }
+                setTaskProgress(90);
+                setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
                 // Write the observations file
                 Path observationsFile = path.getParent().resolve("Register_" + path.getFileName().toString());
                 try (FileOutputStream out = new FileOutputStream(observationsFile.toFile())) {
@@ -1146,6 +1173,8 @@ public class ExportDialog extends JDialog {
                     }
                     row = sheet.createRow(rowCount++);
                 }
+                setTaskProgress(95);
+                setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
                 Path visitsFile = path.getParent().resolve("Site_" + path.getFileName().toString());
                 try (FileOutputStream out = new FileOutputStream(visitsFile.toFile())) {
                     workbook.write(out);
@@ -1155,6 +1184,7 @@ public class ExportDialog extends JDialog {
                 }
                 // Open the visits file
                 UtilsFileProcessing.openFile(visitsFile);
+                setTaskProgress(100);
                 setMessage("Done with the Paarl Excel Export");
                 return null;
             }

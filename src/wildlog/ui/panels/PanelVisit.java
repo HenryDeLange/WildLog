@@ -113,8 +113,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                             @Override
                             protected Object doInBackground() throws Exception {
-                                UtilsPanelGenerator.openBulkUploadTab(
-                                        new BulkUploadPanel(app, this, visit.getLocationName(), visit.getName(), importPath, panelVisitHandle), (JTabbedPane)getParent());
+                                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, visit.getLocationName(), visit.getName(), importPath, panelVisitHandle), (JTabbedPane)getParent());
                                 return null;
                             }
                         });
@@ -168,8 +167,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }
 
     private void uploadFiles(List<File> inFiles) {
-        UtilsFileProcessing.performFileUpload(
-                visit.getWildLogFileID(),
+        UtilsFileProcessing.performFileUpload(visit,
                 Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(locationForVisit.getName()).resolve(visit.getName()),
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
@@ -182,7 +180,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         btnUpdateActionPerformed(null);
                     }
                 }, 
-                app, true, null, true, false);
+                app, true, null, true, true);
     }
 
     public void setVisit(Visit inVisit) {

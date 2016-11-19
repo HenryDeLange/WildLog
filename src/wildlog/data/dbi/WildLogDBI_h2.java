@@ -868,6 +868,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 if (results.getInt("VERSION") == 7) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v7 (before upgrade to 8)"));
                                     doUpdate8();
+                                    wasMajorUpgrade = true; // Omdat die Files se folder struktuur verander het...
                                 }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;

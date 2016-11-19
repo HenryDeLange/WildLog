@@ -67,6 +67,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
@@ -2059,29 +2060,42 @@ public final class WildLogView extends JFrame {
                             public int counter = 0;
                         }
                         class CleanupHelper {
-                            private void doTheMove(Path inExpectedPath, Path inExpectedPrefix, WildLogFile inWildLogFile, final CleanupCounter fileCount) {
+                            private void doTheMove(DataObjectWithWildLogFile inDAOWithFile, Path inExpectedPath, Path inExpectedPrefix, WildLogFile inWildLogFile, final CleanupCounter fileCount) {
                                 Path shouldBePath = inExpectedPath.resolve(inExpectedPrefix);
                                 Path currentPath = inWildLogFile.getAbsolutePath().getParent();
-                                if (!shouldBePath.equals(currentPath)) {
-                                    finalHandleFeedback.println("ERROR:     Incorrect path: " + currentPath);
-                                    finalHandleFeedback.println("+RESOLVED: Moved the file to the correct path: " + shouldBePath);
+                                boolean renameBasedOnSighting = false;
+                                String fileName = inWildLogFile.getRelativePath().getFileName().toString();
+                                if (inDAOWithFile instanceof Sighting) {
+                                    String tempFileName = fileName.substring(0, fileName.lastIndexOf('.'));
+                                    int seqIndex = tempFileName.lastIndexOf('[');
+                                    if (seqIndex > 0) {
+                                        tempFileName = tempFileName.substring(0, seqIndex - 1);
+                                    }
+                                    if (!((Sighting)inDAOWithFile).getCustomFileName().equals(tempFileName)) {
+                                        renameBasedOnSighting = true;
+                                        fileName = ((Sighting)inDAOWithFile).getCustomFileName() + fileName.substring(fileName.lastIndexOf('.'));
+                                    }
+                                }
+                                if (!shouldBePath.equals(currentPath) || renameBasedOnSighting) {
+                                    finalHandleFeedback.println("ERROR:     Incorrect path: " + inWildLogFile.getAbsolutePath());
+                                    finalHandleFeedback.println("+RESOLVED: Moved the file to the correct path: " + shouldBePath.resolve(fileName));
                                     // "Re-upload" the file to the correct location
                                     UtilsFileProcessing.performFileUpload(
-                                            inWildLogFile.getId(),
+                                            inDAOWithFile,
                                             inExpectedPrefix,
                                             new File[]{inWildLogFile.getAbsolutePath().toFile()},
                                             null, 
-                                            app, false, null, false, false);
+                                            app, false, null, false, true);
                                     // Delete the wrong entry
                                     app.getDBI().delete(inWildLogFile);
                                     fileCount.counter++;
                                 }
                             }
-                            public void moveFilesToCorrectFolders(WildLogFile inWildLogFile, Path inPrefix, final CleanupCounter fileCount) {
+                            public void moveFilesToCorrectFolders(DataObjectWithWildLogFile inDAOWithFile, WildLogFile inWildLogFile, Path inPrefix, final CleanupCounter fileCount) {
                                 // Check to make sure the parent paths are correct, if not then move the file to the correct place and add a new DB entry before deleting the old one
                                 // Maak seker alle DB paths is relative (nie absolute nie) en begin met propper WL roots
                                 if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
-                                    doTheMove(
+                                    doTheMove(inDAOWithFile,
                                             WildLogPaths.WILDLOG_FILES_IMAGES.getAbsoluteFullPath(),
                                             inPrefix,
                                             inWildLogFile,
@@ -2089,14 +2103,14 @@ public final class WildLogView extends JFrame {
                                 }
                                 else
                                 if (WildLogFileType.MOVIE.equals(inWildLogFile.getFileType())) {
-                                    doTheMove(
+                                    doTheMove(inDAOWithFile,
                                             WildLogPaths.WILDLOG_FILES_MOVIES.getAbsoluteFullPath(),
                                             inPrefix,
                                             inWildLogFile,
                                             fileCount);
                                 }
                                 else {
-                                    doTheMove(
+                                    doTheMove(inDAOWithFile,
                                             WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath(),
                                             inPrefix,
                                             inWildLogFile,
@@ -2213,7 +2227,7 @@ public final class WildLogView extends JFrame {
                                     continue;
                                 }
                                 // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(
+                                cleanupHelper.moveFilesToCorrectFolders(temp, 
                                         wildLogFile,
                                         Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()),
                                         filesMoved);
@@ -2231,7 +2245,7 @@ public final class WildLogView extends JFrame {
                                     continue;
                                 }
                                 // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(
+                                cleanupHelper.moveFilesToCorrectFolders(temp, 
                                         wildLogFile,
                                         Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getLocationName(), temp.getName()),
                                         filesMoved);
@@ -2249,7 +2263,7 @@ public final class WildLogView extends JFrame {
                                     continue;
                                 }
                                 // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(
+                                cleanupHelper.moveFilesToCorrectFolders(temp, 
                                         wildLogFile,
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()),
                                         filesMoved);
@@ -2274,7 +2288,7 @@ public final class WildLogView extends JFrame {
                                     continue;
                                 }
                                 // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(
+                                cleanupHelper.moveFilesToCorrectFolders(temp, 
                                         wildLogFile,
                                         Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()),
                                         filesMoved);
@@ -3138,12 +3152,11 @@ public final class WildLogView extends JFrame {
                             // TODO: Ek kan ook in die toekoms die "HasFoto" checkbox op WildNote gebruik om die linking meer akkuraat te maak...
                             if (mapFilesToLink != null && mapFilesToLink.get(sighting.getDate().getTime()/IMAGE_LINK_INTERVAL) != null) {
                                 List<File> lstFiles = mapFilesToLink.get(sighting.getDate().getTime()/IMAGE_LINK_INTERVAL);
-                                UtilsFileProcessing.performFileUpload(
-                                        sighting.getWildLogFileID(),
+                                UtilsFileProcessing.performFileUpload(sighting,
                                         Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
                                         lstFiles.toArray(new File[lstFiles.size()]),
                                         null, 
-                                        app, false, null, true, false);
+                                        app, false, null, true, true);
                             }
                             setTaskProgress(25 + (int)(t/(double)listSightings.size()*70));
                             setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");

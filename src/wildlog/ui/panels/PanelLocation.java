@@ -175,8 +175,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }
 
     private void uploadFiles(List<File> inFiles) {
-        UtilsFileProcessing.performFileUpload(
-                locationWL.getWildLogFileID(),
+        UtilsFileProcessing.performFileUpload(locationWL,
                 Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(locationWL.getName()),
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
@@ -189,7 +188,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         btnUpdateActionPerformed(null);
                     }
                 }, 
-                app, true, null, true, false);
+                app, true, null, true, true);
     }
 
     public void setLocationWL(Location inLocation) {
