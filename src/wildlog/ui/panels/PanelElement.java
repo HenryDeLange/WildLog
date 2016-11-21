@@ -31,7 +31,6 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
@@ -103,7 +102,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void setupUI() {
         initComponents();
         imageIndex = 0;
-        int fotoCount = app.getDBI().count(new WildLogFile(element.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, element.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1595,13 +1594,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         if (element.getPrimaryName() != null) {
-            lblNumberOfSightings.setText(Integer.toString(app.getDBI().count(new Sighting(element.getPrimaryName(), null, null))));
+            lblNumberOfSightings.setText(Integer.toString(app.getDBI().countSightings(0, element.getPrimaryName(), null, null)));
         }
         else {
             lblNumberOfSightings.setText("0");
             lblNumberOfLocations.setText("0");
         }
-        int fotoCount = app.getDBI().count(new WildLogFile(element.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, element.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1843,7 +1842,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
 
     private void setupNumberOfImages() {
-        int fotoCount = app.getDBI().count(new WildLogFile(element.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, element.getWildLogFileID());
         if (fotoCount > 0) {
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         } 

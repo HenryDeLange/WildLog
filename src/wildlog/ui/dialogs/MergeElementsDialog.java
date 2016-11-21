@@ -153,7 +153,7 @@ public class MergeElementsDialog extends JDialog {
                 tempSighting.setElementName(keepElement.getPrimaryName());
                 app.getDBI().createOrUpdate(tempSighting, false);
             }
-            app.getDBI().delete(replaceElement);
+            app.getDBI().deleteElement(replaceElement.getPrimaryName());
             // Close the window
             setVisible(false);
             dispose();

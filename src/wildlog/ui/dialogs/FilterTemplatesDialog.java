@@ -251,7 +251,7 @@ public class FilterTemplatesDialog extends JDialog {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (!lstTemplates.getSelectionModel().isSelectionEmpty()) {
             // Get the data from the database
-            app.getDBI().delete(new AdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), lstTemplates.getSelectedValue().toString(), null));
+            app.getDBI().deleteAdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), lstTemplates.getSelectedValue().toString());
             // Reload the data
             loadData();
         }

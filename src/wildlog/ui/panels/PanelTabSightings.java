@@ -16,7 +16,6 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
@@ -578,7 +577,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (tblSightings.getSelectedRowCount() == 1) {
             Sighting sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(
                             tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8)));
-            int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));
+            int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());
             if (fotoCount > 0 ) {
                 imageIndex = 0;
                 UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
@@ -682,9 +681,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
            });
             if (result == JOptionPane.YES_OPTION) {
                 for (int row : tblSightings.getSelectedRows())  {
-                    Sighting sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 8)));
-                    app.getDBI().delete(sighting);
+                    app.getDBI().deleteSighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 8));
                 }
                 doTheRefresh(this);
             }

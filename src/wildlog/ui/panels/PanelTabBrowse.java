@@ -721,7 +721,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
                             }
                             // Delete old DB file enrty and save new one
-                            app.getDBI().delete(wildLogFile);
+                            app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                             newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(newWildLogFile.getAbsolutePath()));
                             newWildLogFile.setFileSize(Files.size(newWildLogFile.getAbsolutePath()));
                             app.getDBI().createOrUpdate(newWildLogFile, false);
@@ -1202,7 +1202,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 if (result == JOptionPane.YES_OPTION) {
                                     Location location = (Location) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                     UtilsPanelGenerator.removeOpenedTab(location.getName(), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent());
-                                    app.getDBI().delete(location);
+                                    app.getDBI().deleteLocation(location.getName());
                                     doTheRefresh(null);
                                 }
                             }
@@ -1226,7 +1226,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 if (result == JOptionPane.YES_OPTION) {
                                     Element element = (Element) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                     UtilsPanelGenerator.removeOpenedTab(element.getPrimaryName(), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent());
-                                    app.getDBI().delete(element);
+                                    app.getDBI().deleteElement(element.getPrimaryName());
                                     doTheRefresh(null);
                                 }
                             }
@@ -1250,7 +1250,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 if (result == JOptionPane.YES_OPTION) {
                                     Visit visit = (Visit) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                     UtilsPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
-                                    app.getDBI().delete(visit);
+                                    app.getDBI().deleteVisit(visit.getName());
                                     doTheRefresh(null);
                                 }
                             }
@@ -1273,7 +1273,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 });
                                 if (result == JOptionPane.YES_OPTION) {
                                     SightingWrapper sightingWrapper = (SightingWrapper) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                    app.getDBI().delete(sightingWrapper.getSighting());
+                                    app.getDBI().deleteSighting(sightingWrapper.getSighting().getSightingCounter());
                                     doTheRefresh(null);
                                 }
                             }
@@ -1544,7 +1544,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 List<Visit> visits = app.getDBI().list(new Visit(null, ((Location) treeNode.getUserObject()).getName()));
                 Collections.sort(visits);
                 for (Visit tempVisit : visits) {
-                    LazyTreeNode lazyNode = new LazyTreeNode(tempVisit, (app.getDBI().count(new Sighting(null, tempVisit.getLocationName(), tempVisit.getName())) == 0));
+                    LazyTreeNode lazyNode = new LazyTreeNode(tempVisit, (app.getDBI().countSightings(0, null, tempVisit.getLocationName(), tempVisit.getName()) == 0));
                     treeNode.add(lazyNode);
                 }
             }
@@ -1624,7 +1624,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         List<Location> locations = app.getDBI().list(new Location());
         Collections.sort(locations);
         for (Location tempLocation : locations) {
-            LazyTreeNode lazyNode = new LazyTreeNode(tempLocation, (app.getDBI().count(new Visit(null, tempLocation.getName())) == 0));
+            LazyTreeNode lazyNode = new LazyTreeNode(tempLocation, (app.getDBI().countVisits(null, tempLocation.getName()) == 0));
             root.add(lazyNode);
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
@@ -1641,7 +1641,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         List<Element> elements = app.getDBI().list(searchElementBrowseTab);
         Collections.sort(elements);
         for (Element tempElement : elements) {
-            LazyTreeNode lazyNode = new LazyTreeNode(tempElement, (app.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, null)) == 0));
+            LazyTreeNode lazyNode = new LazyTreeNode(tempElement, (app.getDBI().countSightings(0, tempElement.getPrimaryName(), null, null) == 0));
             root.add(lazyNode);
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));

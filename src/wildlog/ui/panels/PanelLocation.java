@@ -20,7 +20,6 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
@@ -121,7 +120,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void setupUI() {
         initComponents();
         imageIndex = 0;
-        int fotoCount = app.getDBI().count(new WildLogFile(locationWL.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1188,8 +1187,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLatitude.setText(UtilsGPS.getLatitudeString(locationWL));
         txtLongitude.setText(UtilsGPS.getLongitudeString(locationWL));
         if (locationWL.getName() != null) {
-            lblNumberOfSightings.setText(Integer.toString(app.getDBI().count(new Sighting(null, locationWL.getName(), null))));
-            lblNumberOfVisits.setText(Integer.toString(app.getDBI().count(new Visit(null, locationWL.getName()))));
+            lblNumberOfSightings.setText(Integer.toString(app.getDBI().countSightings(0, null, locationWL.getName(), null)));
+            lblNumberOfVisits.setText(Integer.toString(app.getDBI().countVisits(null, locationWL.getName())));
             if (rdbLocation.isSelected()) {
                 UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
             }
@@ -1200,7 +1199,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblNumberOfSightings.setText("0");
             lblNumberOfVisits.setText("0");
         }
-        int fotoCount = app.getDBI().count(new WildLogFile(locationWL.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1352,9 +1351,9 @@ public class PanelLocation extends PanelCanSetupHeader {
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblVisit.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    Visit visit = app.getDBI().find(new Visit((String)tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1)));
-                    UtilsPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
-                    app.getDBI().delete(visit);
+                    String visitName = (String)tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1);
+                    UtilsPanelGenerator.removeOpenedTab(visitName, PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
+                    app.getDBI().deleteVisit(visitName);
                 }
                 formComponentShown(null);
             }
@@ -1513,7 +1512,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void setupNumberOfImages() {
-        int fotoCount = app.getDBI().count(new WildLogFile(locationWL.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         }

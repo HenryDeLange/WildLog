@@ -208,17 +208,16 @@ public class MergeVisitDialog extends JDialog {
         if (lstFromVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0 && lstToVisit.getSelectedIndex() >= 0) {
             // Update the Visit
             for (String tempFromVisitName : (List<String>) lstFromVisit.getSelectedValuesList()) {
-                Visit tempFromVisit = app.getDBI().find(new Visit(tempFromVisitName));
                 // Update the sightings
                 Sighting tempSighting = new Sighting();
-                tempSighting.setVisitName(tempFromVisit.getName());
+                tempSighting.setVisitName(tempFromVisitName);
                 List<Sighting> sightings = app.getDBI().list(tempSighting, false);
                 for (Sighting sighting : sightings) {
                     sighting.setLocationName((String)lstToLocation.getSelectedValue());
                     sighting.setVisitName((String)lstToVisit.getSelectedValue());
                     app.getDBI().createOrUpdate(sighting, false);
                 }
-                app.getDBI().delete(tempFromVisit);
+                app.getDBI().deleteVisit(tempFromVisitName);
             }
             setVisible(false);
             dispose();

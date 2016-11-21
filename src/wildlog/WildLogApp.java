@@ -50,11 +50,6 @@ import javax.swing.plaf.InsetsUIResource;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
-import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.Location;
-import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
@@ -71,7 +66,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     public static final Logger LOGGER = Logger.getLogger("WildLogApp");
-    public static String WILDLOG_VERSION = "4.3.3_beta";
+    public static String WILDLOG_VERSION = "4.4.1_beta";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static boolean useNimbusLF = false;
@@ -225,11 +220,11 @@ public class WildLogApp extends Application {
                                 //printStream.print("&IP=" + "set by server");
                                 printStream.print("&SystemUsername=" + System.getProperty("user.name"));
                                 printStream.print("&SystemInfo=" + info);
-                                printStream.print("&NumberOfElements=" + dbi.count(new Element()));
-                                printStream.print("&NumberOfLocations=" + dbi.count(new Location()));
-                                printStream.print("&NumberOfVisits=" + dbi.count(new Visit()));
-                                printStream.print("&NumberOfSightings=" + dbi.count(new Sighting()));
-                                printStream.print("&NumberOfFiles=" + dbi.count(new WildLogFile()));
+                                printStream.print("&NumberOfElements=" + dbi.countElements(null, null));
+                                printStream.print("&NumberOfLocations=" + dbi.countLocations(null));
+                                printStream.print("&NumberOfVisits=" + dbi.countVisits(null, null));
+                                printStream.print("&NumberOfSightings=" + dbi.countSightings(0, null, null, null));
+                                printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(null, null));
                                 printStream.print("&PartialLog=" + logFileSnippit);
                                 // Have to get the input stream in order to actually send the request
                                 try (InputStream inputStream = con.getInputStream()) {

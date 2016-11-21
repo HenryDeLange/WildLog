@@ -214,7 +214,7 @@ public class UtilsImageProcessing {
 
     public static int previousImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        int fotoCount = inApp.getDBI().count(new WildLogFile(inID));
+        int fotoCount = inApp.getDBI().countWildLogFiles(null, inID);
         if (fotoCount > 0) {
             if (newImageIndex > 0) {
                 newImageIndex = newImageIndex - 1;
@@ -232,7 +232,7 @@ public class UtilsImageProcessing {
 
     public static int nextImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        int fotoCount = inApp.getDBI().count(new WildLogFile(inID));
+        int fotoCount = inApp.getDBI().countWildLogFiles(null, inID);
         if (fotoCount > 0) {
             if (newImageIndex < fotoCount - 1) {
                 newImageIndex = newImageIndex + 1;
@@ -270,7 +270,7 @@ public class UtilsImageProcessing {
             List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
             if (fotos.size() > 0) {
                 WildLogFile tempFoto = fotos.get(newImageIndex);
-                inApp.getDBI().delete(tempFoto);
+                inApp.getDBI().deleteWildLogFile(tempFoto.getDBFilePath());
                 if (fotos.size() > 1) {
                     newImageIndex = newImageIndex - 1;
                     newImageIndex = nextImage(inID, newImageIndex, inImageLabel, inSize, inApp);
@@ -554,12 +554,10 @@ public class UtilsImageProcessing {
      * @param inSize
      * @return
      */
-    public static Path calculateAbsoluteThumbnailPath(WildLogFile inWildLogFile, WildLogThumbnailSizes inSize) {
-        Path finalPath = WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath()
-                .resolve(inWildLogFile.getRelativePath());
+    public static Path calculateAbsoluteThumbnailPath(String inRelativePath, WildLogThumbnailSizes inSize) {
+        Path finalPath = WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().resolve(inRelativePath);
         // Hardcoding all thumbnails to be JPG (even originally PNG images)
-        String newFilename = finalPath.getFileName().toString()
-                .substring(0, finalPath.getFileName().toString().lastIndexOf('.'))
+        String newFilename = finalPath.getFileName().toString().substring(0, finalPath.getFileName().toString().lastIndexOf('.'))
                 + "_" + inSize.getSize() + "px.jpg";
         return finalPath.resolveSibling(newFilename)/*.normalize()*/;
     }
@@ -573,7 +571,7 @@ public class UtilsImageProcessing {
      * @return
      */
     public static Path getAbsoluteThumbnailPathAndCreate(WildLogFile inWildLogFile, WildLogThumbnailSizes inSize) {
-        Path thumbnail = calculateAbsoluteThumbnailPath(inWildLogFile, inSize);
+        Path thumbnail = calculateAbsoluteThumbnailPath(inWildLogFile.getDBFilePath(), inSize);
         if (!Files.exists(thumbnail)) {
             createThumbnailOnDisk(thumbnail, inWildLogFile.getAbsolutePath(), inSize);
         }

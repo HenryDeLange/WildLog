@@ -148,8 +148,8 @@ public class MergeLocationDialog extends JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-            Location tempFromLocation = app.getDBI().find(new Location((String)lstFromLocation.getSelectedValue()));
-            List<Visit> listVisits = app.getDBI().list(new Visit(null, tempFromLocation.getName()));
+            String tempFromLocationName = (String)lstFromLocation.getSelectedValue();
+            List<Visit> listVisits = app.getDBI().list(new Visit(null, tempFromLocationName));
             for (Visit visit : listVisits) {
                 visit.setLocationName((String)lstToLocation.getSelectedValue());
                 app.getDBI().createOrUpdate(visit, visit.getName());
@@ -159,7 +159,7 @@ public class MergeLocationDialog extends JDialog {
                 sighting.setLocationName((String)lstToLocation.getSelectedValue());
                 app.getDBI().createOrUpdate(sighting, false);
             }
-            app.getDBI().delete(tempFromLocation);
+            app.getDBI().deleteLocation(tempFromLocationName);
             setVisible(false);
             dispose();
         }

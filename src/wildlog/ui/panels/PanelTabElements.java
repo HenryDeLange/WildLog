@@ -9,7 +9,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -322,7 +321,7 @@ public class PanelTabElements extends javax.swing.JPanel {
             }
             // Get Image
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
-            int fotoCount = app.getDBI().count(new WildLogFile(tempElement.getWildLogFileID()));
+            int fotoCount = app.getDBI().countWildLogFiles(null, tempElement.getWildLogFileID());
             if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(tempElement.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
@@ -390,7 +389,7 @@ public class PanelTabElements extends javax.swing.JPanel {
                 int[] selectedRows = tblElement.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
                     UtilsPanelGenerator.removeOpenedTab((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel);
-                    app.getDBI().delete(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1)));
+                    app.getDBI().deleteElement((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1));
                 }
                 formComponentShown(null);
             }

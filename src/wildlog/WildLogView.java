@@ -1410,10 +1410,10 @@ public final class WildLogView extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tabHomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabHomeComponentShown
-        lblLocations.setText("Places: " + app.getDBI().count(new Location()));
-        lblVisits.setText("Periods: " + app.getDBI().count(new Visit()));
-        lblSightings.setText("Observations: " + app.getDBI().count(new Sighting()));
-        lblCreatures.setText("Creatures: " + app.getDBI().count(new Element()));
+        lblLocations.setText("Places: " + app.getDBI().countLocations(null));
+        lblVisits.setText("Periods: " + app.getDBI().countVisits(null, null));
+        lblSightings.setText("Observations: " + app.getDBI().countSightings(0, null, null, null));
+        lblCreatures.setText("Creatures: " + app.getDBI().countElements(null, null));
         lblWorkspaceName.setText(app.getWildLogOptions().getWorkspaceName());
     }//GEN-LAST:event_tabHomeComponentShown
 
@@ -2087,7 +2087,7 @@ public final class WildLogView extends JFrame {
                                             null, 
                                             app, false, null, false, true);
                                     // Delete the wrong entry
-                                    app.getDBI().delete(inWildLogFile);
+                                    app.getDBI().deleteWildLogFile(inWildLogFile.getDBFilePath());
                                     fileCount.counter++;
                                 }
                             }
@@ -2181,21 +2181,21 @@ public final class WildLogView extends JFrame {
                             if (wildLogFile.getId() == null) {
                                 finalHandleFeedback.println("ERROR:     File record without an ID. FilePath: " + wildLogFile.getDBFilePath());
                                 finalHandleFeedback.println("+RESOLVED: Tried to delete the database file record and file on disk.");
-                                app.getDBI().delete(wildLogFile);
+                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                 filesWithoutID++;
                                 continue;
                             }
                             if (wildLogFile.getDBFilePath() == null) {
                                 finalHandleFeedback.println("ERROR:     File path missing from database record. FileID: " + wildLogFile.getId());
                                 finalHandleFeedback.println("+RESOLVED: Deleted the database file record.");
-                                app.getDBI().delete(wildLogFile);
+                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                 filesWithoutPath++;
                                 continue;
                             }
                             if (!Files.exists(wildLogFile.getAbsolutePath())) {
                                 finalHandleFeedback.println("ERROR:     File record in the database can't be found on disk. FilePath: " + wildLogFile.getDBFilePath());
                                 finalHandleFeedback.println("+RESOLVED: Deleted the database file record.");
-                                app.getDBI().delete(wildLogFile);
+                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                 filesNotOnDisk++;
                                 continue;
                             }
@@ -2222,7 +2222,7 @@ public final class WildLogView extends JFrame {
                                     finalHandleFeedback.println("ERROR:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", CreatureName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().delete(wildLogFile);
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                     filesWithBadID++;
                                     continue;
                                 }
@@ -2240,7 +2240,7 @@ public final class WildLogView extends JFrame {
                                     finalHandleFeedback.println("ERROR:     Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PeriodName Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("+RESOLVED: Deleted the file databse record and file from disk.");
-                                    app.getDBI().delete(wildLogFile);
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                     filesWithBadID++;
                                     continue;
                                 }
@@ -2258,7 +2258,7 @@ public final class WildLogView extends JFrame {
                                     finalHandleFeedback.println("ERROR:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PlaceName Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().delete(wildLogFile);
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                     filesWithBadID++;
                                     continue;
                                 }
@@ -2283,7 +2283,7 @@ public final class WildLogView extends JFrame {
                                     finalHandleFeedback.println("ERROR:     Could not find linked Observation for this file. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", ObservationID Used: " + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().delete(wildLogFile);
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                     filesWithBadID++;
                                     continue;
                                 }
@@ -2296,7 +2296,7 @@ public final class WildLogView extends JFrame {
                             else {
                                 finalHandleFeedback.println("ERROR:     File ID is not correctly formatted.");
                                 finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
-                                app.getDBI().delete(wildLogFile);
+                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                 filesWithBadID++;
                             }
                             fileProcessCounter++;
@@ -3100,7 +3100,6 @@ public final class WildLogView extends JFrame {
                         // Setup export DB
                         setTaskProgress(10);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
-// FIXME: Die WildLogOptions gee 'n probleem met die upgrade omdat dit missing is. Maak dat WildNote die Options ook create sodat die updates kan werk.
                         syncDBI = new WildLogDBI_h2("jdbc:h2:" + fileChooser.getSelectedFile().toPath().toAbsolutePath().getParent()
                                 .resolve(WildLogConstants.WILDNOTE_SYNC_DATABASE).toString()
                                     + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
@@ -3117,7 +3116,7 @@ public final class WildLogView extends JFrame {
                         // Setup the Visit
                         Visit tempVisit = new Visit(WildLogConstants.WILDNOTE_VISIT_NAME + " - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(LocalDateTime.now()),
                                 WildLogConstants.WILDNOTE_LOCATION_NAME);
-                        while (app.getDBI().count(tempVisit) > 0) {
+                        while (app.getDBI().countVisits(tempVisit.getName(), null) > 0) {
                             tempVisit = new Visit(tempVisit.getName() + "_wl", tempVisit.getLocationName());
                         }
                         app.getDBI().createOrUpdate(tempVisit, null);

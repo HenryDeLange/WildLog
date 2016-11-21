@@ -548,7 +548,7 @@ public class WorkspaceImportDialog extends JDialog {
             List<WildLogFile> listExternalFiles = importDBI.list(searchExternalWildLogFile);
             for (WildLogFile fileToImport : listExternalFiles) {
                 fileToImport.setId(inNewInternalWildLogFileID);
-                if (app.getDBI().count(fileToImport) == 0) {
+                if (app.getDBI().countWildLogFiles(fileToImport.getDBFilePath(), fileToImport.getId()) == 0) {
                     // Should be safe to copy the file to a similar folder and add the new WildLogFile using the new FileID in the database.
                     // Copy file
                     UtilsFileProcessing.copyFile(
@@ -576,7 +576,7 @@ public class WorkspaceImportDialog extends JDialog {
                         for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
                             try {
                                 // Note: Ek wil hier net die path kry, nie die thumbnail generate nie (so ek gebruik nie WildLogFile.getAbsoluteThumbnailPath() nie).
-                                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(fileToImport, size));
+                                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(fileToImport.getDBFilePath(), size));
                             }
                             catch (IOException ex) {
                                 WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);

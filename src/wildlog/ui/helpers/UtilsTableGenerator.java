@@ -120,7 +120,7 @@ public final class UtilsTableGenerator {
                                 data[finalT][3] = tempElement.getType();
                                 data[finalT][4] = tempElement.getFeedingClass();
                                 data[finalT][5] = tempElement.getWishListRating();
-                                data[finalT][6] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, null));
+                                data[finalT][6] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), null, null);
                                 return null;
                             }
                         });
@@ -281,7 +281,7 @@ public final class UtilsTableGenerator {
                                 data[finalT][5] = new WildLogTableModelDataWrapper(
                                         UtilsGPS.getLongitudeString(tempLocation), 
                                         UtilsGPS.getLonDecimalDegree(tempLocation));
-                                data[finalT][6] = inApp.getDBI().count(new Sighting(null, tempLocation.getName(), null));
+                                data[finalT][6] = inApp.getDBI().countSightings(0, null, tempLocation.getName(), null);
                                 return null;
                             }
                         });
@@ -457,7 +457,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][0] = setupThumbnailIcon(inApp, tempVisit);
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
-                                    data[finalT][3] = inApp.getDBI().count(new Sighting(null, null, tempVisit.getName()));
+                                    data[finalT][3] = inApp.getDBI().countSightings(0, null, null, tempVisit.getName());
                                     return null;
                                 }
                             });
@@ -845,7 +845,7 @@ public final class UtilsTableGenerator {
                                 rowCount = 0;
                             }
                             // Total count
-                            String text = "<html>Showing " + rowCount + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations.";
+                            String text = "<html>Showing " + rowCount + " (of " + inApp.getDBI().countSightings(0, null, null, null) + ") Observations.";
                             // Date range
                             if (inFilterProperties.getStartDate() != null || inFilterProperties.getEndDate() != null) {
                                 text = text + "<br/>Filtering on all Observations ";
@@ -868,9 +868,9 @@ public final class UtilsTableGenerator {
                             }
                             // Location, Visit and Creature filters
                             text = text + "<br/>The current filters are using"
-                                    + " " + inActiveLocations.size() + " (of " + inApp.getDBI().count(new Location()) + ") Places"
-                                    + ", " + inActiveVisits.size() + " (of " + inApp.getDBI().count(new Visit()) + ") Periods "
-                                    + " and " + inActiveElements.size() + " (of " + inApp.getDBI().count(new Element()) + ") Creatures.";
+                                    + " " + inActiveLocations.size() + " (of " + inApp.getDBI().countLocations(null) + ") Places"
+                                    + ", " + inActiveVisits.size() + " (of " + inApp.getDBI().countVisits(null, null) + ") Periods "
+                                    + " and " + inActiveElements.size() + " (of " + inApp.getDBI().countElements(null, null) + ") Creatures.";
                             // Other
                             text = text + "<br/>Additional Observation properties may also be active.</html>";
                             inLblFilterDetails.setText(text);
@@ -922,7 +922,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][1] = tempElement.getPrimaryName();
                                     data[finalT][2] = tempElement.getType();
                                     data[finalT][3] = tempElement.getFeedingClass();
-                                    data[finalT][4] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, inVisit.getName()));
+                                    data[finalT][4] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), null, inVisit.getName());
                                     return null;
                                 }
                             });
@@ -1007,7 +1007,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
                                     data[finalT][1] = tempElement.getPrimaryName();
                                     data[finalT][2] = tempElement.getType();
-                                    data[finalT][3] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), inLocation.getName(), null));
+                                    data[finalT][3] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), inLocation.getName(), null);
                                     return null;
                                 }
                             });

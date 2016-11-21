@@ -21,7 +21,6 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
@@ -126,7 +125,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void setupUI() {
         initComponents();
         imageIndex = 0;
-        int fotoCount = app.getDBI().count(new WildLogFile(visit.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, visit.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
@@ -268,7 +267,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (sighting != null) {
             if (sighting.getElementName() != null) {
                 Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
-                int fotoCount = app.getDBI().count(new WildLogFile(tempElement.getWildLogFileID()));
+                int fotoCount = app.getDBI().countWildLogFiles(null, tempElement.getWildLogFileID());
                 if (fotoCount > 0) {
                     UtilsImageProcessing.setupFoto(tempElement.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
                 }
@@ -280,7 +279,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
             }
             imageSightingIndex = 0;
-            int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));
+            int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());
             if (fotoCount > 0 ) {
                 UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageSightingIndex, lblSightingImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
             }
@@ -1155,7 +1154,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
-        int fotoCount = app.getDBI().count(new WildLogFile(visit.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, visit.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1202,8 +1201,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
            });
             if (result == JOptionPane.YES_OPTION) {
                 for (int row : tblSightings.getSelectedRows())  {
-                    sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6)));
-                    app.getDBI().delete(sighting);
+                    app.getDBI().deleteSighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6));
                 }
                 sighting = null;
                 refreshSightingInfo();
@@ -1494,7 +1492,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }
 
     private void setupNumberOfImages() {
-        int fotoCount = app.getDBI().count(new WildLogFile(visit.getWildLogFileID()));
+        int fotoCount = app.getDBI().countWildLogFiles(null, visit.getWildLogFileID());
         if (fotoCount > 0) {
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         }
@@ -1505,7 +1503,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void setupNumberOfSightingImages() {
         if (sighting != null) {
-            int fotoCount = app.getDBI().count(new WildLogFile(sighting.getWildLogFileID()));
+            int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());
             if (fotoCount > 0) {
                 lblNumberOfSightingImages.setText(imageSightingIndex+1 + " of " + fotoCount);
             }

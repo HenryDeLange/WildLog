@@ -11,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsPanelGenerator;
@@ -298,7 +297,7 @@ public class PanelTabLocations extends JPanel {
             }
             // Get Image
             final Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
-            int fotoCount = app.getDBI().count(new WildLogFile(tempLocation.getWildLogFileID()));
+            int fotoCount = app.getDBI().countWildLogFiles(null, tempLocation.getWildLogFileID());
             if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(tempLocation.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
@@ -392,9 +391,9 @@ public class PanelTabLocations extends JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)));
+                    String locationName = (String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1);
                     Visit tempVisit = new Visit();
-                    tempVisit.setLocationName(tempLocation.getName());
+                    tempVisit.setLocationName(locationName);
                     List<Visit> visits = app.getDBI().list(tempVisit);
                     for (int i = 0; i < visits.size(); i++) {
                         UtilsPanelGenerator.removeOpenedTab(visits.get(i).getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel);
@@ -408,7 +407,7 @@ public class PanelTabLocations extends JPanel {
                             if (headerPanel.getTabType() != null && PanelCanSetupHeader.TabTypes.VISIT.equals(headerPanel.getTabType())) {
                                 PanelVisit panelVisit = (PanelVisit)headerPanel.getParentPanel();
                                 if (panelVisit.getLocationForVisit() != null
-                                    && tempLocation.getName().equalsIgnoreCase(panelVisit.getLocationForVisit().getName())) {
+                                    && locationName.equalsIgnoreCase(panelVisit.getLocationForVisit().getName())) {
                                     tabsToRemove.add(headerPanel);
                                 }
                             }
@@ -418,8 +417,8 @@ public class PanelTabLocations extends JPanel {
                         tabbedPanel.remove(headerPanel.getParentPanel());
                     }
                     // Remove die loation se eie tab
-                    UtilsPanelGenerator.removeOpenedTab(tempLocation.getName(), PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel);
-                    app.getDBI().delete(tempLocation);
+                    UtilsPanelGenerator.removeOpenedTab(locationName, PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel);
+                    app.getDBI().deleteLocation(locationName);
                 }
                 formComponentShown(null);
             }

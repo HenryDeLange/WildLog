@@ -22,7 +22,6 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Certainty;
@@ -417,7 +416,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 element.setPrimaryName(inPrefix + resultSet.getString("CREATURE"));
                 element.setScientificName(resultSet.getString("SCIENTIFIC_NAME"));
                 element.setType(ElementType.getEnumFromText(resultSet.getString("CREATURE_TYPE")));
-                if (count(element) == 0) {
+                if (countElements(element.getPrimaryName(), null) == 0) {
                     success = success && createOrUpdate(element, null);
                 }
                 // Import Locations
@@ -453,7 +452,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         location.setLonMinutes(UtilsGPS.getMinutes(lon));
                         location.setLonSeconds(UtilsGPS.getSeconds(lon));
                     }
-                    if (count(location) == 0) {
+                    if (countLocations(location.getName()) == 0) {
                         success = success && createOrUpdate(location, null);
                     }
                 }
@@ -476,7 +475,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         visit.setEndDate(null);
                     }
                     visit.setDescription(resultSet.getString("PERIOD_DESCRIPTION"));
-                    if (count(visit) == 0) {
+                    if (countVisits(visit.getName(), null) == 0) {
                         success = success && createOrUpdate(visit, null);
                     }
                 }
@@ -612,10 +611,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             if (lstElements.size() == 1) {
                                 // If primary name changed then the update will need to know the old name
                                 if (!elementToSave.getPrimaryName().equalsIgnoreCase(engName)) {
-                                    // Twee verskillende species kan dieselfde common name het. (Append die scientific name agter aan.)
-                                    if (count(elementToSave) > 0) {
+                                    // Twee verskillende species kan dieselfde common name hê. (Append die scientific name agter aan.)
+                                    if (countElements(elementToSave.getPrimaryName(), elementToSave.getScientificName()) > 0) {
                                         elementToSave.setPrimaryName(elementToSave.getPrimaryName() + " (" + sciName + ")");
-                                        while (count(elementToSave) > 0) {
+                                        while (countElements(elementToSave.getPrimaryName(), elementToSave.getScientificName()) > 0) {
                                             elementToSave.setPrimaryName(elementToSave.getPrimaryName() + "_wl");
                                         }
                                     }
@@ -664,10 +663,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             elementToSave.setType(ElementType.REPTILE);
                         }
                         if (!isExisting && inAddNewElements) {
-                            // Twee verskillende species kan dieselfde common name het. (Append die scientific name agter aan.)
-                            if (count(elementToSave) > 0) {
+                            // Twee verskillende species kan dieselfde common name hê. (Append die scientific name agter aan.)
+                            if (countElements(elementToSave.getPrimaryName(), elementToSave.getScientificName()) > 0) {
                                 elementToSave.setPrimaryName(elementToSave.getPrimaryName() + " (" + sciName + ")");
-                                while (count(elementToSave) > 0) {
+                                while (countElements(elementToSave.getPrimaryName(), elementToSave.getScientificName()) > 0) {
                                     elementToSave.setPrimaryName(elementToSave.getPrimaryName() + "_wl");
                                 }
                             }
@@ -723,20 +722,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
-    public <T extends WildLogFileCore> boolean delete(T inWildLogFile) {
+    public boolean deleteWildLogFile(String inDBFilePath) {
         // Note: This method only deletes one file at a time, and all it's "default" thumbnails.
         // First, remove the database entry.
-        super.delete(inWildLogFile);
+        super.deleteWildLogFile(inDBFilePath);
         // Next, delete the original image
         try {
-            if (inWildLogFile instanceof WildLogFile) {
-                Files.deleteIfExists(((WildLogFile) inWildLogFile).getAbsolutePath());
-            }
-            else {
-                WildLogFile temp = new WildLogFile();
-                temp.setDBFilePath(inWildLogFile.getDBFilePath());
-                Files.deleteIfExists(temp.getAbsolutePath());
-            }
+            Files.deleteIfExists(WildLogPaths.getFullWorkspacePrefix().resolve(inDBFilePath).normalize().toAbsolutePath());
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
@@ -745,14 +737,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
             try {
                 // Note: Ek wil hier net die path kry, nie die thumbnail generate nie (so ek gebruik nie WildLogFile.getAbsoluteThumbnailPath() nie).
-                if (inWildLogFile instanceof WildLogFile) {
-                    Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath((WildLogFile) inWildLogFile, size));
-                }
-                else {
-                    WildLogFile temp = new WildLogFile();
-                    temp.setDBFilePath(inWildLogFile.getDBFilePath());
-                    Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(temp, size));
-                }
+                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(inDBFilePath, size));
             }
             catch (IOException ex) {
                 WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
