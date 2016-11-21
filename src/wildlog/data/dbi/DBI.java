@@ -17,11 +17,11 @@ public interface DBI {
     public boolean initialize(boolean inCreateDefaultRecords);
     public void close();
 
-    public <T extends ElementCore> int count(T inElement);
-    public <T extends LocationCore> int count(T inLocation);
-    public <T extends VisitCore> int count(T inVisit);
-    public <T extends SightingCore> int count(T inSighting);
-    public <T extends WildLogFileCore> int count(T inWildLogFile);
+    public int countElements(String inPrimaryName, String inScientificName);
+    public int countLocations(String inName);
+    public int countVisits(String inName, String inLocationName);
+    public int countSightings(long inSightingCounter, String inElementName, String inLocationName, String inVisitName);
+    public int countWildLogFiles(String inDBFilePath, String inWildLogFileID);
 
     public <T extends ElementCore> T find(T inElement);
     public <T extends LocationCore> T find(T inLocation);
@@ -48,17 +48,16 @@ public interface DBI {
     public <T extends WildLogOptions> boolean createOrUpdate(T inWildLogOptions);
     public <T extends AdhocData> boolean createOrUpdate(T inAdhocData);
 
-    public <T extends ElementCore> boolean delete(T inElement);
-    public <T extends LocationCore> boolean delete(T inLocation);
-    public <T extends VisitCore> boolean delete(T inVisit);
-    public <T extends SightingCore> boolean delete(T inSighting);
-    public <T extends WildLogFileCore> boolean delete(T inWildLogFile);
-    public <T extends AdhocData> boolean delete(T inAdhocData);
+    public boolean deleteElement(String inPrimaryName);
+    public boolean deleteLocation(String inName);
+    public boolean deleteVisit(String inName);
+    public boolean deleteSighting(long inSightingCounter);
+    public boolean deleteWildLogFile(String inDBFilePath);
+    public boolean deleteAdhocData(String inFieldID, String inDataKey);
 
-    public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> 
-        List<S> searchSightings(Date inStartDate, Date inEndDate, 
-            List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
-            boolean inIncludeCachedValues, Class<S> inReturnType);
+    public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> List<S> 
+        searchSightings(Date inStartDate, Date inEndDate, List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
+                boolean inIncludeCachedValues, Class<S> inReturnType);
     
     public <T extends LocationCount, V extends ElementCore> List<T> queryLocationCountForElement(V inElement, Class<T> inReturnType);
 

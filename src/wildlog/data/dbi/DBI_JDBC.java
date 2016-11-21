@@ -51,7 +51,6 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
 
-// FIXME: Maak ook dat ek die methods kan roep sonder om heeltyd nuwe objects te create en in te pass net om te onderskei tussen Elements, Locations, ens. Dit maak onnodige garbage...
 // TODO: Kyk of dit eendag veilig is om dalk nie nuwe instances te maak van die types nie maar die een wat ingestuur word te gebruik. (geld vir Location, ens. ook)
 public abstract class DBI_JDBC implements DBI {
     protected final Random randomGenerator = new Random(System.nanoTime()); // ThreadLocalRandom is beter maar net in Java 7
@@ -243,22 +242,22 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> int count(T inElement) {
+    public int countElements(String inPrimaryName, String inScientificName) {
         PreparedStatement state = null;
         ResultSet results = null;
         int count = 0;
         try {
             String sql = countElement;
-            if (inElement.getPrimaryName() != null && inElement.getPrimaryName().length() > 0) {
+            if (inPrimaryName != null && !UtilsData.sanitizeString(inPrimaryName).isEmpty()) {
                 sql = sql + " WHERE PRIMARYNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, inElement.getPrimaryName());
+                state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             }
             else
-            if (inElement.getScientificName() != null && inElement.getScientificName().length() > 0) {
+            if (inScientificName != null && !UtilsData.sanitizeString(inScientificName).isEmpty()) {
                 sql = sql + " WHERE SCIENTIFICNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inElement.getScientificName()));
+                state.setString(1, UtilsData.sanitizeString(inScientificName));
             }
             else {
                 state = conn.prepareStatement(sql);
@@ -278,16 +277,16 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends LocationCore> int count(T inLocation) {
+    public int countLocations(String inName) {
         PreparedStatement state = null;
         ResultSet results = null;
         int count = 0;
         try {
             String sql = countLocation;
-            if (inLocation.getName() != null && inLocation.getName().length() > 0) {
+            if (inName != null && !UtilsData.sanitizeString(inName).isEmpty()) {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, inLocation.getName());
+                state.setString(1, UtilsData.sanitizeString(inName));
             }
             else {
                 state = conn.prepareStatement(sql);
@@ -307,21 +306,22 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends VisitCore> int count(T inVisit) {
+    public int countVisits(String inName, String inLocationName) {
         PreparedStatement state = null;
         ResultSet results = null;
         int count = 0;
         try {
             String sql = countVisit;
-            if (inVisit.getName() != null) {
+            if (inName != null && !UtilsData.sanitizeString(inName).isEmpty()) {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
+                state.setString(1, UtilsData.sanitizeString(inName));
             }
-            else if (inVisit.getLocationName() != null) {
+            else 
+            if (inLocationName != null && !UtilsData.sanitizeString(inLocationName).isEmpty()) {
                 sql = sql + " WHERE LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inVisit.getLocationName()));
+                state.setString(1, UtilsData.sanitizeString(inLocationName));
             }
             else {
                 state = conn.prepareStatement(sql);
@@ -341,48 +341,50 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends SightingCore> int count(T inSighting) {
+    public int countSightings(long inSightingCounter, String inElementName, String inLocationName, String inVisitName) {
         PreparedStatement state = null;
         ResultSet results = null;
         int count = 0;
         try {
             String sql = countSighting;
-            if (inSighting.getSightingCounter() > 0) {
+            if (inSightingCounter > 0) {
                 sql = sql + " WHERE SIGHTINGCOUNTER = ?";
                 state = conn.prepareStatement(sql);
-                state.setLong(1, inSighting.getSightingCounter());
+                state.setLong(1, inSightingCounter);
             }
             else
-            if (inSighting.getElementName() != null && inSighting.getElementName().length() > 0 && inSighting.getLocationName() != null && inSighting.getLocationName().length() > 0) {
+            if (inElementName != null && !UtilsData.sanitizeString(inElementName).isEmpty() 
+                    && inLocationName != null && !UtilsData.sanitizeString(inLocationName).isEmpty()) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
-                state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
+                state.setString(1, UtilsData.sanitizeString(inElementName));
+                state.setString(2, UtilsData.sanitizeString(inLocationName));
             }
             else
-            if (inSighting.getElementName() != null && inSighting.getElementName().length() > 0 && inSighting.getVisitName() != null && inSighting.getVisitName().length() > 0) {
+            if (inElementName != null && !UtilsData.sanitizeString(inElementName).isEmpty() 
+                    && inVisitName != null && !UtilsData.sanitizeString(inVisitName).isEmpty()) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
-                state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
+                state.setString(1, UtilsData.sanitizeString(inElementName));
+                state.setString(2, UtilsData.sanitizeString(inVisitName));
             }
             else
-            if (inSighting.getElementName() != null && inSighting.getElementName().length() > 0) {
+            if (inElementName != null && !UtilsData.sanitizeString(inElementName).isEmpty()) {
                 sql = sql + " WHERE ELEMENTNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+                state.setString(1, UtilsData.sanitizeString(inElementName));
             }
             else
-            if (inSighting.getLocationName() != null && inSighting.getLocationName().length() > 0) {
+            if (inLocationName != null && !UtilsData.sanitizeString(inLocationName).isEmpty()) {
                 sql = sql + " WHERE LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
+                state.setString(1, UtilsData.sanitizeString(inLocationName));
             }
             else
-            if (inSighting.getVisitName() != null && inSighting.getVisitName().length() > 0) {
+            if (inVisitName != null && !UtilsData.sanitizeString(inVisitName).isEmpty()) {
                 sql = sql + " WHERE VISITNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getVisitName()));
+                state.setString(1, UtilsData.sanitizeString(inVisitName));
             }
             else {
                 state = conn.prepareStatement(sql);
@@ -402,22 +404,22 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogFileCore> int count(T inWildLogFile) {
+    public int countWildLogFiles(String inDBFilePath, String inWildLogFileID) {
         PreparedStatement state = null;
         ResultSet results = null;
         int count = 0;
         try {
             String sql = countFile;
-            if (inWildLogFile.getDBFilePath() != null) {
+            if (inDBFilePath != null && !UtilsData.sanitizeString(inDBFilePath).isEmpty()) {
                 sql = sql + " WHERE ORIGINALPATH = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
+                state.setString(1, UtilsData.sanitizeString(inDBFilePath));
             }
             else
-            if (inWildLogFile.getId() != null) {
+            if (inWildLogFileID != null && !UtilsData.sanitizeString(inWildLogFileID).isEmpty()) {
                 sql = sql + " WHERE ID = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
+                state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
             }
             else {
                 state = conn.prepareStatement(sql);
@@ -1144,7 +1146,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
-                if (count(new ElementCore(UtilsData.sanitizeString(inElement.getPrimaryName()))) > 0) {
+                if (countElements(inElement.getPrimaryName(), null) > 0) {
                     System.err.println("Trying to save an Element using a name that already exists.... (" + inElement.getPrimaryName() + " | " + inOldName + ")");
                     return false;
                 }
@@ -1225,7 +1227,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
-                if (count(new LocationCore(UtilsData.sanitizeString(inLocation.getName()))) > 0) {
+                if (countLocations(inLocation.getName()) > 0) {
                     System.err.println("Trying to save an Location using a name that already exists.... (" + inLocation.getName() + " | " + inOldName + ")");
                     return false;
                 }
@@ -1302,7 +1304,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                if (count(new VisitCore(UtilsData.sanitizeString(inVisit.getName()))) > 0) {
+                if (countVisits(inVisit.getName(), null) > 0) {
                     System.err.println("Trying to save an Visit using a name that already exists.... (" + inVisit.getName() + " | " + inOldName + ")");
                     return false;
                 }
@@ -1617,26 +1619,26 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> boolean delete(T inElement) {
+    public boolean deleteElement(String inPrimaryName) {
         PreparedStatement state = null;
         try {
             // Delete the ElementCore
             state = conn.prepareStatement(deleteElement);
-            state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
+            state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             state.executeUpdate();
             // Delete all Sightings for this ElementCore
             SightingCore sighting = new SightingCore();
-            sighting.setElementName(inElement.getPrimaryName());
+            sighting.setElementName(inPrimaryName);
             List<SightingCore> sightingList = list(sighting, false);
             for (SightingCore temp : sightingList) {
-                delete(temp);
+                deleteSighting(temp.getSightingCounter());
             }
             // Delete Fotos
             WildLogFileCore file = new WildLogFileCore();
-            file.setId(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inElement.getPrimaryName()));
+            file.setId(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inPrimaryName));
             List<WildLogFileCore> fileList = list(file);
             for (WildLogFileCore temp : fileList) {
-                delete(temp);
+                deleteWildLogFile(temp.getDBFilePath());
             }
         }
         catch (SQLException ex) {
@@ -1650,27 +1652,27 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends LocationCore> boolean delete(T inLocation) {
+    public boolean deleteLocation(String inName) {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteLocation);
-            state.setString(1, UtilsData.sanitizeString(inLocation.getName()));
+            state.setString(1, UtilsData.sanitizeString(inName));
             // Delete LocationCore
             state.executeUpdate();
             state.close();
             // Delete Visits for this LocationCore
             VisitCore visit = new VisitCore();
-            visit.setLocationName(inLocation.getName());
+            visit.setLocationName(inName);
             List<VisitCore> visitList = list(visit);
             for (VisitCore temp : visitList) {
-                delete(temp);
+                deleteVisit(temp.getName());
             }
             // Delete Fotos
             WildLogFileCore file = new WildLogFileCore();
-            file.setId(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inLocation.getName()));
+            file.setId(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inName));
             List<WildLogFileCore> fileList = list(file);
             for (WildLogFileCore temp : fileList) {
-                delete(temp);
+                deleteWildLogFile(temp.getDBFilePath());
             }
         }
         catch (SQLException ex) {
@@ -1684,26 +1686,26 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends VisitCore> boolean delete(T inVisit) {
+    public boolean deleteVisit(String inName) {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteVisit);
-            state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
+            state.setString(1, UtilsData.sanitizeString(inName));
             // Delete VisitCore
             state.executeUpdate();
             // Delete Sightings for this VisitCore
             SightingCore sighting = new SightingCore();
-            sighting.setVisitName(inVisit.getName());
+            sighting.setVisitName(inName);
             List<SightingCore> sightingList = list(sighting, false);
             for (SightingCore temp : sightingList) {
-                delete(temp);
+                deleteSighting(temp.getSightingCounter());
             }
             // Delete Fotos
             WildLogFileCore file = new WildLogFileCore();
-            file.setId(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inVisit.getName()));
+            file.setId(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inName));
             List<WildLogFileCore> fileList = list(file);
             for (WildLogFileCore temp : fileList) {
-                delete(temp);
+                deleteWildLogFile(temp.getDBFilePath());
             }
         }
         catch (SQLException ex) {
@@ -1717,19 +1719,19 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends SightingCore> boolean delete(T inSighting) {
+    public boolean deleteSighting(long inSightingCounter) {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteSighting);
-            state.setLong(1, inSighting.getSightingCounter());
+            state.setLong(1, inSightingCounter);
             // Delete Sightings
             state.executeUpdate();
             // Delete Fotos
             WildLogFileCore file = new WildLogFileCore();
-            file.setId(SightingCore.WILDLOGFILE_ID_PREFIX + inSighting.getSightingCounter());
+            file.setId(SightingCore.WILDLOGFILE_ID_PREFIX + inSightingCounter);
             List<WildLogFileCore> fileList = list(file);
             for (WildLogFileCore temp : fileList) {
-                delete(temp);
+                deleteWildLogFile(temp.getDBFilePath());
             }
         }
         catch (SQLException ex) {
@@ -1743,12 +1745,12 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogFileCore> boolean delete(T inWildLogFile) {
+    public boolean deleteWildLogFile(String inDBFilePath) {
         // Note: This method only deletes one file at a time from the database.
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteFile);
-            state.setString(1, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
+            state.setString(1, UtilsData.sanitizeString(inDBFilePath));
             // Delete File from database
             state.executeUpdate();
         }
@@ -1763,12 +1765,12 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends AdhocData> boolean delete(T inAdhocData) {
+    public boolean deleteAdhocData(String inFieldID, String inDataKey) {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteAdhocData);
-            state.setString(1, UtilsData.sanitizeString(inAdhocData.getFieldID()));
-            state.setString(2, UtilsData.sanitizeString(inAdhocData.getDataKey()));
+            state.setString(1, UtilsData.sanitizeString(inFieldID));
+            state.setString(2, UtilsData.sanitizeString(inDataKey));
             state.executeUpdate();
         }
         catch (SQLException ex) {

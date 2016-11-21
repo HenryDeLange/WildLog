@@ -21,9 +21,9 @@ public final class UtilsData {
     }
 
     public static String sanitizeString(String inString) {
+        // Check for null before trimming
         if (inString != null) {
-            // Ek dink nie ek het die ' check meer nodig nie want ek gebruik nou JDBC params
-            return inString.trim()/*.replaceAll("'", "''")*/;
+            return inString.trim();
         }
         else {
             return null;
