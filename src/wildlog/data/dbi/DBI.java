@@ -10,6 +10,9 @@ import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.queryobjects.LocationCount;
+import wildlog.data.enums.ElementType;
+import wildlog.data.enums.VisitType;
+import wildlog.data.enums.WildLogFileType;
 
 
 public interface DBI {
@@ -23,20 +26,21 @@ public interface DBI {
     public int countSightings(long inSightingCounter, String inElementName, String inLocationName, String inVisitName);
     public int countWildLogFiles(String inDBFilePath, String inWildLogFileID);
 
-    public <T extends ElementCore> T find(T inElement);
-    public <T extends LocationCore> T find(T inLocation);
-    public <T extends VisitCore> T find(T inVisit);
-    public <T extends SightingCore> T find(T inSighting);
-    public <T extends WildLogFileCore> T find(T inWildLogFile);
-    public <T extends WildLogOptions> T find(T inWildLogOptions);
-    public <T extends AdhocData> T find(T inAdhocData);
+    public <T extends ElementCore> T findElement(String inPrimaryName, Class<T> inReturnType);
+    public <T extends LocationCore> T findLocation(String inName, Class<T> inReturnType);
+    public <T extends VisitCore> T findVisit(String inName, Class<T> inReturnType);
+    public <T extends SightingCore> T findSighting(long inSightingCounter, Class<T> inReturnType);
+    public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, Class<T> inReturnType);
+    public <T extends WildLogOptions> T findWildLogOptions(Class<T> inReturnType);
+    public <T extends AdhocData> T findAdhocData(String inFieldID, String inDataKey, Class<T> inReturnType);
 
-    public <T extends ElementCore> List<T> list(T inElement);
-    public <T extends LocationCore> List<T> list(T inLocation);
-    public <T extends VisitCore> List<T> list(T inVisit);
-    public <T extends SightingCore> List<T> list(T inSighting, boolean inIncludeCachedValues);
-    public <T extends WildLogFileCore> List<T> list(T inWildLogFile);
-    public <T extends AdhocData> List<T> list(T inAdhocData);
+    public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, Class<T> inReturnType);
+    public <T extends LocationCore> List<T> listLocations(String inName, Class<T> inReturnType);
+    public <T extends VisitCore> List<T> listVisits(String inName, String inLocationName, VisitType inVisitType, Class<T> inReturnType);
+    public <T extends SightingCore> List<T> listSightings(long inSightingCounter, String inElementName, 
+            String inLocationName, String inVisitName, boolean inIncludeCachedValues, Class<T> inReturnType);
+    public <T extends WildLogFileCore> List<T> listWildLogFiles(String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
+    public <T extends AdhocData> List<T> listAdhocDatas(String inFieldID, Class<T> inReturnType);
 
 // TODO: Split these methods into propper create and update versions...
     
@@ -59,7 +63,7 @@ public interface DBI {
         searchSightings(Date inStartDate, Date inEndDate, List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
                 boolean inIncludeCachedValues, Class<S> inReturnType);
     
-    public <T extends LocationCount, V extends ElementCore> List<T> queryLocationCountForElement(V inElement, Class<T> inReturnType);
+    public <T extends LocationCount> List<T> queryLocationCountForElement(String inElementPrimaryName, Class<T> inReturnType);
 
     public long generateID();
     

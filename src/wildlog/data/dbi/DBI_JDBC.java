@@ -248,13 +248,13 @@ public abstract class DBI_JDBC implements DBI {
         int count = 0;
         try {
             String sql = countElement;
-            if (inPrimaryName != null && !UtilsData.sanitizeString(inPrimaryName).isEmpty()) {
+            if (inPrimaryName != null && UtilsData.sanitizeString(inPrimaryName).length() > 0) {
                 sql = sql + " WHERE PRIMARYNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             }
             else
-            if (inScientificName != null && !UtilsData.sanitizeString(inScientificName).isEmpty()) {
+            if (inScientificName != null && UtilsData.sanitizeString(inScientificName).length() > 0) {
                 sql = sql + " WHERE SCIENTIFICNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inScientificName));
@@ -283,7 +283,7 @@ public abstract class DBI_JDBC implements DBI {
         int count = 0;
         try {
             String sql = countLocation;
-            if (inName != null && !UtilsData.sanitizeString(inName).isEmpty()) {
+            if (inName != null && UtilsData.sanitizeString(inName).length() > 0) {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inName));
@@ -312,13 +312,13 @@ public abstract class DBI_JDBC implements DBI {
         int count = 0;
         try {
             String sql = countVisit;
-            if (inName != null && !UtilsData.sanitizeString(inName).isEmpty()) {
+            if (inName != null && UtilsData.sanitizeString(inName).length() > 0) {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inName));
             }
             else 
-            if (inLocationName != null && !UtilsData.sanitizeString(inLocationName).isEmpty()) {
+            if (inLocationName != null && UtilsData.sanitizeString(inLocationName).length() > 0) {
                 sql = sql + " WHERE LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inLocationName));
@@ -353,35 +353,35 @@ public abstract class DBI_JDBC implements DBI {
                 state.setLong(1, inSightingCounter);
             }
             else
-            if (inElementName != null && !UtilsData.sanitizeString(inElementName).isEmpty() 
-                    && inLocationName != null && !UtilsData.sanitizeString(inLocationName).isEmpty()) {
+            if (inElementName != null && UtilsData.sanitizeString(inElementName).length() > 0 
+                    && inLocationName != null && UtilsData.sanitizeString(inLocationName).length() > 0) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inElementName));
                 state.setString(2, UtilsData.sanitizeString(inLocationName));
             }
             else
-            if (inElementName != null && !UtilsData.sanitizeString(inElementName).isEmpty() 
-                    && inVisitName != null && !UtilsData.sanitizeString(inVisitName).isEmpty()) {
+            if (inElementName != null && UtilsData.sanitizeString(inElementName).length() > 0 
+                    && inVisitName != null && UtilsData.sanitizeString(inVisitName).length() > 0) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inElementName));
                 state.setString(2, UtilsData.sanitizeString(inVisitName));
             }
             else
-            if (inElementName != null && !UtilsData.sanitizeString(inElementName).isEmpty()) {
+            if (inElementName != null && UtilsData.sanitizeString(inElementName).length() > 0) {
                 sql = sql + " WHERE ELEMENTNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inElementName));
             }
             else
-            if (inLocationName != null && !UtilsData.sanitizeString(inLocationName).isEmpty()) {
+            if (inLocationName != null && UtilsData.sanitizeString(inLocationName).length() > 0) {
                 sql = sql + " WHERE LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inLocationName));
             }
             else
-            if (inVisitName != null && !UtilsData.sanitizeString(inVisitName).isEmpty()) {
+            if (inVisitName != null && UtilsData.sanitizeString(inVisitName).length() > 0) {
                 sql = sql + " WHERE VISITNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inVisitName));
@@ -410,13 +410,13 @@ public abstract class DBI_JDBC implements DBI {
         int count = 0;
         try {
             String sql = countFile;
-            if (inDBFilePath != null && !UtilsData.sanitizeString(inDBFilePath).isEmpty()) {
+            if (inDBFilePath != null && UtilsData.sanitizeString(inDBFilePath).length() > 0) {
                 sql = sql + " WHERE ORIGINALPATH = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inDBFilePath));
             }
             else
-            if (inWildLogFileID != null && !UtilsData.sanitizeString(inWildLogFileID).isEmpty()) {
+            if (inWildLogFileID != null && UtilsData.sanitizeString(inWildLogFileID).length() > 0) {
                 sql = sql + " WHERE ID = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
@@ -439,16 +439,16 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> T find(T inElement) {
+    public <T extends ElementCore> T findElement(String inPrimaryName, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T tempElement = null;
         try {
             state = conn.prepareStatement(findElement);
-            state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
+            state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             results = state.executeQuery();
             if (results.next()) {
-                tempElement = (T) inElement.getClass().newInstance();
+                tempElement = inReturnType.newInstance();
                 populateElement(results, tempElement);
             }
         }
@@ -501,16 +501,16 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends LocationCore> T find(T inLocation) {
+    public <T extends LocationCore> T findLocation(String inName, Class<T> inReturnType) {
         T tempLocation = null;
         PreparedStatement state = null;
         ResultSet results = null;
         try {
             state = conn.prepareStatement(findLocation);
-            state.setString(1, UtilsData.sanitizeString(inLocation.getName()));
+            state.setString(1, UtilsData.sanitizeString(inName));
             results = state.executeQuery();
             if (results.next()) {
-                tempLocation = (T) inLocation.getClass().newInstance();
+                tempLocation = inReturnType.newInstance();
                 populateLocation(results, tempLocation);
             }
         }
@@ -553,16 +553,16 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends VisitCore> T find(T inVisit) {
+    public <T extends VisitCore> T findVisit(String inName, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T tempVisit = null;
         try {
             state = conn.prepareStatement(findVisit);
-            state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
+            state.setString(1, UtilsData.sanitizeString(inName));
             results = state.executeQuery();
             if (results.next()) {
-                tempVisit = (T) inVisit.getClass().newInstance();
+                tempVisit = inReturnType.newInstance();
                 populateVisit(results, tempVisit);
             }
         }
@@ -602,16 +602,16 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends SightingCore> T find(T inSighting) {
+    public <T extends SightingCore> T findSighting(long inSightingCounter, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T tempSighting = null;
         try {
             state = conn.prepareStatement(findSighting);
-            state.setLong(1, inSighting.getSightingCounter());
+            state.setLong(1, inSightingCounter);
             results = state.executeQuery();
             if (results.next()) {
-                tempSighting = (T) inSighting.getClass().newInstance();
+                tempSighting = inReturnType.newInstance();
                 populateSighting(results, tempSighting);
             }
         }
@@ -671,29 +671,29 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogFileCore> T find(T inWildLogFile) {
+    public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T tempFile = null;
         try {
             String sql = findFile;
-            if (inWildLogFile.getDBFilePath() != null) {
+            if (inDBFilePath != null) {
                 sql = sql + " WHERE ORIGINALPATH = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
+                state.setString(1, UtilsData.sanitizeString(inDBFilePath));
             }
             else
-            if (inWildLogFile.getId() != null) {
+            if (inWildLogFileID != null) {
                 sql = sql + " WHERE ID = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
+                state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
             }
             if (state != null) {
                 results = state.executeQuery();
                 if (results.next()) {
-                    tempFile = (T) inWildLogFile.getClass().newInstance();
+                    tempFile = inReturnType.newInstance();
                     populateWildLogFile(results, tempFile);
                 }
             }
@@ -738,7 +738,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogOptions> T find(T inWildLogOptions) {
+    public <T extends WildLogOptions> T findWildLogOptions(Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T tempWildLogOptions = null;
@@ -746,7 +746,7 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.prepareStatement(findWildLogOptions);
             results = state.executeQuery();
             if (results.next()) {
-                tempWildLogOptions = (T) inWildLogOptions.getClass().newInstance();
+                tempWildLogOptions = inReturnType.newInstance();
                 tempWildLogOptions.setDatabaseVersion(results.getInt("VERSION"));
                 tempWildLogOptions.setDefaultLatitude(results.getDouble("DEFAULTLATITUDE"));
                 tempWildLogOptions.setDefaultLongitude(results.getDouble("DEFAULTLONGITUDE"));
@@ -777,17 +777,17 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends AdhocData> T find(T inAdhocData) {
+    public <T extends AdhocData> T findAdhocData(String inFieldID, String inDataKey, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T temp = null;
         try {
             state = conn.prepareStatement(findAdhocData);
-            state.setString(1, UtilsData.sanitizeString(inAdhocData.getFieldID()));
-            state.setString(2, UtilsData.sanitizeString(inAdhocData.getDataKey()));
+            state.setString(1, UtilsData.sanitizeString(inFieldID));
+            state.setString(2, UtilsData.sanitizeString(inDataKey));
             results = state.executeQuery();
             if (results.next()) {
-                temp = (T) inAdhocData.getClass().newInstance();
+                temp = inReturnType.newInstance();
                 temp.setFieldID(results.getString("FIELDID"));
                 temp.setDataKey(results.getString("DATAKEY"));
                 temp.setDataValue(results.getString("DATAVALUE"));
@@ -809,42 +809,42 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> List<T> list(T inElement) {
+    public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
             String sql = listElement;
-            if (inElement.getPrimaryName() != null && inElement.getPrimaryName().length() > 0 && inElement.getType() == null) {
+            if (inPrimaryName != null && inPrimaryName.length() > 0 && inElementType == null) {
                 sql = sql + " WHERE PRIMARYNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
+                state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             }
             else
-            if ((inElement.getPrimaryName() == null || inElement.getPrimaryName().length() == 0) && inElement.getType() != null) {
+            if ((inPrimaryName == null || inPrimaryName.length() == 0) && inElementType != null) {
                 sql = sql + " WHERE ELEMENTTYPE = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, inElement.getType().toString());
+                state.setString(1, inElementType.toString());
             }
             else
-            if (inElement.getPrimaryName() != null && inElement.getPrimaryName().length() > 0 && inElement.getType() != null) {
+            if (inPrimaryName != null && inPrimaryName.length() > 0 && inElementType != null) {
                 sql = sql + " WHERE PRIMARYNAME = ? AND ELEMENTTYPE = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
-                state.setString(2, inElement.getType().toString());
+                state.setString(1, UtilsData.sanitizeString(inPrimaryName));
+                state.setString(2, inElementType.toString());
             }
             else
-            if (inElement.getScientificName() != null && inElement.getScientificName().length() > 0) {
+            if (inScientificName != null && inScientificName.length() > 0) {
                 sql = sql + " WHERE SCIENTIFICNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inElement.getScientificName()));
+                state.setString(1, UtilsData.sanitizeString(inScientificName));
             }
             else {
                 state = conn.prepareStatement(sql);
             }
             results = state.executeQuery();
             while (results.next()) {
-                T tempElement = (T) inElement.getClass().newInstance();
+                T tempElement = inReturnType.newInstance();
                 populateElement(results, tempElement);
                 tempList.add(tempElement);
             }
@@ -865,23 +865,23 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends LocationCore> List<T> list(T inLocation) {
+    public <T extends LocationCore> List<T> listLocations(String inName, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
             String sql = listLocation;
-            if (inLocation.getName() != null) {
+            if (inName != null) {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inLocation.getName()));
+                state.setString(1, UtilsData.sanitizeString(inName));
             }
             else {
                 state = conn.prepareStatement(sql);
             }
             results = state.executeQuery();
             while (results.next()) {
-                T tempLocation = (T) inLocation.getClass().newInstance();
+                T tempLocation = inReturnType.newInstance();
                 populateLocation(results, tempLocation);
                 tempList.add(tempLocation);
             }
@@ -902,35 +902,35 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends VisitCore> List<T> list(T inVisit) {
+    public <T extends VisitCore> List<T> listVisits(String inName, String inLocationName, VisitType inVisitType, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
             String sql = listVisit;
-            if (inVisit.getName() != null) {
+            if (inName != null) {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
+                state.setString(1, UtilsData.sanitizeString(inName));
             }
             else 
-            if (inVisit.getLocationName() != null) {
+            if (inLocationName != null) {
                 sql = sql + " WHERE LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inVisit.getLocationName()));
+                state.setString(1, UtilsData.sanitizeString(inLocationName));
             }
             else 
-            if (inVisit.getType() != null) {
+            if (inVisitType != null) {
                 sql = sql + " WHERE VISITTYPE = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, inVisit.getType().toString());
+                state.setString(1, inVisitType.toString());
             }
             else {
                 state = conn.prepareStatement(sql);
             }
             results = state.executeQuery();
             while (results.next()) {
-                T tempVisit = (T) inVisit.getClass().newInstance();
+                T tempVisit = inReturnType.newInstance();
                 populateVisit(results, tempVisit);
                 tempList.add(tempVisit);
             }
@@ -951,7 +951,8 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends SightingCore> List<T> list(T inSighting, boolean inIncludeCachedValues) {
+    public <T extends SightingCore> List<T> listSightings(long inSightingCounter, String inElementName, 
+            String inLocationName, String inVisitName, boolean inIncludeCachedValues, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
@@ -965,64 +966,64 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 sql = sql + " FROM SIGHTINGS";
             }
-            if (inSighting.getSightingCounter() > 0) {
+            if (inSightingCounter > 0) {
                 sql = sql + " WHERE SIGHTINGCOUNTER = ?";
                 state = conn.prepareStatement(sql);
-                state.setLong(1, inSighting.getSightingCounter());
+                state.setLong(1, inSightingCounter);
             }
             else
-            if (inSighting.getElementName() != null && inSighting.getLocationName() != null && inSighting.getVisitName() != null) {
+            if (inElementName != null && inLocationName != null && inVisitName != null) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND SIGHTINGS.LOCATIONNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
-                state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
-                state.setString(3, UtilsData.sanitizeString(inSighting.getVisitName()));
+                state.setString(1, UtilsData.sanitizeString(inElementName));
+                state.setString(2, UtilsData.sanitizeString(inLocationName));
+                state.setString(3, UtilsData.sanitizeString(inVisitName));
             }
             else
-            if (inSighting.getElementName() != null && inSighting.getLocationName() != null) {
+            if (inElementName != null && inLocationName != null) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND SIGHTINGS.LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
-                state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
+                state.setString(1, UtilsData.sanitizeString(inElementName));
+                state.setString(2, UtilsData.sanitizeString(inLocationName));
             }
             else
-            if (inSighting.getElementName() != null && inSighting.getVisitName() != null) {
+            if (inElementName != null && inVisitName != null) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
-                state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
+                state.setString(1, UtilsData.sanitizeString(inElementName));
+                state.setString(2, UtilsData.sanitizeString(inVisitName));
             }
             else
-            if (inSighting.getLocationName() != null && inSighting.getVisitName() != null) {
+            if (inLocationName != null && inVisitName != null) {
                 sql = sql + " WHERE SIGHTINGS.LOCATIONNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
-                state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
+                state.setString(1, UtilsData.sanitizeString(inLocationName));
+                state.setString(2, UtilsData.sanitizeString(inVisitName));
             }
             else
-            if (inSighting.getElementName() != null) {
+            if (inElementName != null) {
                 sql = sql + " WHERE ELEMENTNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+                state.setString(1, UtilsData.sanitizeString(inElementName));
             }
             else
-            if (inSighting.getLocationName() != null) {
+            if (inLocationName != null) {
                 sql = sql + " WHERE SIGHTINGS.LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
+                state.setString(1, UtilsData.sanitizeString(inLocationName));
             }
             else
-            if (inSighting.getVisitName() != null) {
+            if (inVisitName != null) {
                 sql = sql + " WHERE VISITNAME = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inSighting.getVisitName()));
+                state.setString(1, UtilsData.sanitizeString(inVisitName));
             }
             else {
                 state = conn.prepareStatement(sql);
             }
             results = state.executeQuery();
             while (results.next()) {
-                T tempSighting = (T) inSighting.getClass().newInstance();
+                T tempSighting = inReturnType.newInstance();
                 populateSighting(results, tempSighting);
                 if (inIncludeCachedValues) {
                     tempSighting.setCachedElementType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
@@ -1047,32 +1048,32 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogFileCore> List<T> list(T inWildLogFile) {
+    public <T extends WildLogFileCore> List<T> listWildLogFiles(String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
             String sql = listFile;
-            if (inWildLogFile.getId() != null && (inWildLogFile.getFileType() == null || WildLogFileType.NONE.equals(inWildLogFile.getFileType()))) {
+            if (inWildLogFileID != null && (inWildLogFileType == null || WildLogFileType.NONE.equals(inWildLogFileType))) {
                 sql = sql + " WHERE ID = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
+                state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
             }
             else
-            if (inWildLogFile.getId() != null && !(inWildLogFile.getFileType() == null || WildLogFileType.NONE.equals(inWildLogFile.getFileType()))) {
+            if (inWildLogFileID != null && !(inWildLogFileType == null || WildLogFileType.NONE.equals(inWildLogFileType))) {
                 sql = sql + " WHERE ID = ? AND FILETYPE = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
-                state.setString(2, UtilsData.stringFromObject(inWildLogFile.getFileType()));
+                state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
+                state.setString(2, UtilsData.stringFromObject(inWildLogFileType));
             }
             else
-            if (inWildLogFile.getId() == null && !(inWildLogFile.getFileType() == null || WildLogFileType.NONE.equals(inWildLogFile.getFileType()))) {
+            if (inWildLogFileID == null && !(inWildLogFileType == null || WildLogFileType.NONE.equals(inWildLogFileType))) {
                 sql = sql + " WHERE FILETYPE = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.stringFromObject(inWildLogFile.getFileType()));
+                state.setString(1, UtilsData.stringFromObject(inWildLogFileType));
             }
             else {
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
@@ -1080,7 +1081,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             results = state.executeQuery();
             while (results.next()) {
-                T tempFile = (T) inWildLogFile.getClass().newInstance();
+                T tempFile = inReturnType.newInstance();
                 populateWildLogFile(results, tempFile);
                 tempList.add(tempFile);
             }
@@ -1101,24 +1102,24 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends AdhocData> List<T> list(T inAdhocData) {
+    public <T extends AdhocData> List<T> listAdhocDatas(String inFieldID, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
             String sql = listAdhocData;
-            if (inAdhocData.getFieldID() != null && !inAdhocData.getFieldID().isEmpty()) {
+            if (inFieldID != null && inFieldID.length() > 0) {
                 sql = sql + " WHERE FIELDID = ?";
                 sql = sql + " ORDER BY FIELDID, DATAKEY";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inAdhocData.getFieldID()));
+                state.setString(1, UtilsData.sanitizeString(inFieldID));
             }
             else {
                 state = conn.prepareStatement(sql);
             }
             results = state.executeQuery();
             while (results.next()) {
-                T temp = (T) inAdhocData.getClass().newInstance();
+                T temp = inReturnType.newInstance();
                 temp.setFieldID(results.getString("FIELDID"));
                 temp.setDataKey(results.getString("DATAKEY"));
                 temp.setDataValue(results.getString("DATAVALUE"));
@@ -1156,15 +1157,13 @@ public abstract class DBI_JDBC implements DBI {
                 // Check whether there was a name change or not.
                 if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
                     // Update the Sightings
-                    SightingCore sighting = new SightingCore();
-                    sighting.setElementName(inOldName);
-                    List<SightingCore> sightings = list(sighting, false);
+                    List<SightingCore> sightings = listSightings(0, inOldName, null, null, false, SightingCore.class);
                     for (SightingCore temp : sightings) {
                         temp.setElementName(inElement.getPrimaryName());
                         createOrUpdate(temp, false);
                     }
                     // Update the Files
-                    List<WildLogFileCore> wildLogFiles = list(new WildLogFileCore(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName)));
+                    List<WildLogFileCore> wildLogFiles = listWildLogFiles(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
                     for (WildLogFileCore temp : wildLogFiles) {
                         temp.setId(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
                         createOrUpdate(temp, true);
@@ -1237,21 +1236,19 @@ public abstract class DBI_JDBC implements DBI {
                 // Check whether there was a name change or not.
                 if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
                     // Update the Sightings
-                    SightingCore sighting = new SightingCore();
-                    sighting.setLocationName(inOldName);
-                    List<SightingCore> sightings = list(sighting, false);
+                    List<SightingCore> sightings = listSightings(0, null, inOldName, null, false, SightingCore.class);
                     for (SightingCore temp : sightings) {
                         temp.setLocationName(inLocation.getName());
                         createOrUpdate(temp, false);
                     }
                     // Update the Visits
-                    List<VisitCore> visits = list(new VisitCore(null, inOldName));
+                    List<VisitCore> visits = listVisits(null, inOldName, null, VisitCore.class);
                     for (VisitCore temp : visits) {
                         temp.setLocationName(inLocation.getName());
                         createOrUpdate(temp, temp.getName());
                     }
                     // Update the Files
-                    List<WildLogFileCore> wildLogFiles = list(new WildLogFileCore(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName)));
+                    List<WildLogFileCore> wildLogFiles = listWildLogFiles(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
                     for (WildLogFileCore temp : wildLogFiles) {
                         temp.setId(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
                         createOrUpdate(temp, true);
@@ -1314,17 +1311,15 @@ public abstract class DBI_JDBC implements DBI {
                 // Update the related tables if the name changes
                 VisitCore originalVisit;
                 if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                    originalVisit = find(new VisitCore(inOldName));
+                    originalVisit = findVisit(inOldName, inVisit.getClass());
                     // Update the Sightings
-                    SightingCore sighting = new SightingCore();
-                    sighting.setVisitName(inOldName);
-                    List<SightingCore> sightings = list(sighting, false);
+                    List<SightingCore> sightings = listSightings(0, null, null, inOldName, false, SightingCore.class);
                     for (SightingCore temp : sightings) {
                         temp.setVisitName(inVisit.getName());
                         createOrUpdate(temp, false);
                     }
                     // Update the Files
-                    List<WildLogFileCore> wildLogFiles = list(new WildLogFileCore(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName)));
+                    List<WildLogFileCore> wildLogFiles = listWildLogFiles(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
                     for (WildLogFileCore temp : wildLogFiles) {
                         temp.setId(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
                         createOrUpdate(temp, true);
@@ -1336,9 +1331,7 @@ public abstract class DBI_JDBC implements DBI {
                 // This method should cascade and save the Sightings records when the Visit's LocationName changed (Visit was moved).
                 if (!originalVisit.getLocationName().equals(inVisit.getLocationName())) {
                     // Update the Sightings
-                    SightingCore sighting = new SightingCore();
-                    sighting.setVisitName(inOldName);
-                    List<SightingCore> sightings = list(sighting, false);
+                    List<SightingCore> sightings = listSightings(0, null, null, inOldName, false, SightingCore.class);
                     for (SightingCore temp : sightings) {
                         temp.setLocationName(inVisit.getLocationName());
                         createOrUpdate(temp, false);
@@ -1627,16 +1620,12 @@ public abstract class DBI_JDBC implements DBI {
             state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             state.executeUpdate();
             // Delete all Sightings for this ElementCore
-            SightingCore sighting = new SightingCore();
-            sighting.setElementName(inPrimaryName);
-            List<SightingCore> sightingList = list(sighting, false);
+            List<SightingCore> sightingList = listSightings(0, inPrimaryName, null, null, false, SightingCore.class);
             for (SightingCore temp : sightingList) {
                 deleteSighting(temp.getSightingCounter());
             }
             // Delete Fotos
-            WildLogFileCore file = new WildLogFileCore();
-            file.setId(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inPrimaryName));
-            List<WildLogFileCore> fileList = list(file);
+            List<WildLogFileCore> fileList = listWildLogFiles(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inPrimaryName), null, WildLogFileCore.class);
             for (WildLogFileCore temp : fileList) {
                 deleteWildLogFile(temp.getDBFilePath());
             }
@@ -1661,16 +1650,12 @@ public abstract class DBI_JDBC implements DBI {
             state.executeUpdate();
             state.close();
             // Delete Visits for this LocationCore
-            VisitCore visit = new VisitCore();
-            visit.setLocationName(inName);
-            List<VisitCore> visitList = list(visit);
+            List<VisitCore> visitList = listVisits(null, inName, null, VisitCore.class);
             for (VisitCore temp : visitList) {
                 deleteVisit(temp.getName());
             }
             // Delete Fotos
-            WildLogFileCore file = new WildLogFileCore();
-            file.setId(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inName));
-            List<WildLogFileCore> fileList = list(file);
+            List<WildLogFileCore> fileList = listWildLogFiles(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inName), null, WildLogFileCore.class);
             for (WildLogFileCore temp : fileList) {
                 deleteWildLogFile(temp.getDBFilePath());
             }
@@ -1694,16 +1679,12 @@ public abstract class DBI_JDBC implements DBI {
             // Delete VisitCore
             state.executeUpdate();
             // Delete Sightings for this VisitCore
-            SightingCore sighting = new SightingCore();
-            sighting.setVisitName(inName);
-            List<SightingCore> sightingList = list(sighting, false);
+            List<SightingCore> sightingList = listSightings(0, null, null, inName, false, SightingCore.class);
             for (SightingCore temp : sightingList) {
                 deleteSighting(temp.getSightingCounter());
             }
             // Delete Fotos
-            WildLogFileCore file = new WildLogFileCore();
-            file.setId(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inName));
-            List<WildLogFileCore> fileList = list(file);
+            List<WildLogFileCore> fileList = listWildLogFiles(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inName), null, WildLogFileCore.class);
             for (WildLogFileCore temp : fileList) {
                 deleteWildLogFile(temp.getDBFilePath());
             }
@@ -1727,9 +1708,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Sightings
             state.executeUpdate();
             // Delete Fotos
-            WildLogFileCore file = new WildLogFileCore();
-            file.setId(SightingCore.WILDLOGFILE_ID_PREFIX + inSightingCounter);
-            List<WildLogFileCore> fileList = list(file);
+            List<WildLogFileCore> fileList = listWildLogFiles(SightingCore.WILDLOGFILE_ID_PREFIX + inSightingCounter, null, WildLogFileCore.class);
             for (WildLogFileCore temp : fileList) {
                 deleteWildLogFile(temp.getDBFilePath());
             }
@@ -1863,7 +1842,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + andKeyword + " SIGHTINGDATE <= ?";
                 andKeyword = " AND";
             }
-            if (inActiveLocations != null && !inActiveLocations.isEmpty()) {
+            if (inActiveLocations != null && inActiveLocations.size() > 0) {
                 sql = sql + andKeyword + " SIGHTINGS.LOCATIONNAME IN (";
                 for (int t = 0; t < inActiveLocations.size(); t++) {
                     sql = sql + "?,";
@@ -1871,7 +1850,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql.substring(0, sql.length() - 1) + ")";
                 andKeyword = " AND";
             }
-            if (inActiveVisits != null && !inActiveVisits.isEmpty()) {
+            if (inActiveVisits != null && inActiveVisits.size() > 0) {
                 sql = sql + andKeyword + " VISITNAME IN (";
                 for (int t = 0; t < inActiveVisits.size(); t++) {
                     sql = sql + "?,";
@@ -1879,7 +1858,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql.substring(0, sql.length() - 1) + ")";
                 andKeyword = " AND";
             }
-            if (inActiveElements != null && !inActiveElements.isEmpty()) {
+            if (inActiveElements != null && inActiveElements.size() > 0) {
                 sql = sql + andKeyword + " ELEMENTNAME IN (";
                 for (int t = 0; t < inActiveElements.size(); t++) {
                     sql = sql + "?,";
@@ -1896,17 +1875,17 @@ public abstract class DBI_JDBC implements DBI {
             if (inEndDate != null) {
                 state.setTimestamp(paramCounter++, new Timestamp(inEndDate.getTime()));
             }
-            if (inActiveLocations != null && !inActiveLocations.isEmpty()) {
+            if (inActiveLocations != null && inActiveLocations.size() > 0) {
                 for (LocationCore activeLocation : inActiveLocations) {
                     state.setString(paramCounter++, activeLocation.getName());
                 }
             }
-            if (inActiveVisits != null && !inActiveVisits.isEmpty()) {
+            if (inActiveVisits != null && inActiveVisits.size() > 0) {
                 for (VisitCore activeVisit : inActiveVisits) {
                     state.setString(paramCounter++, activeVisit.getName());
                 }
             }
-            if (inActiveElements != null && !inActiveElements.isEmpty()) {
+            if (inActiveElements != null && inActiveElements.size() > 0) {
                 for (ElementCore activeElement : inActiveElements) {
                     state.setString(paramCounter++, activeElement.getPrimaryName());
                 }
@@ -1940,15 +1919,15 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends LocationCount, V extends ElementCore> List<T> queryLocationCountForElement(V inElement, Class<T> inReturnType) {
+    public <T extends LocationCount> List<T> queryLocationCountForElement(String inElementPrimaryName, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
             String sql = queryLocationCountForElement;
             state = conn.prepareStatement(sql);
-            if (inElement != null) {
-                state.setString(1, inElement.getPrimaryName());
+            if (inElementPrimaryName != null) {
+                state.setString(1, inElementPrimaryName);
             }
             else {
                 state.setString(1, null);
