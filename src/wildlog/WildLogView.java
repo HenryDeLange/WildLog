@@ -1589,7 +1589,7 @@ public final class WildLogView extends JFrame {
                             // Update all Observations
                             setMessage("Starting the Sun and Moon Calculation");
                             setProgress(0);
-                            List<Sighting> sightings = app.getDBI().list(new Sighting(), false);
+                            List<Sighting> sightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 UtilsTime.calculateSunAndMoon(sighting);
@@ -1605,7 +1605,7 @@ public final class WildLogView extends JFrame {
                             // Update only Observations without Sun and Moon phase
                             setMessage("Starting the Sun and Moon Calculation");
                             setProgress(0);
-                            List<Sighting> sightings = app.getDBI().list(new Sighting(), false);
+                            List<Sighting> sightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 if (sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
@@ -1808,7 +1808,7 @@ public final class WildLogView extends JFrame {
                 setMessage("Starting the HTML Basic Export for All Records");
                 setProgress(0);
                 // Elements
-                List<Element> listElements = app.getDBI().list(new Element());
+                List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
                 for (int t = 0; t < listElements.size(); t++) {
                     UtilsHTML.exportHTML(listElements.get(t), app, null);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
@@ -1817,7 +1817,7 @@ public final class WildLogView extends JFrame {
                 setProgress(25);
                 // Locations
                 setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().list(new Location());
+                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportHTML(listLocations.get(t), app, null);
                     setProgress(25 + (int)((t/(double)listLocations.size())*25));
@@ -1825,7 +1825,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 // Visits
-                List<Visit> listVisits = app.getDBI().list(new Visit());
+                List<Visit> listVisits = app.getDBI().listVisits(null, null, null, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     UtilsHTML.exportHTML(listVisits.get(t), app, null);
                     setProgress(50 + (int)((t/(double)listVisits.size())*25));
@@ -1833,7 +1833,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsHTML.exportHTML(listSightings.get(t), app, null);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));
@@ -1869,7 +1869,7 @@ public final class WildLogView extends JFrame {
                 setProgress(5);
                 setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                 Collections.sort(listSightings);
                 for (int t = 0; t < listSightings.size(); t++) {
                     String key = listSightings.get(t).getElementName();
@@ -1881,7 +1881,7 @@ public final class WildLogView extends JFrame {
                     setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 }
                 // Locations
-                List<Location> listLocations = app.getDBI().list(new Location());
+                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     String key = listLocations.get(t).getName();
                     if (!entries.containsKey(key)) {
@@ -2128,7 +2128,7 @@ public final class WildLogView extends JFrame {
 // TODO: As die file bestaan maar nie in die DB link nie kan mens dalk probeer "slim" wees en die link afly deur ander info soos size, date en die path...
                                             WildLogFile wildLogFile = new WildLogFile();
                                             wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile).toString());
-                                            if (app.getDBI().find(wildLogFile) == null) {
+                                            if (app.getDBI().findWildLogFile(wildLogFile.getDBFilePath(), null, WildLogFile.class) == null) {
                                                 finalHandleFeedback.println("ERROR:     File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
                                                 finalHandleFeedback.println("+RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
                                                 // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
@@ -2164,7 +2164,7 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("** Starting Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("1) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
-                        List<WildLogFile> allFiles = app.getDBI().list(new WildLogFile());
+                        List<WildLogFile> allFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
                         int filesWithoutID = 0;
                         int filesWithoutPath = 0;
                         int filesNotOnDisk = 0;
@@ -2217,7 +2217,7 @@ public final class WildLogView extends JFrame {
                             // Check the WildLogFile's linkage
                             if (wildLogFile.getId().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())));
+                                final Element temp = app.getDBI().findElement(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()), Element.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("ERROR:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", CreatureName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
@@ -2235,7 +2235,7 @@ public final class WildLogView extends JFrame {
                             else 
                             if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())));
+                                final Visit temp = app.getDBI().findVisit(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()), Visit.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("ERROR:     Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PeriodName Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
@@ -2253,7 +2253,7 @@ public final class WildLogView extends JFrame {
                             else 
                             if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())));
+                                final Location temp = app.getDBI().findLocation(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()), Location.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("ERROR:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PlaceName Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
@@ -2273,7 +2273,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure it is linked
                                 Sighting temp = null;
                                 try {
-                                    temp = app.getDBI().find(new Sighting(Long.parseLong(wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()))));
+                                    temp = app.getDBI().findSighting(Long.parseLong(wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), Sighting.class);
                                 }
                                 catch (NumberFormatException ex) {
                                     finalHandleFeedback.println("ERROR:       Can't get linked Observation's ID.");
@@ -2343,7 +2343,7 @@ public final class WildLogView extends JFrame {
                         setMessage("Cleanup Step 3: Check the file size and dates... " + getProgress() + "%");
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("3) Compare the size and modified date of the files on disk to the values stored in the database.");
-                        allFiles = app.getDBI().list(new WildLogFile());
+                        allFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
                         fileProcessCounter = 0;
                         for (WildLogFile wildLogFile : allFiles) {
                             LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
@@ -2415,18 +2415,18 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("6) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
                         // Check Visits
-                        List<Visit> allVisits = app.getDBI().list(new Visit());
+                        List<Visit> allVisits = app.getDBI().listVisits(null, null, null, Visit.class);
                         int badDataLinks = 0;
                         int countVisits = 0;
                         for (Visit visit : allVisits) {
                             // Validate the Visit to Location link
-                            Location temp = app.getDBI().find(new Location(visit.getLocationName()));
+                            Location temp = app.getDBI().findLocation(visit.getLocationName(), Location.class);
                             if (temp == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR:     Could not find link between Period and Place. "
                                         + "Period: " + visit.getName() + ", Place: " + visit.getLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Period to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
+                                Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location("WildLog_lost_and_found");
                                     app.getDBI().createOrUpdate(newLocation, null);
@@ -2440,17 +2440,17 @@ public final class WildLogView extends JFrame {
                             setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
                         }
                         // Check Sightings
-                        List<Sighting> allSightings = app.getDBI().list(new Sighting(), false);
+                        List<Sighting> allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                         int countSightings = 0;
                         for (Sighting sighting : allSightings) {
                             // Validate the Sighting to Location link
-                            Location tempLocation = app.getDBI().find(new Location(sighting.getLocationName()));
+                            Location tempLocation = app.getDBI().findLocation(sighting.getLocationName(), Location.class);
                             if (tempLocation == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR:     Could not find link between Observation and Place. "
                                         + "Observation: " + sighting.getSightingCounter() + ", Place: " + sighting.getLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
+                                Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location("WildLog_lost_and_found");
                                     app.getDBI().createOrUpdate(newLocation, null);
@@ -2459,13 +2459,13 @@ public final class WildLogView extends JFrame {
                                 app.getDBI().createOrUpdate(sighting, false);
                             }
                             // Validate the Sighting to Element link
-                            Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
+                            Element tempElement = app.getDBI().findElement(sighting.getElementName(), Element.class);
                             if (tempElement == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR:     Could not find link between Observation and Creature. "
                                         + "Observation: " + sighting.getSightingCounter() + ", Creature: " + sighting.getLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Creature called 'WildLog_lost_and_found'.");
-                                Element newElement = app.getDBI().find(new Element("WildLog_lost_and_found"));
+                                Element newElement = app.getDBI().findElement("WildLog_lost_and_found", Element.class);
                                 if (newElement == null) {
                                     newElement = new Element("WildLog_lost_and_found");
                                     app.getDBI().createOrUpdate(newElement, null);
@@ -2474,14 +2474,14 @@ public final class WildLogView extends JFrame {
                                 app.getDBI().createOrUpdate(sighting, false);
                             }
                             // Validate the Sighting to Visit link
-                            Visit tempVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
+                            Visit tempVisit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
                             if (tempVisit == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR:     Could not find link between Observation and Period. "
                                         + "Observation: " + sighting.getSightingCounter() + ", Period: " + sighting.getVisitName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Period called 'WildLog_lost_and_found'.");
                                 // Visit
-                                Visit newVisit = app.getDBI().find(new Visit("WildLog_lost_and_found"));
+                                Visit newVisit = app.getDBI().findVisit("WildLog_lost_and_found", Visit.class);
                                 if (newVisit == null) {
                                     newVisit = new Visit("WildLog_lost_and_found");
                                     newVisit.setLocationName("WildLog_lost_and_found");
@@ -2489,7 +2489,7 @@ public final class WildLogView extends JFrame {
                                 }
                                 sighting.setVisitName("WildLog_lost_and_found");
                                 // Location
-                                Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
+                                Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location("WildLog_lost_and_found");
                                     app.getDBI().createOrUpdate(newLocation, null);
@@ -2498,13 +2498,13 @@ public final class WildLogView extends JFrame {
                                 app.getDBI().createOrUpdate(sighting, false);
                             }
                             // Make sure the Sighting is using a legitimate Location-Visit pair
-                            Visit checkSightingVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
+                            Visit checkSightingVisit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
                             if (!checkSightingVisit.getLocationName().equalsIgnoreCase(sighting.getLocationName())) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR:     The Observation and Period references different Places. "
                                         + "Observation: " + sighting.getLocationName() + ", Period: " + checkSightingVisit.getLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation and Period to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
+                                Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location("WildLog_lost_and_found");
                                     app.getDBI().createOrUpdate(newLocation, null);
@@ -2527,7 +2527,7 @@ public final class WildLogView extends JFrame {
                         setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("7) Check the GPS Accuracy values.");
-                        allSightings = app.getDBI().list(new Sighting(), false);
+                        allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                         int countGPSAccuracy = 0;
                         int badGPSAccuracy = 0;
                         for (Sighting sighting : allSightings) {
@@ -2555,7 +2555,7 @@ public final class WildLogView extends JFrame {
                             setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
                             setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
                         }
-                        List<Location> allLocations = app.getDBI().list(new Location());
+                        List<Location> allLocations = app.getDBI().listLocations(null, Location.class);
                         countGPSAccuracy = 0;
                         for (Location location : allLocations) {
                             if ((location.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
@@ -2590,7 +2590,7 @@ public final class WildLogView extends JFrame {
                             setMessage("Cleanup Step 8: (Optional) Recreating default thumbnails... " + getProgress() + "%");
                             finalHandleFeedback.println("");
                             finalHandleFeedback.println("8) Recreate the default thumbnails for all images.");
-                            final List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile());
+                            final List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
                             ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
                             final CleanupCounter countThumbnails = new CleanupCounter();
                             for (final WildLogFile wildLogFile : listFiles) {
@@ -2767,13 +2767,11 @@ public final class WildLogView extends JFrame {
                             // Update all observations
                             setMessage("Starting the Duration Calculation");
                             setProgress(0);
-                            List<Sighting> sightingList = app.getDBI().list(new Sighting(), false);
+                            List<Sighting> sightingList = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                             for (int t = 0; t < sightingList.size(); t++) {
                                 Sighting sighting = sightingList.get(t);
-                                WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
-                                // USing only images here since it is more reliable (and safer to automate) than movies
-                                searchFile.setFileType(WildLogFileType.IMAGE);
-                                List<WildLogFile> files = app.getDBI().list(searchFile);
+                                // Using only images here since it is more reliable (and safer to automate) than movies
+                                List<WildLogFile> files = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
                                 if (!files.isEmpty()) {
                                     Collections.sort(files);
                                     Date startDate = UtilsImageProcessing.getDateFromImage(files.get(0).getAbsolutePath());
@@ -2797,13 +2795,12 @@ public final class WildLogView extends JFrame {
                             // Update all observations
                             setMessage("Starting the Duration Calculation");
                             setProgress(0);
-                            List<Sighting> sightingList = app.getDBI().list(new Sighting(), false);
+                            List<Sighting> sightingList = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                             for (int t = 0; t < sightingList.size(); t++) {
                                 Sighting sighting = sightingList.get(t);
                                 if (sighting.getDurationMinutes() == 0 && sighting.getDurationSeconds() == 0.0) {
-                                    WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
-                                    searchFile.setFileType(WildLogFileType.IMAGE);
-                                    List<WildLogFile> files = app.getDBI().list(searchFile);
+                                    // Using only images here since it is more reliable (and safer to automate) than movies
+                                    List<WildLogFile> files = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
                                     if (!files.isEmpty()) {
                                         Collections.sort(files);
                                         Date startDate = UtilsImageProcessing.getDateFromImage(files.get(0).getAbsolutePath());
@@ -2851,7 +2848,7 @@ public final class WildLogView extends JFrame {
                     setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                     syncDBI = new WildLogDBI_h2("jdbc:h2:" + syncDatabase + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
                     // Export the elements
-                    List<Element> listElements = app.getDBI().list(new Element());
+                    List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
                     setTaskProgress(20);
                     setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                     int counter = 0;
@@ -2859,7 +2856,7 @@ public final class WildLogView extends JFrame {
                         // Save the element to the new DB
                         syncDBI.createOrUpdate(element, null);
                         // Copy the files
-                        WildLogFile wildLogFile = app.getDBI().find(new WildLogFile(element.getWildLogFileID()));
+                        WildLogFile wildLogFile = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), WildLogFile.class);
                         if (wildLogFile != null) {
                             // Android kan nie die zip handle as die folders of files snaakse name het met - of _ in nie...
                             wildLogFile.setFilename(UtilsFileProcessing.getAlphaNumericVersion(element.getPrimaryName() + ".jpg"));
@@ -3106,7 +3103,7 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(11);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Setup the Location
-                        Location wildNoteLocation = app.getDBI().find(new Location(WildLogConstants.WILDNOTE_LOCATION_NAME));
+                        Location wildNoteLocation = app.getDBI().findLocation(WildLogConstants.WILDNOTE_LOCATION_NAME, Location.class);
                         if (wildNoteLocation == null) {
                             wildNoteLocation = new Location(WildLogConstants.WILDNOTE_LOCATION_NAME);
                             app.getDBI().createOrUpdate(wildNoteLocation, null);
@@ -3123,10 +3120,10 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(15);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Elements
-                        List<Element> listElements = syncDBI.list(new Element());
+                        List<Element> listElements = syncDBI.listElements(null, null, null, Element.class);
                         for (int t = 0; t < listElements.size(); t++) {
                             Element element = listElements.get(t);
-                            if (app.getDBI().find(element) == null) {
+                            if (app.getDBI().findElement(element.getPrimaryName(), Element.class) == null) {
                                 app.getDBI().createOrUpdate(element, null);
                             }
                             setTaskProgress(15 + (int)(t/(double)listElements.size()*10));
@@ -3135,7 +3132,7 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(25);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Sightings
-                        List<Sighting> listSightings = syncDBI.list(new Sighting(), false);
+                        List<Sighting> listSightings = syncDBI.listSightings(0, null, null, null, false, Sighting.class);
                         for (int t = 0; t < listSightings.size(); t++) {
                             Sighting sighting = listSightings.get(t);
                             sighting.setVisitName(tempVisit.getName());
@@ -3409,7 +3406,7 @@ public final class WildLogView extends JFrame {
                 }
             });
             if (option != JOptionPane.CLOSED_OPTION) {
-                List<Element> lstElements = app.getDBI().list(new Element());
+                List<Element> lstElements = app.getDBI().listElements(null, null, null, Element.class);
                 for (Element element : lstElements) {
                     String oldName = element.getPrimaryName();
                     if (option == 0) {
@@ -3439,7 +3436,7 @@ public final class WildLogView extends JFrame {
                 setProgress(0);
                 setMessage("Starting the XML Export for All Records");
                 // Elements
-                List<Element> listElements = app.getDBI().list(new Element());
+                List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
                 for (int t = 0; t < listElements.size(); t++) {
                     UtilsXML.exportXML(listElements.get(t), app, null, false);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
@@ -3447,7 +3444,7 @@ public final class WildLogView extends JFrame {
                 }
                 // Locations
                 setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().list(new Location());
+                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsXML.exportXML(listLocations.get(t), app, null, false);
                     setProgress(25 + (int)((t/(double)listLocations.size())*25));
@@ -3455,7 +3452,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
                 // Visits
-                List<Visit> listVisits = app.getDBI().list(new Visit());
+                List<Visit> listVisits = app.getDBI().listVisits(null, null, null, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     UtilsXML.exportXML(listVisits.get(t), app, null, false);
                     setProgress(50 + (int)((t/(double)listVisits.size())*25));
@@ -3463,7 +3460,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsXML.exportXML(listSightings.get(t), app, null, false);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));
@@ -3772,7 +3769,7 @@ public final class WildLogView extends JFrame {
                 setProgress(0);
                 setMessage("Busy with the CSV Basic Export");
                 // Elements
-                List<Element> listElements = app.getDBI().list(new Element());
+                List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
                 for (int t = 0; t < listElements.size(); t++) {
                     Element element = listElements.get(t);
                     Path tempPath = path.resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName() + ".csv");
@@ -3784,7 +3781,7 @@ public final class WildLogView extends JFrame {
                 setProgress(25);
                 // Locations
                 setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().list(new Location());
+                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     Location location = listLocations.get(t);
                     Path tempPath = path.resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName() + ".csv");
@@ -3795,7 +3792,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 // Visits
-                List<Visit> listVisits = app.getDBI().list(new Visit());
+                List<Visit> listVisits = app.getDBI().listVisits(null, null, null, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     Visit visit = listVisits.get(t);
                     Path tempPath = path.resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName() + ".csv");
@@ -3806,7 +3803,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                 Path tempPath = path.resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("AllObservations.csv");
                 Files.createDirectories(tempPath.getParent());
                 app.getDBI().doExportBasicCSV(tempPath, null, null, null, null, listSightings);
@@ -3825,7 +3822,7 @@ public final class WildLogView extends JFrame {
                 setMessage("Starting the HTML Advanced Export for All Records");
                 setProgress(0);
                 // Elements
-                List<Element> listElements = app.getDBI().list(new Element());
+                List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
                 for (int t = 0; t < listElements.size(); t++) {
                     UtilsHTML.exportFancyHTML(listElements.get(t), app, null);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
@@ -3834,7 +3831,7 @@ public final class WildLogView extends JFrame {
                 setProgress(25);
                 // Locations
                 setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().list(new Location());
+                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportFancyHTML(listLocations.get(t), app, null);
                     setProgress(25 + (int)((t/(double)listLocations.size())*25));
@@ -3842,7 +3839,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
                 // Visits
-                List<Visit> listVisits = app.getDBI().list(new Visit());
+                List<Visit> listVisits = app.getDBI().listVisits(null, null, null, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     UtilsHTML.exportFancyHTML(listVisits.get(t), app, null);
                     setProgress(50 + (int)((t/(double)listVisits.size())*25));
@@ -3850,7 +3847,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsHTML.exportFancyHTML(listSightings.get(t), app, null);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));

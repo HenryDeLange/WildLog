@@ -270,7 +270,7 @@ public final class UtilsHTML {
         int imageListEndIndex = template.indexOf("___MAIN_LIGHTBOX_END___");
         String imageListTemplate = template.substring(imageListBeginIndex, imageListEndIndex).trim();
         StringBuilder imageList = new StringBuilder(200);
-        List<WildLogFile> lstFiles = inApp.getDBI().list(new WildLogFile(inDataObject.getWildLogFileID()));
+        List<WildLogFile> lstFiles = inApp.getDBI().listWildLogFiles(inDataObject.getWildLogFileID(), null, WildLogFile.class);
         for (int t = 0; t < lstFiles.size(); t++) {
             WildLogFile wildLogFile = lstFiles.get(t);
             Path thumbnailFolder = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS.getAbsoluteFullPath().resolve(wildLogFile.getRelativePath().getParent());
@@ -335,24 +335,24 @@ public final class UtilsHTML {
         // Setup the Map and Related data
         List<Sighting> lstSightings;
         if (inDataObject instanceof Element) {
-            lstSightings = inApp.getDBI().list(new Sighting(inDataObject.getIDField(), null, null), false);
+            lstSightings = inApp.getDBI().listSightings(0, inDataObject.getIDField(), null, null, false, Sighting.class);
         }
         else
         if (inDataObject instanceof Location) {
-            lstSightings = inApp.getDBI().list(new Sighting(null, inDataObject.getIDField(), null), false);
+            lstSightings = inApp.getDBI().listSightings(0, null, inDataObject.getIDField(), null, false, Sighting.class);
         }
         else
         if (inDataObject instanceof Visit) {
-            lstSightings = inApp.getDBI().list(new Sighting(null, null, inDataObject.getIDField()), false);
+            lstSightings = inApp.getDBI().listSightings(0, null, null, inDataObject.getIDField(), false, Sighting.class);
         }
         else {
             lstSightings = new ArrayList<>(3);
         }
         List<DataObjectWithHTML> lstRelatedData = new ArrayList<>(lstSightings);
         if (inDataObject instanceof Sighting) {
-            lstRelatedData.add(inApp.getDBI().find(new Location(((Sighting) inDataObject).getLocationName())));
-            lstRelatedData.add(inApp.getDBI().find(new Visit(((Sighting) inDataObject).getVisitName())));
-            lstRelatedData.add(inApp.getDBI().find(new Element(((Sighting) inDataObject).getElementName())));
+            lstRelatedData.add(inApp.getDBI().findLocation(((Sighting) inDataObject).getLocationName(), Location.class));
+            lstRelatedData.add(inApp.getDBI().findVisit(((Sighting) inDataObject).getVisitName(), Visit.class));
+            lstRelatedData.add(inApp.getDBI().findElement(((Sighting) inDataObject).getElementName(), Element.class));
         }
         int counter = 0;
         int mapBeginIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_START___") + "//___MAP_CLICKABLE_DATA_POINTS_START___".length();
@@ -398,7 +398,7 @@ public final class UtilsHTML {
                 mapBuilder.append(System.lineSeparator());
             }
             // Observation Info
-            List<WildLogFile> lstSightingFiles = inApp.getDBI().list(new WildLogFile(relatedData.getWildLogFileID()));
+            List<WildLogFile> lstSightingFiles = inApp.getDBI().listWildLogFiles(relatedData.getWildLogFileID(), null, WildLogFile.class);
             StringBuilder sliderBuilder = new StringBuilder(200 * lstSightingFiles.size());
             StringBuilder lightboxBuilder = new StringBuilder(200 * lstSightingFiles.size());
             if (lstSightingFiles.isEmpty()) {

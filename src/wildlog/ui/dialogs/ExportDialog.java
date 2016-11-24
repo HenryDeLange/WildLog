@@ -401,7 +401,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Files for '" + location.getName() + "'");
-                    List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(location.getWildLogFileID()));
+                    List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(location.getWildLogFileID(), null, WildLogFile.class);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Location.WILDLOG_FOLDER_PREFIX)
                             .resolve(location.getName());
@@ -428,7 +428,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Files for '" + element.getPrimaryName() + "'");
-                    List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
+                    List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(element.getWildLogFileID(), null, WildLogFile.class);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Element.WILDLOG_FOLDER_PREFIX)
                             .resolve(element.getPrimaryName());
@@ -455,7 +455,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                    setProgress(0);
                     setMessage("Exporting Files for '" + visit.getName() + "'");
-                    List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
+                    List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(visit.getWildLogFileID(), null, WildLogFile.class);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Visit.WILDLOG_FOLDER_PREFIX)
                             .resolve(visit.getName());
@@ -482,7 +482,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Files for '" + sighting.getDisplayName() + "'");
-                    List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
+                    List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
                             .resolve(sighting.getDisplayName());
@@ -514,7 +514,7 @@ public class ExportDialog extends JDialog {
                     .resolve(Element.WILDLOG_FOLDER_PREFIX)
                     .resolve(element.getDisplayName())
                     .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
-            lstSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
+            lstSightings = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
         }
         else
         if (location != null) {
@@ -522,7 +522,7 @@ public class ExportDialog extends JDialog {
                     .resolve(Location.WILDLOG_FOLDER_PREFIX)
                     .resolve(location.getDisplayName())
                     .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
-            lstSightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
+            lstSightings = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
         }
         else
         if (visit != null) {
@@ -530,7 +530,7 @@ public class ExportDialog extends JDialog {
                     .resolve(Visit.WILDLOG_FOLDER_PREFIX)
                     .resolve(visit.getDisplayName())
                     .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
-            lstSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+            lstSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
         }
         else
         if (sighting != null) {
@@ -538,7 +538,8 @@ public class ExportDialog extends JDialog {
                     .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
                     .resolve(sighting.getDisplayName())
                     .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
-            lstSightings = app.getDBI().list(sighting, false);
+            lstSightings = app.getDBI().listSightings(sighting.getSightingCounter(), 
+                    sighting.getElementName(), sighting.getLocationName(), sighting.getVisitName(), false, Sighting.class);
         }
         else
         if (lstSightings != null && !lstSightings.isEmpty()) {
@@ -625,21 +626,21 @@ public class ExportDialog extends JDialog {
                 if (location != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName());
                     if (lstSightingsToUse == null) {
-                        lstSightingsToUse = app.getDBI().list(new Sighting(null, location.getName(), null), false);
+                        lstSightingsToUse = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
                     }
                 }
                 else
                 if (visit != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName());
                     if (lstSightingsToUse == null) {
-                        lstSightingsToUse = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+                        lstSightingsToUse = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
                     }
                 }
                 else
                 if (element != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName());
                     if (lstSightingsToUse == null) {
-                        lstSightingsToUse = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
+                        lstSightingsToUse = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
                     }
                 }
                 else
@@ -671,7 +672,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Observation Files for '" + element.getDisplayName() + "'");
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
+                    List<Sighting> listSightings = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Element.WILDLOG_FOLDER_PREFIX)
                             .resolve(element.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);
@@ -679,7 +680,7 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Observation Files for '" + element.getDisplayName() + "' " + getProgress() + "%");
                     int counter = 0;
                     for (Sighting exportSighting : listSightings) {
-                        List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(exportSighting.getWildLogFileID()));
+                        List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(exportSighting.getWildLogFileID(), null, WildLogFile.class);
                         Path exportDestination = destination.resolve(exportSighting.getDisplayName());
                         Files.createDirectories(exportDestination);
                         for (WildLogFile wildLogFile : listFiles) {
@@ -702,7 +703,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Observation Files for '" + location.getDisplayName() + "'");
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
+                    List<Sighting> listSightings = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Location.WILDLOG_FOLDER_PREFIX)
                             .resolve(location.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);
@@ -710,7 +711,7 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Observation Files for '" + location.getDisplayName() + "' " + getProgress() + "%");
                     int counter = 0;
                     for (Sighting exportSighting : listSightings) {
-                        List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(exportSighting.getWildLogFileID()));
+                        List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(exportSighting.getWildLogFileID(), null, WildLogFile.class);
                         Path exportDestination = destination.resolve(exportSighting.getDisplayName());
                         Files.createDirectories(exportDestination);
                         for (WildLogFile wildLogFile : listFiles) {
@@ -733,7 +734,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Observation Files for '" + visit.getDisplayName() + "'");
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+                    List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Visit.WILDLOG_FOLDER_PREFIX)
                             .resolve(visit.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);
@@ -741,7 +742,7 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Observation Files for '" + visit.getDisplayName() + "' " + getProgress() + "%");
                     int counter = 0;
                     for (Sighting exportSighting : listSightings) {
-                        List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(exportSighting.getWildLogFileID()));
+                        List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(exportSighting.getWildLogFileID(), null, WildLogFile.class);
                         Path exportDestination = destination.resolve(exportSighting.getDisplayName());
                         Files.createDirectories(exportDestination);
                         for (WildLogFile wildLogFile : listFiles) {
@@ -925,7 +926,7 @@ public class ExportDialog extends JDialog {
                     for (Sighting tempSighting : lstSightings) {
                         setProgress(0);
                         setMessage("Exporting Files for '" + tempSighting.getDisplayName() + "'");
-                        List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
+                        List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(tempSighting.getWildLogFileID(), null, WildLogFile.class);
                         Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                                 .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
                                 .resolve(tempSighting.getDisplayName());
@@ -1015,21 +1016,21 @@ public class ExportDialog extends JDialog {
                 if (location != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName()) 
                             .resolve(location.getDisplayName() + ".xls");
-                    lstSightingsToUse = app.getDBI().list(new Sighting(null, location.getName(), null), false);
+                    lstSightingsToUse = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
                     sheetName = location.getDisplayName();
                 }
                 else
                 if (visit != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName())
                             .resolve(visit.getDisplayName() + ".xls");
-                    lstSightingsToUse = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+                    lstSightingsToUse = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
                     sheetName = visit.getDisplayName();
                 }
                 else
                 if (element != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName())
                             .resolve(element.getDisplayName() + ".xls");
-                    lstSightingsToUse = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
+                    lstSightingsToUse = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
                     sheetName = element.getDisplayName();
                 }
                 else
@@ -1080,7 +1081,7 @@ public class ExportDialog extends JDialog {
                     row = sheet.createRow(rowCount);
                     row.createCell(col++).setCellValue(rowCount);
                     row.createCell(col++).setCellValue(tempSighting.getVisitName());
-                    List<WildLogFile> lstFiles = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
+                    List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(tempSighting.getWildLogFileID(), null, WildLogFile.class);
                     String files = "";
                     int counterFiles = 1;
                     for (WildLogFile wildLogFile : lstFiles) {
@@ -1100,7 +1101,7 @@ public class ExportDialog extends JDialog {
                     row.createCell(col++).setCellValue(files);
                     Element tempElement = mapElements.get(tempSighting.getElementName());
                     if (tempElement == null) {
-                        tempElement = app.getDBI().find(new Element(tempSighting.getElementName()));
+                        tempElement = app.getDBI().findElement(tempSighting.getElementName(), Element.class);
                         if (tempElement.getScientificName() == null || tempElement.getScientificName().isEmpty()) {
                             tempElement.setScientificName(tempElement.getPrimaryName());
                         }
@@ -1128,7 +1129,7 @@ public class ExportDialog extends JDialog {
                     String gps = UtilsGPS.getLatitudeString(tempSighting) + " " + UtilsGPS.getLongitudeString(tempSighting);
                     Visit tempVisit = mapVisits.get(gps);
                     if (tempVisit == null) {
-                        mapVisits.put(gps, app.getDBI().find(new Visit(tempSighting.getVisitName())));
+                        mapVisits.put(gps, app.getDBI().findVisit(tempSighting.getVisitName(), Visit.class));
                     }
                     // Update progress
                     setTaskProgress(5 + (int)((counter/(double)lstSightingsToUse.size())*85));

@@ -92,7 +92,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
-            List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+            List<WildLogFile> files = inApp.getDBI().listWildLogFiles(getWildLogFileID(), null, WildLogFile.class);
             for (int t = 0; t < files.size(); t++) {
                 filesString.append(files.get(t).toHTML(inExportType));
                 if (inProgressbarTask != null) {
@@ -110,9 +110,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
             htmlElement.append("<br/>");
             htmlElement.append("</td></tr>");
             htmlElement.append("<tr><td>");
-            Sighting tempSighting = new Sighting();
-            tempSighting.setElementName(primaryName);
-            List<Sighting> sightings = inApp.getDBI().list(tempSighting, false);
+            List<Sighting> sightings = inApp.getDBI().listSightings(0, primaryName, null, null, false, Sighting.class);
             int counter = 0;
             for (Sighting temp : sightings) {
                 htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inIsSummary, inApp, inExportType, null));
@@ -174,7 +172,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
             inProgressbarTask.setTaskProgress(5);
         }
         StringBuilder filesString = new StringBuilder(300);
-        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+        List<WildLogFile> files = inApp.getDBI().listWildLogFiles(getWildLogFileID(), null, WildLogFile.class);
         int counter = 0;
         for (WildLogFile file : files) {
             filesString.append(UtilsXML.getWildLogFileInfoAsXML(file));
@@ -193,7 +191,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         }
         if (inIncludeSightings) {
             StringBuilder sightingString = new StringBuilder(1024);
-            List<Sighting> sightings = inApp.getDBI().list(new Sighting(primaryName, null, null), false);
+            List<Sighting> sightings = inApp.getDBI().listSightings(0, primaryName, null, null, false, Sighting.class);
             counter = 0;
             for (Sighting temp : sightings) {
                 sightingString.append(temp.toXML(inApp, null, false));
@@ -213,7 +211,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
     @Override
     public String toTXT(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         StringBuilder builder = new StringBuilder(50);
-        List<Sighting> lstSightingsToUse = inApp.getDBI().list(new Sighting(primaryName, null, null), false);
+        List<Sighting> lstSightingsToUse = inApp.getDBI().listSightings(0, primaryName, null, null, false, Sighting.class);
         builder.append(primaryName).append(" was observed at the following Places:").append(System.lineSeparator());
         Set<String> uniqueNames = new HashSet<>();
         for (Sighting tempsighting : lstSightingsToUse) {

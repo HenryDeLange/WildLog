@@ -167,7 +167,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[8])) {
-                Element element = WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName()));
+                Element element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementName(), Element.class);
                 categoryValue = UtilsData.stringFromObject(element.getType());
             }
             else

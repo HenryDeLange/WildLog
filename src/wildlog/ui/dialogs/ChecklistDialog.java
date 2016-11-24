@@ -275,13 +275,15 @@ public class ChecklistDialog extends JDialog {
     // Private Methods
     private void loadElementList() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        Element searchElement = new Element();
-        searchElement.setType((ElementType)cmbElementType.getSelectedItem());
-        if (ElementType.NONE.equals(searchElement.getType()))
-            searchElement.setType(null);
-        if (txtSearch.getText().length() > 0)
-            searchElement.setPrimaryName(txtSearch.getText());
-        List<Element> elements = new ArrayList<Element>(app.getDBI().list(searchElement));
+        ElementType elementType = (ElementType) cmbElementType.getSelectedItem();
+        if (ElementType.NONE.equals(elementType)) {
+            elementType = null;
+        }
+        String elementName = null;
+        if (txtSearch.getText().length() > 0) {
+            elementName = txtSearch.getText();
+        }
+        List<Element> elements = new ArrayList<Element>(app.getDBI().listElements(elementName, null, elementType, Element.class));
         Collections.sort(elements);
         DefaultListModel model = (DefaultListModel)lstFromCreatures.getModel();
         model.clear();

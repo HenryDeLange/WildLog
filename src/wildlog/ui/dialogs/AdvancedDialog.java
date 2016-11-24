@@ -229,8 +229,8 @@ public class AdvancedDialog extends JDialog {
             MoveVisitDialog dialog = new MoveVisitDialog(app, visit);
             dialog.setVisible(true);
         }
-        panelVisit.setVisit(app.getDBI().find(visit));
-        panelVisit.setLocationForVisit(app.getDBI().find(new Location(panelVisit.getVisit().getLocationName())));
+        panelVisit.setVisit(app.getDBI().findVisit(visit.getName(), Visit.class));
+        panelVisit.setLocationForVisit(app.getDBI().findLocation(panelVisit.getVisit().getLocationName(), Location.class));
         panelVisit.doTheRefresh(null);
         getGlassPane().setVisible(false);
         setVisible(false);
@@ -242,7 +242,7 @@ public class AdvancedDialog extends JDialog {
         GPSDialog dialog = new GPSDialog(app, this, tempSighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
-            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+            List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
             for (Sighting sighting : listSightings) {
                 sighting.setLatitude(tempSighting.getLatitude());
                 sighting.setLatDegrees(tempSighting.getLatDegrees());
@@ -266,9 +266,9 @@ public class AdvancedDialog extends JDialog {
     private void btnSetDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDurationActionPerformed
         this.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         this.getGlassPane().setVisible(true);
-        List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+        List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
         for (Sighting sighting : listSightings) {
-            List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
+            List<WildLogFile> files = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
             if (files != null && !files.isEmpty()) {
                 Collections.sort(files);
                 Date startDate = UtilsImageProcessing.getDateFromFile(files.get(0).getAbsolutePath());
@@ -294,10 +294,10 @@ public class AdvancedDialog extends JDialog {
         PrintWriter feedback = null;
         try {
             feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
-            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+            List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
             feedback.println("Checking " + listSightings.size() + " Observations for similarities.");
             feedback.println("___________________________________________________________________________");
-            List<Sighting> listSightingsToCompare = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+            List<Sighting> listSightingsToCompare = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
             for (Sighting sighting : listSightings) {
                 for (int t = listSightingsToCompare.size() - 1; t >= 0; t--) {
                     Sighting tempSighting = listSightingsToCompare.get(t);
@@ -367,7 +367,7 @@ public class AdvancedDialog extends JDialog {
 
     private void btnChecklistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChecklistActionPerformed
         ChecklistDialog dialog = new ChecklistDialog(app, this,
-                app.getDBI().find(new Location(panelVisit.getVisit().getLocationName())),
+                app.getDBI().findLocation(panelVisit.getVisit().getLocationName(), Location.class),
                 visit, panelVisit);
         dialog.setVisible(true);
         setVisible(false);
@@ -375,7 +375,7 @@ public class AdvancedDialog extends JDialog {
     }//GEN-LAST:event_btnChecklistActionPerformed
 
     private void btnSetSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetSunAndMoonActionPerformed
-        List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
+        List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
         for (Sighting sighting : listSightings) {
             // Recalculate the Sun and Moon phase
             UtilsTime.calculateSunAndMoon(sighting);

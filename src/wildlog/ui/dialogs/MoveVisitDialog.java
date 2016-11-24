@@ -163,13 +163,11 @@ public class MoveVisitDialog extends JDialog {
             String tempLocation = (String)lstToLocation.getSelectedValue();
             // Update the Visit
             for (String tempVisitName : (List<String>) lstVisit.getSelectedValuesList()) {
-                Visit tempVisit = app.getDBI().find(new Visit(tempVisitName));
+                Visit tempVisit = app.getDBI().findVisit(tempVisitName, Visit.class);
                 tempVisit.setLocationName(tempLocation);
                 app.getDBI().createOrUpdate(tempVisit, tempVisit.getName());
                 // Update the sightings
-                Sighting temp = new Sighting();
-                temp.setVisitName(tempVisit.getName());
-                List<Sighting> sightings = app.getDBI().list(temp, false);
+                List<Sighting> sightings = app.getDBI().listSightings(0, null, null, tempVisit.getName(), false, Sighting.class);
                 for (Sighting tempSighting : sightings) {
                     tempSighting.setLocationName(tempLocation);
                     tempSighting.setVisitName(tempVisit.getName());
@@ -192,9 +190,7 @@ public class MoveVisitDialog extends JDialog {
         DefaultListModel<String> visitModel = new DefaultListModel<String>();
         if (lstFromLocation.getSelectedIndex() >= 0) {
             String tempLocation = (String)lstFromLocation.getSelectedValue();
-            Visit temp = new Visit();
-            temp.setLocationName(tempLocation);
-            List<Visit> visits = app.getDBI().list(temp);
+            List<Visit> visits = app.getDBI().listVisits(null, tempLocation, null, Visit.class);
             Collections.sort(visits);
             for (Visit tempVisit : visits) {
                 visitModel.addElement(tempVisit.getName());
@@ -207,7 +203,7 @@ public class MoveVisitDialog extends JDialog {
     // Private Methods
     private void loadLists() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        List<Location> locations = new ArrayList<Location>(app.getDBI().list(new Location()));
+        List<Location> locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
         Collections.sort(locations);
         DefaultListModel<String> fromLocationModel = new DefaultListModel<String>();
         DefaultListModel<String> toLocationModel = new DefaultListModel<String>();

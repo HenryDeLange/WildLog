@@ -125,7 +125,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             //lblImageLocation.setEnabled(false);
             btnSelectLocation.setEnabled(false);
             // Visti fields
-            Visit tempVisit = app.getDBI().find(new Visit(existingVisitName));
+            Visit tempVisit = app.getDBI().findVisit(existingVisitName, Visit.class);
             txtVisitName.setText(existingVisitName);
             txtVisitName.setEnabled(false);
             cmbVisitType.setSelectedItem(tempVisit.getType());
@@ -693,7 +693,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 // Make sure the location is OK
                 if (selectedLocationName != null && !selectedLocationName.isEmpty() && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
                     // Make sure the visit is OK
-                    Visit visit = app.getDBI().find(new Visit(txtVisitName.getText()));
+                    Visit visit = app.getDBI().findVisit(txtVisitName.getText(), Visit.class);
                     if ((existingVisitName == null || existingVisitName.isEmpty()) && visit != null) {
                         UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                             @Override
@@ -766,7 +766,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     this.setTaskProgress(0);
                     closeTab();
                     // Process the Location
-                    Location location = app.getDBI().find(new Location(selectedLocationName));
+                    Location location = app.getDBI().findLocation(selectedLocationName, Location.class);
                     // Processs the sightings
                     final Location locationHandle = location;
                     final Visit visitHandle = visit;
@@ -922,7 +922,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // Reload the location (espesially the image) as it might have changed
-        if (app.getDBI().find(new Location(selectedLocationName)) == null) {
+        if (app.getDBI().findLocation(selectedLocationName, Location.class) == null) {
             selectedLocationName = "";
             lblLocation.setText(selectedLocationName);
         }
@@ -932,7 +932,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
             BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) model.getValueAt(rowCount, 0);
             if (sightingWrapper.getElementName() != null && !sightingWrapper.getElementName().isEmpty()) {
-                Element element = app.getDBI().find(new Element(sightingWrapper.getElementName()));
+                Element element = app.getDBI().findElement(sightingWrapper.getElementName(), Element.class);
                 if (element != null) {
                     JLabel tempLabel = new JLabel();
                     UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_SMALL, app);

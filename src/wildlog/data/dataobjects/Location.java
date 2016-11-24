@@ -64,7 +64,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
-            List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+            List<WildLogFile> files = inApp.getDBI().listWildLogFiles(getWildLogFileID(), null, WildLogFile.class);
             for (int t = 0; t < files.size(); t++) {
                 filesString.append(files.get(t).toHTML(inExportType));
                 if (inProgressbarTask != null) {
@@ -82,9 +82,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             htmlLocation.append("<br/>");
             htmlLocation.append("</td></tr>");
             htmlLocation.append("<tr><td>");
-            Visit tempVisit = new Visit();
-            tempVisit.setLocationName(name);
-            List<Visit> visits = inApp.getDBI().list(tempVisit);
+            List<Visit> visits = inApp.getDBI().listVisits(null, name, null, Visit.class);
             int counter = 0;
             for (int t = 0; t < visits.size(); t++) {
                 htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
@@ -132,7 +130,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         builder.append("<directions><![CDATA[").append(directions).append("]]></directions>");
         builder.append(UtilsXML.getGPSInfoAsXML(this));
         StringBuilder filesString = new StringBuilder(200);
-        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+        List<WildLogFile> files = inApp.getDBI().listWildLogFiles(getWildLogFileID(), null, WildLogFile.class);
         int counter = 0;
         for (WildLogFile file : files) {
             filesString.append(UtilsXML.getWildLogFileInfoAsXML(file));
@@ -146,7 +144,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         builder.append("<Files>").append(filesString).append("</Files>");
         if (inIncludeSightings) {
             StringBuilder sightingString = new StringBuilder(1024);
-            List<Sighting> sightings = inApp.getDBI().list(new Sighting(null, name, null), false);
+            List<Sighting> sightings = inApp.getDBI().listSightings(0, null, name, null, false, Sighting.class);
             counter = 0;
             for (Sighting temp : sightings) {
                 sightingString.append(temp.toXML(inApp, null, false));
@@ -166,7 +164,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
     @Override
     public String toTXT(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         StringBuilder builder = new StringBuilder(50);
-        List<Sighting> lstSightingsToUse = inApp.getDBI().list(new Sighting(null, name, null), false);
+        List<Sighting> lstSightingsToUse = inApp.getDBI().listSightings(0, null, name, null, false, Sighting.class);
         builder.append("The following Creatures were observed at ").append(name).append(":").append(System.lineSeparator());
         Set<String> uniqueNames = new HashSet<>();
         for (Sighting tempsighting : lstSightingsToUse) {

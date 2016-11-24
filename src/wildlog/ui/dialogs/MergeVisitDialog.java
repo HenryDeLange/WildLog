@@ -209,9 +209,7 @@ public class MergeVisitDialog extends JDialog {
             // Update the Visit
             for (String tempFromVisitName : (List<String>) lstFromVisit.getSelectedValuesList()) {
                 // Update the sightings
-                Sighting tempSighting = new Sighting();
-                tempSighting.setVisitName(tempFromVisitName);
-                List<Sighting> sightings = app.getDBI().list(tempSighting, false);
+                List<Sighting> sightings = app.getDBI().listSightings(0, null, null, tempFromVisitName, false, Sighting.class);
                 for (Sighting sighting : sightings) {
                     sighting.setLocationName((String)lstToLocation.getSelectedValue());
                     sighting.setVisitName((String)lstToVisit.getSelectedValue());
@@ -235,9 +233,7 @@ public class MergeVisitDialog extends JDialog {
         DefaultListModel<String> visitModel = new DefaultListModel<String>();
         if (lstFromLocation.getSelectedIndex() >= 0) {
             String tempLocation = (String)lstFromLocation.getSelectedValue();
-            Visit temp = new Visit();
-            temp.setLocationName(tempLocation);
-            List<Visit> visits = app.getDBI().list(temp);
+            List<Visit> visits = app.getDBI().listVisits(null, tempLocation, null, Visit.class);
             Collections.sort(visits);
             for (Visit tempVisit : visits) {
                 visitModel.addElement(tempVisit.getName());
@@ -250,9 +246,7 @@ public class MergeVisitDialog extends JDialog {
         DefaultListModel<String> visitModel = new DefaultListModel<String>();
         if (lstToLocation.getSelectedIndex() >= 0) {
             String tempLocation = (String)lstToLocation.getSelectedValue();
-            Visit temp = new Visit();
-            temp.setLocationName(tempLocation);
-            List<Visit> visits = app.getDBI().list(temp);
+            List<Visit> visits = app.getDBI().listVisits(null, tempLocation, null, Visit.class);
             Collections.sort(visits);
             for (Visit tempVisit : visits) {
                 visitModel.addElement(tempVisit.getName());
@@ -265,7 +259,7 @@ public class MergeVisitDialog extends JDialog {
     // Private Methods
     private void loadLists() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        List<Location> locations = new ArrayList<Location>(app.getDBI().list(new Location()));
+        List<Location> locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
         Collections.sort(locations);
         DefaultListModel<String> fromLocationModel = new DefaultListModel<String>();
         DefaultListModel<String> toLocationModel = new DefaultListModel<String>();

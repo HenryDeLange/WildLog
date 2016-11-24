@@ -683,7 +683,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
                 DataObjectWithWildLogFile tempNode = (DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(tempNode.getWildLogFileID()));
+                List<WildLogFile> listWildLogFile = app.getDBI().listWildLogFiles(tempNode.getWildLogFileID(), null, WildLogFile.class);
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
@@ -734,7 +734,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             }
                             // Reload the image
                             preloadedImages.remove(wildLogFile.getAbsolutePath().toString());
-                            setupFile(app.getDBI().list(newWildLogFile));
+                            setupFile(app.getDBI().listWildLogFiles(newWildLogFile.getId(), null, WildLogFile.class));
                             // Recreate the thumbnails
                             // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
@@ -866,27 +866,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void btnBrowseNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseNextActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
-                loadNextFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
-                loadNextFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempVisit.getWildLogFileID()));
-                loadNextFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
+            DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+            if (temp != null) {
+                List<WildLogFile> fotos = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
                 loadNextFile(fotos);
             }
         }
@@ -894,27 +876,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void btnBrowsePrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowsePrevActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
-                loadPrevFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
-                loadPrevFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempVisit.getWildLogFileID()));
-                loadPrevFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
+            DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+            if (temp != null) {
+                List<WildLogFile> fotos = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
                 loadPrevFile(fotos);
             }
         }
@@ -939,7 +903,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 UtilsPanelGenerator.openPanelAsTab(app, tempVisit.getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel,
-                    app.getDBI().find(new Location(tempVisit.getLocationName())));
+                    app.getDBI().findLocation(tempVisit.getLocationName(), Location.class));
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
@@ -947,9 +911,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 PanelSighting dialog = new PanelSighting(
                     app, app.getMainFrame(), "Edit an Existing Sighting",
                     tempSighting,
-                    app.getDBI().find(new Location(tempSighting.getLocationName())),
-                    app.getDBI().find(new Visit(tempSighting.getVisitName())),
-                    app.getDBI().find(new Element(tempSighting.getElementName())),
+                    app.getDBI().findLocation(tempSighting.getLocationName(), Location.class),
+                    app.getDBI().findVisit(tempSighting.getVisitName(), Visit.class),
+                    app.getDBI().findElement(tempSighting.getElementName(), Element.class),
                     this,
                     false, false, false);
                 dialog.setVisible(true);
@@ -965,9 +929,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 txtBrowseInfo.setText(((DataObjectWithHTML)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
                     .toHTML(false, false, false, app, UtilsHTMLExportTypes.ForHTML, null)
                     .replace("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>", ""));
-                List<WildLogFile> files = app.getDBI().list(new WildLogFile(
-                        ((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
-                                .getWildLogFileID()));
+                DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                List<WildLogFile> files = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
                 setupFile(files);
                 if ((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                     btnSetDefaultElementImage.setEnabled(true);
@@ -1152,8 +1115,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 PanelSighting dialog = new PanelSighting(
                                         app, app.getMainFrame(), "Add a New Observation",
                                         new Sighting(), 
-                                        app.getDBI().find(new Location(((Visit) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getLocationName())), 
-                                        (Visit) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject(), 
+                                        app.getDBI().findLocation(((Visit) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getLocationName(), Location.class), 
+                                        (Visit) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject(), 
                                         null, tabBrowseHandle, true, false, false);
                                 dialog.setVisible(true);
                             }
@@ -1290,21 +1253,21 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                 Location location = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + location.getDisplayName(), 
-                                        app.getDBI().list(new Sighting(null, location.getName(), null), true));
+                                        app.getDBI().listSightings(0, null, location.getName(), null, true, Sighting.class));
                                 dialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                 Element element = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + element.getDisplayName(), 
-                                        app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), true));
+                                        app.getDBI().listSightings(0, element.getPrimaryName(), null, null, true, Sighting.class));
                                 dialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                 Visit visit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
-                                        app.getDBI().list(new Sighting(null, null, visit.getName()), true));
+                                        app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class));
                                 dialog.setVisible(true);
                             }
                             else
@@ -1329,7 +1292,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempLocation.getName(), 
-                                        app.getDBI().list(new Sighting(null, tempLocation.getName(), null), true));
+                                        app.getDBI().listSightings(0, null, tempLocation.getName(), null, true, Sighting.class));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
@@ -1337,7 +1300,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempElement.getPrimaryName(), 
-                                        app.getDBI().list(new Sighting(tempElement.getPrimaryName(), null, null), true));
+                                        app.getDBI().listSightings(0, tempElement.getPrimaryName(), null, null, true, Sighting.class));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
@@ -1345,7 +1308,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempVisit.getName(), 
-                                        app.getDBI().list(new Sighting(null, null, tempVisit.getName()), true));
+                                        app.getDBI().listSightings(0, null, null, tempVisit.getName(), true, Sighting.class));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
@@ -1417,11 +1380,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 SightingWrapper sightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(sightingWrapper.getWildLogFileID()));
+                List<WildLogFile> listWildLogFile = app.getDBI().listWildLogFiles(sightingWrapper.getWildLogFileID(), null, WildLogFile.class);
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
-                        List<WildLogFile> files = app.getDBI().list(new WildLogFile(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName()));
+                        List<WildLogFile> files = app.getDBI().listWildLogFiles(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
                             app.getDBI().createOrUpdate(tempFile, true);
@@ -1431,14 +1394,15 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
-                                Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(), wildLogFile.getFilename(),
+                        // FIXME: wat gebeur as die file rename was tydens die upload?
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
-                                    Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getElementName())
-                                    .resolve(wildLogFile.getFilename())).toString(),
-                                WildLogFileType.IMAGE));
-                        newWildLogFile.setDefaultFile(true);
-                        app.getDBI().createOrUpdate(newWildLogFile, true);
+                                        Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
+                                                sightingWrapper.getSighting().getElementName()).resolve(
+                                                        wildLogFile.getFilename())).toString(), 
+                                null, WildLogFile.class);
+                        uploadedWildLogFile.setDefaultFile(true);
+                        app.getDBI().createOrUpdate(uploadedWildLogFile, true);
                     }
                 }
             }
@@ -1449,11 +1413,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 SightingWrapper sightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(sightingWrapper.getWildLogFileID()));
+                List<WildLogFile> listWildLogFile = app.getDBI().listWildLogFiles(sightingWrapper.getWildLogFileID(), null, WildLogFile.class);
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
-                        List<WildLogFile> files = app.getDBI().list(new WildLogFile(Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName()));
+                        List<WildLogFile> files = app.getDBI().listWildLogFiles(Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
                             app.getDBI().createOrUpdate(tempFile, true);
@@ -1463,25 +1427,26 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
-                                Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(), wildLogFile.getFilename(),
+                        // FIXME: wat gebeur as die file rename was tydens die upload?
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
-                                    Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getLocationName())
-                                    .resolve(wildLogFile.getFilename())).toString(),
-                                WildLogFileType.IMAGE));
-                        newWildLogFile.setDefaultFile(true);
-                        app.getDBI().createOrUpdate(newWildLogFile, true);
+                                        Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
+                                                sightingWrapper.getSighting().getLocationName()).resolve(
+                                                        wildLogFile.getFilename())).toString(),
+                                null, WildLogFile.class);
+                        uploadedWildLogFile.setDefaultFile(true);
+                        app.getDBI().createOrUpdate(uploadedWildLogFile, true);
                     }
                 }
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit visit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
+                List<WildLogFile> listWildLogFile = app.getDBI().listWildLogFiles(visit.getWildLogFileID(), null, WildLogFile.class);
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
-                        List<WildLogFile> files = app.getDBI().list(new WildLogFile(Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName()));
+                        List<WildLogFile> files = app.getDBI().listWildLogFiles(Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
                             app.getDBI().createOrUpdate(tempFile, true);
@@ -1491,14 +1456,15 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
-                                Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(), wildLogFile.getFilename(),
+                        // FIXME: wat gebeur as die file rename was tydens die upload?
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
-                                    Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getLocationName())
-                                    .resolve(wildLogFile.getFilename())).toString(),
-                                WildLogFileType.IMAGE));
-                        newWildLogFile.setDefaultFile(true);
-                        app.getDBI().createOrUpdate(newWildLogFile, true);
+                                        Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
+                                                visit.getLocationName()).resolve(
+                                                        wildLogFile.getFilename())).toString(),
+                                null, WildLogFile.class);
+                        uploadedWildLogFile.setDefaultFile(true);
+                        app.getDBI().createOrUpdate(uploadedWildLogFile, true);
                     }
                 }
             }
@@ -1509,11 +1475,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 SightingWrapper sightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(sightingWrapper.getWildLogFileID()));
+                List<WildLogFile> listWildLogFile = app.getDBI().listWildLogFiles(sightingWrapper.getWildLogFileID(), null, WildLogFile.class);
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
-                        List<WildLogFile> files = app.getDBI().list(new WildLogFile(Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName()));
+                        List<WildLogFile> files = app.getDBI().listWildLogFiles(Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
                             app.getDBI().createOrUpdate(tempFile, true);
@@ -1523,14 +1489,15 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
-                                Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(), wildLogFile.getFilename(),
+                        // FIXME: wat gebeur as die file rename was tydens die upload?
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
-                                    Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getVisitName())
-                                    .resolve(wildLogFile.getFilename())).toString(),
-                                WildLogFileType.IMAGE));
-                        newWildLogFile.setDefaultFile(true);
-                        app.getDBI().createOrUpdate(newWildLogFile, true);
+                                        Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(
+                                                sightingWrapper.getSighting().getVisitName()).resolve(
+                                                        wildLogFile.getFilename())).toString(),
+                                null, WildLogFile.class);
+                        uploadedWildLogFile.setDefaultFile(true);
+                        app.getDBI().createOrUpdate(uploadedWildLogFile, true);
                     }
                 }
             }
@@ -1541,7 +1508,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         DefaultMutableTreeNode treeNode = ((DefaultMutableTreeNode) evt.getPath().getLastPathComponent());
         if (treeNode.getUserObject() instanceof Location) {
             if (rdbBrowseLocation.isSelected()) {
-                List<Visit> visits = app.getDBI().list(new Visit(null, ((Location) treeNode.getUserObject()).getName()));
+                List<Visit> visits = app.getDBI().listVisits(null, ((Location) treeNode.getUserObject()).getName(), null, Visit.class);
                 Collections.sort(visits);
                 for (Visit tempVisit : visits) {
                     LazyTreeNode lazyNode = new LazyTreeNode(tempVisit, (app.getDBI().countSightings(0, null, tempVisit.getLocationName(), tempVisit.getName()) == 0));
@@ -1552,7 +1519,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         else
         if (treeNode.getUserObject() instanceof Visit) {
             if (rdbBrowseLocation.isSelected()) {
-                List<Sighting> sightings = app.getDBI().list(new Sighting(null, ((Visit) treeNode.getUserObject()).getLocationName(), ((Visit) treeNode.getUserObject()).getName()), false);
+                List<Sighting> sightings = app.getDBI().listSightings(0, null, ((Visit) treeNode.getUserObject()).getLocationName(), ((Visit) treeNode.getUserObject()).getName(), false, Sighting.class);
                 Collections.sort(sightings);
                 for (Sighting tempSighting : sightings) {
                     LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, true), false);
@@ -1563,7 +1530,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         else
         if (treeNode.getUserObject() instanceof Element) {
             if (rdbBrowseElement.isSelected()) {
-                List<Sighting> sightings = app.getDBI().list(new Sighting(((Element) treeNode.getUserObject()).getPrimaryName(), null, null), false);
+                List<Sighting> sightings = app.getDBI().listSightings(0, ((Element) treeNode.getUserObject()).getPrimaryName(), null, null, false, Sighting.class);
                 Collections.sort(sightings);
                 for (Sighting tempSighting : sightings) {
                     LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, false), false);
@@ -1574,18 +1541,18 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         else
         if (treeNode.getUserObject() instanceof SightingWrapper) {
             if (rdbBrowseLocation.isSelected()) {
-                treeNode.add(new LazyTreeNode(app.getDBI().find(new Element(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementName())), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findElement(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementName(), Element.class), true));
             }
             else
             if (rdbBrowseElement.isSelected()) {
-                treeNode.add(new LazyTreeNode(app.getDBI().find(new Location(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationName())), true));
-                treeNode.add(new LazyTreeNode(app.getDBI().find(new Visit(((SightingWrapper) treeNode.getUserObject()).getSighting().getVisitName())), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findLocation(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationName(), Location.class), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findVisit(((SightingWrapper) treeNode.getUserObject()).getSighting().getVisitName(), Visit.class), true));
             }
             else
             if (rdbBrowseDate.isSelected()) {
-                treeNode.add(new LazyTreeNode(app.getDBI().find(new Location(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationName())), true));
-                treeNode.add(new LazyTreeNode(app.getDBI().find(new Visit(((SightingWrapper) treeNode.getUserObject()).getSighting().getVisitName())), true));
-                treeNode.add(new LazyTreeNode(app.getDBI().find(new Element(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementName())), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findLocation(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationName(), Location.class), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findVisit(((SightingWrapper) treeNode.getUserObject()).getSighting().getVisitName(), Visit.class), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findElement(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementName(), Element.class), true));
             }
         }
     }//GEN-LAST:event_treBrowsePhotoTreeWillExpand
@@ -1594,7 +1561,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
                 DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> lstWildLogFiles = app.getDBI().list(new WildLogFile(temp.getWildLogFileID()));
+                List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
                 if (!lstWildLogFiles.isEmpty()) {
                     final List<File> files = new ArrayList<>(1);
                     files.add(lstWildLogFiles.get(imageIndex).getAbsolutePath().toFile());
@@ -1621,7 +1588,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
-        List<Location> locations = app.getDBI().list(new Location());
+        List<Location> locations = app.getDBI().listLocations(null, Location.class);
         Collections.sort(locations);
         for (Location tempLocation : locations) {
             LazyTreeNode lazyNode = new LazyTreeNode(tempLocation, (app.getDBI().countVisits(null, tempLocation.getName()) == 0));
@@ -1638,7 +1605,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (ElementType.NONE.equals(searchElementBrowseTab.getType())) {
             searchElementBrowseTab.setType(null);
         }
-        List<Element> elements = app.getDBI().list(searchElementBrowseTab);
+        List<Element> elements = app.getDBI().listElements(searchElementBrowseTab.getPrimaryName(), null, searchElementBrowseTab.getType(), Element.class);
         Collections.sort(elements);
         for (Element tempElement : elements) {
             LazyTreeNode lazyNode = new LazyTreeNode(tempElement, (app.getDBI().countSightings(0, tempElement.getPrimaryName(), null, null) == 0));
@@ -1765,7 +1732,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         for (int row : preloadNodeRows) {
             final DefaultMutableTreeNode tempNode = (DefaultMutableTreeNode)treBrowsePhoto.getPathForRow(row).getLastPathComponent();
             if (tempNode.getUserObject() instanceof DataObjectWithWildLogFile) {
-                final List<WildLogFile> files = app.getDBI().list(new WildLogFile(((DataObjectWithWildLogFile)tempNode.getUserObject()).getWildLogFileID()));
+                final List<WildLogFile> files = app.getDBI().listWildLogFiles(((DataObjectWithWildLogFile)tempNode.getUserObject()).getWildLogFileID(), null, WildLogFile.class);
                 doConcurrentLoad(newPreloadedImages, newRequestedImages, files, 0, tempNode, finalSize);
             }
         }

@@ -431,10 +431,10 @@ public class WorkspaceImportDialog extends JDialog {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
                 if (dataWrapper.getDataObject()instanceof Location) {
-                    Location importLocation = importDBI.find((Location) dataWrapper.getDataObject());
+                    Location importLocation = importDBI.findLocation(((Location) dataWrapper.getDataObject()).getName(), Location.class);
                     String originalWildLogFileID = importLocation.getWildLogFileID();
                     importLocation.setName(txtPrefix.getText() + importLocation.getName());
-                    Location workspaceLocation = app.getDBI().find(importLocation);
+                    Location workspaceLocation = app.getDBI().findLocation(importLocation.getName(), Location.class);
                     if (workspaceLocation == null) {
                         // New
                         app.getDBI().createOrUpdate(importLocation, null);
@@ -452,11 +452,11 @@ public class WorkspaceImportDialog extends JDialog {
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Visit) {
-                    Visit importVisit = importDBI.find((Visit) dataWrapper.getDataObject());
+                    Visit importVisit = importDBI.findVisit(((Visit) dataWrapper.getDataObject()).getName(), Visit.class);
                     String originalWildLogFileID = importVisit.getWildLogFileID();
                     importVisit.setName(txtPrefix.getText() + importVisit.getName());
                     importVisit.setLocationName(txtPrefix.getText() + importVisit.getLocationName());
-                    Visit workspaceVisit = app.getDBI().find(importVisit);
+                    Visit workspaceVisit = app.getDBI().findVisit(importVisit.getName(), Visit.class);
                     if (workspaceVisit == null) {
                         // New
                         app.getDBI().createOrUpdate(importVisit, null);
@@ -474,10 +474,10 @@ public class WorkspaceImportDialog extends JDialog {
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Element) {
-                    Element importElement = importDBI.find((Element) dataWrapper.getDataObject());
+                    Element importElement = importDBI.findElement(((Element) dataWrapper.getDataObject()).getPrimaryName(), Element.class);
                     String originalWildLogFileID = importElement.getWildLogFileID();
                     importElement.setPrimaryName(txtPrefix.getText() + importElement.getPrimaryName());
-                    Element workspaceElement = app.getDBI().find(importElement);
+                    Element workspaceElement = app.getDBI().findElement(importElement.getPrimaryName(), Element.class);
                     if (workspaceElement == null) {
                         // New
                         app.getDBI().createOrUpdate(importElement, null);
@@ -495,12 +495,12 @@ public class WorkspaceImportDialog extends JDialog {
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof SightingWrapper) {
-                    Sighting importSighting = importDBI.find(((SightingWrapper) dataWrapper.getDataObject()).getSighting());
+                    Sighting importSighting = importDBI.findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getSightingCounter(), Sighting.class);
                     String originalWildLogFileID = importSighting.getWildLogFileID();
                     importSighting.setLocationName(txtPrefix.getText() + importSighting.getLocationName());
                     importSighting.setVisitName(txtPrefix.getText() + importSighting.getVisitName());
                     importSighting.setElementName(txtPrefix.getText() + importSighting.getElementName());
-                    Sighting workpaceSighting = app.getDBI().find(importSighting);
+                    Sighting workpaceSighting = app.getDBI().findSighting(importSighting.getSightingCounter(), Sighting.class);
                     if (workpaceSighting == null) {
                         // New
                         // Note: The sighting ID needs to be the same in the new workspace for the linked images to work...
@@ -541,11 +541,11 @@ public class WorkspaceImportDialog extends JDialog {
         // Die WildLogFile wat gesave word se FileID en DB path en file naam moet ook dan reg wees.
         // Note: Ek kan WildLogFile.getAbsolutePath() op die import file roep want dit sal relative tot die huidige active workspace wees.
         if (!rdbImportNoFiles.isSelected()) {
-            WildLogFile searchExternalWildLogFile = new WildLogFile(inExternalWildLogFileID);
+            WildLogFileType fileType = null;
             if (rdbImportImagesOnly.isSelected()) {
-                searchExternalWildLogFile.setFileType(WildLogFileType.IMAGE);
+                fileType = WildLogFileType.IMAGE;
             }
-            List<WildLogFile> listExternalFiles = importDBI.list(searchExternalWildLogFile);
+            List<WildLogFile> listExternalFiles = importDBI.listWildLogFiles(inExternalWildLogFileID, fileType, WildLogFile.class);
             for (WildLogFile fileToImport : listExternalFiles) {
                 fileToImport.setId(inNewInternalWildLogFileID);
                 if (app.getDBI().countWildLogFiles(fileToImport.getDBFilePath(), fileToImport.getId()) == 0) {
@@ -705,7 +705,7 @@ public class WorkspaceImportDialog extends JDialog {
 
     private void loadLocationTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
-        List<Location> locations = new ArrayList<Location>(importDBI.list(new Location()));
+        List<Location> locations = new ArrayList<Location>(importDBI.listLocations(null, Location.class));
         Map<String, DefaultMutableTreeNode> mapElements;
         Map<String, DefaultMutableTreeNode> mapVisits;
         Collections.sort(locations);
@@ -714,7 +714,7 @@ public class WorkspaceImportDialog extends JDialog {
             mapVisits = new HashMap<>(500);
             DefaultMutableTreeNode locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(location, false));
             root.add(locationNode);
-            List<Sighting> sightings = importDBI.list(new Sighting(null, location.getName(), null), false);
+            List<Sighting> sightings = importDBI.listSightings(0, null, location.getName(), null, false, Sighting.class);
             Collections.sort(sightings, new Comparator<Sighting>() {
                 @Override
                 public int compare(Sighting sighting1, Sighting sighting2) {
@@ -752,7 +752,7 @@ public class WorkspaceImportDialog extends JDialog {
 
     private void loadElementTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
-        List<Element> elements = new ArrayList<Element>(importDBI.list(new Element()));
+        List<Element> elements = new ArrayList<Element>(importDBI.listElements(null, null, null, Element.class));
         Map<String, DefaultMutableTreeNode> mapLocations;
         Map<String, DefaultMutableTreeNode> mapVisits;
         Collections.sort(elements);
@@ -761,7 +761,7 @@ public class WorkspaceImportDialog extends JDialog {
             mapVisits = new HashMap<>(500);
             DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(element, false));
             root.add(elementNode);
-            List<Sighting> sightings = importDBI.list(new Sighting(element.getPrimaryName(), null, null), false);
+            List<Sighting> sightings = importDBI.listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
             Collections.sort(sightings, new Comparator<Sighting>() {
                 @Override
                 public int compare(Sighting sighting1, Sighting sighting2) {

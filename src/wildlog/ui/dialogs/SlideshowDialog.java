@@ -205,45 +205,30 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
     private void btnSlideshowSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowSightingsActionPerformed
-        Sighting tempSighting = new Sighting();
         if (visit != null) {
-            tempSighting.setVisitName(visit.getName());
-            createSlideshowWithSightings(visit.getName(), app.getDBI().list(tempSighting, false));
+            createSlideshowWithSightings(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
         }
         if (location != null) {
-            tempSighting.setLocationName(location.getName());
-            createSlideshowWithSightings(location.getName(), app.getDBI().list(tempSighting, false));
+            createSlideshowWithSightings(location.getName(), app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
         }
         if (element != null) {
-            tempSighting.setElementName(element.getPrimaryName());
-            createSlideshowWithSightings(element.getPrimaryName(), app.getDBI().list(tempSighting, false));
+            createSlideshowWithSightings(element.getPrimaryName(), app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
         }
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnSlideshowSightingsActionPerformed
 
     private void btnGIFAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGIFAllSightingsActionPerformed
-        final Sighting tempSighting = new Sighting();
-        final String tempName;
         if (element != null) {
-            tempName = element.getPrimaryName();
-            tempSighting.setElementName(element.getPrimaryName());
+            createGIF(element.getPrimaryName(), app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
         }
         else
         if (location != null) {
-            tempName = location.getName();
-            tempSighting.setLocationName(location.getName());
+            createGIF(location.getName(), app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
         }
         else
         if (visit != null) {
-            tempName = visit.getName();
-            tempSighting.setVisitName(visit.getName());
-        }
-        else {
-            tempName = null;
-        }
-        if (tempName != null) {
-            createGIF(tempName, app.getDBI().list(tempSighting, false));
+            createGIF(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
         }
         setVisible(false);
         dispose();

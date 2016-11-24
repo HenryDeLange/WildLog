@@ -590,10 +590,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             while (results.next()) {
                 String engName = getFirstPrimaryName(results.getString("EngName"));
                 String sciName = results.getString("SciName").trim();
-                Element searchElement = new Element();
-                searchElement.setScientificName(sciName);
                 // Twee verskillende Elements kan dieselfde spesie naam het (soos Blesbok en Bontebok)
-                List<Element> lstElements = list(searchElement);
+                List<Element> lstElements = listElements(null, sciName, null, Element.class);
                 Element elementToSave = null;
                 boolean isExisting = false;
                 String oldName = null;
@@ -1061,14 +1059,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Migrate TimeAccuracy data
             results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 1");
             while (results.next()) {
-                Sighting sighting = find(new Sighting(results.getLong("SIGHTINGCOUNTER")));
+                Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
                 sighting.setTimeAccuracy(TimeAccuracy.UNKNOWN);
                 createOrUpdate(sighting, false);
             }
             results.close();
             results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 0");
             while (results.next()) {
-                Sighting sighting = find(new Sighting(results.getLong("SIGHTINGCOUNTER")));
+                Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
                 sighting.setTimeAccuracy(TimeAccuracy.GOOD);
                 createOrUpdate(sighting, false);
             }
@@ -1110,8 +1108,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILBROWSE smallint DEFAULT false");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN ENABLESOUNDS smallint DEFAULT true");
             // Update Sightings and WildLog files to use the new UUIDs
-            List<Sighting> listSightings = list(new Sighting(), false);
-            for (Sighting sighting : listSightings) {
+            List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
+            for (Sighting sighting : lstSightings) {
                 long newID = sighting.getDate().getTime()*1000000L + randomGenerator.nextInt(999999);
                 results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
                 while (results.next() && results.getInt(1) > 0) {
@@ -1145,11 +1143,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG ADD COLUMN USESCIENTIFICNAMES smallint DEFAULT true");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACEID bigint DEFAULT 0");
-            WildLogOptions options = find(new WildLogOptions());
+            WildLogOptions options = findWildLogOptions(WildLogOptions.class);
             options.setWorkspaceID(generateID());
             createOrUpdate(options);
             // Recalculate all sun and moon phase info (the enums changed)
-            List<Sighting> lstSightings = list(new Sighting(), false);
+            List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
             for (Sighting sighting : lstSightings) {
                 UtilsTime.calculateSunAndMoon(sighting);
                 createOrUpdate(sighting, false);

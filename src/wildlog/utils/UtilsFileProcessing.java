@@ -256,7 +256,7 @@ public final class UtilsFileProcessing {
     }
 
     public static void openFile(String inID, int inIndex, WildLogApp inApp) {
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
+        List<WildLogFile> fotos = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
         if (fotos.size() > inIndex) {
             openFile(fotos.get(inIndex).getAbsolutePath());
         }

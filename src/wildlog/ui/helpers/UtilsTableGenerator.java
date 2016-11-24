@@ -40,6 +40,7 @@ import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Certainty;
+import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogThumbnailSizes;
@@ -71,7 +72,7 @@ public final class UtilsTableGenerator {
     private UtilsTableGenerator() {
     }
 
-    public static void setupElementTableLarge(final WildLogApp inApp, final JTable inTable, final Element inElement, final String inFilterText) {
+    public static void setupElementTableLarge(final WildLogApp inApp, final JTable inTable, final String inElementPrimaryName, final ElementType inElementType, final String inFilterText) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -98,7 +99,7 @@ public final class UtilsTableGenerator {
                                         "Observations"
                                         };
                 // Load data from DB
-                final List<Element> listElements = inApp.getDBI().list(inElement);
+                final List<Element> listElements = inApp.getDBI().listElements(inElementPrimaryName, null, inElementType, Element.class);
                 if (!listElements.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listElements.size());
                     // Setup new table data
@@ -109,7 +110,7 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Element tempElement = listElements.get(finalT);
-                                data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempElement.getWildLogFileID());
                                 data[finalT][1] = tempElement.getPrimaryName();
                                 if (WildLogApp.getApplication().getWildLogOptions().isUseScientificNames()) {
                                     data[finalT][2] = tempElement.getScientificName();
@@ -176,7 +177,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupElementTableSmall(final WildLogApp inApp, final JTable inTable, final Element inElement) {
+    public static void setupElementTableSmall(final WildLogApp inApp, final JTable inTable, final String inElementPrimaryName, final ElementType inElementType) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -192,7 +193,7 @@ public final class UtilsTableGenerator {
                                         "Type"
                                         };
                 // Load data from DB
-                final List<Element> listElements = inApp.getDBI().list(inElement);
+                final List<Element> listElements = inApp.getDBI().listElements(inElementPrimaryName, null, inElementType, Element.class);
                 if (!listElements.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listElements.size());
                     // Setup new table data
@@ -203,7 +204,7 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Element tempElement = listElements.get(finalT);
-                                data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempElement.getWildLogFileID());
                                 data[finalT][1] = tempElement.getPrimaryName();
                                 data[finalT][2] = tempElement.getType();
                                 return null;
@@ -240,7 +241,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupLocationTableLarge(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+    public static void setupLocationTableLarge(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -260,7 +261,7 @@ public final class UtilsTableGenerator {
                                         "Observations"
                                         };
                 // Load data from DB
-                final List<Location> listLocations = inApp.getDBI().list(inLocation);
+                final List<Location> listLocations = inApp.getDBI().listLocations(inLocationName, Location.class);
                 if (!listLocations.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listLocations.size());
                     // Setup new table data
@@ -271,7 +272,7 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Location tempLocation = listLocations.get(finalT);
-                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation);
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation.getWildLogFileID());
                                 data[finalT][1] = tempLocation.getName();
                                 data[finalT][2] = tempLocation.getRating();
                                 data[finalT][3] = tempLocation.getGameViewingRating();
@@ -328,7 +329,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupVisitTableLarge(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+    public static void setupVisitTableLarge(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -348,9 +349,7 @@ public final class UtilsTableGenerator {
                                         "Creatures"
                                         };
                 // Load data from DB
-                Visit temp = new Visit();
-                temp.setLocationName(inLocation.getName());
-                final List<Visit> listVisits = inApp.getDBI().list(temp);
+                final List<Visit> listVisits = inApp.getDBI().listVisits(null, inLocationName, null, Visit.class);
                 if (!listVisits.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listVisits.size());
                     // Setup new table data
@@ -361,14 +360,12 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Visit tempVisit = listVisits.get(finalT);
-                                data[finalT][0] = setupThumbnailIcon(inApp, tempVisit);
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
                                 data[finalT][1] = tempVisit.getName();
                                 data[finalT][2] = tempVisit.getStartDate();
                                 data[finalT][3] = tempVisit.getEndDate();
                                 data[finalT][4] = tempVisit.getType();
-                                Sighting tempSighting = new Sighting();
-                                tempSighting.setVisitName(tempVisit.getName());
-                                List<Sighting> listSightings = inApp.getDBI().list(tempSighting, false);
+                                List<Sighting> listSightings = inApp.getDBI().listSightings(0, null, null, tempVisit.getName(), false, Sighting.class);
                                 data[finalT][5] = listSightings.size();
                                 Set<String> countElements = new HashSet<String>(listSightings.size()/2);
                                 for (Sighting sighting : listSightings) {
@@ -423,7 +420,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupVisitTableSmallWithSightings(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+    public static void setupVisitTableSmallWithSightings(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -440,10 +437,8 @@ public final class UtilsTableGenerator {
                                         "Observations"
                                         };
                 // Load data from DB
-                if (inLocation != null) {
-                    Visit temp = new Visit();
-                    temp.setLocationName(inLocation.getName());
-                    final List<Visit> listVisits = inApp.getDBI().list(temp);
+                if (inLocationName != null) {
+                    final List<Visit> listVisits = inApp.getDBI().listVisits(null, inLocationName, null, Visit.class);
                     if (!listVisits.isEmpty()) {
                         Collection<Callable<Object>> listCallables = new ArrayList<>(listVisits.size());
                         // Setup new table data
@@ -454,7 +449,7 @@ public final class UtilsTableGenerator {
                                 @Override
                                 public Object call() throws Exception {
                                     Visit tempVisit = listVisits.get(finalT);
-                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit);
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
                                     data[finalT][3] = inApp.getDBI().countSightings(0, null, null, tempVisit.getName());
@@ -499,7 +494,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupVisitTableSmallWithType(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+    public static void setupVisitTableSmallWithType(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -516,10 +511,8 @@ public final class UtilsTableGenerator {
                                         "Type"
                                         };
                 // Load data from DB
-                if (inLocation != null) {
-                    Visit temp = new Visit();
-                    temp.setLocationName(inLocation.getName());
-                    final List<Visit> listVisits = inApp.getDBI().list(temp);
+                if (inLocationName != null) {
+                    final List<Visit> listVisits = inApp.getDBI().listVisits(null, inLocationName, null, Visit.class);
                     if (!listVisits.isEmpty()) {
                         Collection<Callable<Object>> listCallables = new ArrayList<>(listVisits.size());
                         // Setup new table data
@@ -530,7 +523,7 @@ public final class UtilsTableGenerator {
                                 @Override
                                 public Object call() throws Exception {
                                     Visit tempVisit = listVisits.get(finalT);
-                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit);
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
                                     data[finalT][3] = tempVisit.getType();
@@ -575,7 +568,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupSightingTableLarge(final WildLogApp inApp, final JTable inTable, final Visit inVisit) {
+    public static void setupSightingTableLarge(final WildLogApp inApp, final JTable inTable, final String inVisitName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 6);
         // Setup header
@@ -596,10 +589,8 @@ public final class UtilsTableGenerator {
                                         "GPS"
                                         };
                 // Load data from DB
-                if (inVisit != null) {
-                    Sighting sighting = new Sighting();
-                    sighting.setVisitName(inVisit.getName());
-                    final List<Sighting> listSightings = inApp.getDBI().list(sighting, false);
+                if (inVisitName != null) {
+                    final List<Sighting> listSightings = inApp.getDBI().listSightings(0, null, null, inVisitName, false, Sighting.class);
                     if (!listSightings.isEmpty()) {
                         Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
                         // Setup new table data
@@ -610,12 +601,12 @@ public final class UtilsTableGenerator {
                                 @Override
                                 public Object call() throws Exception {
                                     Sighting tempSighting = listSightings.get(finalT);
-                                    data[finalT][0] = setupThumbnailIcon(inApp, tempSighting);
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempSighting.getWildLogFileID());
                                     data[finalT][1] = tempSighting.getElementName();
                                     data[finalT][2] = tempSighting.getDate();
                                     data[finalT][3] = tempSighting.getSightingEvidence();
                                     data[finalT][4] = tempSighting.getCertainty();
-                                    data[finalT][5] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
+                                    data[finalT][5] = inApp.getDBI().findElement(tempSighting.getElementName(), Element.class).getType();
                                     data[finalT][6] = tempSighting.getSightingCounter();
                                     if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
                                         if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
@@ -880,7 +871,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupElementsTableMediumForVisit(final WildLogApp inApp, final JTable inTable, final Visit inVisit) {
+    public static void setupElementsTableMediumForVisit(final WildLogApp inApp, final JTable inTable, final String inVisitName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -898,10 +889,8 @@ public final class UtilsTableGenerator {
                                         "Observations"
                                         };
                 // Load data from DB
-                if (inVisit != null) {
-                    Sighting temp = new Sighting();
-                    temp.setVisitName(inVisit.getName());
-                    List<Sighting> allSightings = inApp.getDBI().list(temp, false);
+                if (inVisitName != null) {
+                    List<Sighting> allSightings = inApp.getDBI().listSightings(0, null, null, inVisitName, false, Sighting.class);
                     final List<String> listElements = new ArrayList<String>();
                     for (Sighting tempSighting : allSightings) {
                         if (!listElements.contains(tempSighting.getElementName())) {
@@ -917,12 +906,12 @@ public final class UtilsTableGenerator {
                             listCallables.add(new Callable<Object>() {
                                 @Override
                                 public Object call() throws Exception {
-                                    Element tempElement = inApp.getDBI().find(new Element(listElements.get(finalT)));
-                                    data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
+                                    Element tempElement = inApp.getDBI().findElement(listElements.get(finalT), Element.class);
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempElement.getWildLogFileID());
                                     data[finalT][1] = tempElement.getPrimaryName();
                                     data[finalT][2] = tempElement.getType();
                                     data[finalT][3] = tempElement.getFeedingClass();
-                                    data[finalT][4] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), null, inVisit.getName());
+                                    data[finalT][4] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), null, inVisitName);
                                     return null;
                                 }
                             });
@@ -967,7 +956,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupElementsTableMediumForLocation(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+    public static void setupElementsTableMediumForLocation(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -984,10 +973,8 @@ public final class UtilsTableGenerator {
                                         "Observations"
                                         };
                 // Load data from DB
-                if (inLocation != null) {
-                    Sighting temp = new Sighting();
-                    temp.setLocationName(inLocation.getName());
-                    List<Sighting> allSightings = inApp.getDBI().list(temp, false);
+                if (inLocationName != null) {
+                    List<Sighting> allSightings = inApp.getDBI().listSightings(0, null, inLocationName, null, false, Sighting.class);
                     final List<String> listElements = new ArrayList<String>();
                     for (Sighting tempSighting : allSightings) {
                         if (!listElements.contains(tempSighting.getElementName())) {
@@ -1003,11 +990,11 @@ public final class UtilsTableGenerator {
                             listCallables.add(new Callable<Object>() {
                                 @Override
                                 public Object call() throws Exception {
-                                    Element tempElement = inApp.getDBI().find(new Element(listElements.get(finalT)));
-                                    data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
+                                    Element tempElement = inApp.getDBI().findElement(listElements.get(finalT), Element.class);
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempElement.getWildLogFileID());
                                     data[finalT][1] = tempElement.getPrimaryName();
                                     data[finalT][2] = tempElement.getType();
-                                    data[finalT][3] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), inLocation.getName(), null);
+                                    data[finalT][3] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), inLocationName, null);
                                     return null;
                                 }
                             });
@@ -1049,7 +1036,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupLocationsTableMedium(final WildLogApp inApp, final JTable inTable, final Element inElement) {
+    public static void setupLocationsTableMedium(final WildLogApp inApp, final JTable inTable, final String inElementPrimaryName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -1065,7 +1052,7 @@ public final class UtilsTableGenerator {
                                         "Observations"
                                         };
                 // Load data from DB
-                final List<LocationCount> listLocationCounts = inApp.getDBI().queryLocationCountForElement(inElement, LocationCount.class);
+                final List<LocationCount> listLocationCounts = inApp.getDBI().queryLocationCountForElement(inElementPrimaryName, LocationCount.class);
                 if (!listLocationCounts.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listLocationCounts.size());
                     // Setup new table data
@@ -1075,8 +1062,8 @@ public final class UtilsTableGenerator {
                         listCallables.add(new Callable<Object>() {
                             @Override
                             public Object call() throws Exception {
-                                Location tempLocation = inApp.getDBI().find(new Location(listLocationCounts.get(finalT).getLocationName()));
-                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation);
+                                Location tempLocation = inApp.getDBI().findLocation(listLocationCounts.get(finalT).getLocationName(), Location.class);
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation.getWildLogFileID());
                                 data[finalT][1] = tempLocation.getName();
                                 data[finalT][2] = listLocationCounts.get(finalT).getCount();
                                 return null;
@@ -1113,7 +1100,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupLocationTableSmall(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+    public static void setupLocationTableSmall(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -1128,7 +1115,7 @@ public final class UtilsTableGenerator {
                                         "Place Name"
                                         };
                 // Load data from DB
-                final List<Location> listLocations = inApp.getDBI().list(inLocation);
+                final List<Location> listLocations = inApp.getDBI().listLocations(inLocationName, Location.class);
                 if (!listLocations.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listLocations.size());
                     // Setup new table data
@@ -1139,7 +1126,7 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Location tempLocation = listLocations.get(finalT);
-                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation);
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation.getWildLogFileID());
                                 data[finalT][1] = tempLocation.getName();
                                 return null;
                             }
@@ -1172,7 +1159,7 @@ public final class UtilsTableGenerator {
         });
      }
 
-    public static void setupSightingsTableSmall(final WildLogApp inApp, final JTable inTable, final Element inElement) {
+    public static void setupSightingsTableSmall(final WildLogApp inApp, final JTable inTable, final String inElementPrimaryName) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs;
         if (inTable.getModel().getColumnCount() < 4) {
@@ -1197,8 +1184,8 @@ public final class UtilsTableGenerator {
                                         };
                 // Load data from DB
                 Sighting tempSighting = new Sighting();
-                tempSighting.setElementName(inElement.getPrimaryName());
-                final List<Sighting> listSightings = inApp.getDBI().list(tempSighting, false);
+                tempSighting.setElementName(inElementPrimaryName);
+                final List<Sighting> listSightings = inApp.getDBI().listSightings(0, inElementPrimaryName, null, null, false, Sighting.class);
                 if (!listSightings.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
                     // Setup new table data
@@ -1209,7 +1196,7 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Sighting tempSighting = listSightings.get(finalT);
-                                data[finalT][0] = setupThumbnailIcon(inApp, tempSighting);
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempSighting.getWildLogFileID());
                                 data[finalT][1] = tempSighting.getLocationName();
                                 data[finalT][2] = tempSighting.getDate();
                                 data[finalT][3] = tempSighting.getSightingCounter();
@@ -1357,9 +1344,9 @@ public final class UtilsTableGenerator {
         inTable.setModel(new WildLogTableModel(inData, inColumnNames));
     }
 
-    private static ImageIcon setupThumbnailIcon(WildLogApp inApp, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
+    private static ImageIcon setupThumbnailIcon(WildLogApp inApp, String inWildLogFileID) {
         if (inApp.getWildLogOptions().isUseThumbnailTables()) {
-            WildLogFile wildLogFile = inApp.getDBI().find(new WildLogFile(inDataObjectWithWildLogFile.getWildLogFileID()));
+            WildLogFile wildLogFile = inApp.getDBI().findWildLogFile(null, inWildLogFileID, WildLogFile.class);
             if (wildLogFile != null) {
                 return new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL).toString());
             }
@@ -1510,10 +1497,10 @@ public final class UtilsTableGenerator {
                             public Object call() throws Exception {
                                 DataObjectWithWildLogFile dataObject = inList.get(finalT);
                                 data[finalT][0] = true;
-                                data[finalT][1] = setupThumbnailIcon(inApp, dataObject);
+                                data[finalT][1] = setupThumbnailIcon(inApp, dataObject.getWildLogFileID());
                                 data[finalT][2] = dataObject.getDisplayName();
                                 if (dataObject instanceof Element) {
-                                    data[finalT][3] = inApp.getDBI().find((Element)dataObject).getType();
+                                    data[finalT][3] = inApp.getDBI().findElement(((Element) dataObject).getPrimaryName(), Element.class).getType();
                                 }
                                 else
                                 if (dataObject instanceof Location) {
@@ -1521,14 +1508,14 @@ public final class UtilsTableGenerator {
                                 }
                                 else
                                 if (dataObject instanceof Visit) {
-                                    Visit visit = inApp.getDBI().find((Visit)dataObject);
+                                    Visit visit = inApp.getDBI().findVisit(((Visit) dataObject).getName(), Visit.class);
                                     data[finalT][3] = visit.getLocationName();
                                     data[finalT][4] = visit.getStartDate();
                                     data[finalT][5] = visit.getType();
                                 }
                                 else
                                 if (dataObject instanceof Sighting) {
-                                    Sighting sighting = inApp.getDBI().find((Sighting)dataObject);
+                                    Sighting sighting = inApp.getDBI().findSighting(((Sighting) dataObject).getSightingCounter(), Sighting.class);
                                     data[finalT][2] = sighting.getElementName();
                                     data[finalT][3] = sighting.getLocationName();
                                     data[finalT][4] = sighting.getDate();
@@ -1612,7 +1599,7 @@ public final class UtilsTableGenerator {
             @Override
             public void run() {
                 final Object removeLock = new Object();
-                List<Element> lstElementData = WildLogApp.getApplication().getDBI().list(new Element());
+                List<Element> lstElementData = WildLogApp.getApplication().getDBI().listElements(null, null, null, Element.class);
                 Set<String> localSetOfLayers = new HashSet<>(inSetAvailableLayers); // Need to make a copy because removing from the orignal will effect the HashMap's keys
                 if (lstElementData != null && !lstElementData.isEmpty() && !localSetOfLayers.isEmpty()) {
                     // Setup column names

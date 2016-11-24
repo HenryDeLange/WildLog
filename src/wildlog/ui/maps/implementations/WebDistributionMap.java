@@ -134,7 +134,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 }
             }
             if (elementName != null) {
-                String newScientificName = WildLogApp.getApplication().getDBI().find(new Element(elementName)).getScientificName();
+                String newScientificName = WildLogApp.getApplication().getDBI().findElement(elementName, Element.class).getScientificName();
                 if (newScientificName != null && !newScientificName.isEmpty()) {
                     // Add base layer
                     map.addLayer(getGeoTiffLayers(BundledMapLayers.EARTH_MODERN));

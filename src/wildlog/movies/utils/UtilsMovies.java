@@ -30,7 +30,7 @@ public final class UtilsMovies {
      * @return List<String> - Sal nie null wees nie.
      */
     public static List<String> getFilePaths(WildLogApp inApp, WildLogFile inWildLogFile) {
-        List<WildLogFile> files = inApp.getDBI().list(inWildLogFile);
+        List<WildLogFile> files = inApp.getDBI().listWildLogFiles(inWildLogFile.getId(), inWildLogFile.getFileType(), WildLogFile.class);
         List<String> slideshowList = new ArrayList<String>(files.size());
         for (WildLogFile tempFile : files) {
             if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {

@@ -219,23 +219,26 @@ public final class UtilsKML {
             listSightings = inLstSightings;
         }
         else {
-            Sighting tempSighting = new Sighting();
             if (inDataObject instanceof Location) {
-                tempSighting.setLocationName(inDataObject.getDisplayName());
+                listSightings = inApp.getDBI().listSightings(0, null, inDataObject.getDisplayName(), null, false, Sighting.class);
             }
             else
             if (inDataObject instanceof Element) {
-                tempSighting.setElementName(inDataObject.getDisplayName());
+                listSightings = inApp.getDBI().listSightings(0, inDataObject.getDisplayName(), null, null, false, Sighting.class);
             }
             else
             if (inDataObject instanceof Visit) {
-                tempSighting.setVisitName(inDataObject.getDisplayName());
+                listSightings = inApp.getDBI().listSightings(0, null, null, inDataObject.getDisplayName(), false, Sighting.class);
             }
             else
             if (inDataObject instanceof Sighting) {
-                tempSighting = (Sighting) inDataObject;
+                Sighting tempSighting = (Sighting) inDataObject;
+                listSightings = inApp.getDBI().listSightings(tempSighting.getSightingCounter(), 
+                        tempSighting.getElementName(), tempSighting.getLocationName(), tempSighting.getVisitName(), false, Sighting.class);
             }
-            listSightings = inApp.getDBI().list(tempSighting, false);
+            else {
+                listSightings = new ArrayList<>(0);
+            }
         }
         Collections.sort(listSightings);
         Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>(50);
@@ -256,22 +259,21 @@ public final class UtilsKML {
         }
         if (!groupByLocationName) {
             // Add Locations entries
-            Location searchLocation;
+            List<Location> listLocations;
             if (inDataObject instanceof Location) {
-                searchLocation = (Location) inDataObject;
+                listLocations = inApp.getDBI().listLocations(inDataObject.getDisplayName(), Location.class);
             }
             else
             if (inDataObject instanceof Visit) {
-                searchLocation = new Location(((Visit) inDataObject).getLocationName());
+                listLocations = inApp.getDBI().listLocations(((Visit) inDataObject).getLocationName(), Location.class);
             }
             else
             if (inDataObject instanceof Sighting) {
-                searchLocation = new Location(((Sighting) inDataObject).getLocationName());
+                listLocations = inApp.getDBI().listLocations(((Sighting) inDataObject).getLocationName(), Location.class);
             }
             else {
-                searchLocation = new Location();
+                listLocations = inApp.getDBI().listLocations(null, Location.class);
             }
-            List<Location> listLocations = inApp.getDBI().list(searchLocation);
             Collections.sort(listLocations);
             for (int t = 0; t < listLocations.size(); t++) {
                 String key = listLocations.get(t).getName();

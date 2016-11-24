@@ -30,7 +30,6 @@ public class ElementSelectionDialog extends JDialog {
     private final WildLogApp app;
     private boolean selectionMade = false;
     private String selectedElementName;
-    private Element searchElement;
 
 
     public ElementSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedElement) {
@@ -58,8 +57,7 @@ public class ElementSelectionDialog extends JDialog {
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
         // Setup the table
-        searchElement = new Element();
-        UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
+        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
         // Load selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
         final int columnToUse;
@@ -256,7 +254,7 @@ public class ElementSelectionDialog extends JDialog {
 
     private void btnPreviousElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousElementActionPerformed
         // Reload the entire table to make sure the element is there
-        UtilsTableGenerator.setupElementTableSmall(app, tblElement, new Element());
+        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -308,12 +306,13 @@ public class ElementSelectionDialog extends JDialog {
     }//GEN-LAST:event_tblElementKeyPressed
 
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
-        searchElement = new Element();
         ElementType type = (ElementType)cmbElementType.getSelectedItem();
         if (!ElementType.NONE.equals(type)) {
-            searchElement.setType(type);
+            UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, type);
         }
-        UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
+        else {
+            UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+        }
         txtSearch.setText("");
         // Clear Images
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));

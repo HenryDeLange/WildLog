@@ -320,7 +320,7 @@ public class HeatMap extends AbstractMap<Sighting> {
         Map<String, Long> mapVisitDuration = new HashMap<>();
         for (Sighting sighting : inLstSightings) {
             if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
-                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
                 if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
                     long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
                     mapVisitDuration.put(sighting.getVisitName(), days);
@@ -415,7 +415,7 @@ public class HeatMap extends AbstractMap<Sighting> {
         Map<String, Long> mapVisitDuration = new HashMap<>();
         for (Sighting sighting : inLstSightings) {
             if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
-                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
                 if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
                     long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
                     mapVisitDuration.put(sighting.getVisitName(), days);
@@ -510,7 +510,7 @@ public class HeatMap extends AbstractMap<Sighting> {
         Map<String, Long> mapVisitDuration = new HashMap<>();
         for (Sighting sighting : inLstSightings) {
             if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
-                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
                 if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
                     long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
                     mapVisitDuration.put(sighting.getVisitName(), days);

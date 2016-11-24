@@ -146,9 +146,7 @@ public class MergeElementsDialog extends JDialog {
         if (lstReplaceElement.getSelectedIndex() >= 0 && lstKeepElement.getSelectedIndex() >= 0) {
             Element replaceElement = (Element)lstReplaceElement.getSelectedValue();
             Element keepElement = (Element)lstKeepElement.getSelectedValue();
-            Sighting templateSighting = new Sighting();
-            templateSighting.setElementName(replaceElement.getPrimaryName());
-            List<Sighting> sightings = app.getDBI().list(templateSighting, false);
+            List<Sighting> sightings = app.getDBI().listSightings(0, replaceElement.getPrimaryName(), null, null, false, Sighting.class);
             for (Sighting tempSighting : sightings) {
                 tempSighting.setElementName(keepElement.getPrimaryName());
                 app.getDBI().createOrUpdate(tempSighting, false);
@@ -170,7 +168,7 @@ public class MergeElementsDialog extends JDialog {
 
     // Private Methods
     private void loadLists() {
-        List<Element> elements = app.getDBI().list(new Element());
+        List<Element> elements = app.getDBI().listElements(null, null, null, Element.class);
         Collections.sort(elements);
         DefaultListModel replaceModel = new DefaultListModel();
         DefaultListModel keepModel = new DefaultListModel();

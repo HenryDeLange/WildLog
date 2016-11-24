@@ -149,12 +149,12 @@ public class MergeLocationDialog extends JDialog {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
             String tempFromLocationName = (String)lstFromLocation.getSelectedValue();
-            List<Visit> listVisits = app.getDBI().list(new Visit(null, tempFromLocationName));
+            List<Visit> listVisits = app.getDBI().listVisits(null, tempFromLocationName, null, Visit.class);
             for (Visit visit : listVisits) {
                 visit.setLocationName((String)lstToLocation.getSelectedValue());
                 app.getDBI().createOrUpdate(visit, visit.getName());
             }
-            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, (String)lstFromLocation.getSelectedValue(), null), false);
+            List<Sighting> listSightings = app.getDBI().listSightings(0, null, (String)lstFromLocation.getSelectedValue(), null, false, Sighting.class);
             for (Sighting sighting : listSightings) {
                 sighting.setLocationName((String)lstToLocation.getSelectedValue());
                 app.getDBI().createOrUpdate(sighting, false);
@@ -176,7 +176,7 @@ public class MergeLocationDialog extends JDialog {
     // Private Methods
     private void loadLists() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        List<Location> locations = new ArrayList<Location>(app.getDBI().list(new Location()));
+        List<Location> locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
         Collections.sort(locations);
         DefaultListModel<String> fromLocationModel = new DefaultListModel<String>();
         DefaultListModel<String> toLocationModel = new DefaultListModel<String>();

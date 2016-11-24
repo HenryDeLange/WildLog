@@ -24,12 +24,10 @@ import wildlog.utils.UtilsImageProcessing;
 public class PanelTabLocations extends JPanel {
     private final WildLogApp app;
     private final JTabbedPane tabbedPanel;
-    private final Location searchLocation;
 
     public PanelTabLocations(WildLogApp inApp, JTabbedPane inTabbedPanel) {
         app = inApp;
         tabbedPanel = inTabbedPanel;
-        searchLocation = new Location();
         initComponents();
         // Add key listeners to table to allow the selection of rows based on key events.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
@@ -296,16 +294,16 @@ public class PanelTabLocations extends JPanel {
                 tblElement.clearSelection();
             }
             // Get Image
-            final Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
-            int fotoCount = app.getDBI().countWildLogFiles(null, tempLocation.getWildLogFileID());
+            String tempLocationName = (String) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1);
+            int fotoCount = app.getDBI().countWildLogFiles(null, Location.WILDLOGFILE_ID_PREFIX + tempLocationName);
             if (fotoCount > 0) {
-                UtilsImageProcessing.setupFoto(tempLocation.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + tempLocationName, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             }
-            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, tempLocation);
-            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, tempLocation);
+            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, tempLocationName);
+            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, tempLocationName);
         }
         else {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
@@ -392,9 +390,7 @@ public class PanelTabLocations extends JPanel {
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
                     String locationName = (String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1);
-                    Visit tempVisit = new Visit();
-                    tempVisit.setLocationName(locationName);
-                    List<Visit> visits = app.getDBI().list(tempVisit);
+                    List<Visit> visits = app.getDBI().listVisits(null, locationName, null, Visit.class);
                     for (int i = 0; i < visits.size(); i++) {
                         UtilsPanelGenerator.removeOpenedTab(visits.get(i).getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel);
                     }
@@ -441,7 +437,8 @@ public class PanelTabLocations extends JPanel {
         if (tblLocation.getSelectedRow() != -1) {
             app.getMainFrame().getGlassPane().setVisible(true);
             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
+            Location tempLocation = app.getDBI().findLocation((String)tblLocation.getModel().getValueAt(
+                    tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1), Location.class);
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
                 UtilsPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1)),
@@ -454,14 +451,14 @@ public class PanelTabLocations extends JPanel {
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
-            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
-            UtilsFileProcessing.openFile(tempLocation.getWildLogFileID(), 0, app);
+            String tempLocationName = (String) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1);
+            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + tempLocationName, 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-        UtilsTableGenerator.setupLocationTableLarge(app, tblLocation, searchLocation);
+        UtilsTableGenerator.setupLocationTableLarge(app, tblLocation, null);
     }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

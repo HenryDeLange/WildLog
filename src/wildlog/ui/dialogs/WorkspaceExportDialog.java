@@ -406,7 +406,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             setProgress(2);
                             setMessage("Workspace Export: " + getProgress() + "%");
                             // Save settings to the new workspace
-                            WildLogOptions options = app.getDBI().find(new WildLogOptions());
+                            WildLogOptions options = app.getDBI().findWildLogOptions(WildLogOptions.class);
                             options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
                             options.setWorkspaceID(app.getDBI().generateID());
                             newDBI.createOrUpdate(options);
@@ -522,8 +522,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
-                if (dataWrapper.getDataObject()instanceof Location) {
-                    Location location = app.getDBI().find((Location) dataWrapper.getDataObject());
+                if (dataWrapper.getDataObject() instanceof Location) {
+                    Location location = app.getDBI().findLocation(((Location) dataWrapper.getDataObject()).getName(), Location.class);
                     if (chkReduceGPS.isSelected()) {
                         location.setLatSeconds(0.0);
                         location.setLonSeconds(0.0);
@@ -532,33 +532,33 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     if (chkRemoveDescriptions.isSelected()) {
                         location.setDescription("");
                     }
-                    if (inNewDBI.find(location) == null) {
+                    if (inNewDBI.findLocation(location.getName(), Location.class) == null) {
                         inNewDBI.createOrUpdate(location, null);
                         saveFiles(inNewDBI, inDestinationWorkspace, location);
                     }
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Visit) {
-                    Visit visit = app.getDBI().find((Visit) dataWrapper.getDataObject());
+                    Visit visit = app.getDBI().findVisit(((Visit) dataWrapper.getDataObject()).getName(), Visit.class);
                     if (chkRemoveDescriptions.isSelected()) {
                         visit.setDescription("");
                     }
-                    if (inNewDBI.find(visit) == null) {
+                    if (inNewDBI.findVisit(visit.getName(), Visit.class) == null) {
                         inNewDBI.createOrUpdate(visit, null);
                         saveFiles(inNewDBI, inDestinationWorkspace, visit);
                     }
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Element) {
-                    Element element = app.getDBI().find((Element) dataWrapper.getDataObject());
-                    if (inNewDBI.find(element) == null) {
+                    Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getPrimaryName(), Element.class);
+                    if (inNewDBI.findElement(element.getPrimaryName(), Element.class) == null) {
                         inNewDBI.createOrUpdate(element, null);
                         saveFiles(inNewDBI, inDestinationWorkspace, element);
                     }
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof SightingWrapper) {
-                    Sighting sighting = app.getDBI().find(((SightingWrapper) dataWrapper.getDataObject()).getSighting());
+                    Sighting sighting = app.getDBI().findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getSightingCounter(), Sighting.class);
                     if (chkReduceGPS.isSelected()) {
                         sighting.setLatSeconds(0.0);
                         sighting.setLonSeconds(0.0);
@@ -576,7 +576,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         calendar.set(Calendar.MILLISECOND, 0);
                         sighting.setDate(calendar.getTime());
                     }
-                    if (inNewDBI.find(sighting) == null) {
+                    if (inNewDBI.findSighting(sighting.getSightingCounter(), Sighting.class) == null) {
                         // Note: The sighting ID needs to be the same for the linked images to work...
                         inNewDBI.createOrUpdate(sighting, true);
                         saveFiles(inNewDBI, inDestinationWorkspace, sighting);
@@ -595,13 +595,13 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     private void saveFiles(WildLogDBI inNewDBI, Path inDestinationWorkspace, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
         if (!rdbExportNoFiles.isSelected()) {
-            WildLogFile tempWildLogFile = new WildLogFile(inDataObjectWithWildLogFile.getWildLogFileID());
+            WildLogFileType fileType = null;
             if (rdbExportImagesOnly.isSelected()) {
-                tempWildLogFile.setFileType(WildLogFileType.IMAGE);
+                fileType = WildLogFileType.IMAGE;
             }
-            List<WildLogFile> listFiles = app.getDBI().list(tempWildLogFile);
+            List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(inDataObjectWithWildLogFile.getWildLogFileID(), fileType, WildLogFile.class);
             for (WildLogFile wildLogFile : listFiles) {
-                if (inNewDBI.find(wildLogFile) == null) {
+                if (inNewDBI.findWildLogFile(wildLogFile.getDBFilePath(), null, WildLogFile.class) == null) {
                     Path source;
                     Path destination;
                     if (rdbExportThumbnails.isSelected() && WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
@@ -696,7 +696,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
         List<Location> locations;
         if (lstSightings == null) {
-            locations = new ArrayList<Location>(app.getDBI().list(new Location()));
+            locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
         }
         else {
             Set<String> uniqueLocations = new HashSet<>();
@@ -716,7 +716,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             mapVisits = new HashMap<>(500);
             DefaultMutableTreeNode locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(location, false));
             root.add(locationNode);
-            List<Sighting> sightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
+            List<Sighting> sightings = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
             Collections.sort(sightings, new Comparator<Sighting>() {
                 @Override
                 public int compare(Sighting sighting1, Sighting sighting2) {
@@ -770,7 +770,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
         List<Element> elements;
         if (lstSightings == null) {
-            elements = new ArrayList<Element>(app.getDBI().list(new Element()));
+            elements = app.getDBI().listElements(null, null, null, Element.class);
         }
         else {
             Set<String> uniqueLocations = new HashSet<>();
@@ -790,7 +790,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             mapVisits = new HashMap<>(500);
             DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(element, false));
             root.add(elementNode);
-            List<Sighting> sightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
+            List<Sighting> sightings = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
             Collections.sort(sightings, new Comparator<Sighting>() {
                 @Override
                 public int compare(Sighting sighting1, Sighting sighting2) {

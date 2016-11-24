@@ -23,12 +23,10 @@ import wildlog.utils.UtilsImageProcessing;
 public class PanelTabElements extends javax.swing.JPanel {
     private final WildLogApp app;
     private final JTabbedPane tabbedPanel;
-    private Element searchElement;
 
     public PanelTabElements(WildLogApp inApp, JTabbedPane inTabbedPanel) {
         app = inApp;
         tabbedPanel = inTabbedPanel;
-        searchElement = new Element();
         initComponents();
         // Add key listeners to table to allow the selection of rows based on key events.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
@@ -320,16 +318,16 @@ public class PanelTabElements extends javax.swing.JPanel {
                 tblLocation.clearSelection();
             }
             // Get Image
-            Element tempElement = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
-            int fotoCount = app.getDBI().countWildLogFiles(null, tempElement.getWildLogFileID());
+            String tempElementName = (String) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1);
+            int fotoCount = app.getDBI().countWildLogFiles(null, Element.WILDLOGFILE_ID_PREFIX + tempElementName);
             if (fotoCount > 0) {
-                UtilsImageProcessing.setupFoto(tempElement.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + tempElementName, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             }
             // Get Locations
-            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, tempElement);
+            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, tempElementName);
         }
         else {
             UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, null);
@@ -409,13 +407,14 @@ public class PanelTabElements extends javax.swing.JPanel {
     }//GEN-LAST:event_tblLocationKeyPressed
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
-        searchElement = new Element();
         txtSearch.setText("");
-        ElementType type = (ElementType)cmbType.getSelectedItem();
+        ElementType type = (ElementType) cmbType.getSelectedItem();
         if (!ElementType.NONE.equals(type)) {
-            searchElement.setType(type);
+            UtilsTableGenerator.setupElementTableLarge(app, tblElement, null, type, txtSearch.getText());
         }
-        UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement, txtSearch.getText());
+        else {
+            UtilsTableGenerator.setupElementTableLarge(app, tblElement, null, null, txtSearch.getText());
+        }
         tblElementMouseReleased(null);
     }//GEN-LAST:event_cmbTypeActionPerformed
 
@@ -433,14 +432,14 @@ public class PanelTabElements extends javax.swing.JPanel {
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
-            Element tempElement = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
-            UtilsFileProcessing.openFile(tempElement.getWildLogFileID(), 0, app);
+            String tempElementName = (String) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1);
+            UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX + tempElementName, 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-        UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement, txtSearch.getText());
+        UtilsTableGenerator.setupElementTableLarge(app, tblElement, null, null, txtSearch.getText());
     }//GEN-LAST:event_formComponentShown
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased

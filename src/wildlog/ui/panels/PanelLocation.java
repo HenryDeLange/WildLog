@@ -19,7 +19,6 @@ import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
@@ -1190,10 +1189,10 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblNumberOfSightings.setText(Integer.toString(app.getDBI().countSightings(0, null, locationWL.getName(), null)));
             lblNumberOfVisits.setText(Integer.toString(app.getDBI().countVisits(null, locationWL.getName())));
             if (rdbLocation.isSelected()) {
-                UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
+                UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL.getName());
             }
             // Note: If the visit radio button was selected, then setting up the visit table below will create the mouse event
-            UtilsTableGenerator.setupVisitTableLarge(app, tblVisit, locationWL);
+            UtilsTableGenerator.setupVisitTableLarge(app, tblVisit, locationWL.getName());
         }
         else {
             lblNumberOfSightings.setText("0");
@@ -1270,7 +1269,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + locationWL.getName(), 
-                    app.getDBI().list(new Sighting(null, locationWL.getName(), null), true));
+                    app.getDBI().listSightings(0, null, locationWL.getName(), null, true, Sighting.class));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed
@@ -1282,11 +1281,12 @@ public class PanelLocation extends PanelCanSetupHeader {
                 tblElement.clearSelection();
             }
             if (rdbLocation.isSelected()) {
-                UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
+                UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL.getName());
             }
             else {
                 if  (tblVisit.getSelectedRowCount() == 1) {
-                    UtilsTableGenerator.setupElementsTableMediumForVisit(app, tblElement, app.getDBI().find(new Visit((String)tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 1))));
+                    UtilsTableGenerator.setupElementsTableMediumForVisit(app, tblElement, (String) tblVisit.getModel().getValueAt(
+                            tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 1));
                 }
                 else {
                     if (tblVisit.getSelectedRowCount() == 0) {
@@ -1310,7 +1310,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + locationWL.getDisplayName(), 
-                    app.getDBI().list(new Sighting(null, locationWL.getName(), null), true));
+                    app.getDBI().listSightings(0, null, locationWL.getName(), null, true, Sighting.class));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapActionPerformed

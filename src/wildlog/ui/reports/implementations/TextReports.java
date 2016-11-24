@@ -114,7 +114,7 @@ public class TextReports extends AbstractReport<Sighting> {
             if (data == null) {
                 data = new VisitData();
                 data.visitName = sighting.getVisitName();
-                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
                 if (visit != null) {
                     data.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
                     data.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());

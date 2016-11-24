@@ -53,7 +53,7 @@ public class LocationSelectionDialog extends JDialog {
         // Attach listeners etc.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
         // Setup the table
-        UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, new Location());
+        UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, null);
         // Load selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
         final int columnToUse;

@@ -166,7 +166,7 @@ public class FilterTemplatesDialog extends JDialog {
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         if (!lstTemplates.getSelectionModel().isSelectionEmpty()) {
             // Get the data from the database
-            AdhocData data = app.getDBI().find(new AdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), lstTemplates.getSelectedValue().toString(), null));
+            AdhocData data = app.getDBI().findAdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), lstTemplates.getSelectedValue().toString(), AdhocData.class);
             // Create the object
             ByteArrayInputStream inputStream = null;
             ObjectInputStream serializer = null;
@@ -273,7 +273,7 @@ public class FilterTemplatesDialog extends JDialog {
     private void loadData() {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
         lstTemplates.setModel(model);
-        List<AdhocData> lstData = WildLogApp.getApplication().getDBI().list(new AdhocData());
+        List<AdhocData> lstData = WildLogApp.getApplication().getDBI().listAdhocDatas(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), AdhocData.class);
         Collections.sort(lstData, new Comparator<AdhocData>() {
             @Override
             public int compare(AdhocData o1, AdhocData o2) {

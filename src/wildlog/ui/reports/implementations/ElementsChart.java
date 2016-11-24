@@ -234,7 +234,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private Chart createPieChartElementType(List<Sighting> inSightings) {
         Map<String, Set<String>> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Element element = WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName()));
+            Element element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementName(), Element.class);
             Set<String> setElements = mapGroupedData.get(UtilsData.stringFromObject(element.getType()));
             if (setElements == null) {
                 setElements = new HashSet<>();

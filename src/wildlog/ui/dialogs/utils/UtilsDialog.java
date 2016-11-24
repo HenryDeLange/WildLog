@@ -201,7 +201,7 @@ public final class UtilsDialog {
     }
 
     public static void showExifPopup(String inID, int inIndex, final WildLogApp inApp) {
-        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(inID));
+        List<WildLogFile> files = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
         if (files.size() > 0) {
             if (WildLogFileType.IMAGE.equals(files.get(inIndex).getFileType())) {
                 showExifPopup(inApp, files.get(inIndex).getAbsolutePath());

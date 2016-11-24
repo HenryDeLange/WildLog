@@ -1569,12 +1569,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
             else {
                 if (tblLocation.getSelectedRowCount() == 1) {
-                    Location location = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
+                    Location location = app.getDBI().findLocation((String) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1), Location.class);
                     // Vir sightings moet ek die model gebruik om by die ID uit te kom want die column is remove van die view
-                    Sighting sighting = app.getDBI().find(new Sighting((Long)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 3)));
+                    Sighting sighting = app.getDBI().findSighting((Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 3), Sighting.class);
                     PanelSighting dialog = new PanelSighting(
                             app, app.getMainFrame(), "Edit an Existing Observation",
-                            sighting, location, app.getDBI().find(new Visit(sighting.getVisitName())), element, this, false, false, false);
+                            sighting, location, app.getDBI().findVisit(sighting.getVisitName(), Visit.class), element, this, false, false, false);
                     dialog.setVisible(true);
                 }
                 else {
@@ -1609,10 +1609,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
         setupNumberOfImages();
         if (rdbLocations.isSelected()) {
-            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
+            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element.getPrimaryName());
         }
         else {
-            UtilsTableGenerator.setupSightingsTableSmall(app, tblLocation, element);
+            UtilsTableGenerator.setupSightingsTableSmall(app, tblLocation, element.getPrimaryName());
         }
         tblLocation.setSelectionBackground(new Color(67,97,113));
         // Wait for the table to finish loading
@@ -1628,7 +1628,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + element.getDisplayName(),
-                    app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), true));
+                    app.getDBI().listSightings(0, element.getPrimaryName(), null, null, true, Sighting.class));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapActionPerformed
@@ -1667,7 +1667,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
         if (rdbSightings.isSelected()) {
             if (element.getPrimaryName() != null) {
-                UtilsTableGenerator.setupSightingsTableSmall(app, tblLocation, element);
+                UtilsTableGenerator.setupSightingsTableSmall(app, tblLocation, element.getPrimaryName());
                 tblLocation.setSelectionBackground(new Color(125,120,93));
             }
             else {
@@ -1675,7 +1675,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         }
         else {
-            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
+            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element.getPrimaryName());
             tblLocation.setSelectionBackground(new Color(67,97,113));
         }
         // Wait for the table to finish loading
@@ -1703,7 +1703,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + element.getPrimaryName(), 
-                    app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), true));
+                    app.getDBI().listSightings(0, element.getPrimaryName(), null, null, true, Sighting.class));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed

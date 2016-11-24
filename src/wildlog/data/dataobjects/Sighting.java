@@ -124,7 +124,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(500);
-            List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+            List<WildLogFile> files = inApp.getDBI().listWildLogFiles(getWildLogFileID(), null, WildLogFile.class);
             for (int t = 0; t < files.size(); t++) {
                 filesString.append(files.get(t).toHTML(inExportType));
                 if (inProgressbarTask != null) {
@@ -147,7 +147,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         entry.setId(inID);
         entry.setName(elementName);
         entry.setDescription(toHTML(false, true, true, inApp, UtilsHTMLExportTypes.ForKML, null));
-        Element element = inApp.getDBI().find(new Element(elementName));
+        Element element = inApp.getDBI().findElement(elementName, Element.class);
         if (element.getType() != null) {
             if (element.getType().equals(ElementType.MAMMAL)) {
                 if (element.getFeedingClass() == null) {
@@ -287,7 +287,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             entry.setStyle("otherStyle");
         }
         if (latitude == null || longitude == null) {
-            Location location = inApp.getDBI().find(new Location(locationName));
+            Location location = inApp.getDBI().findLocation(locationName, Location.class);
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
                     entry.setLatitude(UtilsGPS.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
@@ -301,7 +301,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         }
         else
         if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
-            Location location = inApp.getDBI().find(new Location(locationName));
+            Location location = inApp.getDBI().findLocation(locationName, Location.class);
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
                     entry.setLatitude(UtilsGPS.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
@@ -349,7 +349,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         builder.append("<age>").append(age).append("</age>");
         builder.append(UtilsXML.getGPSInfoAsXML(this));
         StringBuilder filesString = new StringBuilder(300);
-        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+        List<WildLogFile> files = inApp.getDBI().listWildLogFiles(getWildLogFileID(), null, WildLogFile.class);
         int counter = 0;
         for (WildLogFile file : files) {
             filesString.append(UtilsXML.getWildLogFileInfoAsXML(file));

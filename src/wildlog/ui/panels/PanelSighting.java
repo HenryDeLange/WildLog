@@ -72,8 +72,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private Visit visit;
     private Element element;
     private Sighting sighting;
-    private Element searchElement;
-    private Location searchLocation;
     private int imageIndex;
     private WildLogApp app;
     private PanelNeedsRefreshWhenDataChanges panelToRefresh;
@@ -117,14 +115,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         locationWL = inLocation;
         visit = inVisit;
         element = inElement;
-        searchElement = new Element();
-        searchLocation = new Location();
         imageIndex = 0;
         // Auto-generated code
         initComponents();
         // Setup Location and Element tables
-        UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
-        UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, searchLocation);
+        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+        UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, null);
         // Setup default values for tables
         final int columnToUse;
         if (app.getWildLogOptions().isUseThumbnailTables()) {
@@ -197,7 +193,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
         // Setup virist table after the Location has been setup
-        UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL);
+        if (locationWL != null) {
+            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getName());
+        }
+        else {
+            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, null);
+        }
         // Select the visit
         if (visit != null) {
             // Wag eers vir die table om klaar te load voor ek iets probeer select
@@ -1750,7 +1751,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void btnGetDateFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDateFromImageActionPerformed
         boolean hasRelevantFiles = false;
-        List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
+        List<WildLogFile> files = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
         if (files != null && files.size() > 0) {
             hasRelevantFiles = true;
             loadDateFromFile(files.get(imageIndex).getAbsolutePath());
@@ -1768,7 +1769,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void btnGetGPSFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetGPSFromImageActionPerformed
         boolean hasRelevantFiles = false;
-        List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
+        List<WildLogFile> files = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
         if (files != null && files.size() > 0) {
             if (WildLogFileType.IMAGE.equals(files.get(imageIndex).getFileType())) {
                 hasRelevantFiles = true;
@@ -1867,9 +1868,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void btnCalculateDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateDurationActionPerformed
         boolean hasRelevantFiles = false;
         // Get all Image files for this sighting
-        WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
-        //        searchFile.setFileType(WildLogFileType.IMAGE);
-        List<WildLogFile> allFiles = app.getDBI().list(searchFile);
+        List<WildLogFile> allFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
         // Only use Images and Movies for the duration
         List<WildLogFile> files = new ArrayList<WildLogFile>(allFiles.size());
         for (WildLogFile wildLogFile : allFiles) {
@@ -2081,7 +2080,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
         if (!bulkUploadMode) {
             if (tblVisit.getSelectedRowCount() == 1) {
-                visit = app.getDBI().find(new Visit(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 1).toString()));
+                visit = app.getDBI().findVisit(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 1).toString(), Visit.class);
             }
             else {
                 visit = null;
@@ -2104,15 +2103,15 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (!bulkUploadMode) {
             if (tblLocation.getSelectedRowCount() == 1) {
-                locationWL = app.getDBI().find(new Location(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1).toString()));
-                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL);
+                locationWL = app.getDBI().findLocation(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1).toString(), Location.class);
+                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getName());
                 btnAddNewVisit.setEnabled(true);
                 visit = null;
                 UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.SMALL, app);
             }
             else {
                 locationWL = null;
-                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL);
+                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, null);
                 btnAddNewVisit.setEnabled(false);
                 visit = null;
                 lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
@@ -2122,13 +2121,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
         if (sighting != null) {
-            searchElement = new Element();
             txtSearch.setText("");
-            ElementType type = (ElementType)cmbElementType.getSelectedItem();
+            ElementType type = (ElementType) cmbElementType.getSelectedItem();
             if (!ElementType.NONE.equals(type)) {
-                searchElement.setType(type);
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, type);
             }
-            UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
+            else {
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+            }
             // Clear Images
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
@@ -2158,7 +2158,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
-            element = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
+            element = app.getDBI().findElement((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1), Element.class);
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
         }
         else {
@@ -2200,12 +2200,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
             else
             if (inIndicator instanceof PanelLocation) {
-                UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, searchLocation);
+                UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, null);
                 txtSearchLocation.setText("");
             }
             else
             if (inIndicator instanceof PanelElement) {
-                UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
                 txtSearch.setText("");
             }
         }

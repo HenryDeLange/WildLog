@@ -266,10 +266,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void refreshSightingInfo() {
         if (sighting != null) {
             if (sighting.getElementName() != null) {
-                Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
-                int fotoCount = app.getDBI().countWildLogFiles(null, tempElement.getWildLogFileID());
+                int fotoCount = app.getDBI().countWildLogFiles(null, Element.WILDLOGFILE_ID_PREFIX + sighting.getElementName());
                 if (fotoCount > 0) {
-                    UtilsImageProcessing.setupFoto(tempElement.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+                    UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + sighting.getElementName(), 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
                 }
                 else {
                     lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
@@ -1135,10 +1134,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         lblSightingImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         if (visit.getName() != null) {
-            UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, visit);
-            Sighting tempSighting = new Sighting();
-            tempSighting.setVisitName(visit.getName());
-            List<Sighting> sightings = app.getDBI().list(tempSighting, false);
+            UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, visit.getName());
+            List<Sighting> sightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
             lblNumberOfSightings.setText(Integer.toString(sightings.size()));
             setupNumberOfSightingImages();
             List<String> allElements = new ArrayList<String>();
@@ -1230,10 +1227,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSightingActionPerformed
         if (!isPopup) {
             if (sighting != null) {
-//                tblSightings.clearSelection();
                 PanelSighting dialog = new PanelSighting(
                         app, app.getMainFrame(), "Edit an Existing Observation",
-                        sighting, locationForVisit, visit, app.getDBI().find(new Element(sighting.getElementName())), this, false, false, false);
+                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getElementName(), Element.class), this, false, false, false);
                 dialog.setVisible(true);
                 // Reset Sighting on this panel
                 sighting = null;
@@ -1268,9 +1264,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRowCount() == 1) {
-            sighting = app.getDBI().find(new Sighting(
-                    (Long)tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6)));
+            sighting = app.getDBI().findSighting((Long)tblSightings.getModel().getValueAt(
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6), Sighting.class);
         }
         else {
             sighting = null;
@@ -1322,7 +1317,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (sighting != null) {
             if (sighting.getElementName() != null) {
-                UtilsFileProcessing.openFile(app.getDBI().find(new Element(sighting.getElementName())).getWildLogFileID(), 0, app);
+                UtilsFileProcessing.openFile(app.getDBI().findElement(sighting.getElementName(), Element.class).getWildLogFileID(), 0, app);
             }
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
@@ -1365,7 +1360,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (tblSightings.getSelectedRowCount() > 0) {
                 lstSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
                 for (int row : tblSightings.getSelectedRows())  {
-                    lstSightings.add(app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6))));
+                    lstSightings.add(app.getDBI().findSighting((Long)tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 6), Sighting.class));
                 }
             }
             ExportDialog dialog = new ExportDialog(app, null, null, visit, null, lstSightings);
@@ -1379,7 +1375,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (tblSightings.getSelectedRowCount() > 0) {
                 lstSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
                 for (int row : tblSightings.getSelectedRows())  {
-                    lstSightings.add(app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6))));
+                    lstSightings.add(app.getDBI().findSighting((Long)tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 6), Sighting.class));
                 }
             }
             SlideshowDialog dialog = new SlideshowDialog(app, visit, null, null, lstSightings);
@@ -1390,7 +1387,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
-                    app.getDBI().list(new Sighting(null, null, visit.getName()), true));
+                    app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapSightingActionPerformed
@@ -1398,7 +1395,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + visit.getName(), 
-                    app.getDBI().list(new Sighting(null, null, visit.getName()), true));
+                    app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed

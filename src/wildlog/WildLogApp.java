@@ -66,7 +66,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     public static final Logger LOGGER = Logger.getLogger("WildLogApp");
-    public static String WILDLOG_VERSION = "4.4.1_beta";
+    public static String WILDLOG_VERSION = "4.4.0_beta";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static boolean useNimbusLF = false;
@@ -148,7 +148,7 @@ public class WildLogApp extends Application {
         }
         while (openedWorkspace == false);
         // Load the WildLogOptions
-        wildLogOptions = dbi.find(new WildLogOptions());
+        wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
         WildLogApp.LOGGER.log(Level.INFO, "Workspace opened with ID: {0} [{1}]", new Object[]{wildLogOptions.getWorkspaceName(), Long.toString(wildLogOptions.getWorkspaceID())});
         // Check to do monthly backup and try to upload the logs and user data to the MyWild DB
         Path folderPath = WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath()

@@ -250,7 +250,7 @@ public class UtilsImageProcessing {
 
     public static int setMainImage(String inID, int inImageIndex, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        List<WildLogFile> lstFiles = inApp.getDBI().list(new WildLogFile(inID));
+        List<WildLogFile> lstFiles = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
         for (int t = 0; t < lstFiles.size(); t++) {
             if (t != newImageIndex) {
                 lstFiles.get(t).setDefaultFile(false);
@@ -267,7 +267,7 @@ public class UtilsImageProcessing {
     public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
         if (inImageLabel != null) {
-            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
+            List<WildLogFile> fotos = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
             if (fotos.size() > 0) {
                 WildLogFile tempFoto = fotos.get(newImageIndex);
                 inApp.getDBI().deleteWildLogFile(tempFoto.getDBFilePath());
@@ -288,7 +288,7 @@ public class UtilsImageProcessing {
 
     public static void setupFoto(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         if (inImageLabel != null) {
-            List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(inID));
+            List<WildLogFile> files = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
             if (files.size() > inImageIndex) {
                 if (files.get(inImageIndex).getFileType() != null) {
                     if (files.get(inImageIndex).getFileType().equals(WildLogFileType.IMAGE)) {
