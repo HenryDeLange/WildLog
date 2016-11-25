@@ -132,7 +132,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
-                    createOrUpdate(new ElementCore("Unknown Creature"), null);
+                    createElement(new ElementCore("Unknown Creature"));
                 }
                 closeStatement(state);
             }
@@ -144,7 +144,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
-                    createOrUpdate(new LocationCore("Some Place"), null);
+                    createLocation(new LocationCore("Some Place"));
                 }
                 closeStatement(state);
             }
@@ -157,7 +157,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONNAME)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
-                    createOrUpdate(new VisitCore("Casual Observations", "Some Place"), null);
+                    createVisit(new VisitCore("Casual Observations", "Some Place"));
                 }
                 closeStatement(state);
             }
@@ -413,7 +413,7 @@ public abstract class DBI_JDBC implements DBI {
             if (inDBFilePath != null && UtilsData.sanitizeString(inDBFilePath).length() > 0) {
                 sql = sql + " WHERE ORIGINALPATH = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inDBFilePath));
+                state.setString(1, UtilsData.sanitizeString(inDBFilePath.replace("\\", "/")));
             }
             else
             if (inWildLogFileID != null && UtilsData.sanitizeString(inWildLogFileID).length() > 0) {
@@ -681,7 +681,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE ORIGINALPATH = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inDBFilePath));
+                state.setString(1, UtilsData.sanitizeString(inDBFilePath.replace("\\", "/")));
             }
             else
             if (inWildLogFileID != null) {
@@ -719,7 +719,7 @@ public abstract class DBI_JDBC implements DBI {
     protected <T extends WildLogFileCore> void populateWildLogFile(ResultSet inResults, T inWildLogFile) throws SQLException {
         inWildLogFile.setId(inResults.getString("ID"));
         inWildLogFile.setFilename(inResults.getString("FILENAME"));
-        inWildLogFile.setDBFilePath(inResults.getString("ORIGINALPATH"));
+        inWildLogFile.setDBFilePath(inResults.getString("ORIGINALPATH").replace("\\", "/"));
         inWildLogFile.setFileType(WildLogFileType.getEnumFromText(inResults.getString("FILETYPE")));
         if (inResults.getDate("UPLOADDATE") != null) {
             inWildLogFile.setUploadDate(new Date(inResults.getDate("UPLOADDATE").getTime()));
@@ -1142,7 +1142,32 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> boolean createOrUpdate(T inElement, String inOldName) {
+    public <T extends ElementCore> boolean createElement(T inElement) {
+        PreparedStatement state = null;
+        try {
+            // Make sure the name isn't already used
+            if (countElements(inElement.getPrimaryName(), null) > 0) {
+                System.err.println("Trying to save an Element using a name that already exists.... (" + inElement.getPrimaryName() + ")");
+                return false;
+            }
+            // Insert
+            state = conn.prepareStatement(createElement);
+            maintainElement(state, inElement);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends ElementCore> boolean updateElement(T inElement, String inOldName) {
         PreparedStatement state = null;
         try {
             // Make sure the name isn't already used
@@ -1152,61 +1177,25 @@ public abstract class DBI_JDBC implements DBI {
                     return false;
                 }
             }
-            // Check whether it is an update or not
-            if (inOldName != null) {
-                // Check whether there was a name change or not.
-                if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
-                    // Update the Sightings
-                    List<SightingCore> sightings = listSightings(0, inOldName, null, null, false, SightingCore.class);
-                    for (SightingCore temp : sightings) {
-                        temp.setElementName(inElement.getPrimaryName());
-                        createOrUpdate(temp, false);
-                    }
-                    // Update the Files
-                    List<WildLogFileCore> wildLogFiles = listWildLogFiles(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
-                    for (WildLogFileCore temp : wildLogFiles) {
-                        temp.setId(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
-                        createOrUpdate(temp, true);
-                    }
+            // Check whether there was a name change or not.
+            if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
+                // Update the Sightings
+                List<SightingCore> lstSightings = listSightings(0, inOldName, null, null, false, SightingCore.class);
+                for (SightingCore sighting : lstSightings) {
+                    sighting.setElementName(inElement.getPrimaryName());
+                    updateSighting(sighting);
                 }
-                // Update
-                state = conn.prepareStatement(updateElement);
-                state.setString(31, UtilsData.sanitizeString(inOldName));
+                // Update the Files
+                List<WildLogFileCore> lstWildLogFiles = listWildLogFiles(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
+                for (WildLogFileCore wildLogFile : lstWildLogFiles) {
+                    wildLogFile.setId(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
+                    updateWildLogFile(wildLogFile);
+                }
             }
-            else {
-                // Insert
-                state = conn.prepareStatement(createElement);
-            }
-            state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
-            state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getOtherName()), 150));
-            state.setString(3, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getScientificName()), 150));
-            state.setString(4, UtilsData.sanitizeString(inElement.getDescription()));
-            state.setString(5, UtilsData.sanitizeString(inElement.getDistribution()));
-            state.setString(6, UtilsData.sanitizeString(inElement.getNutrition()));
-            state.setString(7, UtilsData.stringFromObject(inElement.getWaterDependance()));
-            state.setDouble(8, inElement.getSizeMaleMin());
-            state.setDouble(9, inElement.getSizeMaleMax());
-            state.setDouble(10, inElement.getSizeFemaleMin());
-            state.setDouble(11, inElement.getSizeFemaleMax());
-            state.setString(12, UtilsData.stringFromObject(inElement.getSizeUnit()));
-            state.setString(13, UtilsData.stringFromObject(inElement.getSizeType()));
-            state.setDouble(14, inElement.getWeightMaleMin());
-            state.setDouble(15, inElement.getWeightMaleMax());
-            state.setDouble(16, inElement.getWeightFemaleMin());
-            state.setDouble(17, inElement.getWeightFemaleMax());
-            state.setString(18, UtilsData.stringFromObject(inElement.getWeightUnit()));
-            state.setString(19, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getBreedingDuration()), 50));
-            state.setString(20, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getBreedingNumber()), 50));
-            state.setString(21, UtilsData.stringFromObject(inElement.getWishListRating()));
-            state.setString(22, UtilsData.sanitizeString(inElement.getDiagnosticDescription()));
-            state.setString(23, UtilsData.stringFromObject(inElement.getActiveTime()));
-            state.setString(24, UtilsData.stringFromObject(inElement.getEndangeredStatus()));
-            state.setString(25, UtilsData.sanitizeString(inElement.getBehaviourDescription()));
-            state.setString(26, UtilsData.stringFromObject(inElement.getAddFrequency()));
-            state.setString(27, UtilsData.stringFromObject(inElement.getType()));
-            state.setString(28, UtilsData.stringFromObject(inElement.getFeedingClass()));
-            state.setString(29, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getLifespan()), 50));
-            state.setString(30, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getReferenceID()), 50));
+            // Update
+            state = conn.prepareStatement(updateElement);
+            maintainElement(state, inElement);
+            state.setString(31, UtilsData.sanitizeString(inOldName));
             // Execute
             state.executeUpdate();
         }
@@ -1220,8 +1209,66 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
+    private <T extends ElementCore> void maintainElement(PreparedStatement state, T inElement) throws SQLException {
+        state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
+        state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getOtherName()), 150));
+        state.setString(3, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getScientificName()), 150));
+        state.setString(4, UtilsData.sanitizeString(inElement.getDescription()));
+        state.setString(5, UtilsData.sanitizeString(inElement.getDistribution()));
+        state.setString(6, UtilsData.sanitizeString(inElement.getNutrition()));
+        state.setString(7, UtilsData.stringFromObject(inElement.getWaterDependance()));
+        state.setDouble(8, inElement.getSizeMaleMin());
+        state.setDouble(9, inElement.getSizeMaleMax());
+        state.setDouble(10, inElement.getSizeFemaleMin());
+        state.setDouble(11, inElement.getSizeFemaleMax());
+        state.setString(12, UtilsData.stringFromObject(inElement.getSizeUnit()));
+        state.setString(13, UtilsData.stringFromObject(inElement.getSizeType()));
+        state.setDouble(14, inElement.getWeightMaleMin());
+        state.setDouble(15, inElement.getWeightMaleMax());
+        state.setDouble(16, inElement.getWeightFemaleMin());
+        state.setDouble(17, inElement.getWeightFemaleMax());
+        state.setString(18, UtilsData.stringFromObject(inElement.getWeightUnit()));
+        state.setString(19, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getBreedingDuration()), 50));
+        state.setString(20, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getBreedingNumber()), 50));
+        state.setString(21, UtilsData.stringFromObject(inElement.getWishListRating()));
+        state.setString(22, UtilsData.sanitizeString(inElement.getDiagnosticDescription()));
+        state.setString(23, UtilsData.stringFromObject(inElement.getActiveTime()));
+        state.setString(24, UtilsData.stringFromObject(inElement.getEndangeredStatus()));
+        state.setString(25, UtilsData.sanitizeString(inElement.getBehaviourDescription()));
+        state.setString(26, UtilsData.stringFromObject(inElement.getAddFrequency()));
+        state.setString(27, UtilsData.stringFromObject(inElement.getType()));
+        state.setString(28, UtilsData.stringFromObject(inElement.getFeedingClass()));
+        state.setString(29, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getLifespan()), 50));
+        state.setString(30, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getReferenceID()), 50));
+    }
+
     @Override
-    public <T extends LocationCore> boolean createOrUpdate(T inLocation, String inOldName) {
+    public <T extends LocationCore> boolean createLocation(T inLocation) {
+        PreparedStatement state = null;
+        try {
+            // Make sure the name isn't already used
+            if (countLocations(inLocation.getName()) > 0) {
+                System.err.println("Trying to save an Location using a name that already exists.... (" + inLocation.getName() + ")");
+                return false;
+            }
+            // Insert
+            state = conn.prepareStatement(createLocation);
+            maintainLocation(state, inLocation);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName) {
         PreparedStatement state = null;
         try {
             // Make sure the name isn't already used
@@ -1231,57 +1278,31 @@ public abstract class DBI_JDBC implements DBI {
                     return false;
                 }
             }
-            // Check whether it is an update or not
-            if (inOldName != null) {
-                // Check whether there was a name change or not.
-                if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
-                    // Update the Sightings
-                    List<SightingCore> sightings = listSightings(0, null, inOldName, null, false, SightingCore.class);
-                    for (SightingCore temp : sightings) {
-                        temp.setLocationName(inLocation.getName());
-                        createOrUpdate(temp, false);
-                    }
-                    // Update the Visits
-                    List<VisitCore> visits = listVisits(null, inOldName, null, VisitCore.class);
-                    for (VisitCore temp : visits) {
-                        temp.setLocationName(inLocation.getName());
-                        createOrUpdate(temp, temp.getName());
-                    }
-                    // Update the Files
-                    List<WildLogFileCore> wildLogFiles = listWildLogFiles(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
-                    for (WildLogFileCore temp : wildLogFiles) {
-                        temp.setId(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
-                        createOrUpdate(temp, true);
-                    }
+            // Check whether there was a name change or not.
+            if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
+                // Update the Sightings
+                List<SightingCore> lstSightings = listSightings(0, null, inOldName, null, false, SightingCore.class);
+                for (SightingCore sighting : lstSightings) {
+                    sighting.setLocationName(inLocation.getName());
+                    updateSighting(sighting);
                 }
-                // Update
-                state = conn.prepareStatement(updateLocation);
-                state.setString(21, UtilsData.sanitizeString(inOldName));
+                // Update the Visits
+                List<VisitCore> lstVisits = listVisits(null, inOldName, null, VisitCore.class);
+                for (VisitCore visit : lstVisits) {
+                    visit.setLocationName(inLocation.getName());
+                    updateVisit(visit, visit.getName());
+                }
+                // Update the Files
+                List<WildLogFileCore> lstWildLogFiles = listWildLogFiles(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
+                for (WildLogFileCore wildLogFile : lstWildLogFiles) {
+                    wildLogFile.setId(LocationCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
+                    updateWildLogFile(wildLogFile);
+                }
             }
-            else {
-                // Insert
-                state = conn.prepareStatement(createLocation);
-            }
-            state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
-            state.setString(2, UtilsData.sanitizeString(inLocation.getDescription()));
-            state.setString(3, UtilsData.stringFromObject(inLocation.getRating()));
-            state.setString(4, UtilsData.stringFromObject(inLocation.getGameViewingRating()));
-            state.setString(5, UtilsData.stringFromObject(inLocation.getHabitatType()));
-            state.setString(6, UtilsData.stringFromObject(inLocation.getAccommodationType()));
-            state.setString(7, UtilsData.stringFromObject(inLocation.getCatering()));
-            state.setString(8, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getContactNumbers()), 50));
-            state.setString(9, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getWebsite()), 100));
-            state.setString(10, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getEmail()), 100));
-            state.setString(11, UtilsData.sanitizeString(inLocation.getDirections()));
-            state.setString(12, UtilsData.stringFromObject(inLocation.getLatitude()));
-            state.setInt(13, inLocation.getLatDegrees());
-            state.setInt(14, inLocation.getLatMinutes());
-            state.setDouble(15, inLocation.getLatSeconds());
-            state.setString(16, UtilsData.stringFromObject(inLocation.getLongitude()));
-            state.setInt(17, inLocation.getLonDegrees());
-            state.setInt(18, inLocation.getLonMinutes());
-            state.setDouble(19, inLocation.getLonSeconds());
-            state.setString(20, UtilsData.stringFromObject(inLocation.getGPSAccuracy()));
+            // Update
+            state = conn.prepareStatement(updateLocation);
+            maintainLocation(state, inLocation);
+            state.setString(21, UtilsData.sanitizeString(inOldName));
             // Execute
             state.executeUpdate();
         }
@@ -1295,8 +1316,56 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
+    private <T extends LocationCore> void maintainLocation(PreparedStatement state, T inLocation) throws SQLException {
+        state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
+        state.setString(2, UtilsData.sanitizeString(inLocation.getDescription()));
+        state.setString(3, UtilsData.stringFromObject(inLocation.getRating()));
+        state.setString(4, UtilsData.stringFromObject(inLocation.getGameViewingRating()));
+        state.setString(5, UtilsData.stringFromObject(inLocation.getHabitatType()));
+        state.setString(6, UtilsData.stringFromObject(inLocation.getAccommodationType()));
+        state.setString(7, UtilsData.stringFromObject(inLocation.getCatering()));
+        state.setString(8, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getContactNumbers()), 50));
+        state.setString(9, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getWebsite()), 100));
+        state.setString(10, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getEmail()), 100));
+        state.setString(11, UtilsData.sanitizeString(inLocation.getDirections()));
+        state.setString(12, UtilsData.stringFromObject(inLocation.getLatitude()));
+        state.setInt(13, inLocation.getLatDegrees());
+        state.setInt(14, inLocation.getLatMinutes());
+        state.setDouble(15, inLocation.getLatSeconds());
+        state.setString(16, UtilsData.stringFromObject(inLocation.getLongitude()));
+        state.setInt(17, inLocation.getLonDegrees());
+        state.setInt(18, inLocation.getLonMinutes());
+        state.setDouble(19, inLocation.getLonSeconds());
+        state.setString(20, UtilsData.stringFromObject(inLocation.getGPSAccuracy()));
+    }
+
     @Override
-    public <T extends VisitCore> boolean createOrUpdate(T inVisit, String inOldName) {
+    public <T extends VisitCore> boolean createVisit(T inVisit) {
+        PreparedStatement state = null;
+        try {
+            // Make sure the name isn't already used
+            if (countVisits(inVisit.getName(), null) > 0) {
+                System.err.println("Trying to save an Visit using a name that already exists.... (" + inVisit.getName() + ")");
+                return false;
+            }
+            // Insert
+            state = conn.prepareStatement(createVisit);
+            maintainVisit(state, inVisit);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName) {
         PreparedStatement state = null;
         try {
             // Make sure the name isn't already used
@@ -1306,62 +1375,39 @@ public abstract class DBI_JDBC implements DBI {
                     return false;
                 }
             }
-            // Check whether to update or create it.
-            if (inOldName != null) {
-                // Update the related tables if the name changes
-                VisitCore originalVisit;
-                if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                    originalVisit = findVisit(inOldName, inVisit.getClass());
-                    // Update the Sightings
-                    List<SightingCore> sightings = listSightings(0, null, null, inOldName, false, SightingCore.class);
-                    for (SightingCore temp : sightings) {
-                        temp.setVisitName(inVisit.getName());
-                        createOrUpdate(temp, false);
-                    }
-                    // Update the Files
-                    List<WildLogFileCore> wildLogFiles = listWildLogFiles(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
-                    for (WildLogFileCore temp : wildLogFiles) {
-                        temp.setId(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
-                        createOrUpdate(temp, true);
-                    }
+            // Update the related tables if the name changes
+            VisitCore originalVisit;
+            if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
+                originalVisit = findVisit(inOldName, inVisit.getClass());
+                // Update the Sightings
+                List<SightingCore> lstSightings = listSightings(0, null, null, inOldName, false, SightingCore.class);
+                for (SightingCore sighting : lstSightings) {
+                    sighting.setVisitName(inVisit.getName());
+                    updateSighting(sighting);
                 }
-                else {
-                    originalVisit = inVisit;
+                // Update the Files
+                List<WildLogFileCore> lstWildLogFiles = listWildLogFiles(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName), null, WildLogFileCore.class);
+                for (WildLogFileCore wildLogFile : lstWildLogFiles) {
+                    wildLogFile.setId(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
+                    updateWildLogFile(wildLogFile);
                 }
-                // This method should cascade and save the Sightings records when the Visit's LocationName changed (Visit was moved).
-                if (!originalVisit.getLocationName().equals(inVisit.getLocationName())) {
-                    // Update the Sightings
-                    List<SightingCore> sightings = listSightings(0, null, null, inOldName, false, SightingCore.class);
-                    for (SightingCore temp : sightings) {
-                        temp.setLocationName(inVisit.getLocationName());
-                        createOrUpdate(temp, false);
-                    }
-                }
-                // Update
-                state = conn.prepareStatement(updateVisit);
-                state.setString(8, UtilsData.sanitizeString(inOldName));
             }
             else {
-                // Insert
-                state = conn.prepareStatement(createVisit);
+                originalVisit = inVisit;
             }
-            state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
-            if (inVisit.getStartDate() != null) {
-                state.setDate(2, new java.sql.Date(inVisit.getStartDate().getTime()));
+            // This method should cascade and save the Sightings records when the Visit's LocationName changed (Visit was moved).
+            if (!originalVisit.getLocationName().equals(inVisit.getLocationName())) {
+                // Update the Sightings
+                List<SightingCore> lstSightings = listSightings(0, null, null, inOldName, false, SightingCore.class);
+                for (SightingCore sighting : lstSightings) {
+                    sighting.setLocationName(inVisit.getLocationName());
+                    updateSighting(sighting);
+                }
             }
-            else {
-                state.setDate(2, null);
-            }
-            if (inVisit.getEndDate() != null) {
-                state.setDate(3, new java.sql.Date(inVisit.getEndDate().getTime()));
-            }
-            else {
-                state.setDate(3, null);
-            }
-            state.setString(4, UtilsData.sanitizeString(inVisit.getDescription()));
-            state.setString(5, UtilsData.stringFromObject(inVisit.getGameWatchingIntensity()));
-            state.setString(6, UtilsData.stringFromObject(inVisit.getType()));
-            state.setString(7, UtilsData.sanitizeString(inVisit.getLocationName()));
+            // Update
+            state = conn.prepareStatement(updateVisit);
+            maintainVisit(state, inVisit);
+            state.setString(8, UtilsData.sanitizeString(inOldName));
             // Execute
             state.executeUpdate();
         }
@@ -1375,78 +1421,49 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
+    private <T extends VisitCore> void maintainVisit(PreparedStatement state, T inVisit) throws SQLException {
+        state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
+        if (inVisit.getStartDate() != null) {
+            state.setDate(2, new java.sql.Date(inVisit.getStartDate().getTime()));
+        }
+        else {
+            state.setDate(2, null);
+        }
+        if (inVisit.getEndDate() != null) {
+            state.setDate(3, new java.sql.Date(inVisit.getEndDate().getTime()));
+        }
+        else {
+            state.setDate(3, null);
+        }
+        state.setString(4, UtilsData.sanitizeString(inVisit.getDescription()));
+        state.setString(5, UtilsData.stringFromObject(inVisit.getGameWatchingIntensity()));
+        state.setString(6, UtilsData.stringFromObject(inVisit.getType()));
+        state.setString(7, UtilsData.sanitizeString(inVisit.getLocationName()));
+    }
+
     @Override
-    public <T extends SightingCore> boolean createOrUpdate(T inSighting, boolean inNewButKeepID) {
+    public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButKeepID) {
         PreparedStatement state = null;
         PreparedStatement tempState = null;
         ResultSet results = null;
-        boolean isUpdate = false;
         try {
-            if (inSighting.getSightingCounter() > 0 && !inNewButKeepID) {
-                // Note: No need to update the files, because once a sighting has an ID it never changes
-                // Update
-                state = conn.prepareStatement(updateSighting);
-                isUpdate = true;
-            }
-            else {
-                if (!inNewButKeepID) {
-                    // Get the new ID
-                    tempState = conn.prepareStatement("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?");
+            if (!inNewButKeepID) {
+                // Get the new ID
+                tempState = conn.prepareStatement("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?");
+                inSighting.setSightingCounter(generateID());
+                tempState.setLong(1, inSighting.getSightingCounter());
+                // Make sure it is unique (should almost always be, but let's be safe...)
+                results = tempState.executeQuery();
+                while (results.next() && results.getInt(1) > 0) {
+                    // ID already used, try a new ID
                     inSighting.setSightingCounter(generateID());
                     tempState.setLong(1, inSighting.getSightingCounter());
-                    // Make sure it is unique (should almost always be, but let's be safe...)
                     results = tempState.executeQuery();
-                    while (results.next() && results.getInt(1) > 0) {
-                        // ID already used, try a new ID
-                        inSighting.setSightingCounter(generateID());
-                        tempState.setLong(1, inSighting.getSightingCounter());
-                        results = tempState.executeQuery();
-                    }
                 }
-                // Insert
-                state = conn.prepareStatement(createSighting);
             }
-            // Populate the values
-            state.setLong(1, inSighting.getSightingCounter());
-            if (inSighting.getDate() != null) {
-                state.setTimestamp(2, new Timestamp(inSighting.getDate().getTime()));
-            }
-            else {
-                state.setTimestamp(2, null);
-            }
-            state.setString(3, UtilsData.sanitizeString(inSighting.getElementName()));
-            state.setString(4, UtilsData.sanitizeString(inSighting.getLocationName()));
-            state.setString(5, UtilsData.sanitizeString(inSighting.getVisitName()));
-            state.setString(6, UtilsData.stringFromObject(inSighting.getTimeOfDay()));
-            state.setString(7, UtilsData.stringFromObject(inSighting.getWeather()));
-            state.setString(8, UtilsData.stringFromObject(inSighting.getViewRating()));
-            state.setString(9, UtilsData.stringFromObject(inSighting.getCertainty()));
-            state.setInt(10, inSighting.getNumberOfElements());
-            state.setString(11, UtilsData.sanitizeString(inSighting.getDetails()));
-            state.setString(12, UtilsData.stringFromObject(inSighting.getLatitude()));
-            state.setInt(13, inSighting.getLatDegrees());
-            state.setInt(14, inSighting.getLatMinutes());
-            state.setDouble(15, inSighting.getLatSeconds());
-            state.setString(16, UtilsData.stringFromObject(inSighting.getLongitude()));
-            state.setInt(17, inSighting.getLonDegrees());
-            state.setInt(18, inSighting.getLonMinutes());
-            state.setDouble(19, inSighting.getLonSeconds());
-            state.setString(20, UtilsData.stringFromObject(inSighting.getSightingEvidence()));
-            state.setInt(21, inSighting.getMoonPhase());
-            state.setString(22, UtilsData.stringFromObject(inSighting.getMoonlight()));
-            state.setDouble(23, inSighting.getTemperature());
-            state.setString(24, UtilsData.stringFromObject(inSighting.getUnitsTemperature()));
-            state.setString(25, UtilsData.stringFromObject(inSighting.getLifeStatus()));
-            state.setString(26, UtilsData.stringFromObject(inSighting.getSex()));
-            state.setString(27, UtilsData.stringFromObject(inSighting.getTag()));
-            state.setInt(28, inSighting.getDurationMinutes());
-            state.setDouble(29, inSighting.getDurationSeconds());
-            state.setString(30, UtilsData.stringFromObject(inSighting.getGPSAccuracy()));
-            state.setString(31, UtilsData.stringFromObject(inSighting.getTimeAccuracy()));
-            state.setString(32, UtilsData.stringFromObject(inSighting.getAge()));
-            if (isUpdate) {
-                state.setLong(33, inSighting.getSightingCounter());
-            }
+            // Insert
+            state = conn.prepareStatement(createSighting);
+            maintainSighting(state, inSighting);
             // Execute
             state.executeUpdate();
         }
@@ -1457,146 +1474,19 @@ public abstract class DBI_JDBC implements DBI {
         finally {
             closeStatementAndResultset(tempState, results);
             closeStatement(state);
-        }
-        return true;
-    }
-
-    @Override
-    public <T extends WildLogFileCore> boolean createOrUpdate(T inWildLogFile, boolean inUpdate) {
-        PreparedStatement state = null;
-        try {
-            if (inUpdate) {
-                state = conn.prepareStatement(updateFile);
-            }
-            else {
-                state = conn.prepareStatement(createFile);
-            }
-            state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
-            state.setString(2, UtilsData.sanitizeString(inWildLogFile.getFilename()));
-            state.setString(3, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
-            state.setString(4, UtilsData.stringFromObject(inWildLogFile.getFileType()));
-            if (inWildLogFile.getUploadDate() != null) {
-                state.setDate(5, new java.sql.Date(inWildLogFile.getUploadDate().getTime()));
-            }
-            else {
-                state.setDate(5, null);
-            }
-            if (inWildLogFile.isDefaultFile()) {
-                state.setBoolean(6, true);
-            }
-            else {
-                state.setBoolean(6, false);
-            }
-            if (inWildLogFile.getFileDate() != null) {
-                state.setTimestamp(7, new Timestamp(inWildLogFile.getFileDate().getTime()));
-            }
-            else {
-                state.setTimestamp(7, null);
-            }
-            state.setLong(8, inWildLogFile.getFileSize());
-            if (inUpdate) {
-                state.setString(9, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
-            }
-            state.executeUpdate();
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatement(state);
-        }
-        return true;
-    }
-
-    @Override
-    public <T extends WildLogOptions> boolean createOrUpdate(T inWildLogOptions) {
-        PreparedStatement state = null;
-        ResultSet results = null;
-        try {
-            state = conn.prepareStatement(findWildLogOptions);
-            results = state.executeQuery();
-            if (!results.next()) {
-                // Insert
-                PreparedStatement prepState = null;
-                try {
-                    prepState = conn.prepareStatement(createWildLogOptions);
-                    prepState.setLong(1, generateID());
-                    prepState.executeUpdate();
-                }
-                catch (SQLException ex) {
-                    printSQLException(ex);
-                    return false;
-                }
-                finally {
-                    closeStatement(prepState);
-                }
-            }
-            else {
-                // Update
-                PreparedStatement prepState = null;
-                try {
-                    prepState = conn.prepareStatement(updateWildLogOptions);
-                    prepState.setDouble(1, inWildLogOptions.getDefaultLatitude());
-                    prepState.setDouble(2, inWildLogOptions.getDefaultLongitude());
-                    prepState.setFloat(3, inWildLogOptions.getDefaultSlideshowSpeed());
-                    prepState.setInt(4, inWildLogOptions.getDefaultSlideshowSize());
-                    prepState.setBoolean(5, inWildLogOptions.isUseThumbnailTables());
-                    prepState.setBoolean(6, inWildLogOptions.isUseThumnailBrowsing());
-                    prepState.setBoolean(7, inWildLogOptions.isEnableSounds());
-                    prepState.setBoolean(8, inWildLogOptions.isUseScientificNames());
-                    prepState.setString(9, inWildLogOptions.getWorkspaceName());
-                    prepState.setLong(10, inWildLogOptions.getWorkspaceID());
-                    prepState.setBoolean(11, inWildLogOptions.isUploadLogs());
-                    prepState.executeUpdate();
-                }
-                catch (SQLException ex) {
-                    printSQLException(ex);
-                    return false;
-                }
-                finally {
-                    closeStatement(prepState);
-                }
-            }
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatementAndResultset(state, results);
         }
         return true;
     }
     
     @Override
-    public <T extends AdhocData> boolean createOrUpdate(T inAdhocData) {
+    public <T extends SightingCore> boolean updateSighting(T inSighting) {
         PreparedStatement state = null;
-        PreparedStatement tempState = null;
-        ResultSet results = null;
-        boolean isUpdate = false;
         try {
-            tempState = conn.prepareStatement("SELECT COUNT(FIELDID) FROM ADHOC WHERE FIELDID = ? AND DATAKEY = ?");
-            tempState.setString(1, inAdhocData.getFieldID());
-            tempState.setString(2, inAdhocData.getDataKey());
-            results = tempState.executeQuery();
-            if (results.next() && results.getInt(1) > 0) {
-                // Update
-                state = conn.prepareStatement(updateAdhocData);
-                isUpdate = true;
-            }
-            else {
-                //Insert
-                state = conn.prepareStatement(createAdhocData);
-            }
-            // Populate the values
-            state.setString(1, inAdhocData.getFieldID());
-            state.setString(2, inAdhocData.getDataKey());
-            state.setString(3, inAdhocData.getDataValue());
-            if (isUpdate) {
-                state.setString(4, inAdhocData.getFieldID());
-                state.setString(5, inAdhocData.getDataKey());
-            }
+            // Note: No need to update the files, because once a sighting has an ID it never changes
+            // Update
+            state = conn.prepareStatement(updateSighting);
+            maintainSighting(state, inSighting);
+            state.setLong(33, inSighting.getSightingCounter());
             // Execute
             state.executeUpdate();
         }
@@ -1605,10 +1495,218 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            closeStatementAndResultset(tempState, results);
             closeStatement(state);
         }
         return true;
+    }
+
+    private <T extends SightingCore> void maintainSighting(PreparedStatement state, T inSighting) throws SQLException {
+        // Populate the values
+        state.setLong(1, inSighting.getSightingCounter());
+        if (inSighting.getDate() != null) {
+            state.setTimestamp(2, new Timestamp(inSighting.getDate().getTime()));
+        }
+        else {
+            state.setTimestamp(2, null);
+        }
+        state.setString(3, UtilsData.sanitizeString(inSighting.getElementName()));
+        state.setString(4, UtilsData.sanitizeString(inSighting.getLocationName()));
+        state.setString(5, UtilsData.sanitizeString(inSighting.getVisitName()));
+        state.setString(6, UtilsData.stringFromObject(inSighting.getTimeOfDay()));
+        state.setString(7, UtilsData.stringFromObject(inSighting.getWeather()));
+        state.setString(8, UtilsData.stringFromObject(inSighting.getViewRating()));
+        state.setString(9, UtilsData.stringFromObject(inSighting.getCertainty()));
+        state.setInt(10, inSighting.getNumberOfElements());
+        state.setString(11, UtilsData.sanitizeString(inSighting.getDetails()));
+        state.setString(12, UtilsData.stringFromObject(inSighting.getLatitude()));
+        state.setInt(13, inSighting.getLatDegrees());
+        state.setInt(14, inSighting.getLatMinutes());
+        state.setDouble(15, inSighting.getLatSeconds());
+        state.setString(16, UtilsData.stringFromObject(inSighting.getLongitude()));
+        state.setInt(17, inSighting.getLonDegrees());
+        state.setInt(18, inSighting.getLonMinutes());
+        state.setDouble(19, inSighting.getLonSeconds());
+        state.setString(20, UtilsData.stringFromObject(inSighting.getSightingEvidence()));
+        state.setInt(21, inSighting.getMoonPhase());
+        state.setString(22, UtilsData.stringFromObject(inSighting.getMoonlight()));
+        state.setDouble(23, inSighting.getTemperature());
+        state.setString(24, UtilsData.stringFromObject(inSighting.getUnitsTemperature()));
+        state.setString(25, UtilsData.stringFromObject(inSighting.getLifeStatus()));
+        state.setString(26, UtilsData.stringFromObject(inSighting.getSex()));
+        state.setString(27, UtilsData.stringFromObject(inSighting.getTag()));
+        state.setInt(28, inSighting.getDurationMinutes());
+        state.setDouble(29, inSighting.getDurationSeconds());
+        state.setString(30, UtilsData.stringFromObject(inSighting.getGPSAccuracy()));
+        state.setString(31, UtilsData.stringFromObject(inSighting.getTimeAccuracy()));
+        state.setString(32, UtilsData.stringFromObject(inSighting.getAge()));
+    }
+
+    @Override
+    public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile) {
+        PreparedStatement state = null;
+        try {
+            // Insert
+            state = conn.prepareStatement(createFile);
+            maintainWildLogFile(state, inWildLogFile);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile) {
+        PreparedStatement state = null;
+        try {
+            // Update
+            state = conn.prepareStatement(updateFile);
+            maintainWildLogFile(state, inWildLogFile);
+            state.setString(9, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+
+    private <T extends WildLogFileCore> void maintainWildLogFile(PreparedStatement state, T inWildLogFile) throws SQLException {
+        state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
+        state.setString(2, UtilsData.sanitizeString(inWildLogFile.getFilename()));
+        state.setString(3, UtilsData.sanitizeString(inWildLogFile.getDBFilePath().replace("\\", "/")));
+        state.setString(4, UtilsData.stringFromObject(inWildLogFile.getFileType()));
+        if (inWildLogFile.getUploadDate() != null) {
+            state.setDate(5, new java.sql.Date(inWildLogFile.getUploadDate().getTime()));
+        }
+        else {
+            state.setDate(5, null);
+        }
+        if (inWildLogFile.isDefaultFile()) {
+            state.setBoolean(6, true);
+        }
+        else {
+            state.setBoolean(6, false);
+        }
+        if (inWildLogFile.getFileDate() != null) {
+            state.setTimestamp(7, new Timestamp(inWildLogFile.getFileDate().getTime()));
+        }
+        else {
+            state.setTimestamp(7, null);
+        }
+        state.setLong(8, inWildLogFile.getFileSize());
+    }
+
+    @Override
+    public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions) {
+        PreparedStatement state = null;
+        try {
+            // Insert
+            state = conn.prepareStatement(createWildLogOptions);
+            // Use default values (except for the WorkspaceID)
+            state.setLong(1, generateID());
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions) {
+        PreparedStatement state = null;
+        try {
+            // Update
+            state = conn.prepareStatement(updateWildLogOptions);
+            state.setDouble(1, inWildLogOptions.getDefaultLatitude());
+            state.setDouble(2, inWildLogOptions.getDefaultLongitude());
+            state.setFloat(3, inWildLogOptions.getDefaultSlideshowSpeed());
+            state.setInt(4, inWildLogOptions.getDefaultSlideshowSize());
+            state.setBoolean(5, inWildLogOptions.isUseThumbnailTables());
+            state.setBoolean(6, inWildLogOptions.isUseThumnailBrowsing());
+            state.setBoolean(7, inWildLogOptions.isEnableSounds());
+            state.setBoolean(8, inWildLogOptions.isUseScientificNames());
+            state.setString(9, inWildLogOptions.getWorkspaceName());
+            state.setLong(10, inWildLogOptions.getWorkspaceID());
+            state.setBoolean(11, inWildLogOptions.isUploadLogs());
+            // Execute
+            state.executeUpdate();
+         }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends AdhocData> boolean createAdhocData(T inAdhocData) {
+        PreparedStatement state = null;
+        try {
+            //Insert
+            state = conn.prepareStatement(createAdhocData);
+            // Populate the values
+            maintainAdhocData(state, inAdhocData);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends AdhocData> boolean updateAdhocData(T inAdhocData) {
+        PreparedStatement state = null;
+        try {
+            // Update
+            state = conn.prepareStatement(updateAdhocData);
+            // Populate the values
+            maintainAdhocData(state, inAdhocData);
+            state.setString(4, inAdhocData.getFieldID());
+            state.setString(5, inAdhocData.getDataKey());
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+
+    private <T extends AdhocData> void maintainAdhocData(PreparedStatement state, T inAdhocData) throws SQLException {
+        state.setString(1, inAdhocData.getFieldID());
+        state.setString(2, inAdhocData.getDataKey());
+        state.setString(3, inAdhocData.getDataValue());
     }
 
     @Override
@@ -1729,7 +1827,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteFile);
-            state.setString(1, UtilsData.sanitizeString(inDBFilePath));
+            state.setString(1, UtilsData.sanitizeString(inDBFilePath.replace("\\", "/")));
             // Delete File from database
             state.executeUpdate();
         }

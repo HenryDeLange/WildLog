@@ -42,15 +42,21 @@ public interface DBI {
     public <T extends WildLogFileCore> List<T> listWildLogFiles(String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
     public <T extends AdhocData> List<T> listAdhocDatas(String inFieldID, Class<T> inReturnType);
 
-// TODO: Split these methods into propper create and update versions...
+    public <T extends ElementCore> boolean createElement(T inElement);
+    public <T extends LocationCore> boolean createLocation(T inLocation);
+    public <T extends VisitCore> boolean createVisit(T inVisit);
+    public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButKeepID);
+    public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile);
+    public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions);
+    public <T extends AdhocData> boolean createAdhocData(T inAdhocData);
     
-    public <T extends ElementCore> boolean createOrUpdate(T inElement, String inOldName);
-    public <T extends LocationCore> boolean createOrUpdate(T inLocation, String inOldName);
-    public <T extends VisitCore> boolean createOrUpdate(T inVisit, String inOldName);
-    public <T extends SightingCore> boolean createOrUpdate(T inSighting, boolean inNewButKeepID);
-    public <T extends WildLogFileCore> boolean createOrUpdate(T inFile, boolean inUpdate);
-    public <T extends WildLogOptions> boolean createOrUpdate(T inWildLogOptions);
-    public <T extends AdhocData> boolean createOrUpdate(T inAdhocData);
+    public <T extends ElementCore> boolean updateElement(T inElement, String inOldName);
+    public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName);
+    public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName);
+    public <T extends SightingCore> boolean updateSighting(T inSighting);
+    public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile);
+    public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions);
+    public <T extends AdhocData> boolean updateAdhocData(T inAdhocData);
 
     public boolean deleteElement(String inPrimaryName);
     public boolean deleteLocation(String inName);
