@@ -841,7 +841,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 }
                                 // Save the sigting
                                 synchronized (saveSightingLock) {
-                                    app.getDBI().createOrUpdate(sightingWrapper, false);
+                                    app.getDBI().createSighting(sightingWrapper, false);
                                 }
                                 // Save the corresponding images
                                 UtilsFileProcessing.performFileUpload(sightingWrapper,
@@ -877,10 +877,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     visit.setEndDate(dtpEndDate.getDate());
                     visit.setType((VisitType)cmbVisitType.getSelectedItem());
                     if (existingVisitName == null || existingVisitName.isEmpty()) {
-                        app.getDBI().createOrUpdate(visit, null);
+                        app.getDBI().createVisit(visit);
                     }
                     else {
-                        app.getDBI().createOrUpdate(visit, existingVisitName);
+                        app.getDBI().updateVisit(visit, existingVisitName);
                     }
                     // Save the images associated with the Visit
                     File[] visitFiles = new File[lstVisitFiles.size()];

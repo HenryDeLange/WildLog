@@ -115,7 +115,7 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
 
     /**
      * This will be the relative path, as stored in the database.<br/>
-     * This path should never start without a file separator.<br/>
+     * This path should never start with a file separator.<br/>
      * The path should also always use '/' characters as path separators.<br/>
      * (Relative path for workspace: ex. Files/Images/Observation/Kruger/IMGP3365.JPG)
      * @return
@@ -130,7 +130,7 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
 
     /**
      * This needs to be the relative path that will be stored in the database.<br/>
-     * This path should never start without a file separator.<br/>
+     * This path should never start with a file separator.<br/>
      * The path should always use '/' characters as path separators.<br/>
      * (Relative path for workspace: ex. Files/Images/Observation/Kruger/IMGP3365.JPG)
      * @param inFilePathFromDB

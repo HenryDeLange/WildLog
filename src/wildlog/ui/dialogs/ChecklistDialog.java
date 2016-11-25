@@ -204,7 +204,7 @@ public class ChecklistDialog extends JDialog {
                 tempSighting.setVisitName(visit.getName());
                 tempSighting.setDate(dtpDate.getDate());
                 tempSighting.setCertainty(Certainty.SURE);
-                app.getDBI().createOrUpdate(tempSighting, false);
+                app.getDBI().createSighting(tempSighting, false);
             }
 
             if (panelToRefresh != null) {

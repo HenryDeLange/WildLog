@@ -1410,9 +1410,15 @@ public class PanelLocation extends PanelCanSetupHeader {
             if (txtName.getText().length() > 0) {
                 String oldName = lastSavedLocation.getName();
                 populateLocationFromUI();
-
                 // Save the location
-                if (app.getDBI().createOrUpdate(locationWL, oldName) == true) {
+                boolean result;
+                if (oldName == null || oldName.isEmpty()) {
+                    result = app.getDBI().createLocation(locationWL);
+                }
+                else {
+                    result = app.getDBI().updateLocation(locationWL, oldName);
+                }
+                if (result == true) {
                     txtName.setBackground(new java.awt.Color(204, 255, 204));
                     txtName.setText(locationWL.getName());
                     lastSavedLocation = locationWL.cloneShallow();

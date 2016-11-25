@@ -118,7 +118,7 @@ public class MergeElementsDialog extends JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 476, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 517, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -149,7 +149,7 @@ public class MergeElementsDialog extends JDialog {
             List<Sighting> sightings = app.getDBI().listSightings(0, replaceElement.getPrimaryName(), null, null, false, Sighting.class);
             for (Sighting tempSighting : sightings) {
                 tempSighting.setElementName(keepElement.getPrimaryName());
-                app.getDBI().createOrUpdate(tempSighting, false);
+                app.getDBI().updateSighting(tempSighting);
             }
             app.getDBI().deleteElement(replaceElement.getPrimaryName());
             // Close the window

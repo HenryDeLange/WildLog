@@ -1416,9 +1416,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (txtName.getText().length() > 0) {
                 String oldName = lastSavedVisit.getName();
                 populateVisitFromUI();
-
                 // Save the visit
-                if (app.getDBI().createOrUpdate(visit, oldName) == true) {
+                boolean result;
+                if (oldName == null || oldName.isEmpty()) {
+                    result = app.getDBI().createVisit(visit);
+                }
+                else {
+                    result = app.getDBI().updateVisit(visit, oldName);
+                }
+                if (result == true) {
                     txtName.setBackground(new java.awt.Color(204, 255, 204));
                     txtName.setText(visit.getName());
                     lastSavedVisit = visit.cloneShallow();

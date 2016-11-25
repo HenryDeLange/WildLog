@@ -586,7 +586,7 @@ public class WildLogApp extends Application {
 
     public void setWildLogOptionsAndSave(WildLogOptions inWildLogOptions) {
         wildLogOptions = inWildLogOptions;
-        dbi.createOrUpdate(wildLogOptions);
+        dbi.updateWildLogOptions(wildLogOptions);
     }
 
     public int getThreadCount() {

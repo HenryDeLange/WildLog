@@ -1593,7 +1593,7 @@ public final class WildLogView extends JFrame {
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 UtilsTime.calculateSunAndMoon(sighting);
-                                app.getDBI().createOrUpdate(sighting, false);
+                                app.getDBI().updateSighting(sighting);
                                 setProgress(0 + (int)((t/(double)sightings.size())*100));
                                 setMessage("Sun and Moon Calculation: " + getProgress() + "%");
                             }
@@ -1623,7 +1623,7 @@ public final class WildLogView extends JFrame {
                                             sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
                                         }
                                     }
-                                    app.getDBI().createOrUpdate(sighting, false);
+                                    app.getDBI().updateSighting(sighting);
                                 }
                                 setProgress(0 + (int)((t/(double)sightings.size())*100));
                                 setMessage("Sun and Moon Calculation: " + getProgress() + "%");
@@ -2211,7 +2211,7 @@ public final class WildLogView extends JFrame {
                                         + ", FileType: " + wildLogFile.getFileType());
                                 finalHandleFeedback.println("+RESOLVED: Changed FileType to " + WildLogFileType.OTHER + ".");
                                 wildLogFile.setFileType(WildLogFileType.OTHER);
-                                app.getDBI().createOrUpdate(wildLogFile, true);
+                                app.getDBI().updateWildLogFile(wildLogFile);
                                 filesWithBadType++;
                             }
                             // Check the WildLogFile's linkage
@@ -2429,11 +2429,11 @@ public final class WildLogView extends JFrame {
                                 Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location("WildLog_lost_and_found");
-                                    app.getDBI().createOrUpdate(newLocation, null);
+                                    app.getDBI().createLocation(newLocation);
                                 }
                                 visit.setLocationName("WildLog_lost_and_found");
                                 // Still an issue with sightings not going to point to the correct place... (handled in the code below)
-                                app.getDBI().createOrUpdate(visit, visit.getName());
+                                app.getDBI().updateVisit(visit, visit.getName());
                             }
                             countVisits++;
                             setProgress(65 + (int)(countVisits/(double)allVisits.size()*3));
@@ -2453,10 +2453,10 @@ public final class WildLogView extends JFrame {
                                 Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location("WildLog_lost_and_found");
-                                    app.getDBI().createOrUpdate(newLocation, null);
+                                    app.getDBI().createLocation(newLocation);
                                 }
                                 sighting.setLocationName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(sighting, false);
+                                app.getDBI().updateSighting(sighting);
                             }
                             // Validate the Sighting to Element link
                             Element tempElement = app.getDBI().findElement(sighting.getElementName(), Element.class);
@@ -2468,10 +2468,10 @@ public final class WildLogView extends JFrame {
                                 Element newElement = app.getDBI().findElement("WildLog_lost_and_found", Element.class);
                                 if (newElement == null) {
                                     newElement = new Element("WildLog_lost_and_found");
-                                    app.getDBI().createOrUpdate(newElement, null);
+                                    app.getDBI().createElement(newElement);
                                 }
                                 sighting.setElementName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(sighting, false);
+                                app.getDBI().updateSighting(sighting);
                             }
                             // Validate the Sighting to Visit link
                             Visit tempVisit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
@@ -2485,17 +2485,17 @@ public final class WildLogView extends JFrame {
                                 if (newVisit == null) {
                                     newVisit = new Visit("WildLog_lost_and_found");
                                     newVisit.setLocationName("WildLog_lost_and_found");
-                                    app.getDBI().createOrUpdate(newVisit, null);
+                                    app.getDBI().createVisit(newVisit);
                                 }
                                 sighting.setVisitName("WildLog_lost_and_found");
                                 // Location
                                 Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location("WildLog_lost_and_found");
-                                    app.getDBI().createOrUpdate(newLocation, null);
+                                    app.getDBI().createLocation(newLocation);
                                 }
                                 sighting.setLocationName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(sighting, false);
+                                app.getDBI().updateSighting(sighting);
                             }
                             // Make sure the Sighting is using a legitimate Location-Visit pair
                             Visit checkSightingVisit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
@@ -2507,14 +2507,14 @@ public final class WildLogView extends JFrame {
                                 Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location("WildLog_lost_and_found");
-                                    app.getDBI().createOrUpdate(newLocation, null);
+                                    app.getDBI().createLocation(newLocation);
                                 }
                                 // Update sighting
                                 sighting.setLocationName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(sighting, false);
+                                app.getDBI().updateSighting(sighting);
                                 // Update visit
                                 checkSightingVisit.setLocationName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(checkSightingVisit, checkSightingVisit.getName());
+                                app.getDBI().updateVisit(checkSightingVisit, checkSightingVisit.getName());
                             }
                             countSightings++;
                             setProgress(68 + (int)(countSightings/(double)allSightings.size()*4));
@@ -2535,7 +2535,7 @@ public final class WildLogView extends JFrame {
                                     && sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
                                     && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
                                 sighting.setGPSAccuracy(GPSAccuracy.AVERAGE);
-                                app.getDBI().createOrUpdate(sighting, false);
+                                app.getDBI().updateSighting(sighting);
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("ERROR:     GPS information found without GPS Accuracy for Observation (" + sighting.getSightingCounter() + ").");
                                 finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
@@ -2545,7 +2545,7 @@ public final class WildLogView extends JFrame {
                                         && (sighting.getLatitude() == null || Latitudes.NONE.equals(sighting.getLatitude())
                                         || sighting.getLongitude() == null || Longitudes.NONE.equals(sighting.getLongitude()))) {
                                     sighting.setGPSAccuracy(GPSAccuracy.NONE);
-                                    app.getDBI().createOrUpdate(sighting, false);
+                                    app.getDBI().updateSighting(sighting);
                                     badGPSAccuracy++;
                                     finalHandleFeedback.println("ERROR:     GPS Accuracy information found without GPS location for Observation (" + sighting.getSightingCounter() + ").");
                                     finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
@@ -2562,7 +2562,7 @@ public final class WildLogView extends JFrame {
                                     && location.getLatitude() != null && !Latitudes.NONE.equals(location.getLatitude())
                                     && location.getLongitude() != null && !Longitudes.NONE.equals(location.getLongitude())) {
                                 location.setGPSAccuracy(GPSAccuracy.AVERAGE);
-                                app.getDBI().createOrUpdate(location, location.getName());
+                                app.getDBI().updateLocation(location, location.getName());
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("ERROR:     GPS information found without GPS Accuracy for Place (" + location.getName() + ").");
                                 finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
@@ -2572,7 +2572,7 @@ public final class WildLogView extends JFrame {
                                         && (location.getLatitude() == null || Latitudes.NONE.equals(location.getLatitude())
                                         || location.getLongitude() == null || Longitudes.NONE.equals(location.getLongitude()))) {
                                     location.setGPSAccuracy(GPSAccuracy.NONE);
-                                    app.getDBI().createOrUpdate(location, location.getName());
+                                    app.getDBI().updateLocation(location, location.getName());
                                     badGPSAccuracy++;
                                     finalHandleFeedback.println("ERROR:     GPS Accuracy information found without GPS location for Place (" + location.getName() + ").");
                                     finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
@@ -2781,7 +2781,7 @@ public final class WildLogView extends JFrame {
                                     double seconds = difference - minutes*60.0;
                                     sighting.setDurationMinutes(minutes);
                                     sighting.setDurationSeconds((double)seconds);
-                                    app.getDBI().createOrUpdate(sighting, false);
+                                    app.getDBI().updateSighting(sighting);
                                 }
                                 setProgress(0 + (int)((t/(double)sightingList.size())*100));
                                 setMessage("Duration Calculation: " + getProgress() + "%");
@@ -2810,7 +2810,7 @@ public final class WildLogView extends JFrame {
                                         double seconds = difference - minutes*60.0;
                                         sighting.setDurationMinutes(minutes);
                                         sighting.setDurationSeconds((double)seconds);
-                                        app.getDBI().createOrUpdate(sighting, false);
+                                        app.getDBI().updateSighting(sighting);
                                     }
                                 }
                                 setProgress(0 + (int)((t/(double)sightingList.size())*100));
@@ -2854,7 +2854,7 @@ public final class WildLogView extends JFrame {
                     int counter = 0;
                     for (Element element : listElements) {
                         // Save the element to the new DB
-                        syncDBI.createOrUpdate(element, null);
+                        syncDBI.createElement(element);
                         // Copy the files
                         WildLogFile wildLogFile = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), WildLogFile.class);
                         if (wildLogFile != null) {
@@ -2883,7 +2883,7 @@ public final class WildLogView extends JFrame {
                                 WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             }
                             // Create the WildLogFile entry in the DB
-                            syncDBI.createOrUpdate(wildLogFile, false);
+                            syncDBI.createWildLogFile(wildLogFile);
                         }
                         setProgress(20 + (int)(counter++/(double)listElements.size()*70));
                         setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
@@ -3106,7 +3106,7 @@ public final class WildLogView extends JFrame {
                         Location wildNoteLocation = app.getDBI().findLocation(WildLogConstants.WILDNOTE_LOCATION_NAME, Location.class);
                         if (wildNoteLocation == null) {
                             wildNoteLocation = new Location(WildLogConstants.WILDNOTE_LOCATION_NAME);
-                            app.getDBI().createOrUpdate(wildNoteLocation, null);
+                            app.getDBI().createLocation(wildNoteLocation);
                         }
                         setTaskProgress(13);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
@@ -3116,7 +3116,7 @@ public final class WildLogView extends JFrame {
                         while (app.getDBI().countVisits(tempVisit.getName(), null) > 0) {
                             tempVisit = new Visit(tempVisit.getName() + "_wl", tempVisit.getLocationName());
                         }
-                        app.getDBI().createOrUpdate(tempVisit, null);
+                        app.getDBI().createVisit(tempVisit);
                         setTaskProgress(15);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Elements
@@ -3124,7 +3124,7 @@ public final class WildLogView extends JFrame {
                         for (int t = 0; t < listElements.size(); t++) {
                             Element element = listElements.get(t);
                             if (app.getDBI().findElement(element.getPrimaryName(), Element.class) == null) {
-                                app.getDBI().createOrUpdate(element, null);
+                                app.getDBI().createElement(element);
                             }
                             setTaskProgress(15 + (int)(t/(double)listElements.size()*10));
                             setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
@@ -3143,7 +3143,7 @@ public final class WildLogView extends JFrame {
                                 sighting.setCertainty(Certainty.SURE);
                             }
                             UtilsTime.calculateSunAndMoon(sighting);
-                            app.getDBI().createOrUpdate(sighting, false);
+                            app.getDBI().createSighting(sighting, false);
                             // Check if there are any images to link
                             // TODO: Ek kan ook in die toekoms die "HasFoto" checkbox op WildNote gebruik om die linking meer akkuraat te maak...
                             if (mapFilesToLink != null && mapFilesToLink.get(sighting.getDate().getTime()/IMAGE_LINK_INTERVAL) != null) {
@@ -3422,7 +3422,7 @@ public final class WildLogView extends JFrame {
                             element.setScientificName(oldName);
                         }
                     }
-                    app.getDBI().createOrUpdate(element, oldName);
+                    app.getDBI().updateElement(element, oldName);
                 }
             }
         }

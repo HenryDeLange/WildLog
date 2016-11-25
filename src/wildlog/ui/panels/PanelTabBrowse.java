@@ -724,7 +724,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                             newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(newWildLogFile.getAbsolutePath()));
                             newWildLogFile.setFileSize(Files.size(newWildLogFile.getAbsolutePath()));
-                            app.getDBI().createOrUpdate(newWildLogFile, false);
+                            app.getDBI().createWildLogFile(newWildLogFile);
                             // Cleanup
                             lljTran.freeMemory();
                             // Stop any future tasks that might be submitted to prefent us loading the file unnessesarily
@@ -1387,7 +1387,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         List<WildLogFile> files = app.getDBI().listWildLogFiles(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
-                            app.getDBI().createOrUpdate(tempFile, true);
+                            app.getDBI().updateWildLogFile(tempFile);
                         }
                         UtilsFileProcessing.performFileUpload(new Element(sightingWrapper.getSighting().getElementName()),
                             Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getElementName()),
@@ -1402,7 +1402,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                                         wildLogFile.getFilename())).toString(), 
                                 null, WildLogFile.class);
                         uploadedWildLogFile.setDefaultFile(true);
-                        app.getDBI().createOrUpdate(uploadedWildLogFile, true);
+                        app.getDBI().updateWildLogFile(uploadedWildLogFile);
                     }
                 }
             }
@@ -1420,7 +1420,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         List<WildLogFile> files = app.getDBI().listWildLogFiles(Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
-                            app.getDBI().createOrUpdate(tempFile, true);
+                            app.getDBI().updateWildLogFile(tempFile);
                         }
                         UtilsFileProcessing.performFileUpload(new Location(sightingWrapper.getSighting().getLocationName()),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getLocationName()),
@@ -1435,7 +1435,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                                         wildLogFile.getFilename())).toString(),
                                 null, WildLogFile.class);
                         uploadedWildLogFile.setDefaultFile(true);
-                        app.getDBI().createOrUpdate(uploadedWildLogFile, true);
+                        app.getDBI().updateWildLogFile(uploadedWildLogFile);
                     }
                 }
             }
@@ -1449,7 +1449,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         List<WildLogFile> files = app.getDBI().listWildLogFiles(Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
-                            app.getDBI().createOrUpdate(tempFile, true);
+                            app.getDBI().updateWildLogFile(tempFile);
                         }
                         UtilsFileProcessing.performFileUpload(new Location(visit.getLocationName()),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getLocationName()),
@@ -1464,7 +1464,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                                         wildLogFile.getFilename())).toString(),
                                 null, WildLogFile.class);
                         uploadedWildLogFile.setDefaultFile(true);
-                        app.getDBI().createOrUpdate(uploadedWildLogFile, true);
+                        app.getDBI().updateWildLogFile(uploadedWildLogFile);
                     }
                 }
             }
@@ -1482,7 +1482,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         List<WildLogFile> files = app.getDBI().listWildLogFiles(Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
-                            app.getDBI().createOrUpdate(tempFile, true);
+                            app.getDBI().updateWildLogFile(tempFile);
                         }
                         UtilsFileProcessing.performFileUpload(new Visit(sightingWrapper.getSighting().getVisitName()),
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getVisitName()),
@@ -1497,7 +1497,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                                         wildLogFile.getFilename())).toString(),
                                 null, WildLogFile.class);
                         uploadedWildLogFile.setDefaultFile(true);
-                        app.getDBI().createOrUpdate(uploadedWildLogFile, true);
+                        app.getDBI().updateWildLogFile(uploadedWildLogFile);
                     }
                 }
             }

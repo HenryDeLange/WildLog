@@ -409,7 +409,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             WildLogOptions options = app.getDBI().findWildLogOptions(WildLogOptions.class);
                             options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
                             options.setWorkspaceID(app.getDBI().generateID());
-                            newDBI.createOrUpdate(options);
+                            newDBI.updateWildLogOptions(options);
                             setProgress(3);
                             setMessage("Workspace Export: " + getProgress() + "%");
                             // Save the selected nodes
@@ -533,7 +533,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         location.setDescription("");
                     }
                     if (inNewDBI.findLocation(location.getName(), Location.class) == null) {
-                        inNewDBI.createOrUpdate(location, null);
+                        inNewDBI.createLocation(location);
                         saveFiles(inNewDBI, inDestinationWorkspace, location);
                     }
                 }
@@ -544,7 +544,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         visit.setDescription("");
                     }
                     if (inNewDBI.findVisit(visit.getName(), Visit.class) == null) {
-                        inNewDBI.createOrUpdate(visit, null);
+                        inNewDBI.createVisit(visit);
                         saveFiles(inNewDBI, inDestinationWorkspace, visit);
                     }
                 }
@@ -552,7 +552,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 if (dataWrapper.getDataObject() instanceof Element) {
                     Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getPrimaryName(), Element.class);
                     if (inNewDBI.findElement(element.getPrimaryName(), Element.class) == null) {
-                        inNewDBI.createOrUpdate(element, null);
+                        inNewDBI.createElement(element);
                         saveFiles(inNewDBI, inDestinationWorkspace, element);
                     }
                 }
@@ -578,7 +578,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     }
                     if (inNewDBI.findSighting(sighting.getSightingCounter(), Sighting.class) == null) {
                         // Note: The sighting ID needs to be the same for the linked images to work...
-                        inNewDBI.createOrUpdate(sighting, true);
+                        inNewDBI.createSighting(sighting, true);
                         saveFiles(inNewDBI, inDestinationWorkspace, sighting);
                     }
                 }
@@ -615,7 +615,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     UtilsFileProcessing.copyFile(source, destination, false, true);
                     wildLogFile.setDBFilePath(inDestinationWorkspace.relativize(destination).toString());
                     wildLogFile.setFilename(destination.getFileName().toString());
-                    inNewDBI.createOrUpdate(wildLogFile, false);
+                    inNewDBI.createWildLogFile(wildLogFile);
                 }
             }
         }

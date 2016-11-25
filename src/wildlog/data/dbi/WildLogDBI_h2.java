@@ -320,7 +320,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Element tempElement = new Element();
                     populateElement(results, tempElement);
                     tempElement.setPrimaryName(inPrefix + results.getString("PRIMARYNAME"));
-                    success = success && createOrUpdate(tempElement, null);
+                    success = success && createElement(tempElement);
                 }
                 results.close();
             }
@@ -331,7 +331,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Location tempLocation = new Location();
                     populateLocation(results, tempLocation);
                     tempLocation.setName(inPrefix + results.getString("NAME"));
-                    success = success && createOrUpdate(tempLocation, null);
+                    success = success && createLocation(tempLocation);
                 }
                 results.close();
             }
@@ -343,7 +343,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     populateVisit(results, tempVisit);
                     tempVisit.setName(inPrefix + results.getString("NAME"));
                     tempVisit.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
-                    success = success && createOrUpdate(tempVisit, null);
+                    success = success && createVisit(tempVisit);
                 }
                 results.close();
             }
@@ -357,7 +357,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
                     tempSighting.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
                     tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
-                    success = success && createOrUpdate(tempSighting, false);
+                    success = success && createSighting(tempSighting, false);
                 }
                 results.close();
             }
@@ -368,7 +368,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         WildLogFile wildLogFile = new WildLogFile();
                         populateWildLogFile(results, wildLogFile);
                         wildLogFile.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
-                        success = success && createOrUpdate(wildLogFile, false);
+                        success = success && createWildLogFile(wildLogFile);
                     }
                 }
             }
@@ -417,7 +417,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 element.setScientificName(resultSet.getString("SCIENTIFIC_NAME"));
                 element.setType(ElementType.getEnumFromText(resultSet.getString("CREATURE_TYPE")));
                 if (countElements(element.getPrimaryName(), null) == 0) {
-                    success = success && createOrUpdate(element, null);
+                    success = success && createElement(element);
                 }
                 // Import Locations
                 if (success) {
@@ -453,7 +453,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         location.setLonSeconds(UtilsGPS.getSeconds(lon));
                     }
                     if (countLocations(location.getName()) == 0) {
-                        success = success && createOrUpdate(location, null);
+                        success = success && createLocation(location);
                     }
                 }
                 // Import Visits
@@ -476,7 +476,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     }
                     visit.setDescription(resultSet.getString("PERIOD_DESCRIPTION"));
                     if (countVisits(visit.getName(), null) == 0) {
-                        success = success && createOrUpdate(visit, null);
+                        success = success && createVisit(visit);
                     }
                 }
                 // Import Sightings
@@ -539,7 +539,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     sighting.setLifeStatus(LifeStatus.getEnumFromText(resultSet.getString("LIFE_STATUS")));
                     sighting.setTag(resultSet.getString("TAG"));
                     sighting.setDetails(resultSet.getString("DETAILS"));
-                    success = success && createOrUpdate(sighting, false);
+                    success = success && createSighting(sighting, false);
                 }
             }
         }
@@ -670,8 +670,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             }
                         }
                         // Save the creature
-                        if ((isExisting && inUpdateExistingElements) || (!isExisting && inAddNewElements)) {
-                            success = success && createOrUpdate(elementToSave, oldName);
+                        if (isExisting && inUpdateExistingElements) {
+                            success = success && updateElement(elementToSave, oldName);
+                        }
+                        else
+                        if (!isExisting && inAddNewElements) {
+                            success = success && createElement(elementToSave);
                         }
                     }
                     counter++;
@@ -752,7 +756,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             results = state.executeQuery("SELECT * FROM WILDLOG");
             // If there isn't a row create one
             if (!results.next()) {
-                createOrUpdate(new WildLogOptions());
+                createWildLogOptions(new WildLogOptions());
                 // Check whether this is a very old database (before the WildLogOptions existed)
                 results = state.executeQuery("select count(*) from information_schema.columns where table_name = 'SIGHTINGS' and column_name = 'MOONLIGHT'");
                 if (results.next() && results.getInt(1) < 1) {
@@ -1061,14 +1065,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             while (results.next()) {
                 Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
                 sighting.setTimeAccuracy(TimeAccuracy.UNKNOWN);
-                createOrUpdate(sighting, false);
+                updateSighting(sighting);
             }
             results.close();
             results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 0");
             while (results.next()) {
                 Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
                 sighting.setTimeAccuracy(TimeAccuracy.GOOD);
-                createOrUpdate(sighting, false);
+                updateSighting(sighting);
             }
             results.close();
             state.execute("ALTER TABLE SIGHTINGS DROP COLUMN UNKNOWNTIME");
@@ -1145,12 +1149,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACEID bigint DEFAULT 0");
             WildLogOptions options = findWildLogOptions(WildLogOptions.class);
             options.setWorkspaceID(generateID());
-            createOrUpdate(options);
+            updateWildLogOptions(options);
             // Recalculate all sun and moon phase info (the enums changed)
             List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
             for (Sighting sighting : lstSightings) {
                 UtilsTime.calculateSunAndMoon(sighting);
-                createOrUpdate(sighting, false);
+                updateSighting(sighting);
             }
             // Increase the cache size slightly (doubled)
             state.execute("SET CACHE_SIZE 32768");

@@ -255,7 +255,7 @@ public class AdvancedDialog extends JDialog {
                 // Because the sighting's GPS point changed I need to recalculate the Sun and Moon phase
                 UtilsTime.calculateSunAndMoon(sighting);
                 // Save the changes
-                app.getDBI().createOrUpdate(sighting, false);
+                app.getDBI().updateSighting(sighting);
             }
             panelVisit.doTheRefresh(null);
         }
@@ -280,7 +280,7 @@ public class AdvancedDialog extends JDialog {
                 sighting.setDurationSeconds(seconds);
             }
             // Save the changes
-            app.getDBI().createOrUpdate(sighting, false);
+            app.getDBI().updateSighting(sighting);
         }
         panelVisit.doTheRefresh(null);
         this.getGlassPane().setCursor(Cursor.getDefaultCursor());
@@ -379,7 +379,7 @@ public class AdvancedDialog extends JDialog {
         for (Sighting sighting : listSightings) {
             // Recalculate the Sun and Moon phase
             UtilsTime.calculateSunAndMoon(sighting);
-            app.getDBI().createOrUpdate(sighting, false);
+            app.getDBI().updateSighting(sighting);
         }
         panelVisit.doTheRefresh(null);
         setVisible(false);

@@ -110,7 +110,6 @@ public class MergeLocationDialog extends JDialog {
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -121,7 +120,8 @@ public class MergeLocationDialog extends JDialog {
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
@@ -152,12 +152,12 @@ public class MergeLocationDialog extends JDialog {
             List<Visit> listVisits = app.getDBI().listVisits(null, tempFromLocationName, null, Visit.class);
             for (Visit visit : listVisits) {
                 visit.setLocationName((String)lstToLocation.getSelectedValue());
-                app.getDBI().createOrUpdate(visit, visit.getName());
+                app.getDBI().updateVisit(visit, visit.getName());
             }
             List<Sighting> listSightings = app.getDBI().listSightings(0, null, (String)lstFromLocation.getSelectedValue(), null, false, Sighting.class);
             for (Sighting sighting : listSightings) {
                 sighting.setLocationName((String)lstToLocation.getSelectedValue());
-                app.getDBI().createOrUpdate(sighting, false);
+                app.getDBI().updateSighting(sighting);
             }
             app.getDBI().deleteLocation(tempFromLocationName);
             setVisible(false);

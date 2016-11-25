@@ -220,7 +220,7 @@ public class FilterTemplatesDialog extends JDialog {
                 serializer.flush();
                 String dataValue = Base64.getEncoder().encodeToString(outputStream.toByteArray());
                 // Save to the database
-                app.getDBI().createOrUpdate(new AdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), templateName, dataValue));
+                app.getDBI().createAdhocData(new AdhocData(AdhocData.ADHOC_FIELD_IDS.FILTER_TEMPLATES.name(), templateName, dataValue));
                 // Reload the data
                 loadData();
             }

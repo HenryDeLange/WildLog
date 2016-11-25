@@ -251,7 +251,7 @@ public final class UtilsFileProcessing {
                 Calendar.getInstance().getTime(),
                 UtilsImageProcessing.getDateFromFileDate(inFromFile),
                 fileSize);
-        inApp.getDBI().createOrUpdate(wildLogFile, false);
+        inApp.getDBI().createWildLogFile(wildLogFile);
         return wildLogFile;
     }
 

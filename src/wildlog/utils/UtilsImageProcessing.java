@@ -258,7 +258,7 @@ public class UtilsImageProcessing {
             else {
                 lstFiles.get(t).setDefaultFile(true);
             }
-            inApp.getDBI().createOrUpdate(lstFiles.get(t), true);
+            inApp.getDBI().updateWildLogFile(lstFiles.get(t));
         }
         newImageIndex = 0;
         return newImageIndex;

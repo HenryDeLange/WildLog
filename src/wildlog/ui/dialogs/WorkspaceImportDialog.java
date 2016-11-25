@@ -437,12 +437,12 @@ public class WorkspaceImportDialog extends JDialog {
                     Location workspaceLocation = app.getDBI().findLocation(importLocation.getName(), Location.class);
                     if (workspaceLocation == null) {
                         // New
-                        app.getDBI().createOrUpdate(importLocation, null);
+                        app.getDBI().createLocation(importLocation);
                     }
                     else {
                         // Update, only if the option was selected to overwrite the active workspace's entry
                         if (rdbKeepImport.isSelected()) {
-                            app.getDBI().createOrUpdate(importLocation, importLocation.getName());
+                            app.getDBI().updateLocation(importLocation, importLocation.getName());
                         }
                         // If the records matching the prefix already exists, then update FileID
                         // (Because the same entry can be in the tree more than once.)
@@ -459,12 +459,12 @@ public class WorkspaceImportDialog extends JDialog {
                     Visit workspaceVisit = app.getDBI().findVisit(importVisit.getName(), Visit.class);
                     if (workspaceVisit == null) {
                         // New
-                        app.getDBI().createOrUpdate(importVisit, null);
+                        app.getDBI().createVisit(importVisit);
                     }
                     else {
                         // Update, only if the option was selected to overwrite the active workspace's entry
                         if (rdbKeepImport.isSelected()) {
-                            app.getDBI().createOrUpdate(importVisit, importVisit.getName());
+                            app.getDBI().updateVisit(importVisit, importVisit.getName());
                         }
                         // If the records matching the prefix already exists, then update FileID
                         // (Because the same entry can be in the tree more than once.)
@@ -480,12 +480,12 @@ public class WorkspaceImportDialog extends JDialog {
                     Element workspaceElement = app.getDBI().findElement(importElement.getPrimaryName(), Element.class);
                     if (workspaceElement == null) {
                         // New
-                        app.getDBI().createOrUpdate(importElement, null);
+                        app.getDBI().createElement(importElement);
                     }
                     else {
                         // Update, only if the option was selected to overwrite the active workspace's entry
                         if (rdbKeepImport.isSelected()) {
-                            app.getDBI().createOrUpdate(importElement, importElement.getPrimaryName());
+                            app.getDBI().updateElement(importElement, importElement.getPrimaryName());
                         }
                         // If the records matching the prefix already exists, then update FileID
                         // (Because the same entry can be in the tree more than once.)
@@ -504,19 +504,19 @@ public class WorkspaceImportDialog extends JDialog {
                     if (workpaceSighting == null) {
                         // New
                         // Note: The sighting ID needs to be the same in the new workspace for the linked images to work...
-                        app.getDBI().createOrUpdate(importSighting, true);
+                        app.getDBI().createSighting(importSighting, true);
                     }
                     else {
                         // Update, only if the option was selected to overwrite the active workspace's entry
                         if (rdbKeepImport.isSelected()) {
-                            app.getDBI().createOrUpdate(importSighting, false);
+                            app.getDBI().updateSighting(importSighting);
                         }
                         else {
                             // Make a new copy of the sighting with a new unique ID.
                             // (Only when a prefix was given, else assume that it is the same sighting.)
                             if (txtPrefix.getText() != null && !txtPrefix.getText().isEmpty()) {
                                 importSighting.setSightingCounter(0);
-                                app.getDBI().createOrUpdate(importSighting, false);
+                                app.getDBI().createSighting(importSighting, false);
                             }
                             // No need to worry about the sighting being in the tree more than once...
                         }
@@ -555,7 +555,7 @@ public class WorkspaceImportDialog extends JDialog {
                             importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath(),
                             fileToImport.getAbsolutePath(), false, true);
                     // Save DB entry
-                    app.getDBI().createOrUpdate(fileToImport, false);
+                    app.getDBI().createWildLogFile(fileToImport);
                     // Create thumbnails
                     if (WildLogFileType.IMAGE.equals(fileToImport.getFileType())) {
                         fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
@@ -606,7 +606,7 @@ public class WorkspaceImportDialog extends JDialog {
                             // Save DB entry
                             fileToImport.setFilename(destinationPath.getFileName().toString());
                             fileToImport.setDBFilePath(Paths.get(fileToImport.getDBFilePath()).getParent().resolve(destinationPath.getFileName()).toString());
-                            app.getDBI().createOrUpdate(fileToImport, false);
+                            app.getDBI().createWildLogFile(fileToImport);
                             // Create thumbnails
                             if (WildLogFileType.IMAGE.equals(fileToImport.getFileType())) {
                                 fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);

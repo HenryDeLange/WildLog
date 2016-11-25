@@ -1418,7 +1418,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 populateElementFromUI();
 
                 // Save the element
-                if (app.getDBI().createOrUpdate(element, oldName) == true) {
+                boolean result;
+                if (oldName == null || oldName.isEmpty()) {
+                    result = app.getDBI().createElement(element);
+                }
+                else {
+                    result = app.getDBI().updateElement(element, oldName);
+                }
+                if (result == true) {
                     txtPrimaryName.setBackground(new java.awt.Color(204, 255, 204));
                     txtPrimaryName.setText(element.getPrimaryName());
                     lastSavedElement = element.cloneShallow();

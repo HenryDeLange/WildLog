@@ -1597,7 +1597,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         // SAVE (Only save to DB if not in bulk upload mode)
         if (!bulkUploadMode) {
-            if (app.getDBI().createOrUpdate(sighting, false) == false) {
+            boolean result;
+            if (sighting.getSightingCounter() == 0) {
+                result = app.getDBI().createSighting(sighting, false);
+            }
+            else {
+                result = app.getDBI().updateSighting(sighting);
+            }
+            if (result == false) {
                 getGlassPane().setVisible(true);
                 JOptionPane.showMessageDialog(this,
                         "Could not save the Observation.",

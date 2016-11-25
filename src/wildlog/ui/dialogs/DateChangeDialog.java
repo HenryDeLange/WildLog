@@ -210,7 +210,7 @@ public class DateChangeDialog extends JDialog {
                 // Because the sighting's date changed I need to recalculate the Sun and Moon phase
                 UtilsTime.calculateSunAndMoon(sighting);
                 // Save the changes
-                app.getDBI().createOrUpdate(sighting, false);
+                app.getDBI().updateSighting(sighting);
             }
             // We are done, dispose this dialog
             setVisible(false);
