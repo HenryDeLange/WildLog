@@ -14,6 +14,7 @@ public class WildLogOptions {
     private String workspaceName;
     private long workspaceID;
     private boolean uploadLogs;
+    private boolean bundledPlayers;
 
 
     public int getDatabaseVersion() {
@@ -110,6 +111,14 @@ public class WildLogOptions {
 
     public void setUploadLogs(boolean inUploadLogs) {
         uploadLogs = inUploadLogs;
+    }
+
+    public boolean isBundledPlayers() {
+        return bundledPlayers;
+    }
+
+    public void setBundledPlayers(boolean inBundledPlayers) {
+        bundledPlayers = inBundledPlayers;
     }
 
 }
