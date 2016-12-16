@@ -64,7 +64,6 @@ public class MergeVisitDialog extends JDialog {
         setMaximumSize(new java.awt.Dimension(740, 600));
         setMinimumSize(new java.awt.Dimension(740, 600));
         setModal(true);
-        setName("Form"); // NOI18N
         setPreferredSize(new java.awt.Dimension(740, 600));
         setResizable(false);
 

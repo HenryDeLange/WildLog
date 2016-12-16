@@ -65,6 +65,7 @@ public class AdvancedDialog extends JDialog {
         btnSetDuration = new javax.swing.JButton();
         btnCorrectTime = new javax.swing.JButton();
         btnDuplicateSightings = new javax.swing.JButton();
+        btnMergeSightings = new javax.swing.JButton();
         btnMoveVisit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -188,6 +189,25 @@ public class AdvancedDialog extends JDialog {
             }
         });
         getContentPane().add(btnDuplicateSightings);
+
+        btnMergeSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Image.png"))); // NOI18N
+        btnMergeSightings.setText("Move Files from one Observation to another Observation");
+        btnMergeSightings.setToolTipText("Move the Files from one Observation to another Observation. Optionally deleting the original Observation in the process.");
+        btnMergeSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMergeSightings.setFocusPainted(false);
+        btnMergeSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnMergeSightings.setIconTextGap(8);
+        btnMergeSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnMergeSightings.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnMergeSightings.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnMergeSightings.setName("btnMergeSightings"); // NOI18N
+        btnMergeSightings.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnMergeSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMergeSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnMergeSightings);
 
         btnMoveVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/LocationList.gif"))); // NOI18N
         btnMoveVisit.setText("Move this Period to a different Place");
@@ -386,11 +406,20 @@ public class AdvancedDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnSetSunAndMoonActionPerformed
 
+    private void btnMergeSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMergeSightingsActionPerformed
+        MergeSightingDialog dialog = new MergeSightingDialog(app, visit);
+        dialog.setVisible(true);
+        panelVisit.doTheRefresh(null);
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnMergeSightingsActionPerformed
+
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChecklist;
     private javax.swing.JButton btnCorrectTime;
     private javax.swing.JButton btnDuplicateSightings;
+    private javax.swing.JButton btnMergeSightings;
     private javax.swing.JButton btnMoveVisit;
     private javax.swing.JButton btnSetAllGPS;
     private javax.swing.JButton btnSetDuration;

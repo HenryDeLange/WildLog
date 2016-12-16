@@ -58,7 +58,6 @@ public class MergeLocationDialog extends JDialog {
         setMaximumSize(new java.awt.Dimension(650, 500));
         setMinimumSize(new java.awt.Dimension(650, 500));
         setModal(true);
-        setName("Form"); // NOI18N
         setPreferredSize(new java.awt.Dimension(650, 500));
         setResizable(false);
 

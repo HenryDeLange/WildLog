@@ -1,5 +1,6 @@
 package wildlog.ui.reports.implementations;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -263,8 +264,12 @@ public class VisitChart extends AbstractReport<Sighting> {
             if (dataWrapper == null) {
                 Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
                 dataWrapper = new ReportDataWrapper();
-                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
-                    dataWrapper.count = (int) ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                if (visit != null && visit.getStartDate() != null) {
+                    LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    if (endDate == null) {
+                        endDate = LocalDate.now();
+                    }
+                    dataWrapper.count = (int) ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                 }
                 else {
                      dataWrapper.count = 0;
@@ -310,8 +315,12 @@ public class VisitChart extends AbstractReport<Sighting> {
                 processedVisits.add(sighting.getVisitName());
                 String duration = "Unknown";
                 Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
-                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                if (visit != null && visit.getStartDate() != null) {
+                    LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    if (endDate == null) {
+                        endDate = LocalDate.now();
+                    }
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                     duration = days + " days";
                 }
                 ReportDataWrapper dataWrapper = mapData.get(duration);
@@ -460,8 +469,12 @@ public class VisitChart extends AbstractReport<Sighting> {
             ReportDataWrapper dataWrapper = mapData.get(sighting.getVisitName());
             if (dataWrapper == null) {
                 Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
-                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                if (visit != null && visit.getStartDate() != null) {
+                    LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    if (endDate == null) {
+                        endDate = LocalDate.now();
+                    }
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                     dataWrapper = new ReportDataWrapper(sighting.getVisitName(), days, 0);
                     mapData.put(sighting.getVisitName(), dataWrapper);
                 }
@@ -520,8 +533,12 @@ public class VisitChart extends AbstractReport<Sighting> {
             if (dataWrapper == null) {
                 if (visitLevelInfo == null) {
                     Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                    if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
-                        long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                    if (visit != null && visit.getStartDate() != null) {
+                        LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                        if (endDate == null) {
+                            endDate = LocalDate.now();
+                        }
+                        long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                         visitLevelInfo = new ReportCountWrapper(0, 0, 0, (int) days);
                         mapKnownVisitInfo.put(sighting.getVisitName(), visitLevelInfo);
                     }
@@ -569,8 +586,12 @@ public class VisitChart extends AbstractReport<Sighting> {
             ReportDataWrapper dataWrapper = mapData.get(sighting.getVisitName());
             if (dataWrapper == null) {
                 Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
-                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                if (visit != null && visit.getStartDate() != null) {
+                    LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    if (endDate == null) {
+                        endDate = LocalDate.now();
+                    }
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                     dataWrapper = new ReportDataWrapper(sighting.getVisitName(), new HashSet<String>(), (int) days);
                     mapData.put(sighting.getVisitName(), dataWrapper);
                 }

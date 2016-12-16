@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -321,8 +322,12 @@ public class HeatMap extends AbstractMap<Sighting> {
         for (Sighting sighting : inLstSightings) {
             if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
                 Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
-                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                if (visit != null && visit.getStartDate() != null) {
+                    LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    if (endDate == null) {
+                        endDate = LocalDate.now();
+                    }
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                     mapVisitDuration.put(sighting.getVisitName(), days);
                 }
                 else {
@@ -416,8 +421,12 @@ public class HeatMap extends AbstractMap<Sighting> {
         for (Sighting sighting : inLstSightings) {
             if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
                 Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
-                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                if (visit != null && visit.getStartDate() != null) {
+                    LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    if (endDate == null) {
+                        endDate = LocalDate.now();
+                    }
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                     mapVisitDuration.put(sighting.getVisitName(), days);
                 }
                 else {
@@ -511,8 +520,12 @@ public class HeatMap extends AbstractMap<Sighting> {
         for (Sighting sighting : inLstSightings) {
             if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
                 Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                if (visit != null && visit.getStartDate() != null && visit.getEndDate() != null) {
-                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), UtilsTime.getLocalDateFromDate(visit.getEndDate()));
+                if (visit != null && visit.getStartDate() != null) {
+                    LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    if (endDate == null) {
+                        endDate = LocalDate.now();
+                    }
+                    long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                     mapVisitDuration.put(sighting.getVisitName(), days);
                 }
                 else {

@@ -547,10 +547,37 @@ public class UtilsImageProcessing {
             WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
         }
     }
+    
+    /**
+     * Resizes the provided image to the specified size. <br>
+     * <b>WARNING: This overwrites the original file.</b>
+     * @param inWildLogFile
+     * @param inSize
+     */
+    public static void resizeImage(WildLogFile inWildLogFile, int inSize) {
+        // Resize the file and then save the thumbnail over the original
+        ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inWildLogFile.getAbsolutePath(), inSize, true);
+        try {
+            // Create the image to save
+            BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics2D = bufferedImage.createGraphics();
+            graphics2D.drawImage(thumbnail.getImage(), 0, 0, null);
+            // Hardcoding all thumbnails to be JPG (even originally PNG images)
+            ImageIO.write(bufferedImage, "jpg", inWildLogFile.getAbsolutePath().toFile());
+            graphics2D.dispose();
+        }
+        catch (IOException ex) {
+            // This can generate "Access is denied" IO exceptions when multiple threads try to create the icons for the first time. 
+            // I'm OK with that and don't want to add sync blocks just to handle that initial posible scenario. 
+            // If it continues or gives problems with "real" files, then fix it properly...
+            WildLogApp.LOGGER.log(Level.SEVERE, "Current thread name was -> {0}", Thread.currentThread().getName());
+            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+        }
+    }
 
     /**
      * Calculates the absolute path to the thumbnail for this size.
-     * @param inWildLogFile
+     * @param inRelativePath
      * @param inSize
      * @return
      */

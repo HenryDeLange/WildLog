@@ -88,6 +88,7 @@ import wildlog.maps.kml.generator.KmlGenerator;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
+import wildlog.ui.dialogs.ImageResizeDialog;
 import wildlog.ui.dialogs.MergeElementsDialog;
 import wildlog.ui.dialogs.MergeLocationDialog;
 import wildlog.ui.dialogs.MergeVisitDialog;
@@ -367,6 +368,8 @@ public final class WildLogView extends JFrame {
         mnuMergeLocations = new javax.swing.JMenuItem();
         mnuMergeVisit = new javax.swing.JMenuItem();
         mnuMergeElements = new javax.swing.JMenuItem();
+        jSeparator21 = new javax.swing.JPopupMenu.Separator();
+        mnuReduceImagesSize = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
@@ -388,6 +391,7 @@ public final class WildLogView extends JFrame {
         chkMnuUseScienteficName = new javax.swing.JCheckBoxMenuItem();
         chkMnuEnableSounds = new javax.swing.JCheckBoxMenuItem();
         chkMnuUploadLogs = new javax.swing.JCheckBoxMenuItem();
+        chkMnuUseBundledMediaViewers = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         mnuAboutWildNote = new javax.swing.JMenuItem();
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
@@ -1139,6 +1143,20 @@ public final class WildLogView extends JFrame {
         });
         advancedMenu.add(mnuMergeElements);
 
+        jSeparator21.setName("jSeparator21"); // NOI18N
+        advancedMenu.add(jSeparator21);
+
+        mnuReduceImagesSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File_Small.png"))); // NOI18N
+        mnuReduceImagesSize.setText("Reduce the size of Images");
+        mnuReduceImagesSize.setToolTipText("Reduce the resolution of certain images to reduce the overall size of the Workspace.");
+        mnuReduceImagesSize.setName("mnuReduceImagesSize"); // NOI18N
+        mnuReduceImagesSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuReduceImagesSizeActionPerformed(evt);
+            }
+        });
+        advancedMenu.add(mnuReduceImagesSize);
+
         menuBar.add(advancedMenu);
 
         extraMenu.setText("Extra");
@@ -1337,6 +1355,17 @@ public final class WildLogView extends JFrame {
             }
         });
         mnuOther.add(chkMnuUploadLogs);
+
+        chkMnuUseBundledMediaViewers.setSelected(true);
+        chkMnuUseBundledMediaViewers.setText("Use Bundled Media Viewers (if available)");
+        chkMnuUseBundledMediaViewers.setToolTipText("If this option is selected WildLog will try to use the bundled media players to open supported file types instead. If no media player is bundled, a non-media file is selected or if this option is desabled, then the default file opener for the operating system will be used.");
+        chkMnuUseBundledMediaViewers.setName("chkMnuUseBundledMediaViewers"); // NOI18N
+        chkMnuUseBundledMediaViewers.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuUseBundledMediaViewersItemStateChanged(evt);
+            }
+        });
+        mnuOther.add(chkMnuUseBundledMediaViewers);
 
         settingsMenu.add(mnuOther);
 
@@ -3872,6 +3901,32 @@ public final class WildLogView extends JFrame {
         app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_chkMnuUploadLogsItemStateChanged
 
+    private void chkMnuUseBundledMediaViewersItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseBundledMediaViewersItemStateChanged
+
+
+// TODO: Implement die gebruik hiervan
+
+
+        WildLogOptions options = app.getWildLogOptions();
+        options.setBundledPlayers(chkMnuUseBundledMediaViewers.isSelected());
+        app.setWildLogOptionsAndSave(options);
+    }//GEN-LAST:event_chkMnuUseBundledMediaViewersItemStateChanged
+
+    private void mnuReduceImagesSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReduceImagesSizeActionPerformed
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
+                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        if (result == JOptionPane.OK_OPTION) {
+            ImageResizeDialog dialog = new ImageResizeDialog(app.getMainFrame());
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_mnuReduceImagesSizeActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3913,6 +3968,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
     private javax.swing.JCheckBoxMenuItem chkMnuUploadLogs;
+    private javax.swing.JCheckBoxMenuItem chkMnuUseBundledMediaViewers;
     private javax.swing.JCheckBoxMenuItem chkMnuUseIconTables;
     private javax.swing.JCheckBoxMenuItem chkMnuUseScienteficName;
     private javax.swing.JMenu exportMenu;
@@ -3939,6 +3995,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;
+    private javax.swing.JPopupMenu.Separator jSeparator21;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
@@ -3994,6 +4051,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuMoveVisits;
     private javax.swing.JMenu mnuOther;
     private javax.swing.JMenu mnuPerformance;
+    private javax.swing.JMenuItem mnuReduceImagesSize;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuSunAndMoon;

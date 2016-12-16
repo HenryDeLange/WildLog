@@ -1223,8 +1223,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         ResultSet results = null;
         try {
             state = conn.createStatement();
-            // Add the new column
+            // Add the new columns
             state.execute("ALTER TABLE WILDLOG ADD COLUMN UPLOADLOGS smallint DEFAULT true");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN BUNDLEDPLAYERS smallint DEFAULT true");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=8");
         }

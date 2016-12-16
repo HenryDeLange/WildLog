@@ -470,7 +470,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(1005, 685));
         setModal(true);
-        setName("Form"); // NOI18N
         setPreferredSize(new java.awt.Dimension(1005, 685));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {

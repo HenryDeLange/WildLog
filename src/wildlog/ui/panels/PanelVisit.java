@@ -139,7 +139,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         // Setup the table
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
         UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);
-
         // setup the file dropping
         if (!isPopup) {
             FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
@@ -152,11 +151,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 }
             });
         }
-
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtName);
         UtilsUI.attachClipboardPopup(txtDescription);
-
         // Setup info for tab headers
         tabTitle = visit.getName();
         tabIconURL = app.getClass().getResource("resources/icons/Visit.gif");
