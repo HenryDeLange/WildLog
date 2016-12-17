@@ -5,18 +5,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * This enum centralizes all file path related logic for the application. <br/>
- * General notes and recommended use: <br/>
- *  - For relative paths all enums defined here will <b>start with a File Separator</b>. <br/>
+ * This enum centralizes all file path related logic for the application. <br>
+ * General notes and recommended use: <br>
+ *  - For relative paths all enums defined here will <b>start with a File Separator</b>. <br>
  *  - All paths defined here will <b>end without File Separators</b>.
  */
 public enum WildLogPaths {
-    /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*//** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
+    /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
     DEFAUL_SETTINGS_FOLDER                (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
     OPEN_H2                               (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.4.187.jar")),
-//    /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
-//    OPEN_OPENMAP                          (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
+    /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
+    OPEN_JPEGVIEW                         (Paths.get(System.getProperty("user.dir"), "JPEGView", "JPEGView.exe")),
+    /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
+    OPEN_MEDIA_PLAYER_CLASSIC             (Paths.get(System.getProperty("user.dir"), "MPC-HC", "mpc-hc.exe")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.
      * The workspacePrefix already has this value appended. */
     DEFAULT_WORKSPACE_NAME                (Paths.get("WildLog")),
@@ -41,7 +43,6 @@ public enum WildLogPaths {
     WILDLOG_BACKUPS_MONTHLY               (Paths.get("Backup", "Auto")),
     WILDLOG_BACKUPS_CHECK_AND_CLEAN       (Paths.get("Backup", "CheckAndClean")),
     WILDLOG_BACKUPS_UPGRADE               (Paths.get("Backup", "Upgrade")),
-    WILDLOG_TEMP                          (Paths.get(System.getProperty("user.home"), "WildLogSettings", "Temp")),
     WILDLOG_EXPORT                        (Paths.get("Export")),
     WILDLOG_EXPORT_KML                    (Paths.get("Export", "KML")),
     WILDLOG_EXPORT_KML_THUMBNAILS         (Paths.get("Export", "KML", "Thumbnails")),
@@ -72,7 +73,9 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_XLS                    (Paths.get("Export", "Excel")),
     WILDLOG_EXPORT_XLS_PAARL              (Paths.get("Export", "Excel", "Paarl Format")),
     WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace")),
-    WILDLOG_BUNDLED_APPLICATION           (Paths.get("WildLogApplication"));
+    WILDLOG_BUNDLED_APPLICATION           (Paths.get("WildLogApplication")),
+    // Folder for temporary files
+    WILDLOG_TEMP                          (Paths.get(System.getProperty("user.home"), "WildLogSettings", "Temp"));
 
     private static Path activeWorkspacePrefix;
     private final Path path;

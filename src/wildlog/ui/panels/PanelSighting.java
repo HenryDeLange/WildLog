@@ -1827,7 +1827,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
             else {
                 // Handle it if there isn't a GPS to use
-                // Only show the messages if the user clicked the button
+                // Only show the messages if the user clicked the button (automatic calls will use a null event)
                 if (evt != null) {
                     // If the location has a GPS point, as whether it should be used for the calculation.
                     if (locationWL.getLatitude() != null && locationWL.getLongitude() != null
@@ -2048,6 +2048,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             && cmbTimeAccuracy.isEnabled()) {
             cmbTimeAccuracy.setSelectedItem(TimeAccuracy.GOOD);
         }
+        btnCalculateSunAndMoonActionPerformed(null);
     }//GEN-LAST:event_spnMinutesStateChanged
 
     private void spnHoursStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnHoursStateChanged
@@ -2055,6 +2056,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             && cmbTimeAccuracy.isEnabled()) {
             cmbTimeAccuracy.setSelectedItem(TimeAccuracy.GOOD);
         }
+        btnCalculateSunAndMoonActionPerformed(null);
     }//GEN-LAST:event_spnHoursStateChanged
 
     private void cmbTimeFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTimeFormatActionPerformed
@@ -2148,6 +2150,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void dtpSightingDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtpSightingDateActionPerformed
         setupSightingDateFromUIFields();
+        btnCalculateSunAndMoonActionPerformed(null);
     }//GEN-LAST:event_dtpSightingDateActionPerformed
 
     private void tblElementKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyReleased

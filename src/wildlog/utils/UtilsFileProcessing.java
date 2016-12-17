@@ -265,29 +265,77 @@ public final class UtilsFileProcessing {
     public static void openFile(Path inPath) {
         if (inPath != null) {
             try {
-                Desktop.getDesktop().open(inPath.normalize().toAbsolutePath().toFile());
+                boolean usedBundledViewers = false;
+                if (WildLogApp.getApplication().getWildLogOptions().isBundledPlayers()) {
+                    // From what I understand from the statement below, what I'm doing here in WildLog should be fine.
+                    /** 
+                     * https://www.gnu.org/licenses/gpl-faq.html#GPLInProprietarySystem
+                     * I'd like to incorporate GPL-covered software in my proprietary system. I have no permission to use that 
+                     * software except what the GPL gives me. Can I do this?
+                     * You cannot incorporate GPL-covered software in a proprietary system. The goal of the GPL is to grant 
+                     * everyone the freedom to copy, redistribute, understand, and modify a program. If you could 
+                     * incorporate GPL-covered software into a non-free system, it would have the effect of making the GPL-covered 
+                     * software non-free too.
+                     * A system incorporating a GPL-covered program is an extended version of that program. The GPL says that any 
+                     * extended version of the program must be released under the GPL if it is released at all. This is for two reasons: 
+                     * to make sure that users who get the software get the freedom they should have, 
+                     * and to encourage people to give back improvements that they make.
+                     * However, in many cases you can distribute the GPL-covered software alongside your proprietary system. 
+                     * To do this validly, you must make sure that the free and non-free programs communicate at arms length, that 
+                     * they are not combined in a way that would make them effectively a single program.
+                     * The difference between this and “incorporating” the GPL-covered software is partly a matter of substance and 
+                     * partly form. The substantive part is this: if the two programs are combined so that they become effectively 
+                     * two parts of one program, then you can't treat them as two separate programs. 
+                     * So the GPL has to cover the whole thing.
+                     * If the two programs remain well separated, like the compiler and the kernel, or like an editor and a shell, 
+                     * then you can treat them as two separate programs—but you have to do it properly. The issue is simply one of form: 
+                     * how you describe what you are doing. Why do we care about this? Because we want to make sure the users clearly 
+                     * understand the free status of the GPL-covered software in the collection.
+                     * If people were to distribute GPL-covered software calling it “part of” a system that users know is partly 
+                     * proprietary, users might be uncertain of their rights regarding the GPL-covered software. But if they know that 
+                     * what they have received is a free program plus another program, side by side, their rights will be clear.
+                     */
+                    if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
+                        if (Files.exists(WildLogPaths.OPEN_JPEGVIEW.getAbsoluteFullPath())) {
+                            ProcessBuilder processBuilder = new ProcessBuilder(WildLogPaths.OPEN_JPEGVIEW.getAbsoluteFullPath().toString(), 
+                                    inPath.normalize().toAbsolutePath().toString());
+                            Process process = processBuilder.start();
+                            usedBundledViewers = true;
+                        }
+                    }
+                    else
+                    if (WildLogFileExtentions.Movies.isKnownExtention(inPath)) {
+                        if (Files.exists(WildLogPaths.OPEN_MEDIA_PLAYER_CLASSIC.getAbsoluteFullPath())) {
+                            ProcessBuilder processBuilder = new ProcessBuilder(WildLogPaths.OPEN_MEDIA_PLAYER_CLASSIC.getAbsoluteFullPath().toString(), 
+                                    inPath.normalize().toAbsolutePath().toString());
+                            Process process = processBuilder.start();
+                            usedBundledViewers = true;
+                        }
+                    }
+                }
+                // Use the default way of openng if no bundled viewer was used
+                if (!usedBundledViewers) {
+                    Desktop.getDesktop().open(inPath.normalize().toAbsolutePath().toFile());
+                }
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.INFO, "Problem opening file in the OS. Trying other method now...");
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.WARNING, "Problem opening file in {0}. Trying fallback method now...", System.getProperty("os.name"));
+                WildLogApp.LOGGER.log(Level.WARNING, ex.toString(), ex);
                 // Backup Plan - Because of Java 6 bug for avi files
                 try {
                     String os = System.getProperty("os.name").toLowerCase();
-                    if (os.indexOf("mac") != -1)
-                    {
+                    if (os.contains("mac")) {
                         String[] commands = {"open", "%s", inPath.normalize().toAbsolutePath().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                     else
-                    if ((os.indexOf("windows") != -1 || os.indexOf("nt") != -1) && (os.equals("windows 95") || os.equals("windows 98")))
-                    {
-                        String[] commands = {"command.com", "/C", "start", "%s", inPath.normalize().toAbsolutePath().toFile().toString()};
+                    if (os.contains("windows") || os.contains("nt")) {
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath.normalize().toAbsolutePath().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                     else
-                    if (os.indexOf("windows") != -1 || os.indexOf("nt") != -1)
-                    {
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath.normalize().toAbsolutePath().toFile().toString()};
+                    if ((os.contains("windows") || os.contains("nt")) && (os.equals("windows 95") || os.equals("windows 98"))) {
+                        String[] commands = {"command.com", "/C", "start", "%s", inPath.normalize().toAbsolutePath().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                 }
