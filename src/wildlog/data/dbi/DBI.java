@@ -1,5 +1,6 @@
 package wildlog.data.dbi;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.AdhocData;
@@ -17,7 +18,7 @@ import wildlog.data.enums.WildLogFileType;
 
 public interface DBI {
 
-    public boolean initialize(boolean inCreateDefaultRecords);
+    public boolean initialize(boolean inCreateDefaultRecords) throws SQLException;
     public void close();
 
     public int countElements(String inPrimaryName, String inScientificName);

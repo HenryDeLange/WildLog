@@ -51,7 +51,7 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
 
-// TODO: Kyk of dit eendag veilig is om dalk nie nuwe instances te maak van die types nie maar die een wat ingestuur word te gebruik. (geld vir Location, ens. ook)
+
 public abstract class DBI_JDBC implements DBI {
     protected final Random randomGenerator = new Random(System.nanoTime()); // ThreadLocalRandom is beter maar net in Java 7
     // Version
@@ -116,7 +116,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public boolean initialize(boolean inCreateDefaultRecords) {
+    public boolean initialize(boolean inCreateDefaultRecords) throws SQLException {
         Statement state = null;
         ResultSet results = null;
         boolean started = true;
@@ -220,6 +220,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException sqle) {
             printSQLException(sqle);
             started = false;
+            throw sqle;
         }
         finally {
             closeStatementAndResultset(state, results);

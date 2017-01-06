@@ -10,7 +10,7 @@ public enum WildLogThumbnailSizes {
     /** 100px - For Photos (Small Display) */
     SMALL(100),
     /** 128px - For Photos (WildNote Sync) */
-    SYNC_EXPORT(128),
+    SYNC_EXPORT(256),
     /** 150px - For Photos (Medium Display) */
     MEDIUM_SMALL(150),
     /** 200px - For Photos (Bulk Import) */
