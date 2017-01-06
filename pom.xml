@@ -3,18 +3,21 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>wildlog</groupId>
     <artifactId>WildLogGeoTools</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- THE GEOTIFFS SEEM TO WORK IN 16.1 -->
+        <geotools.version>16.1</geotools.version>
+        <!-- THE GEOTIFFS WORKS DON'T WORK IN THE NEWER VERSIONS -->
         <!--<geotools.version>15-SNAPSHOT</geotools.version>-->
         <!--<geotools.version>14-RC1</geotools.version>-->
         <!--<geotools.version>13.2</geotools.version>-->
         <!--<geotools.version>12.5</geotools.version>-->
-        <!-- THE GEOTIFFS WORKS IN v10.8 -->
-        <geotools.version>11.5</geotools.version>
+        <!-- THE GEOTIFFS WORKS IN v11.5 AND OLDER -->
+        <!--<geotools.version>11.5</geotools.version>-->
         <!--<geotools.version>10.8</geotools.version>-->
     </properties>
     <repositories>

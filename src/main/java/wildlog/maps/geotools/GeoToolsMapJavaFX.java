@@ -30,10 +30,6 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
 public class GeoToolsMapJavaFX {
-    static {
-        // Do this to get rid of error message in Java 8 (without JAI DLLs?)
-        System.setProperty("com.sun.media.jai.disableMediaLib", "true");
-    }
     private final JFXPanel jfxPanel;
     private final MapContent mapContent = new MapContent();
     private ImageView imageView;
