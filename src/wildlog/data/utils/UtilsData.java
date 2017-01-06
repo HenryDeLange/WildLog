@@ -55,6 +55,7 @@ public final class UtilsData {
             if (c == '\"') return false;
             if (c == ':') return false;
             if (c == '|') return false;
+            if (c == '.') return false;
         }
         return true;
     }
