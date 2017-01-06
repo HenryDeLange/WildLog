@@ -1,6 +1,7 @@
 package wildlog.ui.dialogs;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -131,7 +132,7 @@ public class ImageResizeDialog extends JDialog {
             }
         });
 
-        jLabel3.setText("or lower.");
+        jLabel3.setText("and lower.");
 
         jLabel4.setText("Select the category to be resized:");
 
@@ -203,7 +204,7 @@ public class ImageResizeDialog extends JDialog {
                                         .addGap(5, 5, 5)
                                         .addComponent(cmbRating, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel3))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -232,10 +233,11 @@ public class ImageResizeDialog extends JDialog {
                             .addComponent(rdbElements)
                             .addComponent(rdbVisits))
                         .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cmbRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -263,11 +265,11 @@ public class ImageResizeDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        List<WildLogFile> lstWildLogFiles;
-        List<Sighting> lstSightings;
+        this.getGlassPane().setVisible(true);
+        this.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        List<WildLogFile> lstWildLogFiles = new ArrayList<>();
+        List<Sighting> lstSightings = new ArrayList<>();
         if (rdbElements.isSelected() && !lstPrimary.getSelectionModel().isSelectionEmpty()) {
-            lstWildLogFiles = new ArrayList<>();
-            lstSightings = new ArrayList<>();
             for (String element : lstPrimary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
@@ -280,8 +282,6 @@ public class ImageResizeDialog extends JDialog {
         }
         else
         if (rdbLocations.isSelected() && !lstPrimary.getSelectionModel().isSelectionEmpty()) {
-            lstWildLogFiles = new ArrayList<>();
-            lstSightings = new ArrayList<>();
             for (String location : lstPrimary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
@@ -294,8 +294,6 @@ public class ImageResizeDialog extends JDialog {
         }
         else
         if (rdbVisits.isSelected() && !lstSecondary.getSelectionModel().isSelectionEmpty()) {
-            lstWildLogFiles = new ArrayList<>();
-            lstSightings = new ArrayList<>();
             for (String visit : lstSecondary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
@@ -306,21 +304,21 @@ public class ImageResizeDialog extends JDialog {
                 }
             }
         }
-        else {
-            lstWildLogFiles = new ArrayList<>(0);
-            lstSightings = new ArrayList<>(0);
-        }
+        // Check the rating
         if (chkIncludeSightings.isSelected()) {
             for (Sighting sighting : lstSightings) {
                 if (checkRating(sighting)) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
-                            Sighting.WILDLOGFILE_ID_PREFIX + sighting.getSightingCounter(), WildLogFileType.IMAGE, WildLogFile.class));
+                            sighting.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class));
                 }
             }
         }
+        // Do the resize
         for (WildLogFile wildLogFile : lstWildLogFiles) {
             UtilsImageProcessing.resizeImage(wildLogFile, (int) spnSize.getValue());
         }
+        this.getGlassPane().setCursor(Cursor.getDefaultCursor());
+        this.getGlassPane().setVisible(false);
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnConfirmActionPerformed
@@ -329,9 +327,16 @@ public class ImageResizeDialog extends JDialog {
         if (ViewRating.NONE.equals((ViewRating) cmbRating.getSelectedItem())) {
             return true;
         }
+        ViewRating viewRating;
+        if (ViewRating.NONE.equals(inSighting.getViewRating())) {
+            viewRating = ViewRating.NORMAL;
+        }
+        else {
+            viewRating = inSighting.getViewRating();
+        }
         boolean found = false;
         for (ViewRating rating : ViewRating.values()) {
-            if (rating.equals(inSighting.getViewRating())) {
+            if (rating.equals(viewRating)) {
                 found = true;
                 break;
             }

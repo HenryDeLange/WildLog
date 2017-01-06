@@ -345,7 +345,7 @@
     <Component class="javax.swing.JButton" name="btnPaarlFormat">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Export_Paarl.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Paarl Reserve Format"/>
         <Property name="toolTipText" type="java.lang.String" value="Export the data to the format specified by the Paarl Nature Reserve."/>

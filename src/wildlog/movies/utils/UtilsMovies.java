@@ -61,7 +61,6 @@ public final class UtilsMovies {
         // Now create the slideshow
         JpgToMovie jpgToMovie = new JpgToMovie();
         if (inFilePaths.size() > 0) {
-// FIXME: Kan dalk eendag hierdie verbeter om die JPG files te rotate and dan te save as temporary files om in die movie te gebruik...
             if (jpgToMovie.createMovieFromJpgs(
                     inApp.getWildLogOptions().getDefaultSlideshowSize(),
                     inApp.getWildLogOptions().getDefaultSlideshowSpeed(),

@@ -59,14 +59,14 @@ public class AdvancedDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnChecklist = new javax.swing.JButton();
         btnSetAllGPS = new javax.swing.JButton();
         btnSetSunAndMoon = new javax.swing.JButton();
         btnSetDuration = new javax.swing.JButton();
         btnCorrectTime = new javax.swing.JButton();
-        btnDuplicateSightings = new javax.swing.JButton();
         btnMergeSightings = new javax.swing.JButton();
         btnMoveVisit = new javax.swing.JButton();
+        btnDuplicateSightings = new javax.swing.JButton();
+        btnChecklist = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Advanced Options");
@@ -75,25 +75,6 @@ public class AdvancedDialog extends JDialog {
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
-
-        btnChecklist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CheckList.png"))); // NOI18N
-        btnChecklist.setText("Add Observations using a Checklist");
-        btnChecklist.setToolTipText("Open a popup box to add Observations in a checklist format.");
-        btnChecklist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnChecklist.setFocusPainted(false);
-        btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnChecklist.setIconTextGap(8);
-        btnChecklist.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnChecklist.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnChecklist.setMinimumSize(new java.awt.Dimension(375, 35));
-        btnChecklist.setName("btnChecklist"); // NOI18N
-        btnChecklist.setPreferredSize(new java.awt.Dimension(375, 35));
-        btnChecklist.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChecklistActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnChecklist);
 
         btnSetAllGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         btnSetAllGPS.setText("Set one GPS for all Observations (also recalculates Sun and Moon)");
@@ -171,26 +152,7 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnCorrectTime);
 
-        btnDuplicateSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
-        btnDuplicateSightings.setText("Find possible duplicate Observations");
-        btnDuplicateSightings.setToolTipText("Indentify possible duplicate Observations for for this Period.");
-        btnDuplicateSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDuplicateSightings.setFocusPainted(false);
-        btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnDuplicateSightings.setIconTextGap(8);
-        btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(375, 35));
-        btnDuplicateSightings.setName("btnDuplicateSightings"); // NOI18N
-        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(375, 35));
-        btnDuplicateSightings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDuplicateSightingsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnDuplicateSightings);
-
-        btnMergeSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Image.png"))); // NOI18N
+        btnMergeSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
         btnMergeSightings.setText("Move Files from one Observation to another Observation");
         btnMergeSightings.setToolTipText("Move the Files from one Observation to another Observation. Optionally deleting the original Observation in the process.");
         btnMergeSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -227,6 +189,44 @@ public class AdvancedDialog extends JDialog {
             }
         });
         getContentPane().add(btnMoveVisit);
+
+        btnDuplicateSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
+        btnDuplicateSightings.setText("Find possible duplicate Observations");
+        btnDuplicateSightings.setToolTipText("Indentify possible duplicate Observations for for this Period.");
+        btnDuplicateSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDuplicateSightings.setFocusPainted(false);
+        btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDuplicateSightings.setIconTextGap(8);
+        btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnDuplicateSightings.setName("btnDuplicateSightings"); // NOI18N
+        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnDuplicateSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDuplicateSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDuplicateSightings);
+
+        btnChecklist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CheckList.png"))); // NOI18N
+        btnChecklist.setText("Add Observations using a Checklist");
+        btnChecklist.setToolTipText("Open a popup box to add Observations in a checklist format.");
+        btnChecklist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnChecklist.setFocusPainted(false);
+        btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnChecklist.setIconTextGap(8);
+        btnChecklist.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnChecklist.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnChecklist.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnChecklist.setName("btnChecklist"); // NOI18N
+        btnChecklist.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnChecklist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChecklistActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnChecklist);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

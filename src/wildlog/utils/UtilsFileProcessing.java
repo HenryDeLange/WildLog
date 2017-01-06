@@ -84,7 +84,7 @@ public final class UtilsFileProcessing {
 //        fileChooser.setFileFilter(new MovieFilter());
 //        fileChooser.setFileFilter(new ImageFilter());
 //        fileChooser.setAccessory(new ImagePreview(fileChooser));
-// TODO: Ek nie seker of die filters reg werk nie... GEBRUIK EERDER JavaFx se FileChooser eendag :D
+// TODO: Ek is nie seker of die filters reg werk nie... GEBRUIK EERDER JavaFx se FileChooser eendag :D
         fileChooser.setFilenameFilter(new MovieFilter());
 //        fileChooser.setFile("*.jpg");
         fileChooser.setFilenameFilter(new ImageFilter());
@@ -105,7 +105,7 @@ public final class UtilsFileProcessing {
     }
     
     private static class SequenceCounter {
-        public int counter = 0;
+        public int counter = 1;
     }
 
     public static void performFileUpload(final DataObjectWithWildLogFile inDAOWithID, final Path inPrefixFolder, final File[] inFiles, 
@@ -215,9 +215,7 @@ public final class UtilsFileProcessing {
         if (inDAOWithID instanceof Sighting && fileName.lastIndexOf('.') > 0) {
             // Rename the Sighting files to reflect the date of the Sighting (useful for external camera trap data tools)
             String tempFileName = ((Sighting) inDAOWithID).getCustomFileName();
-            if (inSequenceIndex > 0) {
-                tempFileName = tempFileName + " [" + inSequenceIndex + "]";
-            }
+            tempFileName = tempFileName + getFormattedSequence(inSequenceIndex);
             fileName = tempFileName + fileName.substring(fileName.lastIndexOf('.'));
         }
         Path toFile = toFolder.resolve(fileName);
@@ -230,7 +228,7 @@ public final class UtilsFileProcessing {
             else {
                 tempFileName = fileName.substring(0, fileName.lastIndexOf('.'));
             }
-            toFile = toFolder.resolve(tempFileName + " [" + ++inSequenceIndex + "]" + fileName.substring(fileName.lastIndexOf('.')));
+            toFile = toFolder.resolve(tempFileName + getFormattedSequence(++inSequenceIndex) + fileName.substring(fileName.lastIndexOf('.')));
         }
         // Copy the original file into WildLog's folders. (Don't overwrite other files, and give an error if it already exists.)
         copyFile(inFromFile, toFile, false, false);
@@ -253,6 +251,17 @@ public final class UtilsFileProcessing {
                 fileSize);
         inApp.getDBI().createWildLogFile(wildLogFile);
         return wildLogFile;
+    }
+    
+    private static String getFormattedSequence(int inCount) {
+        String count;
+        if (inCount < 10) {
+            count = "0" + Integer.toString(inCount);
+        }
+        else {
+            count = Integer.toString(inCount);
+        }
+        return " [" + count + "]";
     }
 
     public static void openFile(String inID, int inIndex, WildLogApp inApp) {
@@ -393,6 +402,7 @@ public final class UtilsFileProcessing {
                 }
                 synchronized (lock) {
                     Files.createDirectories(inFileToWrite.getParent());
+// FIXME: Die gee steeds 'n error...
                     Files.copy(inFileToRead, inFileToWrite, StandardCopyOption.REPLACE_EXISTING);
                 }
             }

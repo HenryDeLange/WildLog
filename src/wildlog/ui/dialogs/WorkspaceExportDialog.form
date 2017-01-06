@@ -85,7 +85,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="chkRemoveTime" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="chkOnlyFirstSighting" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jSeparator2" min="-2" pref="600" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
@@ -131,7 +131,7 @@
                           <Component id="chkRemoveDescriptions" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="chkRemoveTime" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="chkReduceGPS" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jCheckBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkOnlyFirstSighting" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel4" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -372,14 +372,13 @@
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator2">
     </Component>
-    <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+    <Component class="javax.swing.JCheckBox" name="chkOnlyFirstSighting">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Only First Observation At A Place"/>
-        <Property name="toolTipText" type="java.lang.String" value="Export only the first Observation of each Creature at a Place."/>
+        <Property name="text" type="java.lang.String" value="One Observation of Creature per Period"/>
+        <Property name="toolTipText" type="java.lang.String" value="Export only the first Observation of each Creature per Period."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="enabled" type="boolean" value="false"/>
         <Property name="focusPainted" type="boolean" value="false"/>
       </Properties>
     </Component>

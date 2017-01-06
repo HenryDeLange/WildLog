@@ -109,7 +109,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        chkOnlyFirstSighting = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         chkIncludeWildLogApp = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
@@ -241,11 +241,10 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Data:");
 
-        jCheckBox1.setText("Only First Observation At A Place");
-        jCheckBox1.setToolTipText("Export only the first Observation of each Creature at a Place.");
-        jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jCheckBox1.setEnabled(false);
-        jCheckBox1.setFocusPainted(false);
+        chkOnlyFirstSighting.setText("One Observation of Creature per Period");
+        chkOnlyFirstSighting.setToolTipText("Export only the first Observation of each Creature per Period.");
+        chkOnlyFirstSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkOnlyFirstSighting.setFocusPainted(false);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Application:");
@@ -308,7 +307,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(chkRemoveTime)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCheckBox1))
+                                        .addComponent(chkOnlyFirstSighting))
                                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel5)
@@ -343,7 +342,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             .addComponent(chkRemoveDescriptions)
                             .addComponent(chkRemoveTime)
                             .addComponent(chkReduceGPS)
-                            .addComponent(jCheckBox1)
+                            .addComponent(chkOnlyFirstSighting)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -413,7 +412,11 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             setProgress(3);
                             setMessage("Workspace Export: " + getProgress() + "%");
                             // Save the selected nodes
-                            saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), totalNodes, this, new ProgressCounter());
+                            Set<String> uniqueElementsPerVisit = null;
+                            if (chkOnlyFirstSighting.isSelected()) {
+                                uniqueElementsPerVisit = new HashSet<>();
+                            }
+                            saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), totalNodes, this, new ProgressCounter(), uniqueElementsPerVisit);
                             setProgress(98);
                             setMessage("Workspace Export: " + getProgress() + "%");
                             // Export the WildLog application
@@ -518,7 +521,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         }
     }
 
-    private void saveChildren(WildLogDBI inNewDBI, Path inDestinationWorkspace, DefaultMutableTreeNode inNode, int inTotalNodes, ProgressbarTask inProgressbarTask, ProgressCounter inCounter) {
+    private void saveChildren(WildLogDBI inNewDBI, Path inDestinationWorkspace, DefaultMutableTreeNode inNode, int inTotalNodes, 
+            ProgressbarTask inProgressbarTask, ProgressCounter inCounter, Set<String> inUniqueElementsPerVisit) {
         if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
@@ -559,27 +563,35 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 else
                 if (dataWrapper.getDataObject() instanceof SightingWrapper) {
                     Sighting sighting = app.getDBI().findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getSightingCounter(), Sighting.class);
-                    if (chkReduceGPS.isSelected()) {
-                        sighting.setLatSeconds(0.0);
-                        sighting.setLonSeconds(0.0);
-                        sighting.setGPSAccuracy(GPSAccuracy.TERRIBLE);
+                    boolean doExport = true;
+                    if (chkOnlyFirstSighting.isSelected()) {
+                        if (!inUniqueElementsPerVisit.add(sighting.getVisitName() + "-" + sighting.getElementName())) {
+                            doExport = false;
+                        }
                     }
-                    if (chkRemoveDescriptions.isSelected()) {
-                        sighting.setDetails("");
-                    }
-                    if (chkRemoveTime.isSelected()) {
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTime(sighting.getDate());
-                        calendar.set(Calendar.HOUR_OF_DAY, 0);
-                        calendar.set(Calendar.MINUTE, 0);
-                        calendar.set(Calendar.SECOND, 0);
-                        calendar.set(Calendar.MILLISECOND, 0);
-                        sighting.setDate(calendar.getTime());
-                    }
-                    if (inNewDBI.findSighting(sighting.getSightingCounter(), Sighting.class) == null) {
-                        // Note: The sighting ID needs to be the same for the linked images to work...
-                        inNewDBI.createSighting(sighting, true);
-                        saveFiles(inNewDBI, inDestinationWorkspace, sighting);
+                    if (doExport) {
+                        if (chkReduceGPS.isSelected()) {
+                            sighting.setLatSeconds(0.0);
+                            sighting.setLonSeconds(0.0);
+                            sighting.setGPSAccuracy(GPSAccuracy.TERRIBLE);
+                        }
+                        if (chkRemoveDescriptions.isSelected()) {
+                            sighting.setDetails("");
+                        }
+                        if (chkRemoveTime.isSelected()) {
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(sighting.getDate());
+                            calendar.set(Calendar.HOUR_OF_DAY, 0);
+                            calendar.set(Calendar.MINUTE, 0);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.MILLISECOND, 0);
+                            sighting.setDate(calendar.getTime());
+                        }
+                        if (inNewDBI.findSighting(sighting.getSightingCounter(), Sighting.class) == null) {
+                            // Note: The sighting ID needs to be the same for the linked images to work...
+                            inNewDBI.createSighting(sighting, true);
+                            saveFiles(inNewDBI, inDestinationWorkspace, sighting);
+                        }
                     }
                 }
             }
@@ -589,7 +601,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         }
         for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
-            saveChildren(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter);
+            saveChildren(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter, inUniqueElementsPerVisit);
         }
     }
 
@@ -843,13 +855,13 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnConfirm;
     private javax.swing.JCheckBox chkDefaultDestinationFolder;
     private javax.swing.JCheckBox chkIncludeWildLogApp;
+    private javax.swing.JCheckBox chkOnlyFirstSighting;
     private javax.swing.JCheckBox chkReduceGPS;
     private javax.swing.JCheckBox chkRemoveDescriptions;
     private javax.swing.JCheckBox chkRemoveTime;
     private javax.swing.ButtonGroup grpFiles;
     private javax.swing.ButtonGroup grpImages;
     private javax.swing.ButtonGroup grpTreeOrder;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

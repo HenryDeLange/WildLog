@@ -94,6 +94,7 @@ public class GPSDialog extends JDialog {
 
 // FIXME: Hierdie popup werk steeds nie lekker nie...
     
+    
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[GPSDialog]");
@@ -1491,25 +1492,38 @@ public class GPSDialog extends JDialog {
         webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
             @Override
             public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
-              if (newState == State.SUCCEEDED) {
-                  JSObject window = (JSObject) webEngine.executeScript("window");
-                  window.setMember("JavaMethodExposer", new JavaMethodExposer());
-              }
+                if (newState == State.SUCCEEDED) {
+                    JSObject window = (JSObject) webEngine.executeScript("window");
+                    window.setMember("JavaMethodExposer", new JavaMethodExposer());
+                }
             }
         });
-        
+//// Get an idea of possible rendering errors
+//webEngine.getLoadWorker().exceptionProperty().addListener(new ChangeListener<Throwable>() {
+//    @Override
+//    public void changed(ObservableValue<? extends Throwable> ov, Throwable t, Throwable t1) {
+//        System.out.println("Received exception: "+t1.getMessage());
+//    }
+//});
+//com.sun.javafx.webkit.WebConsoleListener.setDefaultListener(new com.sun.javafx.webkit.WebConsoleListener(){
+//    @Override
+//    public void messageAdded(WebView webView, String message, int lineNumber, String sourceId) {
+//        System.out.println("Console: [" + sourceId + ":" + lineNumber + "] " + message);
+//    }
+//});
         return webView;
     }
     
-    // NOTE: Lyk my hierdie moet 'n regte public class wees, anders werk dinge nie reg nie...
+    // NOTE: Lyk my hierdie moet 'n regte public class wees met Object types, anders werk dinge nie reg nie...
     public class JavaMethodExposer {
         public void updateGPS(Object inLat, Object inLon) {
             uiLatitude = (double) inLat;
             uiLongitude = (double) inLon;
             
 // FIXME: Hierdie storie werk skielik nie meer reg nie... Of Google maps update, maar tien teen een 'n Java JRE update wat dinge gebreek het...
-// FIXME: Om een of ander vreemde rede hou dit net keilik op werk, dit sal 3 keer reg update en dan net skielik ophou update...
-
+//        Om een of ander vreemde rede hou dit net skielik op werk, dit sal 3 keer reg update en dan net skielik ophou update...
+//        Sien my vraag: http://stackoverflow.com/questions/41197762/javafx-webengine-upcall-stops-working-when-moving-marker-on-map
+//System.out.println("Lat=" + uiLatitude + "   /   Lon=" + uiLongitude);
             if (tglDecimalDegrees.isSelected()) {
                 setupDD();
             }

@@ -71,7 +71,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnAbundanceMapClient);
-// FIXME: Hierdie version neem die antal dae ook in ag, dus sal 'n baie rich plek wat bv 'n jaar getrap word nie wys nie.
+// FIXME: Hierdie version neem die aantal dae ook in ag, dus sal 'n baie rich plek wat bv 'n jaar getrap word nie wys nie.
 //        Maar dis goed om vistis met soortgelyke durations te vergelyk.
 //        Maak dus nog 'n opsie wat net kyk na die totale antal creatures = "Abundance of Creatures".
         Button btnRichnessMapClient = new Button("Richness of Creatures Map");

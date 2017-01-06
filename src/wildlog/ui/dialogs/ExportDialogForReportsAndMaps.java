@@ -1,6 +1,5 @@
 package wildlog.ui.dialogs;
 
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -280,13 +279,13 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                         // Make the PDF the size of the image, no rescaling (it can be done by the user when printing)
                         PDPage page = new PDPage(new PDRectangle(bufferedImage.getWidth(), bufferedImage.getHeight()));
                         doc.addPage(page);
-                        PDPageContentStream content = new PDPageContentStream(doc, page, false, false);
-                        PDImageXObject pdfImage = LosslessFactory.createFromImage(doc, bufferedImage);
-                        content.drawImage(pdfImage, 0, 0);
-                        content.close();
+                        try (PDPageContentStream content = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.OVERWRITE, false)) {
+                            PDImageXObject pdfImage = LosslessFactory.createFromImage(doc, bufferedImage);
+                            content.drawImage(pdfImage, 0, 0);
+                        }
                     }
                     catch (IOException ex){
-                        ex.printStackTrace();
+                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                     }
                     finally {
                         try {
@@ -297,7 +296,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                             }
                         }
                         catch (Exception ex) {
-                            ex.printStackTrace();
+                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                         }
                     }
                     UtilsFileProcessing.openFile(pdfPath);
@@ -311,29 +310,29 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         dispose();
     }//GEN-LAST:event_btnExportPDFActionPerformed
 
-    private Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
-        int original_width = imgSize.width;
-        int original_height = imgSize.height;
-        int bound_width = boundary.width;
-        int bound_height = boundary.height;
-        int new_width = original_width;
-        int new_height = original_height;
-        // first check if we need to scale width
-        if (original_width > bound_width) {
-            // scale width to fit
-            new_width = bound_width;
-            // scale height to maintain aspect ratio
-            new_height = (new_width * original_height) / original_width;
-        }
-        // then check if we need to scale even with the new height
-        if (new_height > bound_height) {
-            // scale height to fit instead
-            new_height = bound_height;
-            // scale width to maintain aspect ratio
-            new_width = (new_height * original_width) / original_height;
-        }
-        return new Dimension(new_width, new_height);
-    }
+//    private Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
+//        int original_width = imgSize.width;
+//        int original_height = imgSize.height;
+//        int bound_width = boundary.width;
+//        int bound_height = boundary.height;
+//        int new_width = original_width;
+//        int new_height = original_height;
+//        // first check if we need to scale width
+//        if (original_width > bound_width) {
+//            // scale width to fit
+//            new_width = bound_width;
+//            // scale height to maintain aspect ratio
+//            new_height = (new_width * original_height) / original_width;
+//        }
+//        // then check if we need to scale even with the new height
+//        if (new_height > bound_height) {
+//            // scale height to fit instead
+//            new_height = bound_height;
+//            // scale width to maintain aspect ratio
+//            new_width = (new_height * original_width) / original_height;
+//        }
+//        return new Dimension(new_width, new_height);
+//    }
     
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         JOptionPane.showMessageDialog(getParent(), 

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -24,6 +25,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import wildlog.WildLogApp;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.implementations.helpers.IntegerTickLabelFormatter;
@@ -180,8 +182,8 @@ public final class UtilsReports {
                     Map<XYChart.Series, String> seriesDefaultColorMap = (Map<XYChart.Series, String>) field.get(this);
                     seriesDefaultColorMap.put(series, fixedDefaultColorStyleClass);
                 } 
-                catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-                    e.printStackTrace();
+                catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 }
             }
         };

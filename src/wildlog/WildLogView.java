@@ -1146,7 +1146,7 @@ public final class WildLogView extends JFrame {
         jSeparator21.setName("jSeparator21"); // NOI18N
         advancedMenu.add(jSeparator21);
 
-        mnuReduceImagesSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File_Small.png"))); // NOI18N
+        mnuReduceImagesSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Image_Small.png"))); // NOI18N
         mnuReduceImagesSize.setText("Reduce the size of Images");
         mnuReduceImagesSize.setToolTipText("Reduce the resolution of certain images to reduce the overall size of the Workspace.");
         mnuReduceImagesSize.setName("mnuReduceImagesSize"); // NOI18N
@@ -1356,9 +1356,9 @@ public final class WildLogView extends JFrame {
         });
         mnuOther.add(chkMnuUploadLogs);
 
-        chkMnuUseBundledMediaViewers.setSelected(true);
+        chkMnuUseBundledMediaViewers.setSelected(app.getWildLogOptions().isBundledPlayers());
         chkMnuUseBundledMediaViewers.setText("Use Bundled Media Viewers (if available)");
-        chkMnuUseBundledMediaViewers.setToolTipText("If this option is selected WildLog will try to use the bundled media players to open supported file types instead. If no media player is bundled, a non-media file is selected or if this option is desabled, then the default file opener for the operating system will be used.");
+        chkMnuUseBundledMediaViewers.setToolTipText("If this option is selected WildLog will try to use the bundled media players to open supported file types instead (if available).");
         chkMnuUseBundledMediaViewers.setName("chkMnuUseBundledMediaViewers"); // NOI18N
         chkMnuUseBundledMediaViewers.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -2887,32 +2887,38 @@ public final class WildLogView extends JFrame {
                         // Copy the files
                         WildLogFile wildLogFile = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), WildLogFile.class);
                         if (wildLogFile != null) {
-                            // Android kan nie die zip handle as die folders of files snaakse name het met - of _ in nie...
-                            wildLogFile.setFilename(UtilsFileProcessing.getAlphaNumericVersion(element.getPrimaryName() + ".jpg"));
-                            Path targetFile = syncDatabase.getParent().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(wildLogFile.getFilename());
-//                            UtilsFileProcessing.copyFile(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SYNC_EXPORT),
-//                                    targetFile, false, false);
-                            // Need to create a new image that have power of two dimentions
-                            ImageIcon thumbnail = new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SYNC_EXPORT).toString());
                             try {
-                                // Make the folder
-                                Files.createDirectories(targetFile);
-                                // Create the image to save
-                                BufferedImage bufferedImage = new BufferedImage(WildLogThumbnailSizes.SYNC_EXPORT.getSize(), WildLogThumbnailSizes.SYNC_EXPORT.getSize(), BufferedImage.TYPE_INT_RGB);
-                                Graphics2D graphics2D = bufferedImage.createGraphics();
-                                graphics2D.drawImage(thumbnail.getImage(),
-                                        (WildLogThumbnailSizes.SYNC_EXPORT.getSize() - thumbnail.getIconWidth())/2,
-                                        (WildLogThumbnailSizes.SYNC_EXPORT.getSize() - thumbnail.getIconHeight())/2,
-                                        Color.BLACK, null);
-                                // Hardcoding all thumbnails to be JPG (even originally PNG images)
-                                ImageIO.write(bufferedImage, "jpg", targetFile.toFile());
-                                graphics2D.dispose();
+                                // Android kan nie die zip handle as die folders of files snaakse name het met - of _ in nie...
+                                wildLogFile.setFilename(UtilsFileProcessing.getAlphaNumericVersion(element.getPrimaryName() + ".jpg"));
+                                Path targetFile = syncDatabase.getParent().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(wildLogFile.getFilename());
+//                                UtilsFileProcessing.copyFile(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SYNC_EXPORT),
+//                                        targetFile, false, false);
+                                // Need to create a new image that have power of two dimentions
+                                ImageIcon thumbnail = new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SYNC_EXPORT).toString());
+                                try {
+                                    // Make the folder
+                                    Files.createDirectories(targetFile);
+                                    // Create the image to save
+                                    BufferedImage bufferedImage = new BufferedImage(WildLogThumbnailSizes.SYNC_EXPORT.getSize(), WildLogThumbnailSizes.SYNC_EXPORT.getSize(), BufferedImage.TYPE_INT_RGB);
+                                    Graphics2D graphics2D = bufferedImage.createGraphics();
+                                    graphics2D.drawImage(thumbnail.getImage(),
+                                            (WildLogThumbnailSizes.SYNC_EXPORT.getSize() - thumbnail.getIconWidth())/2,
+                                            (WildLogThumbnailSizes.SYNC_EXPORT.getSize() - thumbnail.getIconHeight())/2,
+                                            Color.BLACK, null);
+                                    // Hardcoding all thumbnails to be JPG (even originally PNG images)
+                                    ImageIO.write(bufferedImage, "jpg", targetFile.toFile());
+                                    graphics2D.dispose();
+                                }
+                                catch (IOException ex) {
+                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                }
+                                // Create the WildLogFile entry in the DB
+                                syncDBI.createWildLogFile(wildLogFile);
                             }
-                            catch (IOException ex) {
+                            catch  (Exception ex) {
+                                // Moenie stop as iets skeef geloop het met een van die files nie, doen steeds die res...
                                 WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             }
-                            // Create the WildLogFile entry in the DB
-                            syncDBI.createWildLogFile(wildLogFile);
                         }
                         setProgress(20 + (int)(counter++/(double)listElements.size()*70));
                         setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
@@ -3902,11 +3908,6 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_chkMnuUploadLogsItemStateChanged
 
     private void chkMnuUseBundledMediaViewersItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseBundledMediaViewersItemStateChanged
-
-
-// TODO: Implement die gebruik hiervan
-
-
         WildLogOptions options = app.getWildLogOptions();
         options.setBundledPlayers(chkMnuUseBundledMediaViewers.isSelected());
         app.setWildLogOptionsAndSave(options);

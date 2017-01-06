@@ -85,7 +85,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 state.close();
                 WildLogApp.LOGGER.log(Level.INFO, "Database username and password updated.");
                 
-// TODO: Hier kort 'n form van databse recovery s dinge skeep loop...
+// TODO: Hier kort 'n form van database recovery as dinge skeef loop...
 // DOEN MISKIEN IETS SOOS HIERDIE:
 //   Verander die error popup om opsies te wys: "Open Different Workspace", "Try to restore from backup", Cancel"
 //   Vir die restore opsie, delete (rename na _datestamp_broken) die stukkende DB en 

@@ -9,7 +9,7 @@
             padding: 0px
         }
     </style>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script type="text/javascript">
         function initializeMap() {
             // Inititalize map, spiderfier and bounds
@@ -28,7 +28,13 @@
 //___MAP_CLICKABLE_DATA_POINTS_END___
             // Add the drag event to notify the Java code that the marker was moved
             google.maps.event.addListener(marker, 'dragend', function() {
-                JavaMethodExposer.updateGPS(marker.getPosition().lat(), marker.getPosition().lng());
+//            google.maps.event.addListener(marker, 'drag', function() {
+                try {
+                    JavaMethodExposer.updateGPS(marker.getPosition().lat(), marker.getPosition().lng());
+                }
+                catch (err) {
+                    document.getElementById("error").innerHTML = err.message;
+                }
             });
             // Set the map location and zoom to fit all markers
             map.fitBounds(bounds);
@@ -50,6 +56,7 @@
     </script>
 </head>
 <body>
+    <p id="error"></p>
     <div id="map-canvas"></div>
 </body>
 </html>

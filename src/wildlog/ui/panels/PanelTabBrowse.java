@@ -1394,7 +1394,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        // FIXME: wat gebeur as die file rename was tydens die upload?
+// FIXME: wat kan ek doen as as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan)
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
@@ -1427,7 +1427,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        // FIXME: wat gebeur as die file rename was tydens die upload?
+// FIXME: wat kan ek doen as as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan)
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
@@ -1456,7 +1456,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        // FIXME: wat gebeur as die file rename was tydens die upload?
+// FIXME: wat kan ek doen as as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan)
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
@@ -1489,7 +1489,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        // FIXME: wat gebeur as die file rename was tydens die upload?
+// FIXME: wat kan ek doen as as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan)
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(

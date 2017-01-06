@@ -132,7 +132,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             BarChart.Data<Number, String> data = new BarChart.Data<>(mapData.get(key).count, key);
-// TODO: Implement die nommer lang die bar chart vir horisontale charts...
+// TODO: Implement die nommer langs die bar chart vir horisontale charts...
 //            data.nodeProperty().addListener(new BarChartChangeListener<Number, String>(mapData.size(), data));
             allSightings.add(data);
         }
@@ -178,7 +178,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             BarChart.Data<Number, String> data = new BarChart.Data<>(mapData.get(key).size(), key);
-// TODO: Implement die nommer lang die bar chart vir horisontale charts...
+// TODO: Implement die nommer langs die bar chart vir horisontale charts...
 //            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }

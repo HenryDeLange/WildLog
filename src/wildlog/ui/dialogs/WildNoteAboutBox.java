@@ -48,7 +48,7 @@ public class WildNoteAboutBox extends JDialog {
         appTitleLabel.setToolTipText("");
         appTitleLabel.setName("appTitleLabel"); // NOI18N
 
-        appDescLabel.setText("<html>WildNote is a seperate software application developed by Henry de Lange for Android devices. Using WildNote you can easily capture Observations on the go and import the data into WildLog. <br>For more information please visit the website.</html>");
+        appDescLabel.setText("<html>WildNote is a seperate software application developed by Henry de Lange for Android devices. Using WildNote you can easily capture Observations on the go and import the data into WildLog. For more information please visit the website.</html>");
         appDescLabel.setName("appDescLabel"); // NOI18N
 
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/AboutWildNote.gif"))); // NOI18N
@@ -76,10 +76,10 @@ public class WildNoteAboutBox extends JDialog {
         emailAddressLabel1.setName("emailAddressLabel1"); // NOI18N
 
         developerLabel1.setFont(developerLabel1.getFont().deriveFont(developerLabel1.getFont().getStyle() | java.awt.Font.BOLD));
-        developerLabel1.setText("Product Version:");
+        developerLabel1.setText("Compatible Version:");
         developerLabel1.setName("developerLabel1"); // NOI18N
 
-        developerNameLabel1.setText("1.2");
+        developerNameLabel1.setText("1.3");
         developerNameLabel1.setName("developerNameLabel1"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -111,13 +111,15 @@ public class WildNoteAboutBox extends JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(imageLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(imageLabel)
+                        .addGap(10, 10, 10))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(appTitleLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(appDescLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(developerLabel1)
                             .addComponent(developerNameLabel1))
@@ -132,8 +134,8 @@ public class WildNoteAboutBox extends JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(emailLabel1)
-                            .addComponent(emailAddressLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(10, 10, 10))
+                            .addComponent(emailAddressLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(34, 34, 34))))
         );
 
         pack();

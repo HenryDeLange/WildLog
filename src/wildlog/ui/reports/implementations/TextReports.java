@@ -61,7 +61,6 @@ public class TextReports extends AbstractReport<Sighting> {
                 setupChartDescriptionLabel("<html>This is a summary of what was observed during a specific Period.</html>");
             }
         });
-// TODO: Add options to use exact GPS, or to group similar ones together (maybe with two scale options)
         lstCustomButtons.add(btnPaarlReport);
         Button btnTextReport = new Button("Data Summary");
         btnTextReport.setCursor(Cursor.HAND);

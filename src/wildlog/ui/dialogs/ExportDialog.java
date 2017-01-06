@@ -295,7 +295,7 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportKML);
 
-        btnPaarlFormat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        btnPaarlFormat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export_Paarl.gif"))); // NOI18N
         btnPaarlFormat.setText("Paarl Reserve Format");
         btnPaarlFormat.setToolTipText("Export the data to the format specified by the Paarl Nature Reserve.");
         btnPaarlFormat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1087,8 +1087,8 @@ public class ExportDialog extends JDialog {
                     for (WildLogFile wildLogFile : lstFiles) {
                         String fileName = wildLogFile.getRelativePath().getFileName().toString();
                         fileName = tempSighting.getElementName()
-                                .concat(" [row ").concat(Integer.toString(rowCount))
-                                .concat(" no. ").concat(Integer.toString(counterFiles++))
+                                .concat(" [").concat(Integer.toString(rowCount))
+                                .concat("-").concat(Integer.toString(counterFiles++))
                                 .concat("]")
                                 .concat(fileName.substring(fileName.lastIndexOf('.')));
                         files = files + ", " + fileName;
