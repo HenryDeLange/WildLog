@@ -2,7 +2,7 @@ package wildlog.ui.maps.implementations.helpers;
 
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.utils.UtilsFileProcessing;
@@ -80,7 +80,7 @@ public final class UtilsMaps {
             UtilsFileProcessing.createFileFromStream(inputStream, WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(inPath));
         }
         else {
-            WildLogApp.LOGGER.log(Level.SEVERE, "Problem copying Map Layer (can''t find in JAR): {0}", inPath);
+            WildLogApp.LOGGER.log(Level.ERROR, "Problem copying Map Layer (can''t find in JAR): {}", inPath);
         }
     }
     

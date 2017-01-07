@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -155,7 +155,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                                                     return FileVisitResult.TERMINATE;
                                                 }
                                                 catch (DataSourceException ex) {
-                                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                                 }
                                             }
                                             else
@@ -169,7 +169,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                                                     return FileVisitResult.TERMINATE;
                                                 }
                                                 catch (IOException ex) {
-                                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                                 }
                                             }
                                         }
@@ -178,7 +178,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                                 });
                             }
                             catch (IOException ex) {
-                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                             }
                         }
                     }
@@ -254,7 +254,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                                     break;
                                 }
                                 catch (NumberFormatException ex) {
-                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                 }
                             }
                             break;
@@ -283,11 +283,11 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 map.addLayer(pointLayer);
             }
             catch (SchemaException | FactoryRegistryException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         catch (IOException | JsonIOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
     }
     
@@ -325,11 +325,11 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 map.addLayer(pointLayer);
             }
             catch (SchemaException | FactoryRegistryException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         catch (IOException | JsonIOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
     }
     

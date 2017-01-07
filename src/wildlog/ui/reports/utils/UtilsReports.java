@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -183,7 +183,7 @@ public final class UtilsReports {
                     seriesDefaultColorMap.put(series, fixedDefaultColorStyleClass);
                 } 
                 catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
             }
         };

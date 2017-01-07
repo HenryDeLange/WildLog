@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
@@ -122,7 +122,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         Desktop.getDesktop().browse(hyperlinkEvent.getURL().toURI());
                     }
                     catch (IOException | URISyntaxException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                 }
             }
@@ -624,7 +624,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             browseByLocation();
         }
@@ -649,7 +649,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             browseByElement();
         }
@@ -673,7 +673,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             browseByDate();
         }
@@ -744,7 +744,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE);
                         }
                         catch (LLJTranException | IOException ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                             UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                                 @Override
                                 public int showDialog() {
@@ -1677,7 +1677,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             imgBrowsePhotos.setToolTipText("");
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
     }
 
@@ -1829,7 +1829,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                 }
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 finally {
                     imgBrowsePhotos.setToolTipText(inFotos.get(imageIndex).getFilename());
@@ -1842,7 +1842,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     lookupCachedImage(inFotos);
                 }
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 finally {
                     imgBrowsePhotos.setToolTipText("");
@@ -1855,7 +1855,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             finally {
                 imgBrowsePhotos.setToolTipText("");

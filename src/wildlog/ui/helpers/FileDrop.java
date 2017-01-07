@@ -17,7 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.TooManyListenersException;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 
 /**
@@ -110,11 +110,11 @@ public class FileDrop {
                     }*/
                 } 
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     evt.rejectDrop();
                 } 
                 catch (UnsupportedFlavorException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     evt.rejectDrop();
                 }
             }
@@ -147,7 +147,7 @@ public class FileDrop {
             dropTarget.addDropTargetListener(inDropListener);
         } 
         catch (TooManyListenersException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
 
         // Listen for hierarchy changes and remove the drop target when the parent gets cleared out.

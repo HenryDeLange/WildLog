@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -111,7 +111,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         }
                     }
                     catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                 }
             }
@@ -855,7 +855,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     progressbarHandle.setTaskProgress(counter.getAndIncrement(), 0, model.getRowCount());
                                 }
                                 catch (Exception e) {
-                                    WildLogApp.LOGGER.log(Level.SEVERE, e.toString(), e);
+                                    WildLogApp.LOGGER.log(Level.ERROR, e.toString(), e);
                                 }
                             }
                         });

@@ -7,7 +7,7 @@ import java.io.Reader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -143,7 +143,7 @@ public class PointMap extends AbstractMap<Sighting> {
             }
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
         // Edit the template
@@ -190,7 +190,7 @@ public class PointMap extends AbstractMap<Sighting> {
             }
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
         // Edit the template

@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
@@ -89,7 +89,7 @@ public class CustomLayersDialog extends JDialog {
                 });
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         // Load Species layers
@@ -111,7 +111,7 @@ public class CustomLayersDialog extends JDialog {
                 });
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         // Set the layers on the listbox
@@ -512,7 +512,7 @@ public class CustomLayersDialog extends JDialog {
                     mapAllLayers.remove(rowKey);
                 }
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     getGlassPane().setVisible(true);
                     JOptionPane.showMessageDialog(this,
                             "The layer could not be deleted successfully. Please make sure the file isn't in use and try again, or delete it manually.",

@@ -17,7 +17,7 @@ import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -131,7 +131,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
@@ -215,7 +215,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
@@ -291,7 +291,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
@@ -382,7 +382,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
@@ -461,7 +461,7 @@ public final class UtilsTableGenerator {
                             executorService.invokeAll(listCallables);
                         }
                         catch (InterruptedException ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
@@ -535,7 +535,7 @@ public final class UtilsTableGenerator {
                             executorService.invokeAll(listCallables);
                         }
                         catch (InterruptedException ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
@@ -627,7 +627,7 @@ public final class UtilsTableGenerator {
                             executorService.invokeAll(listCallables);
                         }
                         catch (InterruptedException ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
@@ -920,7 +920,7 @@ public final class UtilsTableGenerator {
                             executorService.invokeAll(listCallables);
                         }
                         catch (InterruptedException ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
@@ -1003,7 +1003,7 @@ public final class UtilsTableGenerator {
                             executorService.invokeAll(listCallables);
                         }
                         catch (InterruptedException ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
@@ -1074,7 +1074,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
@@ -1136,7 +1136,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
@@ -1208,7 +1208,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
@@ -1531,7 +1531,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
@@ -1641,7 +1641,7 @@ public final class UtilsTableGenerator {
                         executorService.invokeAll(listCallables);
                     }
                     catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);

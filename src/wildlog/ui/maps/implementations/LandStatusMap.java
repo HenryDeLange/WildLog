@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -147,7 +147,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 map.addLayer(shapelayer);
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             try {
                 FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
@@ -158,7 +158,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 map.addLayer(shapelayer);
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             map.addLayer(getLayerForSightings(inLstSightings));
             if (showCountries) {
@@ -176,7 +176,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 map.replaceLayer(1, shapelayer);
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             try {
                 FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
@@ -187,7 +187,7 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 map.replaceLayer(2, shapelayer);
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             map.replaceLayer(3, getLayerForSightings(inLstSightings));
             if (showCountries) {

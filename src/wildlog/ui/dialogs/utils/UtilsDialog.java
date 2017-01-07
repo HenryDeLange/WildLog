@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -35,6 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.RootPaneContainer;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
@@ -156,12 +156,12 @@ public final class UtilsDialog {
                     frame.setVisible(true);
                 }
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inFile);
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, "Error showing EXIF data for: {}", inFile);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 catch (JpegProcessingException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inFile);
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, "Error showing EXIF data for: {}", inFile);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                         @Override
                         public int showDialog() {
@@ -174,7 +174,7 @@ public final class UtilsDialog {
                 }
             }
             else {
-                WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inFile);
+                WildLogApp.LOGGER.log(Level.ERROR, "Error showing EXIF data for: {}", inFile);
                 UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
@@ -187,7 +187,7 @@ public final class UtilsDialog {
             }
         }
         else {
-            WildLogApp.LOGGER.log(Level.SEVERE, "Error showing EXIF data for: {0}", inFile);
+            WildLogApp.LOGGER.log(Level.ERROR, "Error showing EXIF data for: {}", inFile);
             UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {

@@ -2,7 +2,7 @@ package wildlog.ui.dialogs;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;

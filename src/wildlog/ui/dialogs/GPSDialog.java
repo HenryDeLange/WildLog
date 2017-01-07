@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -1473,7 +1473,7 @@ public class GPSDialog extends JDialog {
             }
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
         // Edit the template
@@ -1549,7 +1549,7 @@ public class GPSDialog extends JDialog {
             map.addLayer(new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader)));
         }
         catch (DataSourceException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         // Point layer
         try {
@@ -1564,7 +1564,7 @@ public class GPSDialog extends JDialog {
             map.addLayer(new FeatureLayer(collection, pointStyle, "WildLogPointLayer"));
         }
         catch (SchemaException | FactoryRegistryException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         // Reload the map to make sure the layers are added correctly, etc.
         map.reloadMap();

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -147,7 +147,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
                         map.addLayer(gridLayer);
                     }
                     catch (DataSourceException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                 }
                 else
@@ -164,7 +164,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
                         map.addLayer(shapelayer);
                     }
                     catch (IOException ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                 }
             }

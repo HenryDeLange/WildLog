@@ -16,7 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -89,7 +89,7 @@ public final class UtilsUI {
                                     inTextField.replaceSelection(doClipboardPaste());
                                 }
                                 catch (UnsupportedFlavorException | IOException | ClassNotFoundException ex) {
-                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                 }
                             }
                         });

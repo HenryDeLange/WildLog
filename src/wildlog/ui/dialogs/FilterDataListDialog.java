@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -48,7 +48,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             typeInstance = inClassType.newInstance();
         }
         catch (IllegalAccessException | InstantiationException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         if (typeInstance instanceof Element) {
             setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Element.gif")).getImage());
@@ -386,7 +386,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                 lstSelectedValues.add((T) typeInstance);
             }
             catch (IllegalAccessException | InstantiationException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         setVisible(false);

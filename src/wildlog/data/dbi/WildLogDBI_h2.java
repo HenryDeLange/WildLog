@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.JOptionPane;
 import org.h2.jdbc.JdbcSQLException;
 import wildlog.WildLogApp;
@@ -101,19 +101,19 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             doUpdates();
         }
         catch (ClassNotFoundException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, "\nUnable to load the JDBC driver.");
-            WildLogApp.LOGGER.log(Level.SEVERE, "Please check your CLASSPATH.");
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, "\nUnable to load the JDBC driver.");
+            WildLogApp.LOGGER.log(Level.ERROR, "Please check your CLASSPATH.");
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             started = false;
         }
         catch (InstantiationException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, "\nUnable to instantiate the JDBC driver.");
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, "\nUnable to instantiate the JDBC driver.");
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             started = false;
         }
         catch (IllegalAccessException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, "\nNot allowed to access the JDBC driver.");
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, "\nNot allowed to access the JDBC driver.");
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             started = false;
         }
         catch (SQLException sqle) {
@@ -122,7 +122,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (Exception ex) {
             started = false;
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         finally {
             closeStatementAndResultset(state, results);
@@ -149,7 +149,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             printSQLException(ex);
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         finally {
             // Statement
@@ -733,7 +733,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             Files.deleteIfExists(WildLogPaths.getFullWorkspacePrefix().resolve(inDBFilePath).normalize().toAbsolutePath());
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         // Then, try to delete the "default/known" thumbnails.
         for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
@@ -742,7 +742,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(inDBFilePath, size));
             }
             catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         return true;

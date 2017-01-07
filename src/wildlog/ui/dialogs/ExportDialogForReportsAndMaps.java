@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javax.imageio.ImageIO;
@@ -285,7 +285,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                         }
                     }
                     catch (IOException ex){
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     finally {
                         try {
@@ -296,7 +296,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                             }
                         }
                         catch (Exception ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                     }
                     UtilsFileProcessing.openFile(pdfPath);

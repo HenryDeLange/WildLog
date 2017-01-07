@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -103,7 +103,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             boolean inTreatAsNewSighting, boolean inDisableEditing, boolean inBulkUploadMode) {
         super(inOwner, inTitle);
         if (inSighting == null) {
-            WildLogApp.LOGGER.log(Level.SEVERE, "PanelSighting: The passed in Sighting is not allowed to be null.");
+            WildLogApp.LOGGER.log(Level.ERROR, "PanelSighting: The passed in Sighting is not allowed to be null.");
             this.closeThisDialog();
         }
         sighting = inSighting;
@@ -1567,7 +1567,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 sighting.setNumberOfElements(Integer.parseInt(spnNumberOfElements.getValue().toString()));
             }
             catch (NumberFormatException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         sighting.setTimeOfDay((ActiveTimeSpesific)cmbTimeOfDay.getSelectedItem());
@@ -1578,7 +1578,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 sighting.setTemperature(Double.parseDouble(spnTemperature.getValue().toString()));
             }
             catch (NumberFormatException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         sighting.setUnitsTemperature((UnitsTemperature)cmbTemperatureUnits.getSelectedItem());

@@ -2,7 +2,7 @@ package wildlog.ui.dialogs;
 
 import java.awt.Component;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;

@@ -29,13 +29,13 @@ private static final double ARC = 206264.8062;
      */
     public static final double BELOW_HORIZON = Double.NEGATIVE_INFINITY;
     /**
-     * The sunrise and moonrise algorithms return values in a double[] vector
- where result[START{0}] is the time of sun/moon rise.
+     * The sunrise and moonrise algorithms return values in a double[] vector 
+     * where result[START{0}] is the time of sun/moon rise.
      */
     public static final int START = 0;
     /**
-     * The sunrise and moonrise algorithms return values in a double[] vector
- where result[END{1}] is the value of sun/moon set.
+     * The sunrise and moonrise algorithms return values in a double[] vector 
+     * where result[END{1}] is the value of sun/moon set.
      */
     public static final int END = 1;
 

@@ -30,12 +30,6 @@ import java.util.TimeZone;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -47,6 +41,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.plaf.InsetsUIResource;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
@@ -65,7 +63,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    public static final Logger LOGGER = Logger.getLogger("WildLogApp");
+    public static Logger LOGGER;
     public static String WILDLOG_VERSION = "4.4.0";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
@@ -119,7 +117,7 @@ public class WildLogApp extends Application {
             }
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         // Open the database
         // If this fails then it might be corrupt or already open. Ask the user to select a new workspace folder.
@@ -149,7 +147,7 @@ public class WildLogApp extends Application {
         while (openedWorkspace == false);
         // Load the WildLogOptions
         wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
-        WildLogApp.LOGGER.log(Level.INFO, "Workspace opened with ID: {0} [{1}]", new Object[]{wildLogOptions.getWorkspaceName(), Long.toString(wildLogOptions.getWorkspaceID())});
+        WildLogApp.LOGGER.log(Level.INFO, "Workspace opened with ID: {} [{}]", new Object[]{wildLogOptions.getWorkspaceName(), Long.toString(wildLogOptions.getWorkspaceID())});
         // Check to do monthly backup and try to upload the logs and user data to the MyWild DB
         Path folderPath = WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath()
                 .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_BACKUP_MONTHLY.format(LocalDateTime.now()) + ")");
@@ -162,7 +160,7 @@ public class WildLogApp extends Application {
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    WildLogApp.LOGGER.log(Level.INFO, "WEB CALL: Start checking for new version... {0}", checkForUpdates());
+                    WildLogApp.LOGGER.log(Level.INFO, "WEB CALL: Start checking for new version... {}", checkForUpdates());
                 }
             }, 10, TimeUnit.SECONDS);
             // Try to upload log data
@@ -195,7 +193,8 @@ public class WildLogApp extends Application {
                                 String logFileSnippit = "(Not using logfile)";
                                 if (logToFile) {
                                     try {
-                                        byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog0.txt")); // The first (main) log file
+// TODO: In the future maybe rather ZIP the text and then upload (and the newest rollover logs)
+                                        byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt")); // The first (main) log file
                                         String logInfo = new String(fileBytes, Charset.defaultCharset());
                                         int logCharacterLength = 99999;
                                         if (logInfo.length() > logCharacterLength) {
@@ -208,7 +207,7 @@ public class WildLogApp extends Application {
                                         logFileSnippit = logFileSnippit.replace(File.separatorChar, '^');
                                     }
                                     catch (IOException  ex) {
-                                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                     }
                                 }
                                 // Send the parameters to the site
@@ -234,12 +233,12 @@ public class WildLogApp extends Application {
                                         response.append(new String(respBuffer).trim());
                                         respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
                                     }
-                                    WildLogApp.LOGGER.log(Level.INFO, "WEB RESPONSE (uploadWildLogInfo): {0}", response.toString());
+                                    WildLogApp.LOGGER.log(Level.INFO, "WEB RESPONSE (uploadWildLogInfo): {}", response.toString());
                                 }
                             }
                         }
                         catch (Exception ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                     }
                 }, 20, TimeUnit.SECONDS);
@@ -250,12 +249,12 @@ public class WildLogApp extends Application {
 
     private boolean openWorkspace() {
         try {
-            WildLogApp.LOGGER.log(Level.INFO, "Opening Workspace at: {0}", WildLogPaths.getFullWorkspacePrefix().toString());
+            WildLogApp.LOGGER.log(Level.INFO, "Opening Workspace at: {}", WildLogPaths.getFullWorkspacePrefix().toString());
             dbi = new WildLogDBI_h2();
         }
         catch (Exception ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, "Could not open the Workspace. Will try to ask the user to try a new Workspace folder.");
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex); // This will technicall log the error twice, but doing it to playsafe
+            WildLogApp.LOGGER.log(Level.ERROR, "Could not open the Workspace. Will try to ask the user to try a new Workspace folder.");
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex); // This will technicall log the error twice, but doing it to playsafe
             return false;
         }
         return true;
@@ -341,7 +340,7 @@ public class WildLogApp extends Application {
                     }
                 }
                 catch (Exception ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 return doShutdown;
             }
@@ -370,6 +369,8 @@ public class WildLogApp extends Application {
     public static void main(String[] args) {
         // Set default startup settings
         ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath().normalize();
+        System.setProperty("settingsFolderLocation", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
+        WildLogApp.LOGGER = LogManager.getLogger("WildLogApp");
         useNimbusLF = true;
         // Load the startup settings from the properties file
         BufferedReader reader = null;
@@ -392,12 +393,16 @@ public class WildLogApp extends Application {
             useNimbusLF = Boolean.parseBoolean(props.getProperty("useNimbus"));
             if (props.getProperty("settingsFolderLocation") != null && !props.getProperty("settingsFolderLocation").trim().isEmpty()) {
                 ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(props.getProperty("settingsFolderLocation")).normalize().toAbsolutePath().normalize();
+                // Once the setting folder has been determined the logger can be reconfigured to use it instead of the default one
+                System.setProperty("settingsFolderLocation", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
+                LoggerContext context = (LoggerContext) LogManager.getContext(false);
+                context.reconfigure();
             }
             // Get the active application folder
             ACTIVEWILDLOG_CODE_FOLDER = Paths.get(WildLogApp.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent();
         }
         catch (IOException | URISyntaxException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             JOptionPane.showMessageDialog(null,
                         "Could not load the settings from the properties on startup. WildLog will continue to start using the default settings.",
                         "Problem Starting WildLog", JOptionPane.WARNING_MESSAGE);
@@ -408,7 +413,7 @@ public class WildLogApp extends Application {
                     reader.close();
                 }
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
             }
         }
@@ -418,55 +423,32 @@ public class WildLogApp extends Application {
             Files.createDirectories(ACTIVE_WILDLOG_SETTINGS_FOLDER);
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
-        // Enable logging to file
-        try {
-            // Setup the Logger to include the uncaught exceptions (usually printed to System.err)
-            Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-                @Override
-                public void uncaughtException(Thread thread, Throwable e) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                }
-            });
-            // Setup the Logger to log to a file
-            if (logToFile) {
-                FileHandler fileHandler = new FileHandler(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog%g.txt").toAbsolutePath().toString(), 
-                        1048576, // 1MB
-                        5, // Keep up to 5 files
-                        true); // Append to the log each time the application starts
-                WildLogApp.LOGGER.addHandler(fileHandler);
+        // Setup the Logger to include the uncaught exceptions (usually printed to System.err)
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable e) {
+                WildLogApp.LOGGER.log(Level.ERROR, e.getMessage(), e);
             }
-            // Create a custom formatter to only print the actual log line
-            for (Handler handler : WildLogApp.LOGGER.getHandlers()) {
-                handler.setFormatter(new Formatter() {
-                    @Override
-                    public String format(LogRecord inRecord) {
-                        return inRecord.getLevel().getName().concat(": ").concat(formatMessage(inRecord)).concat(System.lineSeparator());
-                    }
-                });
+        });
+        // Setup the System.out and System.err to redirect to the Logger
+        System.setOut(new PrintStream(System.out) {
+            @Override
+            public void print(String text) {
+                WildLogApp.LOGGER.log(Level.INFO, text);
             }
-            // Setup the System.out and System.err to redirect to the Logger
-            System.setOut(new PrintStream(System.out) {
-                @Override
-                public void print(String text) {
-                    WildLogApp.LOGGER.log(Level.INFO, text);
-                }
-            });
-            System.setErr(new PrintStream(System.err) {
-                @Override
-                public void print(String text) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, text);
-                }
-            });
-            // Set the Logging level for the console (for example show in NetBeans)
-            WildLogApp.LOGGER.setLevel(Level.ALL);
-            // Add a new line between application startups
-            WildLogApp.LOGGER.log(Level.INFO, "");
-        }
-        catch (IOException | SecurityException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
-        }
+        });
+        System.setErr(new PrintStream(System.err) {
+            @Override
+            public void print(String text) {
+                WildLogApp.LOGGER.log(Level.ERROR, text);
+            }
+        });
+        // Add a new line between application startups
+        WildLogApp.LOGGER.log(Level.INFO, "");
+        
+        
         // Try to read the settings file containing the wildloghome (active workspace)
         try {
             configureWildLogHomeBasedOnSettingsFile();
@@ -486,7 +468,7 @@ public class WildLogApp extends Application {
                 }
             }
             catch (IOException ioex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ioex.toString(), ioex);
+                WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
             }
             finally {
                 if (writer != null) {
@@ -495,7 +477,7 @@ public class WildLogApp extends Application {
                         writer.close();
                     }
                     catch (IOException ioex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ioex.toString(), ioex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
                     }
                 }
             }
@@ -504,14 +486,14 @@ public class WildLogApp extends Application {
                 configureWildLogHomeBasedOnSettingsFile();
             }
             catch (IOException ioex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ioex.toString(), ioex);
+                WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
                 configureWildLogHomeBasedOnFileBrowser(null, true);
             }
         }
-        WildLogApp.LOGGER.log(Level.INFO, "STARTING UP WildLog - {0}", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
-        WildLogApp.LOGGER.log(Level.INFO, "WildLog Setting Folder: {0}", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
-        WildLogApp.LOGGER.log(Level.INFO, "WildLog Application Folder: {0}", ACTIVEWILDLOG_CODE_FOLDER.toAbsolutePath().toString());
-        WildLogApp.LOGGER.log(Level.INFO, "WildLog Version: {0}", WILDLOG_VERSION);
+        WildLogApp.LOGGER.log(Level.INFO, "STARTING UP WildLog - {}", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
+        WildLogApp.LOGGER.log(Level.INFO, "WildLog Setting Folder: {}", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
+        WildLogApp.LOGGER.log(Level.INFO, "WildLog Application Folder: {}", ACTIVEWILDLOG_CODE_FOLDER.toAbsolutePath().toString());
+        WildLogApp.LOGGER.log(Level.INFO, "WildLog Version: {}", WILDLOG_VERSION);
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
     }
@@ -529,7 +511,7 @@ public class WildLogApp extends Application {
                     reader.close();
                 }
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
             }
         }
@@ -571,7 +553,7 @@ public class WildLogApp extends Application {
     @Override
     protected void shutdown() {
         super.shutdown();
-        WildLogApp.LOGGER.log(Level.INFO, "SHUTTING DOWN WildLog - {0}", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
+        WildLogApp.LOGGER.log(Level.INFO, "SHUTTING DOWN WildLog - {}", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         WildLogApp.LOGGER.log(Level.INFO, "");
         Platform.exit();
     }
@@ -621,7 +603,7 @@ public class WildLogApp extends Application {
                     respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
                 }
                 if (!WILDLOG_VERSION.equalsIgnoreCase(response.toString())) {
-                    WildLogApp.LOGGER.log(Level.INFO, "WEB RESPONSE (getLatestWildLogVersion): {0}", response.toString());
+                    WildLogApp.LOGGER.log(Level.INFO, "WEB RESPONSE (getLatestWildLogVersion): {}", response.toString());
                     // Show message with download link
                     JLabel label = new JLabel();
                     Font font = label.getFont();
@@ -639,7 +621,7 @@ public class WildLogApp extends Application {
                                     Desktop.getDesktop().browse(inHyperlinkEvent.getURL().toURI());
                                 }
                                 catch (IOException | URISyntaxException ex) {
-                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                 }
                             }
                         }
@@ -655,7 +637,7 @@ public class WildLogApp extends Application {
             }
         }
         catch (Exception ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         return "Unknown";
     }

@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
@@ -76,7 +76,7 @@ public class BulkUploadDataLoader {
                         inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, files.size() + 1); // Prevent the progress bar from reaching 100%
                     }
                     catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                 }
             });
@@ -149,11 +149,11 @@ public class BulkUploadDataLoader {
             }
         }
         catch (JpegProcessingException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, "Error reading EXIF data for: {0}", inFile);
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, "Error reading EXIF data for: {}", inFile);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         Date date = UtilsImageProcessing.getDateFromImage(metadata, inFile);
         if (date != null) {
@@ -178,7 +178,7 @@ public class BulkUploadDataLoader {
             inImageList.add(wrapper);
         }
         else {
-            WildLogApp.LOGGER.log(Level.INFO, "Could not determine date for image file: {0}", inFile.toAbsolutePath());
+            WildLogApp.LOGGER.log(Level.INFO, "Could not determine date for image file: {}", inFile.toAbsolutePath());
         }
     }
 

@@ -17,7 +17,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -1741,7 +1741,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 data = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), IUCNSpeciesData.class);
             }
             catch (IOException | JsonIOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             finally {
                 app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
@@ -1801,7 +1801,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 data = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), IUCNSpeciesData.class);
             }
             catch (IOException | JsonIOException ex) {
-                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             finally {
                 app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());

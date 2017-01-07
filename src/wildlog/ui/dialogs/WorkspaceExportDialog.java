@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -473,7 +473,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             }
         }
         catch (Exception ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             getGlassPane().setVisible(true);
             JOptionPane.showMessageDialog(app.getMainFrame(),
                     "Could not export the Workspace successfully.",

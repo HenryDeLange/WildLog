@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
@@ -338,7 +338,7 @@ public class SlideshowDialog extends JDialog {
                             gifWriter.finishGIF();
                         }
                         catch (IOException ex) {
-                            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
                         finally {
                             if (output != null) {
@@ -346,13 +346,13 @@ public class SlideshowDialog extends JDialog {
                                     output.flush();
                                 }
                                 catch (IOException ex) {
-                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                 }
                                 try {
                                     output.close();
                                 }
                                 catch (IOException ex) {
-                                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                 }
                             }
                         }

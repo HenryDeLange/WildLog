@@ -1,6 +1,6 @@
 package wildlog.ui.dialogs;
 
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.JDialog;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;

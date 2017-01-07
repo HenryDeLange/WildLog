@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
@@ -1143,7 +1143,7 @@ public class ExportDialog extends JDialog {
                     workbook.write(out);
                 }
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 // Open the observations file
                 UtilsFileProcessing.openFile(observationsFile);
@@ -1181,7 +1181,7 @@ public class ExportDialog extends JDialog {
                     workbook.write(out);
                 }
                 catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 // Open the visits file
                 UtilsFileProcessing.openFile(visitsFile);

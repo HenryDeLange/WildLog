@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
+import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -58,7 +58,7 @@ public class WorkspaceImportDialog extends JDialog {
                 + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
         }
         catch (Exception ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         initComponents();
         // Setup the tree
@@ -400,7 +400,7 @@ public class WorkspaceImportDialog extends JDialog {
             }
         }
         catch (Exception ex) {
-            WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             getGlassPane().setVisible(true);
             JOptionPane.showMessageDialog(app.getMainFrame(),
                     "Could not import the Workspace successfully.",
@@ -579,7 +579,7 @@ public class WorkspaceImportDialog extends JDialog {
                                 Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(fileToImport.getDBFilePath(), size));
                             }
                             catch (IOException ex) {
-                                WildLogApp.LOGGER.log(Level.SEVERE, ex.toString(), ex);
+                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                             }
                         }
                         // Create new thumbnails

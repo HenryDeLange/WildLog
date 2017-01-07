@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.Level;
+import wildlog.WildLogApp;
 import wildlog.maps.kml.UtilsKML;
 
 
@@ -25,14 +25,14 @@ public class KmlGenerator {
             file.flush();
         }
         catch (IOException ex) {
-            Logger.getLogger(KmlGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         finally {
             try {
                 file.close();
             }
             catch (IOException ex) {
-                Logger.getLogger(KmlGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
     }
