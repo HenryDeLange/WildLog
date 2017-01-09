@@ -14,7 +14,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -27,6 +26,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.text.JTextComponent;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
@@ -1808,7 +1808,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (sighting.getDate() != null && cmbTimeAccuracy.getSelectedItem() != null
             && ((TimeAccuracy) cmbTimeAccuracy.getSelectedItem()).isUsableTime()) {
             // Try to save the sighting (to make sure all required fields are there and to get the Sighting Time)
-            if (!bulkUploadMode) {
+            if (!bulkUploadMode && evt != null) { // Moenie save as dit 'n Bulk Import is nie, of as dit via 'n ander button/event geroep word nie
                 btnUpdateSightingActionPerformed(null);
             }
             // Load the date into the sighting object from the fields
