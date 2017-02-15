@@ -118,7 +118,7 @@ public class ImageBox extends JPanel {
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnRemove.setText("<html><u>Remove</u></html>");
-        btnRemove.setToolTipText("Remove the file from this Observation. Right-click to remove the file from the Observation, but move it to the Period.");
+        btnRemove.setToolTipText("Remove the file from this Observation. RIGHT-CLICK to remove the file from the Observation, but move it to the Period.");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setFocusPainted(false);
         btnRemove.setFocusable(false);

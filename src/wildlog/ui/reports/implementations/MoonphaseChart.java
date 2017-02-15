@@ -1,5 +1,6 @@
 package wildlog.ui.reports.implementations;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -26,8 +27,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
+import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
@@ -43,11 +46,18 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     private Chart displayedChart;
     private boolean showDayOrNight = false;
     private boolean showMoonShiningOrNot = false;
+    private boolean showBaseline = false;
     private final int PERCENTAGES_PER_INTERVAL = 10;
+    private final String BASELINE = "<<Baseline>>";
+    private final String MOON_BELOW_50 = "Half Moon 0-50%";
+    private final String MOON_ABOVE_50 = "Full Moon 50-100%";
+    private final String MOON_UNKNOWN = "Unknown";
+    private final String ALL_SIGHTINGS = "All Observations";
+    
     
     public MoonphaseChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Moon Phase Reports", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(9);
+        lstCustomButtons = new ArrayList<>(10);
         // Charts
         Button btnPieChart = new Button("All Observations Together (Pie)");
         btnPieChart.setCursor(Cursor.HAND);
@@ -126,6 +136,16 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(chkShowMoonlight);
+        CheckBox chkShowBaseline = new CheckBox("Show Baseline");
+        chkShowBaseline.setCursor(Cursor.HAND);
+        chkShowBaseline.setSelected(false);
+        chkShowBaseline.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                showBaseline = chkShowBaseline.isSelected();
+            }
+        });
+        lstCustomButtons.add(chkShowBaseline);
     }
 
     @Override
@@ -169,7 +189,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         Map<String, Map<String, ReportDataWrapper>> mapChartDataGroupedForSeries = new HashMap<>();
         String temp = null;
         if (inIsForAllObservations) {
-            temp = "All Observations";
+            temp = ALL_SIGHTINGS;
         }
         for (Sighting sighting : inSightings) {
             if (!inIsForAllObservations) {
@@ -180,37 +200,23 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                 mapChartData = new HashMap<>();
                 mapChartDataGroupedForSeries.put(temp + getDetailsString(sighting), mapChartData);
             }
-            if (sighting.getMoonPhase() >= 0) {
-                if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() < 50) {
-                    increaseCountInMap(mapChartData, "Half Moon 0-50%");
-                } 
-                else
-                if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 100) {
-                    increaseCountInMap(mapChartData, "Full Moon 50-100%");
-                } 
-                else
-                // If the moon is 50% then base it on whether the moon is growing or shrinking.
-                if (sighting.getMoonPhase() == 50) {
-                    LocalDateTime futureTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).plusDays(2);
-                    int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
-                    if (testMoonphase >= 0 && testMoonphase < 50) {
-                        increaseCountInMap(mapChartData, "Half Moon 0-50%");
-                    } 
-                    else
-                    if (testMoonphase > 50 && testMoonphase <= 100) {
-                        increaseCountInMap(mapChartData, "Full Moon 50-100%");
-                    } 
-                    else {
-                        increaseCountInMap(mapChartData, "Unknown");
+            String key = getMoonphaseKey(sighting.getMoonPhase(), UtilsTime.getLocalDateTimeFromDate(sighting.getDate()), "");
+            increaseCountInMap(mapChartData, key);
+        }
+        // Add the baseline
+        if (showBaseline) {
+            Map<String, ReportDataWrapper> mapChartData = new HashMap<>();
+            Map<String, VisitDates> mapVisitDates = getBaselineDates(inSightings);
+            for (VisitDates visitDates : mapVisitDates.values()) {
+                if (visitDates.startDate != null && visitDates.endDate != null) {
+                    for (LocalDate day = visitDates.startDate; day.isBefore(visitDates.endDate); day = day.plusDays(1)) {
+                        int moonphase = AstroCalculator.getMoonPhase(Date.from(day.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                        String key = getMoonphaseKey(moonphase, day.atStartOfDay(), "");
+                        increaseCountInMap(mapChartData, key);
                     }
                 }
-                else {
-                    increaseCountInMap(mapChartData, "Unknown");
-                }
             }
-            else {
-                increaseCountInMap(mapChartData, "Unknown");
-            }
+            mapChartDataGroupedForSeries.put(BASELINE, mapChartData);
         }
         // Setup the final data series to be displayed
         ObservableList<StackedBarChart.Series<String, Number>> lstChartSeries = FXCollections.observableArrayList();
@@ -241,56 +247,24 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         return chart;
     }
     
-    private void increaseCountInMap(Map<String, ReportDataWrapper> inMap, String inKey) {
-        ReportDataWrapper dataWrapper = inMap.get(inKey);
-        if (dataWrapper == null) {
-            dataWrapper = new ReportDataWrapper(inKey, inKey, 0);
-            inMap.put(inKey, dataWrapper);
-        }
-        dataWrapper.increaseCount();
-    }
-    
     private Chart createPieChart(List<Sighting> inSightings) {
-        Map<String, ReportDataWrapper> mapChartData = new HashMap<>(4);
+        Map<String, ReportDataWrapper> mapChartData = new HashMap<>(5);
         for (Sighting sighting : inSightings) {
-            String key = "";
-            if (sighting.getMoonPhase() >= 0) {
-                if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() < 50) {
-                    key = "Half Moon 0-50%" + getDetailsString(sighting);
-                } 
-                else
-                if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 100) {
-                    key = "Full Moon 50-100%" + getDetailsString(sighting);
-                } 
-                else
-                // If the moon is 50% then base it on whether the moon is growing or shrinking.
-                if (sighting.getMoonPhase() == 50) {
-                    LocalDateTime futureTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).plusDays(2);
-                    int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
-                    if (testMoonphase >= 0 && testMoonphase < 50) {
-                        key = "Half Moon 0-50%" + getDetailsString(sighting);
-                    } 
-                    else
-                    if (testMoonphase > 50 && testMoonphase <= 100) {
-                        key = "Full Moon 50-100%" + getDetailsString(sighting);
-                    } 
-                    else {
-                        key = "Unknown";
+            String key = getMoonphaseKey(sighting.getMoonPhase(), UtilsTime.getLocalDateTimeFromDate(sighting.getDate()), getDetailsString(sighting));
+            increaseCountInMap(mapChartData, key);
+        }
+        // Add the baseline
+        if (showBaseline) {
+            Map<String, VisitDates> mapVisitDates = getBaselineDates(inSightings);
+            for (VisitDates visitDates : mapVisitDates.values()) {
+                if (visitDates.startDate != null && visitDates.endDate != null) {
+                    for (LocalDate day = visitDates.startDate; day.isBefore(visitDates.endDate); day = day.plusDays(1)) {
+                        int moonphase = AstroCalculator.getMoonPhase(Date.from(day.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                        String key = getMoonphaseKey(moonphase, day.atStartOfDay(), " - " + BASELINE);
+                        increaseCountInMap(mapChartData, key);
                     }
                 }
-                else {
-                    key = "Unknown";
-                }
             }
-            else {
-                key = "Unknown";
-            }
-            ReportDataWrapper dataWrapper = mapChartData.get(key);
-            if (dataWrapper == null) {
-                dataWrapper = new ReportDataWrapper(null, null, 0);
-                mapChartData.put(key, dataWrapper);
-            }
-            dataWrapper.increaseCount();
         }
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapChartData.keySet());
@@ -320,14 +294,13 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         Map<String, Integer> mapTotalsForSeries = new HashMap<>();
         String temp = null;
         if (inIsForAllObservations) {
-            temp = "All Observations";
+            temp = ALL_SIGHTINGS;
         }
         for (Sighting sighting : inSightings) {
             if (!inIsForAllObservations) {
                 temp = sighting.getElementName();
             }
-            ReportDataWrapper dataWrapper = mapInitialCountedData.get(temp + getDetailsString(sighting) 
-                    + "-" + getMoonIntervalPercentage(sighting.getMoonPhase()));
+            ReportDataWrapper dataWrapper = mapInitialCountedData.get(temp + getDetailsString(sighting) + "-" + getMoonIntervalPercentage(sighting.getMoonPhase()));
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper();
                 dataWrapper.key = temp + getDetailsString(sighting);
@@ -338,11 +311,36 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     dataWrapper.value = Moonlight.UNKNOWN.toString();
                 }
                 dataWrapper.count = 0;
+                mapInitialCountedData.put(temp + getDetailsString(sighting) + "-" + getMoonIntervalPercentage(sighting.getMoonPhase()), dataWrapper);
                 mapTotalsForSeries.put(temp + getDetailsString(sighting), 0);
             }
-            dataWrapper.count++;
-            mapInitialCountedData.put(temp + getDetailsString(sighting) 
-                    + "-" + getMoonIntervalPercentage(sighting.getMoonPhase()), dataWrapper);
+            dataWrapper.increaseCount();
+        }
+        // Add the baseline
+        if (showBaseline) {
+            Map<String, VisitDates> mapVisitDates = getBaselineDates(inSightings);
+            for (VisitDates visitDates : mapVisitDates.values()) {
+                if (visitDates.startDate != null && visitDates.endDate != null) {
+                    for (LocalDate day = visitDates.startDate; day.isBefore(visitDates.endDate); day = day.plusDays(1)) {
+                        int moonphase = AstroCalculator.getMoonPhase(Date.from(day.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+                        ReportDataWrapper dataWrapper = mapInitialCountedData.get(BASELINE + "-" + getMoonIntervalPercentage(moonphase));
+                        if (dataWrapper == null) {
+                            dataWrapper = new ReportDataWrapper();
+                            dataWrapper.key = BASELINE;
+                            if (moonphase >= 0) {
+                                dataWrapper.value = getMoonIntervalPercentage(moonphase);
+                            }
+                            else {
+                                dataWrapper.value = Moonlight.UNKNOWN.toString();
+                            }
+                            dataWrapper.count = 0;
+                            mapInitialCountedData.put(BASELINE + "-" + getMoonIntervalPercentage(moonphase), dataWrapper);
+                            mapTotalsForSeries.put(BASELINE, 0);
+                        }
+                        dataWrapper.increaseCount();
+                    }
+                }
+            }
         }
         // Add all the points on the chart in the correct order. This also adds the 0 values for the data gaps.
         Map<String, ObservableList<AreaChart.Data<String, Number>>> mapDataPerElement = new HashMap<>(mapInitialCountedData.size());
@@ -388,6 +386,15 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         return chart;
     }
     
+    private void increaseCountInMap(Map<String, ReportDataWrapper> inMap, String inKey) {
+        ReportDataWrapper dataWrapper = inMap.get(inKey);
+        if (dataWrapper == null) {
+            dataWrapper = new ReportDataWrapper(inKey, inKey, 0);
+            inMap.put(inKey, dataWrapper);
+        }
+        dataWrapper.increaseCount();
+    }
+    
     private String getDetailsString(Sighting inSighting) {
         String temp = "";
         if (showDayOrNight) {
@@ -412,6 +419,86 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         }
         return Integer.toString((inValue/PERCENTAGES_PER_INTERVAL)*PERCENTAGES_PER_INTERVAL) + "-" 
                 + Integer.toString(((inValue + PERCENTAGES_PER_INTERVAL)/PERCENTAGES_PER_INTERVAL)*PERCENTAGES_PER_INTERVAL) + "%";
+    }
+    
+    private String getMoonphaseKey(int inMoonphase, LocalDateTime inDate, String inDetailsString) {
+        String key;
+        if (inMoonphase >= 0) {
+            if (inMoonphase >= 0 && inMoonphase < 50) {
+                key = MOON_BELOW_50 + inDetailsString;
+            } 
+            else
+            if (inMoonphase > 50 && inMoonphase <= 100) {
+                key = MOON_ABOVE_50 + inDetailsString;
+            } 
+            else
+            // If the moon is 50% then base it on whether the moon is growing or shrinking.
+            if (inMoonphase == 50) {
+                LocalDateTime futureTime = inDate.plusDays(2);
+                int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
+                if (testMoonphase >= 0 && testMoonphase < 50) {
+                    key = MOON_BELOW_50 + inDetailsString;
+                } 
+                else
+                if (testMoonphase > 50 && testMoonphase <= 100) {
+                    key = MOON_ABOVE_50 + inDetailsString;
+                } 
+                else {
+                    key = MOON_UNKNOWN;
+                }
+            }
+            else {
+                key = MOON_UNKNOWN;
+            }
+        }
+        else {
+            key = MOON_UNKNOWN;
+        }
+        return key;
+    }
+    
+    private Map<String, VisitDates> getBaselineDates(List<Sighting> inLstSightings) {
+        Map<String, VisitDates> mapDates = new HashMap<>();
+        for (Sighting sighting : inLstSightings) {
+            VisitDates visitDates = mapDates.get(sighting.getVisitName());
+            if (visitDates == null) {
+                visitDates = new VisitDates();
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                if (visit.getStartDate() != null) {
+                    visitDates.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
+                    visitDates.startDateFromVisit = true;
+                }
+                if (visit.getEndDate()!= null) {
+                    visitDates.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    visitDates.endDateFromVisit = true;
+                }
+                mapDates.put(sighting.getVisitName(), visitDates);
+            }
+            if (!visitDates.startDateFromVisit || !visitDates.endDateFromVisit) {
+                LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+                if (!visitDates.startDateFromVisit) {
+                    if (visitDates.startDate == null || sightingDate.isBefore(visitDates.startDate)) {
+                        visitDates.startDate = sightingDate;
+                    }
+                }
+                if (!visitDates.endDateFromVisit) {
+                    if (visitDates.endDate == null || sightingDate.isAfter(visitDates.endDate)) {
+                        visitDates.endDate = sightingDate;
+                    }
+                }
+            }
+        }
+        for (Map.Entry<String, VisitDates> entry : mapDates.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue().startDate.toString() + " - "  + entry.getValue().endDate.toString() + " ("  + entry.getValue().endDateFromVisit + ")");
+        }
+        return mapDates;
+    }
+    
+    private class VisitDates {
+        LocalDate startDate;
+        boolean startDateFromVisit = false;
+        LocalDate endDate;
+        boolean endDateFromVisit = false;
     }
     
 }

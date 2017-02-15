@@ -344,6 +344,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoElementActionPerformed(null);
+            evt.consume();
         }
         else
         if (evt.getKeyCode() == KeyEvent.VK_DELETE) {

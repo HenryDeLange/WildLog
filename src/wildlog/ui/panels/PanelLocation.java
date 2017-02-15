@@ -9,13 +9,13 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -1475,6 +1475,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoElementActionPerformed(null);
+            evt.consume();
         }
     }//GEN-LAST:event_tblElementKeyPressed
 
@@ -1493,6 +1494,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoVisitActionPerformed(null);
+            evt.consume();
         }
     }//GEN-LAST:event_tblVisitKeyPressed
 

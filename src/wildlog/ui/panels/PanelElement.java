@@ -17,7 +17,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -26,6 +25,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -1663,8 +1663,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoLocationActionPerformed(null);
+            evt.consume();
+        }
     }//GEN-LAST:event_tblLocationKeyPressed
 
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
