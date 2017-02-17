@@ -470,7 +470,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(1005, 685));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(1005, 685));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
@@ -1090,7 +1089,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel9.setText("Rating:");
         jLabel9.setName("jLabel9"); // NOI18N
 
-        jLabel10.setText("Number:");
+        jLabel10.setText("Individuals:");
         jLabel10.setName("jLabel10"); // NOI18N
 
         spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.0d, 1.0d));
@@ -1460,12 +1459,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             .addGroup(pnlButtonsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCalculateDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btnCalculateSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btnCalculateDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCalculateSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnGetGPSFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(btnGetDateFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(btnUpdateSighting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnGetGPSFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnGetDateFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnUpdateSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblSightingID, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
         );

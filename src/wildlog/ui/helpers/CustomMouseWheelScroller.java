@@ -83,23 +83,17 @@ public final class CustomMouseWheelScroller implements MouseWheelListener {
         if (realListeners == null) {
             return;
         }
-
         //  Remove this class as the default listener
-
         scrollPane.removeMouseWheelListener(this);
-
         //  Install the default listeners
-
         for (MouseWheelListener mwl : realListeners) {
             scrollPane.addMouseWheelListener(mwl);
         }
-
         realListeners = null;
     }
 
-//  Implement MouseWheelListener interface
     /**
-     *  Redispatch a MouseWheelEvent to the real MouseWheelListeners
+     *  Re-dispatch a MouseWheelEvent to the real MouseWheelListeners
      */
     public void mouseWheelMoved(MouseWheelEvent e) {
         //  Create an altered event to redispatch

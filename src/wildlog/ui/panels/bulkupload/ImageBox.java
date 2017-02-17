@@ -27,14 +27,16 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public class ImageBox extends JPanel {
-    private BulkUploadImageFileWrapper imageWrapper;
-    private JTable table;
+    private final BulkUploadPanel bulkUploadPanel;
+    private final BulkUploadImageFileWrapper imageWrapper;
+    private final JTable table;
 
-    /** Creates new form ImageBox */
-    public ImageBox(BulkUploadImageFileWrapper inBulkUploadImageFileWrapper, JTable inTable) {
+
+    public ImageBox(final BulkUploadImageFileWrapper inBulkUploadImageFileWrapper, final JTable inTable) {
         initComponents();
         imageWrapper = inBulkUploadImageFileWrapper;
         table = inTable;
+        bulkUploadPanel = (BulkUploadPanel) table.getParent().getParent().getParent();
         populateUI();
         imageWrapper.setImageBox(this);
     }
@@ -139,7 +141,7 @@ public class ImageBox extends JPanel {
 
         btnNewSighting.setBackground(new java.awt.Color(235, 246, 220));
         btnNewSighting.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        btnNewSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting Small.gif"))); // NOI18N
+        btnNewSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add Sighting.png"))); // NOI18N
         btnNewSighting.setText("Observation");
         btnNewSighting.setToolTipText("Move the file into its own NEW Observation.");
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -250,6 +252,7 @@ public class ImageBox extends JPanel {
         BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
         listWrapper.getImageList().add(imageWrapper.getClone());
         model.fireTableCellUpdated(row, col);
+        bulkUploadPanel.updateCountForFilesLinked();
     }//GEN-LAST:event_btnCloneActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
@@ -267,6 +270,7 @@ public class ImageBox extends JPanel {
         else {
             model.fireTableCellUpdated(row, col);
         }
+        bulkUploadPanel.updateCountForFilesLinked();
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnCloneMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloneMouseReleased
@@ -336,6 +340,7 @@ public class ImageBox extends JPanel {
                 }
             }
             evt.consume();
+            bulkUploadPanel.updateCountForFilesLinked();
         }
     }//GEN-LAST:event_btnCloneMouseReleased
 
@@ -368,7 +373,6 @@ public class ImageBox extends JPanel {
                 }
             });
             if (result == JOptionPane.YES_OPTION) {
-                BulkUploadPanel bulkUploadPanel = (BulkUploadPanel) getParent().getParent().getParent().getParent().getParent();
                 bulkUploadPanel.addVisitFile(imageWrapper.getFile());
                 btnRemoveActionPerformed(null);
             }

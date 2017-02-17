@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -26,6 +25,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
@@ -97,7 +97,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Set table scroling to only one row at a time
         mouseWheel = new CustomMouseWheelScroller(scrTable);
         mouseWheel.install();
-        // "Hack" to make the buttons clickable when the mouse scrolles over the cell (very performance intensive, but "better" now...) of as mens die model clear deur 'n nuwe browse besigheid oop te maak...
+        // "Hack" to make the buttons clickable when the mouse scrolls over the cell (very performance intensive, but "better" now...)
+        // of as mens die model clear deur 'n nuwe browse besigheid oop te maak...
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -169,17 +170,19 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
         if (importPath != null) {
             // Setup the datamodel
-            final DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
+            final DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
             model.getDataVector().clear();
             model.fireTableDataChanged();
             BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(
-                    importPath, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), inProgressbarTask, app);
+                    importPath, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), 
+                    inProgressbarTask, lblFilesRead, app);
             if (wrapper != null) {
                 model.getDataVector().addAll(UtilsTableGenerator.convertToVector(wrapper.getData()));
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
                         model.fireTableDataChanged();
+                        updateCountForFilesLinked();
                     }
                 });
                 // Setup the dates
@@ -273,6 +276,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnSelectLocation = new javax.swing.JButton();
         lblLocation = new javax.swing.JLabel();
         lblImageLocation = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        lblFilesRead = new javax.swing.JLabel();
+        lblFilesLinked = new javax.swing.JLabel();
         btnGPSForAll = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         scrTable = new javax.swing.JScrollPane();
@@ -345,9 +352,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
                         .addComponent(txtVisitName)
@@ -356,7 +363,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addGap(8, 8, 8)
                         .addComponent(cmbVisitType, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
                         .addComponent(jLabel3)
                         .addGap(22, 22, 22)
                         .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -517,6 +523,44 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             }
         });
 
+        jPanel1.setBackground(new java.awt.Color(153, 180, 115));
+        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel1.setName("jPanel1"); // NOI18N
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("File Count");
+        jLabel10.setName("jLabel10"); // NOI18N
+
+        lblFilesRead.setText("Read: 0");
+        lblFilesRead.setName("lblFilesRead"); // NOI18N
+
+        lblFilesLinked.setText("Linked: 0");
+        lblFilesLinked.setName("lblFilesLinked"); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addComponent(lblFilesRead)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(lblFilesLinked)
+                .addContainerGap(27, Short.MAX_VALUE))
+            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblFilesRead, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblFilesLinked, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -526,13 +570,20 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblImageLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(2, 2, 2))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(2, 2, 2))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSelectLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 22, Short.MAX_VALUE)))
-                .addGap(2, 2, 2))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -544,7 +595,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 .addGap(1, 1, 1)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblImageLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSelectLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(btnSelectLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(2, 2, 2))
         );
 
@@ -1015,6 +1069,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             lblVisitFiles.setText(lblVisitFiles.getText().substring(0, lblVisitFiles.getText().lastIndexOf(':') + 1) + " " + lstVisitFiles.size());
         }
     }
+    
+    public void updateCountForFilesLinked() {
+        int fileCount = 0;
+        DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
+        for (int row = 0; row < model.getRowCount(); row++) {
+            BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, 1);
+            fileCount = fileCount + listWrapper.getImageList().size();
+        }
+        lblFilesLinked.setText(lblFilesLinked.getText().substring(0, lblFilesLinked.getText().lastIndexOf(':') + 1) + " " + fileCount);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGPSForAll;
@@ -1026,6 +1090,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1033,9 +1098,12 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel lblFilesLinked;
+    private javax.swing.JLabel lblFilesRead;
     private javax.swing.JLabel lblImageLocation;
     private javax.swing.JLabel lblLocation;
     private javax.swing.JLabel lblVisitFiles;

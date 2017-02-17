@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
@@ -41,7 +42,8 @@ import wildlog.utils.WildLogSystemImages;
 
 public class BulkUploadDataLoader {
     
-    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, WildLogApp inApp) {
+    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, 
+            final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp) {
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
         final List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
         if (files.isEmpty() && !inIsRecuresive) {
@@ -54,13 +56,14 @@ public class BulkUploadDataLoader {
                 }
             });
             if (result == JOptionPane.YES_OPTION) {
-                inIsRecuresive = true;
-                files.addAll(getListOfFilesToImport(inFolderPath, inIsRecuresive));
+                files.addAll(getListOfFilesToImport(inFolderPath, true));
             }
             else {
                 return null;
             }
         }
+        // Update the UI to show the numebr of files found
+        inLblFilesRead.setText(inLblFilesRead.getText().substring(0, inLblFilesRead.getText().lastIndexOf(':') + 1) + " " + files.size());
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         final List<BulkUploadImageFileWrapper> imageList = Collections.synchronizedList(new ArrayList<BulkUploadImageFileWrapper>(files.size()));
         // First load all the images and sort them according to date
@@ -141,7 +144,8 @@ public class BulkUploadDataLoader {
     }
 
     private static void loadFileData(Path inFile, List<BulkUploadImageFileWrapper> inImageList) {
-        // Note: Ek load die file meer as een keer (HDD+OS cache), maar dis steeds redelik vinnig, en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
+        // Note: Ek load die file meer as een keer (HDD+OS cache), maar dis steeds redelik vinnig, 
+        //       en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
         Metadata metadata = null;
         try {
             if (WildLogFileExtentions.Images.isJPG(inFile)) {

@@ -2,8 +2,11 @@ package wildlog.ui.panels.bulkupload;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -12,9 +15,12 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.data.enums.Sex;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
+import wildlog.ui.helpers.HorizontalSpinner;
+import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
@@ -42,6 +48,16 @@ public class InfoBox extends JPanel {
         sightingWrapper = inBulkUploadSightingWrapper;
         populateUI();
         sightingWrapper.setInfoBox(this);
+        // Configure the spinner
+        SpinnerFixer.configureSpinners(spnNumber);
+        spnNumber.setUI(new HorizontalSpinner());
+        
+        JComponent spinEditor = spnNumber.getEditor();
+        if (spinEditor instanceof JSpinner.DefaultEditor) {
+            JSpinner.DefaultEditor spinnerEditor = (JSpinner.DefaultEditor) spinEditor;
+            spinnerEditor.getTextField().setHorizontalAlignment(JTextField.CENTER);
+            spinnerEditor.getTextField().setBackground(new Color(225, 230, 215));
+        }
     }
 
     public final void populateUI() {
@@ -53,6 +69,8 @@ public class InfoBox extends JPanel {
         lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
         lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
         lblImage.setIcon(sightingWrapper.getIcon());
+        cmbSex.setSelectedItem(sightingWrapper.getSex());
+        spnNumber.setValue(sightingWrapper.getNumberOfElements());
     }
 
     /** This method is called from within the constructor to
@@ -65,6 +83,7 @@ public class InfoBox extends JPanel {
     private void initComponents() {
 
         jSeparator3 = new javax.swing.JSeparator();
+        jSeparator4 = new javax.swing.JSeparator();
         lblElementName = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
@@ -81,7 +100,8 @@ public class InfoBox extends JPanel {
         btnGPS = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         lblCount = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
+        spnNumber = new javax.swing.JSpinner();
+        cmbSex = new javax.swing.JComboBox<>();
 
         jSeparator3.setName("jSeparator3"); // NOI18N
 
@@ -92,6 +112,10 @@ public class InfoBox extends JPanel {
         setPreferredSize(new java.awt.Dimension(250, 250));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 3, -1, 25));
+
         lblElementName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblElementName.setText("Creature Name");
@@ -99,7 +123,7 @@ public class InfoBox extends JPanel {
         add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 3, 195, 20));
 
         jSeparator2.setName("jSeparator2"); // NOI18N
-        add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 27, 230, 10));
+        add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 27, 230, 2));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Date:");
@@ -108,12 +132,12 @@ public class InfoBox extends JPanel {
 
         lblDate.setText("01 Jan 2012");
         lblDate.setName("lblDate"); // NOI18N
-        add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 70, -1));
+        add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(58, 30, 70, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Time:");
         jLabel3.setName("jLabel3"); // NOI18N
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 30, -1, -1));
 
         lblTime.setText("11:11 pm");
         lblTime.setName("lblTime"); // NOI18N
@@ -138,7 +162,7 @@ public class InfoBox extends JPanel {
         add(lblLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 130, -1));
 
         jSeparator1.setName("jSeparator1"); // NOI18N
-        add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 47, 230, 10));
+        add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 47, 230, 2));
 
         lblImage.setBackground(new java.awt.Color(0, 0, 0));
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -173,7 +197,7 @@ public class InfoBox extends JPanel {
                 btnChooseCreatureActionPerformed(evt);
             }
         });
-        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 50));
+        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 45));
 
         btnGPS.setBackground(new java.awt.Color(229, 241, 212));
         btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
@@ -195,7 +219,7 @@ public class InfoBox extends JPanel {
                 btnGPSActionPerformed(evt);
             }
         });
-        add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 135, 80, 50));
+        add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 130, 80, 34));
 
         btnEdit.setBackground(new java.awt.Color(229, 241, 212));
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
@@ -212,15 +236,36 @@ public class InfoBox extends JPanel {
                 btnEditActionPerformed(evt);
             }
         });
-        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 185, 80, 50));
+        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 208, 80, 27));
 
         lblCount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCount.setName("lblCount"); // NOI18N
         add(lblCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 3, 30, 20));
 
-        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jSeparator4.setName("jSeparator4"); // NOI18N
-        add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 3, -1, 25));
+        spnNumber.setModel(new javax.swing.SpinnerNumberModel(0, 0, 2147483642, 1));
+        spnNumber.setToolTipText("Number of individuals.");
+        spnNumber.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnNumber.setFocusable(false);
+        spnNumber.setName("spnNumber"); // NOI18N
+        spnNumber.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnNumberStateChanged(evt);
+            }
+        });
+        add(spnNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 187, 77, 20));
+
+        cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
+        cmbSex.setSelectedItem(Sex.NONE);
+        cmbSex.setToolTipText("Sex of the creature.");
+        cmbSex.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmbSex.setFocusable(false);
+        cmbSex.setName("cmbSex"); // NOI18N
+        cmbSex.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSexActionPerformed(evt);
+            }
+        });
+        add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 165, 77, 20));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -316,6 +361,14 @@ public class InfoBox extends JPanel {
         }
     }//GEN-LAST:event_btnGPSMouseReleased
 
+    private void cmbSexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSexActionPerformed
+        sightingWrapper.setSex((Sex) cmbSex.getSelectedItem());
+    }//GEN-LAST:event_cmbSexActionPerformed
+
+    private void spnNumberStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnNumberStateChanged
+        sightingWrapper.setNumberOfElements((int) spnNumber.getValue());
+    }//GEN-LAST:event_spnNumberStateChanged
+
     public void setRowBackground(Color inColor) {
         this.setBackground(inColor);
         btnChooseCreature.setBackground(inColor);
@@ -331,6 +384,7 @@ public class InfoBox extends JPanel {
     private javax.swing.JButton btnChooseCreature;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnGPS;
+    private javax.swing.JComboBox<String> cmbSex;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -346,5 +400,6 @@ public class InfoBox extends JPanel {
     private javax.swing.JLabel lblLatitude;
     private javax.swing.JLabel lblLongitude;
     private javax.swing.JLabel lblTime;
+    private javax.swing.JSpinner spnNumber;
     // End of variables declaration//GEN-END:variables
 }
