@@ -38,7 +38,6 @@ public class ImageBox extends JPanel {
         table = inTable;
         bulkUploadPanel = (BulkUploadPanel) table.getParent().getParent().getParent();
         populateUI();
-        imageWrapper.setImageBox(this);
     }
 
     public final void populateUI() {

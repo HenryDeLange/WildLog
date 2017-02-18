@@ -51,6 +51,13 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate) {
+        return getScaledIcon(inAbsolutePathToScale, inSize, inDoAutoRotate, null);
+    }
+
+    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate, Metadata inMetadata) {
+        // Get the size to scale the image to
+        int finalHeight = inSize;
+        int finalWidth = inSize;
         ImageReader imageReader = null;
         FileImageInputStream inputStream = null;
         try {
@@ -60,8 +67,6 @@ public class UtilsImageProcessing {
             imageReader.setInput(inputStream);
             int imageWidth = imageReader.getWidth(imageReader.getMinIndex());
             int imageHeight = imageReader.getHeight(imageReader.getMinIndex());
-            int finalHeight = inSize;
-            int finalWidth = inSize;
             if (imageHeight >= imageWidth) {
                 if (imageHeight >= inSize) {
                     double ratio = (double)imageHeight/inSize;
@@ -82,6 +87,24 @@ public class UtilsImageProcessing {
                     finalHeight = (int)(imageHeight*ratio);
                 }
             }
+        }
+        catch (IOException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        finally {
+            if (imageReader != null) {
+                imageReader.dispose();
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+            }
+        }
+        try {
             // Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou,
             // maar ek sal in elk geval moet uitwerk of dit landscape of portriate is, so vir eers hou ek maar die kode soos hierbo.
             Image image = Toolkit.getDefaultToolkit().createImage(inAbsolutePathToScale.toAbsolutePath().normalize().toString());
@@ -89,7 +112,13 @@ public class UtilsImageProcessing {
             // Rotate the image
             if (inDoAutoRotate) {
                 try {
-                    Metadata metadata = ImageMetadataReader.readMetadata(inAbsolutePathToScale.toFile());
+                    Metadata metadata;
+                    if (inMetadata != null) {
+                        metadata = inMetadata;
+                    }
+                    else {
+                        metadata = ImageMetadataReader.readMetadata(inAbsolutePathToScale.toFile());
+                    }
                     Collection<ExifIFD0Directory> directories = metadata.getDirectoriesOfType(ExifIFD0Directory.class);
                     int orientation = 0;
                     if (directories != null) {
@@ -172,19 +201,6 @@ public class UtilsImageProcessing {
                 }
             }
             return getScaledIconForBrokenFiles(thumbnailSize);
-        }
-        finally {
-            if (imageReader != null) {
-                imageReader.dispose();
-            }
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                }
-                catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                }
-            }
         }
     }
 

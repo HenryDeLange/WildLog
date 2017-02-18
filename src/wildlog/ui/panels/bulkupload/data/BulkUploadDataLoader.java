@@ -44,6 +44,8 @@ public class BulkUploadDataLoader {
     
     public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, 
             final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp) {
+        long time = System.currentTimeMillis();
+        WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadDataWrapper.genenrateTableData() - The files will be read and prepared for the table to display.");
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
         final List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
         if (files.isEmpty() && !inIsRecuresive) {
@@ -133,6 +135,7 @@ public class BulkUploadDataLoader {
         }
         wrapper.setData(getArrayFromHash(finalMap));
         wrapper.setRecursive(inIsRecuresive);
+        WildLogApp.LOGGER.log(Level.INFO, "Finished BulkUploadDataWrapper.genenrateTableData() - The process took {} seconds.", (System.currentTimeMillis() - time)/1000);
         return wrapper;
     }
 
@@ -163,7 +166,7 @@ public class BulkUploadDataLoader {
         if (date != null) {
             ImageIcon imageIcon;
             if (WildLogFileExtentions.Images.isKnownExtention(inFile)) {
-                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, WildLogThumbnailSizes.MEDIUM.getSize(), true);
+                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, WildLogThumbnailSizes.MEDIUM.getSize(), true, metadata);
             }
             else 
             if (WildLogFileExtentions.Movies.isKnownExtention(inFile)) {
@@ -176,9 +179,7 @@ public class BulkUploadDataLoader {
                         WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM),
                         WildLogThumbnailSizes.MEDIUM.getSize(), false);
             }
-            BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(
-                    inFile, imageIcon, date);
-            wrapper.setDataObjectWithGPS(UtilsImageProcessing.getExifGpsFromJpeg(metadata));
+            BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(inFile, imageIcon, date, UtilsImageProcessing.getExifGpsFromJpeg(metadata));
             inImageList.add(wrapper);
         }
         else {

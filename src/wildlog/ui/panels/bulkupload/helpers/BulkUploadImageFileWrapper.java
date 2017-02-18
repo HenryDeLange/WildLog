@@ -3,49 +3,54 @@ package wildlog.ui.panels.bulkupload.helpers;
 import java.nio.file.Path;
 import java.util.Date;
 import javax.swing.Icon;
+import org.apache.logging.log4j.Level;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
-import wildlog.ui.panels.bulkupload.ImageBox;
 
 
 public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFileWrapper> {
-    private Icon icon;
-    private ImageBox imageBox;
-    private Path file;
-    private Date date;
-    private DataObjectWithGPS dataObjectWithGPS;
+    private final Icon icon;
+    private final Path file;
+    private final Date date;
+    private final DataObjectWithGPS dataObjectWithGPS;
+    
 
-
-    public BulkUploadImageFileWrapper(Path inFile, Icon inIcon, Date inDate) {
-        this(inFile, inIcon, inDate, null);
-    }
-
-    public BulkUploadImageFileWrapper(Path inFile, Icon inIcon, Date inDate, ImageBox inImageBox) {
+    public BulkUploadImageFileWrapper(Path inFile, Icon inIcon, Date inDate, DataObjectWithGPS inDataObjectWithGPS) {
         file = inFile;
         icon = inIcon;
         date = inDate;
-        imageBox = inImageBox;
+        dataObjectWithGPS = inDataObjectWithGPS;
     }
 
     public Icon getIcon() {
         return icon;
     }
 
-    public void setIcon(Icon inIcon) {
-        icon = inIcon;
-    }
-
     public Date getDate() {
         return date;
     }
-
-    public void setDate(Date inDate) {
-        date = inDate;
+    
+    public DataObjectWithGPS getDataObjectWithGPS() {
+        return dataObjectWithGPS;
+    }
+    
+    public Path getFile() {
+        return file;
     }
 
     @Override
     public int compareTo(BulkUploadImageFileWrapper inObject) {
         if (date != null && inObject != null && inObject.getDate() != null) {
-            return date.compareTo(inObject.getDate());
+            int result = date.compareTo(inObject.getDate());
+            if (result == 0 ) {
+                try {
+                    result = file.getFileName().toString().compareTo(inObject.getFile().getFileName().toString());
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
+                }
+            }
+            return result;
         }
         else {
             return 0;
@@ -61,34 +66,9 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
         }
     }
 
-    public Path getFile() {
-        return file;
-    }
-
-    public void setFile(Path inFile) {
-        file = inFile;
-    }
-
     public BulkUploadImageFileWrapper getClone() {
-        BulkUploadImageFileWrapper imageFileWrapper = new BulkUploadImageFileWrapper(file, icon, date);
-        imageFileWrapper.setImageBox(new ImageBox(imageFileWrapper, imageBox.getTable()));
+        BulkUploadImageFileWrapper imageFileWrapper = new BulkUploadImageFileWrapper(file, icon, date, dataObjectWithGPS);
         return imageFileWrapper;
-    }
-
-    public ImageBox getImageBox() {
-        return imageBox;
-    }
-
-    public void setImageBox(ImageBox inImageBox) {
-        imageBox = inImageBox;
-    }
-
-    public DataObjectWithGPS getDataObjectWithGPS() {
-        return dataObjectWithGPS;
-    }
-
-    public void setDataObjectWithGPS(DataObjectWithGPS inDataObjectWithGPS) {
-        dataObjectWithGPS = inDataObjectWithGPS;
     }
 
 }

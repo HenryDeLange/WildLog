@@ -34,6 +34,7 @@ public class ImageBoxRenderer implements TableCellRenderer {
         final int imagesPerRow = (int)((inTable.getColumnModel().getColumn(inColumn).getWidth()) / imageBoxSizeWidth);
         int posX = 0;
         int posY = -1;
+// FIXME: Die storie is miskien performacne heavy as daar baie images in een sighting is...
         for (BulkUploadImageFileWrapper imageWrapper : imageListWrapper.getImageList()) {
             if (posX == 0) {
                 posY++;

@@ -128,12 +128,14 @@ public final class UtilsDialog {
                     Iterator<Directory> directories = meta.getDirectories().iterator();
                     while (directories.hasNext()) {
                         Directory directory = directories.next();
+                        temp = temp + "<u><b>" + directory.getName() + "</b></u><br/>";
                         Collection<Tag> tags = directory.getTags();
                         for (Tag tag : tags) {
                             String name = tag.getTagName();
                             String description = tag.getDescription();
                             temp = temp + "<b>" + name + ":</b> " + description + "<br/>";
                         }
+                        temp = temp + "<br/>";
                     }
                     txtPane.setText(temp);
                     txtPane.setCaretPosition(0);

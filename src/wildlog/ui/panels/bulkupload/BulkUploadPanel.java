@@ -182,6 +182,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     @Override
                     public void run() {
                         model.fireTableDataChanged();
+                        WildLogApp.LOGGER.log(Level.INFO, "BulkUploadPanel.loadImages() - The model has been loaded to the table (finished fireTableDataChanged)");
                         updateCountForFilesLinked();
                     }
                 });
