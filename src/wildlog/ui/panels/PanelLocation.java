@@ -94,19 +94,15 @@ public class PanelLocation extends PanelCanSetupHeader {
         FileDrop.SetupFileDrop(btnBulkImport, false, new FileDrop.Listener() {
             @Override
             public void filesDropped(List<File> inFiles) {
-                if (inFiles != null && inFiles.size() == 1) {
-                    final Path importPath;
-                    if (inFiles.get(0).isDirectory()) {
-                        importPath = inFiles.get(0).toPath().toAbsolutePath();
-                    }
-                    else {
-                        importPath = inFiles.get(0).toPath().getParent().toAbsolutePath();
-                    }
+                if (inFiles != null && inFiles.size() > 0) {
+                    final List<Path> lstSelectedPaths = UtilsFileProcessing.getPathsFromSelectedFile(inFiles.toArray(new File[inFiles.size()]));
                     if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
                         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                             @Override
                             protected Object doInBackground() throws Exception {
-                                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName(), null, importPath, null), (JTabbedPane)getParent());
+                                UtilsPanelGenerator.openBulkUploadTab(
+                                        new BulkUploadPanel(app, this, locationWL.getName(), null, lstSelectedPaths, null), 
+                                        (JTabbedPane)getParent());
                                 return null;
                             }
                         });

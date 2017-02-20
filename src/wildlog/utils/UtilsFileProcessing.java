@@ -489,5 +489,20 @@ public final class UtilsFileProcessing {
         });
         UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, null, null, "  Setting up initial mapping data...  ");
     }
+    
+    /**
+     * <b>For Bulk Upload. </b>
+     * This method will take a list of Files and then convert it to a list of Paths. 
+     */
+    public static List<Path> getPathsFromSelectedFile(File[] inFiles) {
+        if (inFiles != null && inFiles.length > 0) {
+            List<Path> lstSelectedPaths = new ArrayList<>(inFiles.length);
+            for (File selectedFile : inFiles) {
+                lstSelectedPaths.add(selectedFile.toPath());
+            }
+            return lstSelectedPaths;
+        }
+        return new ArrayList<>(0);
+    }
 
 }

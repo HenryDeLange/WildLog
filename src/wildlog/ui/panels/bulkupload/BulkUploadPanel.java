@@ -77,19 +77,19 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private final PanelNeedsRefreshWhenDataChanges panelToRefresh;
     final private String existingVisitName;
     private String selectedLocationName;
-    private File importPath = null;
+    private List<Path> lstImportPaths = null;
     private boolean showAsTab = false;
 
 
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, String inLocationName, String inExistingVisitName, 
-            Path inImportPath, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
+            List<Path> inlstImportPaths, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         WildLogApp.LOGGER.log(Level.INFO, "[BulkUploadPanel]");
         app = inApp;
         selectedLocationName = inLocationName;
         existingVisitName = inExistingVisitName;
         panelToRefresh = inPanelToRefresh;
-        if (inImportPath != null) {
-            importPath = inImportPath.toFile();
+        if (inlstImportPaths != null) {
+            lstImportPaths = inlstImportPaths;
         }
         lstVisitFiles = new ArrayList<Path>(3);
         // Init auto generated code
@@ -165,16 +165,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void loadImages(ProgressbarTask inProgressbarTask) {
         // Get the list of files from the folder to import from
-        if (importPath == null) {
-            importPath = showFileChooser();
+        if (lstImportPaths == null) {
+            lstImportPaths = showFileChooser();
         }
-        if (importPath != null) {
+        if (lstImportPaths != null) {
             // Setup the datamodel
             final DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
             model.getDataVector().clear();
             model.fireTableDataChanged();
             BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(
-                    importPath, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), 
+                    lstImportPaths, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), 
                     inProgressbarTask, lblFilesRead, app);
             if (wrapper != null) {
                 model.getDataVector().addAll(UtilsTableGenerator.convertToVector(wrapper.getData()));
@@ -212,7 +212,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
     }
 
-    private File showFileChooser() {
+    private List<Path> showFileChooser() {
         final JFileChooser fileChooser;
         if (lastFilePath != null && lastFilePath.length() > 0) {
             fileChooser = new JFileChooser(lastFilePath);
@@ -223,7 +223,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         fileChooser.setDialogTitle("Select a folder to import");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setFileFilter(new ImageFilter());
         int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
@@ -231,17 +231,12 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 return fileChooser.showOpenDialog(app.getMainFrame());
             }
         });
-        if (result == JFileChooser.ERROR_OPTION || result != JFileChooser.APPROVE_OPTION || fileChooser.getSelectedFile() == null) {
+        if (result == JFileChooser.ERROR_OPTION || result != JFileChooser.APPROVE_OPTION || fileChooser.getSelectedFiles() == null) {
             return null;
         }
         else {
             lastFilePath = fileChooser.getSelectedFile().getAbsolutePath();
-            if (fileChooser.getSelectedFile().isDirectory()) {
-                return fileChooser.getSelectedFile();
-            }
-            else {
-                return fileChooser.getSelectedFile().getParentFile();
-            }
+            return UtilsFileProcessing.getPathsFromSelectedFile(fileChooser.getSelectedFiles());
         }
     }
 

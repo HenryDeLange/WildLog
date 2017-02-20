@@ -10,12 +10,12 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -100,19 +100,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         FileDrop.SetupFileDrop(btnBulkImport, false, new FileDrop.Listener() {
             @Override
             public void filesDropped(List<File> inFiles) {
-                if (inFiles != null && inFiles.size() == 1) {
-                    final Path importPath;
-                    if (inFiles.get(0).isDirectory()) {
-                        importPath = inFiles.get(0).toPath().toAbsolutePath();
-                    }
-                    else {
-                        importPath = inFiles.get(0).toPath().getParent().toAbsolutePath();
-                    }
+                if (inFiles != null && inFiles.size() > 0) {
+                    final List<Path> lstSelectedPaths = UtilsFileProcessing.getPathsFromSelectedFile(inFiles.toArray(new File[inFiles.size()]));
                     if (visit.getName() != null && !visit.getName().isEmpty()) {
                         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                             @Override
                             protected Object doInBackground() throws Exception {
-                                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, visit.getLocationName(), visit.getName(), importPath, panelVisitHandle), (JTabbedPane)getParent());
+                                UtilsPanelGenerator.openBulkUploadTab(
+                                        new BulkUploadPanel(app, this, visit.getLocationName(), visit.getName(), lstSelectedPaths, panelVisitHandle), 
+                                        (JTabbedPane)getParent());
                                 return null;
                             }
                         });

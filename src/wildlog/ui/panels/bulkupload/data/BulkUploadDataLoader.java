@@ -42,13 +42,13 @@ import wildlog.utils.WildLogSystemImages;
 
 public class BulkUploadDataLoader {
     
-    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, 
-            final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp) {
+    public static BulkUploadDataWrapper genenrateTableData(List<Path> inLstFolderPaths, boolean inIsRecuresive, 
+            int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp) {
         long time = System.currentTimeMillis();
         WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadDataWrapper.genenrateTableData() - The files will be read and prepared for the table to display.");
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
-        final List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
-        if (files.isEmpty() && !inIsRecuresive) {
+        final List<Path> lstAllFiles = getListOfFilesToImport(inLstFolderPaths, inIsRecuresive);
+        if (lstAllFiles.isEmpty() && !inIsRecuresive) {
             int result = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {
@@ -58,27 +58,27 @@ public class BulkUploadDataLoader {
                 }
             });
             if (result == JOptionPane.YES_OPTION) {
-                files.addAll(getListOfFilesToImport(inFolderPath, true));
+                lstAllFiles.addAll(getListOfFilesToImport(inLstFolderPaths, true));
             }
             else {
                 return null;
             }
         }
         // Update the UI to show the numebr of files found
-        inLblFilesRead.setText(inLblFilesRead.getText().substring(0, inLblFilesRead.getText().lastIndexOf(':') + 1) + " " + files.size());
+        inLblFilesRead.setText(inLblFilesRead.getText().substring(0, inLblFilesRead.getText().lastIndexOf(':') + 1) + " " + lstAllFiles.size());
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
-        final List<BulkUploadImageFileWrapper> imageList = Collections.synchronizedList(new ArrayList<BulkUploadImageFileWrapper>(files.size()));
+        final List<BulkUploadImageFileWrapper> imageList = Collections.synchronizedList(new ArrayList<BulkUploadImageFileWrapper>(lstAllFiles.size()));
         // First load all the images and sort them according to date
         final ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount(), new NamedThreadFactory("WL_BulkImport(Load)"));
         final AtomicInteger counter = new AtomicInteger();
-        for (int t = 0; t < files.size(); t++) {
-            final File tempFile = files.get(t);
+        for (int t = 0; t < lstAllFiles.size(); t++) {
+            final Path tempFile = lstAllFiles.get(t);
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    loadFileData(tempFile.toPath(), imageList);
+                    loadFileData(tempFile, imageList);
                     try {
-                        inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, files.size() + 1); // Prevent the progress bar from reaching 100%
+                        inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, lstAllFiles.size() + 1); // Prevent the progress bar from reaching 100%
                     }
                     catch (Exception ex) {
                         WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -204,23 +204,45 @@ public class BulkUploadDataLoader {
         };
     }
 
-    private static List<File> getListOfFilesToImport(File inRoot, boolean inIncludeFolders) {
-        List<File> list = new ArrayList<File>();
-        if (inRoot != null) {
-            File[] tempFileList = inRoot.listFiles();
-            for (File tempFile : tempFileList) {
-                if (inIncludeFolders && tempFile.isDirectory()) {
-                    list.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
+    private static List<Path> getListOfFilesToImport(List<Path> inListPaths, boolean inIncludeFolders) {
+        List<Path> lstAllFiles = new ArrayList<>();
+        if (inListPaths != null) {
+            for (Path path : inListPaths) {
+                if (path != null) {
+                    lstAllFiles.addAll(getListOfFilesToImport(path.toFile(), inIncludeFolders));
                 }
-                else {
-                    if (WildLogFileExtentions.Images.isKnownExtention(tempFile.toPath()) 
-                            || WildLogFileExtentions.Movies.isKnownExtention(tempFile.toPath())) {
-                        list.add(tempFile);
+            }
+        }
+        return lstAllFiles;
+    }
+    
+    private static List<Path> getListOfFilesToImport(File inRoot, boolean inIncludeFolders) {
+        List<Path> lstFilesToImport = new ArrayList<>();
+        if (inRoot != null) {
+            if (inRoot.isFile()) {
+                if (WildLogFileExtentions.Images.isKnownExtention(inRoot.toPath()) 
+                        || WildLogFileExtentions.Movies.isKnownExtention(inRoot.toPath())) {
+                    lstFilesToImport.add(inRoot.toPath());
+                }
+            }
+            else {
+                File[] tempFileList = inRoot.listFiles();
+                if (tempFileList != null) {
+                    for (File tempFile : tempFileList) {
+                        if (inIncludeFolders && tempFile.isDirectory()) {
+                            lstFilesToImport.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
+                        }
+                        else {
+                            if (WildLogFileExtentions.Images.isKnownExtention(tempFile.toPath()) 
+                                    || WildLogFileExtentions.Movies.isKnownExtention(tempFile.toPath())) {
+                                lstFilesToImport.add(tempFile.toPath());
+                            }
+                        }
                     }
                 }
             }
         }
-        return list;
+        return lstFilesToImport;
     }
 
 }
