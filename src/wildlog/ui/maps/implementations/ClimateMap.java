@@ -11,10 +11,10 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.BundledMapLayers;
@@ -36,7 +36,8 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
         super("Climate Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(10);
         // Maps
-        Button btnTemperatureMinMap = new Button("Temperature (Monthly Minimum)");
+        ToggleButton btnTemperatureMinMap = new ToggleButton("Temperature (Monthly Minimum)");
+        btnTemperatureMinMap.setToggleGroup(BUTTON_GROUP);
         btnTemperatureMinMap.setCursor(Cursor.HAND);
         btnTemperatureMinMap.setOnAction(new EventHandler() {
             @Override
@@ -45,7 +46,8 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnTemperatureMinMap);
-        Button btnTemperatureMeanMap = new Button("Temperature (Monthly Average)");
+        ToggleButton btnTemperatureMeanMap = new ToggleButton("Temperature (Monthly Average)");
+        btnTemperatureMeanMap.setToggleGroup(BUTTON_GROUP);
         btnTemperatureMeanMap.setCursor(Cursor.HAND);
         btnTemperatureMeanMap.setOnAction(new EventHandler() {
             @Override
@@ -54,7 +56,8 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnTemperatureMeanMap);
-        Button btnTemperatureMaxMap = new Button("Temperature (Monthly Maximum)");
+        ToggleButton btnTemperatureMaxMap = new ToggleButton("Temperature (Monthly Maximum)");
+        btnTemperatureMaxMap.setToggleGroup(BUTTON_GROUP);
         btnTemperatureMaxMap.setCursor(Cursor.HAND);
         btnTemperatureMaxMap.setOnAction(new EventHandler() {
             @Override
@@ -63,7 +66,8 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnTemperatureMaxMap);
-        Button btnPrecipitationMap = new Button("Precipitation (Monthly Average)");
+        ToggleButton btnPrecipitationMap = new ToggleButton("Precipitation (Monthly Average)");
+        btnPrecipitationMap.setToggleGroup(BUTTON_GROUP);
         btnPrecipitationMap.setCursor(Cursor.HAND);
         btnPrecipitationMap.setOnAction(new EventHandler() {
             @Override
@@ -72,7 +76,8 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnPrecipitationMap);
-        Button btnAridityMap = new Button("Aridity (Annual Average)");
+        ToggleButton btnAridityMap = new ToggleButton("Aridity (Annual Average)");
+        btnAridityMap.setToggleGroup(BUTTON_GROUP);
         btnAridityMap.setCursor(Cursor.HAND);
         btnAridityMap.setOnAction(new EventHandler() {
             @Override

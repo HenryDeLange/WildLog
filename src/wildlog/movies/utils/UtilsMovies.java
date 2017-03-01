@@ -5,9 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
@@ -26,18 +26,17 @@ public final class UtilsMovies {
     /**
      * Kry 'n lys van paths wat ooreenstem met die WildLogFile ID. (Slegs JPGs word gekies.)
      * @param inApp
-     * @param inWildLogFile
+     * @param inWildLogFileID
+     * @param inWildLogFileType
      * @return List<String> - Sal nie null wees nie.
      */
-    public static List<String> getFilePaths(WildLogApp inApp, WildLogFile inWildLogFile) {
-        List<WildLogFile> files = inApp.getDBI().listWildLogFiles(inWildLogFile.getId(), inWildLogFile.getFileType(), WildLogFile.class);
+    public static List<String> getFilePaths(WildLogApp inApp, String inWildLogFileID, WildLogFileType inWildLogFileType) {
+        List<WildLogFile> files = inApp.getDBI().listWildLogFiles(inWildLogFileID, inWildLogFileType, WildLogFile.class);
         List<String> slideshowList = new ArrayList<String>(files.size());
         for (WildLogFile tempFile : files) {
-            if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
-                // Only using JPGs because otherwise it might break the video
-                if (WildLogFileExtentions.Images.isJPG(tempFile.getAbsolutePath())) {
-                    slideshowList.add(tempFile.getAbsolutePath().toString());
-                }
+            // Only using JPGs because otherwise it might break the video
+            if (WildLogFileExtentions.Images.isJPG(tempFile.getAbsolutePath())) {
+                slideshowList.add(tempFile.getAbsolutePath().toString());
             }
         }
         return slideshowList;

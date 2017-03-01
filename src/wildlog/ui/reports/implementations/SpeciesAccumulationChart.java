@@ -22,9 +22,9 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
@@ -50,7 +50,8 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         super("Recording Rate Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Line charts
-        Button btnLineChart = new Button("Creature Accumulation (Line)");
+        ToggleButton btnLineChart = new ToggleButton("Creature Accumulation (Line)");
+        btnLineChart.setToggleGroup(BUTTON_GROUP);
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
@@ -60,7 +61,8 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnLineChart);
-        Button btnDailyObsLineChart = new Button("Daily Observation Count (Line)");
+        ToggleButton btnDailyObsLineChart = new ToggleButton("Daily Observation Count (Line)");
+        btnDailyObsLineChart.setToggleGroup(BUTTON_GROUP);
         btnDailyObsLineChart.setCursor(Cursor.HAND);
         btnDailyObsLineChart.setOnAction(new EventHandler() {
             @Override
@@ -70,7 +72,8 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnDailyObsLineChart);
-        Button btnDailyLineChart = new Button("Daily Creature Count (Line)");
+        ToggleButton btnDailyLineChart = new ToggleButton("Daily Creature Count (Line)");
+        btnDailyLineChart.setToggleGroup(BUTTON_GROUP);
         btnDailyLineChart.setCursor(Cursor.HAND);
         btnDailyLineChart.setOnAction(new EventHandler() {
             @Override
@@ -80,6 +83,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnDailyLineChart);
+        // Options
         lstCustomButtons.add(new Label("Chart Options:"));
         CheckBox chkShowDetails = new CheckBox("Show Day, Night or Twilight");
         chkShowDetails.setCursor(Cursor.HAND);

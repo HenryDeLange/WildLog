@@ -20,7 +20,7 @@ public class WildLogSystemFile extends WildLogFile {
     private final Path originalPath;
 
     public WildLogSystemFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType) {
-        super(inID, inFilename, inFilePath, inFileType);
+        super(inID, inFilename, inFilePath, inFileType, null, null, 0);
         originalPath = WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath()
                 .resolve(WILDLOG_FOLDER_PREFIX)
                 .resolve(inFilename).normalize().toAbsolutePath();

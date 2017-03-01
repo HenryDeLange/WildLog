@@ -19,7 +19,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
@@ -39,7 +39,8 @@ public class LocationChart extends AbstractReport<Sighting> {
         super("Place Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(3);
         // Pie charts
-        Button btnPieChartSightings = new Button("Observations per Place (Pie)");
+        ToggleButton btnPieChartSightings = new ToggleButton("Observations per Place (Pie)");
+        btnPieChartSightings.setToggleGroup(BUTTON_GROUP);
         btnPieChartSightings.setCursor(Cursor.HAND);
         btnPieChartSightings.setOnAction(new EventHandler() {
             @Override
@@ -50,7 +51,8 @@ public class LocationChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnPieChartSightings);
         // Bar charts
-        Button btnBarChartSightings = new Button("Observations per Place (Bar)");
+        ToggleButton btnBarChartSightings = new ToggleButton("Observations per Place (Bar)");
+        btnBarChartSightings.setToggleGroup(BUTTON_GROUP);
         btnBarChartSightings.setCursor(Cursor.HAND);
         btnBarChartSightings.setOnAction(new EventHandler() {
             @Override
@@ -60,7 +62,8 @@ public class LocationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartSightings);
-        Button btnBarChartElements = new Button("Creatures per Place (Bar)");
+        ToggleButton btnBarChartElements = new ToggleButton("Creatures per Place (Bar)");
+        btnBarChartElements.setToggleGroup(BUTTON_GROUP);
         btnBarChartElements.setCursor(Cursor.HAND);
         btnBarChartElements.setOnAction(new EventHandler() {
             @Override

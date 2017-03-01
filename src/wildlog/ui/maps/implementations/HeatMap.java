@@ -11,22 +11,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.JLabel;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -53,7 +53,8 @@ public class HeatMap extends AbstractMap<Sighting> {
         super("Distribution Maps (Heat)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(11);
         // Maps
-        Button btnHeatMapClient = new Button("Observation Heat Map");
+        ToggleButton btnHeatMapClient = new ToggleButton("Observation Heat Map");
+        btnHeatMapClient.setToggleGroup(BUTTON_GROUP);
         btnHeatMapClient.setCursor(Cursor.HAND);
         btnHeatMapClient.setOnAction(new EventHandler() {
             @Override
@@ -62,7 +63,8 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnHeatMapClient);
-        Button btnAbundanceMapClient = new Button("Abundance of Observations Map");
+        ToggleButton btnAbundanceMapClient = new ToggleButton("Abundance of Observations Map");
+        btnAbundanceMapClient.setToggleGroup(BUTTON_GROUP);
         btnAbundanceMapClient.setCursor(Cursor.HAND);
         btnAbundanceMapClient.setOnAction(new EventHandler() {
             @Override
@@ -74,7 +76,8 @@ public class HeatMap extends AbstractMap<Sighting> {
 // FIXME: Hierdie version neem die aantal dae ook in ag, dus sal 'n baie rich plek wat bv 'n jaar getrap word nie wys nie.
 //        Maar dis goed om vistis met soortgelyke durations te vergelyk.
 //        Maak dus nog 'n opsie wat net kyk na die totale antal creatures = "Abundance of Creatures".
-        Button btnRichnessMapClient = new Button("Richness of Creatures Map");
+        ToggleButton btnRichnessMapClient = new ToggleButton("Richness of Creatures Map");
+        btnRichnessMapClient.setToggleGroup(BUTTON_GROUP);
         btnRichnessMapClient.setCursor(Cursor.HAND);
         btnRichnessMapClient.setOnAction(new EventHandler() {
             @Override
@@ -83,7 +86,8 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnRichnessMapClient);
-        Button btnSampleEffortMapClient = new Button("Sampling Effort Map");
+        ToggleButton btnSampleEffortMapClient = new ToggleButton("Sampling Effort Map");
+        btnSampleEffortMapClient.setToggleGroup(BUTTON_GROUP);
         btnSampleEffortMapClient.setCursor(Cursor.HAND);
         btnSampleEffortMapClient.setOnAction(new EventHandler() {
             @Override

@@ -21,16 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.logging.log4j.Level;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import org.geotools.data.DataSourceException;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FileDataStore;
@@ -81,7 +81,8 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
         super("Distribution Maps (Web)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
-        Button btnDistributionMap = new Button("Creature Distribution Map");
+        ToggleButton btnDistributionMap = new ToggleButton("Creature Distribution Map");
+        btnDistributionMap.setToggleGroup(BUTTON_GROUP);
         btnDistributionMap.setCursor(Cursor.HAND);
         btnDistributionMap.setOnAction(new EventHandler() {
             @Override

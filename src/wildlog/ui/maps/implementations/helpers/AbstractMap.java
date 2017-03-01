@@ -2,11 +2,16 @@ package wildlog.ui.maps.implementations.helpers;
 
 import java.awt.Cursor;
 import java.util.List;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javax.swing.JLabel;
@@ -15,6 +20,21 @@ import wildlog.ui.maps.MapsBaseDialog;
 
 
 public abstract class AbstractMap<T> {
+    protected static final ToggleGroup BUTTON_GROUP = new ToggleGroup();
+    static {
+        // Make sure the button stays selected when pressing it again if already selected
+        BUTTON_GROUP.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> value, Toggle oldToggle, Toggle newToggle) {
+                if ((newToggle == null)) {
+                    Platform.runLater(new Runnable() {
+                        public void run() {
+                            BUTTON_GROUP.selectToggle(oldToggle);
+                        }
+                    });
+                }
+            }
+        });
+    }
     private final String mapCategoryTitle;
     private String activeSubCategoryTitle = "Default Report";
     protected final MapsBaseDialog mapsBaseDialog;

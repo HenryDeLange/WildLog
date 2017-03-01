@@ -1472,7 +1472,7 @@
                 <Property name="name" type="java.lang.String" value="dtpSightingDate" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dtpSightingDateActionPerformed"/>
+                <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="dtpSightingDatePropertyChange"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel8">
@@ -1704,12 +1704,10 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnCalculateDuration" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="btnCalculateSunAndMoon" min="-2" pref="110" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="btnGetGPSFromImage" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnGetDateFromImage" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnUpdateSighting" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="lblSightingID" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="btnGetGPSFromImage" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="btnGetDateFromImage" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="btnUpdateSighting" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="lblSightingID" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>

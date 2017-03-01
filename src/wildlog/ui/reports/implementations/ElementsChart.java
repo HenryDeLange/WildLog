@@ -20,7 +20,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
@@ -42,7 +42,8 @@ public class ElementsChart extends AbstractReport<Sighting> {
         super("Creature Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Pie charts
-        Button btnPieChartElementTypes = new Button("Creatures per Type (Pie)");
+        ToggleButton btnPieChartElementTypes = new ToggleButton("Creatures per Type (Pie)");
+        btnPieChartElementTypes.setToggleGroup(BUTTON_GROUP);
         btnPieChartElementTypes.setCursor(Cursor.HAND);
         btnPieChartElementTypes.setOnAction(new EventHandler() {
             @Override
@@ -52,7 +53,8 @@ public class ElementsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPieChartElementTypes);
-        Button btnPieChartSightings = new Button("Observations per Creature (Pie)");
+        ToggleButton btnPieChartSightings = new ToggleButton("Observations per Creature (Pie)");
+        btnPieChartSightings.setToggleGroup(BUTTON_GROUP);
         btnPieChartSightings.setCursor(Cursor.HAND);
         btnPieChartSightings.setOnAction(new EventHandler() {
             @Override
@@ -63,7 +65,8 @@ public class ElementsChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnPieChartSightings);
         // Bar charts
-        Button btnBarChartSightings = new Button("Observations per Creature (Bar)");
+        ToggleButton btnBarChartSightings = new ToggleButton("Observations per Creature (Bar)");
+        btnBarChartSightings.setToggleGroup(BUTTON_GROUP);
         btnBarChartSightings.setCursor(Cursor.HAND);
         btnBarChartSightings.setOnAction(new EventHandler() {
             @Override
@@ -73,7 +76,8 @@ public class ElementsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartSightings);
-        Button btnBarChartElements = new Button("Places per Creature (Bar)");
+        ToggleButton btnBarChartElements = new ToggleButton("Places per Creature (Bar)");
+        btnBarChartElements.setToggleGroup(BUTTON_GROUP);
         btnBarChartElements.setCursor(Cursor.HAND);
         btnBarChartElements.setOnAction(new EventHandler() {
             @Override

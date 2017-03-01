@@ -16,8 +16,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
@@ -26,6 +26,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.utils.UtilsData;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.implementations.helpers.ComboBoxToShowReports;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
 
@@ -34,7 +35,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     private enum ChartType {PIE_CHART};
     private ChartType chartType;
     private Chart displayedChart;
-    private final ComboBox<String> cmbCategories;
+    private final ComboBoxToShowReports<String> cmbCategories;
     private final String[] options = new String[] {"Number of Individuals", "Sex", "Age", "Life Status", 
         "Evidence", "Certainty", "Rating", "Info Tag", "Creature Type", "Has GPS"};
     private Scene scene = null;
@@ -43,9 +44,13 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     public SightingPropertiesChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Observation Properties Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(2);
+        // Hidden ToggleButton to use (used to unselect the other toggle buttons)
+        ToggleButton btnHidden = new ToggleButton();
+        btnHidden.setToggleGroup(BUTTON_GROUP);
         // Pie charts
         lstCustomButtons.add(new Label("Pie Chart Categories:"));
-        cmbCategories = new ComboBox<>(FXCollections.observableArrayList(options));
+        cmbCategories = new ComboBoxToShowReports<>();
+        cmbCategories.setItems(FXCollections.observableArrayList(options));
         cmbCategories.setVisibleRowCount(10);
         cmbCategories.setCursor(Cursor.HAND);
         cmbCategories.getSelectionModel().clearSelection();
@@ -53,6 +58,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = null;
+                btnHidden.setSelected(true);
             }
         });
         // Adding this second listener here to trigger the chart when an already selected item is clicked again.

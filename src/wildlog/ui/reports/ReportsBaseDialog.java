@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
@@ -22,6 +21,7 @@ import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -55,6 +56,7 @@ import wildlog.ui.reports.implementations.TimeOfDayChart;
 import wildlog.ui.reports.implementations.TimelineChart;
 import wildlog.ui.reports.implementations.VisitChart;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.implementations.helpers.ComboBoxToShowReports;
 
 
 public class ReportsBaseDialog extends JFrame {
@@ -154,14 +156,16 @@ public class ReportsBaseDialog extends JFrame {
             vBox.setFillWidth(true);
             TitledPane reportButton = new TitledPane(report.getReportCategoryTitle(), vBox);
             for (Node node : report.getLstCustomButtons()) {
-                node.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent inEvent) {
-                        activeReport = report;
-                        jfxReportChartPanel.getScene().setRoot(lblLoading);
-                        activeReport.createReport(jfxReportChartPanel.getScene());
-                    }
-                });
+                if (node instanceof ToggleButton && !(node instanceof RadioButton) || node instanceof ComboBoxToShowReports) {
+                    node.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent inEvent) {
+                            activeReport = report;
+                            jfxReportChartPanel.getScene().setRoot(lblLoading);
+                            activeReport.createReport(jfxReportChartPanel.getScene());
+                        }
+                    });
+                }
                 ((Control) node).setMaxWidth(500);
                 if (node instanceof Labeled && !(node instanceof CheckBox) && !(node instanceof RadioButton)) {
                     ((Labeled) node).setAlignment(Pos.BASELINE_LEFT);

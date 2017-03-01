@@ -14,7 +14,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -40,7 +40,8 @@ public class LegacyMap extends AbstractMap<Sighting> {
         super("Old Legacy Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(1);
         // Maps
-        Button btnPointMapOpenStreetMap = new Button("Old WildLog Online Map");
+        ToggleButton btnPointMapOpenStreetMap = new ToggleButton("Old WildLog Online Map");
+        btnPointMapOpenStreetMap.setToggleGroup(BUTTON_GROUP);
         btnPointMapOpenStreetMap.setCursor(Cursor.HAND);
         btnPointMapOpenStreetMap.setOnAction(new EventHandler() {
             @Override

@@ -8,15 +8,16 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.PanelVisit;
@@ -258,20 +259,21 @@ public class AdvancedDialog extends JDialog {
     }//GEN-LAST:event_btnMoveVisitActionPerformed
 
     private void btnSetAllGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetAllGPSActionPerformed
-        Sighting tempSighting = new Sighting();
-        GPSDialog dialog = new GPSDialog(app, this, tempSighting);
+        DataObjectWithGPS dataObjectWithGPS = new DataObjectWithGPS() {};
+        GPSDialog dialog = new GPSDialog(app, this, dataObjectWithGPS);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
             for (Sighting sighting : listSightings) {
-                sighting.setLatitude(tempSighting.getLatitude());
-                sighting.setLatDegrees(tempSighting.getLatDegrees());
-                sighting.setLatMinutes(tempSighting.getLatMinutes());
-                sighting.setLatSeconds(tempSighting.getLatSeconds());
-                sighting.setLongitude(tempSighting.getLongitude());
-                sighting.setLonDegrees(tempSighting.getLonDegrees());
-                sighting.setLonMinutes(tempSighting.getLonMinutes());
-                sighting.setLonSeconds(tempSighting.getLonSeconds());
+                sighting.setLatitude(dataObjectWithGPS.getLatitude());
+                sighting.setLatDegrees(dataObjectWithGPS.getLatDegrees());
+                sighting.setLatMinutes(dataObjectWithGPS.getLatMinutes());
+                sighting.setLatSeconds(dataObjectWithGPS.getLatSeconds());
+                sighting.setLongitude(dataObjectWithGPS.getLongitude());
+                sighting.setLonDegrees(dataObjectWithGPS.getLonDegrees());
+                sighting.setLonMinutes(dataObjectWithGPS.getLonMinutes());
+                sighting.setLonSeconds(dataObjectWithGPS.getLonSeconds());
+                sighting.setGPSAccuracy(dataObjectWithGPS.getGPSAccuracy());
                 // Because the sighting's GPS point changed I need to recalculate the Sun and Moon phase
                 UtilsTime.calculateSunAndMoon(sighting);
                 // Save the changes

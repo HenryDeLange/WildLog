@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -29,6 +28,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -398,9 +398,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             Files.createDirectories(destinationWorkspace);
                             Files.write(destinationWorkspace.resolve(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getRelativePath()).toAbsolutePath(), 
                                     WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
-                            newDBI = new WildLogDBI_h2("jdbc:h2:"
-                                + (destinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath()
-                                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
+                            newDBI = new WildLogDBI_h2((destinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(
+                                    WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath().toString(), false);
                             int totalNodes = getNumberOfNodes(treWorkspace.getModel());
                             setProgress(2);
                             setMessage("Workspace Export: " + getProgress() + "%");

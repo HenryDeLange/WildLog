@@ -21,9 +21,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Background;
 import javafx.util.StringConverter;
@@ -50,7 +50,8 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         super("Observation Statistics Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(7);
         // Bar charts
-        Button btnSightingsPerDayBarChart = new Button("Observations per Day-Cycle (Bar)");
+        ToggleButton btnSightingsPerDayBarChart = new ToggleButton("Observations per Day-Cycle (Bar)");
+        btnSightingsPerDayBarChart.setToggleGroup(BUTTON_GROUP);
         btnSightingsPerDayBarChart.setCursor(Cursor.HAND);
         btnSightingsPerDayBarChart.setOnAction(new EventHandler() {
             @Override
@@ -61,7 +62,8 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnSightingsPerDayBarChart);
-        Button btnElementPerSightingBarChart = new Button("Number of Individuals (Bar)");
+        ToggleButton btnElementPerSightingBarChart = new ToggleButton("Number of Individuals (Bar)");
+        btnElementPerSightingBarChart.setToggleGroup(BUTTON_GROUP);
         btnElementPerSightingBarChart.setCursor(Cursor.HAND);
         btnElementPerSightingBarChart.setOnAction(new EventHandler() {
             @Override
@@ -72,7 +74,8 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnElementPerSightingBarChart);
-        Button btnSightingChanceBarChart = new Button("Subsequent Observations (Bar)");
+        ToggleButton btnSightingChanceBarChart = new ToggleButton("Subsequent Observations (Bar)");
+        btnSightingChanceBarChart.setToggleGroup(BUTTON_GROUP);
         btnSightingChanceBarChart.setCursor(Cursor.HAND);
         btnSightingChanceBarChart.setOnAction(new EventHandler() {
             @Override
@@ -83,7 +86,8 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnSightingChanceBarChart);
-        Button btnBarChartRelativeAbundance = new Button("Relative Abundance (Bar)");
+        ToggleButton btnBarChartRelativeAbundance = new ToggleButton("Relative Abundance (Bar)");
+        btnBarChartRelativeAbundance.setToggleGroup(BUTTON_GROUP);
         btnBarChartRelativeAbundance.setCursor(Cursor.HAND);
         btnBarChartRelativeAbundance.setOnAction(new EventHandler() {
             @Override

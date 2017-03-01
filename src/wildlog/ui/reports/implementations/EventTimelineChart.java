@@ -20,9 +20,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
 import javax.swing.JLabel;
@@ -45,7 +45,8 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
         super("Timeline Reports (Date Range)", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
-        Button btnLineChart = new Button("Timeline for All Observations (Line)");
+        ToggleButton btnLineChart = new ToggleButton("Timeline for All Observations (Line)");
+        btnLineChart.setToggleGroup(BUTTON_GROUP);
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
@@ -56,7 +57,8 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnLineChart);
         // Timeline per element
-        Button btnStackedLineChart = new Button("Timeline per Creature (Line)");
+        ToggleButton btnStackedLineChart = new ToggleButton("Timeline per Creature (Line)");
+        btnStackedLineChart.setToggleGroup(BUTTON_GROUP);
         btnStackedLineChart.setCursor(Cursor.HAND);
         btnStackedLineChart.setOnAction(new EventHandler() {
             @Override

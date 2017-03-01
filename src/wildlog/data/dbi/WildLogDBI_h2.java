@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import org.apache.logging.log4j.Level;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import org.h2.jdbc.JdbcSQLException;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -49,9 +49,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
      * @throws Exception 
      */
     public WildLogDBI_h2() throws Exception {
-        this("jdbc:h2:"
-                + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=50", true);
+        this(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath()).toString(), true);
     }
 
     /**
@@ -66,20 +64,22 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         Statement state = null;
         ResultSet results = null;
         boolean started = true;
+        String connection = "jdbc:h2:" + inConnectionURL 
+                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=50";
         try {
             Class.forName("org.h2.Driver").newInstance();
             Properties props = new Properties();
             props.setProperty("USER", "wildlog");
             props.setProperty("PASSWORD", "wildlog");
             try {
-                conn = DriverManager.getConnection(inConnectionURL, props);
+                conn = DriverManager.getConnection(connection, props);
             }
             catch (JdbcSQLException ex) {
                 WildLogApp.LOGGER.log(Level.INFO, "Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
                 WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
                 // Might be trying to use the wrong password, try again with old password and update it
                 props = new Properties();
-                conn = DriverManager.getConnection(inConnectionURL, props);
+                conn = DriverManager.getConnection(connection, props);
                 state = conn.createStatement();
                 state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
                 state.close();

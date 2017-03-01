@@ -2894,7 +2894,7 @@ public final class WildLogView extends JFrame {
                     // Setup export DB
                     setTaskProgress(10);
                     setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
-                    syncDBI = new WildLogDBI_h2("jdbc:h2:" + syncDatabase + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
+                    syncDBI = new WildLogDBI_h2(syncDatabase.toAbsolutePath().toString(), false);
                     // Export the elements
                     List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
                     setTaskProgress(20);
@@ -3151,9 +3151,8 @@ public final class WildLogView extends JFrame {
                         // Setup export DB
                         setTaskProgress(10);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
-                        syncDBI = new WildLogDBI_h2("jdbc:h2:" + fileChooser.getSelectedFile().toPath().toAbsolutePath().getParent()
-                                .resolve(WildLogConstants.WILDNOTE_SYNC_DATABASE).toString()
-                                    + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
+                        syncDBI = new WildLogDBI_h2(fileChooser.getSelectedFile().toPath().toAbsolutePath().getParent().resolve(
+                                WildLogConstants.WILDNOTE_SYNC_DATABASE).toString(), false);
                         setTaskProgress(11);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Setup the Location

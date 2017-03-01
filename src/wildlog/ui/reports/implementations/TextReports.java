@@ -18,12 +18,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.BorderPane;
@@ -52,7 +52,8 @@ public class TextReports extends AbstractReport<Sighting> {
         super("Text Summaries", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(4);
         // Add the text report
-        Button btnPaarlReport = new Button("Period Summary");
+        ToggleButton btnPaarlReport = new ToggleButton("Period Summary");
+        btnPaarlReport.setToggleGroup(BUTTON_GROUP);
         btnPaarlReport.setCursor(Cursor.HAND);
         btnPaarlReport.setOnAction(new EventHandler() {
             @Override
@@ -62,7 +63,8 @@ public class TextReports extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPaarlReport);
-        Button btnTextReport = new Button("Data Summary");
+        ToggleButton btnTextReport = new ToggleButton("Data Summary");
+        btnTextReport.setToggleGroup(BUTTON_GROUP);
         btnTextReport.setCursor(Cursor.HAND);
         btnTextReport.setOnAction(new EventHandler() {
             @Override
@@ -72,6 +74,7 @@ public class TextReports extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnTextReport);
+        // Options
         lstCustomButtons.add(new Label("Chart Options:"));
         CheckBox chkGroupGPS = new CheckBox("Group Similar GPS Points");
         chkGroupGPS.setCursor(Cursor.HAND);

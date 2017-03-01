@@ -1077,9 +1077,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         dtpSightingDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         dtpSightingDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpSightingDate.setName("dtpSightingDate"); // NOI18N
-        dtpSightingDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dtpSightingDateActionPerformed(evt);
+        dtpSightingDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dtpSightingDatePropertyChange(evt);
             }
         });
 
@@ -1461,11 +1461,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCalculateDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCalculateSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnGetGPSFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnGetDateFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnUpdateSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblSightingID, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnGetGPSFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGetDateFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdateSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblSightingID, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
         );
         pnlButtonsLayout.setVerticalGroup(
@@ -2147,11 +2146,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 
-    private void dtpSightingDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtpSightingDateActionPerformed
-        setupSightingDateFromUIFields();
-        btnCalculateSunAndMoonActionPerformed(null);
-    }//GEN-LAST:event_dtpSightingDateActionPerformed
-
     private void tblElementKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
             tblElementMouseReleased(null);
@@ -2174,6 +2168,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
     }//GEN-LAST:event_tblElementMouseReleased
+
+    private void dtpSightingDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dtpSightingDatePropertyChange
+        if (evt.getPropertyName().equals("date")) {
+            setupSightingDateFromUIFields();
+            btnCalculateSunAndMoonActionPerformed(null);
+        }
+    }//GEN-LAST:event_dtpSightingDatePropertyChange
 
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());

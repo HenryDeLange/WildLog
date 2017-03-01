@@ -22,9 +22,9 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
@@ -59,7 +59,8 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         super("Moon Phase Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(10);
         // Charts
-        Button btnPieChart = new Button("All Observations Together (Pie)");
+        ToggleButton btnPieChart = new ToggleButton("All Observations Together (Pie)");
+        btnPieChart.setToggleGroup(BUTTON_GROUP);
         btnPieChart.setCursor(Cursor.HAND);
         btnPieChart.setOnAction(new EventHandler() {
             @Override
@@ -70,7 +71,8 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPieChart);
-        Button btnLineChart = new Button("All Observations Together (Bar)");
+        ToggleButton btnLineChart = new ToggleButton("All Observations Together (Bar)");
+        btnLineChart.setToggleGroup(BUTTON_GROUP);
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
@@ -81,7 +83,8 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnLineChart);
-        Button btnBarChart = new Button("All Observations Together (Line)");
+        ToggleButton btnBarChart = new ToggleButton("All Observations Together (Line)");
+        btnBarChart.setToggleGroup(BUTTON_GROUP);
         btnBarChart.setCursor(Cursor.HAND);
         btnBarChart.setOnAction(new EventHandler() {
             @Override
@@ -92,7 +95,8 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChart);
-        Button btnStackedBarChart = new Button("Grouped by Creatures (Bar)");
+        ToggleButton btnStackedBarChart = new ToggleButton("Grouped by Creatures (Bar)");
+        btnStackedBarChart.setToggleGroup(BUTTON_GROUP);
         btnStackedBarChart.setCursor(Cursor.HAND);
         btnStackedBarChart.setOnAction(new EventHandler() {
             @Override
@@ -103,9 +107,10 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnStackedBarChart);
-        Button btnBarChart2 = new Button("Grouped by Creatures (Line)");
-        btnBarChart2.setCursor(Cursor.HAND);
-        btnBarChart2.setOnAction(new EventHandler() {
+        ToggleButton btnLineChartAll = new ToggleButton("Grouped by Creatures (Line)");
+        btnLineChartAll.setToggleGroup(BUTTON_GROUP);
+        btnLineChartAll.setCursor(Cursor.HAND);
+        btnLineChartAll.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART_ELEMENTS;
@@ -113,7 +118,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                         + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });
-        lstCustomButtons.add(btnBarChart2);
+        lstCustomButtons.add(btnLineChartAll);
         // Chart options
         lstCustomButtons.add(new Label("Chart Options:"));
         CheckBox chkShowDetails = new CheckBox("Show Day, Night and Twilight");

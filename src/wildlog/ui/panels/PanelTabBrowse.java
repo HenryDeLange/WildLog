@@ -32,7 +32,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
@@ -50,6 +49,7 @@ import javax.swing.tree.TreeSelectionModel;
 import mediautil.gen.Log;
 import mediautil.image.jpeg.LLJTran;
 import mediautil.image.jpeg.LLJTranException;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -697,8 +697,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             // If you pass the 2nd parameter as false, Exif information is not loaded and hence will not be written.
                             lljTran.read(LLJTran.READ_ALL, true);
                             lljTran.transform(LLJTran.ROT_90);
-                            // Get a new name for the file (because if the same name is used the ImageIcons don't get refreshed if they have been viewed already since Java chaches them)
-                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), wildLogFile.getDBFilePath(), wildLogFile.getFileType());
+                            // Get a new name for the file (because if the same name is used the ImageIcons don't get 
+                            // refreshed if they have been viewed already since Java chaches them)
+                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), wildLogFile.getDBFilePath(), 
+                                    wildLogFile.getFileType(), new Date(), null, -1);
                             newWildLogFile.setDefaultFile(wildLogFile.isDefaultFile());
                             int shortenedAttempt = 0;
                             while (Files.exists(newWildLogFile.getAbsolutePath())) {

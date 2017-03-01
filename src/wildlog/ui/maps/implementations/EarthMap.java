@@ -6,8 +6,8 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.BundledMapLayers;
@@ -24,7 +24,8 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
         super("World Maps (Offline)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Maps
-        Button btnModernMap = new Button("Modern World");
+        ToggleButton btnModernMap = new ToggleButton("Modern World");
+        btnModernMap.setToggleGroup(BUTTON_GROUP);
         btnModernMap.setCursor(Cursor.HAND);
         btnModernMap.setOnAction(new EventHandler() {
             @Override
@@ -33,7 +34,8 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnModernMap);
-        Button btnHistoricMap = new Button("Pre-industrial World");
+        ToggleButton btnHistoricMap = new ToggleButton("Pre-industrial World");
+        btnHistoricMap.setToggleGroup(BUTTON_GROUP);
         btnHistoricMap.setCursor(Cursor.HAND);
         btnHistoricMap.setOnAction(new EventHandler() {
             @Override

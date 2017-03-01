@@ -14,10 +14,10 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.JLabel;
@@ -47,7 +47,8 @@ public class PointMap extends AbstractMap<Sighting> {
         super("World Maps (Online)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
-        Button btnPointMapGoogle = new Button("Markers on Google Maps");
+        ToggleButton btnPointMapGoogle = new ToggleButton("Markers on Google Maps");
+        btnPointMapGoogle.setToggleGroup(BUTTON_GROUP);
         btnPointMapGoogle.setCursor(Cursor.HAND);
         btnPointMapGoogle.setOnAction(new EventHandler() {
             @Override
@@ -56,7 +57,8 @@ public class PointMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnPointMapGoogle);
-        Button btnPointMapBing = new Button("Markers on Bing Maps");
+        ToggleButton btnPointMapBing = new ToggleButton("Markers on Bing Maps");
+        btnPointMapBing.setToggleGroup(BUTTON_GROUP);
         btnPointMapBing.setCursor(Cursor.HAND);
         btnPointMapBing.setOnAction(new EventHandler() {
             @Override

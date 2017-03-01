@@ -20,7 +20,7 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedAreaChart;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
 import javafx.util.StringConverter;
@@ -43,7 +43,8 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         super("Day and Night Cycle Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(4);
         // Area/Line Chart
-        Button btnPieChart = new Button("Day/Night Observations (Pie)");
+        ToggleButton btnPieChart = new ToggleButton("Day/Night Observations (Pie)");
+        btnPieChart.setToggleGroup(BUTTON_GROUP);
         btnPieChart.setCursor(Cursor.HAND);
         btnPieChart.setOnAction(new EventHandler() {
             @Override
@@ -53,7 +54,8 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPieChart);
-        Button btnLineAllChart = new Button("Day/Night Observations (Line)");
+        ToggleButton btnLineAllChart = new ToggleButton("Day/Night Observations (Line)");
+        btnLineAllChart.setToggleGroup(BUTTON_GROUP);
         btnLineAllChart.setCursor(Cursor.HAND);
         btnLineAllChart.setOnAction(new EventHandler() {
             @Override
@@ -63,7 +65,8 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnLineAllChart);
-        Button btnLineCreatureChart = new Button("Day/Night Observations (Stacked)");
+        ToggleButton btnLineCreatureChart = new ToggleButton("Day/Night Observations (Stacked)");
+        btnLineCreatureChart.setToggleGroup(BUTTON_GROUP);
         btnLineCreatureChart.setCursor(Cursor.HAND);
         btnLineCreatureChart.setOnAction(new EventHandler() {
             @Override

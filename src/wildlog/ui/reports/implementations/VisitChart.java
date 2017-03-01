@@ -24,7 +24,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
@@ -50,7 +50,8 @@ public class VisitChart extends AbstractReport<Sighting> {
         super("Period Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(9);
         // Pie charts
-        Button btnPieChartSightingCount = new Button("Observations per Period (Pie)");
+        ToggleButton btnPieChartSightingCount = new ToggleButton("Observations per Period (Pie)");
+        btnPieChartSightingCount.setToggleGroup(BUTTON_GROUP);
         btnPieChartSightingCount.setCursor(Cursor.HAND);
         btnPieChartSightingCount.setOnAction(new EventHandler() {
             @Override
@@ -60,7 +61,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPieChartSightingCount);
-        Button btnBarChartName = new Button("Observations per Period (Bar)");
+        ToggleButton btnBarChartName = new ToggleButton("Observations per Period (Bar)");
+        btnBarChartName.setToggleGroup(BUTTON_GROUP);
         btnBarChartName.setCursor(Cursor.HAND);
         btnBarChartName.setOnAction(new EventHandler() {
             @Override
@@ -70,7 +72,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartName);
-        Button btnBarChartElementCount = new Button("Creatures per Period (Bar)");
+        ToggleButton btnBarChartElementCount = new ToggleButton("Creatures per Period (Bar)");
+        btnBarChartElementCount.setToggleGroup(BUTTON_GROUP);
         btnBarChartElementCount.setCursor(Cursor.HAND);
         btnBarChartElementCount.setOnAction(new EventHandler() {
             @Override
@@ -80,7 +83,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartElementCount);
-        Button btnPieChartType = new Button("Observations per Period Type (Pie)");
+        ToggleButton btnPieChartType = new ToggleButton("Observations per Period Type (Pie)");
+        btnPieChartType.setToggleGroup(BUTTON_GROUP);
         btnPieChartType.setCursor(Cursor.HAND);
         btnPieChartType.setOnAction(new EventHandler() {
             @Override
@@ -90,7 +94,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPieChartType);
-        Button btnBarChartDuration = new Button("Period Duration (Bar)");
+        ToggleButton btnBarChartDuration = new ToggleButton("Period Duration (Bar)");
+        btnBarChartDuration.setToggleGroup(BUTTON_GROUP);
         btnBarChartDuration.setCursor(Cursor.HAND);
         btnBarChartDuration.setOnAction(new EventHandler() {
             @Override
@@ -100,7 +105,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartDuration);
-         Button btnBarChartDurationCombined = new Button("Grouped Period Duration (Bar)");
+        ToggleButton btnBarChartDurationCombined = new ToggleButton("Grouped Period Duration (Bar)");
+        btnBarChartDurationCombined.setToggleGroup(BUTTON_GROUP);
         btnBarChartDurationCombined.setCursor(Cursor.HAND);
         btnBarChartDurationCombined.setOnAction(new EventHandler() {
             @Override
@@ -110,7 +116,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartDurationCombined);
-        Button btnBarChartAbundance = new Button("Abundance of Observations (Bar)");
+        ToggleButton btnBarChartAbundance = new ToggleButton("Abundance of Observations (Bar)");
+        btnBarChartAbundance.setToggleGroup(BUTTON_GROUP);
         btnBarChartAbundance.setCursor(Cursor.HAND);
         btnBarChartAbundance.setOnAction(new EventHandler() {
             @Override
@@ -122,7 +129,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartAbundance);
-        Button btnBarChartElementAbundance = new Button("Abundance of Creatures (Bar)");
+        ToggleButton btnBarChartElementAbundance = new ToggleButton("Abundance of Creatures (Bar)");
+        btnBarChartElementAbundance.setToggleGroup(BUTTON_GROUP);
         btnBarChartElementAbundance.setCursor(Cursor.HAND);
         btnBarChartElementAbundance.setOnAction(new EventHandler() {
             @Override
@@ -134,7 +142,8 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartElementAbundance);
-        Button btnBarChartRichness = new Button("Richness of Creatures (Bar)");
+        ToggleButton btnBarChartRichness = new ToggleButton("Richness of Creatures (Bar)");
+        btnBarChartRichness.setToggleGroup(BUTTON_GROUP);
         btnBarChartRichness.setCursor(Cursor.HAND);
         btnBarChartRichness.setOnAction(new EventHandler() {
             @Override

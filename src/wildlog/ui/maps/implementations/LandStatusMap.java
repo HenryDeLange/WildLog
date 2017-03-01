@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javax.swing.JLabel;
+import org.apache.logging.log4j.Level;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
@@ -35,7 +35,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
         super("Conservation Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(9);
         // Maps
-        Button btnProtectedWorldMap = new Button("Protected Areas (World)");
+        ToggleButton btnProtectedWorldMap = new ToggleButton("Protected Areas (World)");
+        btnProtectedWorldMap.setToggleGroup(BUTTON_GROUP);
         btnProtectedWorldMap.setCursor(Cursor.HAND);
         btnProtectedWorldMap.setOnAction(new EventHandler() {
             @Override
@@ -44,7 +45,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnProtectedWorldMap);
-        Button btnProtectedLocalMap = new Button("Protected Areas (Local)");
+        ToggleButton btnProtectedLocalMap = new ToggleButton("Protected Areas (Local)");
+        btnProtectedLocalMap.setToggleGroup(BUTTON_GROUP);
         btnProtectedLocalMap.setCursor(Cursor.HAND);
         btnProtectedLocalMap.setOnAction(new EventHandler() {
             @Override
@@ -53,7 +55,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnProtectedLocalMap);
-        Button btnForestsMap = new Button("Forested Areas");
+        ToggleButton btnForestsMap = new ToggleButton("Forested Areas");
+        btnForestsMap.setToggleGroup(BUTTON_GROUP);
         btnForestsMap.setCursor(Cursor.HAND);
         btnForestsMap.setOnAction(new EventHandler() {
             @Override
@@ -62,7 +65,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnForestsMap);
-        Button btnHumanInfluenceMap = new Button("Human Influence");
+        ToggleButton btnHumanInfluenceMap = new ToggleButton("Human Influence");
+        btnHumanInfluenceMap.setToggleGroup(BUTTON_GROUP);
         btnHumanInfluenceMap.setCursor(Cursor.HAND);
         btnHumanInfluenceMap.setOnAction(new EventHandler() {
             @Override
@@ -71,7 +75,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnHumanInfluenceMap);
-        Button btnPopulationMap = new Button("Human Population");
+        ToggleButton btnPopulationMap = new ToggleButton("Human Population");
+        btnPopulationMap.setToggleGroup(BUTTON_GROUP);
         btnPopulationMap.setCursor(Cursor.HAND);
         btnPopulationMap.setOnAction(new EventHandler() {
             @Override
@@ -80,7 +85,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
             }
         });
         lstCustomButtons.add(btnPopulationMap);
-        Button btnFarmingMap = new Button("Crop Farming Areas");
+        ToggleButton btnFarmingMap = new ToggleButton("Crop Farming Areas");
+        btnFarmingMap.setToggleGroup(BUTTON_GROUP);
         btnFarmingMap.setCursor(Cursor.HAND);
         btnFarmingMap.setOnAction(new EventHandler() {
             @Override

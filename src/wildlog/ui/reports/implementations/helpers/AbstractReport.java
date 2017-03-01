@@ -1,13 +1,33 @@
 package wildlog.ui.reports.implementations.helpers;
 
 import java.util.List;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 
 
 public abstract class AbstractReport<T> {
+    protected static final ToggleGroup BUTTON_GROUP = new ToggleGroup();
+    static {
+        // Make sure the button stays selected when pressing it again if already selected
+        BUTTON_GROUP.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            public void changed(ObservableValue<? extends Toggle> value, Toggle oldToggle, Toggle newToggle) {
+                if ((newToggle == null)) {
+                    Platform.runLater(new Runnable() {
+                        public void run() {
+                            BUTTON_GROUP.selectToggle(oldToggle);
+                        }
+                    });
+                }
+            }
+        });
+    }
     private final String reportCategoryTitle;
     private String activeSubCategoryTitle = "Default Report";
     protected List<T> lstData;

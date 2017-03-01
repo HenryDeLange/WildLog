@@ -18,7 +18,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
@@ -38,7 +38,8 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         super("Time of Day Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(4);
         // Bar charts
-        Button btnBarChart = new Button("Observation Time of Day (Bar)");
+        ToggleButton btnBarChart = new ToggleButton("Observation Time of Day (Bar)");
+        btnBarChart.setToggleGroup(BUTTON_GROUP);
         btnBarChart.setCursor(Cursor.HAND);
         btnBarChart.setOnAction(new EventHandler() {
             @Override
@@ -49,7 +50,8 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnBarChart);
         // Pie charts
-        Button btnPieChart = new Button("Observation Time of Day (Pie)");
+        ToggleButton btnPieChart = new ToggleButton("Observation Time of Day (Pie)");
+        btnPieChart.setToggleGroup(BUTTON_GROUP);
         btnPieChart.setCursor(Cursor.HAND);
         btnPieChart.setOnAction(new EventHandler() {
             @Override
@@ -60,7 +62,8 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnPieChart);
         // Line charts
-        Button btnLineChart = new Button("Creature Time of Day (Line)");
+        ToggleButton btnLineChart = new ToggleButton("Creature Time of Day (Line)");
+        btnLineChart.setToggleGroup(BUTTON_GROUP);
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override

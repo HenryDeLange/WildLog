@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -16,7 +15,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javax.swing.JLabel;
+import org.apache.logging.log4j.Level;
 import org.geotools.data.DataSourceException;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
@@ -83,7 +84,8 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
         super("Distribution Maps (Layer)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
-        Button btnDistributionMap = new Button("Creature Distribution Map");
+        ToggleButton btnDistributionMap = new ToggleButton("Creature Distribution Map");
+        btnDistributionMap.setToggleGroup(BUTTON_GROUP);
         btnDistributionMap.setCursor(Cursor.HAND);
         btnDistributionMap.setOnAction(new EventHandler() {
             @Override

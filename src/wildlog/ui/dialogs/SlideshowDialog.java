@@ -10,17 +10,17 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -255,7 +255,7 @@ public class SlideshowDialog extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow for '" + inName + "'");
-                List<String> slideshowList = UtilsMovies.getFilePaths(app, new WildLogFile(inWildLogFileID));
+                List<String> slideshowList = UtilsMovies.getFilePaths(app, inWildLogFileID, WildLogFileType.IMAGE);
                 setMessage("Creating the Slideshow for '" + inName + "' (Busy writing the file, this may take a while.)");
                 UtilsMovies.generateSlideshow(slideshowList, app,
                         WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(inName + ".mov"));
@@ -274,7 +274,7 @@ public class SlideshowDialog extends JDialog {
                 Collections.sort(inLstSightings);
                 List<String> slideshowList = new ArrayList<String>(inLstSightings.size() * 3);
                 for (Sighting tempSighting : inLstSightings) {
-                    slideshowList.addAll(UtilsMovies.getFilePaths(app, new WildLogFile(tempSighting.getWildLogFileID())));
+                    slideshowList.addAll(UtilsMovies.getFilePaths(app, tempSighting.getWildLogFileID(), WildLogFileType.IMAGE));
                 }
                 // Now create the slideshow
                 setMessage("Creating the Slideshow for '" + inName + "' (Busy writing the file, this may take a while.)");
@@ -297,7 +297,7 @@ public class SlideshowDialog extends JDialog {
                     setMessage("Creating the Animated GIF for '" + inTempName + "' " + getProgress() + "%");
                     List<String> slideshowList = new ArrayList<String>(inLstSighting.size() * 3);
                     for (Sighting tempSighting : inLstSighting) {
-                        slideshowList.addAll(UtilsMovies.getFilePaths(app, new WildLogFile(tempSighting.getWildLogFileID())));
+                        slideshowList.addAll(UtilsMovies.getFilePaths(app, tempSighting.getWildLogFileID(), WildLogFileType.IMAGE));
                     }
                     // Now create the GIF
                     if (!slideshowList.isEmpty()) {

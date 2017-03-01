@@ -7,14 +7,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javax.swing.JLabel;
+import org.apache.logging.log4j.Level;
 import org.geotools.data.DataSourceException;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
@@ -44,7 +45,8 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
         super("Custom Layers Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Maps
-        Button btnLayers = new Button("Select Custom Layers");
+        ToggleButton btnLayers = new ToggleButton("Select Custom Layers");
+        btnLayers.setToggleGroup(BUTTON_GROUP);
         btnLayers.setCursor(Cursor.HAND);
         btnLayers.setOnAction(new EventHandler() {
             @Override

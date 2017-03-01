@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -20,6 +19,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -53,9 +53,8 @@ public class WorkspaceImportDialog extends JDialog {
         app = inApp;
         importWorkspace = inImportPath;
         try {
-        importDBI = new WildLogDBI_h2("jdbc:h2:"
-                + (importWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath()
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
+        importDBI = new WildLogDBI_h2((importWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(
+                WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath().toString(), false);
         }
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
