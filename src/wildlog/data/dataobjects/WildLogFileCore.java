@@ -1,6 +1,5 @@
 package wildlog.data.dataobjects;
 
-import java.util.Calendar;
 import java.util.Date;
 import wildlog.data.enums.WildLogFileType;
 
@@ -18,19 +17,7 @@ public class WildLogFileCore {
 
     public WildLogFileCore() {
     }
-
-    public WildLogFileCore(String inID) {
-        id = inID;
-    }
-
-    public WildLogFileCore(String inID, String inFilename, String inFilePath, WildLogFileType inFileType) {
-        this(inID, inFilename, inFilePath, inFileType, Calendar.getInstance().getTime(), null, 0);
-    }
-
-    public WildLogFileCore(String inID, String inFilename, String inFilePath, WildLogFileType inFileType, Date inUploadDate) {
-        this(inID, inFilename, inFilePath, inFileType, inUploadDate, null, 0);
-    }
-
+    
     public WildLogFileCore(String inID, String inFilename, String inOriginalFileLocation, WildLogFileType inFileType, Date inUploadDate, Date inFileDate, long inFileSize) {
         id = inID;
         filename = inFilename;
