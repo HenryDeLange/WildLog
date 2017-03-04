@@ -5,7 +5,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -18,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javax.swing.JLabel;
+import org.apache.logging.log4j.Level;
 import org.geotools.data.DataSourceException;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FileDataStore;
@@ -245,6 +245,24 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
     public void dispose() {
         if (map != null) {
             map.dispose();
+        }
+    }
+    
+    public void zoomIn() {
+        if (map != null) {
+            map.zoomIn();
+        }
+    }
+    
+    public void zoomOut() {
+        if (map != null) {
+            map.zoomOut();
+        }
+    }
+    
+    public void identify() {
+        if (map != null) {
+            map.identify();
         }
     }
     

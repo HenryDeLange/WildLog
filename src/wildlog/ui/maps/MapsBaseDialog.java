@@ -43,6 +43,7 @@ import wildlog.ui.dialogs.ExportDialogForReportsAndMaps;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.maps.implementations.BiomeMap;
 import wildlog.ui.maps.implementations.ClimateMap;
 import wildlog.ui.maps.implementations.CustomLayersMap;
 import wildlog.ui.maps.implementations.DistributionMap;
@@ -53,6 +54,7 @@ import wildlog.ui.maps.implementations.LegacyMap;
 import wildlog.ui.maps.implementations.OtherMap;
 import wildlog.ui.maps.implementations.PointMap;
 import wildlog.ui.maps.implementations.WebDistributionMap;
+import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.utils.UtilsFileProcessing;
 
@@ -150,12 +152,12 @@ public class MapsBaseDialog extends JFrame {
         lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new DistributionMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new WebDistributionMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new BiomeMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, this));
-// TODO: Biomes map
         // Add the reports
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(10);
@@ -191,6 +193,10 @@ public class MapsBaseDialog extends JFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         pnlMapsAndFilters = new javax.swing.JPanel();
         pnlMaps = new javax.swing.JPanel();
+        pnlControls = new javax.swing.JPanel();
+        btnZoomIn = new javax.swing.JButton();
+        btnZoomOut = new javax.swing.JButton();
+        btnIdentify = new javax.swing.JButton();
         pnlExport = new javax.swing.JPanel();
         bntExport = new javax.swing.JButton();
         pnlFilters = new javax.swing.JPanel();
@@ -223,6 +229,78 @@ public class MapsBaseDialog extends JFrame {
         pnlMaps.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Map Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlMaps.setLayout(new java.awt.BorderLayout());
 
+        pnlControls.setBackground(new java.awt.Color(172, 198, 183));
+        pnlControls.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Map Controls", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        btnZoomIn.setBackground(new java.awt.Color(179, 198, 172));
+        btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
+        btnZoomIn.setText("Zoom");
+        btnZoomIn.setToolTipText("Zoom into the Offline Map.");
+        btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnZoomIn.setFocusPainted(false);
+        btnZoomIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnZoomIn.setIconTextGap(10);
+        btnZoomIn.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnZoomIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZoomInActionPerformed(evt);
+            }
+        });
+
+        btnZoomOut.setBackground(new java.awt.Color(179, 198, 172));
+        btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnZoomOut.setText("Zoom");
+        btnZoomOut.setToolTipText("Zoom out of the Offline Map.");
+        btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnZoomOut.setFocusPainted(false);
+        btnZoomOut.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnZoomOut.setIconTextGap(10);
+        btnZoomOut.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnZoomOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZoomOutActionPerformed(evt);
+            }
+        });
+
+        btnIdentify.setBackground(new java.awt.Color(179, 198, 172));
+        btnIdentify.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Image.png"))); // NOI18N
+        btnIdentify.setText("Indentify");
+        btnIdentify.setToolTipText("Select an area on the Offline Map to identify the features on the map. (Or simply CTRL + CLICK on the map.)");
+        btnIdentify.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnIdentify.setFocusPainted(false);
+        btnIdentify.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnIdentify.setIconTextGap(10);
+        btnIdentify.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnIdentify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIdentifyActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlControlsLayout = new javax.swing.GroupLayout(pnlControls);
+        pnlControls.setLayout(pnlControlsLayout);
+        pnlControlsLayout.setHorizontalGroup(
+            pnlControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlControlsLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(btnIdentify, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        pnlControlsLayout.setVerticalGroup(
+            pnlControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlControlsLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(pnlControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnIdentify, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
+        );
+
         pnlExport.setBackground(new java.awt.Color(172, 198, 183));
         pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Map Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
@@ -252,9 +330,9 @@ public class MapsBaseDialog extends JFrame {
         pnlExportLayout.setVerticalGroup(
             pnlExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlExportLayout.createSequentialGroup()
-                .addGap(2, 2, 2)
+                .addGap(0, 0, 0)
                 .addComponent(bntExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2))
+                .addGap(0, 0, 0))
         );
 
         pnlFilters.setBackground(new java.awt.Color(172, 198, 183));
@@ -387,17 +465,17 @@ public class MapsBaseDialog extends JFrame {
             pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFiltersLayout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(3, 3, 3)
                 .addComponent(btnFilterLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(3, 3, 3)
                 .addComponent(btnFilterVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(3, 3, 3)
                 .addComponent(btnFilterElement, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
+                .addGap(5, 5, 5)
                 .addComponent(btnFilterProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(5, 5, 5)
                 .addComponent(btnResetFilters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+                .addGap(2, 2, 2))
         );
 
         javax.swing.GroupLayout pnlMapsAndFiltersLayout = new javax.swing.GroupLayout(pnlMapsAndFilters);
@@ -409,16 +487,19 @@ public class MapsBaseDialog extends JFrame {
                 .addGroup(pnlMapsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlExport, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlFilters, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlMaps, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlMaps, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlControls, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
         pnlMapsAndFiltersLayout.setVerticalGroup(
             pnlMapsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMapsAndFiltersLayout.createSequentialGroup()
-                .addComponent(pnlMaps, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
-                .addGap(3, 3, 3)
+                .addComponent(pnlMaps, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
+                .addGap(2, 2, 2)
+                .addComponent(pnlControls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addComponent(pnlExport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
+                .addGap(2, 2, 2)
                 .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3))
         );
@@ -560,6 +641,27 @@ public class MapsBaseDialog extends JFrame {
                 lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
                 lblFilteredRecords, activeMap);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
+
+    private void btnIdentifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIdentifyActionPerformed
+        if (activeMap instanceof AbstractGeoToolsMap) {
+            AbstractGeoToolsMap map = (AbstractGeoToolsMap) activeMap;
+            map.identify();
+        }
+    }//GEN-LAST:event_btnIdentifyActionPerformed
+
+    private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
+        if (activeMap instanceof AbstractGeoToolsMap) {
+            AbstractGeoToolsMap map = (AbstractGeoToolsMap) activeMap;
+            map.zoomIn();
+        }
+    }//GEN-LAST:event_btnZoomInActionPerformed
+
+    private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
+        if (activeMap instanceof AbstractGeoToolsMap) {
+            AbstractGeoToolsMap map = (AbstractGeoToolsMap) activeMap;
+            map.zoomOut();
+        }
+    }//GEN-LAST:event_btnZoomOutActionPerformed
     
     private List<Sighting> getCopiedList(List<Sighting> inList) {
         List<Sighting> list = new ArrayList<>(inList.size());
@@ -652,7 +754,10 @@ public class MapsBaseDialog extends JFrame {
     private javax.swing.JButton btnFilterLocation;
     private javax.swing.JButton btnFilterProperties;
     private javax.swing.JButton btnFilterVisit;
+    private javax.swing.JButton btnIdentify;
     private javax.swing.JButton btnResetFilters;
+    private javax.swing.JButton btnZoomIn;
+    private javax.swing.JButton btnZoomOut;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel4;
@@ -661,6 +766,7 @@ public class MapsBaseDialog extends JFrame {
     private javax.swing.JLabel lblFilteredRecords;
     private javax.swing.JLabel lblMapDescription;
     private javax.swing.JLabel lblTotalRecords;
+    private javax.swing.JPanel pnlControls;
     private javax.swing.JPanel pnlExport;
     private javax.swing.JPanel pnlFilters;
     private javax.swing.JPanel pnlMapArea;
