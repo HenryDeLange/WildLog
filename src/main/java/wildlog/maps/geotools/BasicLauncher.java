@@ -2,10 +2,13 @@ package wildlog.maps.geotools;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.JFXPanel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import org.geotools.data.DataSourceException;
@@ -36,19 +39,31 @@ public class BasicLauncher {
         // This method is invoked on the Swing EDT thread
         JFrame frame = new JFrame("Swing and JavaFX");
         final JFXPanel jfxPanel = new JFXPanel();
-        frame.add(jfxPanel);
+        frame.setLayout(new BorderLayout());
+        frame.add(jfxPanel, BorderLayout.CENTER);
         frame.setSize(850, 600);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // CREATE MAP
         GeoToolsMapJavaFX map = new GeoToolsMapJavaFX(jfxPanel, false);
+        // ADD BUTTONS
+        JButton btnZoomIn = new JButton("Zoom In");
+        btnZoomIn.addActionListener((e) -> { map.zoomIn(); });
+        frame.add(btnZoomIn, BorderLayout.WEST);
+        JButton btnZoomOut = new JButton("Zoom Out");
+        btnZoomOut.addActionListener((e) -> { map.zoomOut(); });
+        frame.add(btnZoomOut, BorderLayout.EAST);
+        JButton btnIdentify = new JButton("Identify");
+        btnIdentify.addActionListener((e) -> { map.identify(); });
+        btnIdentify.setPreferredSize(new Dimension(0, 50));
+        frame.add(btnIdentify, BorderLayout.NORTH);
         // ADD LAYERS
         // GeoTiff
         try {
             File geotiff = new File("C:\\Users\\Henry\\Desktop\\Maps\\__FINALE_MAPS\\Earth Colours - Modern\\world_today_medium.tif");
 //            File geotiff = new File("C:\\WildLogToets\\WildLog\\Maps\\Layers\\Climate_Temperature_Min\\02Feb.tif");
             GeoTiffReader reader = new GeoTiffReader(geotiff);
-            Layer gridlayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader));
+            Layer gridlayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader), "world - base layer");
             map.addLayer(gridlayer);
         }
         catch (DataSourceException ex) {
@@ -60,7 +75,7 @@ public class BasicLauncher {
             FileDataStore shapeStore = FileDataStoreFinder.getDataStore(shapefile);
             SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
             Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
-                    Color.BLACK, Color.BLUE, 0.75, 0.5));
+                    Color.BLACK, Color.BLUE, 0.75, 0.5), "world - countries");
             map.addLayer(shapelayer);
         }
         catch (IOException ex) {
@@ -81,8 +96,8 @@ public class BasicLauncher {
             feature.setAttribute("mydata", "The Name 222222");
             collection.add(feature);
             Style pointStyle = SLD.createPointStyle("Circle", Color.MAGENTA, Color.MAGENTA, 0.9f, 15);
-            FeatureLayer pointLayer = new FeatureLayer(collection, pointStyle, "TheLayerTitle");
-// FIXME: Make the points selectable... (Maybe too small, or smomething weird about the layer or feature types...)
+            FeatureLayer pointLayer = new FeatureLayer(collection, pointStyle, "custom points");
+// FIXME: Make the points selectable... (Maybe too small, or something weird about the layer or feature types...)
             map.addLayer(pointLayer);
         }
         catch (SchemaException | FactoryRegistryException ex) {

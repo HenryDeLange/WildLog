@@ -7,7 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
@@ -15,17 +21,28 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javax.swing.Timer;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.map.FeatureLayer;
 import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
 import org.geotools.renderer.GTRenderer;
 import org.geotools.renderer.lite.StreamingRenderer;
+import org.opengis.feature.Property;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.FilterFactory2;
+import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 
@@ -33,6 +50,7 @@ public class GeoToolsMapJavaFX {
     private final JFXPanel jfxPanel;
     private final MapContent mapContent = new MapContent();
     private ImageView imageView;
+    private boolean identifyIsActive = false;
     
 // TODO: Maybe need to do mapContent.dispose() when the map is closed???
 
@@ -89,23 +107,82 @@ public class GeoToolsMapJavaFX {
                 inScrollEvent.consume();
             }
         });
-        // ZOOM - DOUBLE CLICK
+        // ZOOM - DOUBLE CLICK + INDENTIFY
         imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2();
+            
             @Override
             public void handle(MouseEvent inMouseEvent) {
                 if (inMouseEvent.getClickCount() == 2) {
-                    final double ZOOM_SCALE = 0.5;
-                    double minX = mapContent.getViewport().getBounds().getMinX();
-                    double maxX = mapContent.getViewport().getBounds().getMaxX();
-                    double minY = mapContent.getViewport().getBounds().getMinY();
-                    double maxY = mapContent.getViewport().getBounds().getMaxY();
-                    mapContent.getViewport().setBounds(new ReferencedEnvelope(
-                            minX + getDistance(minX, maxX) * ZOOM_SCALE / 2.0, 
-                            maxX - getDistance(minX, maxX) * ZOOM_SCALE / 2.0, 
-                            minY + getDistance(minY, maxY) * ZOOM_SCALE / 2.0, 
-                            maxY - getDistance(minY, maxY) * ZOOM_SCALE / 2.0, 
-                            mapContent.getCoordinateReferenceSystem()));
-                    reloadMap();
+                    zoomIn();
+                }
+                else
+                if (inMouseEvent.getClickCount() == 1 && (inMouseEvent.isControlDown() || identifyIsActive)) {
+                    identifyIsActive = false;
+                    jfxPanel.getScene().setCursor(Cursor.DEFAULT);
+                    List<Map<String, String>> lstInfoForLayers = new ArrayList<>();
+                    for (Layer layer : mapContent.layers()) {
+// TODO: Handle GeoTIFF layers ook
+                        if (layer instanceof FeatureLayer) {
+                            FeatureLayer featureLayer = (FeatureLayer) layer;
+                            Rectangle screenRect = new Rectangle((int) inMouseEvent.getSceneX() - 4, (int) inMouseEvent.getSceneY() - 4, 8, 8);
+                            mapContent.getViewport().setScreenArea(new Rectangle(jfxPanel.getWidth(), jfxPanel.getHeight()));
+                            mapContent.getViewport().setMatchingAspectRatio(true);
+                            AffineTransform transform = mapContent.getViewport().getScreenToWorld();
+                            Rectangle2D worldRect = transform.createTransformedShape(screenRect).getBounds2D();
+                            ReferencedEnvelope bbox = new ReferencedEnvelope(worldRect, mapContent.getCoordinateReferenceSystem());
+                            try {
+                                String propertyName = featureLayer.getSimpleFeatureSource().getSchema().getGeometryDescriptor().getLocalName();
+                                SimpleFeatureCollection features = featureLayer.getSimpleFeatureSource().getFeatures(
+                                        filterFactory.bbox(propertyName, bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY(), 
+                                                bbox.getCoordinateReferenceSystem().toWKT()));
+                                for (SimpleFeature simpleFeature : features.toArray(new SimpleFeature[]{})) {
+                                    // Get the attributes to display
+                                    Map<String, String> mapInfo = new LinkedHashMap<>();
+                                    mapInfo.put("*** LAYER NAME ***", layer.getTitle());
+                                    for (Property value : simpleFeature.getValue()) {
+                                        if (value != null && value.getName() != null && value.getValue() != null 
+                                                && !value.getName().toString().equals(propertyName)) {
+                                            mapInfo.put(value.getName().toString(),  value.getValue().toString());
+                                        }
+                                    }
+                                    if (!mapInfo.isEmpty()) {
+                                        lstInfoForLayers.add(mapInfo);
+                                    }
+                                }
+                            }
+                            catch (Exception ex) {
+                                ex.printStackTrace(System.err);
+                            }
+                        }
+                    }
+                    if (!lstInfoForLayers.isEmpty()) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                Alert dialog = new Alert(Alert.AlertType.INFORMATION);
+                                dialog.setResizable(true);
+                                dialog.setTitle("Indentified Map Features");
+                                dialog.setHeaderText("The following featueres were identified at the selected location:");
+                                ListView<String> listView = new ListView<>();
+                                for (Map<String, String> mapInfo : lstInfoForLayers) {
+                                    for (Map.Entry<String, String> entry : mapInfo.entrySet()) {
+                                        listView.getItems().add(entry.getKey() + " : " + entry.getValue());
+                                    }
+                                }
+                                GridPane.setVgrow(listView, Priority.ALWAYS);
+                                GridPane.setHgrow(listView, Priority.ALWAYS);
+                                GridPane content = new GridPane();
+                                content.setPrefWidth(450);
+                                content.setPrefHeight(350);
+                                content.setMaxWidth(Double.MAX_VALUE);
+                                content.add(listView, 0, 0);
+                                dialog.getDialogPane().setContent(content);
+                                dialog.initOwner(jfxPanel.getScene().getWindow());
+                                dialog.showAndWait();
+                            }
+                        });
+                    }
                 }
             }
         });
@@ -289,6 +366,47 @@ public class GeoToolsMapJavaFX {
     
     public void dispose() {
         mapContent.dispose();
+    }
+    
+    public void zoomIn() throws MismatchedDimensionException {
+        final double ZOOM_SCALE = 0.5;
+        double minX = mapContent.getViewport().getBounds().getMinX();
+        double maxX = mapContent.getViewport().getBounds().getMaxX();
+        double minY = mapContent.getViewport().getBounds().getMinY();
+        double maxY = mapContent.getViewport().getBounds().getMaxY();
+        mapContent.getViewport().setBounds(new ReferencedEnvelope(
+                minX + getDistance(minX, maxX) * ZOOM_SCALE / 4.0,
+                maxX - getDistance(minX, maxX) * ZOOM_SCALE / 4.0,
+                minY + getDistance(minY, maxY) * ZOOM_SCALE / 4.0,
+                maxY - getDistance(minY, maxY) * ZOOM_SCALE / 4.0,
+                mapContent.getCoordinateReferenceSystem()));
+        reloadMap();
+    }
+    
+    public void zoomOut() throws MismatchedDimensionException {
+        final double ZOOM_SCALE = 0.5;
+        double minX = mapContent.getViewport().getBounds().getMinX();
+        double maxX = mapContent.getViewport().getBounds().getMaxX();
+        double minY = mapContent.getViewport().getBounds().getMinY();
+        double maxY = mapContent.getViewport().getBounds().getMaxY();
+        mapContent.getViewport().setBounds(new ReferencedEnvelope(
+                minX - getDistance(minX, maxX) * ZOOM_SCALE / 4.0,
+                maxX + getDistance(minX, maxX) * ZOOM_SCALE / 4.0,
+                minY - getDistance(minY, maxY) * ZOOM_SCALE / 4.0,
+                maxY + getDistance(minY, maxY) * ZOOM_SCALE / 4.0,
+                mapContent.getCoordinateReferenceSystem()));
+        reloadMap();
+    }
+    
+    public void identify() {
+        identifyIsActive = true;
+// FIXME: Die cursor storie werk nie altyd nie...?
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                jfxPanel.getScene().setCursor(Cursor.CROSSHAIR);
+            }
+        });
     }
     
 }
