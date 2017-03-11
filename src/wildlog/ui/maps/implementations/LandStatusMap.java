@@ -1,6 +1,5 @@
 package wildlog.ui.maps.implementations;
 
-import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -148,8 +147,9 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
                         WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath()).toFile());
                 SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-                Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource,
-                        new Color(18, 133, 28), new Color(23, 168, 35), 0.7, 0.6));
+                Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleFile(shapeSource,
+                        WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath().toString().substring(
+                                0, BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath().toString().lastIndexOf('.')) + ".sld")));
                 map.addLayer(shapelayer);
             }
             catch (IOException ex) {
@@ -159,8 +159,9 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
                         WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath()).toFile());
                 SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-                Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource,
-                        new Color(18, 133, 28), new Color(23, 168, 35), 0.7, 0.6));
+                Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleFile(shapeSource,
+                        WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath().toString().substring(
+                                0, BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath().toString().lastIndexOf('.')) + ".sld")));
                 map.addLayer(shapelayer);
             }
             catch (IOException ex) {
@@ -177,8 +178,9 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
                         WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath()).toFile());
                 SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-                Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource,
-                        new Color(18, 133, 28), new Color(23, 168, 35), 0.7, 0.6));
+                Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleFile(shapeSource,
+                        WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath().toString().substring(
+                                0, BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath().toString().lastIndexOf('.')) + ".sld")));
                 map.replaceLayer(1, shapelayer);
             }
             catch (IOException ex) {
@@ -188,8 +190,9 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 FileDataStore shapeStore = FileDataStoreFinder.getDataStore(
                         WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath()).toFile());
                 SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-                Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource,
-                        new Color(18, 133, 28), new Color(23, 168, 35), 0.7, 0.6));
+                Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleFile(shapeSource,
+                        WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath().toString().substring(
+                                0, BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath().toString().lastIndexOf('.')) + ".sld")));
                 map.replaceLayer(2, shapelayer);
             }
             catch (IOException ex) {

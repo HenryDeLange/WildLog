@@ -179,7 +179,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
         try {
             GeoTiffReader reader = new GeoTiffReader(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath()
                     .resolve(inBundledMapLayers.getRelativePath()).toFile());
-            gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader));
+            gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader), inBundledMapLayers.name());
         }
         catch (DataSourceException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -192,7 +192,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
         try {
             GeoTiffReader reader = new GeoTiffReader(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath()
                     .resolve(inBundledMapLayers.getRelativePathForMonth(inMonth)).toFile());
-            gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader));
+            gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader), inBundledMapLayers.name());
         }
         catch (DataSourceException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -207,7 +207,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                     WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(inBundledMapLayers.getRelativePath()).toFile());
             SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
             shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource,
-                    Color.BLACK, Color.BLACK, 0.8, 0.0));
+                    Color.BLACK, Color.BLACK, 0.8, 0.0), inBundledMapLayers.name());
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -230,10 +230,8 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                     collection.add(feature);
                 }
             }
-//            Style pointStyle = SLD.createPointStyle("Circle", new Color(80, 15, 5), new Color(175, 30, 20), 0.7f, 10);
             Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 0.8, 0.5, 14);
             pointLayer = new FeatureLayer(collection, pointStyle, "WildLogPointLayer");
-// FIXME: Make the points selectable... (Maybe too small, or something weird about the layer or feature types...)
         }
         catch (SchemaException | FactoryRegistryException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

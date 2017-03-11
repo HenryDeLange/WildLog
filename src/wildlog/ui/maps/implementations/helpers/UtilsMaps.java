@@ -35,6 +35,9 @@ public final class UtilsMaps {
         copyShapefiles(BundledMapLayers.BASE_LAKES);
         copyShapefiles(BundledMapLayers.BASE_RIVERS);
         copyShapefiles(BundledMapLayers.BASE_WORLD);
+        copyShapefiles(BundledMapLayers.BIOMES_LOCAL);
+        copyShapefiles(BundledMapLayers.BIOMES_LOCAL_GROUPS);
+        copyShapefiles(BundledMapLayers.BIOMES_WORLD);
         copyShapefiles(BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL);
         copyShapefiles(BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL);
         WildLogApp.LOGGER.log(Level.INFO, "Done copying Map Layers");
@@ -72,6 +75,12 @@ public final class UtilsMaps {
         copySingleFile(inBundledMapLayers.getRelativePath().getParent().resolve(
             inBundledMapLayers.getRelativePath().getFileName().toString()
                 .substring(0, inBundledMapLayers.getRelativePath().getFileName().toString().lastIndexOf('.')) + ".shx"));
+        copySingleFile(inBundledMapLayers.getRelativePath().getParent().resolve(
+            inBundledMapLayers.getRelativePath().getFileName().toString()
+                .substring(0, inBundledMapLayers.getRelativePath().getFileName().toString().lastIndexOf('.')) + ".sld"));
+        copySingleFile(inBundledMapLayers.getRelativePath().getParent().resolve(
+            inBundledMapLayers.getRelativePath().getFileName().toString()
+                .substring(0, inBundledMapLayers.getRelativePath().getFileName().toString().lastIndexOf('.')) + ".qix"));
     }
     
     private static void copySingleFile(Path inPath) {
@@ -80,7 +89,12 @@ public final class UtilsMaps {
             UtilsFileProcessing.createFileFromStream(inputStream, WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(inPath));
         }
         else {
-            WildLogApp.LOGGER.log(Level.ERROR, "Problem copying Map Layer (can''t find in JAR): {}", inPath);
+            if (!inPath.getFileName().toString().endsWith(".sld")) {
+                WildLogApp.LOGGER.log(Level.ERROR, "Problem copying Map Layer (can't find in JAR): {}", inPath);
+            }
+            else {
+                WildLogApp.LOGGER.log(Level.WARN, "No default style found for Map Layer: {}", inPath);
+            }
         }
     }
     
