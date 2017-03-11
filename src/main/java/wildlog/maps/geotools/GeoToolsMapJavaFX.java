@@ -52,7 +52,6 @@ public class GeoToolsMapJavaFX {
     private ImageView imageView;
     private boolean identifyIsActive = false;
     
-// TODO: Maybe need to do mapContent.dispose() when the map is closed???
 
     public GeoToolsMapJavaFX(JFXPanel inJFXPanel, boolean inEnhanceContrast) {
         jfxPanel = inJFXPanel;

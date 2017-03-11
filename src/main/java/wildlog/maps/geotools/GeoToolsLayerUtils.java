@@ -6,6 +6,8 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import java.awt.Color;
 import java.awt.Polygon;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.geotools.coverage.GridSampleDimension;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
@@ -21,6 +23,7 @@ import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Rule;
 import org.geotools.styling.SLD;
+import org.geotools.styling.SLDParser;
 import org.geotools.styling.SelectedChannelType;
 import org.geotools.styling.Stroke;
 import org.geotools.styling.Style;
@@ -167,8 +170,25 @@ public class GeoToolsLayerUtils {
         return style;
     }
     
-    public static Style createShapefileStyleFile(FeatureSource featureSource) {
-// TODO: Read a style from the config file bundled with the shapefile
+    public static Style createShapefileStyleFile(FeatureSource inFeatureSource, Path inStylePath) {
+        // NOTE: Mens kan die SLD files maklik maak in die uDIG GIS program...
+        if (Files.exists(inStylePath)) {
+            return createFromSLD(inStylePath);
+        }
+        System.err.println("SLD style file not found... Using default style instead.  -  " + inStylePath);
+        return createShapefileStyleBasic(inFeatureSource, new Color(18, 133, 28), new Color(23, 168, 35), 0.7, 0.6);
+    }
+
+    private static Style createFromSLD(Path inSLDPath) {
+        try {
+            StyleFactory styleFactory = CommonFactoryFinder.getStyleFactory();
+            SLDParser stylereader = new SLDParser(styleFactory, inSLDPath.toFile());
+            Style[] style = stylereader.readXML();
+            return style[0];
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
         return null;
     }
     
