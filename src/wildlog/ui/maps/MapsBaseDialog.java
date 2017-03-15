@@ -170,6 +170,16 @@ public class MapsBaseDialog extends JFrame {
                         public void handle(ActionEvent inEvent) {
                             activeMap = map;
                             activeMap.loadMap();
+                            if (activeMap instanceof AbstractGeoToolsMap) {
+                                btnZoomIn.setEnabled(true);
+                                btnZoomOut.setEnabled(true);
+                                btnIdentify.setEnabled(true);
+                            }
+                            else {
+                                btnZoomIn.setEnabled(false);
+                                btnZoomOut.setEnabled(false);
+                                btnIdentify.setEnabled(false);
+                            }
                         }
                     });
                 }
@@ -237,6 +247,7 @@ public class MapsBaseDialog extends JFrame {
         btnZoomIn.setText("Zoom");
         btnZoomIn.setToolTipText("Zoom into the Offline Map.");
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnZoomIn.setEnabled(false);
         btnZoomIn.setFocusPainted(false);
         btnZoomIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnZoomIn.setIconTextGap(10);
@@ -252,6 +263,7 @@ public class MapsBaseDialog extends JFrame {
         btnZoomOut.setText("Zoom");
         btnZoomOut.setToolTipText("Zoom out of the Offline Map.");
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnZoomOut.setEnabled(false);
         btnZoomOut.setFocusPainted(false);
         btnZoomOut.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnZoomOut.setIconTextGap(10);
@@ -267,6 +279,7 @@ public class MapsBaseDialog extends JFrame {
         btnIdentify.setText("Indentify");
         btnIdentify.setToolTipText("Select an area on the Offline Map to identify the features on the map. (Or simply CTRL + CLICK on the map.)");
         btnIdentify.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnIdentify.setEnabled(false);
         btnIdentify.setFocusPainted(false);
         btnIdentify.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnIdentify.setIconTextGap(10);

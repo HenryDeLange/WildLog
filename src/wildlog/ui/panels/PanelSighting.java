@@ -9,8 +9,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -230,6 +230,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         SpinnerFixer.configureSpinners(spnNumberOfElements);
         SpinnerFixer.configureSpinners(spnHours);
         SpinnerFixer.configureSpinners(spnMinutes);
+        SpinnerFixer.configureSpinners(spnSeconds);
         SpinnerFixer.configureSpinners(spnMoonPhase);
         SpinnerFixer.configureSpinners(spnTemperature);
         SpinnerFixer.configureSpinners(spnDurationMinutes);
@@ -255,6 +256,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             UtilsUI.attachClipboardPopup(txtTag);
             UtilsUI.attachClipboardPopup((JTextComponent)spnHours.getEditor().getComponent(0));
             UtilsUI.attachClipboardPopup((JTextComponent)spnMinutes.getEditor().getComponent(0));
+            UtilsUI.attachClipboardPopup((JTextComponent)spnSeconds.getEditor().getComponent(0));
             UtilsUI.attachClipboardPopup((JTextComponent)spnMoonPhase.getEditor().getComponent(0));
             UtilsUI.attachClipboardPopup((JTextComponent)spnNumberOfElements.getEditor().getComponent(0));
             UtilsUI.attachClipboardPopup((JTextComponent)spnTemperature.getEditor().getComponent(0));
@@ -324,7 +326,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // Display the ID
         lblSightingID.setText("<html><p align='center'>Observation ID: " + Long.toString(sighting.getSightingCounter()) + "</p></html>");
         // Load the values from the Sighting object
-        setUIFieldsFromSightingDate();
+        setUIFieldsFromSightingDate(sighting.getDate());
         cmbCertainty.setSelectedItem(sighting.getCertainty());
         txtDetails.setText(sighting.getDetails());
         cmbEvidence.setSelectedItem(sighting.getSightingEvidence());
@@ -353,18 +355,19 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
     }
 
-    private void setUIFieldsFromSightingDate() {
-        dtpSightingDate.setDate(sighting.getDate());
-        if (sighting.getDate() != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(sighting.getDate());
-            spnHours.setValue(calendar.get(Calendar.HOUR_OF_DAY));
-            spnMinutes.setValue(calendar.get(Calendar.MINUTE));
+    private void setUIFieldsFromSightingDate(Date inDate) {
+        dtpSightingDate.setDate(inDate);
+        if (inDate != null) {
+            LocalTime time = UtilsTime.getLocalTimeFromDate(inDate);
+            spnHours.setValue(time.getHour());
+            spnMinutes.setValue(time.getMinute());
+            spnSeconds.setValue(time.getSecond());
             cmbTimeAccuracy.setSelectedItem(sighting.getTimeAccuracy());
         }
         else {
             spnHours.setValue(0);
             spnMinutes.setValue(0);
+            spnSeconds.setValue(0);
         }
     }
 
@@ -456,6 +459,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeOfDay = new javax.swing.JComboBox();
         cmbViewRating = new javax.swing.JComboBox();
         cmbCertainty = new javax.swing.JComboBox();
+        jLabel24 = new javax.swing.JLabel();
+        spnSeconds = new javax.swing.JSpinner();
         pnlButtons = new javax.swing.JPanel();
         lblSightingID = new javax.swing.JLabel();
         btnCalculateDuration = new javax.swing.JButton();
@@ -936,6 +941,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel18.setName("jLabel18"); // NOI18N
 
         spnHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
+        spnHours.setToolTipText("Hours");
         spnHours.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         spnHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "0"));
@@ -950,6 +956,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         });
 
         spnMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnMinutes.setToolTipText("Minutes");
         spnMinutes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         spnMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "0"));
@@ -1179,6 +1186,26 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbCertainty.setFocusable(false);
         cmbCertainty.setName("cmbCertainty"); // NOI18N
 
+        jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel24.setText(":");
+        jLabel24.setName("jLabel24"); // NOI18N
+
+        spnSeconds.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnSeconds.setToolTipText("Seconds");
+        spnSeconds.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
+        spnSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnSeconds, "0"));
+        spnSeconds.setEnabled(!disableEditing);
+        spnSeconds.setFocusable(false);
+        spnSeconds.setName("spnSeconds"); // NOI18N
+        spnSeconds.setPreferredSize(new java.awt.Dimension(35, 20));
+        spnSeconds.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnSecondsStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSightingFieldsLayout = new javax.swing.GroupLayout(pnlSightingFields);
         pnlSightingFields.setLayout(pnlSightingFieldsLayout);
         pnlSightingFieldsLayout.setHorizontalGroup(
@@ -1204,20 +1231,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbTemperatureUnits, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(cmbMoonlight, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
-                        .addComponent(spnDurationMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel20)
-                        .addGap(8, 8, 8)
-                        .addComponent(spnDurationSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel21))
-                    .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
-                        .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(5, 5, 5)
-                        .addComponent(btnGPS))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSightingFieldsLayout.createSequentialGroup()
                         .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
@@ -1230,18 +1243,38 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         .addComponent(lblTimeOfDayInfo))
                     .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
                         .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
-                                .addComponent(spnHours, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(spnMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbTimeFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 33, Short.MAX_VALUE))
                             .addComponent(dtpSightingDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbTimeAccuracy, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(1, 1, 1)))
+                        .addGap(1, 1, 1))
+                    .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
+                        .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
+                                .addComponent(spnDurationMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel20)
+                                .addGap(8, 8, 8)
+                                .addComponent(spnDurationSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel21))
+                            .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
+                                .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(5, 5, 5)
+                                .addComponent(btnGPS))
+                            .addGroup(pnlSightingFieldsLayout.createSequentialGroup()
+                                .addComponent(spnHours, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(spnMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2)
+                                .addComponent(spnSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4)
+                                .addComponent(cmbTimeFormat, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
@@ -1262,7 +1295,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     .addComponent(cmbLifeStatus, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbAge, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbSex, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addComponent(spnNumberOfElements))
                 .addGap(5, 5, 5))
         );
@@ -1280,10 +1313,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cmbSex, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(spnSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbTimeFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlSightingFieldsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(spnHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(spnMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cmbTimeFormat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
@@ -1693,7 +1729,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 sighting.setDate(fileDate);
                 sighting.setTimeAccuracy(TimeAccuracy.GOOD);
                 cmbTimeFormat.setSelectedItem(TimeFormat.H24);
-                setUIFieldsFromSightingDate();
+                setUIFieldsFromSightingDate(fileDate);
             }
         }
     }
@@ -2058,7 +2094,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_spnHoursStateChanged
 
     private void cmbTimeFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTimeFormatActionPerformed
-        UtilsTime.modeChanged(spnHours, spnMinutes, cmbTimeFormat, prevTimeFormat);
+        UtilsTime.modeChanged(spnHours, spnMinutes, spnSeconds, cmbTimeFormat, prevTimeFormat);
         prevTimeFormat = (TimeFormat) cmbTimeFormat.getSelectedItem();
         if (cmbTimeFormat.getSelectedItem() == null || TimeFormat.UNKNOWN.equals(cmbTimeFormat.getSelectedItem())
             || TimeFormat.NONE.equals(cmbTimeFormat.getSelectedItem())) {
@@ -2176,6 +2212,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_dtpSightingDatePropertyChange
 
+    private void spnSecondsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnSecondsStateChanged
+        if (TimeAccuracy.UNKNOWN.equals(cmbTimeAccuracy.getSelectedItem())
+            && cmbTimeAccuracy.isEnabled()) {
+            cmbTimeAccuracy.setSelectedItem(TimeAccuracy.GOOD);
+        }
+        btnCalculateSunAndMoonActionPerformed(null);
+    }//GEN-LAST:event_spnSecondsStateChanged
+
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());
         if (fotoCount > 0) {
@@ -2190,7 +2234,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // Get the date from the datepicker
         Date date = dtpSightingDate.getDate();
         if (date != null) {
-            sighting.setDate(UtilsTime.getDateFromUI(spnHours, spnMinutes, cmbTimeFormat, date));
+            sighting.setDate(UtilsTime.getDateFromUI(spnHours, spnMinutes, spnSeconds, cmbTimeFormat, date));
         }
         else {
             sighting.setDate(null);
@@ -2266,6 +2310,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -2299,6 +2344,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JSpinner spnMinutes;
     private javax.swing.JSpinner spnMoonPhase;
     private javax.swing.JSpinner spnNumberOfElements;
+    private javax.swing.JSpinner spnSeconds;
     private javax.swing.JSpinner spnTemperature;
     private javax.swing.JTable tblElement;
     private javax.swing.JTable tblLocation;

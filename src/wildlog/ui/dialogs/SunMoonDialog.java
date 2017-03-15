@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -14,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.astro.MoonTimes;
@@ -422,7 +422,7 @@ public class SunMoonDialog extends JDialog {
     }//GEN-LAST:event_spnMinutesStateChanged
 
     private void cmbTimeFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTimeFormatActionPerformed
-        UtilsTime.modeChanged(spnHours, spnMinutes, cmbTimeFormat, prevTimeFormat);
+        UtilsTime.modeChanged(spnHours, spnMinutes, null, cmbTimeFormat, prevTimeFormat);
         prevTimeFormat = (TimeFormat) cmbTimeFormat.getSelectedItem();
         updateTimeFromUI();
         // If a GPS is provided then do the loading, otherwise skip it to avoid the error
@@ -434,7 +434,7 @@ public class SunMoonDialog extends JDialog {
 
     private void updateTimeFromUI() {
         if (date != null) {
-            date = UtilsTime.getDateFromUI(spnHours, spnMinutes, cmbTimeFormat, date);
+            date = UtilsTime.getDateFromUI(spnHours, spnMinutes, null, cmbTimeFormat, date);
         }
     }
 

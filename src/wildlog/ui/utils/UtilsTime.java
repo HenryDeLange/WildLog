@@ -7,10 +7,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
-import org.apache.logging.log4j.Level;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Sighting;
@@ -29,17 +29,20 @@ public final class UtilsTime {
     public static final DateTimeFormatter WL_DATE_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_WL_DATE_FORMAT_PATTERN);
     public static final DateTimeFormatter WL_DATE_FORMATTER_WITH_HHMM = DateTimeFormatter.ofPattern("dd MMM yyyy (HH:mm)");
     public static final DateTimeFormatter WL_DATE_FORMATTER_WITH_HHMMSS = DateTimeFormatter.ofPattern("dd MMM yyyy (HH:mm:ss)");
+    public static final DateTimeFormatter WL_DATE_FORMATTER_WITH_HHMMSS_AMPM = DateTimeFormatter.ofPattern("dd MMM yyyy (hh:mm:ss a)");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_VISIT_NAME = DateTimeFormatter.ofPattern("dd MMM yyyy (HH'h'mm)");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_FILES = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_FILES_CAMERATRAP_TIMESTAMP = DateTimeFormatter.ofPattern("yyyy MM dd HH mm ss");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH'h'mm'm'ss's'");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_BACKUP_MONTHLY = DateTimeFormatter.ofPattern("yyyy-MM, MMM 'week' W");
 
+    
     private UtilsTime() {
     }
 
-    public static void modeChanged(JSpinner inSpnHours, JSpinner inSpnMinutes, JComboBox<TimeFormat> inCmbTimeFormat, TimeFormat inPrevTimeFormat) {
-        // NOTE: The 12 o'clock times are inclusive going forwards, because at by at 12:00 we are already a few (mili)seconds into PM.
+    
+    public static void modeChanged(JSpinner inSpnHours, JSpinner inSpnMinutes, JSpinner inSpnSeconds, JComboBox<TimeFormat> inCmbTimeFormat, TimeFormat inPrevTimeFormat) {
+        // NOTE: The 12 o'clock times are inclusive going forwards, because by 12:00 we are already a few (mili)seconds into PM.
         //       For example time is calculated like this:
         //         day time morning -> 11:59am -> 12:00pm -> 12:01pm -> day time afternoon
         //         night time evening -> 11:59pm -> 12:00am -> 12:01am -> night time morning
@@ -48,6 +51,9 @@ public final class UtilsTime {
                 && !TimeFormat.H24.equals(inCmbTimeFormat.getSelectedItem())) {
             inSpnHours.getModel().setValue(0);
             inSpnMinutes.getModel().setValue(0);
+            if (inSpnSeconds != null) {
+                inSpnSeconds.getModel().setValue(0);
+            }
         }
         if (TimeFormat.AM.equals(inCmbTimeFormat.getSelectedItem()) || TimeFormat.PM.equals(inCmbTimeFormat.getSelectedItem())) {
             if ((int)inSpnHours.getValue() > 12) {
@@ -77,7 +83,7 @@ public final class UtilsTime {
         }
     }
 
-    public static Date getDateFromUI(JSpinner inSpnHours, JSpinner inSpnMinutes, JComboBox<TimeFormat> inCmbTimeFormat, Date inDate) {
+    public static Date getDateFromUI(JSpinner inSpnHours, JSpinner inSpnMinutes, JSpinner inSpnSeconds, JComboBox<TimeFormat> inCmbTimeFormat, Date inDate) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(inDate);
         try {
@@ -106,6 +112,10 @@ public final class UtilsTime {
             }
             // Minutes
             calendar.set(Calendar.MINUTE, (Integer)inSpnMinutes.getValue());
+            // Seconds
+            if (inSpnSeconds != null) {
+                calendar.set(Calendar.SECOND, (Integer)inSpnSeconds.getValue());
+            }
         }
         catch (NumberFormatException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

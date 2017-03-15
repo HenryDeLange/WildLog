@@ -433,7 +433,7 @@ public class UtilsImageProcessing {
                 Collection<Tag> tags = directory.getTags();
                 for (Tag tag : tags) {
                     try {
-                        if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
+                        if (tag.getTagName().equalsIgnoreCase("Date/Time") || tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
                             // Not all files store the date in the same format, so I have to try a few known formats...
                             // Try 1:
                             try {

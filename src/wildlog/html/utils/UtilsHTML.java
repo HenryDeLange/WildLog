@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,12 +29,12 @@ import wildlog.utils.WildLogSystemImages;
 
 
 public final class UtilsHTML {
-    private static final DateTimeFormatter dateFormatWithTime = DateTimeFormatter.ofPattern("dd MMM yyyy (hh:mm a)");
-    private static final DateTimeFormatter dateFormatWithoutTime = DateTimeFormatter.ofPattern("dd MMM yyyy");
 
+    
     private UtilsHTML() {
     }
 
+    
     public static String generateHTMLImages(WildLogFile inWildLogFile, UtilsHTMLExportTypes inExportType) {
         Path fromFile = inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
         Path toFileAsRelativePath;
@@ -120,10 +119,10 @@ public final class UtilsHTML {
     public static String formatDateAsString(Date inDate, boolean inShowTime) {
         if (inDate != null) {
             if (inShowTime) {
-                return dateFormatWithTime.format(UtilsTime.getLocalDateTimeFromDate(inDate));
+                return UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS_AMPM.format(UtilsTime.getLocalDateTimeFromDate(inDate));
             }
             else {
-                return dateFormatWithoutTime.format(UtilsTime.getLocalDateFromDate(inDate));
+                return UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateFromDate(inDate));
             }
         }
         else {
