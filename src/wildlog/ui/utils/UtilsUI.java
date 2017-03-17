@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
-import org.apache.logging.log4j.Level;
 import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -31,9 +30,12 @@ import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.ui.helpers.ScrollingMenu;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -108,11 +110,32 @@ public final class UtilsUI {
         inTxtSearch.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent inEvent) {
-                inTable.getSelectionModel().clearSelection();
                 if (inEvent.getKeyChar() == KeyEvent.VK_ESCAPE) {
                    inTxtSearch.setText("");
                 }
-                TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>)inTable.getRowSorter();
+            }
+            
+        });
+        inTxtSearch.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                doSearch();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                doSearch();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                doSearch();
+            }
+        
+            private void doSearch() {
+                System.out.println("searching...");
+                inTable.getSelectionModel().clearSelection();
+                TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) inTable.getRowSorter();
                 if (sorter == null) {
                     sorter = new TableRowSorter<>(inTable.getModel());
                 }

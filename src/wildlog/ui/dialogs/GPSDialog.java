@@ -14,7 +14,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,6 +34,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 import netscape.javascript.JSObject;
+import org.apache.logging.log4j.Level;
 import org.geotools.data.DataSourceException;
 import org.geotools.data.DataUtilities;
 import org.geotools.factory.FactoryRegistryException;
@@ -64,6 +64,8 @@ import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.SpinnerFixer;
+import wildlog.ui.helpers.WLFileChooser;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.GpxFilter;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.maps.implementations.PointMap;
@@ -883,21 +885,19 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_tglDegMinSecActionPerformed
 
     private void btnUseGPXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseGPXActionPerformed
-        JFileChooser fileChooser;
+        WLFileChooser fileChooser;
         if (lastFilePath != null && lastFilePath.length() > 0) {
-            fileChooser = new JFileChooser(lastFilePath);
+            fileChooser = new WLFileChooser(lastFilePath);
         }
         else {
-            fileChooser = new JFileChooser();
+            fileChooser = new WLFileChooser();
         }
         fileChooser.setAcceptAllFileFilterUsed(true);
         fileChooser.setFileFilter(new GpxFilter());
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        getGlassPane().setVisible(true);
         int result = fileChooser.showOpenDialog(this);
-        getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             Path file = fileChooser.getSelectedFile().toPath();
             lastFilePath = file.toAbsolutePath().toString();
@@ -931,11 +931,13 @@ public class GPSDialog extends JDialog {
             if (dataObjectWithGPS instanceof Sighting) {
                 Sighting sighting = (Sighting) dataObjectWithGPS;
                 if (sighting.getSightingCounter() != 0) {
-                    getGlassPane().setVisible(true);
-                    int option = JOptionPane.showOptionDialog(WildLogApp.getApplication().getMainFrame(), 
-                                    "Please select where to search for GPS points.", 
-                                    "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                                    null, new String[]{"An external File", "Files already linked to this Observation"}, null);
+                    int option = WLOptionPane.showOptionDialog(this, 
+                            "Please select where to search for GPS points.", 
+                            "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                            null, new String[]{
+                                "An external File", 
+                                "Files already linked to this Observation"}, 
+                            null);
                     if (option != JOptionPane.CLOSED_OPTION) {
                         if (option == 0) {
                             // Browse to an external file
@@ -961,7 +963,6 @@ public class GPSDialog extends JDialog {
                     else {
                         showNothingFoundDialog = false;
                     }
-                    getGlassPane().setVisible(false);
                 }
             }
             else
@@ -969,11 +970,13 @@ public class GPSDialog extends JDialog {
             if (dataObjectWithGPS instanceof Location) {
                 Location location = (Location) dataObjectWithGPS;
                 if (location.getName() != null && !location.getName().isEmpty()) {
-                    getGlassPane().setVisible(true);
-                    int option = JOptionPane.showOptionDialog(WildLogApp.getApplication().getMainFrame(), 
-                                    "Please select where to search for GPS points.", 
-                                    "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                                    null, new String[]{"An external File", "Files already linked to this Place"}, null);
+                    int option = WLOptionPane.showOptionDialog(this, 
+                            "Please select where to search for GPS points.", 
+                            "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                            null, new String[]{
+                                "An external File", 
+                                "Files already linked to this Place"}, 
+                            null);
                     if (option != JOptionPane.CLOSED_OPTION) {
                         if (option == 0) {
                             // Browse to an external file
@@ -999,35 +1002,30 @@ public class GPSDialog extends JDialog {
                     else {
                         showNothingFoundDialog = false;
                     }
-                    getGlassPane().setVisible(false);
                 }
             }
         }
         if (showNothingFoundDialog) {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
+            WLOptionPane.showMessageDialog(this, 
                     "No GPS point was found.", 
                     "No GPS Point", JOptionPane.INFORMATION_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnUseImageActionPerformed
 
     private boolean doFileBrowse() {
-        JFileChooser fileChooser;
+        WLFileChooser fileChooser;
         if (lastFilePath != null && lastFilePath.length() > 0) {
-            fileChooser = new JFileChooser(lastFilePath);
+            fileChooser = new WLFileChooser(lastFilePath);
         }
         else {
-            fileChooser = new JFileChooser();
+            fileChooser = new WLFileChooser();
         }
         fileChooser.setAcceptAllFileFilterUsed(true);
         fileChooser.setFileFilter(new ImageFilter());
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        getGlassPane().setVisible(true);
         int result = fileChooser.showOpenDialog(this);
-        getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             Path file = fileChooser.getSelectedFile().toPath();
             lastFilePath = file.toAbsolutePath().toString();
@@ -1082,11 +1080,14 @@ public class GPSDialog extends JDialog {
             if (dataObjectWithGPS instanceof Sighting) {
                 Sighting sighting = (Sighting) dataObjectWithGPS;
                 if (sighting.getSightingCounter() != 0) {
-                    getGlassPane().setVisible(true);
-                    int option = JOptionPane.showOptionDialog(WildLogApp.getApplication().getMainFrame(), 
-                                    "Please select where to search for related GPS points.", 
-                                    "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                                    null, new String[]{"Files from this Observation", "GPS from the linked Place", "Files from the linked Place"}, null);
+                    int option = WLOptionPane.showOptionDialog(this, 
+                            "Please select where to search for related GPS points.", 
+                            "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                            null, new String[]{
+                                "Files from this Observation", 
+                                "GPS from the linked Place", 
+                                "Files from the linked Place"}, 
+                            null);
                     if (option != JOptionPane.CLOSED_OPTION) {
                         if (option == 0) {
                             // Search in the Files
@@ -1142,7 +1143,6 @@ public class GPSDialog extends JDialog {
                     else {
                         showNothingFoundDialog = false;
                     }
-                    getGlassPane().setVisible(false);
                 }
             }
             else
@@ -1150,11 +1150,14 @@ public class GPSDialog extends JDialog {
             if (dataObjectWithGPS instanceof Location) {
                 Location location = (Location) dataObjectWithGPS;
                 if (location.getName() != null && !location.getName().isEmpty()) {
-                    getGlassPane().setVisible(true);
-                    int option = JOptionPane.showOptionDialog(WildLogApp.getApplication().getMainFrame(), 
-                                    "Please select where to search for related GPS points.", 
-                                    "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                                    null, new String[]{"Files from this Place", "GPS from linked Observations", "Files from linked Observations"}, null);
+                    int option = WLOptionPane.showOptionDialog(this, 
+                            "Please select where to search for related GPS points.", 
+                            "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                            null, new String[]{
+                                "Files from this Place", 
+                                "GPS from linked Observations", 
+                                "Files from linked Observations"}, 
+                            null);
                     if (option != JOptionPane.CLOSED_OPTION) {
                         if (option == 0) {
                             // Search in the Files
@@ -1216,16 +1219,13 @@ public class GPSDialog extends JDialog {
                     else {
                         showNothingFoundDialog = false;
                     }
-                    getGlassPane().setVisible(false);
                 }
             }
         }
         if (showNothingFoundDialog) {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
+            WLOptionPane.showMessageDialog(this, 
                     "No related GPS point was found.", 
                     "No GPS Point", JOptionPane.INFORMATION_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnUseRelatedActionPerformed
 
@@ -1295,12 +1295,10 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_tglWestActionPerformed
 
     private void doGpxInput(Path inFile) {
-        getGlassPane().setVisible(true);
-        String gpxValue = JOptionPane.showInputDialog(this,
+        String gpxValue = WLOptionPane.showInputDialog(this,
                 "<html><b>Please enter the GPX Waypoint's name. </b>"
-                + "<br/> <i>(Use the full name, for example '001', including the 0's.)</i></html>",
+                        + "<br/> <i>(Use the full name, for example '001', including the 0's.)</i></html>",
                 "Load Coordinates From GPX", JOptionPane.INFORMATION_MESSAGE);
-        getGlassPane().setVisible(false);
         if (gpxValue != null) {
             DataObjectWithGPS temp = new DataObjectWithGPS() {};
             UtilsGPX.populateGPSFromGpxFile(inFile, gpxValue, temp, this);

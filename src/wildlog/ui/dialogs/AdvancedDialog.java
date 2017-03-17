@@ -20,6 +20,7 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.panels.PanelVisit;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
@@ -241,11 +242,10 @@ public class AdvancedDialog extends JDialog {
     }//GEN-LAST:event_btnCorrectTimeActionPerformed
 
     private void btnMoveVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveVisitActionPerformed
-        getGlassPane().setVisible(true);
-        int result = JOptionPane.showConfirmDialog(this,
-                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
+        int result = WLOptionPane.showConfirmDialog(this,
+                "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
                         + "Do you want to continue now?</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             MoveVisitDialog dialog = new MoveVisitDialog(app, visit);
             dialog.setVisible(true);
@@ -253,7 +253,6 @@ public class AdvancedDialog extends JDialog {
         panelVisit.setVisit(app.getDBI().findVisit(visit.getName(), Visit.class));
         panelVisit.setLocationForVisit(app.getDBI().findLocation(panelVisit.getVisit().getLocationName(), Location.class));
         panelVisit.doTheRefresh(null);
-        getGlassPane().setVisible(false);
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnMoveVisitActionPerformed
@@ -286,8 +285,8 @@ public class AdvancedDialog extends JDialog {
     }//GEN-LAST:event_btnSetAllGPSActionPerformed
 
     private void btnSetDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDurationActionPerformed
-        this.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        this.getGlassPane().setVisible(true);
+        getGlassPane().setVisible(true);
+        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
         for (Sighting sighting : listSightings) {
             List<WildLogFile> files = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
@@ -305,8 +304,8 @@ public class AdvancedDialog extends JDialog {
             app.getDBI().updateSighting(sighting);
         }
         panelVisit.doTheRefresh(null);
-        this.getGlassPane().setCursor(Cursor.getDefaultCursor());
-        this.getGlassPane().setVisible(false);
+        getGlassPane().setCursor(Cursor.getDefaultCursor());
+        getGlassPane().setVisible(false);
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnSetDurationActionPerformed

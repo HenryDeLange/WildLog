@@ -3,16 +3,17 @@ package wildlog.ui.dialogs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 
 
 public class MergeVisitDialog extends JDialog {
@@ -220,11 +221,9 @@ public class MergeVisitDialog extends JDialog {
             dispose();
         }
         else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this,
+            WLOptionPane.showMessageDialog(this,
                     "Please select a From Place and Period. Then select a To Place and Period.",
                     "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 

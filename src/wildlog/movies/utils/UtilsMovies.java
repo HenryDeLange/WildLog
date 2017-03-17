@@ -12,7 +12,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.movies.jpegmovie.JpgToMovie;
-import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
@@ -71,15 +71,9 @@ public final class UtilsMovies {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                JOptionPane.showMessageDialog(inApp.getMainFrame(),
-                                        "There was a problem generating the slideshow.",
-                                        "Error", JOptionPane.ERROR_MESSAGE);
-                                return -1;
-                            }
-                        });
+                        WLOptionPane.showMessageDialog(inApp.getMainFrame(),
+                                "There was a problem generating the slideshow.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 });
             }
@@ -88,15 +82,9 @@ public final class UtilsMovies {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(inApp.getMainFrame(),
-                                    "Can't generate Slideshow if there aren't any JPG images.",
-                                    "No Images to Process", JOptionPane.INFORMATION_MESSAGE);
-                            return -1;
-                        }
-                    });
+                    WLOptionPane.showMessageDialog(inApp.getMainFrame(),
+                            "Can't generate Slideshow if there aren't any JPG images.",
+                            "No Images to Process", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
         }

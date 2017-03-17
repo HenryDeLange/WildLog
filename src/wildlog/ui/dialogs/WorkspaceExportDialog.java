@@ -45,6 +45,8 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.WLFileChooser;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.renderers.WorkspaceTreeCellRenderer;
 import wildlog.ui.helpers.renderers.WorkspaceTreeDataWrapper;
 import wildlog.ui.utils.UtilsTime;
@@ -488,11 +490,9 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         }
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(app.getMainFrame(),
+            WLOptionPane.showMessageDialog(app.getMainFrame(),
                     "Could not export the Workspace successfully.",
                     "Export Workspace Error", JOptionPane.ERROR_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
@@ -514,14 +514,12 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     }
 
     private File showFileChooser() {
-        final JFileChooser fileChooser = new JFileChooser();
+        WLFileChooser fileChooser = new WLFileChooser();
         fileChooser.setDialogTitle("Select the destination folder for the export");
         fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fileChooser.setMultiSelectionEnabled(false);
-        getGlassPane().setVisible(true);
         int result = fileChooser.showOpenDialog(this);
-        getGlassPane().setVisible(false);
         if (result == JFileChooser.ERROR_OPTION || result != JFileChooser.APPROVE_OPTION || fileChooser.getSelectedFile() == null) {
             return null;
         }

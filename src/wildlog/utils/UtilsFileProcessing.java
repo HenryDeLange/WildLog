@@ -33,7 +33,6 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.filters.MovieFilter;
 import wildlog.ui.maps.implementations.helpers.UtilsMaps;
@@ -92,14 +91,14 @@ public final class UtilsFileProcessing {
         fileChooser.setMultipleMode(true);
 //        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setPreferredSize(new Dimension(950, 550));
-        UtilsDialog.showDialogBackgroundWrapper(inParent, new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
+        if (inParent != null) {
+            inParent.getGlassPane().setVisible(true);
+        }
+        fileChooser.setVisible(true);
 //                return fileChooser.showOpenDialog(inApp.getMainFrame().getContentPane());
-                fileChooser.setVisible(true);
-                return 0;
-            }
-        });
+        if (inParent != null) {
+            inParent.getGlassPane().setVisible(false);
+        }
 //        return Arrays.asList(fileChooser.getSelectedFiles());
         return Arrays.asList(fileChooser.getFiles());
     }

@@ -67,6 +67,7 @@ import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.LazyTreeNode;
 import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.renderers.WildLogTreeCellRenderer;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -781,15 +782,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         catch (LLJTranException | IOException ex) {
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                @Override
-                                public int showDialog() {
-                                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                                        "There was an unexpected error while trying to rotate the current image.",
-                                        "Could Not Rotate Image", JOptionPane.ERROR_MESSAGE);
-                                    return 0;
-                                }
-                            });
+                            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "There was an unexpected error while trying to rotate the current image.",
+                                    "Could Not Rotate Image", JOptionPane.ERROR_MESSAGE);
                         }
                         finally {
                             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
@@ -797,14 +792,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                     }
                     else {
-                        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                    "Currently WildLog can only rotate JPG images.",
-                                    "Not a JPG Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                            }
-                        });
+                        WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "Currently WildLog can only rotate JPG images.",
+                                "Not a JPG Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
@@ -1196,14 +1186,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         mnuDelete.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                            "Are you sure you want to delete this Place? This will delete all Periods, Observations and files linked to the Place as well.",
-                                            "Delete Place?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                                    }
-                                });
+                                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                        "Are you sure you want to delete this Place? This will delete all Periods, Observations and files linked to the Place as well.",
+                                        "Delete Place?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                                 if (result == JOptionPane.YES_OPTION) {
                                     Location location = (Location) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                     UtilsPanelGenerator.removeOpenedTab(location.getName(), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent());
@@ -1220,14 +1205,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         mnuDelete.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                            "Are you sure you want to delete this Creature? This will delete all Observations and files linked to the Creature as well.",
-                                            "Delete Creature?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                                    }
-                                });
+                                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                        "Are you sure you want to delete this Creature? This will delete all Observations and files linked to the Creature as well.",
+                                        "Delete Creature?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                                 if (result == JOptionPane.YES_OPTION) {
                                     Element element = (Element) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                     UtilsPanelGenerator.removeOpenedTab(element.getPrimaryName(), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent());
@@ -1244,14 +1224,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         mnuDelete.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                            "Are you sure you want to delete this Period? This will delete all Observations and files linked to the Period as well.",
-                                            "Delete Period?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                                    }
-                                });
+                                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                        "Are you sure you want to delete this Period? This will delete all Observations and files linked to the Period as well.",
+                                        "Delete Period?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                                 if (result == JOptionPane.YES_OPTION) {
                                     Visit visit = (Visit) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                     UtilsPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
@@ -1268,14 +1243,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         mnuDelete.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                            "Are you sure you want to delete this Observation? This will delete all files linked to the Observation as well.",
-                                            "Delete Observation?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                                    }
-                                });
+                                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                        "Are you sure you want to delete this Observation? This will delete all files linked to the Observation as well.",
+                                        "Delete Observation?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                                 if (result == JOptionPane.YES_OPTION) {
                                     SightingWrapper sightingWrapper = (SightingWrapper) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                     app.getDBI().deleteSighting(sightingWrapper.getSighting().getSightingCounter());
@@ -1364,15 +1334,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             somethingToReportOn = true;
                         }
                         if (somethingToReportOn == false) {
-                            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                @Override
-                                public int showDialog() {
-                                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                        "Please select a Place, Period or Creature in the tree to the left, or specifiy a valid date range.",
-                                        "No Report Available",
-                                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                                }
-                            });
+                            WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                    "Please select a Place, Period or Creature in the tree to the left, or specifiy a valid date range.",
+                                    "No Report Available", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                         }
                     }
                 });
@@ -1656,14 +1620,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 if (temp != null) {
                     List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
                     if (!lstFiles.isEmpty()) {
-                        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                        "Are you sure you want to delete the current File?",
-                                        "Delete File?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                            }
-                        });
+                        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "Are you sure you want to delete the current File?",
+                                "Delete File?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (result == JOptionPane.YES_OPTION) {
                             app.getDBI().deleteWildLogFile(lstFiles.get(imageIndex).getDBFilePath());
                             doTheRefresh(null);

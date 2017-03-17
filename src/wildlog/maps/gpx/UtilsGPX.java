@@ -9,6 +9,7 @@ import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.maps.utils.UtilsGPS;
+import wildlog.ui.helpers.WLOptionPane;
 
 
 public class UtilsGPX {
@@ -44,9 +45,9 @@ public class UtilsGPX {
             inDataObjectWithGPS.setGPSAccuracy(GPSAccuracy.GOOD);
         }
         else {
-            inParent.getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(inParent, "Not GPX Waypoint could be found for: " + inTagName, "No Waypoint", JOptionPane.WARNING_MESSAGE);
-            inParent.getGlassPane().setVisible(false);
+            WLOptionPane.showMessageDialog(inParent, 
+                    "Not GPX Waypoint could be found for: " + inTagName, 
+                    "No Waypoint", JOptionPane.WARNING_MESSAGE);
         }
     }
 

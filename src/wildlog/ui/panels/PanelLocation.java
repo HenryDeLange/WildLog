@@ -30,12 +30,12 @@ import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.CtrlClickSelectionModel;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -202,17 +202,13 @@ public class PanelLocation extends PanelCanSetupHeader {
              return true;
         }
         else {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    String name = locationWL.getName();
-                    if (name ==null || name.isEmpty()) {
-                        name = "<New Place>";
-                    }
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab for " + name + "?", "You have unsaved data",
-                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
+            String name = locationWL.getName();
+            if (name ==null || name.isEmpty()) {
+                name = "<New Place>";
+            }
+            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                    "Save before closing this tab for " + name + "?", 
+                    "You have unsaved data", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 btnUpdateActionPerformed(null);
                 if (locationWL.getName().trim().length() > 0 && UtilsData.checkCharacters(locationWL.getName().trim())) {
@@ -1336,14 +1332,9 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
         if (tblVisit.getSelectedRowCount() > 0) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "Are you sure you want to delete the Period(s)? This will delete all Observations and files linked to the Period(s) as well.",
-                        "Delete Period(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
+            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                    "Are you sure you want to delete the Period(s)? This will delete all Observations and files linked to the Period(s) as well.",
+                    "Delete Period(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblVisit.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {

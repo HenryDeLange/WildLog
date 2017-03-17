@@ -52,6 +52,8 @@ import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLFileChooser;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
@@ -125,17 +127,12 @@ public class WildLogApp extends Application {
         do {
             openedWorkspace = openWorkspace();
             if (openedWorkspace == false) {
-                int choice = UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        return JOptionPane.showConfirmDialog(getMainFrame(),
-                                "<html>The WildLog Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> could not be opened. "
-                                    + "<br/>It is likely that another instance of WildLog already has this Workspace open."
-                                    + "<br/>If the problem persists please consult the Manual or contact support@mywild.co.za for help."
-                                    + "<br/><br/>You can <b>press OK to select another Workspace</b>, or press Cancel to close this instance of WildLog.</html>",
-                                "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-                    }
-                });
+                int choice = WLOptionPane.showConfirmDialog(getMainFrame(),
+                        "<html>The WildLog Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> could not be opened. "
+                                + "<br/>It is likely that another instance of WildLog already has this Workspace open."
+                                + "<br/>If the problem persists please consult the Manual or contact support@mywild.co.za for help."
+                                + "<br/><br/>You can <b>press OK to select another Workspace</b>, or press Cancel to close this instance of WildLog.</html>",
+                        "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
                 if (choice == JOptionPane.OK_OPTION) {
                     configureWildLogHomeBasedOnFileBrowser(null, true);
                 }
@@ -310,17 +307,12 @@ public class WildLogApp extends Application {
                     // Waarsku as daar progressbar tasks is wat nog hardloop
                     TaskMonitor taskMonitor = getContext().getTaskMonitor();
                     if (taskMonitor.getTasks() != null && !taskMonitor.getTasks().isEmpty()) {
-                        int result = UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                return JOptionPane.showConfirmDialog(getMainFrame(),
-                                        "<html>There are background processes running that have not finished yet. "
-                                                + "<br>It is <b>recommended to wait for these processes to finish</b>."
-                                                + "<br>(See the progressbar at the bottom right hand corner for details.)"
-                                                + "<br><b>Continue to Exit WildLog?</b></html>",
-                                        "Warning! Unfinished Processes...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                                }
-                        });
+                        int result = WLOptionPane.showConfirmDialog(getMainFrame(),
+                                "<html>There are background processes running that have not finished yet. "
+                                        + "<br>It is <b>recommended to wait for these processes to finish</b>."
+                                        + "<br>(See the progressbar at the bottom right hand corner for details.)"
+                                        + "<br><b>Continue to Exit WildLog?</b></html>",
+                                "Warning! Unfinished Processes...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (result == JOptionPane.YES_OPTION) {
                             WildLogApp.LOGGER.log(Level.INFO, "Trying to stop running processes before exiting...");
                             // Try to stop the running processes before the DB gets closed
@@ -403,9 +395,10 @@ public class WildLogApp extends Application {
         }
         catch (IOException | URISyntaxException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            JOptionPane.showMessageDialog(null,
+            WLOptionPane.showMessageDialog(null,
                         "Could not load the settings from the properties on startup. WildLog will continue to start using the default settings.",
-                        "Problem Starting WildLog", JOptionPane.WARNING_MESSAGE);
+                        "Problem Starting WildLog", 
+                        JOptionPane.WARNING_MESSAGE);
         }
         finally {
             if (reader != null) {
@@ -518,19 +511,14 @@ public class WildLogApp extends Application {
     }
 
     public static boolean configureWildLogHomeBasedOnFileBrowser(final JFrame inParent, boolean inTerminateIfNotSelected) {
-        final JFileChooser fileChooser = new JFileChooser();
+        WLFileChooser fileChooser = new WLFileChooser();
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setDialogTitle("Please select the WildLog Workspace to use.");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fileChooser.setFileFilter(new WorkspaceFilter());
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setMultiSelectionEnabled(false);
-        int result = UtilsDialog.showDialogBackgroundWrapper(inParent, new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return fileChooser.showOpenDialog(inParent);
-            }
-        });
+        int result = fileChooser.showOpenDialog(inParent);
         if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
             Path selectedPath;
             if (fileChooser.getSelectedFile().isDirectory()) {
@@ -628,7 +616,7 @@ public class WildLogApp extends Application {
                     });
                     editorPane.setEditable(false);
                     editorPane.setBackground(label.getBackground());
-                    JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                    WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
                             editorPane,
                             "A new WildLog update is available!", 
                             JOptionPane.INFORMATION_MESSAGE);

@@ -10,15 +10,16 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 
 
 public class FilterTemplatesDialog extends JDialog {
@@ -204,11 +205,9 @@ public class FilterTemplatesDialog extends JDialog {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // Get the name to safe it as
-        getGlassPane().setVisible(true);
-        String templateName = JOptionPane.showInputDialog(this,
-                            "Please provide the name of the Filter Template to be saved.",
-                            "Filter Template Name", JOptionPane.QUESTION_MESSAGE);
-        getGlassPane().setVisible(false);
+        String templateName = WLOptionPane.showInputDialog(this,
+                "Please provide the name of the Filter Template to be saved.",
+                "Filter Template Name", JOptionPane.QUESTION_MESSAGE);
         if (templateName != null && !templateName.isEmpty()) {
             // Write the object
             ByteArrayOutputStream outputStream = null;

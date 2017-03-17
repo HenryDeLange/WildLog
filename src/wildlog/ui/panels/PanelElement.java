@@ -46,10 +46,10 @@ import wildlog.data.utils.UtilsData;
 import wildlog.data.wrappers.json.iucn.IUCNSpeciesData;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
@@ -197,17 +197,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
              return true;
         }
         else {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    String name = element.getPrimaryName();
-                    if (name ==null || name.isEmpty()) {
-                        name = "<New Creature>";
-                    }
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab for " + name + "?", "You have unsaved data",
-                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
+            String name = element.getPrimaryName();
+            if (name == null || name.isEmpty()) {
+                name = "<New Creature>";
+            }
+            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                    "Save before closing this tab for " + name + "?", 
+                    "You have unsaved data", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 btnUpdateActionPerformed(null);
                 if (element.getPrimaryName().trim().length() > 0 && UtilsData.checkCharacters(element.getPrimaryName().trim())) {
@@ -1585,15 +1581,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     dialog.setVisible(true);
                 }
                 else {
-                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "Please choose one Observation to view.",
-                                    "Select Observation To View", JOptionPane.INFORMATION_MESSAGE);
-                            return -1;
-                        }
-                    });
+                    WLOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Please choose one Observation to view.",
+                            "Select Observation To View", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         }
@@ -1755,38 +1745,24 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
                     Toolkit.getDefaultToolkit().beep();
                 }
-                app.getMainFrame().getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(app.getMainFrame(),
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
                         "<html>A match was found for the Scientific Name at the IUCN Red List web site."
-                        + "<br/>Common Name: " + data.getResult().get(0).getMain_common_name()
-                        + "<br/>Category: " + data.getResult().get(0).getCategory()
-                        + "<br/>Year: " + data.getResult().get(0).getPublished_year() 
-                        + "<br/>Results: " + data.getResult().size() + "</html>",
+                                + "<br/>Common Name: " + data.getResult().get(0).getMain_common_name()
+                                + "<br/>Category: " + data.getResult().get(0).getCategory()
+                                + "<br/>Year: " + data.getResult().get(0).getPublished_year() 
+                                + "<br/>Results: " + data.getResult().size() + "</html>",
                         "Found Red List Category", JOptionPane.INFORMATION_MESSAGE);
-                app.getMainFrame().getGlassPane().setVisible(false);
             }
             else {
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "No threatened category was found at the IUCN Red List web site for current Scientific Name.",
-                                "No Red List Category Found", JOptionPane.WARNING_MESSAGE);
-                        return -1;
-                    }
-                });
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                        "No threatened category was found at the IUCN Red List web site for current Scientific Name.",
+                        "No Red List Category Found", JOptionPane.WARNING_MESSAGE);
             }
         }
         else {
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Please provide a Scientific Name to use and then try again.",
-                            "Scientific Name Required", JOptionPane.WARNING_MESSAGE);
-                    return -1;
-                }
-            });
+            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Please provide a Scientific Name to use and then try again.",
+                    "Scientific Name Required", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnCheckIUCNActionPerformed
 
@@ -1814,38 +1790,24 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
                     Toolkit.getDefaultToolkit().beep();
                 }
-                app.getMainFrame().getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(app.getMainFrame(),
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
                         "<html>A match was found for the Scientific Name at the IUCN Red List web site."
-                        + "<br/>Common Name: " + data.getResult().get(0).getMain_common_name()
-                        + "<br/>Category: " + data.getResult().get(0).getCategory()
-                        + "<br/>Year: " + data.getResult().get(0).getPublished_year() 
-                        + "<br/>Results: " + data.getResult().size() + "</html>",
+                                + "<br/>Common Name: " + data.getResult().get(0).getMain_common_name()
+                                + "<br/>Category: " + data.getResult().get(0).getCategory()
+                                + "<br/>Year: " + data.getResult().get(0).getPublished_year() 
+                                + "<br/>Results: " + data.getResult().size() + "</html>",
                         "Found Red List Common Name", JOptionPane.INFORMATION_MESSAGE);
-                app.getMainFrame().getGlassPane().setVisible(false);
             }
             else {
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "No common name category was found at the IUCN Red List web site for current Scientific Name.",
-                                "No Red List Common Name Found", JOptionPane.WARNING_MESSAGE);
-                        return -1;
-                    }
-                });
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                        "No common name category was found at the IUCN Red List web site for current Scientific Name.",
+                        "No Red List Common Name Found", JOptionPane.WARNING_MESSAGE);
             }
         }
         else {
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Please provide a Scientific Name to use and then try again.",
-                            "Scientific Name Required", JOptionPane.WARNING_MESSAGE);
-                    return -1;
-                }
-            });
+            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Please provide a Scientific Name to use and then try again.",
+                    "Scientific Name Required", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnCheckIUCNOtherNameActionPerformed
 

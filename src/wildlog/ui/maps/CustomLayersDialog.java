@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
@@ -24,9 +23,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLFileChooser;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.MapLayersFilter;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -410,20 +412,14 @@ public class CustomLayersDialog extends JDialog {
     }//GEN-LAST:event_btnMoveDownActionPerformed
 
     private void bntAddToAllLayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddToAllLayerActionPerformed
-        final JFileChooser fileChooser = new JFileChooser();
+        WLFileChooser fileChooser = new WLFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setDialogTitle("Select the Map Layer to import.");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setFileFilter(new MapLayersFilter());
-        final CustomLayersDialog thisHandle = this;
-        int result = UtilsDialog.showDialogBackgroundWrapper(this, new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return fileChooser.showOpenDialog(thisHandle);
-            }
-        });
+        int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
             File file = fileChooser.getSelectedFile();
             if (Files.exists(file.toPath())) {
@@ -458,11 +454,9 @@ public class CustomLayersDialog extends JDialog {
                     }
                 }
                 else {
-                    getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(this,
+                    WLOptionPane.showMessageDialog(this,
                             "A similar layer already exists in this Workspace. Please rename the new layer and try again.",
                             "Duplicate Layer", JOptionPane.ERROR_MESSAGE);
-                    getGlassPane().setVisible(false);
                 }
                 // Add the layer to the hashmap nad reload the UI
                 if (destinationPath != null) {
@@ -513,19 +507,15 @@ public class CustomLayersDialog extends JDialog {
                 }
                 catch (IOException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(this,
+                    WLOptionPane.showMessageDialog(this,
                             "The layer could not be deleted successfully. Please make sure the file isn't in use and try again, or delete it manually.",
                             "Could Not Delete", JOptionPane.ERROR_MESSAGE);
-                    getGlassPane().setVisible(false);
                 }
             }
             else {
-                getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(this,
+                WLOptionPane.showMessageDialog(this,
                         "Only [CUSTOM] layers can be deleted from this dialog.",
                         "Can't Deleted Layer", JOptionPane.WARNING_MESSAGE);
-                getGlassPane().setVisible(false);
             }
         }
     }//GEN-LAST:event_btnRemoveFromAllLayerActionPerformed

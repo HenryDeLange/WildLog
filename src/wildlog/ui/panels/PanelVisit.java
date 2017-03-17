@@ -28,11 +28,11 @@ import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.AdvancedDialog;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -200,17 +200,13 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             return true;
         }
         else {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    String name = visit.getName();
-                    if (name ==null || name.isEmpty()) {
-                        name = "<New Period>";
-                    }
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab for " + name + "?", "You have unsaved data",
-                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
+            String name = visit.getName();
+            if (name ==null || name.isEmpty()) {
+                name = "<New Period>";
+            }
+            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                    "Save before closing this tab for " + name + "?", 
+                    "You have unsaved data", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 btnUpdateActionPerformed(null);
                 if (visit.getName().trim().length() > 0 && UtilsData.checkCharacters(visit.getName().trim())) {
@@ -1181,14 +1177,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
        if (tblSightings.getSelectedRowCount() > 0) {
-           int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
-                                "Delete Observations(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    }
-           });
+           int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                   "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
+                   "Delete Observations(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 for (int row : tblSightings.getSelectedRows())  {
                     app.getDBI().deleteSighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6));
@@ -1229,15 +1220,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 refreshSightingInfo();
             }
             else {
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "Only one Observation can be viewed at a time. Please select one row in the table and try again.",
-                                    "Select One Observation", JOptionPane.WARNING_MESSAGE);
-                            return 0;
-                        }
-               });
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Only one Observation can be viewed at a time. Please select one row in the table and try again.",
+                        "Select One Observation", JOptionPane.WARNING_MESSAGE);
             }
         }
 }//GEN-LAST:event_btnEditSightingActionPerformed

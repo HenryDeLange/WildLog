@@ -63,8 +63,8 @@ public abstract class AbstractMap<T> {
         mapsBaseDialog.getJFXMapPanel().getScene().setRoot(lblLoading);
         createMap(mapsBaseDialog.getJFXMapPanel().getScene());
         // Hide waiting cursor
-        mapsBaseDialog.getGlassPane().setVisible(false);
         mapsBaseDialog.getGlassPane().setCursor(Cursor.getDefaultCursor());
+        mapsBaseDialog.getGlassPane().setVisible(false);
     }
     
     public abstract void createMap(Scene inScene);

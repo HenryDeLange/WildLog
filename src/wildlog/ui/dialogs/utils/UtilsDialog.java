@@ -34,10 +34,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.RootPaneContainer;
+import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.ui.helpers.WLOptionPane;
 
 
 public final class UtilsDialog {
@@ -58,8 +60,15 @@ public final class UtilsDialog {
 
     public static void addModalBackgroundPanel(RootPaneContainer inParentContainer, Window inPopupWindow) {
         // Note: The actual background colour, etc. is set once in the WildLogApp class.
-        final JPanel glassPane = (JPanel)inParentContainer.getGlassPane();
-        glassPane.setVisible(true);
+        final JPanel glassPane = (JPanel) inParentContainer.getGlassPane();
+        SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // Maak seker die gebeur na enige setVisible(false) wat dalk vanaf 'n onlangse vorige popup kan plaasvind
+                    glassPane.setVisible(true);
+                }
+            });
+//        glassPane.setVisible(true);
         inPopupWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -164,41 +173,20 @@ public final class UtilsDialog {
                 catch (JpegProcessingException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, "Error showing EXIF data for: {}", inFile);
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(inApp.getMainFrame(),
-                                    "Could not process the file.",
-                                    "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
-                            return -1;
-                        }
-                    });
+                    WLOptionPane.showMessageDialog(inApp.getMainFrame(),
+                            "Could not process the file.", "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
                 }
             }
             else {
                 WildLogApp.LOGGER.log(Level.ERROR, "Error showing EXIF data for: {}", inFile);
-                UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(inApp.getMainFrame(),
-                                "Could not access the file.",
-                                "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
-                        return -1;
-                    }
-                });
+                WLOptionPane.showMessageDialog(inApp.getMainFrame(),
+                        "Could not access the file.", "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
             WildLogApp.LOGGER.log(Level.ERROR, "Error showing EXIF data for: {}", inFile);
-            UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(inApp.getMainFrame(),
-                            "Could not access the file.",
-                            "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
-                    return -1;
-                }
-            });
+            WLOptionPane.showMessageDialog(inApp.getMainFrame(),
+                    "Could not access the file.", "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -209,33 +197,10 @@ public final class UtilsDialog {
                 showExifPopup(inApp, files.get(inIndex).getAbsolutePath());
             }
             else {
-                UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(inApp.getMainFrame(),
-                                "Only image metadata can be shown.",
-                                "Not An Image", JOptionPane.INFORMATION_MESSAGE);
-                        return -1;
-                    }
-                });
+                WLOptionPane.showMessageDialog(inApp.getMainFrame(),
+                        "Only image metadata can be shown.", "Not An Image", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-    }
-
-    public interface DialogWrapper {
-        public int showDialog();
-    }
-
-    public static int showDialogBackgroundWrapper(RootPaneContainer inParentContainer, DialogWrapper inDialogWrapper) {
-        // TODO: Maybe one day replace this method with a propper custom message/dialog class that will work in a similar way to the JOptionPane, but is setup to use the Glasspane, etc.
-        if (inParentContainer != null) {
-            inParentContainer.getGlassPane().setVisible(true);
-        }
-        int result = inDialogWrapper.showDialog();
-        if (inParentContainer != null) {
-            inParentContainer.getGlassPane().setVisible(false);
-        }
-        return result;
     }
 
 }

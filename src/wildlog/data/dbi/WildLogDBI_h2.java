@@ -36,7 +36,7 @@ import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
-import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
@@ -800,19 +800,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         else {
                             // Only show the popup once
                             if (!upgradeWasDone) {
-                                choice = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(),
-                                                "<html>The Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> needs to be upgraded. "
+                                choice = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(),
+                                        "<html>The Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> needs to be upgraded. "
                                                 + "<br/>It is recommended to first make a manual backup (make a copy) of the Workspace before continuing, "
                                                 + "in particular the WildLog\\Data and WildLog\\Files folders."
                                                 + "<br/>Note that the upgrade can take a while to complete. WildLog will open automatically once the upgrade is complete."
                                                 + "<br/><b>Press OK when you are ready to upgrade the Workspace.</b></html>",
-                                                "Upgrade WildLog Database Structure", 
-                                                JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-                                    }
-                                });
+                                        "Upgrade WildLog Database Structure", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
                             }
                             if (choice == JOptionPane.OK_OPTION) {
                                 // Procede with the needed updates
@@ -870,46 +864,28 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             if (databaseAndApplicationInSync) {
                 if (upgradeWasDone) {
                     if (wasMajorUpgrade) {
-                        UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                        "<html>The Workspace has been <b>successfully upgraded</b> to be compatible with <b>WildLog v" + WildLogApp.WILDLOG_VERSION + "</b>. "
-                                            + "<br/>Please consider running the <i>'Check and Clean the Workspace'</i> process as well. "
-                                            + "<br/>(The feature is accessable from the 'Application' menu at the top of the window.)</html>",
-                                        "WildLog v" + WildLogApp.WILDLOG_VERSION + " - Major Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
-                                return -1;
-                            }
-                        });
+                        WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                                "<html>The Workspace has been <b>successfully upgraded</b> to be compatible with <b>WildLog v" + WildLogApp.WILDLOG_VERSION + "</b>. "
+                                        + "<br/>Please consider running the <i>'Check and Clean the Workspace'</i> process as well. "
+                                        + "<br/>(The feature is accessable from the 'Application' menu at the top of the window.)</html>",
+                                "WildLog v" + WildLogApp.WILDLOG_VERSION + " - Major Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
                     }
                     else {
-                        UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                        "<html>The Workspace has been <b>successfully upgraded</b> to be compatible with <b>WildLog v" + WildLogApp.WILDLOG_VERSION + "</b>.</html>",
-                                        "WildLog v" + WildLogApp.WILDLOG_VERSION + " - Minor Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
-                                return -1;
-                            }
-                        });
+                        WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                                "<html>The Workspace has been <b>successfully upgraded</b> to be compatible with <b>WildLog v" + WildLogApp.WILDLOG_VERSION + "</b>.</html>",
+                                "WildLog v" + WildLogApp.WILDLOG_VERSION + " - Minor Upgrade Complete", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
             else {
-                UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                "<html>The database could not be successfully updated!"
-                                    + "<br/>Make sure that you are running the latest version of WildLog."
-                                    + "<br/>Confirm that the Workspace isn't already open by another WildLog instance."
-                                    + "<bt/>It is possible that the datbase might be broken or corrupted. "
-                                    + "If this is the case you can restore a backup copy and try again, please consult the Manual for details."
-                                    + "<br/>Contact support@mywild.co.za if the problmes persist.</html>",
-                                "WildLog Upgrade Error", JOptionPane.ERROR_MESSAGE);
-                        return -1;
-                    }
-                });
+                WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                        "<html>The database could not be successfully updated!"
+                                + "<br/>Make sure that you are running the latest version of WildLog."
+                                + "<br/>Confirm that the Workspace isn't already open by another WildLog instance."
+                                + "<bt/>It is possible that the datbase might be broken or corrupted. "
+                                + "If this is the case you can restore a backup copy and try again, please consult the Manual for details."
+                                + "<br/>Contact support@mywild.co.za if the problmes persist.</html>",
+                        "WildLog Upgrade Error", JOptionPane.ERROR_MESSAGE);
                 WildLogApp.getApplication().exit();
             }
         }

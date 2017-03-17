@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -20,6 +19,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
@@ -38,6 +38,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.CtrlClickSelectionModel;
 import wildlog.ui.helpers.SpinnerFixer;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -1000,11 +1001,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     }
 
     private void lblTimeOfDayInfoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimeOfDayInfoMousePressed
-        getGlassPane().setVisible(true);
-        JOptionPane.showMessageDialog(this,
-            ActiveTimeSpesific.getCompleteDescription(),
-            "Time of Day Definitions", JOptionPane.INFORMATION_MESSAGE);
-        getGlassPane().setVisible(false);
+        WLOptionPane.showMessageDialog(this,
+                ActiveTimeSpesific.getCompleteDescription(),
+                "Time of Day Definitions", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_lblTimeOfDayInfoMousePressed
 
     private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed

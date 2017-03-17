@@ -24,9 +24,9 @@ import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterGPSDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
@@ -632,15 +632,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             dialog.setVisible(true);
         }
         else {
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "Only one Observation can be viewed at a time. Please select one row in the table and try again.",
-                                "Select One Observation", JOptionPane.WARNING_MESSAGE);
-                        return 0;
-                    }
-           });
+            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Only one Observation can be viewed at a time. Please select one row in the table and try again.",
+                    "Select One Observation", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnGoSightingActionPerformed
 
@@ -669,14 +663,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
         if (tblSightings.getSelectedRowCount() > 0) {
-           int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
-                                "Delete Observations(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    }
-           });
+           int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                   "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
+                   "Delete Observations(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 for (int row : tblSightings.getSelectedRows())  {
                     app.getDBI().deleteSighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 8));
@@ -879,16 +868,13 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             lstSightingsToMap = new ArrayList<>(0);
         }
         else {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showOptionDialog(app.getMainFrame(),
-                            "Please select which subset of Observations should be used.",
-                            "Which Observations to use?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, 
-                            new String[]{"All active Observations (" + tblSightings.getRowCount() + ")", 
-                                         "Only selected Observations (" + tblSightings.getSelectedRowCount() + ")"}, null);
-                }
-            });
+            int result = WLOptionPane.showOptionDialog(app.getMainFrame(),
+                    "Please select which subset of Observations should be used.",
+                    "Which Observations to use?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                    null, new String[]{
+                        "All active Observations (" + tblSightings.getRowCount() + ")", 
+                        "Only selected Observations (" + tblSightings.getSelectedRowCount() + ")"}, 
+                    null);
             if (result != JOptionPane.CLOSED_OPTION) {
                 if (result == 0) {
                     // Use all Sightings

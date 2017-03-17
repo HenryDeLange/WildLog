@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -25,11 +24,14 @@ import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.helpers.WLFileChooser;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.MapLayersFilter;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -373,20 +375,14 @@ public class DistributionLayersDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bntAddSpeciesLayerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntAddSpeciesLayerActionPerformed
-        final JFileChooser fileChooser = new JFileChooser();
+        WLFileChooser fileChooser = new WLFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setDialogTitle("Select the Map Layer to import.");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setFileFilter(new MapLayersFilter());
-        final DistributionLayersDialog thisHandle = this;
-        int result = UtilsDialog.showDialogBackgroundWrapper(this, new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return fileChooser.showOpenDialog(thisHandle);
-            }
-        });
+        int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
             File file = fileChooser.getSelectedFile();
             if (Files.exists(file.toPath())) {
@@ -421,11 +417,9 @@ public class DistributionLayersDialog extends JDialog {
                     }
                 }
                 else {
-                    getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(this,
+                    WLOptionPane.showMessageDialog(this,
                             "A similar layer already exists in this Workspace. Please rename the new layer and try again.",
                             "Duplicate Layer", JOptionPane.ERROR_MESSAGE);
-                    getGlassPane().setVisible(false);
                 }
                 // Add the layer to the hashmap and reload the UI
                 if (destinationPath != null) {
@@ -452,11 +446,9 @@ public class DistributionLayersDialog extends JDialog {
             dispose();
         }
         else {
-            getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(this,
-                            "Please select only 5 (or fewer) Distribution Layers.",
-                            "Too Many Layers Selected", JOptionPane.WARNING_MESSAGE);
-                    getGlassPane().setVisible(false);
+            WLOptionPane.showMessageDialog(this,
+                    "Please select only 5 (or fewer) Distribution Layers.",
+                    "Too Many Layers Selected", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -482,27 +474,21 @@ public class DistributionLayersDialog extends JDialog {
                 }
                 catch (IOException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(this,
+                    WLOptionPane.showMessageDialog(this,
                             "The layer could not be deleted successfully. Please make sure the file isn't in use and try again, or delete it manually.",
                             "Could Not Delete", JOptionPane.ERROR_MESSAGE);
-                    getGlassPane().setVisible(false);
                 }
             }
             else {
-                getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(this,
+                WLOptionPane.showMessageDialog(this,
                         "Please select an existing layer to be deleted.",
                         "Cannot Delete", JOptionPane.WARNING_MESSAGE);
-                getGlassPane().setVisible(false);
             }
         }
         else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this,
+            WLOptionPane.showMessageDialog(this,
                     "Please select one layer to be deleted at a time.",
                     "Cannot Delete", JOptionPane.WARNING_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnRemoveSpeciesLayerActionPerformed
 

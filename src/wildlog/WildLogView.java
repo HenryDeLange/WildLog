@@ -101,6 +101,8 @@ import wildlog.ui.dialogs.WorkspaceImportDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.WLFileChooser;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.CsvFilter;
 import wildlog.ui.helpers.filters.WildNoteSyncFilter;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
@@ -1448,11 +1450,9 @@ public final class WildLogView extends JFrame {
 
     private void mnuMapStartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMapStartMenuItemActionPerformed
         WildLogOptions options = app.getWildLogOptions();
-        app.getMainFrame().getGlassPane().setVisible(true);
-        String inputLat = JOptionPane.showInputDialog(app.getMainFrame(),
+        String inputLat = WLOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the default Latitude to use for the map. (As decimal degrees, for example -33.4639)",
                 options.getDefaultLatitude());
-        app.getMainFrame().getGlassPane().setVisible(false);
         if (inputLat != null) {
             try {
                 options.setDefaultLatitude(Double.parseDouble(inputLat));
@@ -1461,11 +1461,9 @@ public final class WildLogView extends JFrame {
                 // Do Nothing
             }
         }
-        app.getMainFrame().getGlassPane().setVisible(true);
-        String inputLon = JOptionPane.showInputDialog(app.getMainFrame(),
+        String inputLon = WLOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the default Longitude to use for the map. (As decimal degrees, for example 20.9562)",
                 options.getDefaultLongitude());
-        app.getMainFrame().getGlassPane().setVisible(false);
         if (inputLon != null) {
             try {
                 options.setDefaultLongitude(Double.parseDouble(inputLon));
@@ -1478,7 +1476,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuMapStartMenuItemActionPerformed
 
     private void mnuExifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExifMenuItemActionPerformed
-        final JFileChooser fileChooser = new JFileChooser();
+        WLFileChooser fileChooser = new WLFileChooser();
         fileChooser.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File inFile) {
@@ -1495,12 +1493,7 @@ public final class WildLogView extends JFrame {
                 return "JPG Images";
             }
         });
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return fileChooser.showOpenDialog(app.getMainFrame());
-                }
-            });
+        int result = fileChooser.showOpenDialog(app.getMainFrame());
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             UtilsDialog.showExifPopup(app, fileChooser.getSelectedFile().toPath());
         }
@@ -1508,11 +1501,9 @@ public final class WildLogView extends JFrame {
 
     private void mnuSetSlideshowSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSizeActionPerformed
         WildLogOptions options = app.getWildLogOptions();
-        app.getMainFrame().getGlassPane().setVisible(true);
-        String inputFramerate = JOptionPane.showInputDialog(app.getMainFrame(),
+        String inputFramerate = WLOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the default frame size to use for the slideshows. \n (This can be any positive decimal value, for example 500)",
                 options.getDefaultSlideshowSize());
-        app.getMainFrame().getGlassPane().setVisible(false);
         if (inputFramerate != null) {
             try {
                 options.setDefaultSlideshowSize(Math.abs(Integer.parseInt(inputFramerate)));
@@ -1526,12 +1517,10 @@ public final class WildLogView extends JFrame {
 
     private void mnuSetSlideshowSpeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSpeedActionPerformed
         WildLogOptions options = app.getWildLogOptions();
-        app.getMainFrame().getGlassPane().setVisible(true);
-        String inputFramerate = JOptionPane.showInputDialog(app.getMainFrame(),
+        String inputFramerate = WLOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the default framerate (in frames per second) to use for the slideshows. \n "
                         + "This can be any positive decimal value, for example 1 or 0.3 frames per second.",
                 options.getDefaultSlideshowSpeed());
-        app.getMainFrame().getGlassPane().setVisible(false);
         if (inputFramerate != null) {
             try {
                 options.setDefaultSlideshowSpeed(Math.abs(Float.parseFloat(inputFramerate)));
@@ -1544,14 +1533,9 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuSetSlideshowSpeedActionPerformed
 
     private void mnuMergeElementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMergeElementsActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            }
-        });
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
             while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
@@ -1563,15 +1547,10 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuMergeElementsActionPerformed
 
     private void mnuMoveVisitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMoveVisitsActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
                         + "Do you want to continue now?</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-        });
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
             while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
@@ -1583,20 +1562,13 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuMoveVisitsActionPerformed
 
     private void mnuCalcSunMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCalcSunMoonActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>Please <b>backup your Workspace</b> before proceding. <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>Please <b>backup your Workspace</b> before proceding. <br>"
                         + "This will <u>replace</u> the Sun and Moon Information for your Observations with "
                         + "<u>auto generated values from the date, time and GPS information</u>.</html>",
-                        "Calculate Sun and Moon Information",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            }
-        });
+                "Calculate Sun and Moon Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            app.getMainFrame().getGlassPane().setVisible(true);
-            final int choice = JOptionPane.showOptionDialog(app.getMainFrame(),
+            final int choice = WLOptionPane.showOptionDialog(app.getMainFrame(),
                     "Please select what records should be modified:",
                     "Automatically Calculate Sun and Moon Information",
                     JOptionPane.DEFAULT_OPTION,
@@ -1613,6 +1585,7 @@ public final class WildLogView extends JFrame {
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {
+                        app.getMainFrame().getGlassPane().setVisible(true);
                         app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                         if (choice == 0) {
                             // Update all Observations
@@ -1666,9 +1639,6 @@ public final class WildLogView extends JFrame {
                     }
                 });
             }
-            else {
-                app.getMainFrame().getGlassPane().setVisible(false);
-            }
         }
     }//GEN-LAST:event_mnuCalcSunMoonActionPerformed
 
@@ -1684,42 +1654,29 @@ public final class WildLogView extends JFrame {
 
     private void mnuImportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportCSVActionPerformed
         tabbedPanel.setSelectedIndex(0);
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is strongly recommended that you first <b><u>backup your WildLog Database</u></b> before continuing. <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is strongly recommended that you first <b><u>backup your WildLog Database</u></b> before continuing. <br>"
                         + "Press OK when you are ready to start the import process.</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setMessage("Starting the CSV WildLog Import");
-                    final JFileChooser fileChooser = new JFileChooser();
+                    WLFileChooser fileChooser = new WLFileChooser();
                     fileChooser.setDialogTitle("Select the directory with the CSV files to import");
                     fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                return fileChooser.showOpenDialog(app.getMainFrame());
-                            }
-                        });
+                    int result = fileChooser.showOpenDialog(app.getMainFrame());
                     if (result == JFileChooser.APPROVE_OPTION) {
                         tabbedPanel.setSelectedIndex(0);
                         Path path = fileChooser.getSelectedFile().toPath();
-                        app.getMainFrame().getGlassPane().setVisible(true);
-                        String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
+                        String prefix = WLOptionPane.showInputDialog(app.getMainFrame(),
                                 "<html>Please provide a prefix to use for the imported data. "
-                                + "<br>The prefix will be used to map the imported data to new unique records. "
-                                + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
+                                        + "<br>The prefix will be used to map the imported data to new unique records. "
+                                        + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
                                 "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
-                        app.getMainFrame().getGlassPane().setVisible(false);
                         if (prefix != null) {
-                            app.getMainFrame().getGlassPane().setVisible(true);
-                            int choice = JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            int choice = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                                     "<html><b>Would you like to <u>exclude</u> the WildLog File references</b>? "
                                     + "<br><br><hr>"
                                     + "<br>Note: The CSV Import can not import the actual files, but only the database links "
@@ -1728,7 +1685,6 @@ public final class WildLogView extends JFrame {
                                     + "<br>It is <b>strongly recommended</b> to select <b>YES</b> to prevent more than one record to be "
                                     + "<br>linked to the same file. The import will fail if a duplicate link is attempted.</html>",
                                     "Exclude Database File References", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                            app.getMainFrame().getGlassPane().setVisible(false);
                             boolean excludeWildLogFiles = false;
                             if (choice == JOptionPane.YES_OPTION || choice == JOptionPane.CLOSED_OPTION) {
                                 excludeWildLogFiles = true;
@@ -1742,15 +1698,9 @@ public final class WildLogView extends JFrame {
                                 hasErrors = true;
                             }
                             if (hasErrors) {
-                                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                                "Not all of the data could be successfully imported.",
-                                                "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
-                                        return -1;
-                                    }
-                                });
+                                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                        "Not all of the data could be successfully imported.",
+                                        "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     }
@@ -1763,18 +1713,13 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuImportCSVActionPerformed
 
     private void mnuCreateSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateSlideshowActionPerformed
-        final JFileChooser fileChooser = new JFileChooser();
+        WLFileChooser fileChooser = new WLFileChooser();
         fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setFileFilter(new FileNameExtensionFilter("JPG Images",
                 WildLogFileExtentions.Images.JPG.getExtention().toLowerCase(), WildLogFileExtentions.Images.JPEG.getExtention().toLowerCase(),
                 WildLogFileExtentions.Images.JPG.getExtention().toUpperCase(), WildLogFileExtentions.Images.JPG.getExtention().toUpperCase()));
         fileChooser.setDialogTitle("Select the JPG images to use for the Custom Slideshow...");
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return fileChooser.showOpenDialog(app.getMainFrame());
-                }
-            });
+        int result = fileChooser.showOpenDialog(app.getMainFrame());
         if (result == JFileChooser.APPROVE_OPTION) {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
@@ -1789,12 +1734,7 @@ public final class WildLogView extends JFrame {
                     fileChooser.setMultiSelectionEnabled(false);
                     fileChooser.setSelectedFile(new File("slideshow.mov"));
                     fileChooser.setFileFilter(new FileNameExtensionFilter("Slideshow movie", "mov"));
-                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                return fileChooser.showSaveDialog(app.getMainFrame());
-                            }
-                        });
+                    int result = fileChooser.showSaveDialog(app.getMainFrame());
                     if (result == JFileChooser.APPROVE_OPTION) {
                         // Now create the slideshow
                         setMessage("Busy with the Custom Slideshow (this may take a while)");
@@ -1945,15 +1885,9 @@ public final class WildLogView extends JFrame {
                 app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath()
                         .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(LocalDateTime.now()) + ")"));
                 setMessage("Done with the Database Backup");
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "<html>The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. <br>(Note: This only backed up the database entries, the images and other files have to be backed up manually.)</html>",
-                                "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
-                        return -1;
-                    }
-                });
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                        "<html>The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. <br>(Note: This only backed up the database entries, the images and other files have to be backed up manually.)</html>",
+                        "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
                 return null;
             }
         });
@@ -1993,15 +1927,9 @@ public final class WildLogView extends JFrame {
                 }
             }
             // Shutdown
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "The WildLog Workspace has been changed. Please restart the application.",
-                            "Workspace Changed!", JOptionPane.INFORMATION_MESSAGE);
-                    return -1;
-                }
-            });
+            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                    "The WildLog Workspace has been changed. Please restart the application.",
+                    "Workspace Changed!", JOptionPane.INFORMATION_MESSAGE);
 //            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
 //            this.setVisible(false);
             app.quit(evt);
@@ -2011,33 +1939,21 @@ public final class WildLogView extends JFrame {
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[CleanWorkspace]");
         // Popup 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is <b>HIGHLY recommended to backup the entire WildLog Workspace folder</b> before continuing! <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is <b>HIGHLY recommended to backup the entire WildLog Workspace folder</b> before continuing! <br>"
                         + "Please <b>close any other applications</b> that might be accessing any of the Files in the WildLog Workspace. <br>"
                         + "Note that WildLog will be automatically closed when the cleanup is finished. <br>"
                         + "This task will check that all links between the data and files are correct. <br>"
                         + "In addition all unnessasary files will be removed from the Workspace. </html>",
-                        "Warning!",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            }
-        });
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            final int recreateThumbnailsResult = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "<html>Would you like to also recreate all cached image thumbnails?"
+            final int recreateThumbnailsResult = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                    "<html>Would you like to also recreate all cached image thumbnails?"
                             + "<br/>Recreating the thumbnails can improve system performance and might correct thumbnails that "
                             + "are displaying incorrectly."
                             + "<br/>Warining: This step is optional but recommended. It can take very long to complete."
                             + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
-                            "Recreate Thumbnails?",
-                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                }
-            });
+                    "Recreate Thumbnails?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             // Close all tabs and go to the home tab
             tabbedPanel.setSelectedIndex(0);
             while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
@@ -2780,26 +2696,18 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuCleanWorkspaceActionPerformed
 
     private void mnuCalcDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCalcDurationActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>Please <b>backup your Workspace</b> before proceding. <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>Please <b>backup your Workspace</b> before proceding. <br>"
                         + "This will <u>replace</u> the Duration information for all Observations with "
                         + "<u>auto generated values from the uploaded images</u>.</html>",
-                        "Calculate Observation Duration",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            }
-        });
+                "Calculate Observation Duration", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            app.getMainFrame().getGlassPane().setVisible(true);
-            final int choice = JOptionPane.showOptionDialog(app.getMainFrame(),
+            final int choice = WLOptionPane.showOptionDialog(app.getMainFrame(),
                     "Please select what records should be modified:",
-                    "Automatically Calculate Duration",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    new String[] {"All Observations", "Only Obervations without a Duration"},
+                    "Automatically Calculate Duration", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, new String[] {
+                        "All Observations", 
+                        "Only Obervations without a Duration"},
                     null);
             if (choice != JOptionPane.CLOSED_OPTION) {
                 // Close all tabs and go to the home tab
@@ -2810,6 +2718,7 @@ public final class WildLogView extends JFrame {
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {
+                        app.getMainFrame().getGlassPane().setVisible(true);
                         app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                         if (choice == 0) {
                             // Update all observations
@@ -2872,9 +2781,6 @@ public final class WildLogView extends JFrame {
                         return null;
                     }
                 });
-            }
-            else {
-                app.getMainFrame().getGlassPane().setVisible(false);
             }
         }
     }//GEN-LAST:event_mnuCalcDurationActionPerformed
@@ -2968,15 +2874,10 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuExportWildNoteSyncActionPerformed
 
     private void mnuMergeLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMergeLocationsActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
                         + "Do you want to continue now?</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-        });
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
             while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
@@ -2988,15 +2889,10 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuMergeLocationsActionPerformed
 
     private void mnuMergeVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMergeVisitActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
                         + "Do you want to continue now?</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-        });
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
             while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
@@ -3009,29 +2905,19 @@ public final class WildLogView extends JFrame {
 
     private void mnuImportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportWorkspaceActionPerformed
         tabbedPanel.setSelectedIndex(0);
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is <b><u>very strongly</u></b> recommended that you <b><u>backup your Workspace</u></b> (WildLog folder) before continuing. <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is <b><u>very strongly</u></b> recommended that you <b><u>backup your Workspace</u></b> (WildLog folder) before continuing. <br>"
                         + "Press OK when you are ready to start the import process.</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            final JFileChooser fileChooser = new JFileChooser();
+            WLFileChooser fileChooser = new WLFileChooser();
             fileChooser.setDialogTitle("Select the Workspace folder to import");
             fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
             fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
             fileChooser.setFileFilter(new WorkspaceFilter());
             fileChooser.setAcceptAllFileFilterUsed(false);
             fileChooser.setMultiSelectionEnabled(false);
-            result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return fileChooser.showOpenDialog(app.getMainFrame());
-                }
-            });
+            result = fileChooser.showOpenDialog(app.getMainFrame());
             if (result != JFileChooser.ERROR_OPTION && result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
                 Path selectedPath;
                 if (fileChooser.getSelectedFile().isDirectory()) {
@@ -3050,14 +2936,9 @@ public final class WildLogView extends JFrame {
                     dialog.setVisible(true);
                 }
                 else {
-                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                    "The selected folder is not a valid existing WildLog Workspace.",
-                                    "Incorrect Workspace Selected", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-                            }
-                        });
+                    WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "The selected folder is not a valid existing WildLog Workspace.",
+                            "Incorrect Workspace Selected", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -3074,19 +2955,14 @@ public final class WildLogView extends JFrame {
 
     private void mnuImportWildNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportWildNoteActionPerformed
         final int IMAGE_LINK_INTERVAL = 120000;
-        final JFileChooser fileChooser = new JFileChooser();
+        WLFileChooser fileChooser = new WLFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setDialogTitle("Please select the WildNote Sync export file to use.");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setFileFilter(new WildNoteSyncFilter());
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return fileChooser.showOpenDialog(app.getMainFrame());
-            }
-        });
+        int result = fileChooser.showOpenDialog(app.getMainFrame());
         if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
             tabbedPanel.setSelectedIndex(0);
             // Start the import
@@ -3096,33 +2972,24 @@ public final class WildLogView extends JFrame {
                     setProgress(0);
                     setMessage("Starting the Import of the WildNote Sync File");
                     // Get linked images
-                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            return JOptionPane.showConfirmDialog(app.getMainFrame(), "<html>WildLog can automatically try to "
+                    int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                            "<html>WildLog can automatically try to "
                                     + "link the files (photos and movies) in a folder to the imported WildNote Observations "
                                     + "using the date and time."
                                     + "<br>Note: Since this is an automated process the results need to be manually verified when "
                                     + "there are multiple Observations and files being imported with similar dates and times."
                                     + "<br>Would you like to specify a folder to use?",
-                                    "Link Files?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                        }
-                    });
+                            "Link Files?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     final Map<Long, List<File>> mapFilesToLink;
                     if (result == JOptionPane.YES_OPTION) {
                         setMessage("Busy with the Import of the WildNote Sync File (scanning folder)");
-                        final JFileChooser folderChooser = new JFileChooser();
+                        WLFileChooser folderChooser = new WLFileChooser();
                         folderChooser.setAcceptAllFileFilterUsed(false);
                         folderChooser.setMultiSelectionEnabled(false);
                         folderChooser.setDialogType(JFileChooser.OPEN_DIALOG);
                         folderChooser.setDialogTitle("Please select the folder to use.");
                         folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                        result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                return folderChooser.showOpenDialog(app.getMainFrame());
-                            }
-                        });
+                        result = folderChooser.showOpenDialog(app.getMainFrame());
                         if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
                             mapFilesToLink = new HashMap<Long, List<File>>(folderChooser.getSelectedFile().listFiles().length);
                             int t = 0;
@@ -3289,15 +3156,9 @@ public final class WildLogView extends JFrame {
                 }
             }
             // Shutdown
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "The WildLog Workspace has been created. Please restart the application.",
-                            "Workspace Created!", JOptionPane.INFORMATION_MESSAGE);
-                    return -1;
-                }
-            });
+            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                    "The WildLog Workspace has been created. Please restart the application.",
+                    "Workspace Created!", JOptionPane.INFORMATION_MESSAGE);
 //            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
 //            this.setVisible(false);
             app.quit(evt);
@@ -3305,41 +3166,30 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuCreateWorkspaceMenuItemActionPerformed
 
     private void btnImportIUCNListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportIUCNListActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>This will <u>replace</u> the names and threat status for the Creatures in this Workspace."
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>This will <u>replace</u> the names and threat status for the Creatures in this Workspace."
                         + "<br>Creatures are treated as <u>the same when their scientific name match</u>. "
                         + "<br>New Creatures may be added where matches weren't found."
                         + "<br>It is recommended to backup the Workspace's database before proceding."
                         + "<br><b>Warning: If you continue all open tabs will be closed automatically.</b></html>",
-                        "Import IUCN Species Names",
-                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            }
-        });
+                "Import IUCN Species Names", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            app.getMainFrame().getGlassPane().setVisible(true);
-            final int choiceForReplacing = JOptionPane.showOptionDialog(app.getMainFrame(),
+            final int choiceForReplacing = WLOptionPane.showOptionDialog(app.getMainFrame(),
                     "Please select what records should be modified:",
-                    "Import IUCN Species Names",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    new String[] {"Only Add New Creatures", "Only Update Existing Creatures", "Add New and Update Existing Creatures"},
+                    "Import IUCN Species Names", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, new String[] {
+                        "Only Add New Creatures", 
+                        "Only Update Existing Creatures", 
+                        "Add New and Update Existing Creatures"},
                     null);
-            app.getMainFrame().getGlassPane().setVisible(false);
             if (choiceForReplacing != JOptionPane.CLOSED_OPTION) {
-                app.getMainFrame().getGlassPane().setVisible(true);
-                final int choiceForName = JOptionPane.showOptionDialog(app.getMainFrame(),
+                final int choiceForName = WLOptionPane.showOptionDialog(app.getMainFrame(),
                         "Please select what name should be modified:",
-                        "Import IUCN Species Names",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        new String[] {"Primary Names", "Other Names"},
+                        "Import IUCN Species Names", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                        null, new String[] {
+                            "Primary Names", 
+                            "Other Names"},
                         null);
-                app.getMainFrame().getGlassPane().setVisible(false);
                 if (choiceForName != JOptionPane.CLOSED_OPTION) {
                     // Close all tabs and go to the home tab
                     tabbedPanel.setSelectedIndex(0);
@@ -3350,16 +3200,11 @@ public final class WildLogView extends JFrame {
                         @Override
                         protected Object doInBackground() throws Exception {
                             setMessage("Starting the IUCN Import");
-                            final JFileChooser fileChooser = new JFileChooser();
+                            WLFileChooser fileChooser = new WLFileChooser();
                             fileChooser.setDialogTitle("Select the CSV file to import from IUCN");
                             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                             fileChooser.setFileFilter(new CsvFilter());
-                            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        return fileChooser.showOpenDialog(app.getMainFrame());
-                                    }
-                                });
+                            int result = fileChooser.showOpenDialog(app.getMainFrame());
                             if (result == JFileChooser.APPROVE_OPTION) {
                                 tabbedPanel.setSelectedIndex(0);
                                 Path importFile = fileChooser.getSelectedFile().toPath();
@@ -3384,15 +3229,9 @@ public final class WildLogView extends JFrame {
                                     hasErrors = true;
                                 }
                                 if (hasErrors) {
-                                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                        @Override
-                                        public int showDialog() {
-                                            JOptionPane.showMessageDialog(app.getMainFrame(),
-                                                    "Not all of the data could be successfully imported.",
-                                                    "Error Importing IUCN Species Names!", JOptionPane.ERROR_MESSAGE);
-                                            return -1;
-                                        }
-                                    });
+                                    WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                            "Not all of the data could be successfully imported.",
+                                            "Error Importing IUCN Species Names!", JOptionPane.ERROR_MESSAGE);
                                 }
                             }
                             setMessage("Done with the IUCN Import");
@@ -3415,11 +3254,9 @@ public final class WildLogView extends JFrame {
     private void mnuChangeWorkspaceNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceNameActionPerformed
         WildLogOptions options = app.getWildLogOptions();
         String oldName = options.getWorkspaceName();
-        app.getMainFrame().getGlassPane().setVisible(true);
-        String userInput = JOptionPane.showInputDialog(app.getMainFrame(),
+        String userInput = WLOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the new Workspace name:",
                 options.getWorkspaceName());
-        app.getMainFrame().getGlassPane().setVisible(false);
         if (userInput != null && !userInput.trim().isEmpty()) {
             options.setWorkspaceName(userInput.trim());
             if (options.getWorkspaceName().length() > 50) {
@@ -3435,29 +3272,23 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuChangeWorkspaceNameActionPerformed
 
     private void mnuSwitchElementNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSwitchElementNamesActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is strongly recommended that you backup your WildLog Database before continuing. <br>Do you want to continue now?</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            }
-        });
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is strongly recommended that you backup your WildLog Database before continuing. <br>Do you want to continue now?</html>",
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
             while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
                 tabbedPanel.remove(STATIC_TAB_COUNT);
             }
             // Display dialog to select which names should be switched
-            int option = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showOptionDialog(app.getMainFrame(), 
-                            "<html>Select the name field that should be switched with the Primary Name field.</html>", "Which name do you want to use?", 
-                            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                            null, new String[] {"Other Name", "Scientific Name"}, null);
-                }
-            });
+            int option = WLOptionPane.showOptionDialog(app.getMainFrame(), 
+                    "<html>Select the name field that should be switched with the Primary Name field.</html>", 
+                    "Which name do you want to use?", 
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                    null, new String[] {
+                        "Other Name", 
+                        "Scientific Name"}, 
+                    null);
             if (option != JOptionPane.CLOSED_OPTION) {
                 List<Element> lstElements = app.getDBI().listElements(null, null, null, Element.class);
                 for (Element element : lstElements) {
@@ -3528,18 +3359,13 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuExportXMLActionPerformed
 
     private void mnuCreateGIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateGIFActionPerformed
-        final JFileChooser fileChooser = new JFileChooser();
+        WLFileChooser fileChooser = new WLFileChooser();
         fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setFileFilter(new FileNameExtensionFilter("JPG Images",
                 WildLogFileExtentions.Images.JPG.getExtention().toLowerCase(), WildLogFileExtentions.Images.JPEG.getExtention().toLowerCase(),
                 WildLogFileExtentions.Images.JPG.getExtention().toUpperCase(), WildLogFileExtentions.Images.JPG.getExtention().toUpperCase()));
         fileChooser.setDialogTitle("Select the JPG images to use for the Custom Animated GIF...");
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return fileChooser.showOpenDialog(app.getMainFrame());
-                }
-            });
+        int result = fileChooser.showOpenDialog(app.getMainFrame());
         if (result == JFileChooser.APPROVE_OPTION) {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
@@ -3554,12 +3380,7 @@ public final class WildLogView extends JFrame {
                     fileChooser.setMultiSelectionEnabled(false);
                     fileChooser.setSelectedFile(new File("animated_gif.gif"));
                     fileChooser.setFileFilter(new FileNameExtensionFilter("Animated GIF", "gif"));
-                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                return fileChooser.showSaveDialog(app.getMainFrame());
-                            }
-                        });
+                    int result = fileChooser.showSaveDialog(app.getMainFrame());
                     if (result == JFileChooser.APPROVE_OPTION) {
                         setProgress(1);
                         setMessage("Creating the Custom Animated GIF " + getProgress() + "%");
@@ -3692,10 +3513,9 @@ public final class WildLogView extends JFrame {
                 });
             editorPane.setEditable(false);
             editorPane.setBackground(label.getBackground());
-            JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
+            WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
                     editorPane, 
-                    "WildLog User Guide", 
-                    JOptionPane.INFORMATION_MESSAGE);
+                    "WildLog User Guide", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_mnuUserGuideActionPerformed
 
@@ -3708,10 +3528,9 @@ public final class WildLogView extends JFrame {
                 String latestVersion = app.checkForUpdates();
                 // The checkForUpdates() call will show a popup if the versions are out of sync
                 if (WildLogApp.WILDLOG_VERSION.equalsIgnoreCase(latestVersion)) {
-                    JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
+                    WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
                         "You are using the latest official release of WildLog (v" + latestVersion + ").", 
-                        "WildLog is up to date", 
-                        JOptionPane.INFORMATION_MESSAGE);
+                        "WildLog is up to date", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
@@ -3747,40 +3566,28 @@ public final class WildLogView extends JFrame {
 
     private void mnuImportCSVBasicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportCSVBasicActionPerformed
         tabbedPanel.setSelectedIndex(0);
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is strongly recommended that you first <b><u>backup your WildLog Database</u></b> before continuing. <br>"
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is strongly recommended that you first <b><u>backup your WildLog Database</u></b> before continuing. <br>"
                         + "Press OK when you are ready to start the import process.</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setMessage("Starting the CSV Basic Import");
-                    final JFileChooser fileChooser = new JFileChooser();
+                    WLFileChooser fileChooser = new WLFileChooser();
                     fileChooser.setDialogTitle("Select the CSV file to import");
                     fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                     fileChooser.setFileFilter(new CsvFilter());
-                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                return fileChooser.showOpenDialog(app.getMainFrame());
-                            }
-                        });
+                    int result = fileChooser.showOpenDialog(app.getMainFrame());
                     if (result == JFileChooser.APPROVE_OPTION) {
                         tabbedPanel.setSelectedIndex(0);
                         Path path = fileChooser.getSelectedFile().toPath();
-                        app.getMainFrame().getGlassPane().setVisible(true);
-                        String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
+                        String prefix = WLOptionPane.showInputDialog(app.getMainFrame(),
                                 "<html>Please provide a prefix to use for the imported data. "
-                                + "<br>The prefix will be used to map the imported data to new unique records. "
-                                + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
+                                        + "<br>The prefix will be used to map the imported data to new unique records. "
+                                        + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
                                 "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
-                        app.getMainFrame().getGlassPane().setVisible(false);
                         if (prefix != null) {
                             boolean hasErrors = false;
                             try {
@@ -3791,15 +3598,9 @@ public final class WildLogView extends JFrame {
                                 hasErrors = true;
                             }
                             if (hasErrors) {
-                                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                    @Override
-                                    public int showDialog() {
-                                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                                "Not all of the data could be successfully imported.",
-                                                "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
-                                        return -1;
-                                    }
-                                });
+                                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                        "Not all of the data could be successfully imported.",
+                                        "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     }
@@ -3932,14 +3733,9 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_chkMnuUseBundledMediaViewersItemStateChanged
 
     private void mnuReduceImagesSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReduceImagesSizeActionPerformed
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
-                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            }
-        });
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             ImageResizeDialog dialog = new ImageResizeDialog(app.getMainFrame());
             dialog.setVisible(true);

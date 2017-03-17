@@ -56,7 +56,7 @@ import wildlog.data.wrappers.json.gbif.GBIFOccurence;
 import wildlog.data.wrappers.json.inaturalist.INaturalistData;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
-import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 import wildlog.utils.WildLogPaths;
@@ -190,16 +190,10 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                     scientificName = newScientificName;
                 }
                 else {
-                    UtilsDialog.showDialogBackgroundWrapper(mapsBaseDialog, new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(mapsBaseDialog,
-                                    "<html>The data for this map is loaded based on the Scientific Name."
-                                        + "<br/>Please make sure that the active Creature has a Scientific Name associated with it.</html>",
-                                    "Scientific Name not found", JOptionPane.WARNING_MESSAGE);
-                            return -1;
-                        }
-                    });
+                    WLOptionPane.showMessageDialog(mapsBaseDialog,
+                            "<html>The data for this map is loaded based on the Scientific Name."
+                                    + "<br/>Please make sure that the active Creature has a Scientific Name associated with it.</html>",
+                            "Scientific Name not found", JOptionPane.WARNING_MESSAGE);
                 }
                 // Add countries
                 if (showCountries) {
@@ -217,16 +211,10 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
             else {
                 // Add base layer (to prevent the map from showing an empty screen which messes up the zoom)
                 map.addLayer(getGeoTiffLayers(BundledMapLayers.EARTH_MODERN));
-                UtilsDialog.showDialogBackgroundWrapper(mapsBaseDialog, new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(mapsBaseDialog,
-                                "<html>The data for this map can only be loaded for one Creature at a time."
-                                    + "<br/>Please make sure to filter the Observations to only use one Creature.</html>",
-                                "Select a single Creature", JOptionPane.WARNING_MESSAGE);
-                        return -1;
-                    }
-                });
+                WLOptionPane.showMessageDialog(mapsBaseDialog,
+                        "<html>The data for this map can only be loaded for one Creature at a time."
+                                + "<br/>Please make sure to filter the Observations to only use one Creature.</html>",
+                        "Select a single Creature", JOptionPane.WARNING_MESSAGE);
             }
         }
     }

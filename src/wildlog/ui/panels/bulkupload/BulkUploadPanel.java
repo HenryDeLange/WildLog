@@ -41,12 +41,13 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.ZoomDialog;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.CustomMouseWheelScroller;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.helpers.WLFileChooser;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataWrapper;
@@ -213,24 +214,19 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     private List<Path> showFileChooser() {
-        final JFileChooser fileChooser;
+        WLFileChooser fileChooser;
         if (lastFilePath != null && lastFilePath.length() > 0) {
-            fileChooser = new JFileChooser(lastFilePath);
+            fileChooser = new WLFileChooser(lastFilePath);
         }
         else {
-            fileChooser = new JFileChooser();
+            fileChooser = new WLFileChooser();
         }
         fileChooser.setDialogTitle("Select a folder to import");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setFileFilter(new ImageFilter());
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                return fileChooser.showOpenDialog(app.getMainFrame());
-            }
-        });
+        int result = fileChooser.showOpenDialog(app.getMainFrame());
         if (result == JFileChooser.ERROR_OPTION || result != JFileChooser.APPROVE_OPTION || fileChooser.getSelectedFiles() == null) {
             return null;
         }
@@ -745,15 +741,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     // Make sure the visit is OK
                     Visit visit = app.getDBI().findVisit(txtVisitName.getText(), Visit.class);
                     if ((existingVisitName == null || existingVisitName.isEmpty()) && visit != null) {
-                        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                JOptionPane.showMessageDialog(app.getMainFrame(),
-                                        "The Period name is not unique, please specify another one.",
-                                        "Can't Save", JOptionPane.ERROR_MESSAGE);
-                                return -1;
-                            }
-                        });
+                        WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                "The Period name is not unique, please specify another one.",
+                                "Can't Save", JOptionPane.ERROR_MESSAGE);
                         return null;
                     }
                     if (visit == null) {
@@ -771,15 +761,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
                                 }
                             });
-                            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                @Override
-                                public int showDialog() {
-                                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                                            "Please assign a Creature to each of the Observations.",
-                                            "Can't Save", JOptionPane.ERROR_MESSAGE);
-                                    return -1;
-                                }
-                            });
+                            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "Please assign a Creature to each of the Observations.",
+                                    "Can't Save", JOptionPane.ERROR_MESSAGE);
                             return null;
                         }
                     }
@@ -788,14 +772,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
                         if (sightingWrapper.getLatitude() == null || Latitudes.NONE.equals(sightingWrapper.getLatitude())
                                 || sightingWrapper.getLongitude() == null || Longitudes.NONE.equals(sightingWrapper.getLongitude())) {
-                            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                                @Override
-                                public int showDialog() {
-                                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                            "There are Observations without GPS Coordinates. Are you sure you want to save?",
-                                            "Missing GPS Coordinates", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                                }
-                            });
+                            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                    "There are Observations without GPS Coordinates. Are you sure you want to save?",
+                                    "Missing GPS Coordinates", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                             if (result == JOptionPane.YES_OPTION) {
                                 break;
                             }
@@ -911,15 +890,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         });
                     }
                     if (!UtilsConcurency.waitForExecutorToShutdown(executorService)) {
-                        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                            @Override
-                            public int showDialog() {
-                                JOptionPane.showMessageDialog(app.getMainFrame(),
-                                        "There was an unexpected problem while saving.",
-                                        "Problem Saving", JOptionPane.ERROR_MESSAGE);
-                                return -1;
-                            }
-                        });
+                        WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                "There was an unexpected problem while saving.",
+                                "Problem Saving", JOptionPane.ERROR_MESSAGE);
                     }
                     // Process the Visit (only after saving all of the sightings, otherwise the user can edit/delete it while the bulk import is busy)
                     visit.setLocationName(location.getName());
@@ -955,15 +928,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     }
                 }
                 else {
-                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "Please provide a Place name and Period name before saving.",
-                                    "Can't Save", JOptionPane.ERROR_MESSAGE);
-                            return -1;
-                        }
-                    });
+                    WLOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Please provide a Place name and Period name before saving.",
+                            "Can't Save", JOptionPane.ERROR_MESSAGE);
                 }
                 return null;
             }

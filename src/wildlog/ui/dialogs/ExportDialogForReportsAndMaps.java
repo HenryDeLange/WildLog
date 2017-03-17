@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javax.imageio.ImageIO;
@@ -13,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -25,6 +25,7 @@ import wildlog.html.utils.UtilsHTML;
 import wildlog.maps.kml.UtilsKML;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -335,11 +336,11 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 //    }
     
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        JOptionPane.showMessageDialog(getParent(), 
+        WLOptionPane.showMessageDialog(getParent(), 
                 "For best results: "
-                + "\n1) Resize the window containing the report to be as small as possible before printing. "
-                + "\n2) Use landscape orientation. "
-                + "\n3) Use as small a print margin as possible (10mm / 1cm should be fine).", 
+                        + "\n1) Resize the window containing the report to be as small as possible before printing. "
+                        + "\n2) Use landscape orientation. "
+                        + "\n3) Use as small a print margin as possible (10mm / 1cm should be fine).", 
                 "Print Tip", JOptionPane.INFORMATION_MESSAGE);
         setVisible(false);
         dispose();
@@ -350,15 +351,15 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                     printerJob.endJob();
                 }
                 else {
-                    JOptionPane.showMessageDialog(getParent(), "The print job failed.", "Print Error", JOptionPane.ERROR_MESSAGE);
+                    WLOptionPane.showMessageDialog(getParent(), "The print job failed.", "Print Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
             else {
-                JOptionPane.showMessageDialog(getParent(), "Could not setup the printer.", "Print Error", JOptionPane.ERROR_MESSAGE);
+                WLOptionPane.showMessageDialog(getParent(), "Could not setup the printer.", "Print Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
-            JOptionPane.showMessageDialog(getParent(), "No printer was found.", "Print Error", JOptionPane.ERROR_MESSAGE);
+            WLOptionPane.showMessageDialog(getParent(), "No printer was found.", "Print Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 

@@ -28,8 +28,8 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
@@ -49,14 +49,9 @@ public class BulkUploadDataLoader {
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
         final List<Path> lstAllFiles = getListOfFilesToImport(inLstFolderPaths, inIsRecuresive);
         if (lstAllFiles.isEmpty() && !inIsRecuresive) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
-                            "No supported files were found in the specified folder. Would you like to search in the subfolders as well?", 
-                            "Include subfolders?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                }
-            });
+            int result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
+                    "No supported files were found in the specified folder. Would you like to search in the subfolders as well?", 
+                    "Include subfolders?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 lstAllFiles.addAll(getListOfFilesToImport(inLstFolderPaths, true));
             }

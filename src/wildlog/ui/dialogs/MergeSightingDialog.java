@@ -2,7 +2,6 @@ package wildlog.ui.dialogs;
 
 import java.awt.Component;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -10,11 +9,13 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsTime;
 
 
@@ -169,11 +170,9 @@ public class MergeSightingDialog extends JDialog {
             dispose();
         }
         else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this,
+            WLOptionPane.showMessageDialog(this,
                     "Please select the From Observation(s) and then select the To Observation.",
                     "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 

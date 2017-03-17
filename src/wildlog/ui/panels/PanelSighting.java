@@ -58,6 +58,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -1638,11 +1639,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 result = app.getDBI().updateSighting(sighting);
             }
             if (result == false) {
-                getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(this,
+                WLOptionPane.showMessageDialog(this,
                         "Could not save the Observation.",
                         "Error Saving", JOptionPane.ERROR_MESSAGE);
-                getGlassPane().setVisible(false);
                 return false;
             }
         }
@@ -1781,11 +1780,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         }
         else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this,
+            WLOptionPane.showMessageDialog(this,
                 "Please fill in all of the required fields.",
                 "Can't Save Observation", JOptionPane.ERROR_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnUpdateSightingActionPerformed
 
@@ -1798,11 +1795,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
         if (!hasRelevantFiles) {
             if (evt != null) {
-                getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(this,
+                WLOptionPane.showMessageDialog(this,
                     "Please upload some files and try again.",
                     "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
-                getGlassPane().setVisible(false);
             }
         }
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
@@ -1821,20 +1816,16 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     txtLongitude.setText(UtilsGPS.getLongitudeString(sighting));
                 }
                 else {
-                    getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(this,
+                    WLOptionPane.showMessageDialog(this,
                         "No GPS information could be found for the selected file.",
                         "No GPS Data Found.", JOptionPane.ERROR_MESSAGE);
-                    getGlassPane().setVisible(false);
                 }
             }
         }
         if (!hasRelevantFiles) {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this,
+            WLOptionPane.showMessageDialog(this,
                 "Please upload some image files and try again.",
                 "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnGetGPSFromImageActionPerformed
 
@@ -1868,11 +1859,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         && !Latitudes.NONE.equals(locationWL.getLatitude()) && !Longitudes.NONE.equals(locationWL.getLongitude())
                         && !UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLatitudeString(locationWL))
                         && !UtilsGPS.NO_GPS_POINT.equals(UtilsGPS.getLongitudeString(locationWL))) {
-                        getGlassPane().setVisible(true);
-                        int result = JOptionPane.showConfirmDialog(this,
-                            "This Observation does not have a GPS point. Would you like to use the GPS point associated with the Place for the calculation?",
-                            "Use The GPS Point From The Place?", JOptionPane.YES_NO_OPTION);
-                        getGlassPane().setVisible(false);
+                        int result = WLOptionPane.showConfirmDialog(this,
+                                "This Observation does not have a GPS point. Would you like to use the GPS point associated with the Place for the calculation?",
+                                "Use The GPS Point From The Place?", JOptionPane.YES_NO_OPTION);
                         if (result == JOptionPane.YES_OPTION) {
                             double latitude = UtilsGPS.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSeconds());
                             double longitude = UtilsGPS.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSeconds());
@@ -1883,11 +1872,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         }
                     }
                     else {
-                        getGlassPane().setVisible(true);
-                        JOptionPane.showMessageDialog(this,
+                        WLOptionPane.showMessageDialog(this,
                             "Please make sure to first provide an accurate values for the GPS point.",
                             "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
-                        getGlassPane().setVisible(false);
                     }
                 }
             }
@@ -1896,11 +1883,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         else {
             // Only show the error if the user clicked the button
             if (evt != null) {
-                getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(this,
+                WLOptionPane.showMessageDialog(this,
                     "Please make sure to first provide an accurate Date.",
                     "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
-                getGlassPane().setVisible(false);
             }
         }
     }//GEN-LAST:event_btnCalculateSunAndMoonActionPerformed
@@ -1931,11 +1916,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (!hasRelevantFiles) {
             // Only show the error if the user clicked the button
             if (evt != null) {
-                getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(this,
+                WLOptionPane.showMessageDialog(this,
                     "Please upload some image or movie files and try again.",
                     "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
-                getGlassPane().setVisible(false);
             }
         }
     }//GEN-LAST:event_btnCalculateDurationActionPerformed
@@ -1992,11 +1975,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblTimeOfDayInfoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimeOfDayInfoMousePressed
-        getGlassPane().setVisible(true);
-        JOptionPane.showMessageDialog(this,
-            ActiveTimeSpesific.getCompleteDescription(),
-            "Time of Day Definitions", JOptionPane.INFORMATION_MESSAGE);
-        getGlassPane().setVisible(false);
+        WLOptionPane.showMessageDialog(this,
+                ActiveTimeSpesific.getCompleteDescription(),
+                "Time of Day Definitions", JOptionPane.INFORMATION_MESSAGE);
+
     }//GEN-LAST:event_lblTimeOfDayInfoMousePressed
 
     private void btnAddNewVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewVisitActionPerformed
@@ -2015,11 +1997,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             popup.dispose();
         }
         else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this,
-                "Please select a Place first, and then try again to add a new Period.",
-                "No Place Selected", JOptionPane.WARNING_MESSAGE);
-            getGlassPane().setVisible(false);
+            WLOptionPane.showMessageDialog(this,
+                    "Please select a Place first, and then try again to add a new Period.",
+                    "No Place Selected", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnAddNewVisitActionPerformed
 

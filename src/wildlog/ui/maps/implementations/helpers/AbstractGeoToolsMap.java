@@ -92,8 +92,8 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                 // Refresh the map to display the added layers
                 map.reloadMap();
                 // Hide waiting cursor
-                mapsBaseDialog.getGlassPane().setVisible(false);
                 mapsBaseDialog.getGlassPane().setCursor(java.awt.Cursor.getDefaultCursor());
+                mapsBaseDialog.getGlassPane().setVisible(false);
             }
         });
     }

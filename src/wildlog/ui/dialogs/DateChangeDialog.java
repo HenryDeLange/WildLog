@@ -16,6 +16,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.SpinnerFixer;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 
@@ -243,11 +244,9 @@ public class DateChangeDialog extends JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         if (dtpBadDate.getDate() == null || dtpGoodDate.getDate() == null) {
-            getGlassPane().setVisible(true);
-            JOptionPane.showConfirmDialog(this,
+            WLOptionPane.showConfirmDialog(this,
                     "Please make sure to provide the necessary date and time information.",
                     "Provide Adjustment Date", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-            getGlassPane().setVisible(false);
         }
         else {
             // Kry die verskil tussen die twee datums waarvolgens die Sightings geupdate moet word

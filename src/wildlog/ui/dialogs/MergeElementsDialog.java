@@ -2,15 +2,16 @@ package wildlog.ui.dialogs;
 
 import java.util.Collections;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 
 
 public class MergeElementsDialog extends JDialog {
@@ -156,11 +157,9 @@ public class MergeElementsDialog extends JDialog {
             dispose();
         }
         else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this,
+            WLOptionPane.showMessageDialog(this,
                     "Please select two Creatures to merge.",
                     "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 

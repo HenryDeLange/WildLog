@@ -17,7 +17,7 @@ import wildlog.WildLogApp;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.ZoomDialog;
-import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
@@ -274,16 +274,15 @@ public class ImageBox extends JPanel {
 
     private void btnCloneMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloneMouseReleased
         if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
-            int option = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showOptionDialog(WildLogApp.getApplication().getMainFrame(), 
-                            "Choose where the file should be moved.", 
-                            "Duplicate And Move", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                            null, new String[]{"Duplicate to a New Observation", "Duplicate to the Same Observation", 
-                                               "Duplicate and move Up", "Duplicate and move Down"}, null);
-                }
-            });
+            int option = WLOptionPane.showOptionDialog(WildLogApp.getApplication().getMainFrame(), 
+                    "Choose where the file should be moved.", 
+                    "Duplicate And Move", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                    null, new String[]{
+                        "Duplicate to a New Observation", 
+                        "Duplicate to the Same Observation", 
+                        "Duplicate and move Up", 
+                        "Duplicate and move Down"}, 
+                    null);
             if (option != JOptionPane.CLOSED_OPTION) {
                 if (option == 0) {
                     // Make sure to call stop editing after getting the row and col
@@ -363,14 +362,9 @@ public class ImageBox extends JPanel {
 
     private void btnRemoveMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRemoveMouseReleased
         if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
-                            "Are you sure you want to remove the file from the Observation and add it to the Period?", 
-                            "Move File To Period?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                }
-            });
+            int result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
+                    "Are you sure you want to remove the file from the Observation and add it to the Period?", 
+                    "Move File To Period?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
                 bulkUploadPanel.addVisitFile(imageWrapper.getFile());
                 btnRemoveActionPerformed(null);

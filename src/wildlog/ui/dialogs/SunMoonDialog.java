@@ -23,6 +23,7 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.SpinnerFixer;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 
@@ -105,15 +106,11 @@ public class SunMoonDialog extends JDialog {
                 lblMoonset.setText(MoonTimes.getMoonset(date, lat, lon));
             }
             else {
-                getGlassPane().setVisible(true);
-                JOptionPane.showMessageDialog(this, "Please select a valid date.", "Date Error", JOptionPane.ERROR_MESSAGE);
-                getGlassPane().setVisible(false);
+                WLOptionPane.showMessageDialog(this, "Please select a valid date.", "Date Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(this, "Please select a valid GPS point.", "GPS Error", JOptionPane.ERROR_MESSAGE);
-            getGlassPane().setVisible(false);
+            WLOptionPane.showMessageDialog(this, "Please select a valid GPS point.", "GPS Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

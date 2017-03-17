@@ -33,6 +33,7 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.renderers.WorkspaceTreeCellRenderer;
 import wildlog.ui.helpers.renderers.WorkspaceTreeDataWrapper;
 import wildlog.utils.UtilsConcurency;
@@ -349,15 +350,10 @@ public class WorkspaceImportDialog extends JDialog {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
 // TODO: Improve error handeling and feedback
         if (txtPrefix.getText() == null || txtPrefix.getText().isEmpty()) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(this, new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                     "<html>It is highly recommended to provide a unique prefix for the imported data, to help provent conflicts."
-                    + "<br/>Are you sure you want to continue?</html>",
+                            + "<br/>Are you sure you want to continue?</html>",
                     "WARNING: Importing Without Prefix", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-                }
-            });
             if (result != JOptionPane.YES_OPTION) {
                 return;
             }
@@ -400,11 +396,9 @@ public class WorkspaceImportDialog extends JDialog {
         }
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(app.getMainFrame(),
+            WLOptionPane.showMessageDialog(app.getMainFrame(),
                     "Could not import the Workspace successfully.",
                     "Import Workspace Error", JOptionPane.ERROR_MESSAGE);
-            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
