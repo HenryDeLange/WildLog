@@ -56,38 +56,42 @@
                   <Component id="cmbElementTypesBrowseTab" alignment="0" min="-2" pref="214" max="-2" attributes="1"/>
               </Group>
               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-              <Component id="scrTextArea" pref="185" max="375" attributes="0"/>
+              <Component id="scrTextArea" pref="202" max="375" attributes="0"/>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="btnBrowsePrev" min="-2" pref="45" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                      <Component id="lblNumberOfImages" min="-2" pref="65" max="-2" attributes="0"/>
+                      <Component id="lblNumberOfImages" pref="65" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                       <Component id="btnBrowseNext" min="-2" pref="45" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                      <Component id="btnZoomIn" min="-2" pref="75" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                      <Component id="btnZoomOut" min="-2" pref="75" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnRotate" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <Component id="btnZoomIn" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <Component id="btnZoomOut" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <Component id="btnAddFile" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <Component id="btnDeleteFile" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <Component id="btnViewEXIF" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="21" max="32767" attributes="0"/>
                       <Component id="btnCopyImage" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <EmptySpace pref="21" max="32767" attributes="0"/>
                       <Component id="btnViewImage" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="btnDefault" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                      <EmptySpace pref="27" max="32767" attributes="0"/>
                       <Component id="btnSetDefaultElementImage" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="btnSetDefaultLocationImage" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="btnSetDefaultVisitImage" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnViewEXIF" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnRotate" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="imgBrowsePhotos" alignment="0" max="32767" attributes="2"/>
+                  <Component id="b" alignment="0" max="32767" attributes="2"/>
               </Group>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
           </Group>
@@ -100,13 +104,13 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnDefault" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="btnSetDefaultElementImage" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="btnSetDefaultLocationImage" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="btnSetDefaultVisitImage" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="btnViewEXIF" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnDefault" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="btnSetDefaultElementImage" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="btnSetDefaultLocationImage" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="btnSetDefaultVisitImage" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="btnRotate" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="btnBrowsePrev" pref="35" max="32767" attributes="0"/>
@@ -116,15 +120,17 @@
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="btnViewImage" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                               <Component id="btnCopyImage" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="btnViewEXIF" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnAddFile" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="btnDeleteFile" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="btnZoomOut" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                               <Component id="btnZoomIn" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                              <Component id="btnRotate" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                      <Component id="imgBrowsePhotos" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                      <Component id="b" max="32767" attributes="0"/>
                   </Group>
                   <Component id="scrTextArea" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
@@ -385,9 +391,8 @@
           <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Delete_Small.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/ZoomOut.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Zoom Out"/>
         <Property name="toolTipText" type="java.lang.String" value="Zoom the image out."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -475,10 +480,9 @@
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
-        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/ZoomIn.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Zoom In"/>
         <Property name="toolTipText" type="java.lang.String" value="Zoom the image in."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -494,7 +498,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnZoomInActionPerformed"/>
       </Events>
     </Component>
-    <Container class="org.jdesktop.swingx.JXImageView" name="imgBrowsePhotos">
+    <Container class="org.jdesktop.swingx.JXImageView" name="b">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="0" type="rgb"/>
@@ -642,7 +646,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Show EXIF Data"/>
+        <Property name="text" type="java.lang.String" value="EXIF"/>
         <Property name="toolTipText" type="java.lang.String" value="View the EXIF metadata for the image."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -651,7 +655,7 @@
         <Property name="focusable" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[2, 2, 2, 2]"/>
+          <Insets value="[2, 4, 2, 4]"/>
         </Property>
       </Properties>
       <Events>
@@ -679,6 +683,52 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCopyImageActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnAddFile">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Add.gif"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Zoom the image in."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
+        <Property name="iconTextGap" type="int" value="2"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 2, 2, 2]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddFileActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnDeleteFile">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Delete.gif"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Zoom the image out."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
+        <Property name="iconTextGap" type="int" value="2"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 2, 2, 2]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteFileActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

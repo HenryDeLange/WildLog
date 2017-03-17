@@ -107,7 +107,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         app = inApp;
         tabbedPanel = inTabbedPanel;
         initComponents();
-        imgBrowsePhotos.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+        b.setCursor(new Cursor(Cursor.MOVE_CURSOR));
         // Set some configuration for the tree browser
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer());
@@ -166,7 +166,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnBrowseNext = new javax.swing.JButton();
         btnBrowsePrev = new javax.swing.JButton();
         btnZoomIn = new javax.swing.JButton();
-        imgBrowsePhotos = new org.jdesktop.swingx.JXImageView();
+        b = new org.jdesktop.swingx.JXImageView();
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
         btnGoBrowseSelection = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -176,6 +176,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultVisitImage = new javax.swing.JButton();
         btnViewEXIF = new javax.swing.JButton();
         btnCopyImage = new javax.swing.JButton();
+        btnAddFile = new javax.swing.JButton();
+        btnDeleteFile = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 213, 186));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -308,8 +310,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         scrTextArea.setViewportView(txtBrowseInfo);
 
         btnZoomOut.setBackground(new java.awt.Color(204, 213, 186));
-        btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
-        btnZoomOut.setText("Zoom Out");
+        btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ZoomOut.png"))); // NOI18N
         btnZoomOut.setToolTipText("Zoom the image out.");
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setFocusPainted(false);
@@ -363,8 +364,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnZoomIn.setBackground(new java.awt.Color(204, 213, 186));
-        btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
-        btnZoomIn.setText("Zoom In");
+        btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ZoomIn.png"))); // NOI18N
         btnZoomIn.setToolTipText("Zoom the image in.");
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setFocusPainted(false);
@@ -377,17 +377,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        imgBrowsePhotos.setBackground(new java.awt.Color(0, 0, 0));
-        imgBrowsePhotos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        b.setBackground(new java.awt.Color(0, 0, 0));
+        b.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout imgBrowsePhotosLayout = new javax.swing.GroupLayout(imgBrowsePhotos);
-        imgBrowsePhotos.setLayout(imgBrowsePhotosLayout);
-        imgBrowsePhotosLayout.setHorizontalGroup(
-            imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout bLayout = new javax.swing.GroupLayout(b);
+        b.setLayout(bLayout);
+        bLayout.setHorizontalGroup(
+            bLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        imgBrowsePhotosLayout.setVerticalGroup(
-            imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        bLayout.setVerticalGroup(
+            bLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -469,13 +469,13 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnViewEXIF.setBackground(new java.awt.Color(204, 213, 186));
         btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
-        btnViewEXIF.setText("Show EXIF Data");
+        btnViewEXIF.setText("EXIF");
         btnViewEXIF.setToolTipText("View the EXIF metadata for the image.");
         btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewEXIF.setFocusPainted(false);
         btnViewEXIF.setFocusable(false);
         btnViewEXIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewEXIF.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnViewEXIF.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnViewEXIF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewEXIFActionPerformed(evt);
@@ -493,6 +493,34 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnCopyImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCopyImageActionPerformed(evt);
+            }
+        });
+
+        btnAddFile.setBackground(new java.awt.Color(204, 213, 186));
+        btnAddFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
+        btnAddFile.setToolTipText("Zoom the image in.");
+        btnAddFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddFile.setFocusPainted(false);
+        btnAddFile.setFocusable(false);
+        btnAddFile.setIconTextGap(2);
+        btnAddFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnAddFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddFileActionPerformed(evt);
+            }
+        });
+
+        btnDeleteFile.setBackground(new java.awt.Color(204, 213, 186));
+        btnDeleteFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnDeleteFile.setToolTipText("Zoom the image out.");
+        btnDeleteFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteFile.setFocusPainted(false);
+        btnDeleteFile.setFocusable(false);
+        btnDeleteFile.setIconTextGap(2);
+        btnDeleteFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnDeleteFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteFileActionPerformed(evt);
             }
         });
 
@@ -522,36 +550,40 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3)
-                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 185, 375)
+                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 202, 375)
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnBrowsePrev, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(1, 1, 1)
-                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
                         .addGap(1, 1, 1)
                         .addComponent(btnBrowseNext, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(4, 4, 4)
-                        .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRotate)
-                        .addGap(5, 5, 5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(btnAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btnDeleteFile, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                        .addComponent(btnViewEXIF)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addComponent(btnCopyImage)
-                        .addGap(3, 3, 3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                         .addComponent(btnViewImage))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnDefault)
-                        .addGap(2, 2, 2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                         .addComponent(btnSetDefaultElementImage)
                         .addGap(2, 2, 2)
                         .addComponent(btnSetDefaultLocationImage)
                         .addGap(2, 2, 2)
                         .addComponent(btnSetDefaultVisitImage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnViewEXIF))
-                    .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnRotate))
+                    .addComponent(b, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
@@ -561,12 +593,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnDefault, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSetDefaultElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSetDefaultLocationImage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSetDefaultVisitImage, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnViewEXIF))
-                        .addGap(3, 3, 3)
+                            .addComponent(btnDefault, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSetDefaultElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSetDefaultLocationImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSetDefaultVisitImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(btnBrowsePrev, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
@@ -574,13 +606,15 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnCopyImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnCopyImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteFile, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(2, 2, 2)
-                        .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(1, 1, 1)
+                        .addComponent(b, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -620,7 +654,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -645,7 +679,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(true);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -669,7 +703,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -837,57 +871,63 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnRefreshDatesActionPerformed
 
     private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
-        imgBrowsePhotos.setScale(imgBrowsePhotos.getScale()/1.5);
+        b.setScale(b.getScale()/1.5);
     }//GEN-LAST:event_btnZoomOutActionPerformed
 
     private void btnDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDefaultActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = UtilsImageProcessing.setMainImage(tempLocation.getWildLogFileID(), imageIndex, app);
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
+                if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
+                    Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                    imageIndex = UtilsImageProcessing.setMainImage(tempLocation.getWildLogFileID(), imageIndex, app);
+                }
+                else
+                if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
+                    Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                    imageIndex = UtilsImageProcessing.setMainImage(tempElement.getWildLogFileID(), imageIndex, app);
+                }
+                else
+                if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                    Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                    imageIndex = UtilsImageProcessing.setMainImage(tempVisit.getWildLogFileID(), imageIndex, app);
+                }
+                else
+                if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                    SightingWrapper tempSightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                    imageIndex = UtilsImageProcessing.setMainImage(tempSightingWrapper.getSighting().getWildLogFileID(), imageIndex, app);
+                }
+                imageIndex--;
+                btnBrowseNextActionPerformed(evt);
             }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = UtilsImageProcessing.setMainImage(tempElement.getWildLogFileID(), imageIndex, app);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = UtilsImageProcessing.setMainImage(tempVisit.getWildLogFileID(), imageIndex, app);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                SightingWrapper tempSightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = UtilsImageProcessing.setMainImage(tempSightingWrapper.getSighting().getWildLogFileID(), imageIndex, app);
-            }
-            imageIndex--;
-            btnBrowseNextActionPerformed(evt);
         }
     }//GEN-LAST:event_btnDefaultActionPerformed
 
     private void btnBrowseNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseNextActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-            DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-            if (temp != null) {
-                List<WildLogFile> fotos = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
-                loadNextFile(fotos);
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
+                DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                if (temp != null) {
+                    List<WildLogFile> fotos = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
+                    loadNextFile(fotos);
+                }
             }
         }
     }//GEN-LAST:event_btnBrowseNextActionPerformed
 
     private void btnBrowsePrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowsePrevActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-            DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-            if (temp != null) {
-                List<WildLogFile> fotos = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
-                loadPrevFile(fotos);
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
+                DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                if (temp != null) {
+                    List<WildLogFile> fotos = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
+                    loadPrevFile(fotos);
+                }
             }
         }
     }//GEN-LAST:event_btnBrowsePrevActionPerformed
 
     private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
-        imgBrowsePhotos.setScale(imgBrowsePhotos.getScale()*1.5);
+        b.setScale(b.getScale()*1.5);
     }//GEN-LAST:event_btnZoomInActionPerformed
 
     private void btnGoBrowseSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBrowseSelectionActionPerformed
@@ -1161,7 +1201,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     public int showDialog() {
                                         return JOptionPane.showConfirmDialog(app.getMainFrame(),
                                             "Are you sure you want to delete this Place? This will delete all Periods, Observations and files linked to the Place as well.",
-                                            "Delete Place", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                            "Delete Place?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                                     }
                                 });
                                 if (result == JOptionPane.YES_OPTION) {
@@ -1185,7 +1225,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     public int showDialog() {
                                         return JOptionPane.showConfirmDialog(app.getMainFrame(),
                                             "Are you sure you want to delete this Creature? This will delete all Observations and files linked to the Creature as well.",
-                                            "Delete Creature", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                            "Delete Creature?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                                     }
                                 });
                                 if (result == JOptionPane.YES_OPTION) {
@@ -1209,7 +1249,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     public int showDialog() {
                                         return JOptionPane.showConfirmDialog(app.getMainFrame(),
                                             "Are you sure you want to delete this Period? This will delete all Observations and files linked to the Period as well.",
-                                            "Delete Period", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                            "Delete Period?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                                     }
                                 });
                                 if (result == JOptionPane.YES_OPTION) {
@@ -1233,7 +1273,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     public int showDialog() {
                                         return JOptionPane.showConfirmDialog(app.getMainFrame(),
                                             "Are you sure you want to delete this Observation? This will delete all files linked to the Observation as well.",
-                                            "Delete Observation", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                            "Delete Observation?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                                     }
                                 });
                                 if (result == JOptionPane.YES_OPTION) {
@@ -1588,6 +1628,52 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_btnCopyImageActionPerformed
 
+    private void btnAddFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddFileActionPerformed
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
+                DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                if (temp != null) {
+                    List<File> files = UtilsFileProcessing.showFileUploadDialog(app, app.getMainFrame());
+                    UtilsFileProcessing.performFileUpload(temp,
+                        Paths.get(temp.getWildLogFileID()),
+                        files.toArray(new File[files.size()]),
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                doTheRefresh(null);
+                            }
+                        }, 
+                        app, true, null, true, true);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnAddFileActionPerformed
+
+    private void btnDeleteFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteFileActionPerformed
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
+                DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                if (temp != null) {
+                    List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
+                    if (!lstFiles.isEmpty()) {
+                        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                        "Are you sure you want to delete the current File?",
+                                        "Delete File?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                            }
+                        });
+                        if (result == JOptionPane.YES_OPTION) {
+                            app.getDBI().deleteWildLogFile(lstFiles.get(imageIndex).getDBFilePath());
+                            doTheRefresh(null);
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnDeleteFileActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         List<Location> locations = app.getDBI().listLocations(null, Location.class);
@@ -1674,9 +1760,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void noFiles() {
         try {
-            imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+            b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
             lblNumberOfImages.setText("0 of 0");
-            imgBrowsePhotos.setToolTipText("");
+            b.setToolTipText("");
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -1685,9 +1771,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void lookupCachedImage(final List<WildLogFile> inFiles) throws IOException {
         // Maak die finale grote twee keer groter om te help met die zoom, dan hoef ek nie weer images te load nie, en mens kan altyd dan original kyk vir ful resolution
-        int size = (int) imgBrowsePhotos.getSize().getWidth();
-        if (size > (int) imgBrowsePhotos.getSize().getHeight()) {
-            size = (int) imgBrowsePhotos.getSize().getHeight();
+        int size = (int) b.getSize().getWidth();
+        if (size > (int) b.getSize().getHeight()) {
+            size = (int) b.getSize().getHeight();
         }
         final int finalSize = size*2;
         final Map<String, Image> newPreloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
@@ -1705,7 +1791,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             String tempKey = inFiles.get(imageIndex).getAbsolutePath().toString();
             if (!preloadedImages.containsKey(tempKey)) {
                 // The image will be loaded, so setup the loading screen so long.
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/Loading.png"));
+                b.setImage(app.getClass().getResource("resources/icons/Loading.png"));
             }
             int t = startIndex;
             for (; t < inFiles.size() && t < startIndex + CACHE_LIMIT_FOR_SELECTED_NODE; t++) {
@@ -1821,12 +1907,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.MOVIE)) {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/Movie.png"));
+                        b.setImage(app.getClass().getResource("resources/icons/Movie.png"));
                         lookupCachedImage(inFotos);
                     }
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.OTHER)) {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
+                        b.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
                         lookupCachedImage(inFotos);
                     }
                 }
@@ -1834,12 +1920,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 finally {
-                    imgBrowsePhotos.setToolTipText(inFotos.get(imageIndex).getFilename());
+                    b.setToolTipText(inFotos.get(imageIndex).getFilename());
                 }
             }
             else {
                 try {
-                    imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                    b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                     lblNumberOfImages.setText("0 of 0");
                     lookupCachedImage(inFotos);
                 }
@@ -1847,20 +1933,20 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 finally {
-                    imgBrowsePhotos.setToolTipText("");
+                    b.setToolTipText("");
                 }
             }
         }
         else {
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             finally {
-                imgBrowsePhotos.setToolTipText("");
+                b.setToolTipText("");
             }
         }
     }
@@ -1869,46 +1955,46 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         // Only display the image if it is the current active node.
         // (This is to prevent old node's files that finished after the active node from overwriting the displayed image.)
         if (inImageIndex == imageIndex && treBrowsePhoto.getLastSelectedPathComponent() == inSelectedNode) {
-            imgBrowsePhotos.setImage(inImage);
+            b.setImage(inImage);
             double ratio;
             // Adjust the longest side's size
             int imageWidth = inImage.getWidth(null);
             int imageHeight = inImage.getHeight(null);
             if (imageHeight >= imageWidth) {
                 // Portrait image
-                if (imageHeight >= imgBrowsePhotos.getHeight()) {
-                    ratio = (double)imageHeight/imgBrowsePhotos.getHeight();
+                if (imageHeight >= b.getHeight()) {
+                    ratio = (double)imageHeight/b.getHeight();
                 }
                 else {
-                    ratio = (double)imgBrowsePhotos.getHeight()/imageHeight;
+                    ratio = (double)b.getHeight()/imageHeight;
                 }
             }
             else {
                 // Landscape image
-                if (imageWidth >= imgBrowsePhotos.getWidth()) {
-                    ratio = (double)imageWidth/imgBrowsePhotos.getWidth();
+                if (imageWidth >= b.getWidth()) {
+                    ratio = (double)imageWidth/b.getWidth();
                 }
                 else {
-                    ratio = (double)imgBrowsePhotos.getWidth()/imageWidth;
+                    ratio = (double)b.getWidth()/imageWidth;
                 }
             }
             // Check the shortest side's sizes to make sure they also fit into the display size (since it isn't a square)
             imageWidth = (int) (inImage.getWidth(null)/ratio);
             imageHeight = (int) (inImage.getHeight(null)/ratio);
-            if (imgBrowsePhotos.getHeight() >= imageWidth) {
+            if (b.getHeight() >= imageWidth) {
                 // Portrait image
-                if (imageWidth >= imgBrowsePhotos.getWidth()) {
-                    ratio = ratio*(double)imageWidth/imgBrowsePhotos.getWidth();
+                if (imageWidth >= b.getWidth()) {
+                    ratio = ratio*(double)imageWidth/b.getWidth();
                 }
             }
             else {
                 // Landscape image
-                if (imageHeight >= imgBrowsePhotos.getHeight()) {
-                    ratio = ratio*(double)imageHeight/imgBrowsePhotos.getHeight();
+                if (imageHeight >= b.getHeight()) {
+                    ratio = ratio*(double)imageHeight/b.getHeight();
                 }
             }
             // Adjust the scale of the image to fit
-            imgBrowsePhotos.setScale(1/ratio);
+            b.setScale(1/ratio);
         }
     }
 
@@ -2042,10 +2128,13 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXImageView b;
+    private javax.swing.JButton btnAddFile;
     private javax.swing.JButton btnBrowseNext;
     private javax.swing.JButton btnBrowsePrev;
     private javax.swing.JButton btnCopyImage;
     private javax.swing.JButton btnDefault;
+    private javax.swing.JButton btnDeleteFile;
     private javax.swing.JButton btnGoBrowseSelection;
     private javax.swing.JButton btnRefreshBrowseTree;
     private javax.swing.JButton btnRefreshDates;
@@ -2061,7 +2150,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private javax.swing.JComboBox cmbElementTypesBrowseTab;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
-    private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblNumberOfImages;
     private javax.swing.JRadioButton rdbBrowseDate;

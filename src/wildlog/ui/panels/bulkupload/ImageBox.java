@@ -180,7 +180,7 @@ public class ImageBox extends JPanel {
         add(btnClone, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 205, 70, 30));
 
         btnZoom.setBackground(new java.awt.Color(235, 246, 220));
-        btnZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Search.gif"))); // NOI18N
+        btnZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ZoomIn.png"))); // NOI18N
         btnZoom.setToolTipText("Show zoom popup for the image.");
         btnZoom.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoom.setFocusPainted(false);

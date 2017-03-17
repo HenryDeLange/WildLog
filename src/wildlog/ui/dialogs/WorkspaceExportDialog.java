@@ -114,6 +114,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         chkIncludeWildLogApp = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
         chkDefaultDestinationFolder = new javax.swing.JCheckBox();
+        rdbExportDefaultImagesOnly = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Export To A New Workspace");
@@ -148,7 +149,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
         grpFiles.add(rdbExportAllFiles);
         rdbExportAllFiles.setSelected(true);
-        rdbExportAllFiles.setText("Export All Files");
+        rdbExportAllFiles.setText("All Files");
         rdbExportAllFiles.setToolTipText("Include all files in the new Workspace.");
         rdbExportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportAllFiles.setFocusPainted(false);
@@ -159,7 +160,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         });
 
         grpFiles.add(rdbExportImagesOnly);
-        rdbExportImagesOnly.setText("Export Images Only");
+        rdbExportImagesOnly.setText("Images Only");
         rdbExportImagesOnly.setToolTipText("Include only image files in the new Workspace.");
         rdbExportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportImagesOnly.setFocusPainted(false);
@@ -170,7 +171,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         });
 
         grpFiles.add(rdbExportNoFiles);
-        rdbExportNoFiles.setText("Export No Files");
+        rdbExportNoFiles.setText("No Files");
         rdbExportNoFiles.setToolTipText("Don't include any files in the new Workspace.");
         rdbExportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportNoFiles.setFocusPainted(false);
@@ -263,6 +264,17 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         chkDefaultDestinationFolder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkDefaultDestinationFolder.setFocusPainted(false);
 
+        grpFiles.add(rdbExportDefaultImagesOnly);
+        rdbExportDefaultImagesOnly.setText("Default Files Only");
+        rdbExportDefaultImagesOnly.setToolTipText("Include only the default (first) file in the new Workspace.");
+        rdbExportDefaultImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbExportDefaultImagesOnly.setFocusPainted(false);
+        rdbExportDefaultImagesOnly.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbExportDefaultImagesOnlyActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -285,8 +297,10 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(rdbExportImagesOnly)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rdbExportDefaultImagesOnly)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(rdbExportNoFiles)
-                                        .addGap(2, 2, 2)
+                                        .addGap(6, 6, 6)
                                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(2, 2, 2)
                                         .addComponent(rdbExportOriginalImages)
@@ -335,7 +349,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                 .addComponent(rdbExportAllFiles)
                                 .addComponent(rdbExportImagesOnly)
                                 .addComponent(rdbExportNoFiles)
-                                .addComponent(rdbExportThumbnails))
+                                .addComponent(rdbExportThumbnails)
+                                .addComponent(rdbExportDefaultImagesOnly))
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -628,6 +643,9 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     wildLogFile.setFilename(destination.getFileName().toString());
                     inNewDBI.createWildLogFile(wildLogFile);
                 }
+                if (rdbExportDefaultImagesOnly.isSelected()) {
+                    break;
+                }
             }
         }
     }
@@ -702,6 +720,13 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             loadElementTree();
         }
     }//GEN-LAST:event_rdbOrderByElementActionPerformed
+
+    private void rdbExportDefaultImagesOnlyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbExportDefaultImagesOnlyActionPerformed
+        if (rdbExportDefaultImagesOnly.isSelected()) {
+           rdbExportOriginalImages.setEnabled(true);
+           rdbExportThumbnails.setEnabled(true);
+       }
+    }//GEN-LAST:event_rdbExportDefaultImagesOnlyActionPerformed
 
     private void loadLocationTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
@@ -871,6 +896,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JRadioButton rdbExportAllFiles;
+    private javax.swing.JRadioButton rdbExportDefaultImagesOnly;
     private javax.swing.JRadioButton rdbExportImagesOnly;
     private javax.swing.JRadioButton rdbExportNoFiles;
     private javax.swing.JRadioButton rdbExportOriginalImages;
