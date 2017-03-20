@@ -61,6 +61,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(this, null);
     }
 
     /** This method is called from within the constructor to
@@ -336,7 +337,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 //    }
     
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        WLOptionPane.showMessageDialog(getParent(), 
+        WLOptionPane.showMessageDialog(this, 
                 "For best results: "
                         + "\n1) Resize the window containing the report to be as small as possible before printing. "
                         + "\n2) Use landscape orientation. "
@@ -351,15 +352,15 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                     printerJob.endJob();
                 }
                 else {
-                    WLOptionPane.showMessageDialog(getParent(), "The print job failed.", "Print Error", JOptionPane.ERROR_MESSAGE);
+                    WLOptionPane.showMessageDialog(this, "The print job failed.", "Print Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
             else {
-                WLOptionPane.showMessageDialog(getParent(), "Could not setup the printer.", "Print Error", JOptionPane.ERROR_MESSAGE);
+                WLOptionPane.showMessageDialog(this, "Could not setup the printer.", "Print Error", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
-            WLOptionPane.showMessageDialog(getParent(), "No printer was found.", "Print Error", JOptionPane.ERROR_MESSAGE);
+            WLOptionPane.showMessageDialog(this, "No printer was found.", "Print Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnPrintActionPerformed
 

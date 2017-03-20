@@ -1450,9 +1450,10 @@ public final class WildLogView extends JFrame {
 
     private void mnuMapStartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMapStartMenuItemActionPerformed
         WildLogOptions options = app.getWildLogOptions();
-        String inputLat = WLOptionPane.showInputDialog(app.getMainFrame(),
+        String inputLat = (String) WLOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the default Latitude to use for the map. (As decimal degrees, for example -33.4639)",
-                options.getDefaultLatitude());
+                "Default Latitude", JOptionPane.QUESTION_MESSAGE,  
+                null, null, options.getDefaultLatitude());
         if (inputLat != null) {
             try {
                 options.setDefaultLatitude(Double.parseDouble(inputLat));
@@ -1461,9 +1462,10 @@ public final class WildLogView extends JFrame {
                 // Do Nothing
             }
         }
-        String inputLon = WLOptionPane.showInputDialog(app.getMainFrame(),
+        String inputLon = (String) WLOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the default Longitude to use for the map. (As decimal degrees, for example 20.9562)",
-                options.getDefaultLongitude());
+                "Default Longitude", JOptionPane.QUESTION_MESSAGE,  
+                null, null, options.getDefaultLongitude());
         if (inputLon != null) {
             try {
                 options.setDefaultLongitude(Double.parseDouble(inputLon));
@@ -1962,25 +1964,30 @@ public final class WildLogView extends JFrame {
             // Lock the input/display and show busy message
             // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
             tabbedPanel.setSelectedIndex(0);
-            JPanel panel = new JPanel(new AbsoluteLayout());
-            panel.setPreferredSize(new Dimension(400, 50));
-            panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
-            JLabel label = new JLabel("<html>Busy cleaning Workspace. Please be patient, this might take a while. <br/>"
-                    + "Don't close the application until the process is finished.</html>");
-            label.setFont(new Font("Tahoma", Font.BOLD, 12));
-            label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
-            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-            panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
-            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
-            JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
-            glassPane.removeAll();
-            glassPane.setLayout(new BorderLayout(100, 100));
-            glassPane.add(panel, BorderLayout.CENTER);
-            glassPane.addMouseListener(new MouseAdapter() {});
-            glassPane.addKeyListener(new KeyAdapter() {});
-            app.getMainFrame().setGlassPane(glassPane);
-            app.getMainFrame().getGlassPane().setVisible(true);
-            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    JPanel panel = new JPanel(new AbsoluteLayout());
+                    panel.setPreferredSize(new Dimension(400, 50));
+                    panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
+                    JLabel label = new JLabel("<html>Busy cleaning Workspace. Please be patient, this might take a while. <br/>"
+                            + "Don't close the application until the process is finished.</html>");
+                    label.setFont(new Font("Tahoma", Font.BOLD, 12));
+                    label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
+                    panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+                    panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
+                    panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+                    JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
+                    glassPane.removeAll();
+                    glassPane.setLayout(new BorderLayout(100, 100));
+                    glassPane.add(panel, BorderLayout.CENTER);
+                    glassPane.addMouseListener(new MouseAdapter() {});
+                    glassPane.addKeyListener(new KeyAdapter() {});
+                    app.getMainFrame().setGlassPane(glassPane);
+                    app.getMainFrame().getGlassPane().setVisible(true);
+                    app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                }
+            });
             // Start the process in another thread to allow the UI to update correctly and use the progressbar for feedback
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
@@ -2311,6 +2318,7 @@ public final class WildLogView extends JFrame {
                                             + "Changed " + oldDate
                                             + " to " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(actualFileDate));
                                     wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
+                                    app.getDBI().updateWildLogFile(wildLogFile);
                                     filesWithIncorrectDate++;
                                 }
                             }
@@ -2321,6 +2329,7 @@ public final class WildLogView extends JFrame {
                                     finalHandleFeedback.println("+RESOLVED: Updated the database File Size value of the file record. "
                                             + "Changed " + wildLogFile.getFileSize() + " to " + actualFileSize);
                                     wildLogFile.setFileSize(actualFileSize);
+                                    app.getDBI().updateWildLogFile(wildLogFile);
                                     filesWithIncorrectSize++;
                                 }
                             }
@@ -3254,9 +3263,10 @@ public final class WildLogView extends JFrame {
     private void mnuChangeWorkspaceNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceNameActionPerformed
         WildLogOptions options = app.getWildLogOptions();
         String oldName = options.getWorkspaceName();
-        String userInput = WLOptionPane.showInputDialog(app.getMainFrame(),
+        String userInput = (String) WLOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the new Workspace name:",
-                options.getWorkspaceName());
+                "Workspace Name", JOptionPane.QUESTION_MESSAGE,  
+                null, null, options.getWorkspaceName());
         if (userInput != null && !userInput.trim().isEmpty()) {
             options.setWorkspaceName(userInput.trim());
             if (options.getWorkspaceName().length() > 50) {

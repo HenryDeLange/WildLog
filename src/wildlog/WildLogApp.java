@@ -616,7 +616,7 @@ public class WildLogApp extends Application {
                     });
                     editorPane.setEditable(false);
                     editorPane.setBackground(label.getBackground());
-                    WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                    WLOptionPane.showMessageDialog(getMainFrame(),
                             editorPane,
                             "A new WildLog update is available!", 
                             JOptionPane.INFORMATION_MESSAGE);

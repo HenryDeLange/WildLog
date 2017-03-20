@@ -56,6 +56,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private boolean isPopup = false;
     private PanelNeedsRefreshWhenDataChanges panelToRefresh;
 
+    
     public PanelVisit(WildLogApp inApp, Location inLocation, Visit inVisit, boolean inIsPopup, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         app = inApp;
         locationForVisit = inLocation;
@@ -120,6 +121,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void setupUI() {
         initComponents();
+        // Setup images
         imageIndex = 0;
         int fotoCount = app.getDBI().countWildLogFiles(null, visit.getWildLogFileID());
         if (fotoCount > 0) {
@@ -131,7 +133,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfImages.setText("0 of 0");
         }
         imageSightingIndex = 0;
-        //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
         // Setup the table
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
         UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);

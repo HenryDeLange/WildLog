@@ -40,6 +40,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.utils.UtilsUI;
 
 
 public final class UtilsDialog {
@@ -131,23 +132,25 @@ public final class UtilsDialog {
                 JTextPane txtPane = new JTextPane();
                 txtPane.setContentType("text/html");
                 txtPane.setEditable(false);
-                String temp = "";
+                String temp = "<html>";
+                // Note: Gebruik <p> en <div> eerder as <br /> want die <br /> copy nie reg na die clipboard toe nie...
                 try {
                     Metadata meta = JpegMetadataReader.readMetadata(inFile.toFile());
                     Iterator<Directory> directories = meta.getDirectories().iterator();
                     while (directories.hasNext()) {
                         Directory directory = directories.next();
-                        temp = temp + "<u><b>" + directory.getName() + "</b></u><br/>";
+                        temp = temp + "<p><u><b>" + directory.getName() + "</b></u></p>";
                         Collection<Tag> tags = directory.getTags();
                         for (Tag tag : tags) {
                             String name = tag.getTagName();
                             String description = tag.getDescription();
-                            temp = temp + "<b>" + name + ":</b> " + description + "<br/>";
+                            temp = temp + "<div><b>" + name + ":</b> " + description + "</div>";
                         }
-                        temp = temp + "<br/>";
+                        temp = temp + "<div></div>";
                     }
-                    txtPane.setText(temp);
+                    txtPane.setText(temp + "</html>");
                     txtPane.setCaretPosition(0);
+                    UtilsUI.attachClipboardPopup(txtPane, true);
                     JScrollPane scroll = new JScrollPane(txtPane);
                     scroll.setPreferredSize(new Dimension(580, 750));
                     frame.getContentPane().add(scroll);

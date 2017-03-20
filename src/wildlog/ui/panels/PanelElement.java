@@ -67,6 +67,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private boolean isPopup = false;
     private PanelNeedsRefreshWhenDataChanges panelToRefresh;
 
+    
     public PanelElement(WildLogApp inApp, Element inElement, boolean inIsPopup, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         app = inApp;
         element = inElement;
@@ -101,6 +102,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void setupUI() {
         initComponents();
+        // Setup images
         imageIndex = 0;
         int fotoCount = app.getDBI().countWildLogFiles(null, element.getWildLogFileID());
         if (fotoCount > 0) {
@@ -110,11 +112,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
         }
         setupNumberOfImages();
-
         // Setup the table
         tblLocation.getTableHeader().setReorderingAllowed(false);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
-
+        // Fix spinners
         fixSelectAllForSpinners(spnSizeMaleMin);
         fixSelectAllForSpinners(spnSizeMaleMax);
         fixSelectAllForSpinners(spnSizeFemaleMin);
@@ -123,7 +124,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         fixSelectAllForSpinners(spnWeightMaleMax);
         fixSelectAllForSpinners(spnWeightFemaleMin);
         fixSelectAllForSpinners(spnWeightFemaleMax);
-
         // setup the file dropping
         if (!isPopup) {
             FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
@@ -136,7 +136,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 }
             });
         }
-
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtPrimaryName);
         UtilsUI.attachClipboardPopup(txtScienceName);
@@ -158,7 +157,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         UtilsUI.attachClipboardPopup((JTextComponent)spnWeightFemaleMin.getEditor().getComponent(0));
         UtilsUI.attachClipboardPopup((JTextComponent)spnWeightMaleMax.getEditor().getComponent(0));
         UtilsUI.attachClipboardPopup((JTextComponent)spnWeightMaleMin.getEditor().getComponent(0));
-
         // Setup info for tab headers
         tabTitle = element.getPrimaryName();
         tabIconURL = app.getClass().getResource("resources/icons/Element.gif");
@@ -1745,7 +1743,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
                     Toolkit.getDefaultToolkit().beep();
                 }
-                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                WLOptionPane.showMessageDialog(getTopLevelAncestor(),
                         "<html>A match was found for the Scientific Name at the IUCN Red List web site."
                                 + "<br/>Common Name: " + data.getResult().get(0).getMain_common_name()
                                 + "<br/>Category: " + data.getResult().get(0).getCategory()
@@ -1754,13 +1752,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         "Found Red List Category", JOptionPane.INFORMATION_MESSAGE);
             }
             else {
-                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                WLOptionPane.showMessageDialog(getTopLevelAncestor(),
                         "No threatened category was found at the IUCN Red List web site for current Scientific Name.",
                         "No Red List Category Found", JOptionPane.WARNING_MESSAGE);
             }
         }
         else {
-            WLOptionPane.showMessageDialog(app.getMainFrame(),
+            WLOptionPane.showMessageDialog(getTopLevelAncestor(),
                     "Please provide a Scientific Name to use and then try again.",
                     "Scientific Name Required", JOptionPane.WARNING_MESSAGE);
         }
@@ -1790,7 +1788,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
                     Toolkit.getDefaultToolkit().beep();
                 }
-                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                WLOptionPane.showMessageDialog(getTopLevelAncestor(),
                         "<html>A match was found for the Scientific Name at the IUCN Red List web site."
                                 + "<br/>Common Name: " + data.getResult().get(0).getMain_common_name()
                                 + "<br/>Category: " + data.getResult().get(0).getCategory()
@@ -1799,13 +1797,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         "Found Red List Common Name", JOptionPane.INFORMATION_MESSAGE);
             }
             else {
-                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                WLOptionPane.showMessageDialog(getTopLevelAncestor(),
                         "No common name category was found at the IUCN Red List web site for current Scientific Name.",
                         "No Red List Common Name Found", JOptionPane.WARNING_MESSAGE);
             }
         }
         else {
-            WLOptionPane.showMessageDialog(app.getMainFrame(),
+            WLOptionPane.showMessageDialog(getTopLevelAncestor(),
                     "Please provide a Scientific Name to use and then try again.",
                     "Scientific Name Required", JOptionPane.WARNING_MESSAGE);
         }

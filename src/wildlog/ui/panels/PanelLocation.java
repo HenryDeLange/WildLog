@@ -54,8 +54,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     private Location lastSavedLocation;
     private boolean isPopup = false;
     private PanelNeedsRefreshWhenDataChanges panelToRefresh;
-//    private GPSDialog dialog;
 
+    
     public PanelLocation(WildLogApp inApp, Location inLocation, boolean inIsPopup, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         app = inApp;
         locationWL = inLocation;
@@ -114,6 +114,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void setupUI() {
         initComponents();
+        // Setup images
         imageIndex = 0;
         int fotoCount = app.getDBI().countWildLogFiles(null, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
@@ -123,12 +124,10 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
         }
         setupNumberOfImages();
-
         // Setup the tables
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
         UtilsTableGenerator.setupColumnResizingListener(tblVisit, 1);
-
         // setup the file dropping
         if (!isPopup) {
             FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
@@ -141,7 +140,6 @@ public class PanelLocation extends PanelCanSetupHeader {
                 }
             });
         }
-        
         // Select the values for the AccommodationType
         lstAccommodationType.clearSelection();
         if (locationWL.getAccommodationType() != null && !locationWL.getAccommodationType().isEmpty()) {
@@ -153,7 +151,6 @@ public class PanelLocation extends PanelCanSetupHeader {
                 }
             }
         }
-
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtName);
         UtilsUI.attachClipboardPopup(txtContactNumber);
@@ -162,7 +159,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         UtilsUI.attachClipboardPopup(txtDirections);
         UtilsUI.attachClipboardPopup(txtEmail);
         UtilsUI.attachClipboardPopup(txtWebsite);
-
         // Setup info for tab headers
         tabTitle = locationWL.getName();
         tabIconURL = app.getClass().getResource("resources/icons/Location.gif");

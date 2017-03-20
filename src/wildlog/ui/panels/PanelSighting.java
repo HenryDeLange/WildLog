@@ -2028,6 +2028,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         popup.pack();
         UtilsDialog.setDialogToCenter(this, popup);
         UtilsDialog.addModalBackgroundPanel(this, popup);
+        UtilsDialog.addModalBackgroundPanel(popup, null);
         UtilsDialog.addEscapeKeyListener(popup);
         popup.setVisible(true);
         popup.dispose();
