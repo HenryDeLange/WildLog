@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import org.apache.logging.log4j.Level;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -22,6 +21,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import netscape.javascript.JSException;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.maps.implementations.PointMap;
@@ -220,7 +220,8 @@ public class FilterGPSDialog extends JDialog {
                 }
             }
             catch (JSException ex) {
-                // Ignore these errors which can happen when pressing the OK button before the page was loaded
+                // Ignore most of these errors which can happen when pressing the OK button before the page was fully loaded
+                WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
             }
             catch (Exception ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

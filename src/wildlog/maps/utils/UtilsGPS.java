@@ -37,10 +37,10 @@ public final class UtilsGPS {
     public static double getDecimalDegree(Latitudes inLatitudes, int inDegrees, int inMinutes, double inSeconds) {
         if (inLatitudes != null) {
             if (inLatitudes.equals(Latitudes.SOUTH)) {
-                return -1.0*(inDegrees + (inMinutes + inSeconds/60.0)/60.0);
+                return -1.0*(Math.abs(inDegrees) + (inMinutes + inSeconds/60.0)/60.0);
             }
             if (inLatitudes.equals(Latitudes.NORTH)) {
-                return inDegrees + (inMinutes + inSeconds/60.0)/60.0;
+                return Math.abs(inDegrees) + (inMinutes + inSeconds/60.0)/60.0;
             }
             if (inLatitudes.equals(Latitudes.NONE)) {
                 if (inDegrees < 0.0) {
@@ -57,10 +57,10 @@ public final class UtilsGPS {
     public static double getDecimalDegree(Longitudes inLongitudes, int inDegrees, int inMinutes, double inSeconds) {
         if (inLongitudes != null) {
             if (inLongitudes.equals(Longitudes.EAST)) {
-                return inDegrees + (inMinutes + inSeconds/60.0)/60.0;
+                return Math.abs(inDegrees) + (inMinutes + inSeconds/60.0)/60.0;
             }
             if (inLongitudes.equals(Longitudes.WEST)) {
-                return -1.0*(inDegrees + (inMinutes + inSeconds/60.0)/60.0);
+                return -1.0*(Math.abs(inDegrees) + (inMinutes + inSeconds/60.0)/60.0);
             }
             if (inLongitudes.equals(Longitudes.NONE)) {
                 if (inDegrees < 0.0) {

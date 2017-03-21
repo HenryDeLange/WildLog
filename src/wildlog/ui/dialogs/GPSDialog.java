@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
+import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.Level;
 import org.geotools.data.DataSourceException;
@@ -49,6 +50,7 @@ import org.geotools.styling.Style;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.WildLogFile;
@@ -76,6 +78,9 @@ import wildlog.utils.WildLogPaths;
 
 
 public class GPSDialog extends JDialog {
+    private static final String DEFAULT_GPS_SIGNS = "DEFAULT_GPS_SIGNS";
+    private static final String DEFAULT_LAT = "DEFAULT_LAT";
+    private static final String DEFAULT_LON = "DEFAULT_LON";
     private static String lastFilePath = "";
     private static Latitudes prevLat;
     private static int prevLatDeg;
@@ -93,9 +98,9 @@ public class GPSDialog extends JDialog {
     private double uiLongitude = 0.0;
     private GeoToolsMapJavaFX map;
     private boolean dmsHasBeenLoaded = false;
+    private WebView webView = null;
+    private boolean markerWasMovedButNotYetRead = false;
 
-// FIXME: Hierdie popup werk steeds nie lekker nie...
-    
     
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
@@ -123,6 +128,13 @@ public class GPSDialog extends JDialog {
         if (dataObjectWithGPS == null) {
             setVisible(false);
             dispose();
+        }
+        // Maak seker die Adhoc data vir default vir GPS tekens bestaan
+        if (app.getDBI().findAdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LAT, AdhocData.class) == null) {
+            app.getDBI().createAdhocData(new AdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LAT, Latitudes.SOUTH.toString()));
+        }
+        if (app.getDBI().findAdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LON, AdhocData.class) == null) {
+            app.getDBI().createAdhocData(new AdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LON, Longitudes.EAST.toString()));
         }
         // Initialize the auto generated code
         initComponents();
@@ -199,12 +211,18 @@ public class GPSDialog extends JDialog {
 
             private void toggleSign() {
                 if ((double) spnLatDecimal.getModel().getValue() < 0) {
-                    tglSouth.setSelected(true);
                     tglNorth.setSelected(false);
+                    tglSouth.setSelected(true);
+                }
+                else
+                if ((double) spnLatDecimal.getModel().getValue() > 0) {
+                    tglNorth.setSelected(true);
+                    tglSouth.setSelected(false);
                 }
                 else {
-                    tglSouth.setSelected(false);
-                    tglNorth.setSelected(true);
+                    Latitudes defaultLat = Latitudes.getEnumFromText(app.getDBI().findAdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LAT, AdhocData.class).getDataValue());
+                    tglNorth.setSelected(Latitudes.NORTH.equals(defaultLat));
+                    tglSouth.setSelected(Latitudes.SOUTH.equals(defaultLat));
                 }
             }
         });
@@ -226,12 +244,18 @@ public class GPSDialog extends JDialog {
 
             private void toggleSign() {
                 if ((int) spnLatDeg.getModel().getValue() < 0) {
-                    tglSouth.setSelected(true);
                     tglNorth.setSelected(false);
+                    tglSouth.setSelected(true);
+                }
+                else
+                if ((int) spnLatDeg.getModel().getValue() > 0) {
+                    tglNorth.setSelected(true);
+                    tglSouth.setSelected(false);
                 }
                 else {
-                    tglSouth.setSelected(false);
-                    tglNorth.setSelected(true);
+                    Latitudes defaultLat = Latitudes.getEnumFromText(app.getDBI().findAdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LAT, AdhocData.class).getDataValue());
+                    tglNorth.setSelected(Latitudes.NORTH.equals(defaultLat));
+                    tglSouth.setSelected(Latitudes.SOUTH.equals(defaultLat));
                 }
             }
         });
@@ -256,9 +280,15 @@ public class GPSDialog extends JDialog {
                     tglEast.setSelected(false);
                     tglWest.setSelected(true);
                 }
-                else {
+                else
+                if ((double) spnLonDecimal.getModel().getValue() > 0) {
                     tglEast.setSelected(true);
                     tglWest.setSelected(false);
+                }
+                else {
+                    Longitudes defaultLon = Longitudes.getEnumFromText(app.getDBI().findAdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LON, AdhocData.class).getDataValue());
+                    tglEast.setSelected(Longitudes.EAST.equals(defaultLon));
+                    tglWest.setSelected(Longitudes.WEST.equals(defaultLon));
                 }
             }
         });
@@ -283,9 +313,15 @@ public class GPSDialog extends JDialog {
                     tglEast.setSelected(false);
                     tglWest.setSelected(true);
                 }
-                else {
+                else
+                if ((int) spnLonDeg.getModel().getValue() > 0) {
                     tglEast.setSelected(true);
                     tglWest.setSelected(false);
+                }
+                else {
+                    Longitudes defaultLon = Longitudes.getEnumFromText(app.getDBI().findAdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LON, AdhocData.class).getDataValue());
+                    tglEast.setSelected(Longitudes.EAST.equals(defaultLon));
+                    tglWest.setSelected(Longitudes.WEST.equals(defaultLon));
                 }
             }
         });
@@ -324,8 +360,9 @@ public class GPSDialog extends JDialog {
                 tglSouth.setSelected(true);
             }
             else {
-                tglNorth.setSelected(false);
-                tglSouth.setSelected(false);
+                Latitudes defaultLat = Latitudes.getEnumFromText(app.getDBI().findAdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LAT, AdhocData.class).getDataValue());
+                tglNorth.setSelected(Latitudes.NORTH.equals(defaultLat));
+                tglSouth.setSelected(Latitudes.SOUTH.equals(defaultLat));
             }
             if (Longitudes.EAST.equals(inDataObjectWithGPS.getLongitude())) {
                 tglEast.setSelected(true);
@@ -337,8 +374,9 @@ public class GPSDialog extends JDialog {
                 tglWest.setSelected(true);
             }
             else {
-                tglEast.setSelected(false);
-                tglWest.setSelected(false);
+                Longitudes defaultLon = Longitudes.getEnumFromText(app.getDBI().findAdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LON, AdhocData.class).getDataValue());
+                tglEast.setSelected(Longitudes.EAST.equals(defaultLon));
+                tglWest.setSelected(Longitudes.WEST.equals(defaultLon));
             }
             // Setup the accuracy
             cmbAccuracy.setSelectedItem(inDataObjectWithGPS.getGPSAccuracy());
@@ -373,6 +411,9 @@ public class GPSDialog extends JDialog {
         btnUseOnlineMap = new javax.swing.JButton();
         btnUseOfflineMap = new javax.swing.JButton();
         pnlMap = new javax.swing.JPanel();
+        pnlMapTools = new javax.swing.JPanel();
+        btnUpdateGPSOnMap = new javax.swing.JButton();
+        btnUpdateGPSFromMap = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         cmbAccuracy = new javax.swing.JComboBox();
         spnLatDecimal = new javax.swing.JSpinner();
@@ -548,6 +589,56 @@ public class GPSDialog extends JDialog {
         pnlMap.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         pnlMap.setName("pnlMap"); // NOI18N
         pnlMap.setLayout(new java.awt.BorderLayout());
+
+        pnlMapTools.setName("pnlMapTools"); // NOI18N
+
+        btnUpdateGPSOnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ShowGPS.png"))); // NOI18N
+        btnUpdateGPSOnMap.setText("Show GPS coordinates on map");
+        btnUpdateGPSOnMap.setToolTipText("Show the current GPS point as a marker on the map.");
+        btnUpdateGPSOnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUpdateGPSOnMap.setFocusPainted(false);
+        btnUpdateGPSOnMap.setFocusable(false);
+        btnUpdateGPSOnMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnUpdateGPSOnMap.setName("btnUpdateGPSOnMap"); // NOI18N
+        btnUpdateGPSOnMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateGPSOnMapActionPerformed(evt);
+            }
+        });
+
+        btnUpdateGPSFromMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UpdateGPS.png"))); // NOI18N
+        btnUpdateGPSFromMap.setText("Use GPS coordinates from map");
+        btnUpdateGPSFromMap.setToolTipText("Set the current GPS point to the same coordinates as the marker on the map.");
+        btnUpdateGPSFromMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUpdateGPSFromMap.setFocusPainted(false);
+        btnUpdateGPSFromMap.setFocusable(false);
+        btnUpdateGPSFromMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnUpdateGPSFromMap.setName("btnUpdateGPSFromMap"); // NOI18N
+        btnUpdateGPSFromMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateGPSFromMapActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlMapToolsLayout = new javax.swing.GroupLayout(pnlMapTools);
+        pnlMapTools.setLayout(pnlMapToolsLayout);
+        pnlMapToolsLayout.setHorizontalGroup(
+            pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMapToolsLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(btnUpdateGPSOnMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(btnUpdateGPSFromMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        pnlMapToolsLayout.setVerticalGroup(
+            pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnUpdateGPSFromMap)
+                .addComponent(btnUpdateGPSOnMap))
+        );
+
+        pnlMap.add(pnlMapTools, java.awt.BorderLayout.PAGE_START);
 
         jPanel1.setName("jPanel1"); // NOI18N
 
@@ -769,9 +860,9 @@ public class GPSDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(tglDecimalDegrees, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tglDecimalDegrees, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tglDegMinSec, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(tglDegMinSec, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(15, 15, 15)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -810,8 +901,8 @@ public class GPSDialog extends JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnUseOnlineMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUseOfflineMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
+                .addGap(2, 2, 2)
+                .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 
@@ -819,55 +910,69 @@ public class GPSDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // Get lat and long enums
-        if (tglNorth.isSelected()) {
-            dataObjectWithGPS.setLatitude(Latitudes.NORTH);
+        if (markerWasMovedButNotYetRead) {
+            int result = WLOptionPane.showConfirmDialog(this, 
+                    "<html>The marker was moved on the map but the new position was never read. "
+                            + "<br />Would you like to use the latest marker coordinates from the map?</html>", 
+                    "Use Map Marker Coordinates?", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+                btnUpdateGPSFromMapActionPerformed(evt);
+            }
         }
         else {
-            dataObjectWithGPS.setLatitude(Latitudes.SOUTH);
+            // Get lat and long enums
+            if (tglNorth.isSelected()) {
+                dataObjectWithGPS.setLatitude(Latitudes.NORTH);
+            }
+            else {
+                dataObjectWithGPS.setLatitude(Latitudes.SOUTH);
+            }
+            if (tglEast.isSelected()) {
+                dataObjectWithGPS.setLongitude(Longitudes.EAST);
+            }
+            else {
+                dataObjectWithGPS.setLongitude(Longitudes.WEST);
+            }
+            // Set the default lat and lon to show for the next new popup
+            app.getDBI().updateAdhocData(new AdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LAT, dataObjectWithGPS.getLatitude().toString()));
+            app.getDBI().updateAdhocData(new AdhocData(DEFAULT_GPS_SIGNS, DEFAULT_LON, dataObjectWithGPS.getLongitude().toString()));
+            // Get the number values
+            if (tglDecimalDegrees.isSelected()) {
+                // Use decimal degrees
+                double latDecimalDegree = (double)spnLatDecimal.getValue();
+                double lonDecimalDegree = (double)spnLonDecimal.getValue();
+                dataObjectWithGPS.setLatDegrees(UtilsGPS.getDegrees(Latitudes.NONE, latDecimalDegree));
+                dataObjectWithGPS.setLonDegrees(UtilsGPS.getDegrees(Longitudes.NONE, lonDecimalDegree));
+                dataObjectWithGPS.setLatMinutes(UtilsGPS.getMinutes(latDecimalDegree));
+                dataObjectWithGPS.setLonMinutes(UtilsGPS.getMinutes(lonDecimalDegree));
+                dataObjectWithGPS.setLatSeconds(UtilsGPS.getSeconds(latDecimalDegree));
+                dataObjectWithGPS.setLonSeconds(UtilsGPS.getSeconds(lonDecimalDegree));
+            }
+            else {
+                // Use degrees minutes seconds
+                dataObjectWithGPS.setLatDegrees(Math.abs((int)spnLatDeg.getValue()));
+                dataObjectWithGPS.setLonDegrees(Math.abs((int)spnLonDeg.getValue()));
+                dataObjectWithGPS.setLatMinutes((int)spnLatMin.getValue());
+                dataObjectWithGPS.setLonMinutes((int)spnLonMin.getValue());
+                dataObjectWithGPS.setLatSeconds((Double)spnLatSec.getValue());
+                dataObjectWithGPS.setLonSeconds((Double)spnLonSec.getValue());
+            }
+            dataObjectWithGPS.setGPSAccuracy((GPSAccuracy)cmbAccuracy.getSelectedItem());
+            selectionMade = true;
+            // Now update the "previous" GPS value
+            setPrevLat(dataObjectWithGPS.getLatitude());
+            setPrevLatDeg(dataObjectWithGPS.getLatDegrees());
+            setPrevLatMin(dataObjectWithGPS.getLatMinutes());
+            setPrevLatSec(dataObjectWithGPS.getLatSeconds());
+            setPrevLon(dataObjectWithGPS.getLongitude());
+            setPrevLonDeg(dataObjectWithGPS.getLonDegrees());
+            setPrevLonMin(dataObjectWithGPS.getLonMinutes());
+            setPrevLonSec(dataObjectWithGPS.getLonSeconds());
+            setPrevAccuracy(dataObjectWithGPS.getGPSAccuracy());
+            // We are done, dispose this dialog
+            setVisible(false);
+            dispose();
         }
-        if (tglEast.isSelected()) {
-            dataObjectWithGPS.setLongitude(Longitudes.EAST);
-        }
-        else {
-            dataObjectWithGPS.setLongitude(Longitudes.WEST);
-        }
-        // Get the number values
-        if (tglDecimalDegrees.isSelected()) {
-            // Use decimal degrees
-            double latDecimalDegree = (double)spnLatDecimal.getValue();
-            double lonDecimalDegree = (double)spnLonDecimal.getValue();
-            dataObjectWithGPS.setLatDegrees(UtilsGPS.getDegrees(Latitudes.NONE, latDecimalDegree));
-            dataObjectWithGPS.setLonDegrees(UtilsGPS.getDegrees(Longitudes.NONE, lonDecimalDegree));
-            dataObjectWithGPS.setLatMinutes(UtilsGPS.getMinutes(latDecimalDegree));
-            dataObjectWithGPS.setLonMinutes(UtilsGPS.getMinutes(lonDecimalDegree));
-            dataObjectWithGPS.setLatSeconds(UtilsGPS.getSeconds(latDecimalDegree));
-            dataObjectWithGPS.setLonSeconds(UtilsGPS.getSeconds(lonDecimalDegree));
-        }
-        else {
-            // Use degrees minutes seconds
-            dataObjectWithGPS.setLatDegrees((int)spnLatDeg.getValue());
-            dataObjectWithGPS.setLonDegrees((int)spnLonDeg.getValue());
-            dataObjectWithGPS.setLatMinutes((int)spnLatMin.getValue());
-            dataObjectWithGPS.setLonMinutes((int)spnLonMin.getValue());
-            dataObjectWithGPS.setLatSeconds((Double)spnLatSec.getValue());
-            dataObjectWithGPS.setLonSeconds((Double)spnLonSec.getValue());
-        }
-        dataObjectWithGPS.setGPSAccuracy((GPSAccuracy)cmbAccuracy.getSelectedItem());
-        selectionMade = true;
-        // Now update the "previous" GPS value
-        setPrevLat(dataObjectWithGPS.getLatitude());
-        setPrevLatDeg(dataObjectWithGPS.getLatDegrees());
-        setPrevLatMin(dataObjectWithGPS.getLatMinutes());
-        setPrevLatSec(dataObjectWithGPS.getLatSeconds());
-        setPrevLon(dataObjectWithGPS.getLongitude());
-        setPrevLonDeg(dataObjectWithGPS.getLonDegrees());
-        setPrevLonMin(dataObjectWithGPS.getLonMinutes());
-        setPrevLonSec(dataObjectWithGPS.getLonSeconds());
-        setPrevAccuracy(dataObjectWithGPS.getGPSAccuracy());
-        // We are done, dispose this dialog
-        setVisible(false);
-        dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void tglDecimalDegreesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglDecimalDegreesActionPerformed
@@ -1237,6 +1342,9 @@ public class GPSDialog extends JDialog {
             UtilsDialog.setDialogToCenter(getOwner(), this);
         }
         pnlMap.removeAll();
+        pnlMap.add(pnlMapTools, BorderLayout.NORTH);
+        pnlMap.invalidate();
+        pnlMap.repaint();
         JFXPanel jfxPanel = new JFXPanel();
         jfxPanel.setPreferredSize(pnlMap.getSize());
 //        jfxPanel.setScene(new Scene(new VBox(new Label("Empty"))));
@@ -1293,6 +1401,87 @@ public class GPSDialog extends JDialog {
             spnLonDeg.setValue(-1 * Math.abs((int) spnLonDeg.getValue()));
         }
     }//GEN-LAST:event_tglWestActionPerformed
+
+    private void btnUpdateGPSFromMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateGPSFromMapActionPerformed
+        if (webView != null) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        // Get Marker Latitude
+                        Object result = webView.getEngine().executeScript("getMarkerLatitude()");
+                        if (result instanceof Double) {
+                            uiLatitude = (double) result;
+                        }
+                        else 
+                        if (result instanceof Integer) {
+                            uiLatitude = (double) ((int) result);
+                        }
+                        // Get Marker Longitude
+                        result = webView.getEngine().executeScript("getMarkerLongitude()");
+                        if (result instanceof Double) {
+                            uiLongitude = (double) result;
+                        }
+                        else 
+                        if (result instanceof Integer) {
+                            uiLongitude = (double) ((int) result);
+                        }
+                        // Update the UI
+                        if (tglDecimalDegrees.isSelected()) {
+                            setupDD();
+                        }
+                        else {
+                            setupDMS();
+                        }
+                        if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
+                        markerWasMovedButNotYetRead = false;
+                    }
+                    catch (JSException ex) {
+                        // Ignore most of these errors which can happen when pressing the button before the page was fully loaded
+                        WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                    }
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                }
+            });
+        }
+    }//GEN-LAST:event_btnUpdateGPSFromMapActionPerformed
+
+    private void btnUpdateGPSOnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateGPSOnMapActionPerformed
+        if (webView != null) {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        // Get latest values from UI
+                        if (tglDecimalDegrees.isSelected()) {
+                            loadValuesFromDD();
+                        }
+                        else {
+                            loadValuesFromDMS();
+                        }
+                        // Set the Marker Latitude and Longitude
+                        webView.getEngine().executeScript("setMarkerLatLon(" + uiLatitude + ", " + uiLongitude + ")");
+                        // Update the UI
+                        if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
+                        markerWasMovedButNotYetRead = false;
+                    }
+                    catch (JSException ex) {
+                        // Ignore most of these errors which can happen when pressing the button before the page was fully loaded
+                        WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                    }
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                }
+            });
+        }
+    }//GEN-LAST:event_btnUpdateGPSOnMapActionPerformed
 
     private void doGpxInput(Path inFile) {
         String gpxValue = WLOptionPane.showInputDialog(this,
@@ -1456,7 +1645,7 @@ public class GPSDialog extends JDialog {
     }
     
     private WebView createPointMapGoogle() {
-        WebView webView = new WebView();
+        webView = new WebView();
         WebEngine webEngine = webView.getEngine();
         // Get the template file
         final char[] buffer = new char[4096];
@@ -1514,23 +1703,23 @@ public class GPSDialog extends JDialog {
     
     // NOTE: Lyk my hierdie moet 'n regte public class wees met Object types, anders werk dinge nie reg nie...
     public class JavaMethodExposer {
-        public void updateGPS(Object inLat, Object inLon) {
-            uiLatitude = (double) inLat;
-            uiLongitude = (double) inLon;
-            
-// FIXME: Hierdie storie werk skielik nie meer reg nie... Of Google maps update, maar tien teen een 'n Java JRE update wat dinge gebreek het...
-//        Om een of ander vreemde rede hou dit net skielik op werk, dit sal 3 keer reg update en dan net skielik ophou update...
-//        Sien my vraag: http://stackoverflow.com/questions/41197762/javafx-webengine-upcall-stops-working-when-moving-marker-on-map
-//System.out.println("Lat=" + uiLatitude + "   /   Lon=" + uiLongitude);
-            if (tglDecimalDegrees.isSelected()) {
-                setupDD();
-            }
-            else {
-                setupDMS();
-            }
-            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                Toolkit.getDefaultToolkit().beep();
-            }
+        public void gpsMoves(Object inLat, Object inLon) {
+//            uiLatitude = (double) inLat;
+//            uiLongitude = (double) inLon;
+//// FIXME: Hierdie storie werk skielik nie meer reg nie... Of Google maps update, maar tien teen een 'n Java JRE update wat dinge gebreek het...
+////        Om een of ander vreemde rede hou dit net skielik op werk, dit sal 3 keer reg update en dan net skielik ophou update...
+////        Sien my vraag: http://stackoverflow.com/questions/41197762/javafx-webengine-upcall-stops-working-when-moving-marker-on-map
+////System.out.println("Lat=" + uiLatitude + "   /   Lon=" + uiLongitude);
+//            if (tglDecimalDegrees.isSelected()) {
+//                setupDD();
+//            }
+//            else {
+//                setupDMS();
+//            }
+//            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+//                Toolkit.getDefaultToolkit().beep();
+//            }
+            markerWasMovedButNotYetRead = true;
         }
     }
     
@@ -1558,7 +1747,7 @@ public class GPSDialog extends JDialog {
             builder.add(geometryFactory.createPoint(new Coordinate(uiLongitude, uiLatitude)));
             SimpleFeature feature = builder.buildFeature("GPS Point");
             collection.add(feature);
-            Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 0.8, 0.5, 12);
+            Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 1.0, 1.0, 10);
             map.addLayer(new FeatureLayer(collection, pointStyle, "WildLogPointLayer"));
         }
         catch (SchemaException | FactoryRegistryException ex) {
@@ -1571,6 +1760,8 @@ public class GPSDialog extends JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemoveGPS;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUpdateGPSFromMap;
+    private javax.swing.JButton btnUpdateGPSOnMap;
     private javax.swing.JButton btnUseGPX;
     private javax.swing.JButton btnUseImage;
     private javax.swing.JButton btnUseOfflineMap;
@@ -1588,6 +1779,7 @@ public class GPSDialog extends JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel pnlMap;
+    private javax.swing.JPanel pnlMapTools;
     private javax.swing.JSpinner spnLatDecimal;
     private javax.swing.JSpinner spnLatDeg;
     private javax.swing.JSpinner spnLatMin;
