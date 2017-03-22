@@ -118,13 +118,13 @@ public class GeoToolsMapJavaFX {
                 else
                 if (inMouseEvent.getClickCount() == 1 && (inMouseEvent.isControlDown() || identifyIsActive)) {
                     identifyIsActive = false;
-                    jfxPanel.getScene().setCursor(Cursor.DEFAULT);
+                    imageView.getScene().getRoot().setCursor(Cursor.DEFAULT);
                     List<Map<String, String>> lstInfoForLayers = new ArrayList<>();
                     for (Layer layer : mapContent.layers()) {
 // TODO: Handle GeoTIFF layers ook
                         if (layer instanceof FeatureLayer) {
                             FeatureLayer featureLayer = (FeatureLayer) layer;
-                            Rectangle screenRect = new Rectangle((int) inMouseEvent.getSceneX() - 4, (int) inMouseEvent.getSceneY() - 4, 8, 8);
+                            Rectangle screenRect = new Rectangle((int) inMouseEvent.getSceneX() - 5, (int) inMouseEvent.getSceneY() - 5, 10, 10);
                             mapContent.getViewport().setScreenArea(new Rectangle(jfxPanel.getWidth(), jfxPanel.getHeight()));
                             mapContent.getViewport().setMatchingAspectRatio(true);
                             AffineTransform transform = mapContent.getViewport().getScreenToWorld();
@@ -138,7 +138,7 @@ public class GeoToolsMapJavaFX {
                                 for (SimpleFeature simpleFeature : features.toArray(new SimpleFeature[]{})) {
                                     // Get the attributes to display
                                     Map<String, String> mapInfo = new LinkedHashMap<>();
-                                    mapInfo.put("*** LAYER NAME ***", layer.getTitle());
+                                    mapInfo.put("<<< " + layer.getTitle() + " >>>", "");
                                     for (Property value : simpleFeature.getValue()) {
                                         if (value != null && value.getName() != null && value.getValue() != null 
                                                 && !value.getName().toString().equals(propertyName)) {
@@ -161,8 +161,8 @@ public class GeoToolsMapJavaFX {
                             public void run() {
                                 Alert dialog = new Alert(Alert.AlertType.INFORMATION);
                                 dialog.setResizable(true);
-                                dialog.setTitle("Indentified Map Features");
-                                dialog.setHeaderText("The following featueres were identified at the selected location:");
+                                dialog.setTitle("Indentify Map Features");
+                                dialog.setHeaderText("The following features were identified at the selected location:");
                                 ListView<String> listView = new ListView<>();
                                 for (Map<String, String> mapInfo : lstInfoForLayers) {
                                     for (Map.Entry<String, String> entry : mapInfo.entrySet()) {
@@ -399,11 +399,11 @@ public class GeoToolsMapJavaFX {
     
     public void identify() {
         identifyIsActive = true;
-// FIXME: Die cursor storie werk nie altyd nie...?
+// FIXME: Die cursor storie werk nie altyd nie...? Lyk of die probleem gebeur na 'n zoom...
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                jfxPanel.getScene().setCursor(Cursor.CROSSHAIR);
+                imageView.getScene().getRoot().setCursor(Cursor.CROSSHAIR);
             }
         });
     }
