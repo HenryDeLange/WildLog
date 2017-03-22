@@ -2,7 +2,9 @@ package wildlog.ui.maps.implementations;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
+import org.geotools.styling.Style;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
@@ -53,8 +56,8 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
             public void handle(Event event) {
                 CustomLayersDialog dialog = new CustomLayersDialog(mapsBaseDialog);
                 dialog.setVisible(true);
-                lstLayers.clear();
                 if (dialog.getLstSelectedPaths() != null) {
+                    lstLayers.clear();
                     lstLayers.addAll(dialog.getLstSelectedPaths());
                 }
                 // Setup the colours
@@ -62,11 +65,16 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
                 int counter = 0;
                 for (Path layerPath : lstLayers) {
                     if (layerPath.getFileName().toString().toLowerCase().endsWith(".shp")) {
-                        if (counter < lstDefaultMapColours.length) {
-                            mapLegends.put(layerPath.getFileName().toString(), lstDefaultMapColours[counter++]);
-                        }
-                        else {
-                            mapLegends.put(layerPath.getFileName().toString(), Color.DARK_GRAY);
+                        Path stylePath = Paths.get(layerPath.toString().substring(0, layerPath.toString().lastIndexOf('.')) + ".sld");
+                        // Moenie 'n legend wys vir layers wat 'n default style file gebruik nie
+// TODO: Maak dat mens die layers se opacity kan stel (veral die style layers sal handig wees aangesien mens nie die kleuere kan stel vie hulle nie...
+                        if (!Files.exists(stylePath)) {
+                            if (counter < lstDefaultMapColours.length) {
+                                mapLegends.put(layerPath.getFileName().toString(), lstDefaultMapColours[counter++]);
+                            }
+                            else {
+                                mapLegends.put(layerPath.getFileName().toString(), Color.DARK_GRAY);
+                            }
                         }
                     }
                 }
@@ -111,8 +119,16 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
                     try {
                         FileDataStore shapeStore = FileDataStoreFinder.getDataStore(layerPath.toFile());
                         SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
-                        Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
-                                Color.BLACK, mapLegends.get(layerPath.getFileName().toString()), 1.0, 0.3));
+                        Path stylePath = Paths.get(layerPath.toString().substring(0, layerPath.toString().lastIndexOf('.')) + ".sld");
+                        Style style;
+                        if (Files.exists(stylePath)) {
+                            style = GeoToolsLayerUtils.createShapefileStyleFile(shapeSource, stylePath);
+                        }
+                        else {
+                            style = GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
+                                Color.BLACK, mapLegends.get(layerPath.getFileName().toString()), 1.0, 0.3);
+                        }
+                        Layer shapelayer = new FeatureLayer(shapeSource, style, layerPath.getFileName().toString());
                         map.addLayer(shapelayer);
                     }
                     catch (IOException ex) {

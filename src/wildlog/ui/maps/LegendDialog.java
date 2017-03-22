@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -26,6 +25,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
@@ -111,7 +111,7 @@ public class LegendDialog extends JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Map Legend:");
 
-        jLabel2.setText("<html>The colour associated with each Layer can be seen.<br/>To change the colour of the Layer on the Map, select a new colour and press Save.<br/>(Note: Currently only shapefile Layers can be recoloured.)</html>");
+        jLabel2.setText("<html>To change the colour of a Layer on the Map, select a new colour and press Save.<br/>Note: Currently only shapefile Layers can be recoloured.<br/>Note: If the shapefile has a SLD style then it will be used instead and can't be recoloured.</html>");
 
         pnlLegendContent.setLayout(new java.awt.BorderLayout());
 
@@ -136,8 +136,8 @@ public class LegendDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2))
+                        .addGap(10, 10, 10)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pnlLegendContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
@@ -152,10 +152,10 @@ public class LegendDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(jLabel1)
-                        .addGap(5, 5, 5)
+                        .addGap(3, 3, 3)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5)
-                .addComponent(pnlLegendContent, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+                .addGap(7, 7, 7)
+                .addComponent(pnlLegendContent, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
 

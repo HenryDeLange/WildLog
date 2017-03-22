@@ -151,7 +151,8 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                                             if (filename.endsWith(".tif") || filename.endsWith(".tiff")) {
                                                 try {
                                                     GeoTiffReader reader = new GeoTiffReader(inPath.toFile());
-                                                    Layer gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader));
+                                                    Layer gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader), 
+                                                            inPath.getFileName().toString());
                                                     map.addLayer(gridLayer);
                                                     return FileVisitResult.TERMINATE;
                                                 }
@@ -165,7 +166,8 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                                                     FileDataStore shapeStore = FileDataStoreFinder.getDataStore(inPath.toFile());
                                                     SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
                                                     Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(
-                                                            shapeSource, new Color(150, 50, 30), new Color(232, 60, 19), 0.3, 0.25));
+                                                            shapeSource, new Color(150, 50, 30), new Color(232, 60, 19), 0.3, 0.25), 
+                                                            inPath.getFileName().toString());
                                                     map.addLayer(shapelayer);
                                                     return FileVisitResult.TERMINATE;
                                                 }

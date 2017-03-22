@@ -67,8 +67,9 @@ public class CustomLayersDialog extends JDialog {
             }
             else {
                 for (int t = 0; t < 12; t++) {
-                    mapAllLayers.put("[WILDLOG] " + layer.getRelativePath().getFileName().toString() 
-                            + " - " + layer.getRelativePathForMonth(t).getFileName().toString(), path);
+                    Path filename = layer.getRelativePathForMonth(t).getFileName();
+                    mapAllLayers.put("[WILDLOG] " + layer.getRelativePath().getFileName().toString() + " - " + filename.toString(), 
+                            path.resolve(filename));
                 }
             }
         }
@@ -458,7 +459,7 @@ public class CustomLayersDialog extends JDialog {
                             "A similar layer already exists in this Workspace. Please rename the new layer and try again.",
                             "Duplicate Layer", JOptionPane.ERROR_MESSAGE);
                 }
-                // Add the layer to the hashmap nad reload the UI
+                // Add the layer to the hashmap and reload the UI
                 if (destinationPath != null) {
                     mapAllLayers.put("[CUSTOM] " + filename, destinationPath.toAbsolutePath());
                     List<String> keys = new ArrayList<>(mapAllLayers.keySet());

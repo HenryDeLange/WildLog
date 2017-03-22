@@ -149,7 +149,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
                 Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleFile(shapeSource,
                         WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath().toString().substring(
-                                0, BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath().toString().lastIndexOf('.')) + ".sld")));
+                                0, BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.getRelativePath().toString().lastIndexOf('.')) + ".sld")),
+                        BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL.name());
                 map.addLayer(shapelayer);
             }
             catch (IOException ex) {
@@ -161,7 +162,8 @@ public class LandStatusMap extends AbstractGeoToolsMap<Sighting> {
                 SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
                 Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleFile(shapeSource,
                         WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath().toString().substring(
-                                0, BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath().toString().lastIndexOf('.')) + ".sld")));
+                                0, BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.getRelativePath().toString().lastIndexOf('.')) + ".sld")), 
+                        BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL.name());
                 map.addLayer(shapelayer);
             }
             catch (IOException ex) {

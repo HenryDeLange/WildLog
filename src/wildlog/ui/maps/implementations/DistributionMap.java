@@ -145,7 +145,8 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
                         || layerPath.getFileName().toString().toLowerCase().endsWith(".tiff")) {
                     try {
                         GeoTiffReader reader = new GeoTiffReader(layerPath.toFile());
-                        Layer gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader));
+                        Layer gridLayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader), 
+                                layerPath.getFileName().toString());
                         map.addLayer(gridLayer);
                     }
                     catch (DataSourceException ex) {
@@ -158,11 +159,12 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
                         FileDataStore shapeStore = FileDataStoreFinder.getDataStore(layerPath.toFile());
                         SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
                         Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(
-                                shapeSource, 
-                                new Color(150, 60, 30), 
-                                mapLegends.get(layerPath.getFileName().toString()), 
-                                cmbTransparity.getSelectionModel().getSelectedItem().getLineOpacity(),
-                                cmbTransparity.getSelectionModel().getSelectedItem().getFillOpacity()));
+                                    shapeSource, 
+                                    new Color(150, 60, 30), 
+                                    mapLegends.get(layerPath.getFileName().toString()), 
+                                    cmbTransparity.getSelectionModel().getSelectedItem().getLineOpacity(),
+                                    cmbTransparity.getSelectionModel().getSelectedItem().getFillOpacity()), 
+                                layerPath.getFileName().toString());
                         map.addLayer(shapelayer);
                     }
                     catch (IOException ex) {

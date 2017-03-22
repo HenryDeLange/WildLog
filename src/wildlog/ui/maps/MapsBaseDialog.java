@@ -156,8 +156,8 @@ public class MapsBaseDialog extends JFrame {
         lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, this));
+        lstMaps.add(new LegacyMap(lstFilteredData, lblMapDescription, this));
         // Add the reports
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(10);
