@@ -42,7 +42,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
     
     public ExportDialogForReportsAndMaps(JFrame inParent, BufferedImage inImage, Node inNode, String inName, List<Sighting> inLstSightings, ExportType inType) {
         super(inParent);
-        WildLogApp.LOGGER.log(Level.INFO, "[ReportExportDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[ExportDialogForReportsAndMaps]");
         // Set passed in values
         bufferedImage = inImage;
         node = inNode;

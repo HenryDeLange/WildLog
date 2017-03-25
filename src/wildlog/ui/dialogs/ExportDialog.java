@@ -6,13 +6,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
+import org.apache.logging.log4j.Level;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -1012,93 +1015,114 @@ public class ExportDialog extends JDialog {
                 setMessage("Starting the Paarl Excel Export");
                 Path path;
                 List<Sighting> lstSightingsToUse;
-                String sheetName;
                 if (location != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName()) 
-                            .resolve(location.getDisplayName() + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName());
                     lstSightingsToUse = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
-                    sheetName = location.getDisplayName();
                 }
                 else
                 if (visit != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName())
-                            .resolve(visit.getDisplayName() + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName());
                     lstSightingsToUse = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
-                    sheetName = visit.getDisplayName();
                 }
                 else
                 if (element != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName())
-                            .resolve(element.getDisplayName() + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName());
                     lstSightingsToUse = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
-                    sheetName = element.getDisplayName();
                 }
                 else
                 if (sighting != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName())
-                            .resolve(sighting.getDisplayName() + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName());
                     lstSightingsToUse = new ArrayList<>(1);
                     lstSightingsToUse.add(sighting);
-                    sheetName = sighting.getDisplayName();
                 }
                 else
                 if (lstSightings != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations")
-                            .resolve("Observations" + ".xls");
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations");
                     lstSightingsToUse = lstSightings;
-                    sheetName = "Observations";
                 }
                 else {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath();
                     lstSightingsToUse = new ArrayList<>(0);
-                    sheetName = "Unknown";
                 }
                 setTaskProgress(5);
                 setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
-                Files.createDirectories(path.getParent());
+                Files.createDirectories(path);
                 // OBSERVATIONS FILE
-                // Create workbook and sheet
-                HSSFWorkbook workbook = new HSSFWorkbook();
-                HSSFSheet sheet = workbook.createSheet(sheetName);
-                // Setup header row
-                Row row = sheet.createRow(0);
-                int col = 0;
-                row.createCell(col++).setCellValue("Row");
-                row.createCell(col++).setCellValue("Site");
-                row.createCell(col++).setCellValue("Files");
-                row.createCell(col++).setCellValue("Species");
-                row.createCell(col++).setCellValue("Date");
-                row.createCell(col++).setCellValue("Comments");
-                row.createCell(col++).setCellValue("Latitude");
-                row.createCell(col++).setCellValue("Longitude");
+                // Sort the Sightings to be ordered by visit (need to process a visit at a time)
+                Collections.sort(lstSightingsToUse, new Comparator<Sighting>() {
+                    @Override
+                    public int compare(Sighting inSighting1, Sighting inSighting2) {
+                        return inSighting1.getVisitName().compareTo(inSighting2.getVisitName());
+                    }
+                });
+                String currentVisit = null;
                 // Add content rows
-                int rowCount = 1;
                 Map<String, Element> mapElements = new HashMap<>();
-                Map<String, Visit> mapVisits = new HashMap<>();
+                Map<String, Visit> mapVisits = new LinkedHashMap<>(); // Using LinkedHashMap to keep the GPS points from the same visit together
+                HSSFWorkbook workbook = null;
+                HSSFSheet sheet = null;
+                Row row;
+                int rowCount = 0;
+                int col;
                 int counter = 0;
                 for (Sighting tempSighting : lstSightingsToUse) {
+                    // Check whether to start a new spreadsheet (for a new visit)
+                    if (!tempSighting.getVisitName().equals(currentVisit)) {
+                        // Maak seker die folders bestaan
+                        Files.createDirectories(path.resolve(tempSighting.getVisitName()));
+                        // Write the previous visit's register file (sightings)
+                        if (currentVisit != null) {
+                            try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Register.xls").toFile())) {
+                                workbook.write(out);
+                            }
+                            catch (IOException ex) {
+                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            }
+                        }
+                        // Stel die huidige visit se naam
+                        currentVisit = tempSighting.getVisitName();
+                        // Create workbook and sheet
+                        workbook = new HSSFWorkbook();
+                        sheet = workbook.createSheet(currentVisit);
+                        // Setup header row
+                        rowCount = 0;
+                        row = sheet.createRow(rowCount++);
+                        col = 0;
+                        row.createCell(col++).setCellValue("No.");
+                        row.createCell(col++).setCellValue("Site");
+                        row.createCell(col++).setCellValue("Files");
+                        row.createCell(col++).setCellValue("Species");
+                        row.createCell(col++).setCellValue("Date");
+                        row.createCell(col++).setCellValue("Comments");
+                        row.createCell(col++).setCellValue("Latitude");
+                        row.createCell(col++).setCellValue("Longitude");
+                    }
                     col = 0;
                     row = sheet.createRow(rowCount);
                     row.createCell(col++).setCellValue(rowCount);
-                    row.createCell(col++).setCellValue(tempSighting.getVisitName());
+                    row.createCell(col++).setCellValue(currentVisit);
                     List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(tempSighting.getWildLogFileID(), null, WildLogFile.class);
-                    String files = "";
-                    int counterFiles = 1;
-                    for (WildLogFile wildLogFile : lstFiles) {
-                        String fileName = wildLogFile.getRelativePath().getFileName().toString();
-                        fileName = tempSighting.getElementName()
-                                .concat(" [").concat(Integer.toString(rowCount))
-                                .concat("-").concat(Integer.toString(counterFiles++))
-                                .concat("]")
-                                .concat(fileName.substring(fileName.lastIndexOf('.')));
-                        files = files + ", " + fileName;
-                        UtilsFileProcessing.copyFile(wildLogFile.getAbsolutePath(), 
-                                path.getParent().resolve("Files").toAbsolutePath().resolve(fileName), true, true);
+                    if (!lstFiles.isEmpty()) {
+                        int fileCount = 1;
+                        for (WildLogFile wildLogFile : lstFiles) {
+                            String fileName = wildLogFile.getRelativePath().getFileName().toString();
+                            fileName = tempSighting.getCustomFileName() + UtilsFileProcessing.getFormattedSequence(fileCount++) 
+                                    + fileName.substring(fileName.lastIndexOf('.'));
+                            UtilsFileProcessing.copyFile(wildLogFile.getAbsolutePath(), 
+                                    path.resolve(currentVisit).toAbsolutePath().resolve(fileName), true, true);
+                        }
+                        String extraZero;
+                        if (lstFiles.size() < 10) {
+                            extraZero = "0";
+                        }
+                        else { 
+                            extraZero = "";
+                        }
+                        row.createCell(col++).setCellValue(tempSighting.getCustomFileName() + " [01 to " + extraZero + lstFiles.size() + "]");
                     }
-                    if (files.length() >= 2) {
-                        files = files.substring(2, files.length());
+                    else {
+                        row.createCell(col++).setCellValue("");
                     }
-                    row.createCell(col++).setCellValue(files);
                     Element tempElement = mapElements.get(tempSighting.getElementName());
                     if (tempElement == null) {
                         tempElement = app.getDBI().findElement(tempSighting.getElementName(), Element.class);
@@ -1127,64 +1151,82 @@ public class ExportDialog extends JDialog {
                     rowCount++;
                     // Keep track of the GPS points and Visits for the second file
                     String gps = UtilsGPS.getLatitudeString(tempSighting) + " " + UtilsGPS.getLongitudeString(tempSighting);
+                    if (gps.contains(UtilsGPS.NO_GPS_POINT)) {
+                        gps = "No GPS at " + currentVisit;
+                    }
                     Visit tempVisit = mapVisits.get(gps);
                     if (tempVisit == null) {
-                        mapVisits.put(gps, app.getDBI().findVisit(tempSighting.getVisitName(), Visit.class));
+                        mapVisits.put(gps, app.getDBI().findVisit(currentVisit, Visit.class));
                     }
                     // Update progress
-                    setTaskProgress(5 + (int)((counter/(double)lstSightingsToUse.size())*85));
-                    setMessage(getMessage().substring(0, getMessage().lastIndexOf(' ')) + " " + getProgress() + "%");
+                    setTaskProgress(5 + (int)((counter++/(double)lstSightingsToUse.size())*85));
+                    setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
+                }
+                // Write the last visit's register file (sightings)
+                if (currentVisit != null) {
+                    try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Register.xls").toFile())) {
+                        workbook.write(out);
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
                 }
                 setTaskProgress(90);
                 setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
-                // Write the observations file
-                Path observationsFile = path.getParent().resolve("Register_" + path.getFileName().toString());
-                try (FileOutputStream out = new FileOutputStream(observationsFile.toFile())) {
-                    workbook.write(out);
-                }
-                catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                }
-                // Open the observations file
-                UtilsFileProcessing.openFile(observationsFile);
                 // VISITS FILE
-                workbook = new HSSFWorkbook();
-                sheet = workbook.createSheet(sheetName);
-                // Setup header row
+                // Add the rows
+                currentVisit = null;
                 rowCount = 0;
+                counter = 0;
                 for (Map.Entry<String, Visit> entry : mapVisits.entrySet()) {
+                    Visit tempVisit = entry.getValue();
+                    if (!tempVisit.getName().equals(currentVisit)) {
+                        if (currentVisit != null) {
+                            // Write the previous site file (visits)
+                            try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Site.xls").toFile())) {
+                                workbook.write(out);
+                            }
+                            catch (IOException ex) {
+                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            }
+                        }
+                        currentVisit = tempVisit.getName();
+                        workbook = new HSSFWorkbook();
+                        sheet = workbook.createSheet(currentVisit);
+                        rowCount = 0;
+                    }
                     row = sheet.createRow(rowCount++);
                     row.createCell(0).setCellValue("Camera No.");
-                    row.createCell(1).setCellValue(entry.getValue().getName());
+                    row.createCell(1).setCellValue(currentVisit);
                     row = sheet.createRow(rowCount++);
                     row.createCell(0).setCellValue("GPS co-ordinates");
                     row.createCell(1).setCellValue(entry.getKey());
                     row = sheet.createRow(rowCount++);
                     row.createCell(0).setCellValue("Area Description");
-                    row.createCell(1).setCellValue(entry.getValue().getDescription());
+                    row.createCell(1).setCellValue(tempVisit.getDescription());
                     row = sheet.createRow(rowCount++);
                     row.createCell(0).setCellValue("Survey period from");
-                    if (entry.getValue().getStartDate() != null) {
-                        row.createCell(1).setCellValue(UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(entry.getValue().getStartDate())));
+                    if (tempVisit.getStartDate() != null) {
+                        row.createCell(1).setCellValue(UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(tempVisit.getStartDate())));
                     }
                     row = sheet.createRow(rowCount++);
                     row.createCell(0).setCellValue("Survey period to");
-                    if (entry.getValue().getEndDate() != null) {
-                        row.createCell(1).setCellValue(UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(entry.getValue().getEndDate())));
+                    if (tempVisit.getEndDate() != null) {
+                        row.createCell(1).setCellValue(UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(tempVisit.getEndDate())));
                     }
                     row = sheet.createRow(rowCount++);
+                    setTaskProgress(90 + (int)((counter++/(double)mapVisits.size())*9));
+                    setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
                 }
-                setTaskProgress(95);
-                setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
-                Path visitsFile = path.getParent().resolve("Site_" + path.getFileName().toString());
-                try (FileOutputStream out = new FileOutputStream(visitsFile.toFile())) {
+                // Write the last site file (visits)
+                try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Site.xls").toFile())) {
                     workbook.write(out);
                 }
                 catch (IOException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
-                // Open the visits file
-                UtilsFileProcessing.openFile(visitsFile);
+                // Open the folder
+                UtilsFileProcessing.openFile(path);
                 setTaskProgress(100);
                 setMessage("Done with the Paarl Excel Export");
                 return null;

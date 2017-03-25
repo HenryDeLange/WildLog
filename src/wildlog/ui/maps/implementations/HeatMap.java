@@ -76,6 +76,10 @@ public class HeatMap extends AbstractMap<Sighting> {
 // FIXME: Hierdie version neem die aantal dae ook in ag, dus sal 'n baie rich plek wat bv 'n jaar getrap word nie wys nie.
 //        Maar dis goed om vistis met soortgelyke durations te vergelyk.
 //        Maak dus nog 'n opsie wat net kyk na die totale antal creatures = "Abundance of Creatures".
+
+// Idee: Maak n opsie (droplist) wat die visits sal split in "15 dae", "30 dae", "nie split". Dit sal help om dan die heatmaps te standariseer...
+
+
         ToggleButton btnRichnessMapClient = new ToggleButton("Richness of Creatures Map");
         btnRichnessMapClient.setToggleGroup(BUTTON_GROUP);
         btnRichnessMapClient.setCursor(Cursor.HAND);

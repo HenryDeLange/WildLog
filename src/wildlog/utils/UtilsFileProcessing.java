@@ -252,7 +252,7 @@ public final class UtilsFileProcessing {
         return wildLogFile;
     }
     
-    private static String getFormattedSequence(int inCount) {
+    public static String getFormattedSequence(int inCount) {
         String count;
         if (inCount < 10) {
             count = "0" + Integer.toString(inCount);

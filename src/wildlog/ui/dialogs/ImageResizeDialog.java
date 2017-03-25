@@ -10,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -27,6 +28,7 @@ public class ImageResizeDialog extends JDialog {
     
     public ImageResizeDialog(Frame inParent) {
         super(inParent);
+        WildLogApp.LOGGER.log(Level.INFO, "[ImageResizeDialog]");
         initComponents();
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);

@@ -57,6 +57,7 @@ import wildlog.data.wrappers.json.inaturalist.INaturalistData;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.maps.LoadingWebMapDialog;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 import wildlog.utils.WildLogPaths;
@@ -67,16 +68,13 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     private MapType activeMapType = MapType.SPECIES_DISTRIBUTION;
     private boolean showWorkspaceMap = true;
     private boolean showSightings = true;
-    private final int PAGE_LIMIT_INATURALIST = 200;
+    private final int PAGE_LIMIT_INATURALIST = 100;
     private List<INaturalistData> lstAllINaturalistResults = new ArrayList<>(0);
-    private final int PAGE_LIMIT_GBIF = 300;
+    private final int PAGE_LIMIT_GBIF = 150;
     private List<GBIFOccurence> lstAllGBIFResults = new ArrayList<>(0);
     private String scientificName;
 
-    
-// FIXME: Hierdie map kort nog bietjie fine tuning... Wys dalk 'n popup wat die progress aandui (soos "Loading 50-60 of 200"). Gee dit ook 'n cancel button om dinge "mooi" te stop as dit te lank vat of skeef loop...
-    
-    
+
     public WebDistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         super("Distribution Maps (Web)", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
@@ -111,6 +109,10 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 showWorkspaceMap = chkShowWorkspaceMap.isSelected();
             }
         });
+        
+// TODO: Laai ook die spesie layers direk vanaf IUCN se web services? 
+//       (Ek het dit probeer maar lyk my dis 'n geneuk... Sal ook 'n token nodig hê, wat ek seker nie sal kry nie want ek wag nog vir die ander token...)
+        
         chkShowWorkspaceMap.setSelected(showWorkspaceMap);
         lstCustomButtons.add(chkShowWorkspaceMap);
         setupShowCountriesButton();
@@ -222,7 +224,9 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     }
     
     private void getINaturalistData(String inScientificName) {
+        LoadingWebMapDialog dialog = new LoadingWebMapDialog(mapsBaseDialog, "iNaturalist");
         try {
+            dialog.setVisible(true);
             // Check whether the data should be fetched fro the web URL
             if ((scientificName == null && inScientificName != null) || (scientificName != null && !scientificName.equalsIgnoreCase(inScientificName))) {
                 int requestPage = 0;
@@ -255,8 +259,9 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                     List<INaturalistData> lstResults = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), 
                             new TypeToken<List<INaturalistData>>(){}.getType());
                     lstAllINaturalistResults.addAll(lstResults);
+                    dialog.updateInfoText("Loaded " + lstAllINaturalistResults.size() + " of " + totalEntries + " records.");
                 }
-                while ((requestPage * PAGE_LIMIT_INATURALIST) < totalEntries);
+                while (!dialog.isStopLoading() && (requestPage * PAGE_LIMIT_INATURALIST) < totalEntries);
             }
             // Add the layer
             try {
@@ -280,10 +285,16 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
         catch (IOException | JsonIOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
+        finally {
+            dialog.setVisible(false);
+            dialog.dispose();
+        }
     }
     
     private void getGBIFData(String inScientificName) {
+        LoadingWebMapDialog dialog = new LoadingWebMapDialog(mapsBaseDialog, "GBIF");
         try {
+            dialog.setVisible(true);
             // Check whether the data should be fetched fro the web URL
             if ((scientificName == null && inScientificName != null) || (scientificName != null && !scientificName.equalsIgnoreCase(inScientificName))) {
                 int requestPage = 0;
@@ -296,9 +307,10 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                     GBIFData gbifResult = new Gson().fromJson(new InputStreamReader(url.openStream(), "UTF-8"), GBIFData.class);
                     totalEntries = gbifResult.getCount();
                     lstAllGBIFResults.addAll(gbifResult.getResults());
+                    dialog.updateInfoText("Loaded " + lstAllGBIFResults.size() + " of " + totalEntries + " records.");
                     requestPage = requestPage + 1; // Note: Increase at the end because the initial offset must be 0
                 }
-                while ((requestPage * PAGE_LIMIT_GBIF) < totalEntries);
+                while (!dialog.isStopLoading() && (requestPage * PAGE_LIMIT_GBIF) < totalEntries);
             }
             // Add the layer
             try {
@@ -321,6 +333,10 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
         }
         catch (IOException | JsonIOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        finally {
+            dialog.setVisible(false);
+            dialog.dispose();
         }
     }
     
