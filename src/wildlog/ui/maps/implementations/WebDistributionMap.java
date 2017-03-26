@@ -76,7 +76,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
 
 
     public WebDistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
-        super("Distribution Maps (Web)", inLstData, inChartDescLabel, inMapsBaseDialog);
+        super("Distribution Web Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
         ToggleButton btnDistributionMap = new ToggleButton("Creature Distribution Map");

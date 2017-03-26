@@ -252,7 +252,7 @@ public class InfoBox extends JPanel {
                 spnNumberStateChanged(evt);
             }
         });
-        add(spnNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 187, 77, 20));
+        add(spnNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 165, 77, 20));
 
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
         cmbSex.setSelectedItem(Sex.NONE);
@@ -265,7 +265,7 @@ public class InfoBox extends JPanel {
                 cmbSexActionPerformed(evt);
             }
         });
-        add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 165, 77, 20));
+        add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(157, 187, 77, 20));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed

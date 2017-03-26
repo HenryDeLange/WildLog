@@ -133,7 +133,6 @@ public final class UtilsUI {
             }
         
             private void doSearch() {
-                System.out.println("searching...");
                 inTable.getSelectionModel().clearSelection();
                 TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>) inTable.getRowSorter();
                 if (sorter == null) {

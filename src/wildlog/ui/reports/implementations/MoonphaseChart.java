@@ -141,6 +141,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(chkShowMoonlight);
+// TODO: Maak dalk twee opsies: een vir "Baseline at Night" en een vir "Baseline at Day"
         CheckBox chkShowBaseline = new CheckBox("Show Baseline");
         chkShowBaseline.setCursor(Cursor.HAND);
         chkShowBaseline.setSelected(false);

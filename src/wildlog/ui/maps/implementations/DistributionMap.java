@@ -81,7 +81,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
 
     
     public DistributionMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
-        super("Distribution Maps (Layer)", inLstData, inChartDescLabel, inMapsBaseDialog);
+        super("Distribution Layer Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
         ToggleButton btnDistributionMap = new ToggleButton("Creature Distribution Map");
@@ -122,10 +122,9 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
         cmbTransparity.setVisibleRowCount(3);
         cmbTransparity.setCursor(Cursor.HAND);
         lstCustomButtons.add(cmbTransparity);
+        cmbTransparity.getSelectionModel().select(Transparency.NORMAL);
         setupShowCountriesButton();
         setupEnchanceContrastButton();
-        // Select the default transparency
-        cmbTransparity.getSelectionModel().select(Transparency.NORMAL);
     }
 
     @Override

@@ -7,7 +7,6 @@ import java.io.Reader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -21,6 +20,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.JLabel;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
@@ -44,7 +44,7 @@ public class PointMap extends AbstractMap<Sighting> {
 
     
     public PointMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
-        super("World Maps (Online)", inLstData, inChartDescLabel, inMapsBaseDialog);
+        super("Satellite Imagery Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
         ToggleButton btnPointMapGoogle = new ToggleButton("Markers on Google Maps");
@@ -202,13 +202,10 @@ public class PointMap extends AbstractMap<Sighting> {
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
         for (DataObjectWithHTML sighting : inLstSightings) {
             if (UtilsGPS.hasGPSData((DataObjectWithGPS) sighting)) {
-                String point = UtilsMaps.replace(gpsPointTemplate, "var locationZZZ", "var location" + sighting.getIDField());
+                String point = UtilsMaps.replace(gpsPointTemplate, "locationZZZ", "location" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "pinZZZ", "pin" + sighting.getIDField());
+                point = UtilsMaps.replace(point, "boxZZZ", "box" + sighting.getIDField());
                 point = UtilsMaps.replace(point, "Location(-33, 23)", "Location(" + UtilsGPS.getLatDecimalDegree((DataObjectWithGPS) sighting) + "," + UtilsGPS.getLonDecimalDegree((DataObjectWithGPS) sighting) + ")");
-                point = UtilsMaps.replace(point, "var pinZZZ", "var pin" + sighting.getIDField());
-                point = UtilsMaps.replace(point, "Pushpin(locationZZZ", "Pushpin(location" + sighting.getIDField());
-                point = UtilsMaps.replace(point, "push(pinZZZ", "push(pin" + sighting.getIDField());
-                point = UtilsMaps.replace(point, "Infobox(locationZZZ", "Infobox(location" + sighting.getIDField());
-                point = UtilsMaps.replace(point, "pushpin: pinZZZ", "pushpin: pin" + sighting.getIDField());
                 point = UtilsMaps.replace(point, "ZZZ-title", UtilsMaps.replace(sighting.getDisplayName(), "\"", "&quot;"));
                 String html = sighting.toHTML(false, showThumbnails, !showDetails, WildLogApp.getApplication(), UtilsHTMLExportTypes.ForMap, null);
                 point = UtilsMaps.replace(point, "ZZZ-content", UtilsMaps.replace(UtilsMaps.replace(UtilsMaps.replace(html, "\"", "&quot;"), "\n", "<br/>"), "\r", ""));

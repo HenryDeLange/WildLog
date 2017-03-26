@@ -21,7 +21,7 @@ public class EarthMap extends AbstractGeoToolsMap<Sighting> {
 
     
     public EarthMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
-        super("World Maps (Offline)", inLstData, inChartDescLabel, inMapsBaseDialog);
+        super("Basic Terrain Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Maps
         ToggleButton btnModernMap = new ToggleButton("Modern World");
