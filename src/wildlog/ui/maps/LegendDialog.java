@@ -76,7 +76,8 @@ public class LegendDialog extends JDialog {
             HBox row = new HBox(10);
             row.setPadding(new Insets(0, 5, 0, 10));
             Color color = mapLegends.get(layer);
-            ColorPicker colorPicker = new ColorPicker(new javafx.scene.paint.Color(color.getRed()/255.0, color.getGreen()/255.0, color.getBlue()/255.0, 1.0));
+            ColorPicker colorPicker = new ColorPicker(new javafx.scene.paint.Color(
+                    color.getRed()/255.0, color.getGreen()/255.0, color.getBlue()/255.0, color.getAlpha()/255.0));
             colorPicker.setPrefWidth(70);
             colorPicker.setPrefHeight(40);
             colorPicker.getStylesheets().add("wildlog/ui/maps/styling/LegendDialog.css");
@@ -168,7 +169,8 @@ public class LegendDialog extends JDialog {
                 ColorPicker colorPicker = (ColorPicker) ((HBox) row).getChildren().get(0);
                 Label label = (Label) ((HBox) row).getChildren().get(1);
                 javafx.scene.paint.Color color = colorPicker.getValue();
-                mapLegends.put(label.getText(), new Color((int)(color.getRed()*255.0), (int)(color.getGreen()*255.0), (int)(color.getBlue()*255.0)));
+                mapLegends.put(label.getText(), new Color(
+                        (int)(color.getRed()*255.0), (int)(color.getGreen()*255.0), (int)(color.getBlue()*255.0), (int)(color.getOpacity()*255.0)));
             }
         }
         setVisible(false);

@@ -5,6 +5,7 @@ import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Metadata;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,6 +48,16 @@ public class BulkUploadDataLoader {
         long time = System.currentTimeMillis();
         WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadDataWrapper.genenrateTableData() - The files will be read and prepared for the table to display.");
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
+        if (inLstFolderPaths != null && inLstFolderPaths.size() == 1) {
+            if (Files.isRegularFile(inLstFolderPaths.get(0))) {
+                int result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
+                        "Only one file was selected. Would you like to search for other files in the folders as well?", 
+                        "Include all files?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (result == JOptionPane.YES_OPTION) {
+                    inLstFolderPaths.set(0, inLstFolderPaths.get(0).getParent());
+                }
+            }
+        }
         final List<Path> lstAllFiles = getListOfFilesToImport(inLstFolderPaths, inIsRecuresive);
         if (lstAllFiles.isEmpty() && !inIsRecuresive) {
             int result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 

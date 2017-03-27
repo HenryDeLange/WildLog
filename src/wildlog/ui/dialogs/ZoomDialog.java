@@ -1,16 +1,18 @@
 package wildlog.ui.dialogs;
 
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.nio.file.Path;
 import java.util.List;
-import org.apache.logging.log4j.Level;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -64,6 +66,12 @@ public class ZoomDialog extends JDialog {
         else {
             setupFile(inFilesToView.get(fileIndex));
         }
+        // Set size
+        lblZoomedFile.setMinimumSize(new Dimension(WildLogThumbnailSizes.VERY_LARGE.getSize(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
+        lblZoomedFile.setPreferredSize(new Dimension(WildLogThumbnailSizes.VERY_LARGE.getSize(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
+        lblZoomedFile.setMaximumSize(new Dimension(WildLogThumbnailSizes.VERY_LARGE.getSize(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
+        pack();
+        UtilsDialog.setDialogToCenter(getParent(), this);
     }
 
     /**
@@ -104,6 +112,7 @@ public class ZoomDialog extends JDialog {
         getContentPane().add(btnNext, java.awt.BorderLayout.LINE_END);
 
         lblZoomedFile.setBackground(new java.awt.Color(0, 0, 0));
+        lblZoomedFile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblZoomedFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblZoomedFile.setOpaque(true);
         lblZoomedFile.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -153,7 +162,8 @@ public class ZoomDialog extends JDialog {
     private void setupFile(Path inPath) {
         setTitle("Zoom Popup - " + inPath.toString());
         if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
-            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.VERY_LARGE.getSize(), true));
+            ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.VERY_LARGE.getSize(), true);
+            lblZoomedFile.setIcon(imageIcon);
         }
         else
         if (WildLogFileExtentions.Movies.isKnownExtention(inPath)) {
@@ -164,8 +174,7 @@ public class ZoomDialog extends JDialog {
         }
         // Don't set the tooltip. If it is set then sometimes the tooltip uses the initial ESC press.
 //        lblZoomedFile.setToolTipText(inPath.getFileName().toString());
-        // Resize and recenter
-        pack();
+        // Recenter
         UtilsDialog.setDialogToCenter(getParent(), this);
     }
 

@@ -1193,7 +1193,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnDeleteSightingActionPerformed
 
     private void btnAddSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSightingActionPerformed
-        btnUpdateActionPerformed(evt);
+        btnUpdateActionPerformed(null);
         if (!txtName.getBackground().equals(Color.RED)) {
             sighting = new Sighting();
             sighting.setLocationName(locationForVisit.getName());
@@ -1229,7 +1229,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_btnEditSightingActionPerformed
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        btnUpdateActionPerformed(evt);
+        btnUpdateActionPerformed(null);
         if (!txtName.getBackground().equals(Color.RED)) {
             List<File> files = UtilsFileProcessing.showFileUploadDialog(app, app.getMainFrame());
             uploadFiles(files);
@@ -1260,13 +1260,13 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
         imageIndex = UtilsImageProcessing.removeImage(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         setupNumberOfImages();
-        btnUpdateActionPerformed(evt);
+        btnUpdateActionPerformed(null);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
         imageIndex = UtilsImageProcessing.setMainImage(visit.getWildLogFileID(), imageIndex, app);
         setupNumberOfImages();
-        btnUpdateActionPerformed(evt);
+        btnUpdateActionPerformed(null);
 }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
@@ -1395,6 +1395,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (txtName.getText().length() > 0) {
                 String oldName = lastSavedVisit.getName();
                 populateVisitFromUI();
+                // Waarsku as die daar nie minstens 'n begin datum is nie
+                if (evt != null && visit.getStartDate() == null) {
+                    int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                            "<html>No Start Date was provided. The Start Date is used by a number of reports and maps."
+                                    + "<br />Continue to save this Period without a Start Date?</html>", 
+                            "Warning: Save empty Start Date?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (result != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
                 // Save the visit
                 boolean result;
                 if (oldName == null || oldName.isEmpty()) {
@@ -1404,7 +1414,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     result = app.getDBI().updateVisit(visit, oldName);
                 }
                 if (result == true) {
-                    txtName.setBackground(new java.awt.Color(204, 255, 204));
+                    txtName.setBackground(new Color(204, 255, 204));
                     txtName.setText(visit.getName());
                     lastSavedVisit = visit.cloneShallow();
                     if (app.getWildLogOptions().isEnableSounds()) {

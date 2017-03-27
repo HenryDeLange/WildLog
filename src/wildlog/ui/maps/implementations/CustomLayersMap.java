@@ -40,7 +40,9 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
     private enum MapType {CUSTOM};
     private MapType activeMapType = MapType.CUSTOM;
     private final List<Path> lstLayers = new ArrayList<>(5);
-    private final Color[] lstDefaultMapColours = new Color[] {new Color(232, 70, 19), new Color(255, 126, 25), new Color(255, 64, 57), new Color(232, 158, 35), new Color(255, 203, 36)};
+    private final Color[] lstDefaultMapColours = new Color[] {
+        new Color(232, 70, 19, 100), new Color(255, 126, 25, 100), new Color(255, 64, 57, 100), 
+        new Color(232, 158, 35, 100), new Color(255, 203, 36, 100)};
     private Map<String, Color> mapLegends = new HashMap<>(5);
     
     
@@ -67,7 +69,6 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
                     if (layerPath.getFileName().toString().toLowerCase().endsWith(".shp")) {
                         Path stylePath = Paths.get(layerPath.toString().substring(0, layerPath.toString().lastIndexOf('.')) + ".sld");
                         // Moenie 'n legend wys vir layers wat 'n default style file gebruik nie
-// TODO: Maak dat mens die layers se opacity kan stel (veral die style layers sal handig wees aangesien mens nie die kleuere kan stel vie hulle nie...
                         if (!Files.exists(stylePath)) {
                             if (counter < lstDefaultMapColours.length) {
                                 mapLegends.put(layerPath.getFileName().toString(), lstDefaultMapColours[counter++]);
@@ -125,8 +126,9 @@ public class CustomLayersMap extends AbstractGeoToolsMap<Sighting> {
                             style = GeoToolsLayerUtils.createShapefileStyleFile(shapeSource, stylePath);
                         }
                         else {
+                            Color legend = mapLegends.get(layerPath.getFileName().toString());
                             style = GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
-                                Color.BLACK, mapLegends.get(layerPath.getFileName().toString()), 1.0, 0.3);
+                                Color.BLACK, legend, legend.getAlpha()/255.0, legend.getAlpha()/255.0);
                         }
                         Layer shapelayer = new FeatureLayer(shapeSource, style, layerPath.getFileName().toString());
                         map.addLayer(shapelayer);
