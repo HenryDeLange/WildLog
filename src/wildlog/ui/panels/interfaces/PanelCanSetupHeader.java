@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -70,6 +69,9 @@ public abstract class PanelCanSetupHeader extends JPanel {
 
     private void doSetupTabHeader(String inTitleText, URL inIconURL, TabTypes inTabType) {
         HeaderPanel tempTabHeader = new HeaderPanel();
+        tempTabHeader.setBackground(new Color(0, 0, 0, 0));
+        tempTabHeader.setBorder(null);
+        tempTabHeader.setFocusable(false);
         tempTabHeader.setTabType(inTabType);
 // FIXME: Issue waar die scrolling nie werk as mens nie in die panel is nie (die panel moet die hele tab vol stretch...)
         tempTabHeader.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
@@ -90,25 +92,55 @@ public abstract class PanelCanSetupHeader extends JPanel {
         dimension.height = 30;
         titleLabel.setPreferredSize(dimension);
         tempTabHeader.add(titleLabel);
-        JButton btnClose = new JButton();
-        btnClose.setFocusPainted(false);
+        JLabel btnClose = new JLabel();
         btnClose.setFocusable(false);
-        btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnClose.setMinimumSize(new Dimension(12, 12));
         btnClose.setPreferredSize(new Dimension(12, 12));
+        btnClose.setMaximumSize(new Dimension(12, 12));
         btnClose.setToolTipText("Close this tab.");
         btnClose.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/icons/Close.png")));
+        btnClose.setBackground(new Color(0, 0, 0, 0));
         btnClose.setBorder(null);
-        btnClose.setBorderPainted(false);
-        btnClose.setContentAreaFilled(false);
-        btnClose.setRolloverEnabled(false);
+        tempTabHeader.add(btnClose);
+        JLabel btnCloseHover = new JLabel();
+        btnCloseHover.setVisible(false);
+        btnCloseHover.setFocusable(false);
+        btnCloseHover.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnCloseHover.setMinimumSize(new Dimension(12, 12));
+        btnCloseHover.setPreferredSize(new Dimension(12, 12));
+        btnCloseHover.setMaximumSize(new Dimension(12, 12));
+        btnCloseHover.setToolTipText("Close this tab.");
+        btnCloseHover.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/icons/CloseHover.png")));
+        btnCloseHover.setBackground(new Color(0, 0, 0, 0));
+        btnCloseHover.setBorder(null);
+        tempTabHeader.add(btnCloseHover);
+        // Ek moet die snaakse show/hide storie doen om verby die stupid focus probleme met JButtons (en selfs JLabels) te kom...
         btnClose.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 closeTab();
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnClose.setVisible(false);
+                btnCloseHover.setVisible(true);
+            }
         });
-        tempTabHeader.add(btnClose);
-        tempTabHeader.setBackground(new Color(0, 0, 0, 0));
+        btnCloseHover.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                closeTab();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnCloseHover.setVisible(false);
+                btnClose.setVisible(true);
+            }
+            
+        });
         // Keep reference to the tab header on the panel
         tabHeader = tempTabHeader;
         // Setup the tabPanel to display the custom tabheader

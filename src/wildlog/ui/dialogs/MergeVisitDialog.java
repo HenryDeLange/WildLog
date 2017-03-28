@@ -12,6 +12,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 
@@ -26,6 +27,8 @@ public class MergeVisitDialog extends JDialog {
         app = inApp;
         initComponents();
         loadLists();
+        // Weet nie hoekom die dialog 'n pack() nodig het nie...
+        pack();
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
@@ -58,14 +61,13 @@ public class MergeVisitDialog extends JDialog {
         lstToVisit = new javax.swing.JList();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        chkMergeVisitFiles = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Merge Two Periods");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
-        setMaximumSize(new java.awt.Dimension(740, 600));
-        setMinimumSize(new java.awt.Dimension(740, 600));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(740, 600));
+        setName("merge dialog"); // NOI18N
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -139,6 +141,13 @@ public class MergeVisitDialog extends JDialog {
         jLabel6.setText("<html>All Observations from the first Period will be changed to point to the second Period, then the first Period will be deleted.</html>");
         jLabel6.setName("jLabel6"); // NOI18N
 
+        chkMergeVisitFiles.setSelected(true);
+        chkMergeVisitFiles.setText("Also merge the Files associated with the periods.");
+        chkMergeVisitFiles.setToolTipText("If selected this will move the Files from the Period that will be removed to the Period that will be kept, otherwise the Period's Files will be deleted.");
+        chkMergeVisitFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkMergeVisitFiles.setFocusPainted(false);
+        chkMergeVisitFiles.setName("chkMergeVisitFiles"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,7 +165,7 @@ public class MergeVisitDialog extends JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane2))
                                 .addGap(10, 10, 10))
                             .addGroup(layout.createSequentialGroup()
@@ -167,7 +176,8 @@ public class MergeVisitDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 654, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chkMergeVisitFiles))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10))))
@@ -179,10 +189,12 @@ public class MergeVisitDialog extends JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(chkMergeVisitFiles))
                     .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
+                .addGap(3, 3, 3)
                 .addComponent(jLabel1)
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -198,7 +210,7 @@ public class MergeVisitDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(5, 5, 5)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
                     .addComponent(jScrollPane3))
                 .addGap(10, 10, 10))
         );
@@ -211,10 +223,20 @@ public class MergeVisitDialog extends JDialog {
                 // Update the sightings
                 List<Sighting> sightings = app.getDBI().listSightings(0, null, null, tempFromVisitName, false, Sighting.class);
                 for (Sighting sighting : sightings) {
-                    sighting.setLocationName((String)lstToLocation.getSelectedValue());
-                    sighting.setVisitName((String)lstToVisit.getSelectedValue());
+                    sighting.setLocationName((String) lstToLocation.getSelectedValue());
+                    sighting.setVisitName((String) lstToVisit.getSelectedValue());
                     app.getDBI().updateSighting(sighting);
                 }
+                // Update the files
+                if (chkMergeVisitFiles.isSelected()) {
+                    List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(
+                            Visit.WILDLOGFILE_ID_PREFIX + tempFromVisitName, null, WildLogFile.class);
+                    for (WildLogFile wildLogFile : lstWildLogFiles) {
+                        wildLogFile.setId(Visit.WILDLOGFILE_ID_PREFIX + (String) lstToVisit.getSelectedValue());
+                        app.getDBI().updateWildLogFile(wildLogFile);
+                    }
+                }
+                // Delete the visit
                 app.getDBI().deleteVisit(tempFromVisitName);
             }
             setVisible(false);
@@ -271,6 +293,7 @@ public class MergeVisitDialog extends JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
+    private javax.swing.JCheckBox chkMergeVisitFiles;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -3,6 +3,7 @@ package wildlog.ui.helpers;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.HeadlessException;
@@ -157,6 +158,7 @@ public class WLOptionPane extends JOptionPane {
             }
             if (component instanceof JButton) {
                 ((JButton) component).setFocusPainted(false);
+                ((JButton) component).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
         }
     }
