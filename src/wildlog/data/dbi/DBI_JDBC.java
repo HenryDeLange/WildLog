@@ -672,7 +672,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, Class<T> inReturnType) {
+    public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T tempFile = null;
@@ -680,16 +680,22 @@ public abstract class DBI_JDBC implements DBI {
             String sql = findFile;
             if (inDBFilePath != null) {
                 sql = sql + " WHERE ORIGINALPATH = ?";
-                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH LIMIT 1";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inDBFilePath.replace("\\", "/")));
             }
             else
             if (inWildLogFileID != null) {
                 sql = sql + " WHERE ID = ?";
-                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                if (inWildLogFileType != null) {
+                    sql = sql + " AND FILETYPE = ?";
+                }
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH LIMIT 1";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
+                if (inWildLogFileType != null) {
+                    state.setString(2, UtilsData.stringFromObject(inWildLogFileType));
+                }
             }
             if (state != null) {
                 results = state.executeQuery();

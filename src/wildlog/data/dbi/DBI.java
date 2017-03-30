@@ -31,7 +31,7 @@ public interface DBI {
     public <T extends LocationCore> T findLocation(String inName, Class<T> inReturnType);
     public <T extends VisitCore> T findVisit(String inName, Class<T> inReturnType);
     public <T extends SightingCore> T findSighting(long inSightingCounter, Class<T> inReturnType);
-    public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, Class<T> inReturnType);
+    public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
     public <T extends WildLogOptions> T findWildLogOptions(Class<T> inReturnType);
     public <T extends AdhocData> T findAdhocData(String inFieldID, String inDataKey, Class<T> inReturnType);
 
