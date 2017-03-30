@@ -17,7 +17,6 @@ import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.apache.logging.log4j.Level;
 import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -30,6 +29,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -1346,7 +1346,7 @@ public final class UtilsTableGenerator {
 
     private static ImageIcon setupThumbnailIcon(WildLogApp inApp, String inWildLogFileID) {
         if (inApp.getWildLogOptions().isUseThumbnailTables()) {
-            WildLogFile wildLogFile = inApp.getDBI().findWildLogFile(null, inWildLogFileID, WildLogFile.class);
+            WildLogFile wildLogFile = inApp.getDBI().findWildLogFile(null, inWildLogFileID, null, WildLogFile.class);
             if (wildLogFile != null) {
                 return new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL).toString());
             }

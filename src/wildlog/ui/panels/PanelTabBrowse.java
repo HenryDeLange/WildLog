@@ -1406,7 +1406,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getElementName()).resolve(
                                                         wildLogFile.getFilename())).toString(), 
-                                null, WildLogFile.class);
+                                null, null, WildLogFile.class);
                         uploadedWildLogFile.setDefaultFile(true);
                         app.getDBI().updateWildLogFile(uploadedWildLogFile);
                     }
@@ -1439,7 +1439,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getLocationName()).resolve(
                                                         wildLogFile.getFilename())).toString(),
-                                null, WildLogFile.class);
+                                null, null, WildLogFile.class);
                         uploadedWildLogFile.setDefaultFile(true);
                         app.getDBI().updateWildLogFile(uploadedWildLogFile);
                     }
@@ -1468,7 +1468,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
                                                 visit.getLocationName()).resolve(
                                                         wildLogFile.getFilename())).toString(),
-                                null, WildLogFile.class);
+                                null, null, WildLogFile.class);
                         uploadedWildLogFile.setDefaultFile(true);
                         app.getDBI().updateWildLogFile(uploadedWildLogFile);
                     }
@@ -1501,7 +1501,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getVisitName()).resolve(
                                                         wildLogFile.getFilename())).toString(),
-                                null, WildLogFile.class);
+                                null, null, WildLogFile.class);
                         uploadedWildLogFile.setDefaultFile(true);
                         app.getDBI().updateWildLogFile(uploadedWildLogFile);
                     }

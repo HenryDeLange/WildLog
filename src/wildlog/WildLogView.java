@@ -25,10 +25,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +68,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
@@ -1572,12 +1575,11 @@ public final class WildLogView extends JFrame {
         if (result == JOptionPane.OK_OPTION) {
             final int choice = WLOptionPane.showOptionDialog(app.getMainFrame(),
                     "Please select what records should be modified:",
-                    "Automatically Calculate Sun and Moon Information",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    new String[] {"All Observations", "Only Obervations without Sun and Moon information"},
-                    null);
+                    "Automatically Calculate Sun and Moon Information", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                    null, new String[] {
+                        "All Observations", 
+                        "Only Obervations without Sun and Moon information"
+                    }, null);
             if (choice != JOptionPane.CLOSED_OPTION) {
                 // Close all tabs and go to the home tab
                 tabbedPanel.setSelectedIndex(0);
@@ -1949,13 +1951,17 @@ public final class WildLogView extends JFrame {
                         + "In addition all unnessasary files will be removed from the Workspace. </html>",
                 "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            final int recreateThumbnailsResult = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+            final int recreateThumbnailsResult = WLOptionPane.showOptionDialog(app.getMainFrame(),
                     "<html>Would you like to also recreate all cached image thumbnails?"
-                            + "<br/>Recreating the thumbnails can improve system performance and might correct thumbnails that "
-                            + "are displaying incorrectly."
-                            + "<br/>Warining: This step is optional but recommended. It can take very long to complete."
+                            + "<br/>Recreating the thumbnails can improve system performance and might correct thumbnails that are displaying incorrectly."
+                            + "<br/>Warning: This step is optional but recommended. It can take very long to complete."
                             + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
-                    "Recreate Thumbnails?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    "Recreate Thumbnails?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                    null, new String[] {
+                        "Recreate only essential thumbnails (Recommended)",
+                        "Recreate all thumbnails", 
+                        "Don't recreate any thumbnails"
+                    }, null);
             // Close all tabs and go to the home tab
             tabbedPanel.setSelectedIndex(0);
             while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
@@ -2082,7 +2088,7 @@ public final class WildLogView extends JFrame {
 // TODO: As die file bestaan maar nie in die DB link nie kan mens dalk probeer "slim" wees en die link afly deur ander info soos size, date en die path...
                                             WildLogFile wildLogFile = new WildLogFile();
                                             wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile).toString());
-                                            if (app.getDBI().findWildLogFile(wildLogFile.getDBFilePath(), null, WildLogFile.class) == null) {
+                                            if (app.getDBI().findWildLogFile(wildLogFile.getDBFilePath(), null, null, WildLogFile.class) == null) {
                                                 finalHandleFeedback.println("PROBLEM:   File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
                                                 finalHandleFeedback.println("+RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
                                                 // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
@@ -2333,7 +2339,7 @@ public final class WildLogView extends JFrame {
                                     filesWithIncorrectSize++;
                                 }
                             }
-                            setProgress(1 + (int)(fileProcessCounter++/(double)allFiles.size()*12));
+                            setProgress(40 + (int)(fileProcessCounter++/(double)allFiles.size()*12));
                             setMessage("Cleanup Step 3: Check the file size and dates... " + getProgress() + "%");
                         }
                         setProgress(52);
@@ -2493,6 +2499,7 @@ public final class WildLogView extends JFrame {
                             setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
                         }
                         setProgress(72);
+                       
 
                         // ---------------------7---------------------
                         // Check GPS Accuracy
@@ -2557,31 +2564,135 @@ public final class WildLogView extends JFrame {
                         setProgress(76);
                         
                         // ---------------------8---------------------
+                        // Checks Visit dates
+                        setMessage("Cleanup Step 8: Check the Period date ranges... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("8) Check the Period date ranges.");
+                        allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                        int badVisitDates = 0;
+                        for (Sighting sighting : allSightings) {
+                            Visit visit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                            if (visit.getStartDate() == null) {
+                                finalHandleFeedback.println("WARNING:   The Period (" + sighting.getVisitName() + ") does not have a Start Date.");
+                                finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Reports and Maps.");
+                                badVisitDates++;
+                            }
+                            if (visit.getStartDate() != null && visit.getEndDate() != null && visit.getEndDate().before(visit.getStartDate())) {
+                                finalHandleFeedback.println("WARNING:   The Period (" + sighting.getVisitName() + ") has an End Date that is before the Start Date.");
+                                finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have a valid date range.");
+                                badVisitDates++;
+                            }
+                            LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+                            if ((visit.getStartDate() != null && sightingDate.isBefore(UtilsTime.getLocalDateFromDate(visit.getStartDate()))) 
+                                    || (visit.getEndDate() != null && sightingDate.isAfter(UtilsTime.getLocalDateFromDate(visit.getEndDate())))) {
+                                finalHandleFeedback.println("WARNING:   The date for Observation (" + sighting.getSightingCounter() + ") does not fall within the dates from Period (" + sighting.getVisitName() + ").");
+                                finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Observations to use dates that fall within the Start date and End Date of the linked Period.");
+                                badVisitDates++;
+                            }
+                            setProgress(76 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
+                            setMessage("Cleanup Step 8: Check the Period date ranges... " + getProgress() + "%");
+                        }
+                        
+                        // ---------------------9---------------------
                         // Re-create die default thumbnails
-                        if (recreateThumbnailsResult == JOptionPane.YES_OPTION) {
-                            setMessage("Cleanup Step 8: (Optional) Recreating default thumbnails... " + getProgress() + "%");
+                        if (recreateThumbnailsResult == 0) {
+                            // Recreate essential thumbnails
+                            setMessage("Cleanup Step 9: (Optional) Recreating essential default thumbnails... " + getProgress() + "%");
                             finalHandleFeedback.println("");
-                            finalHandleFeedback.println("8) Recreate the default thumbnails for all images.");
-                            final List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
+                            finalHandleFeedback.println("9) Recreate the default thumbnails for essential images.");
+                            List<WildLogFile> listFiles = new ArrayList<>(128);
+                            List<Element> lstElements = app.getDBI().listElements(null, null, null, Element.class);
+                            for (Element element : lstElements) {
+                                WildLogFile image = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
+                                if (image != null) {
+                                    listFiles.add(image);
+                                }
+                            }
+                            List<Location> lstLocation = app.getDBI().listLocations(null, Location.class);
+                            for (Location location : lstLocation) {
+                                WildLogFile image = app.getDBI().findWildLogFile(null, location.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
+                                if (image != null) {
+                                    listFiles.add(image);
+                                }
+                            }
+                            List<Visit> lstVisit = app.getDBI().listVisits(null, null, null, Visit.class);
+                            for (Visit visit : lstVisit) {
+                                WildLogFile image = app.getDBI().findWildLogFile(null, visit.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
+                                if (image != null) {
+                                    listFiles.add(image);
+                                }
+                            }
                             ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
                             final CleanupCounter countThumbnails = new CleanupCounter();
                             for (final WildLogFile wildLogFile : listFiles) {
                                 executorService.submit(new Runnable() {
                                     @Override
                                     public void run() {
-                                        if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                                            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                                                // Maak net die nodigste thumbnails, want anders vat dinge donners lank
-                                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
-                                            }
-                                        }
+                                        // Maak net die nodigste thumbnails, want anders vat dinge donners lank
+                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
                                         // Not going to bother with synchornization here, since it's just the progress bar
                                         countThumbnails.counter++;
-                                        setProgress(76 + (int)(countThumbnails.counter/(double)listFiles.size()*23));
-                                        setMessage("Cleanup Step 8: (Optional) Recreating default thumbnails... " + getProgress() + "%");
+                                        setProgress(78 + (int)(countThumbnails.counter/(double)listFiles.size()*21));
+                                        setMessage("Cleanup Step 9: (Optional) Recreating essential default thumbnails... " + getProgress() + "%");
+                                    }
+                                });
+                            }
+                            for (WildLogSystemImages systemFile : WildLogSystemImages.values()) {
+                                for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                                    systemFile.getWildLogFile().getAbsoluteThumbnailPath(size);
+                                }
+                            }
+                            // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
+                            executorService.shutdown();
+                            if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
+                                finalHandleFeedback.println("PROBLEM:     Processing the thumbnails took too long.");
+                                finalHandleFeedback.println("-UNRESOLVED: Thumbnails can be created on demand by the application.");
+                            }
+                            setProgress(99);
+                        }
+                        else 
+                        if (recreateThumbnailsResult == 1) {
+                            // Recreate all thumbnails
+                            setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... " + getProgress() + "%");
+                            finalHandleFeedback.println("");
+                            finalHandleFeedback.println("9) Recreate the default thumbnails for all images.");
+                            List<WildLogFile> listFiles =app.getDBI().listWildLogFiles(null, WildLogFileType.IMAGE, WildLogFile.class);
+                            // Sort the files by name to put the related location, element, visit and sighting images close to one another, 
+                            // otherwise the loading from disk actually gets worse because the files are all over the place.
+                            // This way the read-ahead will get more hits and be faster.
+                            Collections.sort(listFiles, new Comparator<WildLogFileCore>() {
+                                @Override
+                                public int compare(WildLogFileCore wlFile1, WildLogFileCore wlFile2) {
+                                    String prioritisedID1 = wlFile1.getId();
+                                    String prioritisedID2 = wlFile2.getId();
+                                    // Maak seker Visits word voor Sightings gedoen
+                                    if (prioritisedID1.charAt(0) == 'V') {
+                                        prioritisedID1 = "LZZZ" + prioritisedID1;
+                                    }
+                                    if (prioritisedID2.charAt(0) == 'V') {
+                                        prioritisedID2 = "LZZZ" + prioritisedID2;
+                                    }
+                                    return prioritisedID1.compareTo(prioritisedID2);
+                                }
+                            });
+                            ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
+                            final CleanupCounter countThumbnails = new CleanupCounter();
+                            for (final WildLogFile wildLogFile : listFiles) {
+                                executorService.submit(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Maak net die nodigste thumbnails, want anders vat dinge donners lank
+                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                                        // Not going to bother with synchornization here, since it's just the progress bar
+                                        countThumbnails.counter++;
+                                        setProgress(78 + (int)(countThumbnails.counter/(double)listFiles.size()*21));
+                                        setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... " + getProgress() + "%");
                                     }
                                 });
                             }
@@ -2600,8 +2711,8 @@ public final class WildLogView extends JFrame {
                         }
                         else {
                             setProgress(99);
-                            setMessage("Cleanup Step 8: (Optional) Recreating default thumbnails... SKIPPED " + getProgress() + "%");
-                            finalHandleFeedback.println("8) Recreate the default thumbnails for all images. SKIPPED");
+                            setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... SKIPPED " + getProgress() + "%");
+                            finalHandleFeedback.println("9) Recreate the default thumbnails for all images. SKIPPED");
                         }
 
                         // ---------------------?---------------------
@@ -2638,6 +2749,7 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("Database file records with an incorrect File Size stored in the database: " + filesWithIncorrectSize);
                         finalHandleFeedback.println("Incorrect links between database records: " + badDataLinks);
                         finalHandleFeedback.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
+                        finalHandleFeedback.println("Periods with problematic Start Date and End Date values: " + badVisitDates);
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("+++++++++++++++++++ DURATION +++++++++++++++++++");
                         long duration = System.currentTimeMillis() - startTime;
@@ -2659,6 +2771,7 @@ public final class WildLogView extends JFrame {
                         WildLogApp.LOGGER.log(Level.INFO, "Database file records with an incorrect File Size: {}", filesWithIncorrectSize);
                         WildLogApp.LOGGER.log(Level.INFO, "Incorrect links between database records: {}", badDataLinks);
                         WildLogApp.LOGGER.log(Level.INFO, "Records with incorrect GPS Accuracy: {}", badGPSAccuracy);
+                        WildLogApp.LOGGER.log(Level.INFO, "Periods with problematic Start Date and End Date values: {}", badVisitDates);
                         WildLogApp.LOGGER.log(Level.INFO, "+++++++++++++++++++ DURATION +++++++++++++++++++");
                         WildLogApp.LOGGER.log(Level.INFO, "{} hours, {} minutes, {} seconds", new Object[]{hours, minutes, seconds});
                         setMessage("Finished Workspace Cleanup...");
@@ -2716,8 +2829,8 @@ public final class WildLogView extends JFrame {
                     "Automatically Calculate Duration", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, new String[] {
                         "All Observations", 
-                        "Only Obervations without a Duration"},
-                    null);
+                        "Only Obervations without a Duration"
+                    }, null);
             if (choice != JOptionPane.CLOSED_OPTION) {
                 // Close all tabs and go to the home tab
                 tabbedPanel.setSelectedIndex(0);
@@ -2819,7 +2932,7 @@ public final class WildLogView extends JFrame {
                         // Save the element to the new DB
                         syncDBI.createElement(element);
                         // Copy the files
-                        WildLogFile wildLogFile = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), WildLogFile.class);
+                        WildLogFile wildLogFile = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), null, WildLogFile.class);
                         if (wildLogFile != null) {
                             try {
                                 // Android kan nie die zip handle as die folders of files snaakse name het met - of _ in nie...
@@ -3189,16 +3302,16 @@ public final class WildLogView extends JFrame {
                     null, new String[] {
                         "Only Add New Creatures", 
                         "Only Update Existing Creatures", 
-                        "Add New and Update Existing Creatures"},
-                    null);
+                        "Add New and Update Existing Creatures"
+                    }, null);
             if (choiceForReplacing != JOptionPane.CLOSED_OPTION) {
                 final int choiceForName = WLOptionPane.showOptionDialog(app.getMainFrame(),
                         "Please select what name should be modified:",
                         "Import IUCN Species Names", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
                         null, new String[] {
                             "Primary Names", 
-                            "Other Names"},
-                        null);
+                            "Other Names"
+                        }, null);
                 if (choiceForName != JOptionPane.CLOSED_OPTION) {
                     // Close all tabs and go to the home tab
                     tabbedPanel.setSelectedIndex(0);
@@ -3293,12 +3406,11 @@ public final class WildLogView extends JFrame {
             // Display dialog to select which names should be switched
             int option = WLOptionPane.showOptionDialog(app.getMainFrame(), 
                     "<html>Select the name field that should be switched with the Primary Name field.</html>", 
-                    "Which name do you want to use?", 
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                    "Which name do you want to use?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
                     null, new String[] {
                         "Other Name", 
-                        "Scientific Name"}, 
-                    null);
+                        "Scientific Name"
+                    }, null);
             if (option != JOptionPane.CLOSED_OPTION) {
                 List<Element> lstElements = app.getDBI().listElements(null, null, null, Element.class);
                 for (Element element : lstElements) {

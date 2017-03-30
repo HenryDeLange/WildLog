@@ -625,7 +625,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             }
             List<WildLogFile> listFiles = app.getDBI().listWildLogFiles(inDataObjectWithWildLogFile.getWildLogFileID(), fileType, WildLogFile.class);
             for (WildLogFile wildLogFile : listFiles) {
-                if (inNewDBI.findWildLogFile(wildLogFile.getDBFilePath(), null, WildLogFile.class) == null) {
+                if (inNewDBI.findWildLogFile(wildLogFile.getDBFilePath(), null, null, WildLogFile.class) == null) {
                     Path source;
                     Path destination;
                     if (rdbExportThumbnails.isSelected() && WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
