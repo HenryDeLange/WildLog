@@ -1264,6 +1264,9 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
         lblNumberOfElements.setText("0");
+        
+// FIXME: ek dink nie die Class (carnivore, herbivore) is regtig handig op die period view nie...
+        
         if (locationWL.getName() != null) {
             if (evt != null) {
                 tblElement.clearSelection();

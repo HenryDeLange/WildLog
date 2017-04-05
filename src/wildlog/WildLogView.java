@@ -91,6 +91,7 @@ import wildlog.maps.kml.generator.KmlGenerator;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
+import wildlog.ui.dialogs.GPSGridConversionDialog;
 import wildlog.ui.dialogs.ImageResizeDialog;
 import wildlog.ui.dialogs.MergeElementsDialog;
 import wildlog.ui.dialogs.MergeLocationDialog;
@@ -377,6 +378,7 @@ public final class WildLogView extends JFrame {
         mnuReduceImagesSize = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
+        mnuConvertCoordinates = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
         mnuCreateGIF = new javax.swing.JMenuItem();
         mnuSunAndMoon = new javax.swing.JMenuItem();
@@ -1186,6 +1188,17 @@ public final class WildLogView extends JFrame {
             }
         });
         extraMenu.add(mnuExifMenuItem);
+
+        mnuConvertCoordinates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        mnuConvertCoordinates.setText("Convert GPS / QDS / Pentad");
+        mnuConvertCoordinates.setToolTipText("Convert between GPS, Pentad and QDS coordinates.");
+        mnuConvertCoordinates.setName("mnuConvertCoordinates"); // NOI18N
+        mnuConvertCoordinates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuConvertCoordinatesActionPerformed(evt);
+            }
+        });
+        extraMenu.add(mnuConvertCoordinates);
 
         mnuCreateSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         mnuCreateSlideshow.setText("Create a Slideshow");
@@ -3864,6 +3877,11 @@ public final class WildLogView extends JFrame {
         }
     }//GEN-LAST:event_mnuReduceImagesSizeActionPerformed
 
+    private void mnuConvertCoordinatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuConvertCoordinatesActionPerformed
+        GPSGridConversionDialog dialog = new GPSGridConversionDialog();
+        dialog.setVisible(true);
+    }//GEN-LAST:event_mnuConvertCoordinatesActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3964,6 +3982,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuChangeWorkspaceName;
     private javax.swing.JMenuItem mnuCheckUpdates;
     private javax.swing.JMenuItem mnuCleanWorkspace;
+    private javax.swing.JMenuItem mnuConvertCoordinates;
     private javax.swing.JMenuItem mnuCreateGIF;
     private javax.swing.JMenuItem mnuCreateSlideshow;
     private javax.swing.JMenuItem mnuCreateWorkspaceMenuItem;
