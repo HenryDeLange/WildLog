@@ -736,6 +736,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
+                this.setTaskProgress(0);
+                this.setMessage("Saving the Bulk Import: Validating...");
                 // Make sure the location is OK
                 if (selectedLocationName != null && !selectedLocationName.isEmpty() && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
                     // Make sure the visit is OK
@@ -791,8 +793,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         }
                     }
                     // Everything seems fine, start saving and close the tab to prevent new edits
-                    this.setMessage("Saving the Bulk Import: Starting...");
                     this.setTaskProgress(0);
+                    this.setMessage("Saving the Bulk Import: Starting...");
                     closeTab();
                     // Process the Location
                     Location location = app.getDBI().findLocation(selectedLocationName, Location.class);
@@ -880,8 +882,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         app, false, null, true, uploadListContainsDuplicates);
                                 // Update the progress
                                 try {
-                                    progressbarHandle.setMessage("Saving the Bulk Import: Busy...");
                                     progressbarHandle.setTaskProgress(counter.getAndIncrement(), 0, model.getRowCount());
+                                    progressbarHandle.setMessage("Saving the Bulk Import: Busy... " + progressbarHandle.getProgress() + "%");
                                 }
                                 catch (Exception e) {
                                     WildLogApp.LOGGER.log(Level.ERROR, e.toString(), e);

@@ -1482,6 +1482,10 @@ public class PanelLocation extends PanelCanSetupHeader {
             btnGoVisitActionPerformed(null);
             evt.consume();
         }
+        else
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            btnDeleteVisitActionPerformed(null);
+        }
     }//GEN-LAST:event_tblVisitKeyPressed
 
     private void tblVisitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseClicked

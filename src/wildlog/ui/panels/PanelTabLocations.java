@@ -346,6 +346,7 @@ public class PanelTabLocations extends JPanel {
     private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoVisit_LocTabActionPerformed(null);
+            evt.consume();
         }
     }//GEN-LAST:event_tblVisitKeyPressed
 
@@ -426,6 +427,7 @@ public class PanelTabLocations extends JPanel {
     private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoElement_LocTabActionPerformed(null);
+            evt.consume();
         }
     }//GEN-LAST:event_tblElementKeyPressed
 

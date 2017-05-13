@@ -399,6 +399,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoLocationActionPerformed(null);
+            evt.consume();
         }
     }//GEN-LAST:event_tblLocationKeyPressed
 

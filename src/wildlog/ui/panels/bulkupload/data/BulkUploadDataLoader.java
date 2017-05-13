@@ -47,7 +47,7 @@ public class BulkUploadDataLoader {
             int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp) {
         long time = System.currentTimeMillis();
         WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadDataWrapper.genenrateTableData() - The files will be read and prepared for the table to display.");
-        inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
+        inProgressbarTask.setMessage("Bulk Import Preparation: Configuring...");
         if (inLstFolderPaths != null && inLstFolderPaths.size() == 1) {
             if (Files.isRegularFile(inLstFolderPaths.get(0))) {
                 int result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
@@ -85,6 +85,7 @@ public class BulkUploadDataLoader {
                     loadFileData(tempFile, imageList);
                     try {
                         inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, lstAllFiles.size() + 1); // Prevent the progress bar from reaching 100%
+                        inProgressbarTask.setMessage("Bulk Import Preparation: Loading files... " + inProgressbarTask.getProgress() + "%");
                     }
                     catch (Exception ex) {
                         WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -97,8 +98,8 @@ public class BulkUploadDataLoader {
         }
         // The images must be sorted according to date to make sure they are grouped correctly into sightings
         Collections.sort(imageList);
-        inProgressbarTask.setMessage("Bulk Import Preparation: Process files...");
         inProgressbarTask.setTaskProgress(99);
+        inProgressbarTask.setMessage("Bulk Import Preparation: Loading files... " + inProgressbarTask.getProgress() + "%");
         long timeDiffInMiliseconds = inSightingDurationInSeconds*1000;
         // Next calculate the sightings and build the Object[][]
         Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> finalMap =

@@ -563,7 +563,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Convert GPS / QDS / Pentad"/>
+                <Property name="text" type="java.lang.String" value="Convert GPS / Pentad / QDGC"/>
                 <Property name="toolTipText" type="java.lang.String" value="Convert between GPS, Pentad and QDS coordinates."/>
                 <Property name="name" type="java.lang.String" value="mnuConvertCoordinates" noResource="true"/>
               </Properties>

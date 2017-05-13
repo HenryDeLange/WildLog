@@ -1190,7 +1190,7 @@ public final class WildLogView extends JFrame {
         extraMenu.add(mnuExifMenuItem);
 
         mnuConvertCoordinates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        mnuConvertCoordinates.setText("Convert GPS / QDS / Pentad");
+        mnuConvertCoordinates.setText("Convert GPS / Pentad / QDGC");
         mnuConvertCoordinates.setToolTipText("Convert between GPS, Pentad and QDS coordinates.");
         mnuConvertCoordinates.setName("mnuConvertCoordinates"); // NOI18N
         mnuConvertCoordinates.addActionListener(new java.awt.event.ActionListener() {
