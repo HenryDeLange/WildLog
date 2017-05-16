@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.logging.log4j.Level;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -24,7 +23,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -122,7 +123,7 @@ public final class UtilsReports {
     }
     
     public static void setupNumberAxis(NumberAxis inNumAxism, boolean inSetSizeOnly) {
-        inNumAxism.setTickLabelFont(Font.font(14));
+        inNumAxism.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
         if (!inSetSizeOnly) {
             inNumAxism.setAutoRanging(true);
             inNumAxism.setTickLabelFormatter(new IntegerTickLabelFormatter());
@@ -132,19 +133,19 @@ public final class UtilsReports {
     public static void setupCategoryAxis(CategoryAxis inCategoryAxis, int inNumberOfCategories, boolean inRotateText) {
         // Setup the label size based onthe number of entries
         if (inNumberOfCategories < 10) {
-            inCategoryAxis.setTickLabelFont(Font.font(14));
+            inCategoryAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 15));
         }
         else
         if (inNumberOfCategories < 20) {
-            inCategoryAxis.setTickLabelFont(Font.font(12));
+            inCategoryAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 13));
         }
         else {
-            inCategoryAxis.setTickLabelFont(Font.font(10));
+            inCategoryAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 11));
         }
         // Rotate the text if to many are being shown
-        if (inRotateText && inNumberOfCategories > 30) {
-            inCategoryAxis.setTickLabelRotation(-90);
-        }
+//        if (inRotateText && inNumberOfCategories > 30) {
+//            inCategoryAxis.setTickLabelRotation(-90);
+//        }
     }
     
 //    public static PieChart createPieChartWithStyleIndexReset(ObservableList<PieChart.Data> inLstData) {
@@ -235,7 +236,7 @@ public final class UtilsReports {
                         text = text + name + System.lineSeparator();
                         text = text + "[Value = " + value + "]";
                         Tooltip tooltip = new Tooltip(text);
-                        tooltip.setFont(Font.font(14));
+                        tooltip.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 16));
                         tooltip.setAutoHide(true);
                         tooltip.show((Node) inEvent.getSource(), inEvent.getScreenX(), inEvent.getScreenY());
                     }
@@ -256,7 +257,7 @@ public final class UtilsReports {
                 public void handle(MouseEvent inEvent) {
                     String text = data.getName() + System.lineSeparator() + "[Value = " + data.getPieValue() + "]";
                     Tooltip tooltip = new Tooltip(text);
-                    tooltip.setFont(Font.font(14));
+                    tooltip.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 16));
                     tooltip.setAutoHide(true);
                     tooltip.show((Node) inEvent.getSource(), inEvent.getScreenX(), inEvent.getScreenY());
                 }

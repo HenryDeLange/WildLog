@@ -27,6 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.StringConverter;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
@@ -164,7 +165,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                 return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
             }
         });
-        dateAxis.setTickLabelFont(Font.font(12));
+        dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
         AreaChart<Number, Number> chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(false);

@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
@@ -144,7 +145,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(getAllTimesAsList());
 //        catAxis.setTickLabelRotation(-90);
-        catAxis.setTickLabelFont(Font.font(12));
+        catAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
         AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(false);
@@ -202,7 +203,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(getAllTimesAsList());
-        catAxis.setTickLabelFont(Font.font(12));
+        catAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
 //        catAxis.setTickLabelRotation(-90);
         AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-line-30-color");

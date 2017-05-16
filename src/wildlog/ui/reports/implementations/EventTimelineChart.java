@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
@@ -168,7 +169,7 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
             CategoryAxis catAxis = new CategoryAxis();
             catAxis.setCategories(getAllTimesAsList(firstDate, lastDate));
             catAxis.setTickLabelRotation(90);
-            catAxis.setTickLabelFont(Font.font(12));
+            catAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
             chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
         }
         else {

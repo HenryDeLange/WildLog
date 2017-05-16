@@ -23,6 +23,7 @@ import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.StringConverter;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
@@ -210,7 +211,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                     return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
                 }
             });
-            dateAxis.setTickLabelFont(Font.font(12));
+            dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
             chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
         }
         else {
@@ -296,7 +297,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                     return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
                 }
             });
-            dateAxis.setTickLabelFont(Font.font(12));
+            dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
             chart = new StackedAreaChart<Number, Number>(dateAxis, numAxis, chartData);
         }
         else {

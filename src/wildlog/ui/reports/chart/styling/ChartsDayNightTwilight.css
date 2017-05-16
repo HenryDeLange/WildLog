@@ -1,13 +1,25 @@
 // STYLE: wl-pie-day-night-color
 // Pie Chart using specific colors for the time of day
 .wl-pie-day-night-color .chart-title {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.4em;
+    -fx-text-fill: #333432;
+    -fx-font-size: 1.8em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
 .wl-pie-day-night-color .chart-legend {
     -fx-background-color: transparent;
+}
+.wl-pie-day-night-color .chart-legend .chart-legend-item {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.15em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-pie-day-night-color .chart-content .chart-pie-label {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.1em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
 }
 // These are "fixed" colors, thus I don't need to define any defaults.
 // (no defaults needed))
@@ -33,8 +45,8 @@
     visibility: hidden;
 }
 .wl-line-day-night-color .chart-title {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.4em;
+    -fx-text-fill: #333432;
+    -fx-font-size: 1.8em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
@@ -42,13 +54,19 @@
     -fx-minor-tick-visible: false;
 }
 .wl-line-day-night-color .axis-label {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.2em;
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.4em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
 .wl-line-day-night-color .chart-legend {
     -fx-background-color:  transparent;
+}
+.wl-line-day-night-color .chart-legend .chart-legend-item {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.15em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
 }
 // Currently it is a waste to define more than 8 default colours, because 8 is hardcoded in the JavaFx code...
 // Once the specific colours defined below run out these defaults will be iterated over for the rest.

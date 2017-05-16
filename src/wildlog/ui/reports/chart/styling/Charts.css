@@ -16,8 +16,8 @@
     visibility: hidden;
 }
 .wl-bar-single-color .chart-title {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.4em;
+    -fx-text-fill: #333432;
+    -fx-font-size: 1.8em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
@@ -25,13 +25,19 @@
     -fx-minor-tick-visible: false;
 }
 .wl-bar-single-color .axis-label {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.2em;
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.4em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
 .wl-bar-single-color .chart-legend {
     -fx-background-color: transparent;
+}
+.wl-bar-single-color .chart-legend .chart-legend-item {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.15em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
 }
 
 
@@ -52,8 +58,8 @@
     visibility: hidden;
 }
 .wl-bar-30-color .chart-title {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.4em;
+    -fx-text-fill: #333432;
+    -fx-font-size: 1.8em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
@@ -61,13 +67,19 @@
     -fx-minor-tick-visible: false;
 }
 .wl-bar-30-color .axis-label {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.2em;
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.4em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
 .wl-bar-30-color .chart-legend {
     -fx-background-color: transparent;
+}
+.wl-bar-30-color .chart-legend .chart-legend-item {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.15em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
 }
 // Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
 // Once the specific colours defined below run out these defaults will be iterated over for the rest.
@@ -129,8 +141,8 @@
     visibility: hidden;
 }
 .wl-bar-custom-color .chart-title {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.4em;
+    -fx-text-fill: #333432;
+    -fx-font-size: 1.8em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
@@ -138,13 +150,19 @@
     -fx-minor-tick-visible: false;
 }
 .wl-bar-custom-color .axis-label {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.2em;
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.4em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
 .wl-bar-custom-color .chart-legend {
     -fx-background-color: transparent;
+}
+.wl-bar-custom-color .chart-legend .chart-legend-item {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.15em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
 }
 
 
@@ -162,8 +180,8 @@
     visibility: hidden;
 }
 .wl-stacked-bar-30-color .chart-title {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.4em;
+    -fx-text-fill: #333432;
+    -fx-font-size: 1.8em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
@@ -171,13 +189,19 @@
     -fx-minor-tick-visible: false;
 }
 .wl-stacked-bar-30-color .axis-label {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.2em;
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.4em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
 .wl-stacked-bar-30-color .chart-legend {
     -fx-background-color: transparent;
+}
+.wl-stacked-bar-30-color .chart-legend .chart-legend-item {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.15em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
 }
 // Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
 // Once the specific colours defined below run out these defaults will be iterated over for the rest.
@@ -311,13 +335,25 @@
 // ------ STYLE: wl-pie-30-color ------
 // Pie Chart using up to 30 colors
 .wl-pie-30-color .chart-title {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.4em;
+    -fx-text-fill: #333432;
+    -fx-font-size: 1.8em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
 .wl-pie-30-color .chart-legend {
     -fx-background-color: transparent;
+}
+.wl-pie-30-color .chart-legend .chart-legend-item {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.15em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-pie-30-color .chart-content .chart-pie-label {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.1em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
 }
 // Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
 // Once the specific colours defined below run out these defaults will be iterated over for the rest.
@@ -376,8 +412,8 @@
     visibility: hidden;
 }
 .wl-line-30-color .chart-title {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.4em;
+    -fx-text-fill: #333432;
+    -fx-font-size: 1.8em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
@@ -385,13 +421,19 @@
     -fx-minor-tick-visible: false;
 }
 .wl-line-30-color .axis-label {
-    -fx-text-fill: #656863;
-    -fx-font-size: 1.2em;
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.4em;
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
 .wl-line-30-color .chart-legend {
     -fx-background-color:  transparent;
+}
+.wl-line-30-color .chart-legend .chart-legend-item {
+    -fx-text-fill: #2b2c2b;
+    -fx-font-size: 1.15em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
 }
 // Currently it is a waste to define more than 8 default colours, because 8 is hardcoded in the JavaFx code...
 // Once the specific colours defined below run out these defaults will be iterated over for the rest.
