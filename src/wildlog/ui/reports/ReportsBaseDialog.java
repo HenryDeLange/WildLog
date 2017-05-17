@@ -42,6 +42,7 @@ import wildlog.ui.dialogs.ExportDialogForReportsAndMaps;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.reports.implementations.DayAndNightChart;
 import wildlog.ui.reports.implementations.DurationChart;
 import wildlog.ui.reports.implementations.ElementsChart;
@@ -69,6 +70,7 @@ public class ReportsBaseDialog extends JFrame {
     private List<Visit> lstFilteredVisits;
     private FilterProperties filterProperties = null;
     private AbstractReport activeReport = null;
+    private int optionName;
 
     
     public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
@@ -131,19 +133,19 @@ public class ReportsBaseDialog extends JFrame {
         jfxReportChartPanel.setScene(sceneCharts);
         // Setup the default reports
         List<AbstractReport<Sighting>> reports = new ArrayList<>(13);
-        reports.add(new ElementsChart(lstFilteredData, lblReportDescription));
-        reports.add(new LocationChart(lstFilteredData, lblReportDescription));
-        reports.add(new VisitChart(lstFilteredData, lblReportDescription));
-        reports.add(new SightingPropertiesChart(lstFilteredData, lblReportDescription));
-        reports.add(new DayAndNightChart(lstFilteredData, lblReportDescription));
-        reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription));
-        reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription));
-        reports.add(new DurationChart(lstFilteredData, lblReportDescription));
-        reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
-        reports.add(new EventTimelineChart(lstFilteredData, lblReportDescription));
-        reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription));
-        reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription));
-        reports.add(new TextReports(lstFilteredData, lblReportDescription));
+        reports.add(new ElementsChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new LocationChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new VisitChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new SightingPropertiesChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new DayAndNightChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new DurationChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new TimelineChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new EventTimelineChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new TextReports(lstFilteredData, lblReportDescription, this));
         // Setup loading label
         final Label lblLoading = new Label("... LOADING ...");
         lblLoading.setPadding(new Insets(20));
@@ -186,6 +188,9 @@ public class ReportsBaseDialog extends JFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         pnlReportsAndFilters = new javax.swing.JPanel();
         pnlReports = new javax.swing.JPanel();
+        pnlOptions = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cmdElementNameOption = new javax.swing.JComboBox<>();
         pnlExport = new javax.swing.JPanel();
         bntExport = new javax.swing.JButton();
         pnlFilters = new javax.swing.JPanel();
@@ -217,6 +222,40 @@ public class ReportsBaseDialog extends JFrame {
         pnlReports.setBackground(new java.awt.Color(179, 198, 172));
         pnlReports.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlReports.setLayout(new java.awt.BorderLayout());
+
+        pnlOptions.setBackground(new java.awt.Color(179, 198, 172));
+        pnlOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        jLabel1.setText("Creature Name:");
+
+        cmdElementNameOption.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Primary Name", "Other Name", "Scientific Name" }));
+        cmdElementNameOption.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmdElementNameOption.setFocusable(false);
+        cmdElementNameOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdElementNameOptionActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlOptionsLayout = new javax.swing.GroupLayout(pnlOptions);
+        pnlOptions.setLayout(pnlOptionsLayout);
+        pnlOptionsLayout.setHorizontalGroup(
+            pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlOptionsLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cmdElementNameOption, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlOptionsLayout.setVerticalGroup(
+            pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlOptionsLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(pnlOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmdElementNameOption))
+                .addGap(0, 0, 0))
+        );
 
         pnlExport.setBackground(new java.awt.Color(179, 198, 172));
         pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -325,7 +364,7 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
-        jPanel4.setBackground(new java.awt.Color(192, 207, 186));
+        jPanel4.setBackground(new java.awt.Color(179, 198, 172));
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -351,7 +390,7 @@ public class ReportsBaseDialog extends JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblFilteredRecords, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblTotalRecords, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,13 +443,16 @@ public class ReportsBaseDialog extends JFrame {
                 .addGroup(pnlReportsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(pnlExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlReports, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlReports, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlOptions, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(3, 3, 3))
         );
         pnlReportsAndFiltersLayout.setVerticalGroup(
             pnlReportsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlReportsAndFiltersLayout.createSequentialGroup()
-                .addComponent(pnlReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(pnlReports, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                .addGap(2, 2, 2)
+                .addComponent(pnlOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
                 .addComponent(pnlExport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
@@ -555,6 +597,26 @@ public class ReportsBaseDialog extends JFrame {
                 lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
                 lblFilteredRecords, activeReport, jfxReportChartPanel);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
+
+    private void cmdElementNameOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdElementNameOptionActionPerformed
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (cmdElementNameOption.getSelectedIndex() > 0) {
+                    int result = WLOptionPane.showConfirmDialog(ReportsBaseDialog.this, 
+                            "It is strongly recommended to make sure that the " + cmdElementNameOption.getSelectedItem() + " will be unique for each Creature.", 
+                            "WARNING: Not Using Primary Names", 
+                            WLOptionPane.OK_CANCEL_OPTION, WLOptionPane.WARNING_MESSAGE);
+                    if (result != WLOptionPane.OK_OPTION) {
+                        // Don't change the language anymore
+                        cmdElementNameOption.setSelectedIndex(0);
+                        return;
+                    }
+                }
+                optionName = cmdElementNameOption.getSelectedIndex();
+            }
+        });
+    }//GEN-LAST:event_cmdElementNameOptionActionPerformed
     
     private List<Sighting> getCopiedList(List<Sighting> inList) {
         List<Sighting> list = new ArrayList<>(inList.size());
@@ -628,6 +690,10 @@ public class ReportsBaseDialog extends JFrame {
         }
     }
 
+    public int getOptionName() {
+        return optionName;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bntExport;
     private javax.swing.JButton btnFilterElement;
@@ -635,6 +701,8 @@ public class ReportsBaseDialog extends JFrame {
     private javax.swing.JButton btnFilterProperties;
     private javax.swing.JButton btnFilterVisit;
     private javax.swing.JButton btnResetFilters;
+    private javax.swing.JComboBox<String> cmdElementNameOption;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel4;
@@ -647,6 +715,7 @@ public class ReportsBaseDialog extends JFrame {
     private javax.swing.JPanel pnlChartDescription;
     private javax.swing.JPanel pnlExport;
     private javax.swing.JPanel pnlFilters;
+    private javax.swing.JPanel pnlOptions;
     private javax.swing.JPanel pnlReports;
     private javax.swing.JPanel pnlReportsAndFilters;
     // End of variables declaration//GEN-END:variables

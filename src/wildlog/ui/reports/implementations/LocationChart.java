@@ -23,6 +23,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.BarChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
@@ -35,8 +36,8 @@ public class LocationChart extends AbstractReport<Sighting> {
     private Chart displayedChart;
 
     
-    public LocationChart(List<Sighting> inLstData,JLabel inChartDescLabel) {
-        super("Place Reports", inLstData, inChartDescLabel);
+    public LocationChart(List<Sighting> inLstData,JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Place Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(3);
         // Pie charts
         ToggleButton btnPieChartSightings = new ToggleButton("Observations per Place (Pie)");

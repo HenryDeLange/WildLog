@@ -27,6 +27,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.utils.UtilsData;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
@@ -38,8 +39,8 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private Chart displayedChart;
     
     
-    public ElementsChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Creature Reports", inLstData, inChartDescLabel);
+    public ElementsChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Creature Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Pie charts
         ToggleButton btnPieChartElementTypes = new ToggleButton("Creatures per Type (Pie)");
@@ -123,10 +124,10 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private Chart createBarChartSightings(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapData.get(sighting.getElementName());
+            ReportDataWrapper dataWrapper = mapData.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (dataWrapper == null) {
-                dataWrapper = new ReportDataWrapper(sighting.getElementName(), null, 0);
-                mapData.put(sighting.getElementName(), dataWrapper);
+                dataWrapper = new ReportDataWrapper(sighting.getElementName(reportsBaseDialog.getOptionName()), null, 0);
+                mapData.put(sighting.getElementName(reportsBaseDialog.getOptionName()), dataWrapper);
             }
             dataWrapper.increaseCount();
         }
@@ -169,10 +170,10 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private Chart createBarChartElements(List<Sighting> inSightings) {
         Map<String, Set<String>> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Set<String> set = mapData.get(sighting.getElementName());
+            Set<String> set = mapData.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (set == null) {
                 set = new HashSet<>();
-                mapData.put(sighting.getElementName(), set);
+                mapData.put(sighting.getElementName(reportsBaseDialog.getOptionName()), set);
             }
             set.add(sighting.getLocationName());
         }
@@ -215,10 +216,10 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private Chart createPieChartSightings(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getElementName());
+            ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper("", "", 0);
-                mapGroupedData.put(sighting.getElementName(), dataWrapper);
+                mapGroupedData.put(sighting.getElementName(reportsBaseDialog.getOptionName()), dataWrapper);
             }
             dataWrapper.increaseCount();
         }

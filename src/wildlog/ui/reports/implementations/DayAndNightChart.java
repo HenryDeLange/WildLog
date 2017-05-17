@@ -28,6 +28,7 @@ import javafx.util.StringConverter;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
@@ -40,8 +41,8 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     private Chart displayedChart;
 
     
-    public DayAndNightChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Day and Night Cycle Reports", inLstData, inChartDescLabel);
+    public DayAndNightChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Day and Night Cycle Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Area/Line Chart
         ToggleButton btnPieChart = new ToggleButton("Day/Night Observations (Pie)");

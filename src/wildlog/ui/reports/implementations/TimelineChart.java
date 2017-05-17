@@ -28,6 +28,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
@@ -42,8 +43,8 @@ public class TimelineChart extends AbstractReport<Sighting> {
     private final String[] options = new String[] {"5 minutes", "15 minutes", "30 minutes", "1 hour", "2 hours", "4 hours", "6 hours"};
 
     
-    public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Timeline Reports (24 Hours)", inLstData, inChartDescLabel);
+    public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Timeline Reports (24 Hours)", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
         ToggleButton btnLineChart = new ToggleButton("Timeline for All Observations (Line)");
@@ -159,16 +160,16 @@ public class TimelineChart extends AbstractReport<Sighting> {
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalElements = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName() + "-" + getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime()));
+            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime()));
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper();
-                dataWrapper.key = sighting.getElementName();
+                dataWrapper.key = sighting.getElementName(reportsBaseDialog.getOptionName());
                 dataWrapper.value = getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime());
                 dataWrapper.count = 0;
-                mapTotalElements.put(sighting.getElementName(), 0);
+                mapTotalElements.put(sighting.getElementName(reportsBaseDialog.getOptionName()), 0);
             }
             dataWrapper.count++;
-            mapInitialCountedData.put(sighting.getElementName() + "-" + getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime()), dataWrapper);
+            mapInitialCountedData.put(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime()), dataWrapper);
         }
         // Add all the points on the chart in the correct order. This also adds the 0 values for the data gaps.
         Map<String, ObservableList<AreaChart.Data<String, Number>>> mapDataPerElement = new HashMap<>(mapInitialCountedData.size());

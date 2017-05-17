@@ -10,6 +10,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import wildlog.ui.reports.ReportsBaseDialog;
 
 
 public abstract class AbstractReport<T> {
@@ -30,15 +31,17 @@ public abstract class AbstractReport<T> {
     }
     private final String reportCategoryTitle;
     private String activeSubCategoryTitle = "Default Report";
+    protected final ReportsBaseDialog reportsBaseDialog;
     protected List<T> lstData;
     protected List<Node> lstCustomButtons;
     protected JLabel lblReportDescription;
 
     
-    public AbstractReport(String inReportCategoryTitle, List<T> inList, JLabel inChartDescLabel) {
+    public AbstractReport(String inReportCategoryTitle, List<T> inList, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
         reportCategoryTitle = inReportCategoryTitle;
         lstData = inList;
         lblReportDescription = inChartDescLabel;
+        reportsBaseDialog = inReportsBaseDialog;
     }
     
     public abstract void createReport(Scene inScene);

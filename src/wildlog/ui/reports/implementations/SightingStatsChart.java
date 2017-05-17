@@ -30,6 +30,7 @@ import javafx.util.StringConverter;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportCountWrapper;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
@@ -46,8 +47,8 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
     
       
     
-    public SightingStatsChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Observation Statistics Reports", inLstData, inChartDescLabel);
+    public SightingStatsChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Observation Statistics Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(7);
         // Bar charts
         ToggleButton btnSightingsPerDayBarChart = new ToggleButton("Observations per Day-Cycle (Bar)");
@@ -152,10 +153,10 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         // Get the data structured
         Map<String, ReportCountWrapper> mapElemNum = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportCountWrapper countWrapper = mapElemNum.get(sighting.getElementName());
+            ReportCountWrapper countWrapper = mapElemNum.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (countWrapper == null) {
                 countWrapper = new ReportCountWrapper(0, 0, 0, 0);
-                mapElemNum.put(sighting.getElementName(), countWrapper);
+                mapElemNum.put(sighting.getElementName(reportsBaseDialog.getOptionName()), countWrapper);
             }
             if (sighting.getNumberOfElements() > 0) {
                 countWrapper.total++;
@@ -222,10 +223,10 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         Map<String, Map<LocalDate, ReportCountWrapper>> mapElemCount = new HashMap<>();
         for (Sighting sighting : inSightings) {
             LocalDateTime currentDate = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
-            Map<LocalDate, ReportCountWrapper> mapCount = mapElemCount.get(sighting.getElementName());
+            Map<LocalDate, ReportCountWrapper> mapCount = mapElemCount.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (mapCount == null) {
                 mapCount = new HashMap<>();
-                mapElemCount.put(sighting.getElementName(), mapCount);
+                mapElemCount.put(sighting.getElementName(reportsBaseDialog.getOptionName()), mapCount);
             }
             if (ActiveTime.DAY.equals(ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()))) {
                 // Days are easier because the dates simply need to be on the same day
@@ -330,10 +331,10 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         Map<String, Map<LocalDate, ReportCountWrapper>> mapElemCount = new HashMap<>();
         for (Sighting sighting : inSightings) {
             LocalDateTime currentDate = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
-            Map<LocalDate, ReportCountWrapper> mapCount = mapElemCount.get(sighting.getElementName());
+            Map<LocalDate, ReportCountWrapper> mapCount = mapElemCount.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (mapCount == null) {
                 mapCount = new HashMap<>();
-                mapElemCount.put(sighting.getElementName(), mapCount);
+                mapElemCount.put(sighting.getElementName(reportsBaseDialog.getOptionName()), mapCount);
             }
             if (ActiveTime.DAY.equals(ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()))) {
                 // Days are easier because the dates simply need to be on the same day
@@ -433,10 +434,10 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         // Count the number of Sightings for each Element
         Map<String, ReportDataWrapper> mapElementSightingCount = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapElementSightingCount.get(sighting.getElementName());
+            ReportDataWrapper dataWrapper = mapElementSightingCount.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (dataWrapper == null) {
-                dataWrapper = new ReportDataWrapper(sighting.getElementName(), null, 0);
-                mapElementSightingCount.put(sighting.getElementName(), dataWrapper);
+                dataWrapper = new ReportDataWrapper(sighting.getElementName(reportsBaseDialog.getOptionName()), null, 0);
+                mapElementSightingCount.put(sighting.getElementName(reportsBaseDialog.getOptionName()), dataWrapper);
             }
             dataWrapper.increaseCount();
         }

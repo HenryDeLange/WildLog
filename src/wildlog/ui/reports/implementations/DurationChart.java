@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
@@ -41,8 +42,8 @@ public class DurationChart extends AbstractReport<Sighting> {
     private int maxMinutesCap = 30;
 
     
-    public DurationChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Duration Reports", inLstData, inChartDescLabel);
+    public DurationChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Duration Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
         ToggleButton btnLineChart = new ToggleButton("Duration for All Observations (Line)");
@@ -158,16 +159,16 @@ public class DurationChart extends AbstractReport<Sighting> {
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalElements = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName() + "-" + getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds()));
+            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds()));
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper();
-                dataWrapper.key = sighting.getElementName();
+                dataWrapper.key = sighting.getElementName(reportsBaseDialog.getOptionName());
                 dataWrapper.value = getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds());
                 dataWrapper.count = 0;
-                mapTotalElements.put(sighting.getElementName(), 0);
+                mapTotalElements.put(sighting.getElementName(reportsBaseDialog.getOptionName()), 0);
             }
             dataWrapper.count++;
-            mapInitialCountedData.put(sighting.getElementName() + "-" + getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds()), dataWrapper);
+            mapInitialCountedData.put(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds()), dataWrapper);
             if (sighting.getDurationMinutes() > maxMinutes) {
                 maxMinutes = sighting.getDurationMinutes();
             }

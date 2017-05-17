@@ -36,6 +36,37 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     public Sighting(String inElementName, String inLocationName, String inVisitName) {
         super(inElementName, inLocationName, inVisitName);
     }
+    
+    
+    /**
+     * Get the indicated name of the Element (if present, otherwise returns the primary name). <br>
+     * 0 = Primary Key Name <br>
+     * 1 = Other Name <br>
+     * 2 = Scientific Name
+     */
+    public String getElementName(int inNameChoice) {
+        String primaryName = super.getElementName();
+        if (inNameChoice == 0) {
+            return primaryName;
+        }
+        else
+        if (inNameChoice == 1) {
+            // Other name
+            Element element = WildLogApp.getApplication().getDBI().findElement(primaryName, Element.class);
+            if (element.getOtherName() != null && !element.getOtherName().isEmpty()) {
+                return element.getOtherName();
+            }
+        }
+        else 
+        if (inNameChoice == 2) {
+            // Scientific name
+            Element element = WildLogApp.getApplication().getDBI().findElement(primaryName, Element.class);
+            if (element.getScientificName()!= null && !element.getScientificName().isEmpty()) {
+                return element.getScientificName();
+            }
+        }
+        return primaryName;
+    }
 
 
     /**

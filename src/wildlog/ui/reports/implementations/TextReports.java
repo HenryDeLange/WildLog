@@ -36,6 +36,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.maps.utils.UtilsGPS;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.utils.UtilsTime;
@@ -48,8 +49,8 @@ public class TextReports extends AbstractReport<Sighting> {
     private Parent displayedReport;
     private boolean groupSimilarGPS = false;
     
-    public TextReports(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Text Summaries", inLstData, inChartDescLabel);
+    public TextReports(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Text Summaries", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Add the text report
         ToggleButton btnPaarlReport = new ToggleButton("Period Summary");
@@ -139,7 +140,8 @@ public class TextReports extends AbstractReport<Sighting> {
                 data.gpsPoints.add(UtilsGPS.getLatitudeString(tempSighting) + System.lineSeparator() + UtilsGPS.getLongitudeString(tempSighting));
             }
             data.totalSightings = data.totalSightings + 1;
-            data.mapElementsAndCount.put(sighting.getElementName(), data.mapElementsAndCount.getOrDefault(sighting.getElementName(), 0) + 1);
+            data.mapElementsAndCount.put(sighting.getElementName(reportsBaseDialog.getOptionName()), 
+                    data.mapElementsAndCount.getOrDefault(sighting.getElementName(reportsBaseDialog.getOptionName()), 0) + 1);
         }
         // Display the info
         List<VisitData> lstReportData = new ArrayList<>(mapReportData.values());
@@ -317,7 +319,7 @@ public class TextReports extends AbstractReport<Sighting> {
         Set<String> setLocationNames = new HashSet<>();
         Set<String> setVisitNames = new HashSet<>();
         for (Sighting sighting : inSightings) {
-            setElementNames.add(sighting.getElementName());
+            setElementNames.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
             setLocationNames.add(sighting.getLocationName());
             setVisitNames.add(sighting.getVisitName());
         }
@@ -328,18 +330,18 @@ public class TextReports extends AbstractReport<Sighting> {
             lstReportData.add(new DataPair("Last Observation: ", UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(inSightings.get(inSightings.size() - 1).getDate()))));
             lstReportData.add(new DataPair("First Place: ", inSightings.get(0).getLocationName()));
             lstReportData.add(new DataPair("Last Place: ", inSightings.get(inSightings.size() - 1).getLocationName()));
-            lstReportData.add(new DataPair("First Creature: ", inSightings.get(0).getElementName()));
-            lstReportData.add(new DataPair("Last Creature: ", inSightings.get(inSightings.size() - 1).getElementName()));
+            lstReportData.add(new DataPair("First Creature: ", inSightings.get(0).getElementName(reportsBaseDialog.getOptionName())));
+            lstReportData.add(new DataPair("Last Creature: ", inSightings.get(inSightings.size() - 1).getElementName(reportsBaseDialog.getOptionName())));
         }
         // Number of Sightings
         lstReportData.add(new DataPair("Total Observations: ", Integer.toString(inSightings.size())));
         // Max/Min Sightings of Element per Location
         Map<String, ReportDataWrapper> mapMinMax = new HashMap<>(setElementNames.size() * setLocationNames.size());
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper countWrapper = mapMinMax.get(sighting.getElementName());
+            ReportDataWrapper countWrapper = mapMinMax.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (countWrapper == null) {
-                countWrapper = new ReportDataWrapper(sighting.getElementName(), null, 0);
-                mapMinMax.put(sighting.getElementName(), countWrapper);
+                countWrapper = new ReportDataWrapper(sighting.getElementName(reportsBaseDialog.getOptionName()), null, 0);
+                mapMinMax.put(sighting.getElementName(reportsBaseDialog.getOptionName()), countWrapper);
             }
             countWrapper.count++;
         }
@@ -368,7 +370,7 @@ public class TextReports extends AbstractReport<Sighting> {
                 countSet = new HashSet<>(setElementNames.size());
                 mapCounts.put(sighting.getLocationName(), countSet);
             }
-            countSet.add(sighting.getElementName());
+            countSet.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
         }
         min = inSightings.size();
         ave = 0;
@@ -393,7 +395,7 @@ public class TextReports extends AbstractReport<Sighting> {
                 countSet = new HashSet<>(setElementNames.size());
                 mapCounts.put(sighting.getVisitName(), countSet);
             }
-            countSet.add(sighting.getElementName());
+            countSet.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
         }
         min = inSightings.size();
         ave = 0;

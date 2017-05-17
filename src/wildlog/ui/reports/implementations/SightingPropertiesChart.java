@@ -25,6 +25,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.utils.UtilsData;
 import wildlog.maps.utils.UtilsGPS;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ComboBoxToShowReports;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
@@ -41,8 +42,8 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     private Scene scene = null;
     
     
-    public SightingPropertiesChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Observation Properties Reports", inLstData, inChartDescLabel);
+    public SightingPropertiesChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Observation Properties Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(2);
         // Hidden ToggleButton to use (used to unselect the other toggle buttons)
         ToggleButton btnHidden = new ToggleButton();

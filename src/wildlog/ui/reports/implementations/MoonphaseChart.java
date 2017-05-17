@@ -34,6 +34,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
@@ -55,8 +56,8 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     private final String ALL_SIGHTINGS = "All Observations";
     
     
-    public MoonphaseChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Moon Phase Reports", inLstData, inChartDescLabel);
+    public MoonphaseChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Moon Phase Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(10);
         // Charts
         ToggleButton btnPieChart = new ToggleButton("All Observations Together (Pie)");
@@ -199,7 +200,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         }
         for (Sighting sighting : inSightings) {
             if (!inIsForAllObservations) {
-                temp = sighting.getElementName();
+                temp = sighting.getElementName(reportsBaseDialog.getOptionName());
             }
             Map<String, ReportDataWrapper> mapChartData = mapChartDataGroupedForSeries.get(temp + getDetailsString(sighting));
             if (mapChartData == null) {
@@ -304,7 +305,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         }
         for (Sighting sighting : inSightings) {
             if (!inIsForAllObservations) {
-                temp = sighting.getElementName();
+                temp = sighting.getElementName(reportsBaseDialog.getOptionName());
             }
             ReportDataWrapper dataWrapper = mapInitialCountedData.get(temp + getDetailsString(sighting) + "-" + getMoonIntervalPercentage(sighting.getMoonPhase()));
             if (dataWrapper == null) {

@@ -31,6 +31,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.utils.UtilsData;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.BarChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportCountWrapper;
@@ -46,8 +47,8 @@ public class VisitChart extends AbstractReport<Sighting> {
 
 // TODO: Klompie van hierdie charts sal beter werk as line (area) charts
     
-    public VisitChart(List<Sighting> inLstData,JLabel inChartDescLabel) {
-        super("Period Reports", inLstData, inChartDescLabel);
+    public VisitChart(List<Sighting> inLstData,JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Period Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(9);
         // Pie charts
         ToggleButton btnPieChartSightingCount = new ToggleButton("Observations per Period (Pie)");
@@ -532,7 +533,7 @@ public class VisitChart extends AbstractReport<Sighting> {
         Map<String, Map<String, ReportDataWrapper>> mapChartDataGroupedForSeries = new HashMap<>();
         Map<String, ReportCountWrapper> mapKnownVisitInfo = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Map<String, ReportDataWrapper> mapPeriodsForElement = mapChartDataGroupedForSeries.get(sighting.getElementName());
+            Map<String, ReportDataWrapper> mapPeriodsForElement = mapChartDataGroupedForSeries.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
             if (mapPeriodsForElement == null) {
                 mapPeriodsForElement = new HashMap<>();
                 // Don't add to the amp yet, because the continue below might want to skip this visit...
@@ -559,7 +560,7 @@ public class VisitChart extends AbstractReport<Sighting> {
                 dataWrapper = new ReportDataWrapper(sighting.getVisitName(), (int) visitLevelInfo.count, 0);
                 mapPeriodsForElement.put(sighting.getVisitName(), dataWrapper);
             }
-            mapChartDataGroupedForSeries.putIfAbsent(sighting.getElementName(), mapPeriodsForElement);
+            mapChartDataGroupedForSeries.putIfAbsent(sighting.getElementName(reportsBaseDialog.getOptionName()), mapPeriodsForElement);
             dataWrapper.increaseCount();
             visitLevelInfo.total = visitLevelInfo.total + 1;
         }

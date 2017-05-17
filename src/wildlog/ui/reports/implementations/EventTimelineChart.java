@@ -28,6 +28,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
@@ -42,8 +43,8 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
     private final String[] options = new String[] {"1 hour", "3 hours", "6 hours", "12 hours", "24 hours"};
 
     
-    public EventTimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Timeline Reports (Date Range)", inLstData, inChartDescLabel);
+    public EventTimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Timeline Reports (Date Range)", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
         ToggleButton btnLineChart = new ToggleButton("Timeline for All Observations (Line)");
@@ -130,7 +131,7 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
                     key = "All Observations";
                 }
                 else {
-                    key = sighting.getElementName();
+                    key = sighting.getElementName(reportsBaseDialog.getOptionName());
                 }
                 Map<String, ReportDataWrapper> mapSpeciesData = mapDataPerElement.get(key);
                 if (mapSpeciesData == null) {

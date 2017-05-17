@@ -142,7 +142,12 @@ public class HeatMap extends AbstractMap<Sighting> {
         cmbSplitIndicator.setVisibleRowCount(4);
         cmbSplitIndicator.setCursor(Cursor.HAND);
         lstCustomButtons.add(cmbSplitIndicator);
-        cmbSplitIndicator.getSelectionModel().select(HeatMap.SplitIndicator.NEVER);
+// TODO: Toets of die storie dit reg / goed hanteer as 'n baie lang visit met min spesies gesplit word in baie 2 week punte met almal min spesies... 
+//       Word dit dan "warm" of bly dit (hopelik) "koud"?
+
+// TODO: Sit ook 'n checkbox by vir "Use Only Highest Interval" wat dan net die split met die hoogste waarde sal gebruik.
+
+        cmbSplitIndicator.getSelectionModel().select(HeatMap.SplitIndicator.NORMAL);
         CheckBox chkTransparent = new CheckBox("Semi-Transparent");
         chkTransparent.setCursor(Cursor.HAND);
         chkTransparent.setOnAction(new EventHandler() {

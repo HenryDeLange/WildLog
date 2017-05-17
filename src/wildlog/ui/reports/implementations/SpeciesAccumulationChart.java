@@ -32,6 +32,7 @@ import javafx.util.StringConverter;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
@@ -47,8 +48,8 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     
 // Nuwe chart wat die species accumulation curvevan verskillende periods gelyk op die mak kan wys om te vergelyk
     
-    public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Recording Rate Reports", inLstData, inChartDescLabel);
+    public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Recording Rate Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Line charts
         ToggleButton btnLineChart = new ToggleButton("Creature Accumulation (Line)");
@@ -191,7 +192,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                 }
             }
             else {
-                key = sighting.getElementName();
+                key = sighting.getElementName(reportsBaseDialog.getOptionName());
                 if (showDayOrNight) {
                     key = key + " - " + ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()).toString();
                 }
@@ -204,7 +205,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             String dayString = UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()));
             ReportDataWrapper dataWrapper = mapColumnData.get(dayString);
             if (dataWrapper == null) {
-                dataWrapper = new ReportDataWrapper(dayString, sighting.getElementName(), 0);
+                dataWrapper = new ReportDataWrapper(dayString, sighting.getElementName(reportsBaseDialog.getOptionName()), 0);
                 mapColumnData.put(dayString, dataWrapper);
             }
             dataWrapper.increaseCount();

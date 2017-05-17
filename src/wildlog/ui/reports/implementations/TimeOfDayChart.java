@@ -23,6 +23,7 @@ import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.CustomColourBarChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
@@ -34,8 +35,8 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
     private ChartType chartType = ChartType.PIE_CHART;
     private Chart displayedChart;
     
-    public TimeOfDayChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Time of Day Reports", inLstData, inChartDescLabel);
+    public TimeOfDayChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
+        super("Time of Day Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Bar charts
         ToggleButton btnBarChart = new ToggleButton("Observation Time of Day (Bar)");
@@ -189,10 +190,10 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalElements = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName() + "-" + sighting.getTimeOfDay());
+            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + sighting.getTimeOfDay());
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper();
-                dataWrapper.key = sighting.getElementName();
+                dataWrapper.key = sighting.getElementName(reportsBaseDialog.getOptionName());
                 if (sighting.getTimeOfDay() != null) {
                     dataWrapper.value = sighting.getTimeOfDay().toString();
                 }
@@ -200,10 +201,10 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
                     dataWrapper.value = ActiveTimeSpesific.UNKNOWN.toString();
                 }
                 dataWrapper.count = 0;
-                mapTotalElements.put(sighting.getElementName(), 0);
+                mapTotalElements.put(sighting.getElementName(reportsBaseDialog.getOptionName()), 0);
             }
             dataWrapper.count++;
-            mapInitialCountedData.put(sighting.getElementName() + "-" + sighting.getTimeOfDay(), dataWrapper);
+            mapInitialCountedData.put(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + sighting.getTimeOfDay(), dataWrapper);
         }
         // Add all the points on the chart in the correct order. This also adds the 0 values for the data gaps.
         Map<String, ObservableList<AreaChart.Data<String, Number>>> mapDataPerElement = new HashMap<>(mapInitialCountedData.size());
