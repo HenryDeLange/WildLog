@@ -102,7 +102,9 @@ public final class UtilsReports {
     }
     
     public static void displayLabelForDataToRight(XYChart.Data<Number, String> inData) {
+
 // FIXME: werk nie lekker nie...
+
         final Node node = inData.getNode();
         final Text dataText = new Text(inData.getXValue() + "");
         dataText.setStyle("-fx-fill: #99AA88;");
@@ -264,6 +266,13 @@ public final class UtilsReports {
             });
             data.getNode().setCursor(Cursor.HAND);
         }
+    }
+    
+    public static String getNumberWithZero(int inNumber) {
+        if (inNumber < 10) {
+            return "0" + inNumber;
+        }
+        return Integer.toString(inNumber);
     }
     
 }

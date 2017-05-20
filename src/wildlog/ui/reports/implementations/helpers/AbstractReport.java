@@ -30,6 +30,7 @@ public abstract class AbstractReport<T> {
         });
     }
     private final String reportCategoryTitle;
+    /** Word gebruik vir die naam van die export file */
     private String activeSubCategoryTitle = "Default Report";
     protected final ReportsBaseDialog reportsBaseDialog;
     protected List<T> lstData;

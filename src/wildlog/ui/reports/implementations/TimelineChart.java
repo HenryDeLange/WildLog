@@ -39,12 +39,12 @@ public class TimelineChart extends AbstractReport<Sighting> {
     private enum ChartType {TIMELINE_FOR_ALL, TIMELINE_PER_ELEMENT};
     private ChartType chartType = ChartType.TIMELINE_FOR_ALL;
     private Chart displayedChart;
-    private ComboBox<String> cmbIntervalSize;
+    private final ComboBox<String> cmbIntervalSize;
     private final String[] options = new String[] {"5 minutes", "15 minutes", "30 minutes", "1 hour", "2 hours", "4 hours", "6 hours"};
 
     
     public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Timeline Reports (24 Hours)", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Timeline Reports (Daily Hours)", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
         ToggleButton btnLineChart = new ToggleButton("Timeline for All Observations (Line)");
@@ -79,22 +79,6 @@ public class TimelineChart extends AbstractReport<Sighting> {
         cmbIntervalSize.setVisibleRowCount(10);
         cmbIntervalSize.getSelectionModel().clearSelection();
         cmbIntervalSize.getSelectionModel().select(3);
-        cmbIntervalSize.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                if (!cmbIntervalSize.getSelectionModel().isEmpty()) {
-                    if (chartType == ChartType.TIMELINE_FOR_ALL) {
-                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations during a specific time period. "
-                            + "The real time intervals are good for comparing related data from the same location during a short time period (a few weeks).</html>");
-                    }
-                    else
-                    if (chartType == ChartType.TIMELINE_PER_ELEMENT) {
-                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations during a specific time period. "
-                            + "The real time intervals are good for comparing related data from the same location during a short time period (a few weeks).</html>");
-                    }
-                }
-            }
-        });
         lstCustomButtons.add(cmbIntervalSize);
     }
     

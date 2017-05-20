@@ -89,7 +89,7 @@ public class WildLogApp extends Application {
         if (threadCount < 3) {
             threadCount = 3;
         }
-        // Makse sure all the basic data/file folders are in place
+        // Make sure all the basic data/file folders are in place
         try {
             Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());
             Files.createDirectories(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath());

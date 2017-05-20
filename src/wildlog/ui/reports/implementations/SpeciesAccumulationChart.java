@@ -3,14 +3,20 @@ package wildlog.ui.reports.implementations;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +36,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.StringConverter;
 import javax.swing.JLabel;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTime;
 import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
@@ -40,29 +48,73 @@ import wildlog.ui.utils.UtilsTime;
 
 
 public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
-    private enum ChartType {ACCUMULATION_LINE_CHART, DAILY_CREATURE_LINE_CHART, DAILY_OBSERVATION_LINE_CHART};
+    private enum ChartType {ACCUMULATION_LINE_CHART, ACCUMULATION_SIGHTING_LINE_CHART, ACCUMULATION_SIGHTING_ELEMENT_LINE_CHART, 
+                            DAILY_CREATURE_LINE_CHART, DAILY_OBSERVATION_LINE_CHART, ACC_VISIT_ELEMENT_CHART, ACC_VISIT_SIGHTING_CHART};
     private ChartType chartType = ChartType.ACCUMULATION_LINE_CHART;
     private Chart displayedChart;
-    private boolean showDayOrNight = false;
+    private final CheckBox chkShowDayOrNight;
 
-    
-// Nuwe chart wat die species accumulation curvevan verskillende periods gelyk op die mak kan wys om te vergelyk
     
     public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
         super("Recording Rate Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
-        lstCustomButtons = new ArrayList<>(5);
+        lstCustomButtons = new ArrayList<>(9);
         // Line charts
-        ToggleButton btnLineChart = new ToggleButton("Creature Accumulation (Line)");
-        btnLineChart.setToggleGroup(BUTTON_GROUP);
-        btnLineChart.setCursor(Cursor.HAND);
-        btnLineChart.setOnAction(new EventHandler() {
+        ToggleButton btnCreatureAccumulationLineChart = new ToggleButton("Creature Accumulation (Line)");
+        btnCreatureAccumulationLineChart.setToggleGroup(BUTTON_GROUP);
+        btnCreatureAccumulationLineChart.setCursor(Cursor.HAND);
+        btnCreatureAccumulationLineChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.ACCUMULATION_LINE_CHART;
                 setupChartDescriptionLabel("<html>This chart illustrates the rate at which new Creatures were recorded over time.</html>");
             }
         });
-        lstCustomButtons.add(btnLineChart);
+        lstCustomButtons.add(btnCreatureAccumulationLineChart);
+        ToggleButton btnSightingAccumulationLineChart = new ToggleButton("Observation Accumulation (Line)");
+        btnSightingAccumulationLineChart.setToggleGroup(BUTTON_GROUP);
+        btnSightingAccumulationLineChart.setCursor(Cursor.HAND);
+        btnSightingAccumulationLineChart.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.ACCUMULATION_SIGHTING_LINE_CHART;
+                setupChartDescriptionLabel("<html>This chart illustrates the rate at which new Observations were recorded over time.</html>");
+            }
+        });
+        lstCustomButtons.add(btnSightingAccumulationLineChart);
+        ToggleButton btnSightingElementAccumulationLineChart = new ToggleButton("Observations per Creature (Line)");
+        btnSightingElementAccumulationLineChart.setToggleGroup(BUTTON_GROUP);
+        btnSightingElementAccumulationLineChart.setCursor(Cursor.HAND);
+        btnSightingElementAccumulationLineChart.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.ACCUMULATION_SIGHTING_ELEMENT_LINE_CHART;
+                setupChartDescriptionLabel("<html>This chart illustrates the rate at which new Observations were recorded over time for each Creature.</html>");
+            }
+        });
+        lstCustomButtons.add(btnSightingElementAccumulationLineChart);
+        ToggleButton btnAccElementPerVisitLineChart = new ToggleButton("Creatures per Period (Line)");
+        btnAccElementPerVisitLineChart.setToggleGroup(BUTTON_GROUP);
+        btnAccElementPerVisitLineChart.setCursor(Cursor.HAND);
+        btnAccElementPerVisitLineChart.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.ACC_VISIT_ELEMENT_CHART;
+                setupChartDescriptionLabel("<html>This chart illustrates the number of Creatures recorded over time per Period.</html>");
+            }
+        });
+        lstCustomButtons.add(btnAccElementPerVisitLineChart);
+        ToggleButton btnAccSightingPerVisitLineChart = new ToggleButton("Observations per Period (Line)");
+        btnAccSightingPerVisitLineChart.setToggleGroup(BUTTON_GROUP);
+        btnAccSightingPerVisitLineChart.setCursor(Cursor.HAND);
+        btnAccSightingPerVisitLineChart.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.ACC_VISIT_SIGHTING_CHART;
+                setupChartDescriptionLabel("<html>This chart illustrates the number of Observations recorded over time per Period.</html>");
+            }
+        });
+        lstCustomButtons.add(btnAccSightingPerVisitLineChart);
+// FIXME: Moet ek nie dat die "daily" eerder op die day-night cycle manier werk nie?
         ToggleButton btnDailyObsLineChart = new ToggleButton("Daily Observation Count (Line)");
         btnDailyObsLineChart.setToggleGroup(BUTTON_GROUP);
         btnDailyObsLineChart.setCursor(Cursor.HAND);
@@ -74,6 +126,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnDailyObsLineChart);
+// FIXME: Moet ek nie dat die "daily" eerder op die day-night cycle manier werk nie?
         ToggleButton btnDailyLineChart = new ToggleButton("Daily Creature Count (Line)");
         btnDailyLineChart.setToggleGroup(BUTTON_GROUP);
         btnDailyLineChart.setCursor(Cursor.HAND);
@@ -87,16 +140,10 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         lstCustomButtons.add(btnDailyLineChart);
         // Options
         lstCustomButtons.add(new Label("Chart Options:"));
-        CheckBox chkShowDetails = new CheckBox("Show Day, Night or Twilight");
-        chkShowDetails.setCursor(Cursor.HAND);
-        chkShowDetails.setSelected(false);
-        chkShowDetails.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                showDayOrNight = chkShowDetails.isSelected();
-            }
-        });
-        lstCustomButtons.add(chkShowDetails);
+        chkShowDayOrNight = new CheckBox("Show Day, Night or Twilight");
+        chkShowDayOrNight.setCursor(Cursor.HAND);
+        chkShowDayOrNight.setSelected(false);
+        lstCustomButtons.add(chkShowDayOrNight);
     }
 
     @Override
@@ -106,16 +153,43 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.ACCUMULATION_LINE_CHART)) {
+                    chkShowDayOrNight.setDisable(true);
                     setActiveSubCategoryTitle("Creature Accumulation (Line)");
                     displayedChart = createAccumulationReport(lstData);
                 }
                 else
+                if (chartType.equals(ChartType.ACCUMULATION_SIGHTING_LINE_CHART)) {
+                    chkShowDayOrNight.setDisable(true);
+                    setActiveSubCategoryTitle("Observation Accumulation (Line)");
+                    displayedChart = createAccumulationSightingReport(lstData, true);
+                }
+                else
+                if (chartType.equals(ChartType.ACCUMULATION_SIGHTING_ELEMENT_LINE_CHART)) {
+                    chkShowDayOrNight.setDisable(true);
+                    setActiveSubCategoryTitle("Observations per Creature (Line)");
+                    displayedChart = createAccumulationSightingReport(lstData, false);
+                }
+                else
+                if (chartType.equals(ChartType.ACC_VISIT_ELEMENT_CHART)) {
+                    chkShowDayOrNight.setDisable(true);
+                    setActiveSubCategoryTitle("Creatures per Period (Line)");
+                    displayedChart = createAccumulationVisitReport(lstData, false);
+                }
+                else
+                if (chartType.equals(ChartType.ACC_VISIT_SIGHTING_CHART)) {
+                    chkShowDayOrNight.setDisable(true);
+                    setActiveSubCategoryTitle("Observations per Period (Line)");
+                    displayedChart = createAccumulationVisitReport(lstData, true);
+                }
+                else
                 if (chartType.equals(ChartType.DAILY_CREATURE_LINE_CHART)) {
+                    chkShowDayOrNight.setDisable(false);
                     setActiveSubCategoryTitle("Daily Creature Count (Line)");
                     displayedChart = createDailyReport(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.DAILY_OBSERVATION_LINE_CHART)) {
+                    chkShowDayOrNight.setDisable(false);
                     setActiveSubCategoryTitle("Daily Observation Count (Line)");
                     displayedChart = createDailyReport(lstData, true);
                 }
@@ -126,27 +200,60 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     }
     
     private Chart createAccumulationReport(List<Sighting> inSightings) {
-// TODO: Include an option to include the start and end date of the first and last Visits, repectively, in the cart, to get an idea of how it slowed down toward the end...
+        // Get the fisrt and last Visit date
+        Map<String, DateWrapper> mapVisitDates = new HashMap<>();
+        LocalDate startDate = null; 
+        LocalDate endDate = null;
+        for (Sighting sighting : inSightings) {
+            DateWrapper visitDates = mapVisitDates.get(sighting.getVisitName());
+            if (visitDates == null) {
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                visitDates = new DateWrapper();
+                visitDates.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
+                visitDates.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                mapVisitDates.put(sighting.getVisitName(), visitDates);
+            }
+            // Get Start Date
+            // If no date was found then use the Sighting's date
+            LocalDate possibleDate = visitDates.startDate;
+            if (possibleDate == null) {
+                possibleDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+            }
+            // Kies die vroegste datum
+            if (startDate == null || possibleDate.isBefore(startDate)) {
+                startDate = possibleDate;
+            }
+            // Get End Date
+            // If no date was found then use the Sighting's date
+            possibleDate = visitDates.endDate;
+            if (possibleDate == null) {
+                possibleDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+            }
+            // Kies die laaste datum
+            if (endDate == null || possibleDate.isAfter(endDate)) {
+                endDate = possibleDate;
+            }
+        }
         // Get the data in the correct structure
         // Get sorted (by date) Sightings list
         Collections.sort(inSightings);
         Map<String, LocalDateTime> mapAccumulation = new LinkedHashMap<>();
         for (Sighting sighting : inSightings) {
-            mapAccumulation.putIfAbsent(sighting.getElementName(), UtilsTime.getLocalDateTimeFromDate(sighting.getDate()));
+            mapAccumulation.putIfAbsent(sighting.getElementName(reportsBaseDialog.getOptionName()), UtilsTime.getLocalDateTimeFromDate(sighting.getDate()));
         }
         // Construct the final list of series that needs to be displayed
-        int counter = 1;
+        int counter = 0;
         ObservableList<AreaChart.Data<Number, Number>> lstChartData = FXCollections.observableArrayList();
-        long startTime = 0;
-        long endTime = 0;
         for (String elementName : mapAccumulation.keySet()) {
-            endTime = UtilsTime.getDateFromLocalDateTime(mapAccumulation.get(elementName)).getTime();
-            if (startTime == 0) {
-                startTime = endTime;
-                // Add an entry to the front (and back) to make the first (and last) entry more visible
-                lstChartData.add(new AreaChart.Data<>(startTime, 0, ""));
-            }
-            lstChartData.add(new AreaChart.Data<>(endTime, counter++, elementName));
+            long sightingTime = UtilsTime.getDateFromLocalDateTime(mapAccumulation.get(elementName)).getTime();
+            lstChartData.add(new AreaChart.Data<>(sightingTime, ++counter, elementName));
+        }
+        // Add an entry to the front (and back) to make the first (and last) entry more visible
+        if (endDate != null) {
+            lstChartData.add(new AreaChart.Data<>(UtilsTime.getDateFromLocalDateTime(endDate.atTime(LocalTime.MAX)).getTime(), counter, "END"));
+        }
+        if (startDate != null) {
+            lstChartData.add(new AreaChart.Data<>(UtilsTime.getDateFromLocalDateTime(startDate.atTime(LocalTime.MIN)).getTime(), 0, "START"));
         }
         ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
         chartData.add(new AreaChart.Series<>("All Creatures", lstChartData));
@@ -175,6 +282,108 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         return chart;
     }
     
+    private Chart createAccumulationSightingReport(List<Sighting> inSightings, boolean inIsForAllCreatures) {
+        // Get the fisrt and last Visit date
+        Map<String, DateWrapper> mapVisitDates = new HashMap<>();
+        LocalDate startDate = null; 
+        LocalDate endDate = null;
+        for (Sighting sighting : inSightings) {
+            DateWrapper visitDates = mapVisitDates.get(sighting.getVisitName());
+            if (visitDates == null) {
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                visitDates = new DateWrapper();
+                visitDates.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
+                visitDates.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                mapVisitDates.put(sighting.getVisitName(), visitDates);
+            }
+            // Get Start Date
+            // If no date was found then use the Sighting's date
+            LocalDate possibleDate = visitDates.startDate;
+            if (possibleDate == null) {
+                possibleDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+            }
+            // Kies die vroegste datum
+            if (startDate == null || possibleDate.isBefore(startDate)) {
+                startDate = possibleDate;
+            }
+            // Get End Date
+            // If no date was found then use the Sighting's date
+            possibleDate = visitDates.endDate;
+            if (possibleDate == null) {
+                possibleDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+            }
+            // Kies die laaste datum
+            if (endDate == null || possibleDate.isAfter(endDate)) {
+                endDate = possibleDate;
+            }
+        }
+        // Get the data in the correct structure
+        // Get sorted (by date) Sightings list
+        Collections.sort(inSightings);
+        // Construct the final list of series that needs to be displayed
+        Map<String, ObservableList<AreaChart.Data<Number, Number>>> mapGroupedData = new HashMap<>();
+        for (Sighting sighting : inSightings) {
+            String key;
+            if (inIsForAllCreatures) {
+                key = "All Creatures";
+            }
+            else {
+                key = sighting.getElementName(reportsBaseDialog.getOptionName());
+            }
+            ObservableList<AreaChart.Data<Number, Number>> lstChartData = mapGroupedData.get(key);
+            if (lstChartData == null) {
+                lstChartData = FXCollections.observableArrayList();
+                mapGroupedData.put(key, lstChartData);
+            }
+            lstChartData.add(new AreaChart.Data<>(sighting.getDate().getTime(), lstChartData.size() + 1, 
+                    sighting.getElementName(reportsBaseDialog.getOptionName())));
+        }
+        // Get the final list of series
+        ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
+        List<String> lstKeys = new ArrayList<>(mapGroupedData.keySet());
+        Collections.sort(lstKeys);
+        for (String key : lstKeys) {
+            ObservableList<AreaChart.Data<Number, Number>> lstChartData = mapGroupedData.get(key);
+            // Add an entry to the front (and back) to make the first (and last) entry more visible
+            if (endDate != null) {
+                lstChartData.add(new AreaChart.Data<>(UtilsTime.getDateFromLocalDateTime(endDate.atTime(LocalTime.MAX)).getTime(), lstChartData.size(), "END"));
+            }
+            if (startDate != null) {
+                lstChartData.add(0, new AreaChart.Data<>(UtilsTime.getDateFromLocalDateTime(startDate.atTime(LocalTime.MIN)).getTime(), 0, "START"));
+            }
+            // Add the series
+            chartData.add(new AreaChart.Series<>(key + " (" + lstChartData.size() + ")", lstChartData));
+        }
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, false);
+        NumberAxis dateAxis = new NumberAxis();
+        dateAxis.setAutoRanging(true);
+        dateAxis.setForceZeroInRange(false);
+        dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                return UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(new Date(object.longValue())));
+            }
+            @Override
+            public Number fromString(String string) {
+                return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
+            }
+        });
+        dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
+        AreaChart<Number, Number> chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-line-30-color");
+        chart.setLegendVisible(!inIsForAllCreatures);
+        if (inIsForAllCreatures) {
+            chart.setTitle("Number of Observations over Time");
+        }
+        else {
+            chart.setTitle("Number of Observations per Creature over Time");
+        }
+        UtilsReports.setupChartTooltips(chart, true, true);
+        return chart;
+    }
+    
 // FIXME: Baie stadig vir groot datasets. (Dalk ook tedoen met as daar 'n paar series is wat oor 'n groot x-axis gaan, basies te veel datums om te render?)
     private Chart createDailyReport(List<Sighting> inSightings, boolean inIsForAllObservations) {
         Map<String, Map<String, ReportDataWrapper>> mapSeries = new HashMap<>();
@@ -184,7 +393,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         for (Sighting sighting : inSightings) {
             String key;
             if (inIsForAllObservations) {
-                if (showDayOrNight) {
+                if (chkShowDayOrNight.isSelected()) {
                     key = ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()).toString();
                 }
                 else {
@@ -193,7 +402,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
             else {
                 key = sighting.getElementName(reportsBaseDialog.getOptionName());
-                if (showDayOrNight) {
+                if (chkShowDayOrNight.isSelected()) {
                     key = key + " - " + ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()).toString();
                 }
             }
@@ -218,7 +427,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             int numberOfDays = (int) Duration.between(firstDate.atTime(0, 0), lastDate.atTime(0, 0)).toDays();
             ObservableList<AreaChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
             List<String> keys;
-            if (inIsForAllObservations && showDayOrNight) {
+            if (inIsForAllObservations && chkShowDayOrNight.isSelected()) {
                 keys = ActiveTime.getEnumListAsStringForReports();
             }
             else {
@@ -264,7 +473,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         else {
             chart = new AreaChart<String, Number>(new CategoryAxis(), new NumberAxis(), FXCollections.observableArrayList());
         }
-        if (inIsForAllObservations && showDayOrNight) {
+        if (inIsForAllObservations && chkShowDayOrNight.isSelected()) {
             chart.getStylesheets().add("wildlog/ui/reports/chart/styling/ChartsDayNightTwilight.css");
             chart.getStyleClass().add("wl-line-day-night-color");
         }
@@ -272,7 +481,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             chart.getStyleClass().add("wl-line-30-color");
         }
         if (inIsForAllObservations) {
-            if (showDayOrNight) {
+            if (chkShowDayOrNight.isSelected()) {
                 chart.setTitle("Number of Observations per Day, Night and Twilight");
                 chart.setLegendVisible(true);
             }
@@ -282,7 +491,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         }
         else {
-            if (showDayOrNight) {
+            if (chkShowDayOrNight.isSelected()) {
                 chart.setTitle("Number of Creatures per Day, Night and Twilight");
             }
             else {
@@ -293,5 +502,128 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         UtilsReports.setupChartTooltips(chart, true, false);
         return chart;
     }
+
+    private Chart createAccumulationVisitReport(List<Sighting> inSightings, boolean inIsForObservations) {
+        // Get the fisrt and last Visit date
+        Map<String, DateWrapper> mapVisitDates = new HashMap<>();
+        TemporalAmount dateDiffRange = null;
+        for (Sighting sighting : inSightings) {
+            DateWrapper visitDates = mapVisitDates.get(sighting.getVisitName());
+            if (visitDates == null) {
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                visitDates = new DateWrapper();
+                visitDates.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
+                visitDates.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                mapVisitDates.put(sighting.getVisitName(), visitDates);
+            }
+            LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+            // Get Start Date
+            if (visitDates.startDate == null) {
+                visitDates.startDate = sightingDate;
+            }
+            if (visitDates.startDate.isAfter(sightingDate)) {
+                visitDates.startDate = sightingDate;
+            }
+            // Get End Date
+            if (visitDates.endDate == null) {
+                visitDates.endDate = sightingDate;
+            }
+            if (visitDates.endDate.isBefore(sightingDate)) {
+                visitDates.endDate = sightingDate;
+            }
+            // check longest duration
+            TemporalAmount tempDifference = Duration.between(visitDates.startDate.atTime(LocalTime.MIN), visitDates.endDate.atTime(LocalTime.MAX));
+            if (dateDiffRange == null || dateDiffRange.get(ChronoUnit.SECONDS) < tempDifference.get(ChronoUnit.SECONDS)) {
+                dateDiffRange = tempDifference;
+            }
+        }
+        // Get the data in the correct structure
+        // Get sorted (by date) Sightings list
+        Collections.sort(inSightings);
+        // Construct the final list of series that needs to be displayed
+        Map<String, ObservableList<AreaChart.Data<Number, Number>>> mapGroupedData = new HashMap<>();
+        Map<String, Set<String>> mapVisitElementCount = new HashMap<>(mapVisitDates.size());
+        for (Sighting sighting : inSightings) {
+            ObservableList<AreaChart.Data<Number, Number>> lstChartData = mapGroupedData.get(sighting.getVisitName());
+            if (lstChartData == null) {
+                lstChartData = FXCollections.observableArrayList();
+                mapGroupedData.put(sighting.getVisitName(), lstChartData);
+            }
+            TemporalAmount tempDifference = Duration.between(mapVisitDates.get(sighting.getVisitName()).startDate.atTime(LocalTime.MIN), 
+                    UtilsTime.getLocalDateTimeFromDate(sighting.getDate()));
+            if (inIsForObservations) {
+                lstChartData.add(new AreaChart.Data<>(tempDifference.get(ChronoUnit.SECONDS), lstChartData.size() + 1, 
+                    sighting.getElementName(reportsBaseDialog.getOptionName()) + " [" + sighting.getVisitName() + "]"));
+            }
+            else {
+                Set<String> elementCount = mapVisitElementCount.get(sighting.getVisitName());
+                if (elementCount == null) {
+                    elementCount = new HashSet<>();
+                    mapVisitElementCount.put(sighting.getVisitName(), elementCount);
+                }
+                if (!elementCount.contains(sighting.getElementName(reportsBaseDialog.getOptionName()))) {
+                    elementCount.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
+                    lstChartData.add(new AreaChart.Data<>(tempDifference.get(ChronoUnit.SECONDS), elementCount.size(), 
+                        sighting.getElementName(reportsBaseDialog.getOptionName()) + " [" + sighting.getVisitName() + "]"));
+                }
+            }
+        }
+        // Get the final list of series
+        ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
+        List<String> lstKeys = new ArrayList<>(mapGroupedData.keySet());
+        Collections.sort(lstKeys);
+        for (String key : lstKeys) {
+            ObservableList<AreaChart.Data<Number, Number>> lstChartData = mapGroupedData.get(key);
+            // Add an entry to the front (and back) to make the first (and last) entry more visible
+            int maxCount = lstChartData.size();
+            DateWrapper visitDates = mapVisitDates.get(key);
+            TemporalAmount tempDifference = Duration.between(visitDates.startDate.atTime(LocalTime.MIN), visitDates.endDate.atTime(LocalTime.MAX));
+            lstChartData.add(new AreaChart.Data<>(tempDifference.get(ChronoUnit.SECONDS), maxCount, "PERIOD ENDED"));
+            lstChartData.add(new AreaChart.Data<>(dateDiffRange.get(ChronoUnit.SECONDS), maxCount, "END"));
+            lstChartData.add(0, new AreaChart.Data<>(0, 0, "START"));
+            // Add the series
+            chartData.add(new AreaChart.Series<>(key + " (" + lstChartData.size() + ")", lstChartData));
+        }
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, false);
+        NumberAxis dayAxis = new NumberAxis();
+        dayAxis.setAutoRanging(true);
+        dayAxis.setForceZeroInRange(true);
+        dayAxis.setTickLabelFormatter(new StringConverter<Number>() {
+            private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("(HH:mm:ss)");
+            @Override
+            public String toString(Number object) {
+                long allSeconds = object.longValue();
+                int days = (int) (allSeconds / /*24 * 60 * 60 = */86400);
+                LocalTime time = LocalTime.ofSecondOfDay(allSeconds - (days * 86400));
+                return "Day " + UtilsReports.getNumberWithZero(days) + " " + TIMEFORMAT.format(time);
+            }
+            @Override
+            public Number fromString(String string) {
+                int days = Integer.parseInt(string.substring(string.indexOf(' '), string.lastIndexOf(' ')));
+                String time = string.substring(string.lastIndexOf(' '));
+                return TIMEFORMAT.parse(time).get(ChronoField.MILLI_OF_SECOND) + (days * 86400);
+            }
+        });
+        dayAxis.setTickLabelRotation(-90);
+        dayAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 14));
+        AreaChart<Number, Number> chart = new AreaChart<Number, Number>(dayAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-line-30-color");
+        chart.setLegendVisible(true);
+        if (inIsForObservations) {
+            chart.setTitle("Observations per Period over Time");
+        }
+        else {
+            chart.setTitle("Creatures per Period over Time");
+        }
+        UtilsReports.setupChartTooltips(chart, true, true);
+        return chart;
+    }
     
+    private class DateWrapper {
+        LocalDate startDate;
+        LocalDate endDate;
+    }
+
 }

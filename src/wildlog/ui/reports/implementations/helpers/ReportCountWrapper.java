@@ -7,6 +7,7 @@ public class ReportCountWrapper {
     public double min;
     public double total;
     public double count;
+    public Object value;
 
     public ReportCountWrapper() {
     }
@@ -48,6 +49,14 @@ public class ReportCountWrapper {
 
     public void setCount(double inCount) {
         count = inCount;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object inValue) {
+        value = inValue;
     }
     
 }

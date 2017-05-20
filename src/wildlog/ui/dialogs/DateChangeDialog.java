@@ -283,22 +283,22 @@ public class DateChangeDialog extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSave;
-    private org.jdesktop.swingx.JXDatePicker dtpBadDate;
-    private org.jdesktop.swingx.JXDatePicker dtpGoodDate;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSpinner spnBadHours;
-    private javax.swing.JSpinner spnBadMinutes;
-    private javax.swing.JSpinner spnBadSeconds;
-    private javax.swing.JSpinner spnGoodHours;
-    private javax.swing.JSpinner spnGoodMinutes;
-    private javax.swing.JSpinner spnGoodSeconds;
+    javax.swing.JButton btnSave;
+    org.jdesktop.swingx.JXDatePicker dtpBadDate;
+    org.jdesktop.swingx.JXDatePicker dtpGoodDate;
+    javax.swing.JLabel jLabel1;
+    javax.swing.JLabel jLabel10;
+    javax.swing.JLabel jLabel11;
+    javax.swing.JLabel jLabel6;
+    javax.swing.JLabel jLabel7;
+    javax.swing.JLabel jLabel8;
+    javax.swing.JLabel jLabel9;
+    javax.swing.JSeparator jSeparator2;
+    javax.swing.JSpinner spnBadHours;
+    javax.swing.JSpinner spnBadMinutes;
+    javax.swing.JSpinner spnBadSeconds;
+    javax.swing.JSpinner spnGoodHours;
+    javax.swing.JSpinner spnGoodMinutes;
+    javax.swing.JSpinner spnGoodSeconds;
     // End of variables declaration//GEN-END:variables
 }

@@ -53,7 +53,7 @@ public class TextReports extends AbstractReport<Sighting> {
         super("Text Summaries", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Add the text report
-        ToggleButton btnPaarlReport = new ToggleButton("Period Summary");
+        ToggleButton btnPaarlReport = new ToggleButton("Period Summary (Text)");
         btnPaarlReport.setToggleGroup(BUTTON_GROUP);
         btnPaarlReport.setCursor(Cursor.HAND);
         btnPaarlReport.setOnAction(new EventHandler() {
@@ -64,7 +64,7 @@ public class TextReports extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPaarlReport);
-        ToggleButton btnTextReport = new ToggleButton("Data Summary");
+        ToggleButton btnTextReport = new ToggleButton("Data Summary (Text)");
         btnTextReport.setToggleGroup(BUTTON_GROUP);
         btnTextReport.setCursor(Cursor.HAND);
         btnTextReport.setOnAction(new EventHandler() {
