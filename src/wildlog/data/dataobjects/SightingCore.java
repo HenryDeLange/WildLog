@@ -73,7 +73,12 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
             // Ek los die instanceof check uit vir eers want ek glo nie ek sal ooit lyste sort met verskillende data objects in nie...
             SightingCore compareSighting = (SightingCore) inSighting;
             if (date != null && compareSighting.getDate() != null) {
-                return(date.compareTo(compareSighting.getDate()));
+                int result = (date.compareTo(compareSighting.getDate()));
+                if (result == 0) {
+                    //From Long.compare(..) (since Java 7)
+                    result = (sightingCounter < compareSighting.getSightingCounter()) ? -1 : ((sightingCounter == compareSighting.getSightingCounter()) ? 0 : 1);
+                }
+                return result;
             }
         }
         return 0;
