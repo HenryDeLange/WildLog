@@ -43,7 +43,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     
     public DayAndNightChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
         super("Day and Night Cycle Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
-        lstCustomButtons = new ArrayList<>(4);
+        lstCustomButtons = new ArrayList<>(3);
         // Area/Line Chart
         ToggleButton btnPieChart = new ToggleButton("Day/Night Observations (Pie)");
         btnPieChart.setToggleGroup(BUTTON_GROUP);

@@ -81,6 +81,7 @@ public final class UtilsReports {
         return Arrays.copyOf(array, counter);
     }
     
+// FIXME: Die nommers kap soms af... Ek kan dit teoreties binne die bar sit, maar ek dink dit lyk beter buite dit... Die afkap pla nie erg nie...
     public static void displayLabelForDataOnTop(XYChart.Data<String, Number> inData) {
         final Node node = inData.getNode();
         final Text dataText = new Text(inData.getYValue() + "");
@@ -101,10 +102,8 @@ public final class UtilsReports {
         });
     }
     
+// FIXME: Die nommers kap soms af... Ek kan dit teoreties binne die bar sit, maar ek dink dit lyk beter buite dit... Die afkap pla nie erg nie...
     public static void displayLabelForDataToRight(XYChart.Data<Number, String> inData) {
-
-// FIXME: werk nie lekker nie...
-
         final Node node = inData.getNode();
         final Text dataText = new Text(inData.getXValue() + "");
         dataText.setStyle("-fx-fill: #99AA88;");
@@ -118,8 +117,8 @@ public final class UtilsReports {
         node.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
             @Override
             public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
-                dataText.setLayoutX(Math.round(bounds.getMaxX() + 5));
-                dataText.setLayoutY(Math.round(bounds.getMinY() - bounds.getHeight() / 2 - dataText.prefHeight(-1) / 2 ));
+                dataText.setX(Math.round(bounds.getWidth() + dataText.prefWidth(-1) * 0.5));
+                dataText.setY(Math.round(bounds.getMaxY() - bounds.getHeight() / 2 + dataText.prefHeight(-1) / 2));
             }
         });
     }

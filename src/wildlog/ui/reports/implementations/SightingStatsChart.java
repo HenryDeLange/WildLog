@@ -34,6 +34,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTime;
 import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.implementations.helpers.HorizontalBarChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportCountWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
@@ -55,7 +56,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         super("Observation Statistics Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Bar charts
-        ToggleButton btnSightingsPerDayBarChart = new ToggleButton("Observations per Day-Cycle (Bar)");
+        ToggleButton btnSightingsPerDayBarChart = new ToggleButton("Observations per Day-Cycle");
         btnSightingsPerDayBarChart.setToggleGroup(BUTTON_GROUP);
         btnSightingsPerDayBarChart.setCursor(Cursor.HAND);
         btnSightingsPerDayBarChart.setOnAction(new EventHandler() {
@@ -68,7 +69,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnSightingsPerDayBarChart);
-        ToggleButton btnElementPerSightingBarChart = new ToggleButton("Number of Individuals (Bar)");
+        ToggleButton btnElementPerSightingBarChart = new ToggleButton("Number of Individuals");
         btnElementPerSightingBarChart.setToggleGroup(BUTTON_GROUP);
         btnElementPerSightingBarChart.setCursor(Cursor.HAND);
         btnElementPerSightingBarChart.setOnAction(new EventHandler() {
@@ -81,7 +82,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnElementPerSightingBarChart);
-        ToggleButton btnBarChartFirstSighting = new ToggleButton("Days to first Observation (Bar)");
+        ToggleButton btnBarChartFirstSighting = new ToggleButton("Days to first Observation");
         btnBarChartFirstSighting.setToggleGroup(BUTTON_GROUP);
         btnBarChartFirstSighting.setCursor(Cursor.HAND);
         btnBarChartFirstSighting.setOnAction(new EventHandler() {
@@ -93,7 +94,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartFirstSighting);
-        ToggleButton btnSightingChanceBarChart = new ToggleButton("Subsequent Observations (Bar)");
+        ToggleButton btnSightingChanceBarChart = new ToggleButton("Subsequent Observations");
         btnSightingChanceBarChart.setToggleGroup(BUTTON_GROUP);
         btnSightingChanceBarChart.setCursor(Cursor.HAND);
         btnSightingChanceBarChart.setOnAction(new EventHandler() {
@@ -136,17 +137,17 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.NUMBER_PER_SIGHTING_CHART)) {
-                    setActiveSubCategoryTitle("Number of Individuals (Bar)");
+                    setActiveSubCategoryTitle("Number of Individuals");
                     displayedChart = createNumOfElementsPerSightingBarChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.SUBSEQUENT_CHART)) {
-                    setActiveSubCategoryTitle("Subsequent Observations (Bar)");
+                    setActiveSubCategoryTitle("Subsequent Observations");
                     displayedChart = createSubsequentSightingBarChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.SIGHTINGS_PER_DAY_CHART)) {
-                    setActiveSubCategoryTitle("Observations per Day-Cycle (Bar)");
+                    setActiveSubCategoryTitle("Observations per Day-Cycle");
                     displayedChart = createSightingPerDayBarChart(lstData);
                 }
 //                else
@@ -156,7 +157,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
 //                }
                 else
                 if (chartType.equals(ChartType.FIRST_SIGHTING_CHART)) {
-                    setActiveSubCategoryTitle("Days to first Observation (Bar)");
+                    setActiveSubCategoryTitle("Days to first Observation");
                     displayedChart = createFirstSightingBarChart(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);
@@ -197,16 +198,22 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 if (minValue == Double.MAX_VALUE) {
                     minValue = 0;
                 }
-                lstCountForElements.add(new BarChart.Data<Number, String>(minValue, key));
+                BarChart.Data<Number, String> data = new BarChart.Data<>(minValue, key);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
             else
             if (cmbOption.getSelectionModel().isSelected(1)) { // Ave
-                lstCountForElements.add(new BarChart.Data<Number, String>(
-                        Math.round((mapElemNum.get(key).count/mapElemNum.get(key).total)*100.0)/100.0, key));
+                BarChart.Data<Number, String> data = new BarChart.Data<>(
+                        Math.round((mapElemNum.get(key).count/mapElemNum.get(key).total)*100.0)/100.0, key);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
             else
             if (cmbOption.getSelectionModel().isSelected(2)) { // Max
-                lstCountForElements.add(new BarChart.Data<Number, String>(mapElemNum.get(key).max, key));
+                BarChart.Data<Number, String> data = new BarChart.Data<>(mapElemNum.get(key).max, key);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
         }
         // Sort the results
@@ -319,16 +326,22 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 if (minSightingsPerDay == Double.MAX_VALUE) {
                     minSightingsPerDay = 0;
                 }
-                lstCountForElements.add(new BarChart.Data<Number, String>(minSightingsPerDay, key));
+                BarChart.Data<Number, String> data = new BarChart.Data<>(minSightingsPerDay, key);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
             else
             if (cmbOption.getSelectionModel().isSelected(1)) { // Ave
-                lstCountForElements.add(new BarChart.Data<Number, String>(
-                        Math.round((totalNumberOfSightings/totalNumberOfDaysSighted)*100.0)/100.0, key));
+                BarChart.Data<Number, String> data = new BarChart.Data<>(
+                        Math.round((totalNumberOfSightings/totalNumberOfDaysSighted)*100.0)/100.0, key);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
             else
             if (cmbOption.getSelectionModel().isSelected(2)) { // Max
-                lstCountForElements.add(new BarChart.Data<Number, String>(maxSightingsPerDay, key));
+                BarChart.Data<Number, String> data = new BarChart.Data<>(maxSightingsPerDay, key);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
         }
         // Sort the results
@@ -435,8 +448,10 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 }
                 totalNumberOfDaysSighted++;
             }
-            lstCountForElements.add(new BarChart.Data<Number, String>(
-                    Math.round((daysWithMultipleSightings/totalNumberOfDaysSighted)*100.0), key));
+            BarChart.Data<Number, String> data = new BarChart.Data<>(
+                    Math.round((daysWithMultipleSightings/totalNumberOfDaysSighted)*100.0), key);
+            data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+            lstCountForElements.add(data);
         }
         // Sort the results
         Collections.sort(lstCountForElements, new Comparator<XYChart.Data<Number, String>>() {
@@ -614,7 +629,9 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 if (minValue == Double.MAX_VALUE) {
                     minValue = 0;
                 }
-                lstCountForElements.add(new BarChart.Data<Number, String>(minValue, key, wrapper.value));
+                BarChart.Data<Number, String> data = new BarChart.Data<>(minValue, key, wrapper.value);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
             else
             if (cmbOption.getSelectionModel().isSelected(1)) { // Ave
@@ -622,11 +639,15 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 if (minValue == Double.MAX_VALUE) {
                     minValue = 0;
                 }
-                lstCountForElements.add(new BarChart.Data<Number, String>((minValue + wrapper.max)/2, key));
+                BarChart.Data<Number, String> data = new BarChart.Data<>((minValue + wrapper.max)/2, key);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
             else
             if (cmbOption.getSelectionModel().isSelected(2)) { // Max
-                lstCountForElements.add(new BarChart.Data<Number, String>(wrapper.max, key, wrapper.value));
+                BarChart.Data<Number, String> data = new BarChart.Data<>(wrapper.max, key, wrapper.value);
+                data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(keys.size(), data));
+                lstCountForElements.add(data);
             }
         }
         // Sort the results

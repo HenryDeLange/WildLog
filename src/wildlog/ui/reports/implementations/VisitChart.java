@@ -73,7 +73,7 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartName);
-        ToggleButton btnBarChartElementCount = new ToggleButton("Creatures per Period (Bar)");
+        ToggleButton btnBarChartElementCount = new ToggleButton("Creatures per Period");
         btnBarChartElementCount.setToggleGroup(BUTTON_GROUP);
         btnBarChartElementCount.setCursor(Cursor.HAND);
         btnBarChartElementCount.setOnAction(new EventHandler() {
@@ -84,7 +84,7 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartElementCount);
-        ToggleButton btnPieChartType = new ToggleButton("Observations per Period Type (Pie)");
+        ToggleButton btnPieChartType = new ToggleButton("Observations per Period Type");
         btnPieChartType.setToggleGroup(BUTTON_GROUP);
         btnPieChartType.setCursor(Cursor.HAND);
         btnPieChartType.setOnAction(new EventHandler() {
@@ -95,7 +95,7 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPieChartType);
-        ToggleButton btnBarChartDuration = new ToggleButton("Period Duration (Bar)");
+        ToggleButton btnBarChartDuration = new ToggleButton("Period Duration");
         btnBarChartDuration.setToggleGroup(BUTTON_GROUP);
         btnBarChartDuration.setCursor(Cursor.HAND);
         btnBarChartDuration.setOnAction(new EventHandler() {
@@ -106,7 +106,7 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartDuration);
-        ToggleButton btnBarChartDurationCombined = new ToggleButton("Grouped Period Duration (Bar)");
+        ToggleButton btnBarChartDurationCombined = new ToggleButton("Grouped Period Duration");
         btnBarChartDurationCombined.setToggleGroup(BUTTON_GROUP);
         btnBarChartDurationCombined.setCursor(Cursor.HAND);
         btnBarChartDurationCombined.setOnAction(new EventHandler() {
@@ -117,7 +117,7 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartDurationCombined);
-        ToggleButton btnBarChartAbundance = new ToggleButton("Abundance of Observations (Bar)");
+        ToggleButton btnBarChartAbundance = new ToggleButton("Abundance of Observations");
         btnBarChartAbundance.setToggleGroup(BUTTON_GROUP);
         btnBarChartAbundance.setCursor(Cursor.HAND);
         btnBarChartAbundance.setOnAction(new EventHandler() {
@@ -130,7 +130,7 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartAbundance);
-        ToggleButton btnBarChartElementAbundance = new ToggleButton("Abundance of Creatures (Bar)");
+        ToggleButton btnBarChartElementAbundance = new ToggleButton("Abundance of Creatures");
         btnBarChartElementAbundance.setToggleGroup(BUTTON_GROUP);
         btnBarChartElementAbundance.setCursor(Cursor.HAND);
         btnBarChartElementAbundance.setOnAction(new EventHandler() {
@@ -143,7 +143,7 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartElementAbundance);
-        ToggleButton btnBarChartRichness = new ToggleButton("Richness of Creatures (Bar)");
+        ToggleButton btnBarChartRichness = new ToggleButton("Richness of Creatures");
         btnBarChartRichness.setToggleGroup(BUTTON_GROUP);
         btnBarChartRichness.setCursor(Cursor.HAND);
         btnBarChartRichness.setOnAction(new EventHandler() {
@@ -165,7 +165,7 @@ public class VisitChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.PIE_CHART_TYPE)) {
-                    setActiveSubCategoryTitle("Observations per Period Type (Pie)");
+                    setActiveSubCategoryTitle("Observations per Period Type");
                     displayedChart = createPieChartVisitTypes(lstData);
                 }
                 else
@@ -180,32 +180,32 @@ public class VisitChart extends AbstractReport<Sighting> {
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_COMBINED_DURATION)) {
-                    setActiveSubCategoryTitle("Grouped Period Duration (Bar)");
+                    setActiveSubCategoryTitle("Grouped Period Duration");
                     displayedChart = createBarChartDurationCombined(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_DURATION)) {
-                    setActiveSubCategoryTitle("Period Duration (Bar)");
+                    setActiveSubCategoryTitle("Period Duration");
                     displayedChart = createBarChartDuration(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ABUNDANCE)) {
-                    setActiveSubCategoryTitle("Abundance of Observations (Bar)");
+                    setActiveSubCategoryTitle("Abundance of Observations");
                     displayedChart = createBarChartAbundance(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENT_ABUNDANCE)) {
-                    setActiveSubCategoryTitle("Abundance of Creatures (Bar)");
+                    setActiveSubCategoryTitle("Abundance of Creatures");
                     displayedChart = createBarChartElementAbundance(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENT_COUNT)) {
-                    setActiveSubCategoryTitle("Creatures per Period (Bar)");
+                    setActiveSubCategoryTitle("Creatures per Period");
                     displayedChart = createBarChartElementCount(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_RICHNESS)) {
-                    setActiveSubCategoryTitle("Richness of Creatures (Bar)");
+                    setActiveSubCategoryTitle("Richness of Creatures");
                     displayedChart = createBarChartRichness(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

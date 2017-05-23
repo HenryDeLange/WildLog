@@ -49,7 +49,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         ToggleButton btnHidden = new ToggleButton();
         btnHidden.setToggleGroup(BUTTON_GROUP);
         // Pie charts
-        lstCustomButtons.add(new Label("Pie Chart Categories:"));
+        lstCustomButtons.add(new Label("Observation Categories:"));
         cmbCategories = new ComboBoxToShowReports<>();
         cmbCategories.setItems(FXCollections.observableArrayList(options));
         cmbCategories.setVisibleRowCount(10);

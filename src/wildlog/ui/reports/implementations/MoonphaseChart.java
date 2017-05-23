@@ -58,7 +58,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     
     public MoonphaseChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
         super("Moon Phase Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
-        lstCustomButtons = new ArrayList<>(10);
+        lstCustomButtons = new ArrayList<>(9);
         // Charts
         ToggleButton btnPieChart = new ToggleButton("All Observations Together (Pie)");
         btnPieChart.setToggleGroup(BUTTON_GROUP);
@@ -162,27 +162,27 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.BAR_CHART_ALL)) {
-                    setActiveSubCategoryTitle("All Observations Together (Bar)");
+                    setActiveSubCategoryTitle("All Observations Together");
                     displayedChart = createBarChart(lstData, true);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
-                    setActiveSubCategoryTitle("Grouped by Creatures (Bar)");
+                    setActiveSubCategoryTitle("Grouped by Creatures");
                     displayedChart = createBarChart(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.LINE_CHART_ALL)) {
-                    setActiveSubCategoryTitle("All Observations Together (Line)");
+                    setActiveSubCategoryTitle("All Observations Together");
                     displayedChart = createLineChart(lstData, true);
                 }
                 else
                 if (chartType.equals(ChartType.LINE_CHART_ELEMENTS)) {
-                    setActiveSubCategoryTitle("Grouped by Creatures (Line)");
+                    setActiveSubCategoryTitle("Grouped by Creatures");
                     displayedChart = createLineChart(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.PIE_CHART)) {
-                    setActiveSubCategoryTitle("All Observations Together (Pie)");
+                    setActiveSubCategoryTitle("All Observations Together");
                     displayedChart = createPieChart(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

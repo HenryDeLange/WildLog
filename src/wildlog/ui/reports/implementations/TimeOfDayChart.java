@@ -37,7 +37,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
     
     public TimeOfDayChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
         super("Time of Day Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
-        lstCustomButtons = new ArrayList<>(4);
+        lstCustomButtons = new ArrayList<>(3);
         // Bar charts
         ToggleButton btnBarChart = new ToggleButton("Observation Time of Day (Bar)");
         btnBarChart.setToggleGroup(BUTTON_GROUP);
@@ -63,7 +63,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnPieChart);
         // Line charts
-        ToggleButton btnLineChart = new ToggleButton("Creature Time of Day (Line)");
+        ToggleButton btnLineChart = new ToggleButton("Creature Time of Day");
         btnLineChart.setToggleGroup(BUTTON_GROUP);
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
@@ -83,7 +83,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.LINE_CHART)) {
-                    setActiveSubCategoryTitle("Creature Time of Day (Line)");
+                    setActiveSubCategoryTitle("Creature Time of Day");
                     displayedChart = createLineChart(lstData);
                 }
                 else

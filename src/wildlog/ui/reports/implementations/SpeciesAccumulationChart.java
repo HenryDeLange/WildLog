@@ -56,10 +56,10 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
 
     
     public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Recording Rate Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Accumulation Rate Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(9);
         // Line charts
-        ToggleButton btnCreatureAccumulationLineChart = new ToggleButton("Creature Accumulation (Line)");
+        ToggleButton btnCreatureAccumulationLineChart = new ToggleButton("Creature Accumulation");
         btnCreatureAccumulationLineChart.setToggleGroup(BUTTON_GROUP);
         btnCreatureAccumulationLineChart.setCursor(Cursor.HAND);
         btnCreatureAccumulationLineChart.setOnAction(new EventHandler() {
@@ -70,7 +70,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnCreatureAccumulationLineChart);
-        ToggleButton btnSightingAccumulationLineChart = new ToggleButton("Observation Accumulation (Line)");
+        ToggleButton btnSightingAccumulationLineChart = new ToggleButton("Observation Accumulation");
         btnSightingAccumulationLineChart.setToggleGroup(BUTTON_GROUP);
         btnSightingAccumulationLineChart.setCursor(Cursor.HAND);
         btnSightingAccumulationLineChart.setOnAction(new EventHandler() {
@@ -81,7 +81,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnSightingAccumulationLineChart);
-        ToggleButton btnSightingElementAccumulationLineChart = new ToggleButton("Observations per Creature (Line)");
+        ToggleButton btnSightingElementAccumulationLineChart = new ToggleButton("Observations per Creature");
         btnSightingElementAccumulationLineChart.setToggleGroup(BUTTON_GROUP);
         btnSightingElementAccumulationLineChart.setCursor(Cursor.HAND);
         btnSightingElementAccumulationLineChart.setOnAction(new EventHandler() {
@@ -92,7 +92,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnSightingElementAccumulationLineChart);
-        ToggleButton btnAccElementPerVisitLineChart = new ToggleButton("Creatures per Period (Line)");
+        ToggleButton btnAccElementPerVisitLineChart = new ToggleButton("Creatures per Period");
         btnAccElementPerVisitLineChart.setToggleGroup(BUTTON_GROUP);
         btnAccElementPerVisitLineChart.setCursor(Cursor.HAND);
         btnAccElementPerVisitLineChart.setOnAction(new EventHandler() {
@@ -103,7 +103,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnAccElementPerVisitLineChart);
-        ToggleButton btnAccSightingPerVisitLineChart = new ToggleButton("Observations per Period (Line)");
+        ToggleButton btnAccSightingPerVisitLineChart = new ToggleButton("Observations per Period");
         btnAccSightingPerVisitLineChart.setToggleGroup(BUTTON_GROUP);
         btnAccSightingPerVisitLineChart.setCursor(Cursor.HAND);
         btnAccSightingPerVisitLineChart.setOnAction(new EventHandler() {
@@ -114,8 +114,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnAccSightingPerVisitLineChart);
-// FIXME: Moet ek nie dat die "daily" eerder op die day-night cycle manier werk nie?
-        ToggleButton btnDailyObsLineChart = new ToggleButton("Daily Observation Count (Line)");
+        ToggleButton btnDailyObsLineChart = new ToggleButton("Daily Observation Count");
         btnDailyObsLineChart.setToggleGroup(BUTTON_GROUP);
         btnDailyObsLineChart.setCursor(Cursor.HAND);
         btnDailyObsLineChart.setOnAction(new EventHandler() {
@@ -126,8 +125,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnDailyObsLineChart);
-// FIXME: Moet ek nie dat die "daily" eerder op die day-night cycle manier werk nie?
-        ToggleButton btnDailyLineChart = new ToggleButton("Daily Creature Count (Line)");
+        ToggleButton btnDailyLineChart = new ToggleButton("Daily Creature Count");
         btnDailyLineChart.setToggleGroup(BUTTON_GROUP);
         btnDailyLineChart.setCursor(Cursor.HAND);
         btnDailyLineChart.setOnAction(new EventHandler() {
@@ -154,43 +152,43 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                 displayedChart = null;
                 if (chartType.equals(ChartType.ACCUMULATION_LINE_CHART)) {
                     chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Creature Accumulation (Line)");
+                    setActiveSubCategoryTitle("Creature Accumulation");
                     displayedChart = createAccumulationReport(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.ACCUMULATION_SIGHTING_LINE_CHART)) {
                     chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Observation Accumulation (Line)");
+                    setActiveSubCategoryTitle("Observation Accumulation");
                     displayedChart = createAccumulationSightingReport(lstData, true);
                 }
                 else
                 if (chartType.equals(ChartType.ACCUMULATION_SIGHTING_ELEMENT_LINE_CHART)) {
                     chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Observations per Creature (Line)");
+                    setActiveSubCategoryTitle("Observations per Creature");
                     displayedChart = createAccumulationSightingReport(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.ACC_VISIT_ELEMENT_CHART)) {
                     chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Creatures per Period (Line)");
+                    setActiveSubCategoryTitle("Creatures per Period");
                     displayedChart = createAccumulationVisitReport(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.ACC_VISIT_SIGHTING_CHART)) {
                     chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Observations per Period (Line)");
+                    setActiveSubCategoryTitle("Observations per Period");
                     displayedChart = createAccumulationVisitReport(lstData, true);
                 }
                 else
                 if (chartType.equals(ChartType.DAILY_CREATURE_LINE_CHART)) {
                     chkShowDayOrNight.setDisable(false);
-                    setActiveSubCategoryTitle("Daily Creature Count (Line)");
+                    setActiveSubCategoryTitle("Daily Creature Count");
                     displayedChart = createDailyReport(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.DAILY_OBSERVATION_LINE_CHART)) {
                     chkShowDayOrNight.setDisable(false);
-                    setActiveSubCategoryTitle("Daily Observation Count (Line)");
+                    setActiveSubCategoryTitle("Daily Observation Count");
                     displayedChart = createDailyReport(lstData, true);
                 }
                 displayedChart.setBackground(Background.EMPTY);
@@ -253,7 +251,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             lstChartData.add(new AreaChart.Data<>(UtilsTime.getDateFromLocalDateTime(endDate.atTime(LocalTime.MAX)).getTime(), counter, "END"));
         }
         if (startDate != null) {
-            lstChartData.add(new AreaChart.Data<>(UtilsTime.getDateFromLocalDateTime(startDate.atTime(LocalTime.MIN)).getTime(), 0, "START"));
+            lstChartData.add(0, new AreaChart.Data<>(UtilsTime.getDateFromLocalDateTime(startDate.atTime(LocalTime.MIN)).getTime(), 0, "START"));
         }
         ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
         chartData.add(new AreaChart.Series<>("All Creatures", lstChartData));
@@ -384,7 +382,10 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         return chart;
     }
     
-// FIXME: Baie stadig vir groot datasets. (Dalk ook tedoen met as daar 'n paar series is wat oor 'n groot x-axis gaan, basies te veel datums om te render?)
+// FIXME: Baie stadig vir groot datasets.
+//        Die probleem is dat daar 'n data punt vir elke dag moet wees. Dan raak die chart stadiger hou verder die begin en eind datum uit mekaar is...
+//        Dit raak dan ook erger hoe meer series mens het want dan raak dit net meer ne meer data punte
+//        OPLOSSING? Iets soos 'n (stacked vir multi series) bar chart sal seker beter werk en selfs maklikker lees?
     private Chart createDailyReport(List<Sighting> inSightings, boolean inIsForAllObservations) {
         Map<String, Map<String, ReportDataWrapper>> mapSeries = new HashMap<>();
         // Get sorted (by date) Sightings list
@@ -424,7 +425,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         if (!inSightings.isEmpty()) {
             LocalDate firstDate = UtilsTime.getLocalDateFromDate(inSightings.get(0).getDate());
             LocalDate lastDate = UtilsTime.getLocalDateFromDate(inSightings.get(inSightings.size() - 1).getDate());
-            int numberOfDays = (int) Duration.between(firstDate.atTime(0, 0), lastDate.atTime(0, 0)).toDays();
+            int numberOfDays = (int) Duration.between(firstDate.atTime(LocalTime.MIN), lastDate.atTime(LocalTime.MIN)).toDays();
             ObservableList<AreaChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
             List<String> keys;
             if (inIsForAllObservations && chkShowDayOrNight.isSelected()) {
@@ -448,8 +449,8 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                             seriesDataCount = seriesDataCount + reportDataWrapper.count;
                         }
                         else {
-                            lstChartData.add(new AreaChart.Data<String, Number>(dateString, 0, key));
-                        }
+                                lstChartData.add(new AreaChart.Data<String, Number>(dateString, 0, key));
+                            }
                         loopDate = loopDate.plusDays(1);
                     }
                     AreaChart.Series<String, Number> series = new AreaChart.Series<String, Number>(

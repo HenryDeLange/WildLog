@@ -15,6 +15,9 @@
 .wl-bar-single-color .chart-vertical-grid-lines {
     visibility: hidden;
 }
+.wl-bar-single-color .chart-horizontal-grid-lines {
+    visibility: hidden;
+}
 .wl-bar-single-color .chart-title {
     -fx-text-fill: #333432;
     -fx-font-size: 1.8em;

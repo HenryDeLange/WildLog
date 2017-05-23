@@ -45,9 +45,9 @@ public class TimelineChart extends AbstractReport<Sighting> {
     
     public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
         super("Timeline Reports (Daily Hours)", inLstData, inChartDescLabel, inReportsBaseDialog);
-        lstCustomButtons = new ArrayList<>(5);
+        lstCustomButtons = new ArrayList<>(4);
         // Timeline for all
-        ToggleButton btnLineChart = new ToggleButton("Timeline for All Observations (Line)");
+        ToggleButton btnLineChart = new ToggleButton("Timeline for All Observations");
         btnLineChart.setToggleGroup(BUTTON_GROUP);
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
@@ -60,7 +60,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnLineChart);
         // Timeline per element
-        ToggleButton btnStackedBarChart = new ToggleButton("Timeline per Creature (Line)");
+        ToggleButton btnStackedBarChart = new ToggleButton("Timeline per Creature");
         btnStackedBarChart.setToggleGroup(BUTTON_GROUP);
         btnStackedBarChart.setCursor(Cursor.HAND);
         btnStackedBarChart.setOnAction(new EventHandler() {
@@ -89,12 +89,12 @@ public class TimelineChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.TIMELINE_FOR_ALL)) {
-                    setActiveSubCategoryTitle("Timeline for All Observations (Line)");
+                    setActiveSubCategoryTitle("Timeline for All Observations");
                     displayedChart = createTimelineForAllChart(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.TIMELINE_PER_ELEMENT)) {
-                    setActiveSubCategoryTitle("Timeline per Creature (Line)");
+                    setActiveSubCategoryTitle("Timeline per Creature");
                     displayedChart = createTimelinePerElementChart(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);

@@ -63,7 +63,7 @@ public class LocationChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartSightings);
-        ToggleButton btnBarChartElements = new ToggleButton("Creatures per Place (Bar)");
+        ToggleButton btnBarChartElements = new ToggleButton("Creatures per Place");
         btnBarChartElements.setToggleGroup(BUTTON_GROUP);
         btnBarChartElements.setCursor(Cursor.HAND);
         btnBarChartElements.setOnAction(new EventHandler() {
@@ -93,7 +93,7 @@ public class LocationChart extends AbstractReport<Sighting> {
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
-                    setActiveSubCategoryTitle("Creatures per Place (Bar)");
+                    setActiveSubCategoryTitle("Creatures per Place");
                     displayedChart = createBarChartElements(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);
