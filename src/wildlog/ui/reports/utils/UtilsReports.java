@@ -140,6 +140,10 @@ public final class UtilsReports {
         if (inNumberOfCategories < 20) {
             inCategoryAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 13));
         }
+        else
+        if (inNumberOfCategories > 40) {
+            inCategoryAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 9));
+        }
         else {
             inCategoryAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 11));
         }
@@ -193,6 +197,10 @@ public final class UtilsReports {
     }
     
     public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate) {
+        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null);
+    }
+    
+    public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate, Map<Integer, String> inMapAxisToNames) {
         for (XYChart.Series<Object, Object> series : (List<XYChart.Series<Object, Object>>) inChart.getData()) {
             for (XYChart.Data<Object, Object> data : series.getData()) {
                 data.getNode().setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -234,8 +242,15 @@ public final class UtilsReports {
                         if (inFormatLongAsDate) {
                             name = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(new Date(Long.parseLong(name))));
                         }
-                        text = text + name + System.lineSeparator();
-                        text = text + "[Value = " + value + "]";
+                        if (inMapAxisToNames == null) {
+                            text = text + name + System.lineSeparator();
+                            text = text + "[Value = " + value + "]";
+                        }
+                        else {
+                            name = inMapAxisToNames.get(Integer.parseInt(name));
+                            value = inMapAxisToNames.get(Integer.parseInt(value));
+                            text = name + " and " + value + System.lineSeparator() + "[Value = " + text.trim() + "]";
+                        }
                         Tooltip tooltip = new Tooltip(text);
                         tooltip.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 16));
                         tooltip.setAutoHide(true);

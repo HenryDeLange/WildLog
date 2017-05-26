@@ -55,7 +55,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPieChartElementTypes);
-        ToggleButton btnPieChartSightings = new ToggleButton("Observations per Creature");
+        ToggleButton btnPieChartSightings = new ToggleButton("Observations per Creature (Pie)");
         btnPieChartSightings.setToggleGroup(BUTTON_GROUP);
         btnPieChartSightings.setCursor(Cursor.HAND);
         btnPieChartSightings.setOnAction(new EventHandler() {
@@ -67,7 +67,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(btnPieChartSightings);
         // Bar charts
-        ToggleButton btnBarChartSightings = new ToggleButton("Observations per Creature");
+        ToggleButton btnBarChartSightings = new ToggleButton("Observations per Creature (Bar)");
         btnBarChartSightings.setToggleGroup(BUTTON_GROUP);
         btnBarChartSightings.setCursor(Cursor.HAND);
         btnBarChartSightings.setOnAction(new EventHandler() {
@@ -98,7 +98,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.PIE_CHART_SIGHTINGS)) {
-                    setActiveSubCategoryTitle("Observations per Creature");
+                    setActiveSubCategoryTitle("Observations per Creature (Pie)");
                     displayedChart = createPieChartSightings(lstData);
                 }
                 else
@@ -108,7 +108,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_SIGHTINGS)) {
-                    setActiveSubCategoryTitle("Observations per Creature");
+                    setActiveSubCategoryTitle("Observations per Creature (Bar)");
                     displayedChart = createBarChartSightings(lstData);
                 }
                 else

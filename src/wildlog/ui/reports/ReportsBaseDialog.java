@@ -49,6 +49,7 @@ import wildlog.ui.reports.implementations.ElementsChart;
 import wildlog.ui.reports.implementations.EventTimelineChart;
 import wildlog.ui.reports.implementations.LocationChart;
 import wildlog.ui.reports.implementations.MoonphaseChart;
+import wildlog.ui.reports.implementations.RelationshipsChart;
 import wildlog.ui.reports.implementations.SightingPropertiesChart;
 import wildlog.ui.reports.implementations.SightingStatsChart;
 import wildlog.ui.reports.implementations.SpeciesAccumulationChart;
@@ -145,6 +146,7 @@ public class ReportsBaseDialog extends JFrame {
         reports.add(new TimelineChart(lstFilteredData, lblReportDescription, this));
         reports.add(new EventTimelineChart(lstFilteredData, lblReportDescription, this));
         reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription, this));
+        reports.add(new RelationshipsChart(lstFilteredData, lblReportDescription, this));
         reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription, this));
         reports.add(new TextReports(lstFilteredData, lblReportDescription, this));
         // Setup loading label
