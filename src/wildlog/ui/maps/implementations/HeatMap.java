@@ -8,9 +8,13 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
@@ -50,6 +54,7 @@ public class HeatMap extends AbstractMap<Sighting> {
     private Parent displayedMap;
     private String displayedTemplate;
     private enum SplitIndicator {
+        VERY_SHORT(3),
         SHORT(7), 
         NORMAL(14), 
         LONG(28),
@@ -68,23 +73,26 @@ public class HeatMap extends AbstractMap<Sighting> {
         @Override
         public String toString() {
             switch (this) {
+                case VERY_SHORT:
                 case SHORT:
                 case NORMAL:
                 case LONG:
-                    return "Split Periods after " + days + " days";
+                    return "Use " + days + " day intervals";
                 case NEVER:
-                    return "Don't Split Periods";
+                    return "Don't split Periods into intervals";
                 default:
                     return super.toString();
             }
         }
     };
     private final ComboBox<HeatMap.SplitIndicator> cmbSplitIndicator;
+    private final CheckBox chkUseOneSplit;
+    private final CheckBox chkExtendShortSplits;
 
     
     public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         super("Distribution Heat Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(13);
+        lstCustomButtons = new ArrayList<>(15);
         // Maps
         ToggleButton btnHeatMapClient = new ToggleButton("Observation Count Map");
         btnHeatMapClient.setToggleGroup(BUTTON_GROUP);
@@ -139,14 +147,17 @@ public class HeatMap extends AbstractMap<Sighting> {
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
         cmbSplitIndicator = new ComboBox<>(FXCollections.observableArrayList(HeatMap.SplitIndicator.values()));
-        cmbSplitIndicator.setVisibleRowCount(4);
+        cmbSplitIndicator.setVisibleRowCount(10);
         cmbSplitIndicator.setCursor(Cursor.HAND);
         lstCustomButtons.add(cmbSplitIndicator);
-// TODO: Toets of die storie dit reg / goed hanteer as 'n baie lang visit met min spesies gesplit word in baie 2 week punte met almal min spesies... 
-//       Word dit dan "warm" of bly dit (hopelik) "koud"?
-
-// TODO: Sit ook 'n checkbox by vir "Use Only Highest Interval" wat dan net die split met die hoogste waarde sal gebruik.
-
+        chkUseOneSplit = new CheckBox("Use only one interval per Period");
+        chkUseOneSplit.setCursor(Cursor.HAND);
+        chkUseOneSplit.setSelected(true);
+        lstCustomButtons.add(chkUseOneSplit);
+        chkExtendShortSplits = new CheckBox("Extend short Period to interval legth");
+        chkExtendShortSplits.setCursor(Cursor.HAND);
+        chkExtendShortSplits.setSelected(true);
+        lstCustomButtons.add(chkExtendShortSplits);
         cmbSplitIndicator.getSelectionModel().select(HeatMap.SplitIndicator.NORMAL);
         CheckBox chkTransparent = new CheckBox("Semi-Transparent");
         chkTransparent.setCursor(Cursor.HAND);
@@ -171,7 +182,7 @@ public class HeatMap extends AbstractMap<Sighting> {
         lstCustomButtons.add(rdbSmall);
         RadioButton rdbMedium = new RadioButton("Medium Radius");
         rdbMedium.setToggleGroup(toggleGroup);
-        rdbMedium.setSelected(true);
+        rdbMedium.setSelected(false);
         rdbMedium.setCursor(Cursor.HAND);
         rdbMedium.setOnAction(new EventHandler() {
             @Override
@@ -182,7 +193,7 @@ public class HeatMap extends AbstractMap<Sighting> {
         lstCustomButtons.add(rdbMedium);
         RadioButton rdbLarge = new RadioButton("Large Radius");
         rdbLarge.setToggleGroup(toggleGroup);
-        rdbLarge.setSelected(false);
+        rdbLarge.setSelected(true);
         rdbLarge.setCursor(Cursor.HAND);
         rdbLarge.setOnAction(new EventHandler() {
             @Override
@@ -388,7 +399,7 @@ public class HeatMap extends AbstractMap<Sighting> {
                     heatPoint = new HeatPoint();
                     heatPoint.lat = lat;
                     heatPoint.lon = lon;
-                    heatPoint.value = sighting.getElementName() + ":" + sighting.getVisitName();
+                    heatPoint.key = sighting.getElementName() + ":" + sighting.getVisitName();
                     heatPoint.weight = 1;
                     mapHeatPoints.put(key, heatPoint);
                 }
@@ -478,7 +489,9 @@ public class HeatMap extends AbstractMap<Sighting> {
                             endDate = LocalDate.now();
                         }
                         long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
-                        if (days > cmbSplitIndicator.getSelectionModel().getSelectedItem().getDays()) {
+                        if (days > cmbSplitIndicator.getSelectionModel().getSelectedItem().getDays() 
+                                || (!cmbSplitIndicator.getSelectionModel().getSelectedItem().equals(HeatMap.SplitIndicator.NEVER))
+                                    && chkExtendShortSplits.isSelected()) {
                             days = cmbSplitIndicator.getSelectionModel().getSelectedItem().getDays();
                         }
                         mapVisitDuration.put(visitDurationKey, days);
@@ -497,16 +510,34 @@ public class HeatMap extends AbstractMap<Sighting> {
                     heatPoint = new HeatPoint();
                     heatPoint.lat = lat;
                     heatPoint.lon = lon;
-                    heatPoint.value = visitDurationKey;
+                    heatPoint.key = visitDurationKey;
+                    heatPoint.visitName = visit.getName();
                     mapHeatPoints.put(heatMapKey, heatPoint);
                 }
                 heatPoint.weight++;
             }
         }
-        for (HeatPoint  heatPoint : mapHeatPoints.values()) {
+        List<HeatPoint> lstHeatPoints = new ArrayList<>(mapHeatPoints.values());
+        if (chkUseOneSplit.isSelected()) {
+            // Maak seker die hoogste een is eerste vir elke visit (want later word net die eerste een gebruik (as die opsiegekies is)
+            Collections.sort(lstHeatPoints, new Comparator<HeatPoint>() {
+                @Override
+                public int compare(HeatPoint heatPoint1, HeatPoint heatPoint2) {
+                    return Integer.compare(heatPoint2.weight, heatPoint1.weight);
+                }
+            });
+        }
+        Set<String> processedVisits = new HashSet<String>();
+        for (HeatPoint  heatPoint : lstHeatPoints) {
+            if (chkUseOneSplit.isSelected()) {
+                if (processedVisits.contains(heatPoint.visitName)) {
+                    continue;
+                }
+                processedVisits.add(heatPoint.visitName);
+            }
             String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
             point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
-            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.value) * 1000.0) / 1000.0) + "}");
+            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.key) * 1000.0) / 1000.0) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
         }
@@ -587,7 +618,9 @@ public class HeatMap extends AbstractMap<Sighting> {
                             endDate = LocalDate.now();
                         }
                         long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
-                        if (days > cmbSplitIndicator.getSelectionModel().getSelectedItem().getDays()) {
+                        if (days > cmbSplitIndicator.getSelectionModel().getSelectedItem().getDays() 
+                                || (!cmbSplitIndicator.getSelectionModel().getSelectedItem().equals(HeatMap.SplitIndicator.NEVER))
+                                    && chkExtendShortSplits.isSelected()) {
                             days = cmbSplitIndicator.getSelectionModel().getSelectedItem().getDays();
                         }
                         mapVisitDuration.put(visitDurationKey, days);
@@ -606,16 +639,34 @@ public class HeatMap extends AbstractMap<Sighting> {
                     heatPoint = new HeatPoint();
                     heatPoint.lat = lat;
                     heatPoint.lon = lon;
-                    heatPoint.value = visitDurationKey;
+                    heatPoint.key = visitDurationKey;
+                    heatPoint.visitName = visit.getName();
                     heatPoint.weight = 1;
                     mapHeatPoints.put(heatMapKey, heatPoint);
                 }
             }
         }
-        for (HeatPoint  heatPoint : mapHeatPoints.values()) {
+        List<HeatPoint> lstHeatPoints = new ArrayList<>(mapHeatPoints.values());
+        if (chkUseOneSplit.isSelected()) {
+            // Maak seker die hoogste een is eerste vir elke visit (want later word net die eerste een gebruik (as die opsiegekies is)
+            Collections.sort(lstHeatPoints, new Comparator<HeatPoint>() {
+                @Override
+                public int compare(HeatPoint heatPoint1, HeatPoint heatPoint2) {
+                    return Integer.compare(heatPoint2.weight, heatPoint1.weight);
+                }
+            });
+        }
+        Set<String> processedVisits = new HashSet<String>();
+        for (HeatPoint  heatPoint : lstHeatPoints) {
+            if (chkUseOneSplit.isSelected()) {
+                if (processedVisits.contains(heatPoint.visitName)) {
+                    continue;
+                }
+                processedVisits.add(heatPoint.visitName);
+            }
             String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
             point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
-            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.value) * 1000.0) / 1000.0) + "}");
+            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.key) * 1000.0) / 1000.0) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
         }
@@ -705,7 +756,7 @@ public class HeatMap extends AbstractMap<Sighting> {
                     heatPoint = new HeatPoint();
                     heatPoint.lat = lat;
                     heatPoint.lon = lon;
-                    heatPoint.value = sighting.getVisitName();
+                    heatPoint.key = sighting.getVisitName();
                     mapHeatPoints.put(key, heatPoint);
                 }
             }
@@ -713,7 +764,7 @@ public class HeatMap extends AbstractMap<Sighting> {
         for (HeatPoint  heatPoint : mapHeatPoints.values()) {
             String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
             point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
-            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + mapVisitDuration.get(heatPoint.value) + "}");
+            point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + mapVisitDuration.get(heatPoint.key) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
         }
@@ -756,7 +807,8 @@ public class HeatMap extends AbstractMap<Sighting> {
         public double lat;
         public double lon;
         public int weight = 0;
-        public String value;
+        public String key;
+        public String visitName;
     }
     
     private long getSplitNumber(Visit inVisit, Sighting inSighting) {

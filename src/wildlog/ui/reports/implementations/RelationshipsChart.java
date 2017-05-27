@@ -60,12 +60,13 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.CHART_ELEMENTS;
-                setupChartDescriptionLabel("<html>This chart shows the number of times two Creatures (species) where observed together.</html>");
             }
         });
         lstCustomButtons.add(btnPieChartElementTypes);
         // Chart options
+        
 // TODO: Sit 'n beskrywing onder aan die chart (en dalk in die titel) wat verduidelik hoe die opsies dinge beinvloed
+
         lstCustomButtons.add(new Label("Chart Options:"));
         chkCompareVisits = new CheckBox("Must be in the same Period");
         chkCompareVisits.setCursor(Cursor.HAND);
@@ -94,14 +95,16 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         cmbCompareDates.getSelectionModel().select(3);
         lstCustomButtons.add(cmbCompareDates);
         cmbType = new ComboBox<>(FXCollections.observableArrayList(new String[] {
-// FIXME: Besluit wat om hier alles te doen...
             "Total Count", 
-            "Relative Count", 
-            "Ratio"}));
+            "Total Count (favour exclusivity)", 
+            "Related Percentage (minimum)", 
+            "Related Percentage (average)", 
+            "Related Percentage (maximum)",
+            "One-Way Relationships"}));
         cmbType.setCursor(Cursor.HAND);
         cmbType.setVisibleRowCount(10);
         cmbType.getSelectionModel().clearSelection();
-        cmbType.getSelectionModel().select(0);
+        cmbType.getSelectionModel().select(3);
         lstCustomButtons.add(cmbType);
     }
 
@@ -113,6 +116,60 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
                 displayedChart = null;
                 if (chartType.equals(ChartType.CHART_ELEMENTS)) {
                     setActiveSubCategoryTitle("Creature Associations");
+                    String info = "<html>This chart shows the number of times two Creatures (species) where observed together.";
+                    // Visit
+                    if (chkCompareVisits.isSelected()) {
+                        info = info + " Only Observations from the same Period are compared to each other.";
+                    }
+                    else {
+                        info = info + " Observations from all Periods are compared to each other.";
+                    }
+                    // GPS
+                    if (cmbGPS.getSelectionModel().isSelected(0)) {
+                        info = info + " The GPS coordinates are not taken into account.";
+                    }
+                    else {
+                        info = info + " The GPS coordinates are taken into account, if no GPS coordinates are available then the Observation is ignored.";
+                    }
+                    // Dates
+                    if (cmbCompareDates.getSelectionModel().isSelected(0)) {
+                        info = info + " The Date and Time of Observations are not taken into account.";
+                    }
+                    else {
+                        info = info + " The number of day-night cycles between Observations are compared.";
+                    }
+                    // Type
+                    if (cmbType.getSelectionModel().isSelected(0)) {
+                        info = info + " <br/>Showing the total number of times two Creatures had related Observations.";
+                    }
+                    else
+                    if (cmbType.getSelectionModel().isSelected(1)) {
+                        info = info + " <br/><b>Showing:</b> The total number of times two Creatures had related Observations,"
+                                + " adjusted by how exclusive the pairing is. The number will be reduced in relation to"
+                                + " how often, on average, each Creature was also observed not this related pairing.";
+                    }
+                    else
+                    if (cmbType.getSelectionModel().isSelected(2)) {
+                        info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
+                                + " for the Creature in the pairing with the minimum related percentage.";
+                    }
+                    else
+                    if (cmbType.getSelectionModel().isSelected(3)) {
+                        info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
+                                + " for average related percentage of both Creatures.";
+                    }
+                    else
+                    if (cmbType.getSelectionModel().isSelected(4)) {
+                        info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
+                                + " for the Creature in the pairing with the maximum related percentage.";
+                    }
+                    else {
+                        info = info + " <br/><b>Showing:</b> The two related Creatures with emphasys on the extent to which"
+                                + " there is a difference in how strongly the one Creature is related to the other Creature."
+                                + " The higher the number the more one-sided the relationship is.";
+                    }
+                    info = info + "</html>";
+                    setupChartDescriptionLabel(info);
                     displayedChart = createElementRelationshipChart(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);
@@ -182,46 +239,49 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         for (String key : keys) {
             ReportDataWrapper dataWrapper = mapChartData.get(key);
             if (dataWrapper != null && dataWrapper.count > 0) {
-                int value;
-                if (cmbType.getSelectionModel().isSelected(0)) {
-                    value = dataWrapper.count;
-                }
-                else
-                if (cmbType.getSelectionModel().isSelected(1)) {
+                int value = dataWrapper.count;
+                if (!cmbType.getSelectionModel().isSelected(0)) {
                     BubbleInfo bubbleInfo = (BubbleInfo) dataWrapper.value;
                     List<String> elementPair = new ArrayList<>(bubbleInfo.elementRatio.keySet());
                     double count1 = bubbleInfo.elementRatio.get(elementPair.get(0));
                     double count2 = bubbleInfo.elementRatio.get(elementPair.get(1));
                     double total1 = elementTotalCounts.get(elementPair.get(0));
                     double total2 = elementTotalCounts.get(elementPair.get(1));
-                    double averageRatio = ((count1 / total1) + (count2 / total2)) / 2.0;
-                    int adjustedCount = (int) (dataWrapper.count * averageRatio);
-System.out.println("PAIR = " + key);
-System.out.println(elementPair.get(0) + " = " + (int) count1 + " of " + (int) total1);
-System.out.println(elementPair.get(1) + " = " + (int) count2 + " of " + (int) total2);
-System.out.println("Totaal vir die twee saam = " + dataWrapper.count);
-System.out.println("Average Ratio = " + averageRatio);
-System.out.println("Adjusted Count = " + adjustedCount);
-System.out.println("---------------------------------------");
-                    value = adjustedCount;
-                }
-                else {
-                    BubbleInfo bubbleInfo = (BubbleInfo) dataWrapper.value;
-                    List<String> elementPair = new ArrayList<>(bubbleInfo.elementRatio.keySet());
-                    double count1 = bubbleInfo.elementRatio.get(elementPair.get(0));
-                    double count2 = bubbleInfo.elementRatio.get(elementPair.get(1));
-                    double total1 = elementTotalCounts.get(elementPair.get(0));
-                    double total2 = elementTotalCounts.get(elementPair.get(1));
-                    double averageRatio = ((count1 / total1) + (count2 / total2)) / 2.0;
-                    int adjustedCount = (int) (dataWrapper.count * averageRatio);
-System.out.println("PAIR = " + key);
-System.out.println(elementPair.get(0) + " = " + (int) count1 + " of " + (int) total1);
-System.out.println(elementPair.get(1) + " = " + (int) count2 + " of " + (int) total2);
-System.out.println("Totaal vir die twee saam = " + dataWrapper.count);
-System.out.println("Average Ratio = " + averageRatio);
-System.out.println("Adjusted Count = " + adjustedCount);
-System.out.println("---------------------------------------");
-                    value = (int) (averageRatio * 100.0);
+                    double ratio1 = count1 / total1;
+                    double ratio2 = count2 / total2;
+                    double averageRatio = (ratio1 + ratio2) / 2.0;
+                    if (cmbType.getSelectionModel().isSelected(1)) {
+                        value = (int) (dataWrapper.count * averageRatio);
+                    }
+                    else
+                    if (cmbType.getSelectionModel().isSelected(2)) {
+                        if (ratio1 < ratio2) {
+                            value = (int) (ratio1 * 100);
+                        }
+                        else {
+                            value = (int) (ratio2 * 100);
+                        }
+                    }
+                    else
+                    if (cmbType.getSelectionModel().isSelected(3)) {
+                        value = (int) (averageRatio * 100);
+                    }
+                    else
+                    if (cmbType.getSelectionModel().isSelected(4)) {
+                        if (ratio1 > ratio2) {
+                            value = (int) (ratio1 * 100);
+                        }
+                        else {
+                            value = (int) (ratio2 * 100);
+                        }
+                    }
+                    else
+                    if (cmbType.getSelectionModel().isSelected(5)) {
+                        value = (int) (Math.abs(ratio1 - ratio2) * 100);
+                    }
+                    else {
+                        value = 0;
+                    }
                 }
                 BarChart.Data<Number, String> data = new BarChart.Data<>(value, key);
                 data.nodeProperty().addListener(new HorizontalBarChartChangeListener<>(mapChartData.size(), data));
@@ -249,7 +309,28 @@ System.out.println("---------------------------------------");
         BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, catAxis, chartSeries);
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
-        chart.setTitle("Creatures Observed together");
+        if (cmbType.getSelectionModel().isSelected(0)) {
+            chart.setTitle("Total Related Observations");
+        }
+        else
+        if (cmbType.getSelectionModel().isSelected(1)) {
+            chart.setTitle("Total Related Observations (Adjusted For Exclusivity)");
+        }
+        else
+        if (cmbType.getSelectionModel().isSelected(2)) {
+            chart.setTitle("Minimum Percentage Of Related Observations");
+        }
+        else
+        if (cmbType.getSelectionModel().isSelected(3)) {
+            chart.setTitle("Average Percentage Of Related Observations");
+        }
+        else
+        if (cmbType.getSelectionModel().isSelected(4)) {
+            chart.setTitle("Maximum Percentage Of Related Observations");
+        }
+        else {
+            chart.setTitle("One-Way Relationships");
+        }
         UtilsReports.setupChartTooltips(chart, false, false);
         return chart;
     }
