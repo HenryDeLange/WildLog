@@ -2578,9 +2578,9 @@ public final class WildLogView extends JFrame {
                         
                         // ---------------------8---------------------
                         // Checks Visit dates
-                        setMessage("Cleanup Step 8: Check the Period date ranges... " + getProgress() + "%");
+                        setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + getProgress() + "%");
                         finalHandleFeedback.println("");
-                        finalHandleFeedback.println("8) Check the Period date ranges.");
+                        finalHandleFeedback.println("8) Check the Period and linked Observation date ranges.");
                         allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                         int badVisitDates = 0;
                         for (Sighting sighting : allSightings) {
@@ -2603,7 +2603,7 @@ public final class WildLogView extends JFrame {
                                 badVisitDates++;
                             }
                             setProgress(76 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
-                            setMessage("Cleanup Step 8: Check the Period date ranges... " + getProgress() + "%");
+                            setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + getProgress() + "%");
                         }
                         
                         // ---------------------9---------------------
