@@ -1,5 +1,6 @@
 package wildlog.utils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,9 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.Level;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 
 public final class UtilsCompression {
@@ -61,6 +63,52 @@ public final class UtilsCompression {
             }
 	}
         return inFileList;
+    }
+    
+    public static void unzipFile(Path inSourceZIP, Path inDestinationFolder) {
+// NOTE: Ek het hierdie nog net getoets met die backups se ZIPs wat net een file in het...
+        ZipInputStream zipInputStream = null;
+        try {
+            zipInputStream = new ZipInputStream(new BufferedInputStream(new FileInputStream(inSourceZIP.toFile())));
+            byte[] buffer = new byte[1024];
+            int count;
+            ZipEntry zipEntry = zipInputStream.getNextEntry();
+            while (zipEntry != null) {
+                // Make the folders
+                if (zipEntry.isDirectory()) {
+                    Path folder = inDestinationFolder.resolve(zipEntry.getName());
+                    Files.createDirectories(folder);
+                }
+                else {
+                    Path folder = inDestinationFolder.resolve(zipEntry.getName());
+                    Files.createDirectories(folder.getParent());
+                }
+                // Write the file
+                Path destinationFile = inDestinationFolder.resolve(zipEntry.getName());
+                Files.deleteIfExists(destinationFile);
+                try (FileOutputStream fileOutputStream = new FileOutputStream(destinationFile.toFile())) {
+                    while ((count = zipInputStream.read(buffer)) != -1) {
+                        fileOutputStream.write(buffer, 0, count);
+                    }
+                }
+                // Prepare for next entry
+                zipInputStream.closeEntry();
+                zipEntry = zipInputStream.getNextEntry();
+            }
+        }
+        catch (IOException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        finally {
+            if (zipInputStream != null) {
+                try {
+                    zipInputStream.close();
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+            }
+        }
     }
 
 }

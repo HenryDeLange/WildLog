@@ -38,6 +38,7 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
@@ -141,9 +142,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Create the folders
             Files.createDirectories(inDestinationFolder);
             // Create a database file backup
-            state.execute("BACKUP TO '" + inDestinationFolder.resolve("WildLog Backup - H2.zip").toAbsolutePath().toString() + "'");
+            state.execute("BACKUP TO '" + inDestinationFolder.resolve(BACKUP_H2).toAbsolutePath().toString() + "'");
             // Create a SQL dump
-            state.execute("SCRIPT TO '" + inDestinationFolder.resolve("WildLog Backup - SQL.zip").toAbsolutePath().toString() + "' COMPRESSION ZIP");
+            state.execute("SCRIPT DROP TO '" + inDestinationFolder.resolve(BACKUP_SQL).toAbsolutePath().toString() + "' COMPRESSION ZIP");
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -161,6 +162,43 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             }
             catch (SQLException sqle) {
                 printSQLException(sqle);
+            }
+        }
+    }
+
+    
+    @Override
+    public void doRestore(Path inSourceFolder) {
+        if (inSourceFolder.getFileName().toString().equalsIgnoreCase(BACKUP_H2)) {
+            // Restore a database file backup
+            // Maak eers die DB toe
+            close();
+            // Copy dan die nuwe file
+            UtilsCompression.unzipFile(inSourceFolder, WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath());
+        }
+        else
+        if (inSourceFolder.getFileName().toString().equalsIgnoreCase(BACKUP_SQL)) {
+            // Restore a SQL dump
+            Statement state = null;
+            try {
+                state = conn.createStatement();
+                // NOTE: Voor v5 het die backups nie die drop statements in gehad nie, so die ou scripts gan nie automaties reg run nie...
+                state.execute("RUNSCRIPT FROM '" + inSourceFolder.toAbsolutePath().toString() + "' COMPRESSION ZIP");
+            }
+            catch (SQLException ex) {
+                printSQLException(ex);
+            }
+            finally {
+                // Statement
+                try {
+                    if (state != null) {
+                        state.close();
+                        state = null;
+                    }
+                }
+                catch (SQLException sqle) {
+                    printSQLException(sqle);
+                }
             }
         }
     }
