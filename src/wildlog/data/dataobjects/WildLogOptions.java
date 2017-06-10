@@ -15,6 +15,7 @@ public class WildLogOptions {
     private long workspaceID;
     private boolean uploadLogs;
     private boolean bundledPlayers;
+    private boolean useIndividualsInSightingPath;
 
 
     public int getDatabaseVersion() {
@@ -119,6 +120,14 @@ public class WildLogOptions {
 
     public void setBundledPlayers(boolean inBundledPlayers) {
         bundledPlayers = inBundledPlayers;
+    }
+
+    public boolean isUseIndividualsInSightingPath() {
+        return useIndividualsInSightingPath;
+    }
+
+    public void setUseIndividualsInSightingPath(boolean inUseIndividualsInSightingPath) {
+        useIndividualsInSightingPath = inUseIndividualsInSightingPath;
     }
 
 }
