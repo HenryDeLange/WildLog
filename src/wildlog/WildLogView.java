@@ -399,6 +399,7 @@ public final class WildLogView extends JFrame {
         mnuOther = new javax.swing.JMenu();
         chkMnuUseScienteficName = new javax.swing.JCheckBoxMenuItem();
         chkMnuEnableSounds = new javax.swing.JCheckBoxMenuItem();
+        chkMnuIncludeCountInSightingPath = new javax.swing.JCheckBoxMenuItem();
         chkMnuUploadLogs = new javax.swing.JCheckBoxMenuItem();
         chkMnuUseBundledMediaViewers = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
@@ -1217,8 +1218,8 @@ public final class WildLogView extends JFrame {
         extraMenu.add(mnuConvertCoordinates);
 
         mnuCreateSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
-        mnuCreateSlideshow.setText("Create a Slideshow");
-        mnuCreateSlideshow.setToolTipText("Create a slideshow using a folder of images anywhere on your computer.");
+        mnuCreateSlideshow.setText("Create a JPEG Movie");
+        mnuCreateSlideshow.setToolTipText("Create a JPEG Movie slideshow using a folder of images anywhere on your computer.");
         mnuCreateSlideshow.setName("mnuCreateSlideshow"); // NOI18N
         mnuCreateSlideshow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1303,7 +1304,7 @@ public final class WildLogView extends JFrame {
         slideshowMenu.setText("Slideshow Settings");
         slideshowMenu.setName("slideshowMenu"); // NOI18N
 
-        mnuSetSlideshowSize.setText("Set Slideshow and Animated GIF Size");
+        mnuSetSlideshowSize.setText("Set Slideshow Image Size");
         mnuSetSlideshowSize.setToolTipText("Set the size to which the images should be resized for the generated Slideshows.");
         mnuSetSlideshowSize.setName("mnuSetSlideshowSize"); // NOI18N
         mnuSetSlideshowSize.addActionListener(new java.awt.event.ActionListener() {
@@ -1313,8 +1314,8 @@ public final class WildLogView extends JFrame {
         });
         slideshowMenu.add(mnuSetSlideshowSize);
 
-        mnuSetSlideshowSpeed.setText("Set Slideshow and Animated GIF Speed");
-        mnuSetSlideshowSpeed.setToolTipText("Set the framerate that will be used for all generated Slideshows.");
+        mnuSetSlideshowSpeed.setText("Set Slideshow Speed");
+        mnuSetSlideshowSpeed.setToolTipText("Set the framerate that will be used for generated Slideshows (where applicable).");
         mnuSetSlideshowSpeed.setName("mnuSetSlideshowSpeed"); // NOI18N
         mnuSetSlideshowSpeed.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1378,6 +1379,17 @@ public final class WildLogView extends JFrame {
             }
         });
         mnuOther.add(chkMnuEnableSounds);
+
+        chkMnuIncludeCountInSightingPath.setSelected(app.getWildLogOptions().isUseIndividualsInSightingPath());
+        chkMnuIncludeCountInSightingPath.setText("Include Number of Individuals in the File Path");
+        chkMnuIncludeCountInSightingPath.setToolTipText("This option will change the way in which the Files are stored and exported. Select this option to group all Files for Observations (from the same Period) into folders based on the number of individuals observed.");
+        chkMnuIncludeCountInSightingPath.setName("chkMnuIncludeCountInSightingPath"); // NOI18N
+        chkMnuIncludeCountInSightingPath.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuIncludeCountInSightingPathItemStateChanged(evt);
+            }
+        });
+        mnuOther.add(chkMnuIncludeCountInSightingPath);
 
         chkMnuUploadLogs.setSelected(app.getWildLogOptions().isUploadLogs());
         chkMnuUploadLogs.setText("Automatically Upload Error Logs");
@@ -3592,7 +3604,7 @@ public final class WildLogView extends JFrame {
                                     }
                                 }
                             }
-                            UtilsFileProcessing.openFile(outputPath.getParent());
+                            UtilsFileProcessing.openFile(outputPath);
                         }
                     }
                     setProgress(100);
@@ -3995,6 +4007,12 @@ public final class WildLogView extends JFrame {
         }
     }//GEN-LAST:event_mnuBackupRestoreActionPerformed
 
+    private void chkMnuIncludeCountInSightingPathItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuIncludeCountInSightingPathItemStateChanged
+        WildLogOptions options = app.getWildLogOptions();
+        options.setUseIndividualsInSightingPath(chkMnuIncludeCountInSightingPath.isSelected());
+        app.setWildLogOptionsAndSave(options);
+    }//GEN-LAST:event_chkMnuIncludeCountInSightingPathItemStateChanged
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4035,6 +4053,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem btnImportIUCNList;
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
+    private javax.swing.JCheckBoxMenuItem chkMnuIncludeCountInSightingPath;
     private javax.swing.JCheckBoxMenuItem chkMnuUploadLogs;
     private javax.swing.JCheckBoxMenuItem chkMnuUseBundledMediaViewers;
     private javax.swing.JCheckBoxMenuItem chkMnuUseIconTables;

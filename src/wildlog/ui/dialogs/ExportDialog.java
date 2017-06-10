@@ -129,7 +129,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportFiles);
 
         btnExportFilesObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
-        btnExportFilesObservations.setText("Export Files for all the Observations");
+        btnExportFilesObservations.setText("Export Files - All Observations");
         btnExportFilesObservations.setToolTipText("Save copies of all relevant files in the Export folder.");
         btnExportFilesObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportFilesObservations.setFocusPainted(false);
@@ -148,7 +148,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportFilesObservations);
 
         btnExportFilesSelectedObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
-        btnExportFilesSelectedObservations.setText("Export Files for the selected Observations");
+        btnExportFilesSelectedObservations.setText("Export Files - Selected Observations");
         btnExportFilesSelectedObservations.setToolTipText("Save copies of the selected Observations' files in the Export folder.");
         btnExportFilesSelectedObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportFilesSelectedObservations.setFocusPainted(false);
@@ -167,7 +167,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportFilesSelectedObservations);
 
         btnExportTXTList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/TXT.png"))); // NOI18N
-        btnExportTXTList.setText("Export as Text File (Data Summary)");
+        btnExportTXTList.setText("Export as Text File - Data Summary");
         btnExportTXTList.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
         btnExportTXTList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportTXTList.setFocusPainted(false);
@@ -186,7 +186,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportTXTList);
 
         btnExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSVBasic.setText("Export as Spreadsheet (Basic format)");
+        btnExportCSVBasic.setText("Export as Spreadsheet - Basic format");
         btnExportCSVBasic.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
         btnExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVBasic.setFocusPainted(false);
@@ -205,7 +205,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportCSVBasic);
 
         btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSV.setText("Export as Spreadsheet (WildLog format)");
+        btnExportCSV.setText("Export as Spreadsheet - WildLog format");
         btnExportCSV.setToolTipText("Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc.");
         btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSV.setFocusPainted(false);
@@ -243,7 +243,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportXML);
 
         btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTML.setText("Export as Web Page (Basic)");
+        btnExportHTML.setText("Export as Web Page - Basic");
         btnExportHTML.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportHTML.setFocusPainted(false);
@@ -262,7 +262,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportHTML);
 
         btnExportHTMLAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTMLAdvanced.setText("Export as Web Page (Advanced)");
+        btnExportHTMLAdvanced.setText("Export as Web Page - Advanced");
         btnExportHTMLAdvanced.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportHTMLAdvanced.setFocusPainted(false);

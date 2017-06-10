@@ -889,6 +889,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                     doUpdate8();
                                     wasMajorUpgrade = true; // Omdat die Files se folder struktuur verander het...
                                 }
+                                else
+                                if (results.getInt("VERSION") == 8) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v8 (before upgrade to 9)"));
+                                    doUpdate9();
+                                }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
                             }
@@ -1250,6 +1255,27 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 8");
+    }
+    
+    private void doUpdate9() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 9");
+        // This update adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Add the new columns
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN USEINDVCOUNTINPATH smallint DEFAULT false");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=9");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 9");
     }
 
 }

@@ -56,7 +56,7 @@
                   <Component id="cmbElementTypesBrowseTab" alignment="0" min="-2" pref="214" max="-2" attributes="1"/>
               </Group>
               <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-              <Component id="scrTextArea" pref="198" max="375" attributes="0"/>
+              <Component id="scrTextArea" pref="214" max="375" attributes="0"/>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
@@ -288,7 +288,7 @@
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Rotate Image"/>
+        <Property name="text" type="java.lang.String" value="Rotate"/>
         <Property name="toolTipText" type="java.lang.String" value="Rotate the image clockwise."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>

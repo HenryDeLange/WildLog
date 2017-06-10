@@ -1,8 +1,12 @@
 package wildlog.ui.dialogs;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,11 +14,23 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import org.apache.logging.log4j.Level;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.poi.hslf.usermodel.HSLFPictureData;
+import org.apache.poi.hslf.usermodel.HSLFPictureShape;
+import org.apache.poi.hslf.usermodel.HSLFSlide;
+import org.apache.poi.hslf.usermodel.HSLFSlideShow;
+import org.apache.poi.sl.usermodel.PictureData;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -52,14 +68,11 @@ public class SlideshowDialog extends JDialog {
         // Auto generated code
         initComponents();
         // Determine what buttons to show
-        if (visit == null && location == null && element == null) {
-            btnSlideshow.setVisible(false);
-            btnSlideshowSightings.setVisible(false);
-            btnGIFAllSightings.setVisible(false);
-        }
         if (lstSightings == null || lstSightings.isEmpty()) {
             btnSlideshowSelectedSightings.setVisible(false);
             btnGIFSelectedSightings.setVisible(false);
+            btnPDFSelectedSightings.setVisible(false);
+            btnPowerPointSelectedSightings.setVisible(false);
         }
         // Pack
         pack();
@@ -78,11 +91,18 @@ public class SlideshowDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnSlideshow = new javax.swing.JButton();
-        btnSlideshowSightings = new javax.swing.JButton();
-        btnSlideshowSelectedSightings = new javax.swing.JButton();
+        btnGIF = new javax.swing.JButton();
         btnGIFAllSightings = new javax.swing.JButton();
         btnGIFSelectedSightings = new javax.swing.JButton();
+        btnPDF = new javax.swing.JButton();
+        btnPDFAllSightings = new javax.swing.JButton();
+        btnPDFSelectedSightings = new javax.swing.JButton();
+        btnPowerPoint = new javax.swing.JButton();
+        btnPowerPointAllSightings = new javax.swing.JButton();
+        btnPowerPointSelectedSightings = new javax.swing.JButton();
+        btnSlideshow = new javax.swing.JButton();
+        btnSlideshowAllSightings = new javax.swing.JButton();
+        btnSlideshowSelectedSightings = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Slideshows");
@@ -92,66 +112,28 @@ public class SlideshowDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
-        btnSlideshow.setText("Slideshow of the Images");
-        btnSlideshow.setToolTipText("Create a SlideShow (MJPEG Video) using the Images from this entity.");
-        btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshow.setFocusPainted(false);
-        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSlideshow.setIconTextGap(10);
-        btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshow.setMaximumSize(new java.awt.Dimension(320, 35));
-        btnSlideshow.setMinimumSize(new java.awt.Dimension(320, 35));
-        btnSlideshow.setName("btnSlideshow"); // NOI18N
-        btnSlideshow.setPreferredSize(new java.awt.Dimension(320, 35));
-        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
+        btnGIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GIF.png"))); // NOI18N
+        btnGIF.setText("Animated GIF");
+        btnGIF.setToolTipText("Create a Animated GIF using the Images from this entity.");
+        btnGIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGIF.setFocusPainted(false);
+        btnGIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGIF.setIconTextGap(10);
+        btnGIF.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnGIF.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnGIF.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnGIF.setName("btnGIF"); // NOI18N
+        btnGIF.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnGIF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSlideshowActionPerformed(evt);
+                btnGIFActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSlideshow);
-
-        btnSlideshowSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
-        btnSlideshowSightings.setText("Slideshow of all the Observations' Images");
-        btnSlideshowSightings.setToolTipText("Create a SlideShow (MJPEG Video) using the Images from all the linked Observations.");
-        btnSlideshowSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshowSightings.setFocusPainted(false);
-        btnSlideshowSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSlideshowSightings.setIconTextGap(10);
-        btnSlideshowSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshowSightings.setMaximumSize(new java.awt.Dimension(320, 35));
-        btnSlideshowSightings.setMinimumSize(new java.awt.Dimension(320, 35));
-        btnSlideshowSightings.setName("btnSlideshowSightings"); // NOI18N
-        btnSlideshowSightings.setPreferredSize(new java.awt.Dimension(320, 35));
-        btnSlideshowSightings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSlideshowSightingsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnSlideshowSightings);
-
-        btnSlideshowSelectedSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
-        btnSlideshowSelectedSightings.setText("Slideshow of the Selected Observations' Images");
-        btnSlideshowSelectedSightings.setToolTipText("Create a SlideShow (MJPEG Video) using the Images from the selected Observations.");
-        btnSlideshowSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshowSelectedSightings.setFocusPainted(false);
-        btnSlideshowSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSlideshowSelectedSightings.setIconTextGap(10);
-        btnSlideshowSelectedSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshowSelectedSightings.setMaximumSize(new java.awt.Dimension(320, 35));
-        btnSlideshowSelectedSightings.setMinimumSize(new java.awt.Dimension(320, 35));
-        btnSlideshowSelectedSightings.setName("btnSlideshowSelectedSightings"); // NOI18N
-        btnSlideshowSelectedSightings.setPreferredSize(new java.awt.Dimension(320, 35));
-        btnSlideshowSelectedSightings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSlideshowSelectedSightingsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnSlideshowSelectedSightings);
+        getContentPane().add(btnGIF);
 
         btnGIFAllSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GIF.png"))); // NOI18N
-        btnGIFAllSightings.setText("Animated GIF of all the Observations' Images");
-        btnGIFAllSightings.setToolTipText("Create a SlideShow (Animated GIF) using the Images from all the linked Observations.");
+        btnGIFAllSightings.setText("Animated GIF - All Observations");
+        btnGIFAllSightings.setToolTipText("Create an Animated GIF using the Images from all the linked Observations.");
         btnGIFAllSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGIFAllSightings.setFocusPainted(false);
         btnGIFAllSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -169,8 +151,8 @@ public class SlideshowDialog extends JDialog {
         getContentPane().add(btnGIFAllSightings);
 
         btnGIFSelectedSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GIF.png"))); // NOI18N
-        btnGIFSelectedSightings.setText("Animated GIF of the Selected Observations' Images");
-        btnGIFSelectedSightings.setToolTipText("Create a SlideShow (Animated GIF) using the Images from the selected Observations.");
+        btnGIFSelectedSightings.setText("Animated GIF - Selected Observations");
+        btnGIFSelectedSightings.setToolTipText("Create an Animated GIF using the Images from the selected Observations.");
         btnGIFSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGIFSelectedSightings.setFocusPainted(false);
         btnGIFSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -186,6 +168,177 @@ public class SlideshowDialog extends JDialog {
             }
         });
         getContentPane().add(btnGIFSelectedSightings);
+
+        btnPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF_big.png"))); // NOI18N
+        btnPDF.setText("PDF");
+        btnPDF.setToolTipText("Create a PDF using the Images from this entity.");
+        btnPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPDF.setFocusPainted(false);
+        btnPDF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPDF.setIconTextGap(10);
+        btnPDF.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnPDF.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnPDF.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnPDF.setName("btnPDF"); // NOI18N
+        btnPDF.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPDFActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPDF);
+
+        btnPDFAllSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF_big.png"))); // NOI18N
+        btnPDFAllSightings.setText("PDF - All Observations");
+        btnPDFAllSightings.setToolTipText("Create a PDF using the Images from all the linked Observations.");
+        btnPDFAllSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPDFAllSightings.setFocusPainted(false);
+        btnPDFAllSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPDFAllSightings.setIconTextGap(10);
+        btnPDFAllSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnPDFAllSightings.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnPDFAllSightings.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnPDFAllSightings.setName("btnPDFAllSightings"); // NOI18N
+        btnPDFAllSightings.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnPDFAllSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPDFAllSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPDFAllSightings);
+
+        btnPDFSelectedSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF_big.png"))); // NOI18N
+        btnPDFSelectedSightings.setText("PDF - Selected Observations");
+        btnPDFSelectedSightings.setToolTipText("Create a PDF using the Images from the selected Observations.");
+        btnPDFSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPDFSelectedSightings.setFocusPainted(false);
+        btnPDFSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPDFSelectedSightings.setIconTextGap(10);
+        btnPDFSelectedSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnPDFSelectedSightings.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnPDFSelectedSightings.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnPDFSelectedSightings.setName("btnPDFSelectedSightings"); // NOI18N
+        btnPDFSelectedSightings.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnPDFSelectedSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPDFSelectedSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPDFSelectedSightings);
+
+        btnPowerPoint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PowerPoint.png"))); // NOI18N
+        btnPowerPoint.setText("PowerPoint");
+        btnPowerPoint.setToolTipText("Create a PowerPoint Presentation using the Images from this entity.");
+        btnPowerPoint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPowerPoint.setFocusPainted(false);
+        btnPowerPoint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPowerPoint.setIconTextGap(10);
+        btnPowerPoint.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnPowerPoint.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnPowerPoint.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnPowerPoint.setName("btnPowerPoint"); // NOI18N
+        btnPowerPoint.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnPowerPoint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPowerPointActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPowerPoint);
+
+        btnPowerPointAllSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PowerPoint.png"))); // NOI18N
+        btnPowerPointAllSightings.setText("PowerPoint - All Observations");
+        btnPowerPointAllSightings.setToolTipText("Create a PowerPoint Presentation using the Images from all the linked Observations.");
+        btnPowerPointAllSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPowerPointAllSightings.setFocusPainted(false);
+        btnPowerPointAllSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPowerPointAllSightings.setIconTextGap(10);
+        btnPowerPointAllSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnPowerPointAllSightings.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnPowerPointAllSightings.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnPowerPointAllSightings.setName("btnPowerPointAllSightings"); // NOI18N
+        btnPowerPointAllSightings.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnPowerPointAllSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPowerPointAllSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPowerPointAllSightings);
+
+        btnPowerPointSelectedSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PowerPoint.png"))); // NOI18N
+        btnPowerPointSelectedSightings.setText("PowerPoint - Selected Observations");
+        btnPowerPointSelectedSightings.setToolTipText("Create a PowerPoint Presentation using the Images from the selected Observations.");
+        btnPowerPointSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPowerPointSelectedSightings.setFocusPainted(false);
+        btnPowerPointSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPowerPointSelectedSightings.setIconTextGap(10);
+        btnPowerPointSelectedSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnPowerPointSelectedSightings.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnPowerPointSelectedSightings.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnPowerPointSelectedSightings.setName("btnPowerPointSelectedSightings"); // NOI18N
+        btnPowerPointSelectedSightings.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnPowerPointSelectedSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPowerPointSelectedSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPowerPointSelectedSightings);
+
+        btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshow.setText("JPEG Movie");
+        btnSlideshow.setToolTipText("Create a MJPEG Movie using the Images from this entity.");
+        btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSlideshow.setFocusPainted(false);
+        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSlideshow.setIconTextGap(10);
+        btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnSlideshow.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnSlideshow.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnSlideshow.setName("btnSlideshow"); // NOI18N
+        btnSlideshow.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlideshowActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSlideshow);
+
+        btnSlideshowAllSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshowAllSightings.setText("JPEG Movie - All Observations");
+        btnSlideshowAllSightings.setToolTipText("Create a MJPEG Video using the Images from all the linked Observations.");
+        btnSlideshowAllSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSlideshowAllSightings.setFocusPainted(false);
+        btnSlideshowAllSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSlideshowAllSightings.setIconTextGap(10);
+        btnSlideshowAllSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnSlideshowAllSightings.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnSlideshowAllSightings.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnSlideshowAllSightings.setName("btnSlideshowAllSightings"); // NOI18N
+        btnSlideshowAllSightings.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnSlideshowAllSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlideshowAllSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSlideshowAllSightings);
+
+        btnSlideshowSelectedSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshowSelectedSightings.setText("JPEG Movie - Selected Observations");
+        btnSlideshowSelectedSightings.setToolTipText("Create a MJPEG Video using the Images from the selected Observations.");
+        btnSlideshowSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSlideshowSelectedSightings.setFocusPainted(false);
+        btnSlideshowSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSlideshowSelectedSightings.setIconTextGap(10);
+        btnSlideshowSelectedSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnSlideshowSelectedSightings.setMaximumSize(new java.awt.Dimension(320, 35));
+        btnSlideshowSelectedSightings.setMinimumSize(new java.awt.Dimension(320, 35));
+        btnSlideshowSelectedSightings.setName("btnSlideshowSelectedSightings"); // NOI18N
+        btnSlideshowSelectedSightings.setPreferredSize(new java.awt.Dimension(320, 35));
+        btnSlideshowSelectedSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlideshowSelectedSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSlideshowSelectedSightings);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -204,7 +357,7 @@ public class SlideshowDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
-    private void btnSlideshowSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowSightingsActionPerformed
+    private void btnSlideshowAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowAllSightingsActionPerformed
         if (visit != null) {
             createSlideshowWithSightings(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
         }
@@ -216,7 +369,7 @@ public class SlideshowDialog extends JDialog {
         }
         setVisible(false);
         dispose();
-    }//GEN-LAST:event_btnSlideshowSightingsActionPerformed
+    }//GEN-LAST:event_btnSlideshowAllSightingsActionPerformed
 
     private void btnGIFAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGIFAllSightingsActionPerformed
         if (element != null) {
@@ -250,16 +403,151 @@ public class SlideshowDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnGIFSelectedSightingsActionPerformed
 
+    private void btnPowerPointAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPowerPointAllSightingsActionPerformed
+        if (element != null) {
+            createPowerPoint(element.getPrimaryName(), app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
+        }
+        else
+        if (location != null) {
+            createPowerPoint(location.getName(), app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
+        }
+        else
+        if (visit != null) {
+            createPowerPoint(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnPowerPointAllSightingsActionPerformed
+
+    private void btnPDFAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFAllSightingsActionPerformed
+        if (element != null) {
+            createPDF(element.getPrimaryName(), app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
+        }
+        else
+        if (location != null) {
+            createPDF(location.getName(), app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
+        }
+        else
+        if (visit != null) {
+            createPDF(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnPDFAllSightingsActionPerformed
+
+    private void btnPDFSelectedSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFSelectedSightingsActionPerformed
+        if (lstSightings != null && !lstSightings.isEmpty()) {
+            createPDF("Observations", lstSightings);
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnPDFSelectedSightingsActionPerformed
+
+    private void btnPowerPointSelectedSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPowerPointSelectedSightingsActionPerformed
+        if (lstSightings != null && !lstSightings.isEmpty()) {
+            createPowerPoint("Observations", lstSightings);
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnPowerPointSelectedSightingsActionPerformed
+
+    private void btnPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFActionPerformed
+        if (visit != null) {
+            createPDFWithoutSightings(visit.getName(), visit.getWildLogFileID());
+        }
+        if (location != null) {
+            createPDFWithoutSightings(location.getName(), location.getWildLogFileID());
+        }
+        if (element != null) {
+            createPDFWithoutSightings(element.getPrimaryName(), element.getWildLogFileID());
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnPDFActionPerformed
+
+    private void btnPowerPointActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPowerPointActionPerformed
+        if (visit != null) {
+            createPowerPointWithoutSightings(visit.getName(), visit.getWildLogFileID());
+        }
+        if (location != null) {
+            createPowerPointWithoutSightings(location.getName(), location.getWildLogFileID());
+        }
+        if (element != null) {
+            createPowerPointWithoutSightings(element.getPrimaryName(), element.getWildLogFileID());
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnPowerPointActionPerformed
+
+    private void btnGIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGIFActionPerformed
+        if (visit != null) {
+            createGIFWithoutSightings(visit.getName(), visit.getWildLogFileID());
+        }
+        if (location != null) {
+            createGIFWithoutSightings(location.getName(), location.getWildLogFileID());
+        }
+        if (element != null) {
+            createGIFWithoutSightings(element.getPrimaryName(), element.getWildLogFileID());
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnGIFActionPerformed
+
     private void createSlideshowWithoutSightings(String inName, String inWildLogFileID) {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow for '" + inName + "'");
+                setMessage("Creating the JPEG Movie for '" + inName + "'");
                 List<String> slideshowList = UtilsMovies.getFilePaths(app, inWildLogFileID, WildLogFileType.IMAGE);
-                setMessage("Creating the Slideshow for '" + inName + "' (Busy writing the file, this may take a while.)");
+                setMessage("Creating the JPEG Movie for '" + inName + "' (Busy writing the file, this may take a while.)");
                 UtilsMovies.generateSlideshow(slideshowList, app,
                         WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(inName + ".mov"));
-                setMessage("Done with the Slideshow for '" + inName + "'");
+                setMessage("Done with the JPEG Movie for '" + inName + "'");
+                return null;
+            }
+        });
+    }
+    
+    private void createGIFWithoutSightings(String inName, String inWildLogFileID) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Creating the Animated GIF for '" + inName + "'");
+                setProgress(1);
+                List<String> slideshowList = UtilsMovies.getFilePaths(app, inWildLogFileID, WildLogFileType.IMAGE);
+                processGIFs(inName, slideshowList, this);
+                setProgress(100);
+                setMessage("Done with the Animated GIF for '" + inName + "'");
+                return null;
+            }
+        });
+    }
+    
+    private void createPowerPointWithoutSightings(String inName, String inWildLogFileID) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Creating the PowerPoint for '" + inName + "'");
+                setProgress(1);
+                List<String> slideshowList = UtilsMovies.getFilePaths(app, inWildLogFileID, WildLogFileType.IMAGE);
+                processPowerPoints(inName, slideshowList, this);
+                setProgress(100);
+                setMessage("Done with the PowerPoint for '" + inName + "'");
+                return null;
+            }
+        });
+    }
+    
+    private void createPDFWithoutSightings(String inName, String inWildLogFileID) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Creating the PDF for '" + inName + "'");
+                setProgress(1);
+                List<String> slideshowList = UtilsMovies.getFilePaths(app, inWildLogFileID, WildLogFileType.IMAGE);
+                processPDFs(inName, slideshowList, this);
+                setProgress(100);
+                setMessage("Done with the PDF for '" + inName + "'");
                 return null;
             }
         });
@@ -269,7 +557,7 @@ public class SlideshowDialog extends JDialog {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow for '" + inName + "'");
+                setMessage("Creating the JPEG Movie for '" + inName + "'");
                 // Get all the files for each Sighting
                 Collections.sort(inLstSightings);
                 List<String> slideshowList = new ArrayList<String>(inLstSightings.size() * 3);
@@ -277,100 +565,249 @@ public class SlideshowDialog extends JDialog {
                     slideshowList.addAll(UtilsMovies.getFilePaths(app, tempSighting.getWildLogFileID(), WildLogFileType.IMAGE));
                 }
                 // Now create the slideshow
-                setMessage("Creating the Slideshow for '" + inName + "' (Busy writing the file, this may take a while.)");
+                setMessage("Creating the JPEG Movie for '" + inName + "' (Busy writing the file, this may take a while.)");
                 UtilsMovies.generateSlideshow(slideshowList, app,
                         WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(inName + "_Observations.mov"));
-                setMessage("Done with the Slideshow for '" + inName + "'");
+                setMessage("Done with the JPEG Movie for '" + inName + "'");
                 return null;
             }
         });
     }
     
-    private void createGIF(final String inTempName, final List<Sighting> inLstSighting) {
+    private void createGIF(final String inName, final List<Sighting> inLstSighting) {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Animated GIF for '" + inTempName + "'");
+                setMessage("Creating the Animated GIF for '" + inName + "'");
                 if (!inLstSighting.isEmpty()) {
                     Collections.sort(inLstSighting);
                     setProgress(1);
-                    setMessage("Creating the Animated GIF for '" + inTempName + "' " + getProgress() + "%");
+                    setMessage("Creating the Animated GIF for '" + inName + "' " + getProgress() + "%");
                     List<String> slideshowList = new ArrayList<String>(inLstSighting.size() * 3);
                     for (Sighting tempSighting : inLstSighting) {
                         slideshowList.addAll(UtilsMovies.getFilePaths(app, tempSighting.getWildLogFileID(), WildLogFileType.IMAGE));
                     }
-                    // Now create the GIF
-                    if (!slideshowList.isEmpty()) {
-                        Path outputPath = WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(inTempName + "_Observations.gif");
-                        Files.createDirectories(outputPath.getParent());
-                        ImageOutputStream output = null;
-                        try {
-                            output = new FileImageOutputStream(outputPath.toFile());
-                            int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
-                            ImageIcon image = UtilsImageProcessing.getScaledIcon(WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), thumbnailSize, false);
-                            BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-                            Graphics2D graphics2D = bufferedImage.createGraphics();
-                            graphics2D.drawImage(image.getImage(),
-                                    (thumbnailSize - image.getIconWidth())/2,
-                                    (thumbnailSize - image.getIconHeight())/2,
-                                    image.getIconWidth(),
-                                    image.getIconHeight(),
-                                    Color.BLACK, null);
-                            int timeBetweenFrames = (int) (1000.0 / ((double) app.getWildLogOptions().getDefaultSlideshowSpeed()));
-                            AnimatedGIFWriter gifWriter = new AnimatedGIFWriter(output, bufferedImage.getType(), timeBetweenFrames, true);
-                            gifWriter.writeToGIF(bufferedImage);
-                            setProgress(2);
-                            setMessage("Creating the Animated GIF for '" + inTempName + "' " + getProgress() + "%");
-                            for (int t = 0; t < slideshowList.size(); t++) {
-                                image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize, true);
-                                bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
-                                graphics2D = bufferedImage.createGraphics();
-                                graphics2D.drawImage(image.getImage(),
-                                        (thumbnailSize - image.getIconWidth())/2,
-                                        (thumbnailSize - image.getIconHeight())/2,
-                                        image.getIconWidth(),
-                                        image.getIconHeight(),
-                                        Color.BLACK, null);
-                                gifWriter.writeToGIF(bufferedImage);
-                                setProgress(2 + (int)((((double)t)/((double)slideshowList.size()))*98));
-                                setMessage("Creating the Animated GIF for '" + inTempName + "' " + getProgress() + "%");
-                            }
-                            gifWriter.finishGIF();
-                        }
-                        catch (IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        }
-                        finally {
-                            if (output != null) {
-                                try {
-                                    output.flush();
-                                }
-                                catch (IOException ex) {
-                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                }
-                                try {
-                                    output.close();
-                                }
-                                catch (IOException ex) {
-                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                }
-                            }
-                        }
-                        UtilsFileProcessing.openFile(outputPath.getParent());
-                    }
+                    processGIFs(inName, slideshowList, this);
                 }
                 setProgress(100);
-                setMessage("Done with the Animated GIF for '" + inTempName + "'");
+                setMessage("Done with the Animated GIF for '" + inName + "'");
                 return null;
             }
         });
     }
+    
+    private void processGIFs(final String inName, final List<String> slideshowList, final ProgressbarTask inProgressbarTask) throws IOException {
+        if (!slideshowList.isEmpty()) {
+            Path outputPath = WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(inName + "_Observations.gif");
+            Files.createDirectories(outputPath.getParent());
+            ImageOutputStream output = null;
+            try {
+                output = new FileImageOutputStream(outputPath.toFile());
+                int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
+                ImageIcon image = UtilsImageProcessing.getScaledIcon(WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), thumbnailSize, false);
+                BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                Graphics2D graphics2D = bufferedImage.createGraphics();
+                graphics2D.drawImage(image.getImage(),
+                        (thumbnailSize - image.getIconWidth())/2,
+                        (thumbnailSize - image.getIconHeight())/2,
+                        image.getIconWidth(),
+                        image.getIconHeight(),
+                        Color.BLACK, null);
+                int timeBetweenFrames = (int) (1000.0 / ((double) app.getWildLogOptions().getDefaultSlideshowSpeed()));
+                AnimatedGIFWriter gifWriter = new AnimatedGIFWriter(output, bufferedImage.getType(), timeBetweenFrames, true);
+                gifWriter.writeToGIF(bufferedImage);
+                inProgressbarTask.setTaskProgress(2);
+                inProgressbarTask.setMessage("Creating the Animated GIF for '" + inName + "' " + inProgressbarTask.getProgress() + "%");
+                for (int t = 0; t < slideshowList.size(); t++) {
+                    image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize, true);
+                    bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
+                    graphics2D = bufferedImage.createGraphics();
+                    graphics2D.drawImage(image.getImage(),
+                            (thumbnailSize - image.getIconWidth())/2,
+                            (thumbnailSize - image.getIconHeight())/2,
+                            image.getIconWidth(),
+                            image.getIconHeight(),
+                            Color.BLACK, null);
+                    gifWriter.writeToGIF(bufferedImage);
+                    inProgressbarTask.setTaskProgress(2 + (int)((((double)t)/((double)slideshowList.size()))*98));
+                    inProgressbarTask.setMessage("Creating the Animated GIF for '" + inName + "' " + inProgressbarTask.getProgress() + "%");
+                }
+                gifWriter.finishGIF();
+            }
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            finally {
+                if (output != null) {
+                    try {
+                        output.flush();
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                    try {
+                        output.close();
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                }
+            }
+            UtilsFileProcessing.openFile(outputPath);
+        }
+    }
+    
+    private void createPowerPoint(final String inName, final List<Sighting> inLstSighting) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Creating the PowerPoint for '" + inName + "'");
+                if (!inLstSighting.isEmpty()) {
+                    Collections.sort(inLstSighting);
+                    setProgress(1);
+                    setMessage("Creating the PowerPoint for '" + inName + "' " + getProgress() + "%");
+                    List<String> slideshowList = new ArrayList<String>(inLstSighting.size() * 3);
+                    for (Sighting tempSighting : inLstSighting) {
+                        slideshowList.addAll(UtilsMovies.getFilePaths(app, tempSighting.getWildLogFileID(), WildLogFileType.IMAGE));
+                    }
+                    processPowerPoints(inName, slideshowList, this);
+                }
+                setProgress(100);
+                setMessage("Done with the PowerPoint for '" + inName + "'");
+                return null;
+            }
+        });
+    }
+    
+    private void processPowerPoints(final String inName, List<String> slideshowList, final ProgressbarTask inProgressbarTask) throws IOException {
+        if (!slideshowList.isEmpty()) {
+            // Add "WildLog Movie" image
+            slideshowList.add(0, WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath().toString());
+            // Process the rest of the images
+            int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
+            Path outputPath = WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(inName + "_Observations.ppt");
+            Files.createDirectories(outputPath.getParent());
+            try (FileOutputStream out = new FileOutputStream(outputPath.toFile())) {
+                HSLFSlideShow slideShow = new HSLFSlideShow();
+                slideShow.setPageSize(new Dimension(thumbnailSize, thumbnailSize));
+                for (int t = 0; t < slideshowList.size(); t++) {
+                    ImageIcon image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize, true);
+                    BufferedImage bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
+                    Graphics2D graphics2D = bufferedImage.createGraphics();
+                    graphics2D.drawImage(image.getImage(),
+                            (thumbnailSize - image.getIconWidth())/2,
+                            (thumbnailSize - image.getIconHeight())/2,
+                            image.getIconWidth(),
+                            image.getIconHeight(),
+                            Color.BLACK, null);
+                    graphics2D.dispose();
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    ImageIO.write(bufferedImage, "jpg", bytes);
+                    HSLFPictureData pictureData = slideShow.addPicture(bytes.toByteArray(), PictureData.PictureType.JPEG);
+                    HSLFPictureShape pictureShape = new HSLFPictureShape(pictureData);
+                    pictureShape.setAnchor(new Rectangle(0, 0, thumbnailSize, thumbnailSize));
+                    HSLFSlide slide = slideShow.createSlide();
+                    slide.addShape(pictureShape);
+                    // Update progress
+                    inProgressbarTask.setTaskProgress(2 + (int)((((double)t)/((double)slideshowList.size()))*98));
+                    inProgressbarTask.setMessage("Creating the PowerPoint for '" + inName + "' " + inProgressbarTask.getProgress() + "%");
+                }
+                // Write the slides to the file
+                slideShow.write(out);
+            }
+            catch (Exception ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            UtilsFileProcessing.openFile(outputPath);
+        }
+    }
+    
+    private void createPDF(final String inName, final List<Sighting> inLstSighting) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Creating the PDF for '" + inName + "'");
+                if (!inLstSighting.isEmpty()) {
+                    Collections.sort(inLstSighting);
+                    setProgress(1);
+                    setMessage("Creating the PDF for '" + inName + "' " + getProgress() + "%");
+                    List<String> slideshowList = new ArrayList<String>(inLstSighting.size() * 3);
+                    for (Sighting tempSighting : inLstSighting) {
+                        slideshowList.addAll(UtilsMovies.getFilePaths(app, tempSighting.getWildLogFileID(), WildLogFileType.IMAGE));
+                    }
+                    processPDFs(inName, slideshowList, this);
+                }
+                setProgress(100);
+                setMessage("Done with the PDF for '" + inName + "'");
+                return null;
+            }
+        });
+    }
+    
+    private void processPDFs(final String inName, List<String> slideshowList, final ProgressbarTask inProgressbarTask) throws IOException {
+        if (!slideshowList.isEmpty()) {
+            // Add "WildLog Movie" image
+            slideshowList.add(0, WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath().toString());
+            // Process the rest of the images
+            int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
+            Path outputPath = WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(inName + "_Observations.pdf");
+            Files.createDirectories(outputPath.getParent());
+            PDDocument doc = null;
+            try {
+                doc = new PDDocument();
+                for (int t = 0; t < slideshowList.size(); t++) {
+                    PDPage page = new PDPage(new PDRectangle(thumbnailSize, thumbnailSize));
+                    doc.addPage(page);
+                    ImageIcon image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize, true);
+                    try (PDPageContentStream pageContent = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.OVERWRITE, false)) {
+                        BufferedImage bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
+                        Graphics2D graphics2D = bufferedImage.createGraphics();
+                        graphics2D.drawImage(image.getImage(),
+                                (thumbnailSize - image.getIconWidth())/2,
+                                (thumbnailSize - image.getIconHeight())/2,
+                                image.getIconWidth(),
+                                image.getIconHeight(),
+                                Color.BLACK, null);
+                        graphics2D.dispose();
+                        PDImageXObject pdfImage = LosslessFactory.createFromImage(doc, bufferedImage);
+                        pageContent.drawImage(pdfImage, 0, 0);
+                    }
+                    // Update progress
+                    inProgressbarTask.setTaskProgress(2 + (int)((((double)t)/((double)slideshowList.size()))*98));
+                    inProgressbarTask.setMessage("Creating the PDF for '" + inName + "' " + inProgressbarTask.getProgress() + "%");
+                }
+            }
+            catch (Exception ex){
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            finally {
+                try {
+                    //save and close
+                    if (doc != null) {
+                        doc.save(outputPath.toFile());
+                        doc.close();
+                    }
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+            }
+            UtilsFileProcessing.openFile(outputPath);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGIF;
     private javax.swing.JButton btnGIFAllSightings;
     private javax.swing.JButton btnGIFSelectedSightings;
+    private javax.swing.JButton btnPDF;
+    private javax.swing.JButton btnPDFAllSightings;
+    private javax.swing.JButton btnPDFSelectedSightings;
+    private javax.swing.JButton btnPowerPoint;
+    private javax.swing.JButton btnPowerPointAllSightings;
+    private javax.swing.JButton btnPowerPointSelectedSightings;
     private javax.swing.JButton btnSlideshow;
+    private javax.swing.JButton btnSlideshowAllSightings;
     private javax.swing.JButton btnSlideshowSelectedSightings;
-    private javax.swing.JButton btnSlideshowSightings;
     // End of variables declaration//GEN-END:variables
 }

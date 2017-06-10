@@ -257,7 +257,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnRotate.setBackground(new java.awt.Color(204, 213, 186));
         btnRotate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
-        btnRotate.setText("Rotate Image");
+        btnRotate.setText("Rotate");
         btnRotate.setToolTipText("Rotate the image clockwise.");
         btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRotate.setFocusPainted(false);
@@ -551,7 +551,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3)
-                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 198, 375)
+                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 214, 375)
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()

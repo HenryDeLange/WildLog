@@ -76,7 +76,12 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
      * @return
      */
     public Path toPath() {
-        return Paths.get(locationName, visitName, elementName, Integer.toString(numberOfElements));
+        if (!WildLogApp.getApplication().getWildLogOptions().isUseIndividualsInSightingPath()) {
+            return Paths.get(locationName, visitName, elementName);
+        }
+        else {
+            return Paths.get(locationName, visitName, elementName, Integer.toString(numberOfElements));
+        }
     }
     
     public String getCustomFileName() {

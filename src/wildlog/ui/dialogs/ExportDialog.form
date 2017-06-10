@@ -68,7 +68,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/File.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Export Files for all the Observations"/>
+        <Property name="text" type="java.lang.String" value="Export Files - All Observations"/>
         <Property name="toolTipText" type="java.lang.String" value="Save copies of all relevant files in the Export folder."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -99,7 +99,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/File.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Export Files for the selected Observations"/>
+        <Property name="text" type="java.lang.String" value="Export Files - Selected Observations"/>
         <Property name="toolTipText" type="java.lang.String" value="Save copies of the selected Observations&apos; files in the Export folder."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -130,7 +130,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/TXT.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Export as Text File (Data Summary)"/>
+        <Property name="text" type="java.lang.String" value="Export as Text File - Data Summary"/>
         <Property name="toolTipText" type="java.lang.String" value="Export a CSV file for all relevant Observations. Can be opened in Excel, etc."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -161,7 +161,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Export as Spreadsheet (Basic format)"/>
+        <Property name="text" type="java.lang.String" value="Export as Spreadsheet - Basic format"/>
         <Property name="toolTipText" type="java.lang.String" value="Export a CSV file for all relevant Observations. Can be opened in Excel, etc."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -192,7 +192,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Export as Spreadsheet (WildLog format)"/>
+        <Property name="text" type="java.lang.String" value="Export as Spreadsheet - WildLog format"/>
         <Property name="toolTipText" type="java.lang.String" value="Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -254,7 +254,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/HTML Icon.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Export as Web Page (Basic)"/>
+        <Property name="text" type="java.lang.String" value="Export as Web Page - Basic"/>
         <Property name="toolTipText" type="java.lang.String" value="Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -285,7 +285,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/HTML Icon.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Export as Web Page (Advanced)"/>
+        <Property name="text" type="java.lang.String" value="Export as Web Page - Advanced"/>
         <Property name="toolTipText" type="java.lang.String" value="Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>

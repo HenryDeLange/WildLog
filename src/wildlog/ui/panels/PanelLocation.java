@@ -801,6 +801,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         btnSlideshow.setText("Slideshows");
         btnSlideshow.setToolTipText("View slideshow videos of linked images for this Place.");
+        btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 8));

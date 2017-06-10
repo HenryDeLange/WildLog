@@ -25,20 +25,20 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,120,0,0,1,106"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-61,0,0,1,106"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
     <Property name="axis" type="int" value="1"/>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="btnSlideshow">
+    <Component class="javax.swing.JButton" name="btnGIF">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Slideshow.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/GIF.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Slideshow of the Images"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a SlideShow (MJPEG Video) using the Images from this entity."/>
+        <Property name="text" type="java.lang.String" value="Animated GIF"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a Animated GIF using the Images from this entity."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -54,75 +54,13 @@
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[320, 35]"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="btnSlideshow" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="btnGIF" noResource="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[320, 35]"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnSlideshowSightings">
-      <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Slideshow.gif"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Slideshow of all the Observations&apos; Images"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a SlideShow (MJPEG Video) using the Images from all the linked Observations."/>
-        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
-        </Property>
-        <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="iconTextGap" type="int" value="10"/>
-        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[2, 6, 2, 6]"/>
-        </Property>
-        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[320, 35]"/>
-        </Property>
-        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[320, 35]"/>
-        </Property>
-        <Property name="name" type="java.lang.String" value="btnSlideshowSightings" noResource="true"/>
-        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[320, 35]"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowSightingsActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnSlideshowSelectedSightings">
-      <Properties>
-        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Slideshow.gif"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Slideshow of the Selected Observations&apos; Images"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a SlideShow (MJPEG Video) using the Images from the selected Observations."/>
-        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
-        </Property>
-        <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="iconTextGap" type="int" value="10"/>
-        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[2, 6, 2, 6]"/>
-        </Property>
-        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[320, 35]"/>
-        </Property>
-        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[320, 35]"/>
-        </Property>
-        <Property name="name" type="java.lang.String" value="btnSlideshowSelectedSightings" noResource="true"/>
-        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[320, 35]"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowSelectedSightingsActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGIFActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnGIFAllSightings">
@@ -130,8 +68,8 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/GIF.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Animated GIF of all the Observations&apos; Images"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a SlideShow (Animated GIF) using the Images from all the linked Observations."/>
+        <Property name="text" type="java.lang.String" value="Animated GIF - All Observations"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create an Animated GIF using the Images from all the linked Observations."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -161,8 +99,8 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/GIF.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Animated GIF of the Selected Observations&apos; Images"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a SlideShow (Animated GIF) using the Images from the selected Observations."/>
+        <Property name="text" type="java.lang.String" value="Animated GIF - Selected Observations"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create an Animated GIF using the Images from the selected Observations."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -185,6 +123,285 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGIFSelectedSightingsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnPDF">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/PDF_big.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="PDF"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PDF using the Images from this entity."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnPDF" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPDFActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnPDFAllSightings">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/PDF_big.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="PDF - All Observations"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PDF using the Images from all the linked Observations."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnPDFAllSightings" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPDFAllSightingsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnPDFSelectedSightings">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/PDF_big.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="PDF - Selected Observations"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PDF using the Images from the selected Observations."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnPDFSelectedSightings" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPDFSelectedSightingsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnPowerPoint">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/PowerPoint.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="PowerPoint"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PowerPoint Presentation using the Images from this entity."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnPowerPoint" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPowerPointActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnPowerPointAllSightings">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/PowerPoint.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="PowerPoint - All Observations"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PowerPoint Presentation using the Images from all the linked Observations."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnPowerPointAllSightings" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPowerPointAllSightingsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnPowerPointSelectedSightings">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/PowerPoint.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="PowerPoint - Selected Observations"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PowerPoint Presentation using the Images from the selected Observations."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnPowerPointSelectedSightings" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPowerPointSelectedSightingsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnSlideshow">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Slideshow.gif"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="JPEG Movie"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a MJPEG Movie using the Images from this entity."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnSlideshow" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnSlideshowAllSightings">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Slideshow.gif"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="JPEG Movie - All Observations"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a MJPEG Video using the Images from all the linked Observations."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnSlideshowAllSightings" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowAllSightingsActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnSlideshowSelectedSightings">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Slideshow.gif"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="JPEG Movie - Selected Observations"/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a MJPEG Video using the Images from the selected Observations."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="btnSlideshowSelectedSightings" noResource="true"/>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[320, 35]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowSelectedSightingsActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

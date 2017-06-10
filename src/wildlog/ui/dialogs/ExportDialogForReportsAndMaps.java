@@ -77,8 +77,8 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportHTML = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
         btnExportPDF = new javax.swing.JButton();
-        btnPrint = new javax.swing.JButton();
         btnExportKML = new javax.swing.JButton();
+        btnPrint = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Export Formats");
@@ -164,25 +164,6 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         });
         getContentPane().add(btnExportPDF);
 
-        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
-        btnPrint.setText("Print the Report");
-        btnPrint.setToolTipText("Try to print the report or map using your default installed printer.");
-        btnPrint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPrint.setFocusPainted(false);
-        btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnPrint.setIconTextGap(10);
-        btnPrint.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnPrint.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnPrint.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnPrint.setName("btnPrint"); // NOI18N
-        btnPrint.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnPrint);
-
         btnExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
         btnExportKML.setText("Export as KML");
         btnExportKML.setToolTipText("Export a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc.");
@@ -201,6 +182,25 @@ public class ExportDialogForReportsAndMaps extends JDialog {
             }
         });
         getContentPane().add(btnExportKML);
+
+        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        btnPrint.setText("Print the Report");
+        btnPrint.setToolTipText("Try to print the report or map using your default installed printer.");
+        btnPrint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPrint.setFocusPainted(false);
+        btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPrint.setIconTextGap(10);
+        btnPrint.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnPrint.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnPrint.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnPrint.setName("btnPrint"); // NOI18N
+        btnPrint.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPrint);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
