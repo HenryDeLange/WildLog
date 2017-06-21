@@ -35,6 +35,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsExcel;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 import wildlog.xml.utils.UtilsXML;
@@ -92,6 +93,7 @@ public class ExportDialog extends JDialog {
         btnExportFilesObservations = new javax.swing.JButton();
         btnExportFilesSelectedObservations = new javax.swing.JButton();
         btnExportTXTList = new javax.swing.JButton();
+        btnExportExcelBasic = new javax.swing.JButton();
         btnExportCSVBasic = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
         btnExportXML = new javax.swing.JButton();
@@ -185,8 +187,27 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportTXTList);
 
+        btnExportExcelBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Excel.png"))); // NOI18N
+        btnExportExcelBasic.setText("Export as Excel - Basic format");
+        btnExportExcelBasic.setToolTipText("Export an Excel file for all relevant Observations.");
+        btnExportExcelBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportExcelBasic.setFocusPainted(false);
+        btnExportExcelBasic.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportExcelBasic.setIconTextGap(10);
+        btnExportExcelBasic.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportExcelBasic.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportExcelBasic.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportExcelBasic.setName("btnExportExcelBasic"); // NOI18N
+        btnExportExcelBasic.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportExcelBasic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportExcelBasicActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportExcelBasic);
+
         btnExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSVBasic.setText("Export as Spreadsheet - Basic format");
+        btnExportCSVBasic.setText("Export as CSV - Basic format");
         btnExportCSVBasic.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
         btnExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVBasic.setFocusPainted(false);
@@ -205,7 +226,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportCSVBasic);
 
         btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSV.setText("Export as Spreadsheet - WildLog format");
+        btnExportCSV.setText("Export as CSV - WildLog format");
         btnExportCSV.setToolTipText("Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc.");
         btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSV.setFocusPainted(false);
@@ -300,7 +321,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportKML);
 
         btnPaarlFormat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export_Paarl.gif"))); // NOI18N
-        btnPaarlFormat.setText("Paarl Reserve Format");
+        btnPaarlFormat.setText("Export as Paarl Reserve Format");
         btnPaarlFormat.setToolTipText("Export the data to the format specified by the Paarl Nature Reserve.");
         btnPaarlFormat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPaarlFormat.setFocusPainted(false);
@@ -898,6 +919,8 @@ public class ExportDialog extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the Paarl Excel Export");
+                setTaskProgress(1);
+                setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
                 Path path;
                 List<Sighting> lstSightingsToUse;
                 if (location != null) {
@@ -1121,10 +1144,92 @@ public class ExportDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnPaarlFormatActionPerformed
 
+    private void btnExportExcelBasicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportExcelBasicActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the Excel Export");
+                setTaskProgress(1);
+                setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                Path path;
+                List<Sighting> lstSightingsToUse;
+                String name;
+                if (location != null) {
+                    name = location.getDisplayName();
+                    lstSightingsToUse = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
+                }
+                else
+                if (visit != null) {
+                    name = visit.getDisplayName();
+                    lstSightingsToUse = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
+                }
+                else
+                if (element != null) {
+                    name = element.getDisplayName();
+                    lstSightingsToUse = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
+                }
+                else
+                if (sighting != null) {
+                    name = sighting.getDisplayName();
+                    lstSightingsToUse = new ArrayList<>(1);
+                    lstSightingsToUse.add(sighting);
+                }
+                else
+                if (lstSightings != null) {
+                    name = "Observations";
+                    lstSightingsToUse = lstSightings;
+                }
+                else {
+                    name = "Unknown";
+                    path = WildLogPaths.WILDLOG_EXPORT_XLS.getAbsoluteFullPath();
+                    lstSightingsToUse = new ArrayList<>(0);
+                }
+                setTaskProgress(3);
+                setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                path = WildLogPaths.WILDLOG_EXPORT_XLS.getAbsoluteFullPath().resolve(name + ".xls");
+                Files.createDirectories(path.getParent());
+                // Create workbook and sheet
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                HSSFSheet sheet = workbook.createSheet("WildLog - " + name);
+                // Setup header row
+                int rowCount = 0;
+                UtilsExcel.exportSightingToExcelHeader(sheet, rowCount++);
+                setTaskProgress(5);
+                setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                // Add the Sightings
+                int counter = 0;
+                for (Sighting tempSighting : lstSightingsToUse) {
+                    UtilsExcel.exportSightingToExcel(sheet, rowCount++, tempSighting, app);
+                    // Update progress
+                    setTaskProgress(5 + (int)((counter++/(double)lstSightingsToUse.size())*90));
+                    setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                }
+                // Write the last visit's register file (sightings)
+                setTaskProgress(95);
+                setMessage("Busy with the Excel Export (writing the file)... " + getProgress() + "%");
+                try (FileOutputStream out = new FileOutputStream(path.toFile())) {
+                    workbook.write(out);
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+                // Open the folder
+                UtilsFileProcessing.openFile(path);
+                setTaskProgress(100);
+                setMessage("Done with the Excel Export");
+                return null;
+            }
+        });
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnExportExcelBasicActionPerformed
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
     private javax.swing.JButton btnExportCSVBasic;
+    private javax.swing.JButton btnExportExcelBasic;
     private javax.swing.JButton btnExportFiles;
     private javax.swing.JButton btnExportFilesObservations;
     private javax.swing.JButton btnExportFilesSelectedObservations;

@@ -180,6 +180,24 @@
             <EventHandler event="menuSelected" listener="javax.swing.event.MenuListener" parameters="javax.swing.event.MenuEvent" handler="exportMenuMenuSelected"/>
           </Events>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExportExcelBasic">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/Excel.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Export All to Excel (Basic format)"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export all data to Excel files using the Basic format."/>
+                <Property name="name" type="java.lang.String" value="mnuExportExcelBasic" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportExcelBasicActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator23">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator23" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuExportCSVBasic">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">

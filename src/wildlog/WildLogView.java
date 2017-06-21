@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -59,6 +60,8 @@ import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.logging.log4j.Level;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.jdesktop.application.TaskMonitor;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
@@ -121,6 +124,7 @@ import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsExcel;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
@@ -341,6 +345,8 @@ public final class WildLogView extends JFrame {
         jSeparator22 = new javax.swing.JPopupMenu.Separator();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
+        mnuExportExcelBasic = new javax.swing.JMenuItem();
+        jSeparator23 = new javax.swing.JPopupMenu.Separator();
         mnuExportCSVBasic = new javax.swing.JMenuItem();
         mnuExportCSV = new javax.swing.JMenuItem();
         jSeparator18 = new javax.swing.JPopupMenu.Separator();
@@ -872,6 +878,20 @@ public final class WildLogView extends JFrame {
                 exportMenuMenuSelected(evt);
             }
         });
+
+        mnuExportExcelBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Excel.png"))); // NOI18N
+        mnuExportExcelBasic.setText("Export All to Excel (Basic format)");
+        mnuExportExcelBasic.setToolTipText("Export all data to Excel files using the Basic format.");
+        mnuExportExcelBasic.setName("mnuExportExcelBasic"); // NOI18N
+        mnuExportExcelBasic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportExcelBasicActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportExcelBasic);
+
+        jSeparator23.setName("jSeparator23"); // NOI18N
+        exportMenu.add(jSeparator23);
 
         mnuExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         mnuExportCSVBasic.setText("Export All to CSV (Basic format)");
@@ -4013,6 +4033,53 @@ public final class WildLogView extends JFrame {
         app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_chkMnuIncludeCountInSightingPathItemStateChanged
 
+    private void mnuExportExcelBasicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportExcelBasicActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the Excel Export");
+                setTaskProgress(1);
+                setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                Path path;
+                List<Sighting> lstSightingsToUse = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                setTaskProgress(3);
+                setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                path = WildLogPaths.WILDLOG_EXPORT_XLS_ALL.getAbsoluteFullPath().resolve("WildLog_Observations.xls");
+                Files.createDirectories(path.getParent());
+                // Create workbook and sheet
+                HSSFWorkbook workbook = new HSSFWorkbook();
+                HSSFSheet sheet = workbook.createSheet("WildLog - All Observations");
+                // Setup header row
+                int rowCount = 0;
+                UtilsExcel.exportSightingToExcelHeader(sheet, rowCount++);
+                setTaskProgress(5);
+                setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                // Add the Sightings
+                int counter = 0;
+                for (Sighting tempSighting : lstSightingsToUse) {
+                    UtilsExcel.exportSightingToExcel(sheet, rowCount++, tempSighting, app);
+                    // Update progress
+                    setTaskProgress(5 + (int)((counter++/(double)lstSightingsToUse.size())*90));
+                    setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                }
+                // Write the last visit's register file (sightings)
+                setTaskProgress(95);
+                setMessage("Busy with the Excel Export (writing the file)... " + getProgress() + "%");
+                try (FileOutputStream out = new FileOutputStream(path.toFile())) {
+                    workbook.write(out);
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+                // Open the folder
+                UtilsFileProcessing.openFile(path);
+                setTaskProgress(100);
+                setMessage("Done with the Excel Export");
+                return null;
+            }
+        });
+    }//GEN-LAST:event_mnuExportExcelBasicActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4084,6 +4151,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator20;
     private javax.swing.JPopupMenu.Separator jSeparator21;
     private javax.swing.JPopupMenu.Separator jSeparator22;
+    private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
@@ -4124,6 +4192,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuExifMenuItem;
     private javax.swing.JMenuItem mnuExportCSV;
     private javax.swing.JMenuItem mnuExportCSVBasic;
+    private javax.swing.JMenuItem mnuExportExcelBasic;
     private javax.swing.JMenuItem mnuExportHTML;
     private javax.swing.JMenuItem mnuExportHTMLAdvanced;
     private javax.swing.JMenuItem mnuExportKML;
