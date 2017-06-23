@@ -4011,16 +4011,29 @@ public final class WildLogView extends JFrame {
                         app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                     }
                 });
-                // Do the actual backup
-                app.getDBI().doRestore(fileChooser.getSelectedFile().toPath());
-                // Seker die beste om te mak dat die user die program nuut oop maak om seker te maak alles is reg...
-                WLOptionPane.showMessageDialog(app.getMainFrame(),
-                        "The active database was restored to a previous state. Please restart the application.",
-                        "Backup Restored", JOptionPane.INFORMATION_MESSAGE);
-                SwingUtilities.invokeLater(new Runnable() {
+                // Start the process in another thread to allow the UI to update correctly and use the progressbar for feedback
+                UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
-                    public void run() {
-                        app.quit(null);
+                    protected Object doInBackground() throws Exception {
+                        app.getDBI().doRestore(fileChooser.getSelectedFile().toPath());
+                        return null;
+                    }
+
+                    @Override
+                    protected void finished() {
+                        super.finished();
+                        // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
+                        // that asks whether you want to close the application or not, and it's best to rather restart afterwards.
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                        "The active database was restored to a previous state. Please restart the application.",
+                                        "Backup Restored", JOptionPane.INFORMATION_MESSAGE);
+                                app.quit(null);
+                            }
+                        });
                     }
                 });
             }

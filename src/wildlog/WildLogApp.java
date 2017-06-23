@@ -7,7 +7,9 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,12 +26,18 @@ import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.EventObject;
+import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javafx.application.Platform;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -70,7 +78,6 @@ public class WildLogApp extends Application {
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static boolean useNimbusLF = false;
-    private static boolean logToFile = false;
     // Other settings
     private WildLogOptions wildLogOptions;
     private int threadCount;
@@ -157,7 +164,7 @@ public class WildLogApp extends Application {
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
-                    WildLogApp.LOGGER.log(Level.INFO, "WEB CALL: Start checking for new version... {}", checkForUpdates());
+                    WildLogApp.LOGGER.log(Level.INFO, "Latest WildLog version: {}", checkForUpdates());
                 }
             }, 10, TimeUnit.SECONDS);
             // Try to upload log data
@@ -187,24 +194,50 @@ public class WildLogApp extends Application {
                                             + "JVM Max Memory  : " + (maxMemory == Long.MAX_VALUE ? "no limit" : Math.round((maxMemory) / (1024.0*1024.0) * 100) / 100.0) + " MB" + "\n"
                                             + "Screen Size : " + width + "x" + height + "\n"
                                             + "Screen Count: " + GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
-                                String logFileSnippit = "(Not using logfile)";
-                                if (logToFile) {
-                                    try {
-// TODO: In the future maybe rather ZIP the text and then upload (and the newest rollover logs)
-                                        byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt")); // The first (main) log file
-                                        String logInfo = new String(fileBytes, Charset.defaultCharset());
-                                        int logCharacterLength = 99999;
-                                        if (logInfo.length() > logCharacterLength) {
-                                            logFileSnippit = "...\n...\n" + logInfo.substring(logInfo.length() - logCharacterLength);
-                                        }
-                                        else {
-                                            logFileSnippit = logInfo;
-                                        }
-                                        // Om die file se path beter te lees in die uploaded log (want dit haal die snaakse karakters uit)
-                                        logFileSnippit = logFileSnippit.replace(File.separatorChar, '^');
+                                String logFileSnippit = "";
+                                ByteArrayOutputStream logFileZip = new ByteArrayOutputStream();
+                                try {
+                                    byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildlog_errorlog.txt")); // The first (main) log file
+                                    String logInfo = new String(fileBytes, Charset.defaultCharset());
+                                    int errorCount = -1;
+                                    int startIndex = 0;
+                                    while (startIndex >= 0) {
+                                        startIndex = logInfo.indexOf("ERROR", startIndex + 1);
+                                        errorCount++;
                                     }
-                                    catch (IOException  ex) {
-                                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                    logFileSnippit = "Recent Error Count = " + errorCount;
+                                }
+                                catch (IOException  ex) {
+                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                }
+                                // Get a Zipped archive of all the error logs
+                                List<String> fileList = new ArrayList<>(Arrays.asList(ACTIVE_WILDLOG_SETTINGS_FOLDER.toFile().list()));
+                                if (fileList != null && !fileList.isEmpty()) {
+                                    for (int t = fileList.size() - 1; t >= 0; t--) {
+                                        if (!fileList.get(t).startsWith("wildlog_errorlog")) {
+                                            fileList.remove(t);
+                                        }
+                                    }
+                                    if (!fileList.isEmpty()) {
+                                        byte[] buffer = new byte[1024];
+                                        try {
+                                            try (ZipOutputStream zipOutputStream = new ZipOutputStream(logFileZip)) {
+                                                for (String fileString : fileList) {
+                                                    ZipEntry zipEntry = new ZipEntry(fileString);
+                                                    zipOutputStream.putNextEntry(zipEntry);
+                                                    try (FileInputStream fileInputStream = new FileInputStream(ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().resolve(fileString).toString())) {
+                                                        int len;
+                                                        while ((len = fileInputStream.read(buffer)) > 0) {
+                                                            zipOutputStream.write(buffer, 0, len);
+                                                        }
+                                                    }
+                                                }
+                                                zipOutputStream.closeEntry();
+                                            }
+                                        }
+                                        catch (IOException ex) {
+                                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                        }
                                     }
                                 }
                                 // Send the parameters to the site
@@ -222,6 +255,7 @@ public class WildLogApp extends Application {
                                 printStream.print("&NumberOfSightings=" + dbi.countSightings(0, null, null, null));
                                 printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(null, null));
                                 printStream.print("&PartialLog=" + logFileSnippit);
+                                printStream.print("&ZippedLog=" + Base64.getEncoder().encodeToString(logFileZip.toByteArray()).replaceAll("\\+", "%2B"));
                                 // Have to get the input stream in order to actually send the request
                                 try (InputStream inputStream = con.getInputStream()) {
                                     StringBuilder response = new StringBuilder(35);
@@ -381,7 +415,6 @@ public class WildLogApp extends Application {
             Properties props = new Properties();
             props.load(reader);
             // Set the settings
-            logToFile = Boolean.parseBoolean(props.getProperty("logToFile"));
             useNimbusLF = Boolean.parseBoolean(props.getProperty("useNimbus"));
             if (props.getProperty("settingsFolderLocation") != null && !props.getProperty("settingsFolderLocation").trim().isEmpty()) {
                 ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(props.getProperty("settingsFolderLocation")).normalize().toAbsolutePath().normalize();
@@ -440,8 +473,6 @@ public class WildLogApp extends Application {
         });
         // Add a new line between application startups
         WildLogApp.LOGGER.log(Level.INFO, "");
-        
-        
         // Try to read the settings file containing the wildloghome (active workspace)
         try {
             configureWildLogHomeBasedOnSettingsFile();
@@ -578,6 +609,7 @@ public class WildLogApp extends Application {
     public String checkForUpdates() {
         try {
             // Open a connection to the site
+            WildLogApp.LOGGER.log(Level.INFO, "WEB CALL (getLatestWildLogVersion)");
             URL url = new URL("http://www.mywild.co.za/wildlog/getLatestWildLogVersion.php");
             URLConnection con = url.openConnection();
             // Activate the output
@@ -618,8 +650,7 @@ public class WildLogApp extends Application {
                     editorPane.setBackground(label.getBackground());
                     WLOptionPane.showMessageDialog(getMainFrame(),
                             editorPane,
-                            "A new WildLog update is available!", 
-                            JOptionPane.INFORMATION_MESSAGE);
+                            "A new WildLog update is available!", JOptionPane.INFORMATION_MESSAGE);
                 }
                 return response.toString();
             }

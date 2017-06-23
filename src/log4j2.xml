@@ -5,15 +5,15 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n" />
         </Console>
         <RollingFile name="RollingFile" 
-                     fileName="${sys:settingsFolderLocation}/errorlog.txt" 
-                     filePattern="${sys:settingsFolderLocation}/errorlog%i.txt.zip">
+                     fileName="${sys:settingsFolderLocation}/wildlog_errorlog.txt" 
+                     filePattern="${sys:settingsFolderLocation}/wildlog_errorlog_archive%i.txt.zip">
             <PatternLayout>
                 <Pattern>%d{yyyy-MM-dd HH:mm:ss} %p %m%n</Pattern>
             </PatternLayout>
             <Policies>
                 <SizeBasedTriggeringPolicy size="1 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="10"/>
+            <DefaultRolloverStrategy max="5"/>
         </RollingFile>
     </Appenders>
     <Loggers>

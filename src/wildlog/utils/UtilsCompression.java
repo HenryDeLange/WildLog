@@ -1,7 +1,6 @@
 package wildlog.utils;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,7 +30,7 @@ public final class UtilsCompression {
                     if (!Paths.get(fileString).getFileName().toString().equals(inZipFilePath.getFileName().toString())) {
                         ZipEntry zipEntry = new ZipEntry(fileString);
                         zipOutputStream.putNextEntry(zipEntry);
-                        try (FileInputStream fileInputStream = new FileInputStream(inSourceFolderPath + File.separator + fileString)) {
+                        try (FileInputStream fileInputStream = new FileInputStream(inSourceFolderPath.resolve(fileString).toFile())) {
                             int len;
                             while ((len = fileInputStream.read(buffer)) > 0) {
                                 zipOutputStream.write(buffer, 0, len);
