@@ -73,18 +73,20 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
+    public final static String WILDLOG_VERSION = "5.0.0";
     public static Logger LOGGER;
-    public static String WILDLOG_VERSION = "5.0.0";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
+    private static String iNaturalistToken;
     private static boolean useNimbusLF = false;
-    // Other settings
+    private WildLogView view;
     private WildLogOptions wildLogOptions;
     private int threadCount;
-    // Make sure the application uses the same WildLogDBI instance...
-    // The WildLogDBI is initialized in startup() and closed in shutdown()
+    /** 
+     * Make sure the application uses the same WildLogDBI instance...
+    * The WildLogDBI is initialized in startup() and closed in shutdown()
+    * */
     private WildLogDBI dbi;
-    private WildLogView view;
 
 
     @Override
@@ -397,7 +399,6 @@ public class WildLogApp extends Application {
         ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath().normalize();
         System.setProperty("settingsFolderLocation", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
         WildLogApp.LOGGER = LogManager.getLogger("WildLogApp");
-        useNimbusLF = true;
         // Load the startup settings from the properties file
         BufferedReader reader = null;
         try {
@@ -659,6 +660,14 @@ public class WildLogApp extends Application {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         return "Unknown";
+    }
+
+    public static String getINaturalistToken() {
+        return iNaturalistToken;
+    }
+
+    public static void setINaturalistToken(String inINaturalistToken) {
+        iNaturalistToken = inINaturalistToken;
     }
 
 }

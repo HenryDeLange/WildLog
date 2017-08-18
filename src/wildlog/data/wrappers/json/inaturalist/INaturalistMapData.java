@@ -1,7 +1,7 @@
 package wildlog.data.wrappers.json.inaturalist;
 
 
-public class INaturalistData {
+public class INaturalistMapData {
     private long id;
     private double latitude;
     private double longitude;

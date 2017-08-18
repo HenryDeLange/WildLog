@@ -53,7 +53,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.wrappers.json.gbif.GBIFData;
 import wildlog.data.wrappers.json.gbif.GBIFOccurence;
-import wildlog.data.wrappers.json.inaturalist.INaturalistData;
+import wildlog.data.wrappers.json.inaturalist.INaturalistMapData;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
 import wildlog.ui.helpers.WLOptionPane;
@@ -69,7 +69,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
     private boolean showWorkspaceMap = true;
     private boolean showSightings = true;
     private final int PAGE_LIMIT_INATURALIST = 100;
-    private List<INaturalistData> lstAllINaturalistResults = new ArrayList<>(0);
+    private List<INaturalistMapData> lstAllINaturalistResults = new ArrayList<>(0);
     private final int PAGE_LIMIT_GBIF = 150;
     private List<GBIFOccurence> lstAllGBIFResults = new ArrayList<>(0);
     private String scientificName;
@@ -256,8 +256,8 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                         }
                     }
                     InputStream inputStream = urlConnection.getInputStream();
-                    List<INaturalistData> lstResults = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), 
-                            new TypeToken<List<INaturalistData>>(){}.getType());
+                    List<INaturalistMapData> lstResults = new Gson().fromJson(new InputStreamReader(inputStream, "UTF-8"), 
+                            new TypeToken<List<INaturalistMapData>>(){}.getType());
                     lstAllINaturalistResults.addAll(lstResults);
                     dialog.updateInfoText("Loaded " + lstAllINaturalistResults.size() + " of " + totalEntries + " records.");
                 }
@@ -269,7 +269,7 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
                 SimpleFeatureBuilder builder = new SimpleFeatureBuilder(type);
                 DefaultFeatureCollection collection = new DefaultFeatureCollection();
                 GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
-                for (INaturalistData data : lstAllINaturalistResults) {
+                for (INaturalistMapData data : lstAllINaturalistResults) {
                     builder.add(geometryFactory.createPoint(new Coordinate(data.getLongitude(), data.getLatitude())));
                     SimpleFeature feature = builder.buildFeature(Long.toString(data.getId()), new Object[] {data.getId()});
                     collection.add(feature);

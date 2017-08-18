@@ -59,6 +59,7 @@ import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.panels.inaturalist.dialogs.INatSightingDialog;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -469,6 +470,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnGetGPSFromImage = new javax.swing.JButton();
         btnGetDateFromImage = new javax.swing.JButton();
         btnUpdateSighting = new javax.swing.JButton();
+        btnINaturalist = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Observation");
@@ -1414,13 +1416,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnCalculateDuration.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration_Small.png"))); // NOI18N
-        btnCalculateDuration.setText("<html>Calculate <b>Duration</b> from <b>Image</b> data</html>");
+        btnCalculateDuration.setText("<html>Get Duration from Images</html>");
         btnCalculateDuration.setToolTipText("Attempt to calculate the Duration of the Observation based on times specified on the uploaded images.");
         btnCalculateDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode);
         btnCalculateDuration.setFocusPainted(false);
         btnCalculateDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCalculateDuration.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnCalculateDuration.setIconTextGap(8);
+        btnCalculateDuration.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnCalculateDuration.setName("btnCalculateDuration"); // NOI18N
         btnCalculateDuration.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1430,13 +1433,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnCalculateSunAndMoon.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
-        btnCalculateSunAndMoon.setText("<html>Calculate <b>Time of Day</b> and <b> Moon Phase</b></html>");
+        btnCalculateSunAndMoon.setText("<html>Calculate Time of Day and Moon Phase</html>");
         btnCalculateSunAndMoon.setToolTipText("Automatically calculate the Sun and Moon phase based on the date and GPS co-ordinates.");
         btnCalculateSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateSunAndMoon.setEnabled(!disableEditing);
         btnCalculateSunAndMoon.setFocusPainted(false);
         btnCalculateSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCalculateSunAndMoon.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnCalculateSunAndMoon.setIconTextGap(8);
+        btnCalculateSunAndMoon.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnCalculateSunAndMoon.setName("btnCalculateSunAndMoon"); // NOI18N
         btnCalculateSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1446,13 +1450,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnGetGPSFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetGPSFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS_Small.png"))); // NOI18N
-        btnGetGPSFromImage.setText("<html>Load <b>GPS</b> from <b>Image </b>data</html>");
+        btnGetGPSFromImage.setText("<html>Use GPS from Images</html>");
         btnGetGPSFromImage.setToolTipText("Attempt to load the GPS from the image's EXIF data.");
         btnGetGPSFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetGPSFromImage.setEnabled(!disableEditing && !bulkUploadMode);
         btnGetGPSFromImage.setFocusPainted(false);
         btnGetGPSFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnGetGPSFromImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnGetGPSFromImage.setIconTextGap(8);
+        btnGetGPSFromImage.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnGetGPSFromImage.setName("btnGetGPSFromImage"); // NOI18N
         btnGetGPSFromImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1462,13 +1467,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
-        btnGetDateFromImage.setText("<html>Load <b>Date</b> from <b>Image </b>data</html>");
+        btnGetDateFromImage.setText("<html>Use Date from Images</html>");
         btnGetDateFromImage.setToolTipText("Attempt to load the date and time from the image's EXIF data.");
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode);
         btnGetDateFromImage.setFocusPainted(false);
         btnGetDateFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnGetDateFromImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnGetDateFromImage.setIconTextGap(8);
+        btnGetDateFromImage.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnGetDateFromImage.setName("btnGetDateFromImage"); // NOI18N
         btnGetDateFromImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1489,19 +1495,36 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         });
 
+        btnINaturalist.setBackground(new java.awt.Color(208, 204, 181));
+        btnINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_small.png"))); // NOI18N
+        btnINaturalist.setText("<html>Link with iNaturalist</html>");
+        btnINaturalist.setToolTipText("Link this Observatin with an iNaturalist account.");
+        btnINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnINaturalist.setFocusPainted(false);
+        btnINaturalist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnINaturalist.setIconTextGap(8);
+        btnINaturalist.setMargin(new java.awt.Insets(2, 4, 2, 2));
+        btnINaturalist.setName("btnINaturalist"); // NOI18N
+        btnINaturalist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnINaturalistActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlButtonsLayout = new javax.swing.GroupLayout(pnlButtons);
         pnlButtons.setLayout(pnlButtonsLayout);
         pnlButtonsLayout.setHorizontalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnCalculateDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCalculateSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGetGPSFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGetDateFromImage, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdateSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSightingID, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblSightingID, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnINaturalist, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
         );
         pnlButtonsLayout.setVerticalGroup(
@@ -1510,13 +1533,15 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 .addGap(0, 0, 0)
                 .addComponent(btnUpdateSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
-                .addComponent(btnGetDateFromImage)
-                .addGap(3, 3, 3)
-                .addComponent(btnGetGPSFromImage)
-                .addGap(3, 3, 3)
-                .addComponent(btnCalculateSunAndMoon)
-                .addGap(3, 3, 3)
-                .addComponent(btnCalculateDuration)
+                .addComponent(btnGetDateFromImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnGetGPSFromImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnCalculateSunAndMoon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnCalculateDuration, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnINaturalist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblSightingID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
@@ -2195,11 +2220,16 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void spnSecondsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnSecondsStateChanged
         if (TimeAccuracy.UNKNOWN.equals(cmbTimeAccuracy.getSelectedItem())
-            && cmbTimeAccuracy.isEnabled()) {
+                && cmbTimeAccuracy.isEnabled()) {
             cmbTimeAccuracy.setSelectedItem(TimeAccuracy.GOOD);
         }
         btnCalculateSunAndMoonActionPerformed(null);
     }//GEN-LAST:event_spnSecondsStateChanged
+
+    private void btnINaturalistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnINaturalistActionPerformed
+        INatSightingDialog dialog = new INatSightingDialog(this, sighting);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnINaturalistActionPerformed
 
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());
@@ -2256,6 +2286,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JButton btnGPS;
     private javax.swing.JButton btnGetDateFromImage;
     private javax.swing.JButton btnGetGPSFromImage;
+    private javax.swing.JButton btnINaturalist;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousImage;
     private javax.swing.JButton btnSetMainImage;
