@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.ElementCore;
+import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.VisitCore;
@@ -34,6 +35,7 @@ public interface DBI {
     public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
     public <T extends WildLogOptions> T findWildLogOptions(Class<T> inReturnType);
     public <T extends AdhocData> T findAdhocData(String inFieldID, String inDataKey, Class<T> inReturnType);
+    public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType);
 
     public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, Class<T> inReturnType);
     public <T extends LocationCore> List<T> listLocations(String inName, Class<T> inReturnType);
@@ -50,6 +52,7 @@ public interface DBI {
     public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile);
     public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean createAdhocData(T inAdhocData);
+    public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData);
     
     public <T extends ElementCore> boolean updateElement(T inElement, String inOldName);
     public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName);
@@ -58,6 +61,7 @@ public interface DBI {
     public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile);
     public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean updateAdhocData(T inAdhocData);
+    public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData);
 
     public boolean deleteElement(String inPrimaryName);
     public boolean deleteLocation(String inName);
@@ -65,6 +69,7 @@ public interface DBI {
     public boolean deleteSighting(long inSightingCounter);
     public boolean deleteWildLogFile(String inDBFilePath);
     public boolean deleteAdhocData(String inFieldID, String inDataKey);
+    public boolean deleteINaturalistLinkedData(long inWildLogID, long inINaturalistID);
 
     public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> List<S> 
         searchSightings(Date inStartDate, Date inEndDate, List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 

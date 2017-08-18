@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.ElementCore;
+import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.VisitCore;
@@ -55,15 +56,16 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected final Random randomGenerator = new Random(System.nanoTime()); // ThreadLocalRandom is beter maar net in Java 7
     // Version
-    protected static final int WILDLOG_DB_VERSION = 9;
+    protected static final int WILDLOG_DB_VERSION = 10;
     // Tables
     protected static final String tableElements = "CREATE TABLE ELEMENTS (PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL, OTHERNAME varchar(150), SCIENTIFICNAME varchar(150), DESCRIPTION longvarchar, DISTRIBUTION longvarchar, NUTRITION longvarchar, WATERDEPENDANCE varchar(50), SIZEMALEMIN float(52), SIZEMALEMAX float(52), SIZEFEMALEMIN float(52), SIZEFEMALEMAX float(52), SIZEUNIT varchar(10), SIZETYPE varchar(50), WEIGHTMALEMIN float(52), WEIGHTMALEMAX float(52), WEIGHTFEMALEMIN float(52), WEIGHTFEMALEMAX float(52), WEIGHTUNIT varchar(10), BREEDINGDURATION varchar(50), BREEDINGNUMBER varchar(50), WISHLISTRATING varchar(50), DIAGNOSTICDESCRIPTION longvarchar, ACTIVETIME varchar(50), ENDANGEREDSTATUS varchar(35), BEHAVIOURDESCRIPTION longvarchar, ADDFREQUENCY varchar(50), ELEMENTTYPE varchar(50), FEEDINGCLASS varchar(50), LIFESPAN varchar(50), REFERENCEID varchar(50))";
     protected static final String tableLocations = "CREATE TABLE LOCATIONS (NAME varchar(150) PRIMARY KEY NOT NULL, DESCRIPTION longvarchar, RATING varchar(50), GAMEVIEWINGRATING varchar(50), HABITATTYPE longvarchar, ACCOMMODATIONTYPE varchar(150), CATERING varchar(50), CONTACTNUMBERS varchar(50), WEBSITE varchar(100), EMAIL varchar(100), DIRECTIONS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, GPSACCURACY varchar(50))";
     protected static final String tableVisits = "CREATE TABLE VISITS (NAME varchar(150) PRIMARY KEY NOT NULL, STARTDATE date, ENDDATE date, DESCRIPTION longvarchar, GAMEWATCHINGINTENSITY varchar(50), VISITTYPE varchar(50), LOCATIONNAME varchar(150))";
-    protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int, TEMPERATURE double, TEMPERATUREUNIT varchar(15), LIFESTATUS varchar(15), SEX varchar(15), TAG longvarchar, DURATIONMINUTES int, DURATIONSECONDS double, GPSACCURACY varchar(50), TIMEACCURACY varchar(50), AGE varchar(50))";
+    protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL, SIGHTINGDATE timestamp NOT NULL, ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int, TEMPERATURE double, TEMPERATUREUNIT varchar(15), LIFESTATUS varchar(15), SEX varchar(15), TAG longvarchar, DURATIONMINUTES int, DURATIONSECONDS double, GPSACCURACY varchar(50), TIMEACCURACY varchar(50), AGE varchar(50))";
     protected static final String tableFiles = "CREATE TABLE FILES (ID varchar(175), FILENAME varchar(255), ORIGINALPATH varchar(500), FILETYPE varchar(50), UPLOADDATE date, ISDEFAULT smallint, FILEDATE timestamp, FILESIZE bigint)";
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG (VERSION int DEFAULT " + WILDLOG_DB_VERSION + ", DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 750, USETHUMBNAILTABLES smallint DEFAULT true, USETHUMBNAILBROWSE smallint DEFAULT false, ENABLESOUNDS smallint DEFAULT true, USESCIENTIFICNAMES smallint DEFAULT true, WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace', WORKSPACEID bigint DEFAULT 0, UPLOADLOGS smallint DEFAULT true, BUNDLEDPLAYERS smallint DEFAULT true, USEINDVCOUNTINPATH smallint DEFAULT false)";
     protected static final String tableAdhocData = "CREATE TABLE ADHOC (FIELDID varchar(150) NOT NULL, DATAKEY varchar(150) NOT NULL, DATAVALUE TEXT)";
+    protected static final String tableINaturalistLinkedData = "CREATE TABLE INATURALIST (WILDLOGID bigint PRIMARY KEY NOT NULL, INATURALISTID bigint NOT NULL, INATURALISTDATA TEXT)";
     // Count
     protected static final String countLocation = "SELECT count(*) FROM LOCATIONS";
     protected static final String countVisit = "SELECT count(*) FROM VISITS";
@@ -78,6 +80,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String findFile = "SELECT * FROM FILES";
     protected static final String findWildLogOptions = "SELECT * FROM WILDLOG";
     protected static final String findAdhocData = "SELECT * FROM ADHOC WHERE FIELDID = ? AND DATAKEY = ?";
+    protected static final String findINaturalistLinkedData = "SELECT * FROM INATURALIST WHERE WILDLOGID = ? OR INATURALISTID = ?";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listVisit = "SELECT * FROM VISITS";
@@ -92,6 +95,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String createFile = "INSERT INTO FILES (ID,FILENAME,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT,FILEDATE,FILESIZE) VALUES (?,?,?,?,?,?,?,?)";
     protected static final String createWildLogOptions = "INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, ?, DEFAULT, DEFAULT, DEFAULT)";
     protected static final String createAdhocData = "INSERT INTO ADHOC (FIELDID, DATAKEY, DATAVALUE) VALUES (?, ?, ?)";
+    protected static final String createINaturalistLinkedData = "INSERT INTO INATURALIST (WILDLOGID, INATURALISTID, INATURALISTDATA) VALUES (?, ?, ?)";
     // Update
     protected static final String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ?, GPSACCURACY = ? WHERE NAME = ?";
     protected static final String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
@@ -100,6 +104,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ?, FILEDATE = ?, FILESIZE = ? WHERE ORIGINALPATH = ?";
     protected static final String updateWildLogOptions = "UPDATE WILDLOG SET DEFAULTLATITUDE = ?, DEFAULTLONGITUDE = ?, DEFAULTSLIDESHOWSPEED = ?, DEFAULTSLIDESHOWSIZE = ?, USETHUMBNAILTABLES = ?, USETHUMBNAILBROWSE =?, ENABLESOUNDS = ?, USESCIENTIFICNAMES = ?, WORKSPACENAME = ?, WORKSPACEID = ?, UPLOADLOGS = ?, BUNDLEDPLAYERS = ?, USEINDVCOUNTINPATH = ?";
     protected static final String updateAdhocData = "UPDATE ADHOC SET FIELDID = ?, DATAKEY = ?, DATAVALUE = ? WHERE FIELDID = ? AND DATAKEY = ?";
+    protected static final String updateINaturalistLinkedData = "UPDATE INATURALIST SET WILDLOGID = ?, INATURALISTID = ?, INATURALISTDATA = ? WHERE WILDLOGID = ? OR INATURALISTID = ?";
     // Delete
     protected static final String deleteLocation = "DELETE FROM LOCATIONS WHERE NAME = ?";
     protected static final String deleteVisit = "DELETE FROM VISITS WHERE NAME = ?";
@@ -107,6 +112,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteElement = "DELETE FROM ELEMENTS WHERE PRIMARYNAME = ?";
     protected static final String deleteFile = "DELETE FROM FILES WHERE ORIGINALPATH = ?";
     protected static final String deleteAdhocData = "DELETE FROM ADHOC WHERE FIELDID = ? AND DATAKEY = ?";
+    protected static final String deleteINaturalistLinkedData = "DELETE FROM INATURALIST WHERE WILDLOGID = ? OR INATURALISTID = ?";
     // Queries
     protected static final String queryLocationCountForElement = "select SIGHTINGS.LOCATIONNAME, count(*) cnt from SIGHTINGS where SIGHTINGS.ELEMENTNAME = ? group by SIGHTINGS.LOCATIONNAME order by cnt desc";
     // Variables
@@ -194,6 +200,14 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableAdhocData);
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FIELDID_DATAKEY ON ADHOC (FIELDID, DATAKEY)");
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "INATURALIST", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableINaturalistLinkedData);
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ID_LINKS ON INATURALIST (WILDLOGID, INATURALISTID)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -1821,6 +1835,8 @@ public abstract class DBI_JDBC implements DBI {
             for (WildLogFileCore temp : fileList) {
                 deleteWildLogFile(temp.getDBFilePath());
             }
+            // Delete any linked iNaturalist data
+            deleteINaturalistLinkedData(inSightingCounter, 0);
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -2067,6 +2083,106 @@ public abstract class DBI_JDBC implements DBI {
     @Override
     public long generateID() {
         return System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
+    }
+
+    @Override
+    public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        T temp = null;
+        try {
+            state = conn.prepareStatement(findINaturalistLinkedData);
+            state.setLong(1, inWildLogID);
+            state.setLong(2, inINaturalistID);
+            results = state.executeQuery();
+            if (results.next()) {
+                temp = inReturnType.newInstance();
+                temp.setWildlogID(results.getLong("WILDLOGID"));
+                temp.setINaturalistID(results.getLong("INATURALISTID"));
+                temp.setINaturalistData(results.getString("INATURALISTDATA"));
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return temp;
+    }
+    
+    @Override
+    public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData) {
+        PreparedStatement state = null;
+        try {
+            //Insert
+            state = conn.prepareStatement(createINaturalistLinkedData);
+            // Populate the values
+            maintainINaturalistLinkedData(state, inINaturalistLinkedData);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+
+    @Override
+    public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData) {
+        PreparedStatement state = null;
+        try {
+            // Update
+            state = conn.prepareStatement(updateINaturalistLinkedData);
+            // Populate the values
+            maintainINaturalistLinkedData(state, inINaturalistLinkedData);
+            state.setLong(4, inINaturalistLinkedData.getWildlogID());
+            state.setLong(5, inINaturalistLinkedData.getINaturalistID());
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    private <T extends INaturalistLinkedData> void maintainINaturalistLinkedData(PreparedStatement state, T inINaturalistLinkedData) throws SQLException {
+        state.setLong(1, inINaturalistLinkedData.getWildlogID());
+        state.setLong(2, inINaturalistLinkedData.getINaturalistID());
+        state.setString(3, inINaturalistLinkedData.getINaturalistData());
+    }
+
+    @Override
+    public boolean deleteINaturalistLinkedData(long inWildLogID, long inINaturalistID) {
+        PreparedStatement state = null;
+        try {
+            state = conn.prepareStatement(deleteINaturalistLinkedData);
+            state.setLong(1, inWildLogID);
+            state.setLong(2, inINaturalistID);
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
     }
 
 }
