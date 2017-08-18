@@ -1,0 +1,19 @@
+1) Gee die iNat App Auth link vir die user:
+http://www.inaturalist.org/oauth/authorize
+?client_id=33639c729ed7cfaa1d6d23411c94c6225b60a54b8c2c65bdea2d0baa07e629c0
+&redirect_uri=http%3A%2F%2Fwww.mywild.co.za%2Fwildlog%2FiNatAuthCode.php
+&response_type=code
+
+Dit sal maak dat die user moet insign en vir die WildLog Application (wat geskep is in iNaturalist) access gee.
+
+2) Die storie hierbo sal 'n CODE return as parameter in die redirect URL.
+
+3) Wys dan 'n MyWild page wat hierdie code gebruik in 'n call om die TOKEN te kry:
+https://www.inaturalist.org/oauth/token?
+client_id=33639c729ed7cfaa1d6d23411c94c6225b60a54b8c2c65bdea2d0baa07e629c0
+&client_secret=6c0225abd1edc16ad70a34a8e0fa185888706f38295e76844d23e65eeff1f0be
+&code=<Die CODE>
+&redirect_uri=http://www.mywild.co.za/wildlog/iNatAuthCode.php
+&grant_type=authorization_code
+
+4) Die gebruiker tik dan hierdie TOKEN in WildLog in, want dis dit wat nodig is vir die API calls.
