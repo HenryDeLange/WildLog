@@ -2174,6 +2174,7 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.prepareStatement(deleteINaturalistLinkedData);
             state.setLong(1, inWildLogID);
             state.setLong(2, inINaturalistID);
+            state.executeUpdate();
         }
         catch (SQLException ex) {
             printSQLException(ex);
