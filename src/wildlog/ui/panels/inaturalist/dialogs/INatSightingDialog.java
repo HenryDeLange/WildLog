@@ -4,13 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import java.awt.Desktop;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.time.ZoneId;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -29,12 +24,13 @@ import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
 public class INatSightingDialog extends JDialog {
     private final WildLogApp app = WildLogApp.getApplication();
-    private final Gson gson = new Gson();
+    private final Gson GSON = new Gson();
     private final Sighting sighting;
     private INaturalistLinkedData linkedData = null;
 
@@ -60,23 +56,19 @@ public class INatSightingDialog extends JDialog {
     private void doSetup() {
         initComponents();
         lblWildLogID.setText(Long.toString(sighting.getSightingCounter()));
-        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), 0, lblWildLogImage, WildLogThumbnailSizes.SMALL, app);
+        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.SMALL, app);
         linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
         if (linkedData != null) {
             lblINaturalistID.setText(Long.toString(linkedData.getINaturalistID()));
             try {
                 if (linkedData.getINaturalistData() != null && !linkedData.getINaturalistData().isEmpty()) {
-System.out.println("SETUP JSON = " + linkedData.getINaturalistData()
-        .replace(',', '\n')
-        .replace('{', '\n')
-        .replace('}', '\n')
-        .replace('[', '\n')
-        .replace(']', '\n'));
-                    List<INaturalistObservation> lstINatObservation = gson.fromJson(linkedData.getINaturalistData(), new TypeToken<List<INaturalistObservation>>(){}.getType());
+                    List<INaturalistObservation> lstINatObservation = GSON.fromJson(linkedData.getINaturalistData(), 
+                            new TypeToken<List<INaturalistObservation>>(){}.getType());
                     if (lstINatObservation != null && !lstINatObservation.isEmpty()) {
                         txtInfo.setText("ID = " + lstINatObservation.get(0).getId());
+                        txtInfo.setText(txtInfo.getText() + "\nDescription = " + lstINatObservation.get(0).getDescription());
                         if (lstINatObservation.get(0).getPhotos() != null && !lstINatObservation.get(0).getPhotos().isEmpty()) {
-                            lblINatImage.setIcon(new ImageIcon(lstINatObservation.get(0).getPhotos().get(0).getSquare_url()));
+                            txtInfo.setText(txtInfo.getText() + "\nImage = " + lstINatObservation.get(0).getPhotos().get(0).getMedium_url());
                         }
                     }
                 }
@@ -95,25 +87,25 @@ System.out.println("SETUP JSON = " + linkedData.getINaturalistData()
     private void initComponents() {
 
         lblTitle = new javax.swing.JLabel();
-        scrTextArea = new javax.swing.JScrollPane();
-        txtInfo = new javax.swing.JTextPane();
-        jLabel3 = new javax.swing.JLabel();
-        scrTextArea1 = new javax.swing.JScrollPane();
-        txtActivity = new javax.swing.JTextPane();
-        jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        lblWildLogImage = new javax.swing.JLabel();
+        lblImage = new javax.swing.JLabel();
         btnOK = new javax.swing.JButton();
         btnViewWebsite = new javax.swing.JButton();
         btnUpload = new javax.swing.JButton();
         btnDownload = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        lblINatImage = new javax.swing.JLabel();
+        btnUnlink = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         lblWildLogID = new javax.swing.JLabel();
+        scrTextArea = new javax.swing.JScrollPane();
+        txtInfo = new javax.swing.JTextPane();
+        jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         lblINaturalistID = new javax.swing.JLabel();
+        scrTextArea1 = new javax.swing.JScrollPane();
+        txtActivity = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("iNaturalist Observation Details");
@@ -127,39 +119,18 @@ System.out.println("SETUP JSON = " + linkedData.getINaturalistData()
         lblTitle.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist.png"))); // NOI18N
         lblTitle.setText("iNaturalist Observation Details");
 
-        scrTextArea.setMaximumSize(new java.awt.Dimension(375, 32767));
-        scrTextArea.setMinimumSize(new java.awt.Dimension(185, 23));
-
-        txtInfo.setEditable(false);
-        txtInfo.setContentType("text/html"); // NOI18N
-        txtInfo.setText("");
-        txtInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        scrTextArea.setViewportView(txtInfo);
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("iNaturalist Information:");
-        jLabel3.setPreferredSize(new java.awt.Dimension(100, 20));
-
-        scrTextArea1.setMaximumSize(new java.awt.Dimension(375, 32767));
-        scrTextArea1.setMinimumSize(new java.awt.Dimension(185, 23));
-
-        txtActivity.setEditable(false);
-        txtActivity.setContentType("text/html"); // NOI18N
-        txtActivity.setText("");
-        txtActivity.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        scrTextArea1.setViewportView(txtActivity);
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel7.setText("iNaturalist Activity:");
-        jLabel7.setPreferredSize(new java.awt.Dimension(100, 20));
-
-        lblWildLogImage.setBackground(new java.awt.Color(0, 0, 0));
-        lblWildLogImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblWildLogImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblWildLogImage.setMaximumSize(new java.awt.Dimension(100, 100));
-        lblWildLogImage.setMinimumSize(new java.awt.Dimension(100, 100));
-        lblWildLogImage.setOpaque(true);
-        lblWildLogImage.setPreferredSize(new java.awt.Dimension(100, 100));
+        lblImage.setBackground(new java.awt.Color(0, 0, 0));
+        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblImage.setMaximumSize(new java.awt.Dimension(100, 100));
+        lblImage.setMinimumSize(new java.awt.Dimension(100, 100));
+        lblImage.setOpaque(true);
+        lblImage.setPreferredSize(new java.awt.Dimension(100, 100));
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
+            }
+        });
 
         btnOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnOK.setToolTipText("Close the dialog.");
@@ -205,35 +176,36 @@ System.out.println("SETUP JSON = " + linkedData.getINaturalistData()
         btnDownload.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDownload.setMargin(new java.awt.Insets(2, 8, 2, 2));
 
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("WildLog");
-
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("iNaturalist");
-
-        lblINatImage.setBackground(new java.awt.Color(0, 0, 0));
-        lblINatImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblINatImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblINatImage.setMaximumSize(new java.awt.Dimension(100, 100));
-        lblINatImage.setMinimumSize(new java.awt.Dimension(100, 100));
-        lblINatImage.setOpaque(true);
-        lblINatImage.setPreferredSize(new java.awt.Dimension(100, 100));
+        btnUnlink.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnUnlink.setText("Unlink");
+        btnUnlink.setToolTipText("Unlink this Observation from iNaturalist.");
+        btnUnlink.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUnlink.setFocusPainted(false);
+        btnUnlink.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnUnlink.setMargin(new java.awt.Insets(2, 6, 2, 2));
+        btnUnlink.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnlinkActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblINatImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblWildLogImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnViewWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnOK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnViewWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnOK, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                            .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnUnlink, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
         );
         jPanel2Layout.setVerticalGroup(
@@ -241,34 +213,114 @@ System.out.println("SETUP JSON = " + linkedData.getINaturalistData()
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
+                .addGap(10, 10, 10)
+                .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addComponent(btnViewWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
                 .addComponent(btnUpload, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addGap(15, 15, 15)
                 .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
-                .addComponent(jLabel4)
-                .addGap(2, 2, 2)
-                .addComponent(lblWildLogImage, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(jLabel5)
-                .addGap(2, 2, 2)
-                .addComponent(lblINatImage, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnUnlink, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("WildLog ID:");
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("iNaturalist Information:");
+        jLabel3.setPreferredSize(new java.awt.Dimension(100, 20));
+
         lblWildLogID.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblWildLogID.setText("Unknown...");
+
+        scrTextArea.setMaximumSize(new java.awt.Dimension(375, 32767));
+        scrTextArea.setMinimumSize(new java.awt.Dimension(185, 23));
+
+        txtInfo.setEditable(false);
+        txtInfo.setContentType("text/html"); // NOI18N
+        txtInfo.setText("");
+        txtInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        scrTextArea.setViewportView(txtInfo);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(10, 10, 10)
+                        .addComponent(lblWildLogID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lblWildLogID))
+                .addGap(15, 15, 15)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("iNaturalist ID:");
 
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setText("iNaturalist Activity:");
+        jLabel7.setPreferredSize(new java.awt.Dimension(100, 20));
+
         lblINaturalistID.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblINaturalistID.setText("Not linked...");
+
+        scrTextArea1.setMaximumSize(new java.awt.Dimension(375, 32767));
+        scrTextArea1.setMinimumSize(new java.awt.Dimension(185, 23));
+
+        txtActivity.setEditable(false);
+        txtActivity.setContentType("text/html"); // NOI18N
+        txtActivity.setText("");
+        txtActivity.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        scrTextArea1.setViewportView(txtActivity);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scrTextArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(10, 10, 10)
+                        .addComponent(lblINaturalistID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(lblINaturalistID))
+                .addGap(15, 15, 15)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(scrTextArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -278,23 +330,11 @@ System.out.println("SETUP JSON = " + linkedData.getINaturalistData()
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(10, 10, 10)
-                                .addComponent(lblWildLogID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrTextArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(10, 10, 10)
-                                .addComponent(lblINaturalistID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(10, 10, 10))
-                    .addComponent(lblTitle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 646, Short.MAX_VALUE))
+                    .addComponent(lblTitle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE))
                 .addGap(5, 5, 5)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -304,26 +344,14 @@ System.out.println("SETUP JSON = " + linkedData.getINaturalistData()
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(10, 10, 10))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTitle)
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(lblINaturalistID)
-                            .addComponent(jLabel1)
-                            .addComponent(lblWildLogID))
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(4, 4, 4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(scrTextArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(10, 10, 10))))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(10, 10, 10))
         );
 
         pack();
@@ -356,102 +384,55 @@ System.out.println("SETUP JSON = " + linkedData.getINaturalistData()
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
             dialog.setVisible(true);
         }
-        try {
-// TODO: Validation -> Moet GPS en 'n Scientific Name hê
-
-            // Skep die nuwe rekord om op te laai
-            INaturalistAddObservation uploadObservation = new INaturalistAddObservation();
-            Element element = app.getDBI().findElement(sighting.getElementName(), Element.class);
-            uploadObservation.setSpecies_guess(element.getPrimaryName());
-            uploadObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
-            uploadObservation.setDescription("WARNING THIS IS ONLY TEST DATA");
-            uploadObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
-            uploadObservation.setLongitide(UtilsGPS.getLonDecimalDegree(sighting));
-            uploadObservation.setGeoprivacy(INaturalistGeoprivacy._private);
-            // POST die data na iNaturalist
-            URL url = new URL("https://www.inaturalist.org/observations.json");
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoOutput(true);
-            urlConnection.setDoInput(true);
-            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-            urlConnection.setRequestProperty("Authorization", "Bearer " + WildLogApp.getINaturalistToken());
-            OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream());
-System.out.println("Data = " + uploadObservation.getDataString());
-            writer.write(uploadObservation.getDataString());
-            writer.flush();
-            writer.close();
-            // Lees die terugvoer
-            String line;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-            // Get the response
-            StringBuilder builder = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
-            }
-// TODO: Sit die code in finally blocks
-            reader.close();
-            urlConnection.disconnect();
-            
-// TODO: Upload ook die foto(s)
-            
-            // Stoor die inligting in WildLog
-            String json = builder.toString();
-System.out.println("UPDATE JSON = " + json
-        .replace(',', '\n')
-        .replace('{', '\n')
-        .replace('}', '\n')
-        .replace('[', '\n')
-        .replace(']', '\n'));
-            try {
-                List<INaturalistObservation> lstINatObservation = gson.fromJson(json, new TypeToken<List<INaturalistObservation>>(){}.getType());
-                if (lstINatObservation != null && !lstINatObservation.isEmpty()) {
-// TODO: Handle die inserts en updates reg
-                    long oldID = linkedData.getINaturalistID();
-                    linkedData = new INaturalistLinkedData(sighting.getSightingCounter(), lstINatObservation.get(0).getId(), json);
-                    if (oldID == 0) {
-                        app.getDBI().createINaturalistLinkedData(linkedData);
-System.out.println("Inserted");
-                    }
-                    else {
-                        app.getDBI().updateINaturalistLinkedData(linkedData);
-System.out.println("Updated");
-                    }
-                    doSetup();
-                }
-                else {
-System.out.println("NOT PARSED!!!!!!");
-                }
-            }
-            catch (JsonSyntaxException ex) {
-ex.printStackTrace();
-                WildLogApp.LOGGER.log(Level.ERROR, ex);
-            }
-        }
-        catch (Exception ex) {
-            txtInfo.setText("Error = " + ex.getMessage());
-            WildLogApp.LOGGER.log(Level.ERROR, ex);
-ex.printStackTrace();
-        }
+        // Skep die nuwe rekord om op te laai
+        INaturalistAddObservation uploadObservation = new INaturalistAddObservation();
+        Element element = app.getDBI().findElement(sighting.getElementName(), Element.class);
+        uploadObservation.setSpecies_guess(element.getPrimaryName());
+        uploadObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
+        uploadObservation.setDescription("WARNING THIS IS ONLY TEST DATA");
+        uploadObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
+        uploadObservation.setLongitide(UtilsGPS.getLonDecimalDegree(sighting));
+        uploadObservation.setGeoprivacy(INaturalistGeoprivacy._private);
+        
+//        
+//        WildLogApp.getINaturalistToken()
+//        
+//        long oldID = linkedData.getINaturalistID();
+//                    linkedData = new INaturalistLinkedData(sighting.getSightingCounter(), lstINatObservation.get(0).getId(), json);
+//                    if (oldID == 0) {
+//                        app.getDBI().createINaturalistLinkedData(linkedData);
+//System.out.println("Inserted");
+//                    }
+//                    else {
+//                        app.getDBI().updateINaturalistLinkedData(linkedData);
+//                    }
     }//GEN-LAST:event_btnUploadActionPerformed
+
+    private void btnUnlinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnlinkActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUnlinkActionPerformed
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        UtilsFileProcessing.openFile(sighting.getWildLogFileID(), 0, app);
+    }//GEN-LAST:event_lblImageMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnOK;
+    private javax.swing.JButton btnUnlink;
     private javax.swing.JButton btnUpload;
     private javax.swing.JButton btnViewWebsite;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JLabel lblINatImage;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lblINaturalistID;
+    private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblWildLogID;
-    private javax.swing.JLabel lblWildLogImage;
     private javax.swing.JScrollPane scrTextArea;
     private javax.swing.JScrollPane scrTextArea1;
     private javax.swing.JTextPane txtActivity;

@@ -23,6 +23,7 @@ public class INatAuthTokenDialog extends JDialog {
     
     public INatAuthTokenDialog(JFrame inParent) {
         super(inParent);
+        WildLogApp.LOGGER.log(Level.INFO, "[INatAuthTokenDialog]");
         initComponents();
         originalTokenText = txtToken.getText();
         UtilsDialog.setDialogToCenter(inParent, this);
@@ -32,6 +33,7 @@ public class INatAuthTokenDialog extends JDialog {
     
     public INatAuthTokenDialog(JDialog inParent) {
         super(inParent);
+        WildLogApp.LOGGER.log(Level.INFO, "[INatAuthTokenDialog]");
         initComponents();
         originalTokenText = txtToken.getText();
         UtilsDialog.setDialogToCenter(inParent, this);
@@ -59,9 +61,10 @@ public class INatAuthTokenDialog extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("iNaturalist Authorization");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist_small.png")).getImage());
+        setMaximumSize(new java.awt.Dimension(750, 300));
         setMinimumSize(new java.awt.Dimension(650, 200));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(650, 250));
+        setPreferredSize(new java.awt.Dimension(650, 245));
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -91,8 +94,10 @@ public class INatAuthTokenDialog extends JDialog {
             }
         });
 
-        jLabel3.setText("<html>WildLog requires an iNaturalist Authorization Token in order to interact with your iNaturalist account. \n<br/>\nPlease follow the steps below to aquire the Token:</html>");
+        jLabel3.setText("<html>WildLog requires an iNaturalist Authorization Token in order to interact with an iNaturalist account. \n<br/>\nPlease follow the steps below to acquire the Token.</html>");
 
+        btnHelpStep1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnHelpStep1.setForeground(new java.awt.Color(51, 51, 51));
         btnHelpStep1.setText("Show URL");
         btnHelpStep1.setToolTipText("Show the URL that will be used to authorizae WildLog on iNaturalist.");
         btnHelpStep1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -115,7 +120,7 @@ public class INatAuthTokenDialog extends JDialog {
             }
         });
 
-        jLabel4.setText("<html>TIP: You can store the generated Token in a safe place and reuse it again later, or simply generate a new Token next time you need to interact with iNaturalist.</html>");
+        jLabel4.setText("<html><b>TIP</b><br />Store the generated Token in a safe place and reuse it again later, or simply generate a new Token.</html>");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,8 +129,8 @@ public class INatAuthTokenDialog extends JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(85, 85, 85)
+                        .addComponent(jLabel4))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,8 +176,8 @@ public class INatAuthTokenDialog extends JDialog {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtToken, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
-                .addComponent(jLabel4)
-                .addGap(10, 10, 10))
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();

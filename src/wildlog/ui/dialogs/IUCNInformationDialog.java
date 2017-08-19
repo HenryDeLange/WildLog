@@ -28,7 +28,8 @@ public class IUCNInformationDialog extends JDialog {
     private final JComboBox cmbEndangeredStatus;
     private IUCNSpeciesData data = null;
 
-    public IUCNInformationDialog(final JFrame inParent, final String inScientificName, final JTextField inTxtOtherName, final JComboBox inCmbEndangeredStatus) {
+    public IUCNInformationDialog(final JFrame inParent, 
+            final String inScientificName, final JTextField inTxtOtherName, final JComboBox inCmbEndangeredStatus) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[IUCNInformationDialog]");
         scientificName = inScientificName;

@@ -3,11 +3,15 @@ package wildlog.ui.panels;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Toolkit;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.file.Paths;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -667,7 +671,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         btnCheckIUCNOtherName.setBackground(new java.awt.Color(0, 0, 0));
         btnCheckIUCNOtherName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/IUCN.gif"))); // NOI18N
-        btnCheckIUCNOtherName.setToolTipText("Try to load the main common name from the IUCN web services.");
+        btnCheckIUCNOtherName.setToolTipText("Try to load the main common name and threat category for this Creature from the IUCN web services.");
         btnCheckIUCNOtherName.setBorder(null);
         btnCheckIUCNOtherName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCheckIUCNOtherName.setFocusPainted(false);
@@ -681,7 +685,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         btnINaturalist.setBackground(new java.awt.Color(255, 255, 255));
         btnINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
-        btnINaturalist.setToolTipText("Try to load the main common name from the IUCN web services.");
+        btnINaturalist.setToolTipText("Try to view this Creature on the iNaturalist website.");
         btnINaturalist.setBorder(null);
         btnINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnINaturalist.setFocusPainted(false);
@@ -1115,36 +1119,36 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     .addGroup(pnlInfo2Layout.createSequentialGroup()
                         .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                .addComponent(jLabel71, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(spnSizeMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfo2Layout.createSequentialGroup()
-                                .addComponent(jLabel72, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(spnSizeFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(10, 10, 10)
-                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel10)
-                                .addGap(11, 11, 11)
-                                .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                .addComponent(spnSizeMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jLabel4)
-                                .addGap(12, 12, 12)
-                                .addComponent(cmbSizeUnits, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(20, 20, 20)
-                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                .addGap(93, 93, 93)
-                                .addComponent(jLabel7)
-                                .addGap(44, 44, 44)
-                                .addComponent(jLabel8))
-                            .addGroup(pnlInfo2Layout.createSequentialGroup()
                                 .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                        .addComponent(jLabel71, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(32, 32, 32)
+                                        .addComponent(spnSizeMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfo2Layout.createSequentialGroup()
+                                        .addComponent(jLabel72, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(spnSizeFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(10, 10, 10)
+                                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                        .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel10)
+                                        .addGap(11, 11, 11)
+                                        .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                        .addComponent(spnSizeMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(jLabel4)
+                                        .addGap(12, 12, 12)
+                                        .addComponent(cmbSizeUnits, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(20, 20, 20)
+                                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                        .addGap(93, 93, 93)
+                                        .addComponent(jLabel7)
+                                        .addGap(44, 44, 44)
+                                        .addComponent(jLabel8))
                                     .addGroup(pnlInfo2Layout.createSequentialGroup()
                                         .addComponent(jLabel73)
                                         .addGap(20, 20, 20)
@@ -1160,13 +1164,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                         .addGap(8, 8, 8)
                                         .addComponent(spnWeightFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addGroup(pnlInfo2Layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addComponent(jLabel3)
-                        .addGap(44, 44, 44)
-                        .addComponent(jLabel6)
+                                        .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                .addGap(100, 100, 100)
+                                .addComponent(jLabel3)
+                                .addGap(44, 44, 44)
+                                .addComponent(jLabel6)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
@@ -1727,7 +1730,20 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnCheckIUCNOtherNameActionPerformed
 
     private void btnINaturalistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnINaturalistActionPerformed
-        // TODO add your handling code here:
+        if (txtScienceName.getText() != null && !txtScienceName.getText().trim().isEmpty()) {
+            try {
+                Desktop.getDesktop().browse(URI.create("https://www.inaturalist.org/taxa/search?q="
+                        + URLEncoder.encode(txtScienceName.getText().trim(), "UTF-8").replace("+", "%20")));
+            }
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+        }
+        else {
+            WLOptionPane.showMessageDialog(getTopLevelAncestor(),
+                    "Please provide a Scientific Name to use and then try again.",
+                    "Scientific Name Required", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnINaturalistActionPerformed
 
 
