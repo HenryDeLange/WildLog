@@ -3,7 +3,13 @@ package wildlog.inaturalist.utils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+
 public class UtilsINaturalist {
+    
+    
+    private UtilsINaturalist() {
+    }
+    
     
     /**
      * Makes sure the String is safe to be used in a URL.

@@ -53,7 +53,7 @@ public class INaturalistSearchObservations {
     private INaturalistExtra extra;
     
     public String getQueryString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder(128);
         stringBuilder.append('?');
         if (q != null && !q.isEmpty()) {
             stringBuilder.append("q=").append(UtilsINaturalist.forURL(q)).append('&');
@@ -162,8 +162,8 @@ public class INaturalistSearchObservations {
      * Intended to be used alone. 
      * Can be any String to search for.
      */
-    public void setQ(String q) {
-        this.q = q;
+    public void setQ(String inQ) {
+        q = inQ;
     }
 
     public int getPage() {
@@ -173,8 +173,8 @@ public class INaturalistSearchObservations {
     /**
      * Any positive integer.
      */
-    public void setPage(int page) {
-        this.page = page;
+    public void setPage(int inPage) {
+        page = inPage;
     }
 
     public int getPer_page() {
@@ -184,40 +184,40 @@ public class INaturalistSearchObservations {
     /**
      * Must be between 1 to 200.
      */
-    public void setPer_page(int per_page) {
-        this.per_page = per_page;
+    public void setPer_page(int inPer_page) {
+        per_page = inPer_page;
     }
 
     public INaturalistOrderBy getOrder_by() {
         return order_by;
     }
 
-    public void setOrder_by(INaturalistOrderBy order_by) {
-        this.order_by = order_by;
+    public void setOrder_by(INaturalistOrderBy inOrder_by) {
+        order_by = inOrder_by;
     }
 
     public INaturalistOrder getOrder() {
         return order;
     }
 
-    public void setOrder(INaturalistOrder order) {
-        this.order = order;
+    public void setOrder(INaturalistOrder inOrder) {
+        order = inOrder;
     }
 
     public INaturalistLicense getLicense() {
         return license;
     }
 
-    public void setLicense(INaturalistLicense license) {
-        this.license = license;
+    public void setLicense(INaturalistLicense inLicense) {
+        license = inLicense;
     }
 
     public INaturalistLicense getPhoto_license() {
         return photo_license;
     }
 
-    public void setPhoto_license(INaturalistLicense photo_license) {
-        this.photo_license = photo_license;
+    public void setPhoto_license(INaturalistLicense inPhoto_license) {
+        photo_license = inPhoto_license;
     }
 
     public int getTaxon_id() {
@@ -227,8 +227,8 @@ public class INaturalistSearchObservations {
     /**
      * The iNaturalist Taxon ID.
      */
-    public void setTaxon_id(int taxon_id) {
-        this.taxon_id = taxon_id;
+    public void setTaxon_id(int inTaxon_id) {
+        taxon_id = inTaxon_id;
     }
 
     public String getTaxon_name() {
@@ -238,32 +238,32 @@ public class INaturalistSearchObservations {
     /**
      * The Scientific Name (or other taxonomic category).
      */
-    public void setTaxon_name(String taxon_name) {
-        this.taxon_name = taxon_name;
+    public void setTaxon_name(String inTaxon_name) {
+        taxon_name = inTaxon_name;
     }
 
     public List<INaturalistIconicTaxa> getIconic_taxa() {
         return iconic_taxa;
     }
 
-    public void setIconic_taxa(List<INaturalistIconicTaxa> iconic_taxa) {
-        this.iconic_taxa = iconic_taxa;
+    public void setIconic_taxa(List<INaturalistIconicTaxa> inIconic_taxa) {
+        iconic_taxa = inIconic_taxa;
     }
 
     public List<INaturalistHas> getHas() {
         return has;
     }
 
-    public void setHas(List<INaturalistHas> has) {
-        this.has = has;
+    public void setHas(List<INaturalistHas> inHas) {
+        has = inHas;
     }
 
     public INaturalistQualityGrade getQuality_grade() {
         return quality_grade;
     }
 
-    public void setQuality_grade(INaturalistQualityGrade quality_grade) {
-        this.quality_grade = quality_grade;
+    public void setQuality_grade(INaturalistQualityGrade inQuality_grade) {
+        quality_grade = inQuality_grade;
     }
 
     public boolean isOut_of_range() {
@@ -274,24 +274,24 @@ public class INaturalistSearchObservations {
      * Filter by whether or not iNat considers the observation out of range for the associated taxon. 
      * This is based on iNat's range data.
      */
-    public void setOut_of_range(boolean out_of_range) {
-        this.out_of_range = out_of_range;
+    public void setOut_of_range(boolean inOut_of_range) {
+        out_of_range = inOut_of_range;
     }
 
     public INaturalistOn getOn() {
         return on;
     }
 
-    public void setOn(INaturalistOn on) {
-        this.on = on;
+    public void setOn(INaturalistOn inOn) {
+        on = inOn;
     }
 
     public int getYear() {
         return year;
     }
 
-    public void setYear(int year) {
-        this.year = year;
+    public void setYear(int inYear) {
+        year = inYear;
     }
 
     public int getMonth() {
@@ -301,8 +301,8 @@ public class INaturalistSearchObservations {
     /**
      * Between 1 to 12.
      */
-    public void setMonth(int month) {
-        this.month = month;
+    public void setMonth(int inMonth) {
+        month = inMonth;
     }
 
     public int getDay() {
@@ -312,8 +312,8 @@ public class INaturalistSearchObservations {
     /**
      * Between 1 to 31.
      */
-    public void setDay(int day) {
-        this.day = day;
+    public void setDay(int inDay) {
+        day = inDay;
     }
 
     public LocalDate getD1() {
@@ -323,8 +323,8 @@ public class INaturalistSearchObservations {
     /**
      * First date of an interval. 
      */
-    public void setD1(LocalDate d1) {
-        this.d1 = d1;
+    public void setD1(LocalDate inD1) {
+        d1 = inD1;
     }
 
     public LocalDate getD2() {
@@ -334,8 +334,8 @@ public class INaturalistSearchObservations {
     /**
      * Second date of an interval. 
      */
-    public void setD2(LocalDate d2) {
-        this.d2 = d2;
+    public void setD2(LocalDate inD2) {
+        d2 = inD2;
     }
 
     public int getM1() {
@@ -346,8 +346,8 @@ public class INaturalistSearchObservations {
      * First month of an interval. 
      * Between 1 to 12;
      */
-    public void setM1(int m1) {
-        this.m1 = m1;
+    public void setM1(int inM1) {
+        m1 = inM1;
     }
 
     public int getM2() {
@@ -358,8 +358,8 @@ public class INaturalistSearchObservations {
      * Second month of an interval. 
      * Between 1 to 12;
      */
-    public void setM2(int m2) {
-        this.m2 = m2;
+    public void setM2(int inM2) {
+        m2 = inM2;
     }
 
     public int getH1() {
@@ -370,8 +370,8 @@ public class INaturalistSearchObservations {
      * First hour of an interval. 
      * Between 0 to 23;
      */
-    public void setH1(int h1) {
-        this.h1 = h1;
+    public void setH1(int inH1) {
+        h1 = inH1;
     }
 
     public int getH2() {
@@ -382,8 +382,8 @@ public class INaturalistSearchObservations {
      * Second hour of an interval. 
      * Between 0 to 23;
      */
-    public void setH2(int h2) {
-        this.h2 = h2;
+    public void setH2(int inH2) {
+        h2 = inH2;
     }
 
     public double getSwlat() {
@@ -394,8 +394,8 @@ public class INaturalistSearchObservations {
      * Southwest latitude of a bounding box query. 
      * Between -90 to 90;
      */
-    public void setSwlat(double swlat) {
-        this.swlat = swlat;
+    public void setSwlat(double iSwlat) {
+        swlat = iSwlat;
     }
 
     public double getSwlng() {
@@ -406,8 +406,8 @@ public class INaturalistSearchObservations {
      * Southwest longitude of a bounding box query. 
      * Between -180 to 180;
      */
-    public void setSwlng(double swlng) {
-        this.swlng = swlng;
+    public void setSwlng(double inSwlng) {
+        swlng = inSwlng;
     }
 
     public double getNelat() {
@@ -418,8 +418,8 @@ public class INaturalistSearchObservations {
      * Northeast latitude of a bounding box query. 
      * Between -90 to 90;
      */
-    public void setNelat(double nelat) {
-        this.nelat = nelat;
+    public void setNelat(double inNelat) {
+        nelat = inNelat;
     }
 
     public double getNelng() {
@@ -430,8 +430,8 @@ public class INaturalistSearchObservations {
      * Northeast longitude of a bounding box query. 
      * Between -180 to 180;
      */
-    public void setNelng(double nelng) {
-        this.nelng = nelng;
+    public void setNelng(double inNelng) {
+        nelng = inNelng;
     }
 
     public int getList_id() {
@@ -441,24 +441,24 @@ public class INaturalistSearchObservations {
     /**
      * Restrict results to observations of taxa on the specified list. Limited to lists with 2000 taxa or less.
      */
-    public void setList_id(int list_id) {
-        this.list_id = list_id;
+    public void setList_id(int inList_id) {
+        list_id = inList_id;
     }
 
     public ZonedDateTime getUpdated_since() {
         return updated_since;
     }
 
-    public void setUpdated_since(ZonedDateTime updated_since) {
-        this.updated_since = updated_since;
+    public void setUpdated_since(ZonedDateTime inUpdated_since) {
+        updated_since = inUpdated_since;
     }
 
     public INaturalistExtra getExtra() {
         return extra;
     }
 
-    public void setExtra(INaturalistExtra extra) {
-        this.extra = extra;
+    public void setExtra(INaturalistExtra inExtra) {
+        extra = inExtra;
     }
     
 }

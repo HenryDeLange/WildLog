@@ -1,5 +1,6 @@
 package wildlog.inaturalist.responseobjects;
 
+
 public class INaturalistIconicTaxon {
     private int id;
     private String name;
@@ -7,44 +8,45 @@ public class INaturalistIconicTaxon {
     private int rank_level;
     private String ancestry;
 
+    
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int inId) {
+        id = inId;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String inName) {
+        name = inName;
     }
 
     public String getRank() {
         return rank;
     }
 
-    public void setRank(String rank) {
-        this.rank = rank;
+    public void setRank(String inRank) {
+        rank = inRank;
     }
 
     public int getRank_level() {
         return rank_level;
     }
 
-    public void setRank_level(int rank_level) {
-        this.rank_level = rank_level;
+    public void setRank_level(int inRank_level) {
+        rank_level = inRank_level;
     }
 
     public String getAncestry() {
         return ancestry;
     }
 
-    public void setAncestry(String ancestry) {
-        this.ancestry = ancestry;
+    public void setAncestry(String inAncestry) {
+        ancestry = inAncestry;
     }
     
 }

@@ -1,25 +1,30 @@
 package wildlog.inaturalist.queryobjects;
 
+import wildlog.inaturalist.queryobjects.enums.INaturalistIgnorePhotos;
+
 
 /**
  * Used to for [PUT/observations/:id]
  */
 public class INaturalistUpdateObservation extends INaturalistAddObservation {
     private String _method = "put";
-    private int ignore_photos;
+    private INaturalistIgnorePhotos ignore_photos = INaturalistIgnorePhotos.YES_1;
     
+    @Override
     public String getDataString() {
-        StringBuilder stringBuilder = new StringBuilder(super.getDataString());
+        StringBuilder stringBuilder = new StringBuilder(super.getDataString() + 64);
         if (stringBuilder.length() > 0) {
             stringBuilder.append('&');
         }
         if (_method != null && !_method.isEmpty()) {
             stringBuilder.append("observation[_method]=").append(_method).append('&');
         }
-        if (ignore_photos == 0 || ignore_photos == 1) {
+        if (ignore_photos != null) {
             stringBuilder.append("observation[ignore_photos]=").append(ignore_photos).append('&');
         }
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        if (stringBuilder.length() > 0) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
         return stringBuilder.toString();
     }
 
@@ -27,16 +32,16 @@ public class INaturalistUpdateObservation extends INaturalistAddObservation {
         return _method;
     }
 
-    public void setMethod(String _method) {
-        this._method = _method;
+    public void setMethod(String inMethod) {
+        _method = inMethod;
     }
 
-    public int getIgnore_photos() {
+    public INaturalistIgnorePhotos getIgnore_photos() {
         return ignore_photos;
     }
 
-    public void setIgnore_photos(int ignore_photos) {
-        this.ignore_photos = ignore_photos;
+    public void setIgnore_photos(INaturalistIgnorePhotos inIgnore_photos) {
+        ignore_photos = inIgnore_photos;
     }
     
 }

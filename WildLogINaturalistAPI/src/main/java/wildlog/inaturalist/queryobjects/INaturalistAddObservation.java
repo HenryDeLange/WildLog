@@ -28,7 +28,7 @@ public class INaturalistAddObservation {
 // TODO: Doen "observation[observation_field_values_attributes][order]" vir, ek neem aan, stuff soos die "captive" status, ens.
     
     public String getDataString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder(128);
         // Note: POST data doesn't start with a '?' since it isn't part of the URL
         if (species_guess != null && !species_guess.isEmpty()) {
             stringBuilder.append("observation[species_guess]=").append(UtilsINaturalist.forURL(species_guess)).append('&');
@@ -90,8 +90,8 @@ public class INaturalistAddObservation {
      * Equivalent of the "What did you see?" field on the observation form, this is the name of the organism observed. 
      * If the taxon ID is absent, iNat will try to choose a single taxon based on this string, but it may fail if there's some taxonomic ambiguity. 
      */
-    public void setSpecies_guess(String species_guess) {
-        this.species_guess = species_guess;
+    public void setSpecies_guess(String inSpecies_guess) {
+        species_guess = inSpecies_guess;
     }
 
     public int getTaxon_id() {
@@ -101,40 +101,40 @@ public class INaturalistAddObservation {
     /**
      * A valid iNat taxon ID.
      */
-    public void setTaxon_id(int taxon_id) {
-        this.taxon_id = taxon_id;
+    public void setTaxon_id(int inTaxon_id) {
+        taxon_id = inTaxon_id;
     }
 
     public INaturalistIdPlease getId_please() {
         return id_please;
     }
 
-    public void setId_please(INaturalistIdPlease id_please) {
-        this.id_please = id_please;
+    public void setId_please(INaturalistIdPlease inId_please) {
+        id_please = inId_please;
     }
 
     public ZonedDateTime getObserved_on_string() {
         return observed_on_string;
     }
 
-    public void setObserved_on_string(ZonedDateTime observed_on_string) {
-        this.observed_on_string = observed_on_string;
+    public void setObserved_on_string(ZonedDateTime inObserved_on_string) {
+        observed_on_string = inObserved_on_string;
     }
 
     public String getTime_zone() {
         return time_zone;
     }
 
-    public void setTime_zone(String time_zone) {
-        this.time_zone = time_zone;
+    public void setTime_zone(String inTime_zone) {
+        time_zone = inTime_zone;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String inDescription) {
+        description = inDescription;
     }
 
     public String getTag_list() {
@@ -144,8 +144,8 @@ public class INaturalistAddObservation {
     /**
      * Comma-separated list of tags.
      */
-    public void setTag_list(String tag_list) {
-        this.tag_list = tag_list;
+    public void setTag_list(String inTag_list) {
+        tag_list = inTag_list;
     }
 
     public String getPlace_guess() {
@@ -157,8 +157,8 @@ public class INaturalistAddObservation {
      * Note that iNat will <b>not</b> try to automatically look up coordinates based on this string. 
      * That task is uncertain enough that the UI should perform it so the user can confirm it. 
      */
-    public void setPlace_guess(String place_guess) {
-        this.place_guess = place_guess;
+    public void setPlace_guess(String inPlace_guess) {
+        place_guess = inPlace_guess;
     }
 
     public double getLatitude() {
@@ -169,8 +169,8 @@ public class INaturalistAddObservation {
      * Presumed datum is WGS84. 
      * Between -90 to 90.
      */
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setLatitude(double inLatitude) {
+        latitude = inLatitude;
     }
 
     public double getLongitide() {
@@ -181,8 +181,8 @@ public class INaturalistAddObservation {
      * Presumed datum is WGS84. 
      * Between -180 to 180.
      */
-    public void setLongitide(double longitide) {
-        this.longitide = longitide;
+    public void setLongitide(double inLongitide) {
+        longitide = inLongitide;
     }
 
     public int getMap_scale() {
@@ -193,8 +193,8 @@ public class INaturalistAddObservation {
      * Google Maps zoom level at which to show this observation's map marker. 
      * Between 0 to 19;
      */
-    public void setMap_scale(int map_scale) {
-        this.map_scale = map_scale;
+    public void setMap_scale(int inMap_scale) {
+        map_scale = inMap_scale;
     }
 
     public int getPositional_accuracy() {
@@ -205,16 +205,16 @@ public class INaturalistAddObservation {
      * Positional accuracy of the observation coordinates in meters. 
      * Any positive integer.
      */
-    public void setPositional_accuracy(int positional_accuracy) {
-        this.positional_accuracy = positional_accuracy;
+    public void setPositional_accuracy(int inPositional_accuracy) {
+        positional_accuracy = inPositional_accuracy;
     }
 
     public INaturalistGeoprivacy getGeoprivacy() {
         return geoprivacy;
     }
 
-    public void setGeoprivacy(INaturalistGeoprivacy geoprivacy) {
-        this.geoprivacy = geoprivacy;
+    public void setGeoprivacy(INaturalistGeoprivacy inGeoprivacy) {
+        geoprivacy = inGeoprivacy;
     }
     
 }
