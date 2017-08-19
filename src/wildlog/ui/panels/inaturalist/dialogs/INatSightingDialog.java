@@ -1,13 +1,12 @@
 package wildlog.ui.panels.inaturalist.dialogs;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.time.ZoneId;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -17,20 +16,22 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.inaturalist.INatAPI;
 import wildlog.inaturalist.queryobjects.INaturalistAddObservation;
+import wildlog.inaturalist.queryobjects.INaturalistUpdateObservation;
 import wildlog.inaturalist.queryobjects.enums.INaturalistGeoprivacy;
-import wildlog.inaturalist.responseobjects.INaturalistObservation;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsTime;
+import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
 public class INatSightingDialog extends JDialog {
     private final WildLogApp app = WildLogApp.getApplication();
-    private final Gson GSON = new Gson();
+    private final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private final Sighting sighting;
     private INaturalistLinkedData linkedData = null;
 
@@ -39,44 +40,43 @@ public class INatSightingDialog extends JDialog {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
         sighting = inSighting;
-        doSetup();
+        initComponents();
+        setupUI();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        UtilsUI.attachClipboardPopup(txtInfo, true);
     }
     
     public INatSightingDialog(JDialog inParent, Sighting inSighting) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
         sighting = inSighting;
-        doSetup();
+        initComponents();
+        setupUI();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        UtilsUI.attachClipboardPopup(txtInfo, true);
     }
 
-    private void doSetup() {
-        initComponents();
-        lblWildLogID.setText(Long.toString(sighting.getSightingCounter()));
-        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.SMALL, app);
+    private void setupUI() {
         linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
-        if (linkedData != null) {
-            lblINaturalistID.setText(Long.toString(linkedData.getINaturalistID()));
+        txtInfo.setText("");
+        if (linkedData != null && linkedData.getINaturalistData() != null && !linkedData.getINaturalistData().isEmpty()) {
             try {
-                if (linkedData.getINaturalistData() != null && !linkedData.getINaturalistData().isEmpty()) {
-                    List<INaturalistObservation> lstINatObservation = GSON.fromJson(linkedData.getINaturalistData(), 
-                            new TypeToken<List<INaturalistObservation>>(){}.getType());
-                    if (lstINatObservation != null && !lstINatObservation.isEmpty()) {
-                        txtInfo.setText("ID = " + lstINatObservation.get(0).getId());
-                        txtInfo.setText(txtInfo.getText() + "\nDescription = " + lstINatObservation.get(0).getDescription());
-                        if (lstINatObservation.get(0).getPhotos() != null && !lstINatObservation.get(0).getPhotos().isEmpty()) {
-                            txtInfo.setText(txtInfo.getText() + "\nImage = " + lstINatObservation.get(0).getPhotos().get(0).getMedium_url());
-                        }
-                    }
-                }
+                txtInfo.setText(linkedData.getINaturalistData());
             }
-            catch (JsonSyntaxException ex) {
+            catch (Exception ex) {
+                txtInfo.setText("Could not read the stored iNaturalist data..." + System.lineSeparator() 
+                        + "Please try to download the iNaturalist data again.");
                 WildLogApp.LOGGER.log(Level.ERROR, ex);
             }
         }
+        else {
+            linkedData = new INaturalistLinkedData(sighting.getSightingCounter(), 0, null);
+        }
+        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.SMALL, app);
+        lblWildLogID.setText(Long.toString(sighting.getSightingCounter()));
+        lblINaturalistID.setText(Long.toString(linkedData.getINaturalistID()));
     }
     
     /**
@@ -175,6 +175,11 @@ public class INatSightingDialog extends JDialog {
         btnDownload.setFocusPainted(false);
         btnDownload.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDownload.setMargin(new java.awt.Insets(2, 8, 2, 2));
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
 
         btnUnlink.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnUnlink.setText("Unlink");
@@ -240,7 +245,6 @@ public class INatSightingDialog extends JDialog {
         scrTextArea.setMinimumSize(new java.awt.Dimension(185, 23));
 
         txtInfo.setEditable(false);
-        txtInfo.setContentType("text/html"); // NOI18N
         txtInfo.setText("");
         txtInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         scrTextArea.setViewportView(txtInfo);
@@ -380,41 +384,89 @@ public class INatSightingDialog extends JDialog {
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
+        // Maak seker die Auth Token is OK
         if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
             dialog.setVisible(true);
         }
         // Skep die nuwe rekord om op te laai
-        INaturalistAddObservation uploadObservation = new INaturalistAddObservation();
+// FIXME: Is hierdie goed genoeg om seker te wees ek insert / update reg?
+        long oldINaturalistID = linkedData.getINaturalistID();
+        INaturalistAddObservation iNatObservation;
+        if (oldINaturalistID == 0) {
+            iNatObservation = new INaturalistAddObservation();
+        }
+        else {
+            iNatObservation = new INaturalistUpdateObservation();
+        }
         Element element = app.getDBI().findElement(sighting.getElementName(), Element.class);
-        uploadObservation.setSpecies_guess(element.getPrimaryName());
-        uploadObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
-        uploadObservation.setDescription("WARNING THIS IS ONLY TEST DATA");
-        uploadObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
-        uploadObservation.setLongitide(UtilsGPS.getLonDecimalDegree(sighting));
-        uploadObservation.setGeoprivacy(INaturalistGeoprivacy._private);
-        
-//        
-//        WildLogApp.getINaturalistToken()
-//        
-//        long oldID = linkedData.getINaturalistID();
-//                    linkedData = new INaturalistLinkedData(sighting.getSightingCounter(), lstINatObservation.get(0).getId(), json);
-//                    if (oldID == 0) {
-//                        app.getDBI().createINaturalistLinkedData(linkedData);
-//System.out.println("Inserted");
-//                    }
-//                    else {
-//                        app.getDBI().updateINaturalistLinkedData(linkedData);
-//                    }
+        iNatObservation.setSpecies_guess(element.getScientificName());
+        iNatObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
+        iNatObservation.setDescription("WARNING THIS IS ONLY TEST DATA");
+        iNatObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
+        iNatObservation.setLongitide(UtilsGPS.getLonDecimalDegree(sighting));
+        iNatObservation.setGeoprivacy(INaturalistGeoprivacy._private);
+// TODO: Stel die "WildLog_ID"
+// TODO: Upload die fotos
+        // Roep iNaturalist
+        JsonElement jsonElement;
+        if (oldINaturalistID == 0) {
+            jsonElement = INatAPI.createObservation(iNatObservation, WildLogApp.getINaturalistToken());
+        }
+        else {
+            INaturalistUpdateObservation updateObservation = (INaturalistUpdateObservation) iNatObservation;
+            updateObservation.setId(oldINaturalistID);
+// FIXME: Die update werk nog nie reg nie
+            jsonElement = INatAPI.updateObservation(updateObservation, WildLogApp.getINaturalistToken());
+        }
+        // Save die inligting in WildLog
+        try {
+            linkedData = new INaturalistLinkedData(sighting.getSightingCounter(), 
+                    jsonElement.getAsJsonArray().get(0).getAsJsonObject().get("id").getAsLong(), 
+                    GSON.toJson(jsonElement));
+            if (oldINaturalistID == 0) {
+                app.getDBI().createINaturalistLinkedData(linkedData);
+            }
+            else {
+                app.getDBI().updateINaturalistLinkedData(linkedData);
+            }
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        // Opdateer die UI
+        setupUI();
     }//GEN-LAST:event_btnUploadActionPerformed
 
     private void btnUnlinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnlinkActionPerformed
-        // TODO add your handling code here:
+        if (linkedData.getINaturalistID() != 0) {
+            // Maak seker die Auth Token is OK
+            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
+                dialog.setVisible(true);
+            }
+            // Roep iNaturalist
+            INatAPI.deleteObservation(linkedData.getINaturalistID(), WildLogApp.getINaturalistToken());
+            // Save die inligting in WildLog
+            app.getDBI().deleteINaturalistLinkedData(sighting.getSightingCounter(), 0);
+            // Opdateer die UI
+            setupUI();
+        }
+        else {
+            WLOptionPane.showMessageDialog(this, 
+                    "<html>The iNaturalist ID was not found. "
+                            + "<br />Please first upload the Observation to iNaturalist.</html>", 
+                    "No iNaturalist ID", WLOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnUnlinkActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         UtilsFileProcessing.openFile(sighting.getWildLogFileID(), 0, app);
     }//GEN-LAST:event_lblImageMouseReleased
+
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDownloadActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;
