@@ -1,11 +1,10 @@
 package wildlog.inaturalist;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -24,13 +23,14 @@ import wildlog.inaturalist.responseobjects.INaturalistObservation;
 public class INatAPI {
     private static final int PAGE_LIMIT_INATURALIST = 20;
     private static final Gson GSON = new Gson();
+    private static final JsonParser PARSER = new JsonParser();
     
     
     private INatAPI() {
     }
     
     
-    public static INaturalistObservation getObservation(long inINaturalistID) {
+    public static JsonElement getObservation(long inINaturalistID) {
         try {
             // POST die data na iNaturalist
             URL url = new URL("https://www.inaturalist.org/observations/" + inINaturalistID + ".json");
@@ -39,16 +39,14 @@ public class INatAPI {
             urlConnection.setDoInput(true);
             // Lees die terugvoer
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
-// TODO: Map die comments
-                List<INaturalistObservation> lstINatObservation = GSON.fromJson(
-                        reader, new TypeToken<List<INaturalistObservation>>(){}.getType());
-                if (lstINatObservation != null && !lstINatObservation.isEmpty()) {
-                    urlConnection.disconnect();
-                    return lstINatObservation.get(0);
-                }
+                JsonElement jsonElement = PARSER.parse(reader);
+                return jsonElement;
+            }
+            finally {
+                urlConnection.disconnect();
             }
         }
-        catch (JsonSyntaxException | IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return null;
@@ -93,13 +91,13 @@ public class INatAPI {
             while ((requestPage * PAGE_LIMIT_INATURALIST) < totalEntries);
             return lstAllINaturalistResults;
         }
-        catch (JsonIOException | JsonSyntaxException | IOException e) {
+        catch (Exception e) {
             e.printStackTrace(System.err);
         }
         return null;
     }
     
-    public static INaturalistObservation createObservation(INaturalistAddObservation inINaturalistAddObservation, String inToken) {
+    public static JsonElement createObservation(INaturalistAddObservation inINaturalistAddObservation, String inToken) {
         try {
             // POST die data na iNaturalist
             URL url = new URL("https://www.inaturalist.org/observations.json");
@@ -115,26 +113,23 @@ public class INatAPI {
             }
             // Lees die terugvoer
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
-                List<INaturalistObservation> lstINatObservation = GSON.fromJson(
-                        reader, new TypeToken<List<INaturalistObservation>>(){}.getType());
-                if (lstINatObservation != null && !lstINatObservation.isEmpty()) {
-                    urlConnection.disconnect();
-                    return lstINatObservation.get(0);
-                }
+                JsonElement jsonElement = PARSER.parse(reader);
+                return jsonElement;
             }
-            // POST die foto(s) na iNaturalist
-// TODO
+            finally {
+                urlConnection.disconnect();
+            }
         }
-        catch (JsonSyntaxException | IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return null;
     }
     
-    public static INaturalistObservation updateObservation(INaturalistUpdateObservation inINaturalistUpdateObservation, String inToken) {
+    public static JsonElement updateObservation(INaturalistUpdateObservation inINaturalistUpdateObservation, String inToken) {
         try {
             // PUT die data na iNaturalist
-            URL url = new URL("https://www.inaturalist.org/observations.json");
+            URL url = new URL("https://www.inaturalist.org/observations/" + inINaturalistUpdateObservation.getId() + ".json");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("PUT");
             urlConnection.setDoOutput(true);
@@ -147,23 +142,20 @@ public class INatAPI {
             }
             // Lees die terugvoer
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
-                List<INaturalistObservation> lstINatObservation = GSON.fromJson(
-                        reader, new TypeToken<List<INaturalistObservation>>(){}.getType());
-                if (lstINatObservation != null && !lstINatObservation.isEmpty()) {
-                    urlConnection.disconnect();
-                    return lstINatObservation.get(0);
-                }
+                JsonElement jsonElement = PARSER.parse(reader);
+                return jsonElement;
             }
-            // POST die foto(s) na iNaturalist
-// TODO
+            finally {
+                urlConnection.disconnect();
+            }
         }
-        catch (JsonSyntaxException | IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return null;
     }
     
-    public static INaturalistObservation deleteObservation(long inINaturalistID, String inToken) {
+    public static JsonElement deleteObservation(long inINaturalistID, String inToken) {
         try {
             // DELETE die data na iNaturalist
             URL url = new URL("https://www.inaturalist.org/observations/" + inINaturalistID + ".json");
@@ -174,15 +166,14 @@ public class INatAPI {
             urlConnection.setRequestProperty("Authorization", "Bearer " + inToken);
             // Lees die terugvoer
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
-                List<INaturalistObservation> lstINatObservation = GSON.fromJson(
-                        reader, new TypeToken<List<INaturalistObservation>>(){}.getType());
-                if (lstINatObservation != null && !lstINatObservation.isEmpty()) {
-                    urlConnection.disconnect();
-                    return lstINatObservation.get(0);
-                }
+                JsonElement jsonElement = PARSER.parse(reader);
+                return jsonElement;
+            }
+            finally {
+                urlConnection.disconnect();
             }
         }
-        catch (JsonSyntaxException | IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return null;

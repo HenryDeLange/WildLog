@@ -7,7 +7,8 @@ import wildlog.inaturalist.queryobjects.enums.INaturalistIgnorePhotos;
  * Used to for [PUT/observations/:id]
  */
 public class INaturalistUpdateObservation extends INaturalistAddObservation {
-    private String _method = "put";
+    private long id;
+    private String _method/* = "put"*/;
     private INaturalistIgnorePhotos ignore_photos = INaturalistIgnorePhotos.YES_1;
     
     @Override
@@ -26,6 +27,14 @@ public class INaturalistUpdateObservation extends INaturalistAddObservation {
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         }
         return stringBuilder.toString();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long inId) {
+        id = inId;
     }
 
     public String getMethod() {
