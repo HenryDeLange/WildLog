@@ -2,6 +2,7 @@ package wildlog.inaturalist.queryobjects;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 import wildlog.inaturalist.queryobjects.enums.INaturalistGeoprivacy;
 import wildlog.inaturalist.queryobjects.enums.INaturalistIdPlease;
 import wildlog.inaturalist.utils.UtilsINaturalist;
@@ -25,7 +26,8 @@ public class INaturalistAddObservation {
     private int map_scale;
     private int positional_accuracy;
     private INaturalistGeoprivacy geoprivacy;
-// TODO: Doen "observation[observation_field_values_attributes][order]" vir, ek neem aan, stuff soos die "captive" status, ens.
+    private Map<String, String> observation_field_values;
+
     
     public String getDataString() {
         StringBuilder stringBuilder = new StringBuilder(128);
@@ -70,16 +72,20 @@ public class INaturalistAddObservation {
         if (geoprivacy != null) {
             stringBuilder.append("observation[geoprivacy]=").append(UtilsINaturalist.forURL(geoprivacy)).append('&');
         }
+        if (observation_field_values != null && !observation_field_values.isEmpty()) {
+            int counter = 0;
+            for (Map.Entry<String, String> entry : observation_field_values.entrySet()) {
+                stringBuilder.append("observation[observation_field_values_attributes][").append(counter).append("]")
+                        .append("[observation_field_id]=").append(UtilsINaturalist.forURL(entry.getKey())).append('&');
+                stringBuilder.append("observation[observation_field_values_attributes][").append(counter).append("]")
+                        .append("[value]=").append(UtilsINaturalist.forURL(entry.getValue())).append('&');
+                counter++;
+            }
+        }
         if (stringBuilder.length() > 0) {
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         }
-//        try {
-//            return URLEncoder.encode(stringBuilder.toString(), "UTF-8").replace("+", "%20");
-//        }
-//        catch (UnsupportedEncodingException ex) {
-//            ex.printStackTrace(System.err);
-            return stringBuilder.toString();
-//        }
+        return stringBuilder.toString();
     }
 
     public String getSpecies_guess() {
@@ -215,6 +221,14 @@ public class INaturalistAddObservation {
 
     public void setGeoprivacy(INaturalistGeoprivacy inGeoprivacy) {
         geoprivacy = inGeoprivacy;
+    }
+
+    public Map<String, String> getObservation_field_values() {
+        return observation_field_values;
+    }
+
+    public void setObservation_field_values(Map<String, String> inObservation_field_values) {
+        observation_field_values = inObservation_field_values;
     }
     
 }

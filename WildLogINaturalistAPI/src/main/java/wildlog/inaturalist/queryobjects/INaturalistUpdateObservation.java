@@ -8,20 +8,20 @@ import wildlog.inaturalist.queryobjects.enums.INaturalistIgnorePhotos;
  */
 public class INaturalistUpdateObservation extends INaturalistAddObservation {
     private long id;
-    private String _method/* = "put"*/;
+    private String _method = "put";
     private INaturalistIgnorePhotos ignore_photos = INaturalistIgnorePhotos.YES_1;
     
     @Override
     public String getDataString() {
-        StringBuilder stringBuilder = new StringBuilder(super.getDataString() + 64);
+        StringBuilder stringBuilder = new StringBuilder(super.getDataString());
         if (stringBuilder.length() > 0) {
             stringBuilder.append('&');
         }
         if (_method != null && !_method.isEmpty()) {
-            stringBuilder.append("observation[_method]=").append(_method).append('&');
+            stringBuilder.append("_method=").append(_method).append('&');
         }
         if (ignore_photos != null) {
-            stringBuilder.append("observation[ignore_photos]=").append(ignore_photos).append('&');
+            stringBuilder.append("ignore_photos=").append(ignore_photos).append('&');
         }
         if (stringBuilder.length() > 0) {
             stringBuilder.deleteCharAt(stringBuilder.length() - 1);

@@ -27,6 +27,14 @@ public class INatAPI {
     
     
     private INatAPI() {
+// Handige links:
+//    http://www.inaturalist.org/pages/api+reference
+//
+//    http://www.inaturalist.org/oauth/applications
+//    http://www.inaturalist.org/oauth/applications/179
+//
+//    https://www.inaturalist.org/observation_fields
+//    https://www.inaturalist.org/observation_fields/7112
     }
     
     
