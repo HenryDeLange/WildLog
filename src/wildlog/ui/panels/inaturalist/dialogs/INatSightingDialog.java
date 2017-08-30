@@ -17,10 +17,13 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.inaturalist.INatAPI;
 import wildlog.inaturalist.queryobjects.INaturalistAddObservation;
 import wildlog.inaturalist.queryobjects.INaturalistUpdateObservation;
+import wildlog.inaturalist.queryobjects.INaturalistUploadPhoto;
 import wildlog.inaturalist.queryobjects.enums.INaturalistGeoprivacy;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -335,6 +338,9 @@ public class INatSightingDialog extends JDialog {
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
+        
+// TODO: Wys 'n popup wat vra: "Data", "Photos", "Data + Photos"
+
         // Maak seker die Auth Token is OK
         if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
@@ -360,7 +366,6 @@ public class INatSightingDialog extends JDialog {
         // Stel die "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
         iNatObservation.setObservation_field_values(new HashMap<>(1));
         iNatObservation.getObservation_field_values().put("7112", Long.toString(sighting.getSightingCounter()));
-// TODO: Upload die fotos
         // Roep iNaturalist
         JsonElement jsonElement;
         if (oldINaturalistID == 0) {
@@ -385,6 +390,15 @@ public class INatSightingDialog extends JDialog {
         }
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        // Doen die fotos
+        WildLogFile wildLogFile = app.getDBI().findWildLogFile(null, sighting.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
+        if (wildLogFile != null) {
+            INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
+// FIXME: Hanteer hierdie beter waar die ID eers beskikbaar is as die upload gewerk het...
+            iNatPhoto.setObservation_id(linkedData.getINaturalistID());
+            iNatPhoto.setFile(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.LARGE));
+            INatAPI.uploadPhoto(iNatPhoto, WildLogApp.getINaturalistToken());
         }
         // Opdateer die UI
         setupUI();

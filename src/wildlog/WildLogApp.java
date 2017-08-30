@@ -64,6 +64,7 @@ import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
 import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.LoggingPrintStream;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -460,18 +461,8 @@ public class WildLogApp extends Application {
             }
         });
         // Setup the System.out and System.err to redirect to the Logger
-        System.setOut(new PrintStream(System.out) {
-            @Override
-            public void print(String text) {
-                WildLogApp.LOGGER.log(Level.INFO, text);
-            }
-        });
-        System.setErr(new PrintStream(System.err) {
-            @Override
-            public void print(String text) {
-                WildLogApp.LOGGER.log(Level.ERROR, text);
-            }
-        });
+        System.setOut(new LoggingPrintStream(System.out, Level.INFO));
+        System.setErr(new LoggingPrintStream(System.err, Level.ERROR));
         // Add a new line between application startups
         WildLogApp.LOGGER.log(Level.INFO, "");
         // Try to read the settings file containing the wildloghome (active workspace)
