@@ -9,7 +9,7 @@ import wildlog.inaturalist.utils.UtilsINaturalist;
 
 
 /**
- * Used to for [POST/observations]
+ * Used to add observations using [POST/observations]
  */
 public class INaturalistAddObservation {
     private static final DateTimeFormatter ZONED_DATE_TIME_FORMAT = DateTimeFormatter.ISO_DATE_TIME;

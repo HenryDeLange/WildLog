@@ -4,7 +4,7 @@ import wildlog.inaturalist.queryobjects.enums.INaturalistIgnorePhotos;
 
 
 /**
- * Used to for [PUT/observations/:id]
+ * Used to update observations using [PUT/observations/:id]
  */
 public class INaturalistUpdateObservation extends INaturalistAddObservation {
     private long id;
