@@ -1500,6 +1500,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnINaturalist.setText("<html>Link with iNaturalist</html>");
         btnINaturalist.setToolTipText("Link this Observatin with an iNaturalist account.");
         btnINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnINaturalist.setEnabled(!disableEditing && !bulkUploadMode);
         btnINaturalist.setFocusPainted(false);
         btnINaturalist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnINaturalist.setIconTextGap(8);
@@ -2227,6 +2228,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_spnSecondsStateChanged
 
     private void btnINaturalistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnINaturalistActionPerformed
+        if (!bulkUploadMode) {
+            btnUpdateSightingActionPerformed(null);
+        }
         INatSightingDialog dialog = new INatSightingDialog(this, sighting);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnINaturalistActionPerformed
