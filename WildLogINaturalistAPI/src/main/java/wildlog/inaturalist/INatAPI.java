@@ -238,4 +238,29 @@ public class INatAPI {
         return null;
     }
     
+    public static JsonElement getAuthenticatedUser(String inToken) {
+        try {
+            // POST die data na iNaturalist
+            URL url = new URL("https://www.inaturalist.org/users/edit.json");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoOutput(true);
+            urlConnection.setDoInput(true);
+            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("Authorization", "Bearer " + inToken);
+            // Lees die terugvoer (dit doen ook dan eers die stuur)
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
+                JsonElement jsonElement = PARSER.parse(reader);
+                return jsonElement;
+            }
+            finally {
+                urlConnection.disconnect();
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+    
 }
