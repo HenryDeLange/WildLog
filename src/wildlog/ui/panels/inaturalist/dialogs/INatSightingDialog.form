@@ -145,7 +145,7 @@
               <Image iconType="3" name="/wildlog/resources/icons/iNaturalist.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="View Website"/>
-            <Property name="toolTipText" type="java.lang.String" value="Open this Observation on the iNaturalist website."/>
+            <Property name="toolTipText" type="java.lang.String" value="View this Observation on the iNaturalist website."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -306,11 +306,10 @@
                           <Component id="btnUploadData" min="-2" pref="35" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                           <Component id="btnDownload" min="-2" pref="35" max="-2" attributes="0"/>
-                          <EmptySpace pref="57" max="32767" attributes="0"/>
+                          <EmptySpace pref="59" max="32767" attributes="0"/>
                           <Component id="rdbSummary" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="rdbAllInfo" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -392,6 +391,10 @@
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" value="Show Summary"/>
             <Property name="toolTipText" type="java.lang.String" value="Show a summary of the iNaturalist data."/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="rdbSummaryItemStateChanged"/>
@@ -404,6 +407,10 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Show All Data"/>
             <Property name="toolTipText" type="java.lang.String" value="Show all the data recieved from iNaturalist."/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
         </Component>
       </SubComponents>

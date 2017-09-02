@@ -4,14 +4,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.HeadlessException;
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +45,7 @@ import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogSystemImages;
 
 
@@ -60,6 +67,8 @@ public class INatSightingDialog extends JDialog {
         setupUI();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+// FIXME: DIe grys gedeelte wys steeds nie (net die cursor wys... Dalk 'n Swing threading ding...
+        UtilsDialog.addModalBackgroundPanel(this, null);
         UtilsUI.attachClipboardPopup(txtInfo, true);
     }
     
@@ -71,6 +80,8 @@ public class INatSightingDialog extends JDialog {
         setupUI();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+// FIXME: DIe grys gedeelte wys steeds nie (net die cursor wys... Dalk 'n Swing threading ding...
+        UtilsDialog.addModalBackgroundPanel(this, null);
         UtilsUI.attachClipboardPopup(txtInfo, true);
     }
 
@@ -78,11 +89,36 @@ public class INatSightingDialog extends JDialog {
         linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
         lblWildLogID.setText(Long.toString(sighting.getSightingCounter()));
         if (linkedData != null && linkedData.getINaturalistData() != null && !linkedData.getINaturalistData().isEmpty()) {
-            if (rdbAllInfo.isSelected()) {
-                txtInfo.setText(linkedData.getINaturalistData());
+            if (rdbSummary.isSelected()) {
+                try {
+                    JsonObject jsonObs = PARSER.parse(linkedData.getINaturalistData()).getAsJsonObject();
+                    StringBuilder builder =new StringBuilder(256);
+                    builder.append("Species Guess: ");
+                    builder.append(jsonObs.get("species_guess").getAsString()).append(System.lineSeparator());
+                    builder.append(System.lineSeparator());
+                    builder.append("Date: ");
+                    builder.append(jsonObs.get("observed_on").getAsString()).append(System.lineSeparator());
+                    builder.append(System.lineSeparator());
+                    builder.append("Photos: ");
+                    builder.append(jsonObs.get("observation_photos_count").getAsString()).append(System.lineSeparator());
+                    builder.append("Comments: ");
+                    builder.append(jsonObs.get("comments_count").getAsString()).append(System.lineSeparator());
+                    builder.append("Identifications: ");
+                    builder.append(jsonObs.get("identifications_count").getAsString()).append(System.lineSeparator());
+                    builder.append(System.lineSeparator());
+                    builder.append("Description:").append(System.lineSeparator());
+                    JsonElement desc = jsonObs.get("description");
+                    if (desc != null) {
+                        builder.append(desc.getAsString()).append(System.lineSeparator());
+                    }
+                    txtInfo.setText(builder.toString());
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    txtInfo.setText("Could not generate the summary. Please use the 'View All Data' option instead.");
+                }
             }
             else {
-// TODO: wys summary data
                 txtInfo.setText(linkedData.getINaturalistData());
             }
             txtInfo.setCaretPosition(0);
@@ -205,7 +241,7 @@ public class INatSightingDialog extends JDialog {
 
         btnViewWebsite.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist.png"))); // NOI18N
         btnViewWebsite.setText("View Website");
-        btnViewWebsite.setToolTipText("Open this Observation on the iNaturalist website.");
+        btnViewWebsite.setToolTipText("View this Observation on the iNaturalist website.");
         btnViewWebsite.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewWebsite.setFocusPainted(false);
         btnViewWebsite.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -333,6 +369,8 @@ public class INatSightingDialog extends JDialog {
         rdbSummary.setSelected(true);
         rdbSummary.setText("Show Summary");
         rdbSummary.setToolTipText("Show a summary of the iNaturalist data.");
+        rdbSummary.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbSummary.setFocusPainted(false);
         rdbSummary.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbSummaryItemStateChanged(evt);
@@ -342,6 +380,8 @@ public class INatSightingDialog extends JDialog {
         buttonGroup1.add(rdbAllInfo);
         rdbAllInfo.setText("Show All Data");
         rdbAllInfo.setToolTipText("Show all the data recieved from iNaturalist.");
+        rdbAllInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbAllInfo.setFocusPainted(false);
 
         javax.swing.GroupLayout pnlDataLayout = new javax.swing.GroupLayout(pnlData);
         pnlData.setLayout(pnlDataLayout);
@@ -373,11 +413,10 @@ public class INatSightingDialog extends JDialog {
                         .addComponent(btnUploadData, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
                         .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
                         .addComponent(rdbSummary)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rdbAllInfo)
-                        .addGap(0, 0, 0)))
+                        .addComponent(rdbAllInfo)))
                 .addGap(5, 5, 5))
         );
 
@@ -644,10 +683,10 @@ public class INatSightingDialog extends JDialog {
             iNatObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
             iNatObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
             iNatObservation.setLongitide(UtilsGPS.getLonDecimalDegree(sighting));
-    // TODO: Wys opsie vir watse GPS privacy om te gebruik
+
+// TODO: Wys opsie vir watse GPS privacy om te gebruik
+
             iNatObservation.setGeoprivacy(INaturalistGeoprivacy._private);
-// TODO: wys finale waardes
-            iNatObservation.setDescription("WARNING THIS IS ONLY TEST DATA");
             // Stel die "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
             iNatObservation.setObservation_field_values(new HashMap<>(1));
             iNatObservation.getObservation_field_values().put("7112", Long.toString(sighting.getSightingCounter()));
@@ -765,7 +804,7 @@ public class INatSightingDialog extends JDialog {
     }//GEN-LAST:event_btnNextImageWLActionPerformed
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        if (linkedData.getINaturalistID() != 0) {        
+        if (linkedData.getINaturalistID() != 0) {
             // Maak seker die Auth Token is OK
             if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
                 INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
@@ -780,7 +819,9 @@ public class INatSightingDialog extends JDialog {
                         && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
                     INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
                     iNatPhoto.setObservation_id(linkedData.getINaturalistID());
+                    
 // TODO: Stel die upload size
+
                     iNatPhoto.setFile(lstWildLogFiles.get(imageCounterWL).getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE));
                     INatAPI.uploadPhoto(iNatPhoto, WildLogApp.getINaturalistToken());
                 }
@@ -809,7 +850,53 @@ public class INatSightingDialog extends JDialog {
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnDownloadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadImageActionPerformed
-// TODO: Save die image as 'n file in die workspace
+        if (linkedData.getINaturalistID() != 0) {
+            try {
+                getGlassPane().setVisible(true);
+                getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                // Kry die foto vanaf iNaturalist
+                JsonElement jsonElement = PARSER.parse(linkedData.getINaturalistData());
+                JsonArray photos = jsonElement.getAsJsonObject().get("observation_photos").getAsJsonArray();
+                if (photos.size() > 0 && imageCounterINat < photos.size()) {
+                    String photoURL = "https://static.inaturalist.org/photos/" 
+                            + photos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject().get("id").getAsString() 
+                            + "/original.jpg";
+                    final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
+                    UtilsFileProcessing.createFileFromStream(new BufferedInputStream(new URL(photoURL).openStream()), tempFile);
+                    UtilsFileProcessing.performFileUpload(sighting, Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()), 
+                            new File[] {tempFile.toFile()}, new Runnable() {
+                        @Override
+                        public void run() {
+                            // Delete die tydelikke file
+                            try {
+                                Files.delete(tempFile);
+                            }
+                            catch (IOException ex) {
+                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            }
+                            // Laai die nuwe inligitng op die UI
+                            setupUI();
+                        }
+                    }, app, false, this, true, false);
+                }
+                else {
+                    setupNumberOfImagesINat(0);
+                }
+            }
+            catch (Exception ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                WLOptionPane.showMessageDialog(this,
+                        "<html>The photo was not correctly downloaded from iNaturalist.</html>",
+                        "Download Error", WLOptionPane.ERROR_MESSAGE);
+            }
+            finally {
+                getGlassPane().setCursor(Cursor.getDefaultCursor());
+                getGlassPane().setVisible(false);
+            }
+        }
+        else {
+            showMessageForNoINatID();
+        }
     }//GEN-LAST:event_btnDownloadImageActionPerformed
 
     private void btnPreviousImageINatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageINatActionPerformed

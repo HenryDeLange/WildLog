@@ -119,6 +119,7 @@ import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
+import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -366,6 +367,8 @@ public final class WildLogView extends JFrame {
         mnuImportCSV = new javax.swing.JMenuItem();
         jSeparator13 = new javax.swing.JPopupMenu.Separator();
         btnImportIUCNList = new javax.swing.JMenuItem();
+        jSeparator25 = new javax.swing.JPopupMenu.Separator();
+        mnuImportINaturalist = new javax.swing.JMenuItem();
         jSeparator12 = new javax.swing.JPopupMenu.Separator();
         mnuImportWildNote = new javax.swing.JMenuItem();
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
@@ -1048,6 +1051,20 @@ public final class WildLogView extends JFrame {
             }
         });
         importMenu.add(btnImportIUCNList);
+
+        jSeparator25.setName("jSeparator25"); // NOI18N
+        importMenu.add(jSeparator25);
+
+        mnuImportINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
+        mnuImportINaturalist.setText("Import iNaturalist Observations");
+        mnuImportINaturalist.setToolTipText("Import observations from iNaturalist.");
+        mnuImportINaturalist.setName("mnuImportINaturalist"); // NOI18N
+        mnuImportINaturalist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuImportINaturalistActionPerformed(evt);
+            }
+        });
+        importMenu.add(mnuImportINaturalist);
 
         jSeparator12.setName("jSeparator12"); // NOI18N
         importMenu.add(jSeparator12);
@@ -4115,6 +4132,11 @@ public final class WildLogView extends JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuINaturalistTokenActionPerformed
 
+    private void mnuImportINaturalistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportINaturalistActionPerformed
+        INatImportDialog dialog = new INatImportDialog(this);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_mnuImportINaturalistActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4188,6 +4210,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator22;
     private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator24;
+    private javax.swing.JPopupMenu.Separator jSeparator25;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
@@ -4238,6 +4261,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuINaturalistToken;
     private javax.swing.JMenuItem mnuImportCSV;
     private javax.swing.JMenuItem mnuImportCSVBasic;
+    private javax.swing.JMenuItem mnuImportINaturalist;
     private javax.swing.JMenuItem mnuImportWildNote;
     private javax.swing.JMenuItem mnuImportWorkspace;
     private javax.swing.JMenuItem mnuMapStartMenuItem;
