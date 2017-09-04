@@ -66,6 +66,7 @@ public class INatSightingDialog extends JDialog {
         initComponents();
         setupUI();
         UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
 // FIXME: DIe grys gedeelte wys steeds nie (net die cursor wys... Dalk 'n Swing threading ding...
         UtilsDialog.addModalBackgroundPanel(this, null);
@@ -79,6 +80,7 @@ public class INatSightingDialog extends JDialog {
         initComponents();
         setupUI();
         UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
 // FIXME: DIe grys gedeelte wys steeds nie (net die cursor wys... Dalk 'n Swing threading ding...
         UtilsDialog.addModalBackgroundPanel(this, null);
@@ -96,8 +98,8 @@ public class INatSightingDialog extends JDialog {
                     builder.append("Species Guess: ");
                     builder.append(jsonObs.get("species_guess").getAsString()).append(System.lineSeparator());
                     builder.append(System.lineSeparator());
-                    builder.append("Date: ");
-                    builder.append(jsonObs.get("observed_on").getAsString()).append(System.lineSeparator());
+                    builder.append("Date and Time: ");
+                    builder.append(jsonObs.get("observed_on_string").getAsString()).append(System.lineSeparator());
                     builder.append(System.lineSeparator());
                     builder.append("Photos: ");
                     builder.append(jsonObs.get("observation_photos_count").getAsString()).append(System.lineSeparator());
@@ -184,12 +186,16 @@ public class INatSightingDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroupInfo = new javax.swing.ButtonGroup();
+        buttonGroupGPS = new javax.swing.ButtonGroup();
         lblTitle = new javax.swing.JLabel();
         pnlButtons = new javax.swing.JPanel();
         btnOK = new javax.swing.JButton();
         btnViewWebsite = new javax.swing.JButton();
         btnUnlink = new javax.swing.JButton();
+        rdbGPSOpen = new javax.swing.JRadioButton();
+        rdbGPSObscured = new javax.swing.JRadioButton();
+        rdbGPSPrivate = new javax.swing.JRadioButton();
         pnlIDs = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblWildLogID = new javax.swing.JLabel();
@@ -265,39 +271,75 @@ public class INatSightingDialog extends JDialog {
             }
         });
 
+        buttonGroupGPS.add(rdbGPSOpen);
+        rdbGPSOpen.setSelected(true);
+        rdbGPSOpen.setText("Open GPS");
+        rdbGPSOpen.setToolTipText("Upload the GPS position with open access in iNaturalist.");
+        rdbGPSOpen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbGPSOpen.setFocusPainted(false);
+
+        buttonGroupGPS.add(rdbGPSObscured);
+        rdbGPSObscured.setText("Obscured GPS");
+        rdbGPSObscured.setToolTipText("Upload the GPS position with obscured access in iNaturalist.");
+        rdbGPSObscured.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbGPSObscured.setFocusPainted(false);
+
+        buttonGroupGPS.add(rdbGPSPrivate);
+        rdbGPSPrivate.setText("Private GPS");
+        rdbGPSPrivate.setToolTipText("Upload the GPS position with private access in iNaturalist.");
+        rdbGPSPrivate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbGPSPrivate.setFocusPainted(false);
+
         javax.swing.GroupLayout pnlButtonsLayout = new javax.swing.GroupLayout(pnlButtons);
         pnlButtons.setLayout(pnlButtonsLayout);
         pnlButtonsLayout.setHorizontalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnViewWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                    .addComponent(btnOK, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                    .addComponent(btnUnlink, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
+                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlButtonsLayout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnViewWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnOK, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnUnlink, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
+                    .addGroup(pnlButtonsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(rdbGPSOpen))
+                    .addGroup(pnlButtonsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(rdbGPSObscured))
+                    .addGroup(pnlButtonsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(rdbGPSPrivate)))
                 .addGap(5, 5, 5))
         );
         pnlButtonsLayout.setVerticalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addComponent(btnViewWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
-                .addComponent(btnUnlink, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(btnViewWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(btnUnlink, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(rdbGPSOpen)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rdbGPSObscured)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rdbGPSPrivate)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlIDs.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("WildLog ID:");
 
         lblWildLogID.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblWildLogID.setText("Unknown...");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("iNaturalist ID:");
 
         lblINaturalistID.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -330,7 +372,7 @@ public class INatSightingDialog extends JDialog {
                 .addGap(3, 3, 3))
         );
 
-        pnlData.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "iNaturalist Information:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        pnlData.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "iNaturalist Information:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         scrTextArea.setMaximumSize(new java.awt.Dimension(375, 32767));
         scrTextArea.setMinimumSize(new java.awt.Dimension(185, 23));
@@ -365,7 +407,7 @@ public class INatSightingDialog extends JDialog {
             }
         });
 
-        buttonGroup1.add(rdbSummary);
+        buttonGroupInfo.add(rdbSummary);
         rdbSummary.setSelected(true);
         rdbSummary.setText("Show Summary");
         rdbSummary.setToolTipText("Show a summary of the iNaturalist data.");
@@ -377,7 +419,7 @@ public class INatSightingDialog extends JDialog {
             }
         });
 
-        buttonGroup1.add(rdbAllInfo);
+        buttonGroupInfo.add(rdbAllInfo);
         rdbAllInfo.setText("Show All Data");
         rdbAllInfo.setToolTipText("Show all the data recieved from iNaturalist.");
         rdbAllInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -411,16 +453,16 @@ public class INatSightingDialog extends JDialog {
                     .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlDataLayout.createSequentialGroup()
                         .addComponent(btnUploadData, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
+                        .addGap(10, 10, 10)
                         .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(rdbSummary)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(rdbAllInfo)))
-                .addGap(5, 5, 5))
+                .addGap(3, 3, 3))
         );
 
-        pnlWildLogImages.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "WildLog Images", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        pnlWildLogImages.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "WildLog Images", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         btnPreviousImageWL.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImageWL.setToolTipText("Load previous WildLog Image.");
@@ -504,7 +546,7 @@ public class INatSightingDialog extends JDialog {
                 .addGap(3, 3, 3))
         );
 
-        pnlINatImages.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "iNaturalist Images", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+        pnlINatImages.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "iNaturalist Images", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
         btnNextImageINat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImageINat.setToolTipText("Load next iNaturalist Image.");
@@ -624,7 +666,7 @@ public class INatSightingDialog extends JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTitle)
@@ -633,7 +675,7 @@ public class INatSightingDialog extends JDialog {
                         .addGap(3, 3, 3)
                         .addComponent(pnlData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(pnlButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(3, 3, 3)
+                .addGap(2, 2, 2)
                 .addComponent(pnlImages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
         );
@@ -683,10 +725,17 @@ public class INatSightingDialog extends JDialog {
             iNatObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
             iNatObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
             iNatObservation.setLongitide(UtilsGPS.getLonDecimalDegree(sighting));
-
-// TODO: Wys opsie vir watse GPS privacy om te gebruik
-
-            iNatObservation.setGeoprivacy(INaturalistGeoprivacy._private);
+            if (rdbGPSOpen.isSelected()) {
+                iNatObservation.setGeoprivacy(INaturalistGeoprivacy.open);
+            }
+            else
+            if (rdbGPSObscured.isSelected()) {
+                iNatObservation.setGeoprivacy(INaturalistGeoprivacy.obscured);
+            }
+            else
+            if (rdbGPSPrivate.isSelected()) {
+                iNatObservation.setGeoprivacy(INaturalistGeoprivacy._private);
+            }
             // Stel die "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
             iNatObservation.setObservation_field_values(new HashMap<>(1));
             iNatObservation.getObservation_field_values().put("7112", Long.toString(sighting.getSightingCounter()));
@@ -714,7 +763,7 @@ public class INatSightingDialog extends JDialog {
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             WLOptionPane.showMessageDialog(this,
-                    "<html>The WildLog Observation was not correctly uploaded to iNaturalist.</html>",
+                    "<html>The WildLog Observation was not uploaded to iNaturalist.</html>",
                     "Upload Error", WLOptionPane.ERROR_MESSAGE);
         }
         finally {
@@ -743,7 +792,7 @@ public class INatSightingDialog extends JDialog {
             catch (Exception ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 WLOptionPane.showMessageDialog(this,
-                        "<html>The Observation was not correctly removed from iNaturalist.</html>",
+                        "<html>The Observation was not removed from iNaturalist.</html>",
                         "Delete Error", WLOptionPane.ERROR_MESSAGE);
             }
             finally {
@@ -778,7 +827,7 @@ public class INatSightingDialog extends JDialog {
             catch (Exception ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 WLOptionPane.showMessageDialog(this,
-                        "<html>The Observation was not correctly downloaded from iNaturalist.</html>",
+                        "<html>The Observation was not downloaded from iNaturalist.</html>",
                         "Download Error", WLOptionPane.ERROR_MESSAGE);
             }
             finally {
@@ -819,10 +868,7 @@ public class INatSightingDialog extends JDialog {
                         && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
                     INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
                     iNatPhoto.setObservation_id(linkedData.getINaturalistID());
-                    
-// TODO: Stel die upload size
-
-                    iNatPhoto.setFile(lstWildLogFiles.get(imageCounterWL).getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE));
+                    iNatPhoto.setFile(lstWildLogFiles.get(imageCounterWL).getAbsolutePath());
                     INatAPI.uploadPhoto(iNatPhoto, WildLogApp.getINaturalistToken());
                 }
                 else {
@@ -834,7 +880,7 @@ public class INatSightingDialog extends JDialog {
             catch (Exception ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 WLOptionPane.showMessageDialog(this,
-                        "<html>The WildLog Image was not correctly uploaded to iNaturalist.</html>",
+                        "<html>The WildLog Image was not uploaded to iNaturalist.</html>",
                         "Upload Error", WLOptionPane.ERROR_MESSAGE);
             }
             finally {
@@ -886,7 +932,7 @@ public class INatSightingDialog extends JDialog {
             catch (Exception ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 WLOptionPane.showMessageDialog(this,
-                        "<html>The photo was not correctly downloaded from iNaturalist.</html>",
+                        "<html>The photo was not downloaded from iNaturalist.</html>",
                         "Download Error", WLOptionPane.ERROR_MESSAGE);
             }
             finally {
@@ -951,7 +997,8 @@ public class INatSightingDialog extends JDialog {
     private javax.swing.JButton btnUploadData;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.JButton btnViewWebsite;
-    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroupGPS;
+    private javax.swing.ButtonGroup buttonGroupInfo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblINaturalistID;
@@ -968,6 +1015,9 @@ public class INatSightingDialog extends JDialog {
     private javax.swing.JPanel pnlImages;
     private javax.swing.JPanel pnlWildLogImages;
     private javax.swing.JRadioButton rdbAllInfo;
+    private javax.swing.JRadioButton rdbGPSObscured;
+    private javax.swing.JRadioButton rdbGPSOpen;
+    private javax.swing.JRadioButton rdbGPSPrivate;
     private javax.swing.JRadioButton rdbSummary;
     private javax.swing.JScrollPane scrTextArea;
     private javax.swing.JTextPane txtInfo;
