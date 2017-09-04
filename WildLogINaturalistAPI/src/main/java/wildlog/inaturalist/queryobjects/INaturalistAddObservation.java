@@ -61,7 +61,7 @@ public class INaturalistAddObservation {
             stringBuilder.append("observation[latitude]=").append(latitude).append('&');
         }
         if (longitide >= -180 && longitide <= 180 && longitide != 0) {
-            stringBuilder.append("observation[longitide]=").append(longitide).append('&');
+            stringBuilder.append("observation[longitude]=").append(longitide).append('&');
         }
         if (map_scale >= 0 && map_scale <= 19) {
             stringBuilder.append("observation[map_scale]=").append(map_scale).append('&');
