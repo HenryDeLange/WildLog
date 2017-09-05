@@ -2,20 +2,30 @@ package wildlog.ui.panels.inaturalist.dialogs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import java.awt.Desktop;
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.inaturalist.INatAPI;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogPaths;
 
 
 public class INatImportDialog extends JDialog {
@@ -198,7 +208,6 @@ public class INatImportDialog extends JDialog {
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the iNaturalist Import");
                 
-// TODO
                 
                 setMessage("Done with the iNaturalist import");
                 return null;
@@ -208,6 +217,38 @@ public class INatImportDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnViewWebsite1ActionPerformed
 
+    private void importPhotos(JsonArray inJsonArrayPhotos, Sighting inSighting) {
+//        JsonElement jsonElement = PARSER.parse(linkedData.getINaturalistData());
+//        JsonArray photos = jsonElement.getAsJsonObject().get("observation_photos").getAsJsonArray();
+        for (int imageCounterINat = 0; imageCounterINat < inJsonArrayPhotos.size(); imageCounterINat++) {
+            String photoURL = "https://static.inaturalist.org/photos/" 
+                    + inJsonArrayPhotos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject().get("id").getAsString() 
+                    + "/original.jpg";
+            final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
+            try {
+                UtilsFileProcessing.createFileFromStream(new BufferedInputStream(new URL(photoURL).openStream()), tempFile);
+                UtilsFileProcessing.performFileUpload(inSighting, Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(inSighting.toPath()), 
+                        new File[] {tempFile.toFile()}, new Runnable() {
+                    @Override
+                    public void run() {
+                        // Delete die tydelikke file
+                        try {
+                            Files.delete(tempFile);
+                        }
+                        catch (IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        }
+                        // Laai die nuwe inligitng op die UI
+// TODO update progress bar
+                    }
+                }, app, false, INatImportDialog.this, true, false);
+            }
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOK;
     private javax.swing.JButton btnViewWebsite;
