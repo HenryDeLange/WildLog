@@ -11,6 +11,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
@@ -99,7 +100,7 @@ public class MergeSightingDialog extends JDialog {
         jLabel3.setName("jLabel3"); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("This will move the Files associated with the selected Observation(s) to the another Observation.");
+        jLabel4.setText("This will move the Files and linked iNaturalist data from the selected Observation(s) to the another Observation.");
         jLabel4.setName("jLabel4"); // NOI18N
 
         chkDeleteSightings.setSelected(true);
@@ -125,9 +126,11 @@ public class MergeSightingDialog extends JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(chkDeleteSightings)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 661, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(chkDeleteSightings)
+                        .addGap(0, 469, Short.MAX_VALUE))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -156,12 +159,23 @@ public class MergeSightingDialog extends JDialog {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstSightingsTo.getSelectedIndex() >= 0 && lstSightingsFrom.getSelectedIndex() >= 0) {
             Sighting destinationSighting = (Sighting) lstSightingsTo.getSelectedValue();
+            INaturalistLinkedData destinationLinkedData = app.getDBI().findINaturalistLinkedData(
+                    destinationSighting.getSightingCounter(), 0, INaturalistLinkedData.class);
             for (Sighting sighting : (List<Sighting>) lstSightingsFrom.getSelectedValuesList()) {
+                // Move files
                 List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
                 for (WildLogFile file : lstFiles) {
                     file.setId(destinationSighting.getWildLogFileID());
                     app.getDBI().updateWildLogFile(file);
                 }
+                // Move iNaturalist link (if none is already present on the To Sighting)
+                INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
+                if (destinationLinkedData == null && linkedData != null && linkedData.getINaturalistID() != 0) {
+                    destinationLinkedData = linkedData;
+                    destinationLinkedData.setWildlogID(destinationSighting.getSightingCounter());
+                    app.getDBI().updateINaturalistLinkedData(destinationLinkedData);
+                }
+                // Delete Sighting
                 if (chkDeleteSightings.isSelected()) {
                     app.getDBI().deleteSighting(sighting.getSightingCounter());
                 }

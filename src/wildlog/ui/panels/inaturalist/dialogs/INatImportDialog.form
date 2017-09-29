@@ -8,14 +8,14 @@
       <Connection code="new ImageIcon(WildLogApp.class.getResource(&quot;resources/icons/iNaturalist_small.png&quot;)).getImage()" type="code"/>
     </Property>
     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[800, 300]"/>
+      <Dimension value="[800, 420]"/>
     </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[600, 240]"/>
+      <Dimension value="[600, 380]"/>
     </Property>
     <Property name="modal" type="boolean" value="true"/>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[600, 260]"/>
+      <Dimension value="[600, 390]"/>
     </Property>
   </Properties>
   <SyntheticProperties>
@@ -38,25 +38,25 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="lblTitle" pref="456" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jLabel3" pref="0" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="lblTitle" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnViewWebsite1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="jLabel3" pref="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="pnlButtons" min="-2" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="btnFindMissingInWildLog" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnImport" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnFindMissingInINaturalist" alignment="1" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -65,15 +65,19 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="pnlButtons" min="-2" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="15" max="32767" attributes="0"/>
-                      <Component id="btnViewWebsite1" min="-2" pref="80" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                      <Component id="jLabel3" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="pnlButtons" min="-2" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace pref="11" max="32767" attributes="0"/>
+              <Component id="btnImport" min="-2" pref="80" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <Component id="btnFindMissingInWildLog" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <Component id="btnFindMissingInINaturalist" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -144,7 +148,7 @@
               <Image iconType="3" name="/wildlog/resources/icons/iNaturalist.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="View Website"/>
-            <Property name="toolTipText" type="java.lang.String" value="View the authenticated user on the iNaturalist website."/>
+            <Property name="toolTipText" type="java.lang.String" value="View the authenticated user&apos;s account on the iNaturalist website."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -165,10 +169,11 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;This process will import iNaturalist observations of the authorized iNaturalist user. All observations that don&apos;t already have an associated &lt;i&gt;WildLog_ID&lt;/i&gt; obseration field value will be imported. After the import the associated &lt;i&gt;WildLog_ID&lt;/i&gt; observation field will be added to each iNaturalist observation.&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;This process will download iNaturalist Observations of the authorized iNaturalist user and import it into this WildLog Workspace.&#xa;&lt;br /&gt;&lt;br /&gt;All observations that don&apos;t already have an associated &lt;i&gt;WildLog_ID&lt;/i&gt; obseration field value will be imported. After the import the associated &lt;i&gt;WildLog_ID&lt;/i&gt; observation field will be added to each iNaturalist observation.&lt;/html&gt;"/>
+        <Property name="verticalTextPosition" type="int" value="1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btnViewWebsite1">
+    <Component class="javax.swing.JButton" name="btnImport">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="14" style="1"/>
@@ -176,7 +181,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/ShowGPS.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Import new iNaturalist Observations"/>
+        <Property name="text" type="java.lang.String" value="Import all unlinked iNaturalist Observations into this Workspace"/>
         <Property name="toolTipText" type="java.lang.String" value="View the authenticated user on the iNaturalist website."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -188,7 +193,53 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewWebsite1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImportActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnFindMissingInWildLog">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="13" style="0"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/SelectClear.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Find linked iNaturalist Observations not present in this WildLog Workspace"/>
+        <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;List all iNaturalist Observations on the specified account which have a &lt;i&gt;WildLog_ID&lt;/i&gt;, &#xa;&lt;br /&gt;but the matching WildLog Observation could not be found in this Workspace.&lt;/html&gt;"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="iconTextGap" type="int" value="8"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[6, 20, 6, 20]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFindMissingInWildLogActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnFindMissingInINaturalist">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="13" style="0"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/SelectClear.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Find linked WildLog Observations not present on the iNaturalist Account"/>
+        <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;List all WildLog Observations in this Workspace which have a linked iNaturalist record, &#xa;&lt;br /&gt;but the iNaturalist Observation could not be found on the specified account.&lt;/html&gt;"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="iconTextGap" type="int" value="8"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[6, 20, 6, 20]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFindMissingInINaturalistActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

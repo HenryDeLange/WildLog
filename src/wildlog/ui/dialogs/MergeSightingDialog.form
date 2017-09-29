@@ -50,14 +50,17 @@
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="chkDeleteSightings" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel4" min="-2" pref="661" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="chkDeleteSightings" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="469" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="jLabel4" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnConfirm" min="-2" pref="110" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -175,7 +178,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="This will move the Files associated with the selected Observation(s) to the another Observation."/>
+        <Property name="text" type="java.lang.String" value="This will move the Files and linked iNaturalist data from the selected Observation(s) to the another Observation."/>
         <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
       </Properties>
     </Component>

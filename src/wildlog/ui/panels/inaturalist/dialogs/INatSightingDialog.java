@@ -956,9 +956,11 @@ public class INatSightingDialog extends JDialog {
                         JsonElement jsonElement = PARSER.parse(linkedData.getINaturalistData());
                         JsonArray photos = jsonElement.getAsJsonObject().get("observation_photos").getAsJsonArray();
                         if (photos.size() > 0 && imageCounterINat < photos.size()) {
-                            String photoURL = "https://static.inaturalist.org/photos/" 
-                                    + photos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject().get("id").getAsString() 
-                                    + "/original.jpg";
+//                            String photoURL = "https://static.inaturalist.org/photos/" 
+//                                    + photos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject().get("id").getAsString() 
+//                                    + "/original.jpg";
+                            String photoURL = photos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject()
+                                    .get("large_url").getAsString().replace("large", "original");
                             final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
                             try {
                                 UtilsFileProcessing.createFileFromStream(new BufferedInputStream(new URL(photoURL).openStream()), tempFile);

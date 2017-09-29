@@ -1,28 +1,40 @@
 package wildlog.ui.panels.inaturalist.dialogs;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.JsonObject;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.INaturalistLinkedData;
+import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.inaturalist.INatAPI;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -30,15 +42,14 @@ import wildlog.utils.WildLogPaths;
 
 public class INatImportDialog extends JDialog {
     private final WildLogApp app = WildLogApp.getApplication();
-    private final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final JsonParser PARSER = new JsonParser();
 
-
+    
     public INatImportDialog(JFrame inParent) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
         initComponents();
         UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
         UtilsDialog.addModalBackgroundPanel(this, null);
     }
@@ -48,6 +59,7 @@ public class INatImportDialog extends JDialog {
         WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
         initComponents();
         UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
         UtilsDialog.addModalBackgroundPanel(this, null);
     }
@@ -64,15 +76,17 @@ public class INatImportDialog extends JDialog {
         btnOK = new javax.swing.JButton();
         btnViewWebsite = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        btnViewWebsite1 = new javax.swing.JButton();
+        btnImport = new javax.swing.JButton();
+        btnFindMissingInWildLog = new javax.swing.JButton();
+        btnFindMissingInINaturalist = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import iNaturalist Observations");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist_small.png")).getImage());
-        setMaximumSize(new java.awt.Dimension(800, 300));
-        setMinimumSize(new java.awt.Dimension(600, 240));
+        setMaximumSize(new java.awt.Dimension(800, 420));
+        setMinimumSize(new java.awt.Dimension(600, 380));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(600, 260));
+        setPreferredSize(new java.awt.Dimension(600, 390));
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -92,7 +106,7 @@ public class INatImportDialog extends JDialog {
 
         btnViewWebsite.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist.png"))); // NOI18N
         btnViewWebsite.setText("View Website");
-        btnViewWebsite.setToolTipText("View the authenticated user on the iNaturalist website.");
+        btnViewWebsite.setToolTipText("View the authenticated user's account on the iNaturalist website.");
         btnViewWebsite.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewWebsite.setFocusPainted(false);
         btnViewWebsite.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -125,19 +139,48 @@ public class INatImportDialog extends JDialog {
         );
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setText("<html>This process will import iNaturalist observations of the authorized iNaturalist user. All observations that don't already have an associated <i>WildLog_ID</i> obseration field value will be imported. After the import the associated <i>WildLog_ID</i> observation field will be added to each iNaturalist observation.</html>");
+        jLabel3.setText("<html>This process will download iNaturalist Observations of the authorized iNaturalist user and import it into this WildLog Workspace.\n<br /><br />All observations that don't already have an associated <i>WildLog_ID</i> obseration field value will be imported. After the import the associated <i>WildLog_ID</i> observation field will be added to each iNaturalist observation.</html>");
+        jLabel3.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
-        btnViewWebsite1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnViewWebsite1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ShowGPS.png"))); // NOI18N
-        btnViewWebsite1.setText("Import new iNaturalist Observations");
-        btnViewWebsite1.setToolTipText("View the authenticated user on the iNaturalist website.");
-        btnViewWebsite1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewWebsite1.setFocusPainted(false);
-        btnViewWebsite1.setIconTextGap(8);
-        btnViewWebsite1.setMargin(new java.awt.Insets(6, 20, 6, 20));
-        btnViewWebsite1.addActionListener(new java.awt.event.ActionListener() {
+        btnImport.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ShowGPS.png"))); // NOI18N
+        btnImport.setText("Import all unlinked iNaturalist Observations into this Workspace");
+        btnImport.setToolTipText("View the authenticated user on the iNaturalist website.");
+        btnImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnImport.setFocusPainted(false);
+        btnImport.setIconTextGap(8);
+        btnImport.setMargin(new java.awt.Insets(6, 20, 6, 20));
+        btnImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewWebsite1ActionPerformed(evt);
+                btnImportActionPerformed(evt);
+            }
+        });
+
+        btnFindMissingInWildLog.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnFindMissingInWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SelectClear.png"))); // NOI18N
+        btnFindMissingInWildLog.setText("Find linked iNaturalist Observations not present in this WildLog Workspace");
+        btnFindMissingInWildLog.setToolTipText("<html>List all iNaturalist Observations on the specified account which have a <i>WildLog_ID</i>, \n<br />but the matching WildLog Observation could not be found in this Workspace.</html>");
+        btnFindMissingInWildLog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFindMissingInWildLog.setFocusPainted(false);
+        btnFindMissingInWildLog.setIconTextGap(8);
+        btnFindMissingInWildLog.setMargin(new java.awt.Insets(6, 20, 6, 20));
+        btnFindMissingInWildLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindMissingInWildLogActionPerformed(evt);
+            }
+        });
+
+        btnFindMissingInINaturalist.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnFindMissingInINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SelectClear.png"))); // NOI18N
+        btnFindMissingInINaturalist.setText("Find linked WildLog Observations not present on the iNaturalist Account");
+        btnFindMissingInINaturalist.setToolTipText("<html>List all WildLog Observations in this Workspace which have a linked iNaturalist record, \n<br />but the iNaturalist Observation could not be found on the specified account.</html>");
+        btnFindMissingInINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFindMissingInINaturalist.setFocusPainted(false);
+        btnFindMissingInINaturalist.setIconTextGap(8);
+        btnFindMissingInINaturalist.setMargin(new java.awt.Insets(6, 20, 6, 20));
+        btnFindMissingInINaturalist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFindMissingInINaturalistActionPerformed(evt);
             }
         });
 
@@ -146,33 +189,38 @@ public class INatImportDialog extends JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
-                                .addGap(5, 5, 5))
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnViewWebsite1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(5, 5, 5))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnFindMissingInWildLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnFindMissingInINaturalist, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTitle)
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                        .addComponent(btnViewWebsite1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(btnImport, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(btnFindMissingInWildLog)
+                .addGap(15, 15, 15)
+                .addComponent(btnFindMissingInINaturalist)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -186,6 +234,8 @@ public class INatImportDialog extends JDialog {
             dialog.setVisible(true);
         }
         try {
+            getGlassPane().setVisible(true);
+            getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             JsonElement jsonElement = INatAPI.getAuthenticatedUser(WildLogApp.getINaturalistToken());
             int userID = jsonElement.getAsJsonObject().get("id").getAsInt();
             if (userID > 0) {
@@ -195,6 +245,15 @@ public class INatImportDialog extends JDialog {
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
+        finally {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    getGlassPane().setCursor(Cursor.getDefaultCursor());
+                    getGlassPane().setVisible(false);
+                }
+            });
+        }
     }//GEN-LAST:event_btnViewWebsiteActionPerformed
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
@@ -202,30 +261,90 @@ public class INatImportDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnOKActionPerformed
 
-    private void btnViewWebsite1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewWebsite1ActionPerformed
+    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
+        // Maak seker die Auth Token is OK
+        if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+            INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
+            dialog.setVisible(true);
+        }
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
+                setTaskProgress(0);
                 setMessage("Starting the iNaturalist Import");
-                
-                
+                setTaskProgress(1);
+                setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
+                try {
+                    JsonElement userJsonElement = INatAPI.getAuthenticatedUser(WildLogApp.getINaturalistToken());
+                    String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
+                    setTaskProgress(2);
+                    setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
+                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
+                    setTaskProgress(5);
+                    setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
+                    String locationName = "iNaturalist Observations";
+                    if (app.getDBI().countLocations(locationName) == 0) {
+                        app.getDBI().createLocation(new Location(locationName));
+                    }
+                    String visitName = "iNaturalist Import " + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now());
+                    if (app.getDBI().countVisits(visitName, locationName) == 0) {
+                        app.getDBI().createVisit(new Visit(visitName, locationName));
+                    }
+                    for (int t = 0; t < lstObservationsJsonObjects.size(); t++) {
+                        JsonObject iNatFullObs = INatAPI.getObservation(lstObservationsJsonObjects.get(t).get("id").getAsLong()).getAsJsonObject();
+                        Sighting sighting = new Sighting();
+                        LocalDateTime localDateTime = ZonedDateTime.parse(
+                                iNatFullObs.get("time_observed_at").getAsString() + " " + iNatFullObs.get("time_zone").getAsString(),
+                                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX' 'VV")).toLocalDateTime();
+                        sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime));
+                        sighting.setLocationName(locationName);
+                        sighting.setVisitName(visitName);
+                        String scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
+                        List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
+                        if (lstElements != null && lstElements.size() == 1) {
+                            sighting.setElementName(lstElements.get(0).getPrimaryName());
+                        }
+                        else {
+                            // If no mathc was found on an Element's Scientific Name, then use it as the Primary Name
+                            if (app.getDBI().countElements(scientificName, null) == 0) {
+                                app.getDBI().createElement(new Element(scientificName));
+                            }
+                            sighting.setElementName(scientificName);
+                        }
+                        // Save the Sighting
+                        app.getDBI().createSighting(sighting, false);
+                        // Update the iNaturalist observation_field_values
+// TODO
+                        // Save the LinkedData
+// TODO
+                        // Download the images
+                        importPhotos(iNatFullObs.getAsJsonArray("observation_photos"), sighting);
+                        // Update progress
+                        setTaskProgress(5 + (int) (((double) t / (double) lstObservationsJsonObjects.size()) * 94));
+                        setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
+                    }
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    WLOptionPane.showMessageDialog(INatImportDialog.this,
+                            "<html>There was a problem importing the iNaturalist data.</html>",
+                            "Import Error", WLOptionPane.ERROR_MESSAGE);
+                }
+                setTaskProgress(100);
                 setMessage("Done with the iNaturalist import");
                 return null;
             }
         });
         setVisible(false);
         dispose();
-    }//GEN-LAST:event_btnViewWebsite1ActionPerformed
+    }//GEN-LAST:event_btnImportActionPerformed
 
-    private void importPhotos(JsonArray inJsonArrayPhotos, Sighting inSighting) {
-//        JsonElement jsonElement = PARSER.parse(linkedData.getINaturalistData());
-//        JsonArray photos = jsonElement.getAsJsonObject().get("observation_photos").getAsJsonArray();
-        for (int imageCounterINat = 0; imageCounterINat < inJsonArrayPhotos.size(); imageCounterINat++) {
-            String photoURL = "https://static.inaturalist.org/photos/" 
-                    + inJsonArrayPhotos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject().get("id").getAsString() 
-                    + "/original.jpg";
-            final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
-            try {
+    private void importPhotos(JsonArray inJsonArrayPhotos, Sighting inSighting) throws MalformedURLException, IOException {
+        if (inJsonArrayPhotos != null) {
+            for (int imageCounterINat = 0; imageCounterINat < inJsonArrayPhotos.size(); imageCounterINat++) {
+                String photoURL = inJsonArrayPhotos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject().get("large_url").getAsString()
+                        .replace("large", "original");
+                final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
                 UtilsFileProcessing.createFileFromStream(new BufferedInputStream(new URL(photoURL).openStream()), tempFile);
                 UtilsFileProcessing.performFileUpload(inSighting, Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(inSighting.toPath()), 
                         new File[] {tempFile.toFile()}, new Runnable() {
@@ -238,21 +357,180 @@ public class INatImportDialog extends JDialog {
                         catch (IOException ex) {
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
-                        // Laai die nuwe inligitng op die UI
-// TODO update progress bar
                     }
                 }, app, false, INatImportDialog.this, true, false);
-            }
-            catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
     }
     
+    private void btnFindMissingInWildLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindMissingInWildLogActionPerformed
+        // Maak seker die Auth Token is OK
+        if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+            INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
+            dialog.setVisible(true);
+        }
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setTaskProgress(0);
+                setMessage("Starting the check for broken iNaturalist-WildLog links");
+                setTaskProgress(1);
+                setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
+                try {
+                    JsonElement userJsonElement = INatAPI.getAuthenticatedUser(WildLogApp.getINaturalistToken());
+                    String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
+                    setTaskProgress(2);
+                    setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
+                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
+                    setTaskProgress(5);
+                    setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
+                    for (int t = 0; t < lstObservationsJsonObjects.size(); t++) {
+
+// TODO: Write to file and then open
+
+                        // Need to load the full iNat data to get the observation_field_values as well
+                        JsonObject iNatFullObs = INatAPI.getObservation(lstObservationsJsonObjects.get(t).get("id").getAsLong()).getAsJsonObject();
+                        long iNatID = iNatFullObs.get("id").getAsLong();
+                        JsonElement observationFieldValues = iNatFullObs.get("observation_field_values");
+                        long foundWildLogID = 0;
+                        if (observationFieldValues != null) {
+                            JsonArray arrayObsFieldValues = observationFieldValues.getAsJsonArray();
+                            for (int i = 0; i < arrayObsFieldValues.size(); i++) {
+                                // Soek vir "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
+                                if (arrayObsFieldValues.get(i).getAsJsonObject().get("observation_field_id").getAsInt() == 7112) {
+                                    foundWildLogID = arrayObsFieldValues.get(i).getAsJsonObject().get("value").getAsLong();
+                                    break;
+                                }
+                            }
+                        }
+                        if (foundWildLogID > 0) {
+                            INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(0, iNatID, INaturalistLinkedData.class);
+                            if (linkedData == null || linkedData.getWildlogID() == 0) {
+                                int sightingID = app.getDBI().countSightings(foundWildLogID, null, null, null);
+                                if (sightingID == 0) {
+System.out.println("NOT LINKED IN NOR PRESENT WILDLOG, BUT LINKED FROM iNat " + iNatID);
+                                }
+                                else {
+System.out.println("NOT LINKED IN WILDLOG, BUT THE LINKED FROM iNat IS PRESENT IN WILDLOG " + iNatID);
+                                }
+                            }
+                            else {
+                                if (foundWildLogID != linkedData.getWildlogID()) {
+System.out.println("IS LINKED IN WILDLOG, BUT LINKED FROM iNat WildLogID does not match" + iNatID);
+                                }
+                                else {
+                                    int sightingID = app.getDBI().countSightings(foundWildLogID, null, null, null);
+                                    if (sightingID == 0) {
+System.out.println("IS LINKED IN WILDLOG, BUT LINKED FROM iNat does not exist" + iNatID);
+                                    }
+                                    else {
+System.out.println("THE LINK LOOKS GOOD " + iNatID);
+                                    }
+                                }
+                            }
+                        }
+                        else {
+System.out.println("NOT LINKED FROM iNat >>> " + iNatID);
+                        }
+                        setTaskProgress(5 + (int) (((double) t / (double) lstObservationsJsonObjects.size()) * 94));
+                        setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
+                    }
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    WLOptionPane.showMessageDialog(INatImportDialog.this,
+                            "<html>There was a problem processing the iNaturalist data.</html>",
+                            "Processing Error", WLOptionPane.ERROR_MESSAGE);
+                }
+                setTaskProgress(100);
+                setMessage("Done with the check for broken iNaturalist-WildLog links");
+                return null;
+            }
+        });
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnFindMissingInWildLogActionPerformed
+
+    private void btnFindMissingInINaturalistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindMissingInINaturalistActionPerformed
+        // Maak seker die Auth Token is OK
+        if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+            INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
+            dialog.setVisible(true);
+        }
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setTaskProgress(0);
+                setMessage("Starting the check for broken WildLog-iNaturalist links");
+                setTaskProgress(1);
+                setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
+                try {
+                    JsonElement userJsonElement = INatAPI.getAuthenticatedUser(WildLogApp.getINaturalistToken());
+                    String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
+                    setTaskProgress(2);
+                    setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
+                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
+                    setTaskProgress(5);
+                    setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
+                    List<Long> lstINatIDs = new ArrayList<>(lstObservationsJsonObjects.size());
+                    int t = 0;
+                    for (JsonObject jsonObject : lstObservationsJsonObjects) {
+                        // Need to load the full iNat data to get the observation_field_values as well
+                        JsonObject iNatFullObs = INatAPI.getObservation(jsonObject.get("id").getAsLong()).getAsJsonObject();
+                        lstINatIDs.add(iNatFullObs.get("id").getAsLong());
+                        setTaskProgress(5 + (int) (((double) t++ / (double) lstObservationsJsonObjects.size()) * 64));
+                        setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
+                    }
+                    
+                    setTaskProgress(70);
+                    setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
+                    List<INaturalistLinkedData> lstLinkedData = app.getDBI().listINaturalistLinkedDatas(INaturalistLinkedData.class);
+                    t = 0;
+                    for (INaturalistLinkedData linkedData : lstLinkedData) {
+                        
+// TODO: Write to file and then open
+                        
+                        if (app.getDBI().countSightings(linkedData.getWildlogID(), null, null, null) == 0) {
+System.out.println("LINK IS MISSING IN WILDLOG");
+                        }
+                        else {
+                            boolean foundLink = false;
+                            for (long iNatID : lstINatIDs) {
+                                if (iNatID == linkedData.getINaturalistID()) {
+                                    foundLink = true;
+System.out.println("LINK IS GOOD");
+                                    break;
+                                }
+                            }
+                            if (!foundLink) {
+System.out.println("LINK IS MISSING ON INAT");
+                            }
+                        }
+                        setTaskProgress(70 + (int) (((double) t++ / (double) lstObservationsJsonObjects.size()) * 29));
+                        setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
+                    }
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    WLOptionPane.showMessageDialog(INatImportDialog.this,
+                            "<html>There was a problem processing the iNaturalist data.</html>",
+                            "Processing Error", WLOptionPane.ERROR_MESSAGE);
+                }
+                setTaskProgress(100);
+                setMessage("Done with the check for broken WildLog-iNaturalist links");
+                return null;
+            }
+        });
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnFindMissingInINaturalistActionPerformed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFindMissingInINaturalist;
+    private javax.swing.JButton btnFindMissingInWildLog;
+    private javax.swing.JButton btnImport;
     private javax.swing.JButton btnOK;
     private javax.swing.JButton btnViewWebsite;
-    private javax.swing.JButton btnViewWebsite1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel pnlButtons;
