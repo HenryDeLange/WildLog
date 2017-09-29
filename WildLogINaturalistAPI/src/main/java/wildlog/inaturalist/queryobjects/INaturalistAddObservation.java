@@ -12,7 +12,7 @@ import wildlog.inaturalist.utils.UtilsINaturalist;
  * Used to add observations using [POST/observations]
  */
 public class INaturalistAddObservation {
-    private static final DateTimeFormatter ZONED_DATE_TIME_FORMAT = DateTimeFormatter.ISO_DATE_TIME;
+    private static final DateTimeFormatter ZONED_DATE_TIME_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     private String species_guess;
     private int taxon_id;
     private INaturalistIdPlease id_please;
@@ -22,7 +22,7 @@ public class INaturalistAddObservation {
     private String tag_list;
     private String place_guess;
     private double latitude;
-    private double longitide;
+    private double longitude;
     private int map_scale;
     private int positional_accuracy;
     private INaturalistGeoprivacy geoprivacy;
@@ -60,8 +60,8 @@ public class INaturalistAddObservation {
         if (latitude >= -90 && latitude <= 90 && latitude != 0) {
             stringBuilder.append("observation[latitude]=").append(latitude).append('&');
         }
-        if (longitide >= -180 && longitide <= 180 && longitide != 0) {
-            stringBuilder.append("observation[longitude]=").append(longitide).append('&');
+        if (longitude >= -180 && longitude <= 180 && longitude != 0) {
+            stringBuilder.append("observation[longitude]=").append(longitude).append('&');
         }
         if (map_scale >= 0 && map_scale <= 19) {
             stringBuilder.append("observation[map_scale]=").append(map_scale).append('&');
@@ -179,16 +179,16 @@ public class INaturalistAddObservation {
         latitude = inLatitude;
     }
 
-    public double getLongitide() {
-        return longitide;
+    public double getLongitude() {
+        return longitude;
     }
 
     /**
      * Presumed datum is WGS84. 
      * Between -180 to 180.
      */
-    public void setLongitide(double inLongitide) {
-        longitide = inLongitide;
+    public void setLongitude(double inLongitide) {
+        longitude = inLongitide;
     }
 
     public int getMap_scale() {

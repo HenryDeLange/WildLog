@@ -13,6 +13,10 @@ public enum INaturalistExtra {
      */
     identifications,
     /**
+     * ???Not documented???
+     */
+    observation_photos,
+    /**
      * Returns info about the projects the observations have been added to.
      */
     projects;
