@@ -87,6 +87,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String listElement = "SELECT * FROM ELEMENTS";
     protected static final String listFile = "SELECT * FROM FILES";
     protected static final String listAdhocData = "SELECT * FROM ADHOC";
+    protected static final String listINaturalistLinkedData = "SELECT * FROM INATURALIST";
     // Create
     protected static final String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS,GPSACCURACY) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
@@ -1146,6 +1147,38 @@ public abstract class DBI_JDBC implements DBI {
                 temp.setFieldID(results.getString("FIELDID"));
                 temp.setDataKey(results.getString("DATAKEY"));
                 temp.setDataValue(results.getString("DATAVALUE"));
+                tempList.add(temp);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+    
+    @Override
+    public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<T> tempList = new ArrayList<T>();
+        try {
+            String sql = listINaturalistLinkedData;
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
+            while (results.next()) {
+                T temp = inReturnType.newInstance();
+                temp.setWildlogID(results.getLong("WILDLOGID"));
+                temp.setINaturalistID(results.getLong("INATURALISTID"));
+                temp.setINaturalistData(results.getString("INATURALISTDATA"));
                 tempList.add(temp);
             }
         }

@@ -44,6 +44,7 @@ public interface DBI {
             String inLocationName, String inVisitName, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends WildLogFileCore> List<T> listWildLogFiles(String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
     public <T extends AdhocData> List<T> listAdhocDatas(String inFieldID, Class<T> inReturnType);
+    public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType);
 
     public <T extends ElementCore> boolean createElement(T inElement);
     public <T extends LocationCore> boolean createLocation(T inLocation);
