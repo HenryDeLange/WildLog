@@ -7,7 +7,9 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -157,7 +159,6 @@ public class INatImportDialog extends JDialog {
         });
 
         btnFindMissingInWildLog.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        btnFindMissingInWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SelectClear.png"))); // NOI18N
         btnFindMissingInWildLog.setText("Find linked iNaturalist Observations not present in this WildLog Workspace");
         btnFindMissingInWildLog.setToolTipText("<html>List all iNaturalist Observations on the specified account which have a <i>WildLog_ID</i>, \n<br />but the matching WildLog Observation could not be found in this Workspace.</html>");
         btnFindMissingInWildLog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -171,7 +172,6 @@ public class INatImportDialog extends JDialog {
         });
 
         btnFindMissingInINaturalist.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        btnFindMissingInINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SelectClear.png"))); // NOI18N
         btnFindMissingInINaturalist.setText("Find linked WildLog Observations not present on the iNaturalist Account");
         btnFindMissingInINaturalist.setToolTipText("<html>List all WildLog Observations in this Workspace which have a linked iNaturalist record, \n<br />but the iNaturalist Observation could not be found on the specified account.</html>");
         btnFindMissingInINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -376,7 +376,15 @@ public class INatImportDialog extends JDialog {
                 setMessage("Starting the check for broken iNaturalist-WildLog links");
                 setTaskProgress(1);
                 setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
+                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+                PrintWriter feedback = null;
                 try {
+                    feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                    feedback.println("---------------------------------------------------------");
+                    feedback.println("---------- iNaturalist and WildLog Link Report ----------");
+                    feedback.println("----------   (Using iNaturalist as baseline)   ----------");
+                    feedback.println("---------------------------------------------------------");
+                    feedback.println("");
                     JsonElement userJsonElement = INatAPI.getAuthenticatedUser(WildLogApp.getINaturalistToken());
                     String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
                     setTaskProgress(2);
@@ -384,10 +392,8 @@ public class INatImportDialog extends JDialog {
                     List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
                     setTaskProgress(5);
                     setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
+                    int countGoodLinks = 0;
                     for (int t = 0; t < lstObservationsJsonObjects.size(); t++) {
-
-// TODO: Write to file and then open
-
                         // Need to load the full iNat data to get the observation_field_values as well
                         JsonObject iNatFullObs = INatAPI.getObservation(lstObservationsJsonObjects.get(t).get("id").getAsLong()).getAsJsonObject();
                         long iNatID = iNatFullObs.get("id").getAsLong();
@@ -406,42 +412,69 @@ public class INatImportDialog extends JDialog {
                         if (foundWildLogID > 0) {
                             INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(0, iNatID, INaturalistLinkedData.class);
                             if (linkedData == null || linkedData.getWildlogID() == 0) {
-                                int sightingID = app.getDBI().countSightings(foundWildLogID, null, null, null);
-                                if (sightingID == 0) {
-System.out.println("NOT LINKED IN NOR PRESENT WILDLOG, BUT LINKED FROM iNat " + iNatID);
+                                if (app.getDBI().countSightings(foundWildLogID, null, null, null) == 0) {
+                                    feedback.println("iNatWrongLink  - The iNaturalist observation " + iNatID + " references the WildLog Observation "
+                                            + foundWildLogID + " which is not in this Workspace.");
                                 }
                                 else {
-System.out.println("NOT LINKED IN WILDLOG, BUT THE LINKED FROM iNat IS PRESENT IN WILDLOG " + iNatID);
+                                    feedback.println("iNatBrokenLink - The iNaturalist observation " + iNatID + " references the WildLog Observation "
+                                            + foundWildLogID + " which is present in this Workspace, but not marked as linked.");
                                 }
                             }
                             else {
                                 if (foundWildLogID != linkedData.getWildlogID()) {
-System.out.println("IS LINKED IN WILDLOG, BUT LINKED FROM iNat WildLogID does not match" + iNatID);
+                                    feedback.println("iNatMissMatch  - The iNaturalist observation " + iNatID + " references the WildLog Observation "
+                                            + foundWildLogID + " which is not the same as " + linkedData.getWildlogID() + " which is expected by the "
+                                            + "data in this Workspace.");
                                 }
                                 else {
-                                    int sightingID = app.getDBI().countSightings(foundWildLogID, null, null, null);
-                                    if (sightingID == 0) {
-System.out.println("IS LINKED IN WILDLOG, BUT LINKED FROM iNat does not exist" + iNatID);
+                                    if (app.getDBI().countSightings(foundWildLogID, null, null, null) == 0) {
+                                        feedback.println("iNatBadLink    - The iNaturalist observation " + iNatID + " references the WildLog Observation "
+                                                + foundWildLogID + " which is not in this Workspace.");
                                     }
                                     else {
-System.out.println("THE LINK LOOKS GOOD " + iNatID);
+                                        // Don't log these (the link is good)
+                                        countGoodLinks++;
                                     }
                                 }
                             }
                         }
                         else {
-System.out.println("NOT LINKED FROM iNat >>> " + iNatID);
+                            feedback.println("iNatNotLinked  - The iNaturalist observation " + iNatID + " is not linked to any WildLog Workspace.");
                         }
                         setTaskProgress(5 + (int) (((double) t / (double) lstObservationsJsonObjects.size()) * 94));
                         setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
                     }
+                    feedback.println("");
+                    feedback.println("iNatGoodLinks  - There are " + countGoodLinks + " good links between iNaturalist observations and this WildLog Workspace.");
                 }
                 catch (Exception ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     WLOptionPane.showMessageDialog(INatImportDialog.this,
                             "<html>There was a problem processing the iNaturalist data.</html>",
                             "Processing Error", WLOptionPane.ERROR_MESSAGE);
+                    if (feedback != null) {
+                        feedback.println("");
+                        feedback.println("------------------------------");
+                        feedback.println("---------- ERROR ----------");
+                        feedback.println(ex.toString());
+                        feedback.println("------------------------------");
+                        feedback.println("");
+                    }
                 }
+                finally {
+                    if (feedback != null) {
+                        feedback.println("");
+                        feedback.println("------------------------------");
+                        feedback.println("---------- FINISHED ----------");
+                        feedback.println("------------------------------");
+                        feedback.println("");
+                        feedback.flush();
+                        feedback.close();
+                    }
+                }
+                // Open the summary document
+                UtilsFileProcessing.openFile(feedbackFile);
                 setTaskProgress(100);
                 setMessage("Done with the check for broken iNaturalist-WildLog links");
                 return null;
@@ -464,7 +497,15 @@ System.out.println("NOT LINKED FROM iNat >>> " + iNatID);
                 setMessage("Starting the check for broken WildLog-iNaturalist links");
                 setTaskProgress(1);
                 setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
+                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+                PrintWriter feedback = null;
                 try {
+                    feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                    feedback.println("---------------------------------------------------------");
+                    feedback.println("---------- iNaturalist and WildLog Link Report ----------");
+                    feedback.println("----------     (Using WildLog as baseline)     ----------");
+                    feedback.println("---------------------------------------------------------");
+                    feedback.println("");
                     JsonElement userJsonElement = INatAPI.getAuthenticatedUser(WildLogApp.getINaturalistToken());
                     String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
                     setTaskProgress(2);
@@ -481,41 +522,65 @@ System.out.println("NOT LINKED FROM iNat >>> " + iNatID);
                         setTaskProgress(5 + (int) (((double) t++ / (double) lstObservationsJsonObjects.size()) * 64));
                         setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
                     }
-                    
                     setTaskProgress(70);
                     setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
                     List<INaturalistLinkedData> lstLinkedData = app.getDBI().listINaturalistLinkedDatas(INaturalistLinkedData.class);
+                    int countGoodLinks = 0;
                     t = 0;
                     for (INaturalistLinkedData linkedData : lstLinkedData) {
-                        
-// TODO: Write to file and then open
-                        
                         if (app.getDBI().countSightings(linkedData.getWildlogID(), null, null, null) == 0) {
-System.out.println("LINK IS MISSING IN WILDLOG");
+                            feedback.println("WildLogBadData - The Workspace data references the " + linkedData.getWildlogID() 
+                                    + " WildLog Observation which does not exist in this WildLog Workspace.");
                         }
                         else {
                             boolean foundLink = false;
                             for (long iNatID : lstINatIDs) {
                                 if (iNatID == linkedData.getINaturalistID()) {
                                     foundLink = true;
-System.out.println("LINK IS GOOD");
+                                    // Don't log these (the link is good)
+                                    countGoodLinks++;
                                     break;
                                 }
                             }
                             if (!foundLink) {
-System.out.println("LINK IS MISSING ON INAT");
+                                feedback.println("iNatNotLinked  - The iNaturalist observation " + linkedData.getINaturalistID() 
+                                        + " has linked data in this WildLog Workspace for WildLog Observation " + linkedData.getWildlogID() 
+                                        + ", but is not linked on iNaturalist.");
                             }
                         }
                         setTaskProgress(70 + (int) (((double) t++ / (double) lstObservationsJsonObjects.size()) * 29));
                         setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
                     }
+                    feedback.println("");
+                    feedback.println("iNatGoodLinks  - There are " + countGoodLinks + " good links between iNaturalist observations and this WildLog Workspace.");
                 }
                 catch (Exception ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     WLOptionPane.showMessageDialog(INatImportDialog.this,
                             "<html>There was a problem processing the iNaturalist data.</html>",
                             "Processing Error", WLOptionPane.ERROR_MESSAGE);
+                if (feedback != null) {
+                        feedback.println("");
+                        feedback.println("------------------------------");
+                        feedback.println("---------- ERROR ----------");
+                        feedback.println(ex.toString());
+                        feedback.println("------------------------------");
+                        feedback.println("");
+                    }
                 }
+                finally {
+                    if (feedback != null) {
+                        feedback.println("");
+                        feedback.println("------------------------------");
+                        feedback.println("---------- FINISHED ----------");
+                        feedback.println("------------------------------");
+                        feedback.println("");
+                        feedback.flush();
+                        feedback.close();
+                    }
+                }
+                // Open the summary document
+                UtilsFileProcessing.openFile(feedbackFile);
                 setTaskProgress(100);
                 setMessage("Done with the check for broken WildLog-iNaturalist links");
                 return null;

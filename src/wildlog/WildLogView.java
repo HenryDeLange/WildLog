@@ -2594,8 +2594,7 @@ public final class WildLogView extends JFrame {
                             setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
                         }
                         setProgress(72);
-                       
-
+                        
                         // ---------------------7---------------------
                         // Check GPS Accuracy
                         setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
