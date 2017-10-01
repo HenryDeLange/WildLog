@@ -21,6 +21,7 @@ import wildlog.inaturalist.queryobjects.INaturalistAddObservation;
 import wildlog.inaturalist.queryobjects.INaturalistSearchObservations;
 import wildlog.inaturalist.queryobjects.INaturalistUpdateObservation;
 import wildlog.inaturalist.queryobjects.INaturalistUploadPhoto;
+import wildlog.inaturalist.utils.UtilsINaturalist;
 
 
 public class INatAPI {
@@ -29,12 +30,14 @@ public class INatAPI {
     
     
     private INatAPI() {
-// Handige links:
+//    API Documentation
 //    http://www.inaturalist.org/pages/api+reference
-//
+
+//    WildLog App
 //    http://www.inaturalist.org/oauth/applications
 //    http://www.inaturalist.org/oauth/applications/179
-//
+
+//    WildLog_ID Field
 //    https://www.inaturalist.org/observation_fields
 //    https://www.inaturalist.org/observation_fields/7112
     }
@@ -305,6 +308,39 @@ public class INatAPI {
             urlConnection.setDoInput(true);
             urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
             urlConnection.setRequestProperty("Authorization", "Bearer " + inToken);
+            // Lees die terugvoer (dit doen ook dan eers die stuur)
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
+                JsonElement jsonElement = PARSER.parse(reader);
+                return jsonElement;
+            }
+            finally {
+                urlConnection.disconnect();
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+    
+    public static JsonElement addObservationFieldValue(long inObservation_id, int inObservation_field_id, String inValue, String inToken) {
+        try {
+            // PUT die data na iNaturalist
+            URL url = new URL("https://www.inaturalist.org/observation_field_values.json");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setDoOutput(true);
+            urlConnection.setDoInput(true);
+            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("Authorization", "Bearer " + inToken);
+            StringBuilder stringBuilder = new StringBuilder(64);
+            stringBuilder.append("observation_field_value[observation_id]=").append(inObservation_id).append('&');
+            stringBuilder.append("observation_field_value[observation_field_id]=").append(inObservation_field_id).append('&');
+            stringBuilder.append("observation_field_value[value]=").append(UtilsINaturalist.forURL(inValue));
+            try (OutputStreamWriter writer = new OutputStreamWriter(urlConnection.getOutputStream())) {
+                writer.write(stringBuilder.toString());
+                writer.flush();
+            }
             // Lees die terugvoer (dit doen ook dan eers die stuur)
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
                 JsonElement jsonElement = PARSER.parse(reader);
