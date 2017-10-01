@@ -894,6 +894,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v8 (before upgrade to 9)"));
                                     doUpdate9();
                                 }
+                                else
+                                if (results.getInt("VERSION") == 9) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v9 (before upgrade to 10)"));
+                                    doUpdate10();
+                                }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
                             }
@@ -1276,6 +1281,27 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 9");
+    }
+    
+    private void doUpdate10() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 10");
+        // This update added the new INATURALIST table
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // The INATURALIST is created automatically, if absent
+            // There are no other changes...
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=10");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 10");
     }
 
 }

@@ -1,5 +1,7 @@
 package wildlog.ui.panels.inaturalist.dialogs;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -44,6 +46,7 @@ import wildlog.utils.WildLogPaths;
 
 public class INatImportDialog extends JDialog {
     private final WildLogApp app = WildLogApp.getApplication();
+    private final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     
     public INatImportDialog(JFrame inParent) {
@@ -232,6 +235,9 @@ public class INatImportDialog extends JDialog {
         if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
             dialog.setVisible(true);
+            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                return;
+            }
         }
         try {
             getGlassPane().setVisible(true);
@@ -266,6 +272,9 @@ public class INatImportDialog extends JDialog {
         if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
             dialog.setVisible(true);
+            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                return;
+            }
         }
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
@@ -292,35 +301,53 @@ public class INatImportDialog extends JDialog {
                     }
                     for (int t = 0; t < lstObservationsJsonObjects.size(); t++) {
                         JsonObject iNatFullObs = INatAPI.getObservation(lstObservationsJsonObjects.get(t).get("id").getAsLong()).getAsJsonObject();
-                        Sighting sighting = new Sighting();
-                        LocalDateTime localDateTime = ZonedDateTime.parse(
-                                iNatFullObs.get("time_observed_at").getAsString() + " " + iNatFullObs.get("time_zone").getAsString(),
-                                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX' 'VV")).toLocalDateTime();
-                        sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime));
-                        sighting.setLocationName(locationName);
-                        sighting.setVisitName(visitName);
-                        String scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
-                        List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
-                        if (lstElements != null && lstElements.size() == 1) {
-                            sighting.setElementName(lstElements.get(0).getPrimaryName());
-                        }
-                        else {
-                            // If no mathc was found on an Element's Scientific Name, then use it as the Primary Name
-                            if (app.getDBI().countElements(scientificName, null) == 0) {
-                                app.getDBI().createElement(new Element(scientificName));
+                        JsonElement observationFieldValues = iNatFullObs.get("observation_field_values");
+                        long foundWildLogID = 0;
+                        if (observationFieldValues != null) {
+                            JsonArray arrayObsFieldValues = observationFieldValues.getAsJsonArray();
+                            for (int i = 0; i < arrayObsFieldValues.size(); i++) {
+                                // Soek vir "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
+                                if (arrayObsFieldValues.get(i).getAsJsonObject().get("observation_field_id").getAsInt() == 7112) {
+                                    foundWildLogID = arrayObsFieldValues.get(i).getAsJsonObject().get("value").getAsLong();
+                                    break;
+                                }
                             }
-                            sighting.setElementName(scientificName);
                         }
-                        // Save the Sighting
-                        app.getDBI().createSighting(sighting, false);
-                        // Update the iNaturalist observation_field_values
-// TODO
-                        // Save the LinkedData
-// TODO
-                        // Download the images
-                        importPhotos(iNatFullObs.getAsJsonArray("observation_photos"), sighting);
+                        if (foundWildLogID == 0) {
+                            Sighting sighting = new Sighting();
+                            LocalDateTime localDateTime = ZonedDateTime.parse(
+                                    iNatFullObs.get("time_observed_at").getAsString() + " " + iNatFullObs.get("time_zone").getAsString(),
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX' 'VV")).toLocalDateTime();
+                            sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime));
+                            sighting.setLocationName(locationName);
+                            sighting.setVisitName(visitName);
+                            String scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
+                            List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
+                            if (lstElements != null && lstElements.size() == 1) {
+                                sighting.setElementName(lstElements.get(0).getPrimaryName());
+                            }
+                            else {
+                                // If no match was found on an Element's Scientific Name, then use it as the Primary Name
+                                if (app.getDBI().countElements(scientificName, null) == 0) {
+                                    app.getDBI().createElement(new Element(scientificName));
+                                }
+                                sighting.setElementName(scientificName);
+                            }
+                            // Save the Sighting
+                            app.getDBI().createSighting(sighting, false);
+                            // Update the iNaturalist observation_field_values
+                            // Add "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
+                            INatAPI.addObservationFieldValue(iNatFullObs.get("id").getAsLong(), 7112, 
+                                    Long.toString(sighting.getSightingCounter()), WildLogApp.getINaturalistToken());
+                            // Save the LinkedData
+                            app.getDBI().createINaturalistLinkedData(new INaturalistLinkedData(
+                                    sighting.getSightingCounter(), iNatFullObs.get("id").getAsLong(), 
+                                    GSON.toJson(INatAPI.getObservation(iNatFullObs.get("id").getAsLong()))));
+                            // Download the images
+                            importPhotos(iNatFullObs.getAsJsonArray("observation_photos"), sighting);
+                        }
                         // Update progress
-                        setTaskProgress(5 + (int) (((double) t / (double) lstObservationsJsonObjects.size()) * 94));
+                        setTaskProgress(5 + (int) (((double) (t + 1) / (double) lstObservationsJsonObjects.size()) * 94));
                         setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
                     }
                 }
@@ -368,6 +395,9 @@ public class INatImportDialog extends JDialog {
         if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
             dialog.setVisible(true);
+            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                return;
+            }
         }
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
@@ -442,7 +472,7 @@ public class INatImportDialog extends JDialog {
                         else {
                             feedback.println("iNatNotLinked  - The iNaturalist observation " + iNatID + " is not linked to any WildLog Workspace.");
                         }
-                        setTaskProgress(5 + (int) (((double) t / (double) lstObservationsJsonObjects.size()) * 94));
+                        setTaskProgress(5 + (int) (((double) (t + 1) / (double) lstObservationsJsonObjects.size()) * 94));
                         setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
                     }
                     feedback.println("");
@@ -489,6 +519,9 @@ public class INatImportDialog extends JDialog {
         if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
             dialog.setVisible(true);
+            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                return;
+            }
         }
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
@@ -519,7 +552,7 @@ public class INatImportDialog extends JDialog {
                         // Need to load the full iNat data to get the observation_field_values as well
                         JsonObject iNatFullObs = INatAPI.getObservation(jsonObject.get("id").getAsLong()).getAsJsonObject();
                         lstINatIDs.add(iNatFullObs.get("id").getAsLong());
-                        setTaskProgress(5 + (int) (((double) t++ / (double) lstObservationsJsonObjects.size()) * 64));
+                        setTaskProgress(5 + (int) (((double) ++t / (double) lstObservationsJsonObjects.size()) * 64));
                         setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
                     }
                     setTaskProgress(70);
@@ -548,11 +581,12 @@ public class INatImportDialog extends JDialog {
                                         + ", but is not linked on iNaturalist.");
                             }
                         }
-                        setTaskProgress(70 + (int) (((double) t++ / (double) lstObservationsJsonObjects.size()) * 29));
+                        setTaskProgress(70 + (int) (((double) ++t / (double) lstLinkedData.size()) * 29));
                         setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
                     }
                     feedback.println("");
-                    feedback.println("iNatGoodLinks  - There are " + countGoodLinks + " good links between iNaturalist observations and this WildLog Workspace.");
+                    feedback.println("iNatGoodLinks  - There are " + countGoodLinks + " good links between iNaturalist observations "
+                            + "and this WildLog Workspace.");
                 }
                 catch (Exception ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

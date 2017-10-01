@@ -4132,6 +4132,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuINaturalistTokenActionPerformed
 
     private void mnuImportINaturalistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportINaturalistActionPerformed
+        tabbedPanel.setSelectedIndex(0);
         INatImportDialog dialog = new INatImportDialog(this);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuImportINaturalistActionPerformed

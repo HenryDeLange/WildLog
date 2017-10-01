@@ -716,6 +716,9 @@ public class INatSightingDialog extends JDialog {
         if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
             dialog.setVisible(true);
+            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                return;
+            }
         }
         try {
             getGlassPane().setVisible(true);
@@ -799,6 +802,9 @@ public class INatSightingDialog extends JDialog {
             if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
                 INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
                 dialog.setVisible(true);
+                if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                    return;
+                }
             }
             try {
                 getGlassPane().setVisible(true);
@@ -897,6 +903,9 @@ public class INatSightingDialog extends JDialog {
             if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
                 INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
                 dialog.setVisible(true);
+                if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                    return;
+                }
             }
             try {
                 getGlassPane().setVisible(true);
