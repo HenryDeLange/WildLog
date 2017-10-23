@@ -72,7 +72,8 @@ public class INatAPI {
             final List<JsonObject> lstAllINaturalistResults = new ArrayList<>(PAGE_LIMIT_INATURALIST);
             do {
                 requestPage = requestPage + 1; // Note: Increase first because page 0 and 1 seems to return the same info
-                URL url = new URL("https://www.inaturalist.org/observations/" + inINaturalistLoginName + ".json");
+                URL url = new URL("https://www.inaturalist.org/observations/" + inINaturalistLoginName + ".json"
+                        + "?page=" + requestPage + "&per_page=" + PAGE_LIMIT_INATURALIST);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setDoInput(true);
@@ -104,7 +105,7 @@ public class INatAPI {
                     }
                 }
             }
-            while ((requestPage * PAGE_LIMIT_INATURALIST) < totalEntries);
+            while (lstAllINaturalistResults.size() < totalEntries);
             return lstAllINaturalistResults;
         }
         catch (Exception e) {
@@ -118,8 +119,10 @@ public class INatAPI {
             int requestPage = 0;
             int totalEntries = 0;
             final List<JsonObject> lstAllINaturalistResults = new ArrayList<>(PAGE_LIMIT_INATURALIST);
+            inINaturalistSearchObservations.setPer_page(PAGE_LIMIT_INATURALIST);
             do {
                 requestPage = requestPage + 1; // Note: Increase first because page 0 and 1 seems to return the same info
+                inINaturalistSearchObservations.setPage(requestPage);
                 URL url = new URL("https://www.inaturalist.org/observations.json" 
                         + inINaturalistSearchObservations.getQueryString());
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -153,7 +156,7 @@ public class INatAPI {
                     }
                 }
             }
-            while ((requestPage * PAGE_LIMIT_INATURALIST) < totalEntries);
+            while (lstAllINaturalistResults.size() < totalEntries);
             return lstAllINaturalistResults;
         }
         catch (Exception e) {
