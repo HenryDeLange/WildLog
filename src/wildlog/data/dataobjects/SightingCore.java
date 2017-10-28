@@ -47,6 +47,7 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     // Adding some extra fields that can optionally be cached for performance reasons
     protected ElementType cachedElementType;
     protected VisitType cachedVisitType;
+    protected boolean cachedLinkedToINaturalist;
 
 
     public SightingCore() {
@@ -353,6 +354,14 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
 
     public void setCachedVisitType(VisitType inCachedVisitType) {
         cachedVisitType = inCachedVisitType;
+    }
+
+    public boolean isCachedLinkedToINaturalist() {
+        return cachedLinkedToINaturalist;
+    }
+
+    public void setCachedLinkedToINaturalist(boolean inCachedLinkedToINaturalist) {
+        cachedLinkedToINaturalist = inCachedLinkedToINaturalist;
     }
 
 }

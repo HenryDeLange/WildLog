@@ -983,7 +983,9 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = "SELECT SIGHTINGS.*";
             if (inIncludeCachedValues) {
-                sql = sql + ", ELEMENTS.ELEMENTTYPE, VISITS.VISITTYPE FROM SIGHTINGS"
+                sql = sql + ", ELEMENTS.ELEMENTTYPE, VISITS.VISITTYPE, "
+                          + " (SELECT COUNT(*) FROM INATURALIST INAT WHERE INAT.WILDLOGID = SIGHTINGS.SIGHTINGCOUNTER) INATCOUNT"
+                          + " FROM SIGHTINGS"
                           + " LEFT JOIN ELEMENTS ON ELEMENTS.PRIMARYNAME = SIGHTINGS.ELEMENTNAME" 
                           + " LEFT JOIN VISITS ON VISITS.NAME = SIGHTINGS.VISITNAME";
             }
@@ -1052,6 +1054,12 @@ public abstract class DBI_JDBC implements DBI {
                 if (inIncludeCachedValues) {
                     tempSighting.setCachedElementType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
                     tempSighting.setCachedVisitType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
+                    if (results.getInt("INATCOUNT") == 0) {
+                        tempSighting.setCachedLinkedToINaturalist(false);
+                    }
+                    else {
+                        tempSighting.setCachedLinkedToINaturalist(true);
+                    }
                 }
                 tempList.add(tempSighting);
             }
@@ -1983,7 +1991,9 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = "SELECT SIGHTINGS.*";
             if (inIncludeCachedValues) {
-                sql = sql + ", ELEMENTS.ELEMENTTYPE, VISITS.VISITTYPE FROM SIGHTINGS"
+                sql = sql + ", ELEMENTS.ELEMENTTYPE, VISITS.VISITTYPE, "
+                          + " (SELECT COUNT(*) FROM INATURALIST INAT WHERE INAT.WILDLOGID = SIGHTINGS.SIGHTINGCOUNTER) INATCOUNT"
+                          + " FROM SIGHTINGS"
                           + " LEFT JOIN ELEMENTS ON ELEMENTS.PRIMARYNAME = SIGHTINGS.ELEMENTNAME" 
                           + " LEFT JOIN VISITS ON VISITS.NAME = SIGHTINGS.VISITNAME";
             }
@@ -2057,6 +2067,12 @@ public abstract class DBI_JDBC implements DBI {
                 if (inIncludeCachedValues) {
                     tempSighting.setCachedElementType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
                     tempSighting.setCachedVisitType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
+                    if (results.getInt("INATCOUNT") == 0) {
+                        tempSighting.setCachedLinkedToINaturalist(false);
+                    }
+                    else {
+                        tempSighting.setCachedLinkedToINaturalist(true);
+                    }
                 }
                 tempList.add(tempSighting);
             }
