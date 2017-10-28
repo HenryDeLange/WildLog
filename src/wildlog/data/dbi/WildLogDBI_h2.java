@@ -791,6 +791,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         ResultSet results = null;
         try {
             state = conn.createStatement();
+// FIXME: WildNote maak nie 'n ry nie, so gebruik eerder die Table Exists check... 
+//        Die call na createWildLogOptions() fial dan omdat die regte koelomme nie bestaan nie
+//        Die probleem moet eerder in WildNota gefix word sodat dit ook die options create
             results = state.executeQuery("SELECT * FROM WILDLOG");
             // If there isn't a row create one
             if (!results.next()) {

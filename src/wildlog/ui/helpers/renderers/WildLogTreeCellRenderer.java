@@ -17,6 +17,7 @@ public class WildLogTreeCellRenderer extends DefaultTreeCellRenderer {
     private final static ImageIcon iconVisit = new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif"));
     private final static ImageIcon iconElement = new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif"));
     private final static ImageIcon iconSighting = new ImageIcon(WildLogApp.class.getResource("resources/icons/Sighting Small.gif"));
+    private final static ImageIcon iconINaturalist = new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist_small.png"));
     private final static ImageIcon iconExpanded = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small.gif"));
     private final static ImageIcon iconSelected = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small Selected.gif"));
 
@@ -41,7 +42,12 @@ public class WildLogTreeCellRenderer extends DefaultTreeCellRenderer {
             }
             else
             if (node.getUserObject() instanceof SightingWrapper) {
-                setIcon(iconSighting);
+                if (!((SightingWrapper) node.getUserObject()).getSighting().isCachedLinkedToINaturalist()) {
+                    setIcon(iconSighting);
+                }
+                else {
+                    setIcon(iconINaturalist);
+                }
             }
             else {
                 setIcon(iconExpanded);

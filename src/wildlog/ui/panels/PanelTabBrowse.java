@@ -1566,7 +1566,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         else
         if (treeNode.getUserObject() instanceof Visit) {
             if (rdbBrowseLocation.isSelected()) {
-                List<Sighting> sightings = app.getDBI().listSightings(0, null, ((Visit) treeNode.getUserObject()).getLocationName(), ((Visit) treeNode.getUserObject()).getName(), false, Sighting.class);
+                List<Sighting> sightings = app.getDBI().listSightings(0, null, ((Visit) treeNode.getUserObject()).getLocationName(), ((Visit) treeNode.getUserObject()).getName(), true, Sighting.class);
                 Collections.sort(sightings);
                 for (Sighting tempSighting : sightings) {
                     LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, true), false);
@@ -1577,7 +1577,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         else
         if (treeNode.getUserObject() instanceof Element) {
             if (rdbBrowseElement.isSelected()) {
-                List<Sighting> sightings = app.getDBI().listSightings(0, ((Element) treeNode.getUserObject()).getPrimaryName(), null, null, false, Sighting.class);
+                List<Sighting> sightings = app.getDBI().listSightings(0, ((Element) treeNode.getUserObject()).getPrimaryName(), null, null, true, Sighting.class);
                 Collections.sort(sightings);
                 for (Sighting tempSighting : sightings) {
                     LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, false), false);

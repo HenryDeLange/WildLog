@@ -696,7 +696,7 @@ public final class UtilsTableGenerator {
                                         "Certainty",
                                         "Tag",
                                         "ID",
-                                        "GPS"
+                                        "Info"
                                         };
                 // Load data from DB (filtering on date and lists)
                 LocalDateTime startDateTime;
@@ -754,13 +754,12 @@ public final class UtilsTableGenerator {
                                     }
                                     rowData[7] = tempSighting.getTag();
                                     rowData[8] = tempSighting.getSightingCounter();
-                                    if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
-                                        if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
-                                            rowData[9] = "GPS";
-                                        }
-                                        else {
-                                            rowData[9] = "";
-                                        }
+                                    if (tempSighting.isCachedLinkedToINaturalist()) {
+                                        rowData[9] = new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist.png"));
+                                    }
+                                    else
+                                    if (UtilsGPS.hasGPSData(tempSighting)) {
+                                        rowData[9] = "GPS";
                                     }
                                     else {
                                         rowData[9] = "";
@@ -781,8 +780,10 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, tableData, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, true, true, 0);
+                    inTable.getColumnModel().getColumn(9).setCellRenderer(
+                            new IconCellRenderer(WildLogThumbnailSizes.VERY_TINY.getSize(), true));
                     // Set a different TextCellRenderer to left align some rows
-                    inTable.setDefaultRenderer(Object.class, new TextCellRenderer(0, 1, 2, 3));
+                    inTable.setDefaultRenderer(String.class, new TextCellRenderer(0, 1, 2, 3));
                     // Continue to setup the column sizes
                     inTable.getColumnModel().getColumn(0).setMinWidth(110);
                     inTable.getColumnModel().getColumn(0).setPreferredWidth(110);

@@ -2,15 +2,11 @@ package wildlog.ui.panels;
 
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -62,24 +58,24 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         // Add listner to auto resize columns.
         UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);
         // "Hack" to make the buttons clickable when the mouse scrolles over the cell
-        final JTable tableHandle = tblSightings;
-        tblSightings.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent inEvent) {
-                int row = tableHandle.rowAtPoint(inEvent.getPoint());
-                int col = tableHandle.columnAtPoint(inEvent.getPoint());
-                if (row != tableHandle.getEditingRow() || col != tableHandle.getEditingColumn()) {
-                    try {
-                        if (row >= 0 && row < tableHandle.getModel().getRowCount() && col >= 0 && col < tableHandle.getModel().getColumnCount()) {
-                            tableHandle.editCellAt(row, col);
-                        }
-                    }
-                    catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    }
-                }
-            }
-        });
+//        final JTable tableHandle = tblSightings;
+//        tblSightings.addMouseMotionListener(new MouseAdapter() {
+//            @Override
+//            public void mouseMoved(MouseEvent inEvent) {
+//                int row = tableHandle.rowAtPoint(inEvent.getPoint());
+//                int col = tableHandle.columnAtPoint(inEvent.getPoint());
+//                if (row != tableHandle.getEditingRow() || col != tableHandle.getEditingColumn()) {
+//                    try {
+//                        if (row >= 0 && row < tableHandle.getModel().getRowCount() && col >= 0 && col < tableHandle.getModel().getColumnCount()) {
+//                            tableHandle.editCellAt(row, col);
+//                        }
+//                    }
+//                    catch (Exception ex) {
+//                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+//                    }
+//                }
+//            }
+//        });
     }
 
     /**

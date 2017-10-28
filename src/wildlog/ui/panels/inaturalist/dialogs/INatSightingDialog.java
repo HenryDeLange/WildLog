@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -105,12 +106,8 @@ public class INatSightingDialog extends JDialog {
                     builder.append(jsonObs.get("comments_count").getAsString()).append(System.lineSeparator());
                     builder.append("Identifications: ");
                     builder.append(jsonObs.get("identifications_count").getAsString()).append(System.lineSeparator());
-                    builder.append(System.lineSeparator());
-                    builder.append("Description:").append(System.lineSeparator());
-                    JsonElement desc = jsonObs.get("description");
-                    if (desc != null) {
-                        builder.append(desc.getAsString()).append(System.lineSeparator());
-                    }
+                    builder.append("Geoprivacy:");
+                    builder.append(jsonObs.get("geoprivacy").getAsString()).append(System.lineSeparator());
                     txtInfo.setText(builder.toString());
                 }
                 catch (Exception ex) {
@@ -181,6 +178,9 @@ public class INatSightingDialog extends JDialog {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
+                    if (app.getWildLogOptions().isEnableSounds()) {
+                        Toolkit.getDefaultToolkit().beep();
+                    }
                     getGlassPane().setCursor(Cursor.getDefaultCursor());
                     getGlassPane().setVisible(false);
                 }
@@ -712,6 +712,19 @@ public class INatSightingDialog extends JDialog {
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnUploadDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadDataActionPerformed
+        if (!UtilsGPS.hasGPSData(sighting)) {
+            WLOptionPane.showMessageDialog(this,
+                    "<html>WildLog Observation without GPS coordinates cannot be uploaded to iNaturalist.</html>",
+                    "Incompatible WildLog Observation", WLOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Element element = app.getDBI().findElement(sighting.getElementName(), Element.class);
+        if (element.getScientificName() == null || element.getScientificName().isEmpty()) {
+            WLOptionPane.showMessageDialog(this,
+                    "<html>WildLog Observation without a Scientific Name cannot be uploaded to iNaturalist.</html>",
+                    "Incompatible WildLog Observation", WLOptionPane.ERROR_MESSAGE);
+            return;
+        }
         // Maak seker die Auth Token is OK
         if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
             INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
@@ -735,9 +748,9 @@ public class INatSightingDialog extends JDialog {
                     else {
                         iNatObservation = new INaturalistUpdateObservation();
                     }
-                    Element element = app.getDBI().findElement(sighting.getElementName(), Element.class);
                     iNatObservation.setSpecies_guess(element.getScientificName());
                     iNatObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
+// FIXME: Stel maar die timezone hier, want anders default iNat dit soms na snaakse plekke...
                     iNatObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
                     iNatObservation.setLongitude(UtilsGPS.getLonDecimalDegree(sighting));
                     if (rdbGPSOpen.isSelected()) {
@@ -788,6 +801,9 @@ public class INatSightingDialog extends JDialog {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
+                    if (app.getWildLogOptions().isEnableSounds()) {
+                        Toolkit.getDefaultToolkit().beep();
+                    }
                     getGlassPane().setCursor(Cursor.getDefaultCursor());
                     getGlassPane().setVisible(false);
                     btnDownloadActionPerformed(null);
@@ -830,6 +846,9 @@ public class INatSightingDialog extends JDialog {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
                         getGlassPane().setCursor(Cursor.getDefaultCursor());
                         getGlassPane().setVisible(false);
                         setupUI();
@@ -875,6 +894,9 @@ public class INatSightingDialog extends JDialog {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
                         getGlassPane().setCursor(Cursor.getDefaultCursor());
                         getGlassPane().setVisible(false);
                         setupUI();
@@ -941,6 +963,9 @@ public class INatSightingDialog extends JDialog {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
                         getGlassPane().setCursor(Cursor.getDefaultCursor());
                         getGlassPane().setVisible(false);
                         btnDownloadActionPerformed(null);
@@ -1012,6 +1037,9 @@ public class INatSightingDialog extends JDialog {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
                         getGlassPane().setCursor(Cursor.getDefaultCursor());
                         getGlassPane().setVisible(false);
                     }

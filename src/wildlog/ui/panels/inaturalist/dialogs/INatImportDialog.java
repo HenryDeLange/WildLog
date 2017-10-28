@@ -346,6 +346,11 @@ public class INatImportDialog extends JDialog {
                             // Download the images
                             importPhotos(iNatFullObs.getAsJsonArray("observation_photos"), sighting);
                         }
+                        else {
+// TODO: As die rekord gelink is dan kan ek sommer ook die WildLog iNat table data update met die nuutste iNat stuff
+
+
+                        }
                         // Update progress
                         setTaskProgress(5 + (int) (((double) (t + 1) / (double) lstObservationsJsonObjects.size()) * 94));
                         setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");

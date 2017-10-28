@@ -1,15 +1,15 @@
 package wildlog.data.dataobjects.wrappers;
 
-import java.util.Calendar;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.utils.UtilsTime;
 
 /**
- * This class wraps a Sighting object in order to return just the Creature name as the toString() value.
+ * This class wraps a Sighting object in order to return custom toString() values for the Browse Tab.
  */
 public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWithHTML {
     // Variables
@@ -25,14 +25,12 @@ public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWit
     // Methods
     @Override
     public String toString() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(sighting.getDate());
-        String dateString = " (" + calendar.get(Calendar.DAY_OF_MONTH) + "-" + (calendar.get(Calendar.MONTH)+1) + "-" + calendar.get(Calendar.YEAR) + ")";
+        String dateString = UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(UtilsTime.getLocalDateFromDate(sighting.getDate()));
         if (isForLocation) {
-            return sighting.getElementName() + dateString;
+            return dateString + " " + sighting.getElementName();
         }
         else {
-            return sighting.getLocationName() + dateString;
+            return dateString + " " + sighting.getLocationName();
         }
     }
 
