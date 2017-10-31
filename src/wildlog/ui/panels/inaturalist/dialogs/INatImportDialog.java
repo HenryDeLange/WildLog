@@ -34,7 +34,12 @@ import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.GPSAccuracy;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.TimeAccuracy;
 import wildlog.inaturalist.INatAPI;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
@@ -302,6 +307,7 @@ public class INatImportDialog extends JDialog {
                     for (int t = 0; t < lstObservationsJsonObjects.size(); t++) {
                         JsonObject iNatFullObs = INatAPI.getObservation(lstObservationsJsonObjects.get(t).get("id").getAsLong()).getAsJsonObject();
                         JsonElement observationFieldValues = iNatFullObs.get("observation_field_values");
+                        long iNatID = iNatFullObs.get("id").getAsLong();
                         long foundWildLogID = 0;
                         if (observationFieldValues != null) {
                             JsonArray arrayObsFieldValues = observationFieldValues.getAsJsonArray();
@@ -314,42 +320,38 @@ public class INatImportDialog extends JDialog {
                             }
                         }
                         if (foundWildLogID == 0) {
-                            Sighting sighting = new Sighting();
-                            LocalDateTime localDateTime = ZonedDateTime.parse(
-                                    iNatFullObs.get("time_observed_at").getAsString() + " " + iNatFullObs.get("time_zone").getAsString(),
-                                    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX' 'VV")).toLocalDateTime();
-                            sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime));
-                            sighting.setLocationName(locationName);
-                            sighting.setVisitName(visitName);
-                            String scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
-                            List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
-                            if (lstElements != null && lstElements.size() == 1) {
-                                sighting.setElementName(lstElements.get(0).getPrimaryName());
-                            }
-                            else {
-                                // If no match was found on an Element's Scientific Name, then use it as the Primary Name
-                                if (app.getDBI().countElements(scientificName, null) == 0) {
-                                    app.getDBI().createElement(new Element(scientificName));
-                                }
-                                sighting.setElementName(scientificName);
-                            }
-                            // Save the Sighting
-                            app.getDBI().createSighting(sighting, false);
+                            // Create sighting
+                            Sighting sighting = createSighting(iNatFullObs, locationName, visitName);
                             // Update the iNaturalist observation_field_values
                             // Add "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
-                            INatAPI.addObservationFieldValue(iNatFullObs.get("id").getAsLong(), 7112, 
-                                    Long.toString(sighting.getSightingCounter()), WildLogApp.getINaturalistToken());
+                            INatAPI.addObservationFieldValue(iNatID, 7112, Long.toString(sighting.getSightingCounter()), 
+                                    WildLogApp.getINaturalistToken());
                             // Save the LinkedData
                             app.getDBI().createINaturalistLinkedData(new INaturalistLinkedData(
-                                    sighting.getSightingCounter(), iNatFullObs.get("id").getAsLong(), 
-                                    GSON.toJson(INatAPI.getObservation(iNatFullObs.get("id").getAsLong()))));
+                                    sighting.getSightingCounter(), iNatID, 
+                                    GSON.toJson(INatAPI.getObservation(iNatID))));
                             // Download the images
                             importPhotos(iNatFullObs.getAsJsonArray("observation_photos"), sighting);
                         }
                         else {
-// TODO: As die rekord gelink is dan kan ek sommer ook die WildLog iNat table data update met die nuutste iNat stuff
-
-
+                            INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(foundWildLogID, iNatID, INaturalistLinkedData.class);
+                            if (linkedData != null) {
+                                // Update the LinkedData
+                                linkedData.setINaturalistData(GSON.toJson(iNatFullObs));
+                                app.getDBI().updateINaturalistLinkedData(linkedData);
+                            }
+                            else {
+                                // Create sighting
+                                Sighting sighting = app.getDBI().findSighting(foundWildLogID, Sighting.class);
+                                if (sighting == null) {
+                                    sighting = createSighting(iNatFullObs, locationName, visitName);
+                                }
+                                // Insert the LinkedData
+                                app.getDBI().createINaturalistLinkedData(new INaturalistLinkedData(
+                                        sighting.getSightingCounter(), iNatID, GSON.toJson(iNatFullObs)));
+                                // Download the images
+                                importPhotos(iNatFullObs.getAsJsonArray("observation_photos"), sighting);
+                            }
                         }
                         // Update progress
                         setTaskProgress(5 + (int) (((double) (t + 1) / (double) lstObservationsJsonObjects.size()) * 94));
@@ -365,6 +367,69 @@ public class INatImportDialog extends JDialog {
                 setTaskProgress(100);
                 setMessage("Done with the iNaturalist import");
                 return null;
+            }
+
+            private Sighting createSighting(JsonObject iNatFullObs, String locationName, String visitName) {
+                Sighting sighting = new Sighting();
+// FIXME: Die timezone storie werk steeds nie reg nie (kan bv. nie die Hawaii een load nie...)
+                LocalDateTime localDateTime = ZonedDateTime.parse(
+                        iNatFullObs.get("time_observed_at").getAsString() + " " + iNatFullObs.get("time_zone").getAsString(),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX' 'VV")).toLocalDateTime();
+                sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime));
+                sighting.setTimeAccuracy(TimeAccuracy.GOOD);
+                sighting.setLocationName(locationName);
+                sighting.setVisitName(visitName);
+                String scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
+                String[] words = scientificName.split(" ");
+                if (words.length > 2) {
+                    scientificName = words[1] + " " + words[2];
+                }
+                List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
+                if (lstElements != null && lstElements.size() == 1) {
+                    sighting.setElementName(lstElements.get(0).getPrimaryName());
+                }
+                else {
+                    // If no match was found on an Element's Scientific Name, then use it as the Primary Name
+                    if (app.getDBI().countElements(scientificName, null) == 0) {
+                        Element element = new Element(scientificName);
+                        element.setScientificName(scientificName);
+                        app.getDBI().createElement(element);
+                    }
+                    sighting.setElementName(scientificName);
+                }
+                double latitude = iNatFullObs.get("latitude").getAsDouble();
+                if (latitude < 0) {
+                    sighting.setLatitude(Latitudes.SOUTH);
+                }
+                else 
+                if (latitude > 0) {
+                    sighting.setLatitude(Latitudes.NORTH);
+                }
+                else {
+                    sighting.setLatitude(Latitudes.NONE);
+                }
+                sighting.setLatDegrees(UtilsGPS.getDegrees(Latitudes.NONE, latitude));
+                sighting.setLatMinutes(UtilsGPS.getMinutes(latitude));
+                sighting.setLatSeconds(UtilsGPS.getSeconds(latitude));
+                double longitude = iNatFullObs.get("longitude").getAsDouble();
+                if (longitude < 0) {
+                    sighting.setLongitude(Longitudes.WEST);
+                }
+                else 
+                if (longitude > 0) {
+                    sighting.setLongitude(Longitudes.EAST);
+                }
+                else {
+                    sighting.setLongitude(Longitudes.NONE);
+                }
+                sighting.setLonDegrees(UtilsGPS.getDegrees(Longitudes.NONE, longitude));
+                sighting.setLonMinutes(UtilsGPS.getMinutes(longitude));
+                sighting.setLonSeconds(UtilsGPS.getSeconds(longitude));
+                sighting.setGPSAccuracy(GPSAccuracy.AVERAGE);
+                UtilsTime.calculateSunAndMoon(sighting);
+                // Save the Sighting
+                app.getDBI().createSighting(sighting, false);
+                return sighting;
             }
         });
         setVisible(false);

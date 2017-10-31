@@ -41,8 +41,6 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
-import wildlog.data.enums.Latitudes;
-import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
@@ -586,11 +584,11 @@ public final class UtilsTableGenerator {
                                         "Certainty",
                                         "Type",
                                         "ID",
-                                        "GPS"
+                                        "Info"
                                         };
                 // Load data from DB
                 if (inVisitName != null) {
-                    final List<Sighting> listSightings = inApp.getDBI().listSightings(0, null, null, inVisitName, false, Sighting.class);
+                    final List<Sighting> listSightings = inApp.getDBI().listSightings(0, null, null, inVisitName, true, Sighting.class);
                     if (!listSightings.isEmpty()) {
                         Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
                         // Setup new table data
@@ -608,13 +606,12 @@ public final class UtilsTableGenerator {
                                     data[finalT][4] = tempSighting.getCertainty();
                                     data[finalT][5] = inApp.getDBI().findElement(tempSighting.getElementName(), Element.class).getType();
                                     data[finalT][6] = tempSighting.getSightingCounter();
-                                    if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
-                                        if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
-                                            data[finalT][7] = "GPS";
-                                        }
-                                        else {
-                                            data[finalT][7] = "";
-                                        }
+                                    if (tempSighting.isCachedLinkedToINaturalist()) {
+                                        data[finalT][7] = new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist.png"));
+                                    }
+                                    else
+                                    if (UtilsGPS.hasGPSData(tempSighting)) {
+                                        data[finalT][7] = "GPS";
                                     }
                                     else {
                                         data[finalT][7] = "";
@@ -631,8 +628,11 @@ public final class UtilsTableGenerator {
                         }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
-                        // Setup the column and row sizes etc.
+                        // Setup the default renderers, column and row sizes etc.
                         setupRenderersAndThumbnailRows(inTable, true, false, 0);
+                        inTable.getColumnModel().getColumn(7).setCellRenderer(
+                                new IconCellRenderer(WildLogThumbnailSizes.VERY_TINY.getSize(), true));
+                        // Setup the column sizes
                         inTable.getColumnModel().getColumn(1).setMinWidth(100);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
                         inTable.getColumnModel().getColumn(2).setMinWidth(100);
@@ -780,10 +780,10 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, tableData, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, true, true, 0);
-                    inTable.getColumnModel().getColumn(9).setCellRenderer(
-                            new IconCellRenderer(WildLogThumbnailSizes.VERY_TINY.getSize(), true));
                     // Set a different TextCellRenderer to left align some rows
                     inTable.setDefaultRenderer(String.class, new TextCellRenderer(0, 1, 2, 3));
+                    inTable.getColumnModel().getColumn(9).setCellRenderer(
+                            new IconCellRenderer(WildLogThumbnailSizes.VERY_TINY.getSize(), true));
                     // Continue to setup the column sizes
                     inTable.getColumnModel().getColumn(0).setMinWidth(110);
                     inTable.getColumnModel().getColumn(0).setPreferredWidth(110);

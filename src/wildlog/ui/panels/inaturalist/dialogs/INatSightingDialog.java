@@ -106,8 +106,13 @@ public class INatSightingDialog extends JDialog {
                     builder.append(jsonObs.get("comments_count").getAsString()).append(System.lineSeparator());
                     builder.append("Identifications: ");
                     builder.append(jsonObs.get("identifications_count").getAsString()).append(System.lineSeparator());
-                    builder.append("Geoprivacy:");
-                    builder.append(jsonObs.get("geoprivacy").getAsString()).append(System.lineSeparator());
+                    builder.append("Geoprivacy: ");
+                    if (jsonObs.get("geoprivacy") != null) {
+                        builder.append(jsonObs.get("geoprivacy").getAsString()).append(System.lineSeparator());
+                    }
+                    else {
+                        builder.append("Open (not provided)").append(System.lineSeparator());
+                    }
                     txtInfo.setText(builder.toString());
                 }
                 catch (Exception ex) {
@@ -750,9 +755,10 @@ public class INatSightingDialog extends JDialog {
                     }
                     iNatObservation.setSpecies_guess(element.getScientificName());
                     iNatObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
-// FIXME: Stel maar die timezone hier, want anders default iNat dit soms na snaakse plekke...
+// FIXME: Stel maar die timezone hier, want anders default iNat dit soms na snaakse plekke... (maar hoe kry ek die regte waardes???)
                     iNatObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
                     iNatObservation.setLongitude(UtilsGPS.getLonDecimalDegree(sighting));
+// TODO: Stel die accuracy ook
                     if (rdbGPSOpen.isSelected()) {
                         iNatObservation.setGeoprivacy(INaturalistGeoprivacy.open);
                     }
