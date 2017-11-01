@@ -3,8 +3,12 @@ package wildlog.data.enums;
 
 public enum SightingEvidence {
     SEEN("Seen"),
-    HEARD("Heard"),
     TRACK("Tracks"),
+    SCAT("Scat"),
+    HAIR_ETC("Body Covering (Hair, etc.)"),
+    MARKING("Marking"),
+    HEARD("Heard"),
+    SMELL("Smell"),
     OTHER_EVIDENCE("Other Evidence"),
     UNKNOWN("Unknown"),
     NONE("");
