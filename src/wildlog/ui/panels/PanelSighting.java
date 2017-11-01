@@ -976,6 +976,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel4.setText("Evidence:");
         jLabel4.setName("jLabel4"); // NOI18N
 
+        cmbEvidence.setMaximumRowCount(12);
         cmbEvidence.setModel(new DefaultComboBoxModel(SightingEvidence.values()));
         cmbEvidence.setSelectedItem(sighting.getSightingEvidence());
         cmbEvidence.setEnabled(!disableEditing);

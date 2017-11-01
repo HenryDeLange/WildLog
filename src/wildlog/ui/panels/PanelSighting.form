@@ -1226,6 +1226,7 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="cmbEvidence">
               <Properties>
+                <Property name="maximumRowCount" type="int" value="12"/>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new DefaultComboBoxModel(SightingEvidence.values())" type="code"/>
                 </Property>

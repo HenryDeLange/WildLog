@@ -436,7 +436,13 @@ public class PanelTabElements extends javax.swing.JPanel {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-        UtilsTableGenerator.setupElementTableLarge(app, tblElement, null, null, txtSearch.getText());
+        ElementType type = (ElementType) cmbType.getSelectedItem();
+        if (!ElementType.NONE.equals(type)) {
+            UtilsTableGenerator.setupElementTableLarge(app, tblElement, null, type, txtSearch.getText());
+        }
+        else {
+            UtilsTableGenerator.setupElementTableLarge(app, tblElement, null, null, txtSearch.getText());
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased

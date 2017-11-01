@@ -49,7 +49,7 @@ public class HeatMap extends AbstractMap<Sighting> {
     private enum MapType {TOTAL_OBSERVATIONS_MAP, TOTAL_ELEMENTS_MAP, ABUNDANCE_MAP, RICHNESS_MAP, SAMPLE_EFFORT_MAP};
     private enum HeatMapSize {SMALL, MEDIUM, LARGE, VERY_LARGE};
     private MapType activeMapType = MapType.TOTAL_OBSERVATIONS_MAP;
-    private HeatMapSize activeHeatMapSize = HeatMapSize.MEDIUM;
+    private HeatMapSize activeHeatMapSize = HeatMapSize.LARGE;
     private boolean isTransparent = false;
     private Parent displayedMap;
     private String displayedTemplate;
