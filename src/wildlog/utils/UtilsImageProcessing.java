@@ -283,6 +283,10 @@ public class UtilsImageProcessing {
     public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
         if (inImageLabel != null) {
+            // Flush the old image data - this should help to render newly uploaded images with the same name as the deleted image correctly
+            if (inImageLabel.getIcon() instanceof ImageIcon) {
+                ((ImageIcon) inImageLabel.getIcon()).getImage().flush();
+            }
             List<WildLogFile> fotos = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
             if (fotos.size() > 0) {
                 WildLogFile tempFoto = fotos.get(newImageIndex);

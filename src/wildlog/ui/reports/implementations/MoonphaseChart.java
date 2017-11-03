@@ -250,7 +250,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         StackedBarChart<String, Number> chart = UtilsReports.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
         chart.getStyleClass().add("wl-stacked-bar-30-color");
         chart.setTitle("Number of Observations for each Moon Phase");
-        UtilsReports.setupChartTooltips(chart, true, false);
+        UtilsReports.setupChartTooltips(chart, true, false, true);
         return chart;
     }
     

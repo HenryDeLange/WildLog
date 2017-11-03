@@ -1424,7 +1424,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 else {
                     txtName.setBackground(Color.RED);
                     visit.setName(oldName);
-                    txtName.setText(txtName.getText() + "_cannot_save");
+                    txtName.setText(oldName);
+                    WLOptionPane.showMessageDialog(this, 
+                            "The Period could not be saved.", 
+                            "Not Saved!", JOptionPane.ERROR_MESSAGE);
                 }
 
                 lblVisitName.setText(txtName.getText() + " - [" + locationForVisit.getName() + "]");
@@ -1444,11 +1447,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
             else {
                 txtName.setBackground(Color.RED);
+                WLOptionPane.showMessageDialog(this, 
+                        "Please provide a Period Name before trying to save.", 
+                        "Not Saved!", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
-            txtName.setText(txtName.getText() + "_unsupported_character");
             txtName.setBackground(Color.RED);
+            WLOptionPane.showMessageDialog(this, 
+                    "The Period Name contains unsupported characters and could not be saved.", 
+                    "Not Saved!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 

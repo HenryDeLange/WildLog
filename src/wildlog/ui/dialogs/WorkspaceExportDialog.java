@@ -31,6 +31,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -500,15 +501,15 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         public int counter = 0;
     }
 
-    private int getNumberOfNodes(TreeModel model) {
-        return getNumberOfNodes(model, model.getRoot());
+    private int getNumberOfNodes(TreeModel inModel) {
+        return getNumberOfNodes(inModel, inModel.getRoot());
     }
 
-    private int getNumberOfNodes(TreeModel model, Object node) {
+    private int getNumberOfNodes(TreeModel inModel, Object inNode) {
         int count = 1;
-        int nChildren = model.getChildCount(node);
-        for (int i = 0; i < nChildren; i++) {
-            count += getNumberOfNodes(model, model.getChild(node, i));
+        int numberOfChildren = inModel.getChildCount(inNode);
+        for (int i = 0; i < numberOfChildren; i++) {
+            count += getNumberOfNodes(inModel, inModel.getChild(inNode, i));
         }
         return count;
     }
@@ -599,15 +600,20 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             calendar.set(Calendar.MILLISECOND, 0);
                             sighting.setDate(calendar.getTime());
                         }
-                        if (inNewDBI.findSighting(sighting.getSightingCounter(), Sighting.class) == null) {
+                        if (inNewDBI.countSightings(sighting.getSightingCounter(), null, null, null) == 0) {
                             // Note: The sighting ID needs to be the same for the linked images to work...
                             inNewDBI.createSighting(sighting, true);
                             saveFiles(inNewDBI, inDestinationWorkspace, sighting);
+                            // Save ook die iNaturalist linked data
+                            INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
+                            if (linkedData != null) {
+                                inNewDBI.createINaturalistLinkedData(linkedData);
+                            }
                         }
                     }
                 }
             }
-            inProgressbarTask.setTaskProgress(3 + (int)(inCounter.counter/(double)inTotalNodes*95));
+            inProgressbarTask.setTaskProgress(3 + (int)((inCounter.counter/(double)inTotalNodes)*95.0));
             inProgressbarTask.setMessage("Workspace Export: " + inProgressbarTask.getProgress() + "%");
             inCounter.counter++;
         }

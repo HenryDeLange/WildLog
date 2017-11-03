@@ -32,6 +32,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.inaturalist.INatAPI;
@@ -87,6 +88,14 @@ public class INatSightingDialog extends JDialog {
     }
 
     private void setupUI() {
+        if (sighting.getSightingCounter() == 0) {
+            WLOptionPane.showMessageDialog(this,
+                    "<html>Please first save this WildLog Observation before uploading it to iNaturalist.</html>",
+                    "Unsaved WildLog Observation", WLOptionPane.ERROR_MESSAGE);
+            setVisible(false);
+            dispose();
+            return;
+        }
         linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
         lblWildLogID.setText(Long.toString(sighting.getSightingCounter()));
         if (linkedData != null && linkedData.getINaturalistData() != null && !linkedData.getINaturalistData().isEmpty()) {
@@ -239,6 +248,7 @@ public class INatSightingDialog extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("iNaturalist Observation Details");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist_small.png")).getImage());
+        setMaximumSize(new java.awt.Dimension(980, 800));
         setMinimumSize(new java.awt.Dimension(680, 700));
         setModal(true);
         setPreferredSize(new java.awt.Dimension(720, 700));
@@ -336,13 +346,13 @@ public class INatSightingDialog extends JDialog {
                 .addComponent(btnViewWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btnUnlink, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(10, 10, 10)
                 .addComponent(rdbGPSOpen)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdbGPSObscured)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdbGPSPrivate)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pnlIDs.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -388,7 +398,7 @@ public class INatSightingDialog extends JDialog {
 
         pnlData.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "iNaturalist Information:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
 
-        scrTextArea.setMaximumSize(new java.awt.Dimension(375, 32767));
+        scrTextArea.setMaximumSize(new java.awt.Dimension(375, 400));
         scrTextArea.setMinimumSize(new java.awt.Dimension(185, 23));
 
         txtInfo.setEditable(false);
@@ -461,18 +471,19 @@ public class INatSightingDialog extends JDialog {
         );
         pnlDataLayout.setVerticalGroup(
             pnlDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlDataLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addGroup(pnlDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlDataLayout.createSequentialGroup()
                         .addComponent(btnUploadData, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
                         .addComponent(rdbSummary)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rdbAllInfo)))
+                        .addComponent(rdbAllInfo)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(3, 3, 3))
         );
 
@@ -755,10 +766,14 @@ public class INatSightingDialog extends JDialog {
                     }
                     iNatObservation.setSpecies_guess(element.getScientificName());
                     iNatObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
+                    
 // FIXME: Stel maar die timezone hier, want anders default iNat dit soms na snaakse plekke... (maar hoe kry ek die regte waardes???)
+
                     iNatObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
                     iNatObservation.setLongitude(UtilsGPS.getLonDecimalDegree(sighting));
-// TODO: Stel die accuracy ook
+                    if (sighting.getGPSAccuracy() != null && sighting.getGPSAccuracy().getMeters() <= GPSAccuracy.TERRIBLE.getMeters()) {
+                        iNatObservation.setPositional_accuracy(sighting.getGPSAccuracy().getMeters());
+                    }
                     if (rdbGPSOpen.isSelected()) {
                         iNatObservation.setGeoprivacy(INaturalistGeoprivacy.open);
                     }

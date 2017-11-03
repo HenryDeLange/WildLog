@@ -34,8 +34,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -2664,24 +2666,27 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("8) Check the Period and linked Observation date ranges.");
                         allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                         int badVisitDates = 0;
+                        Set<String> processedVisits = new HashSet<>();
                         for (Sighting sighting : allSightings) {
-                            Visit visit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                            if (visit.getStartDate() == null) {
-                                finalHandleFeedback.println("WARNING:   The Period (" + sighting.getVisitName() + ") does not have a Start Date.");
-                                finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Reports and Maps.");
-                                badVisitDates++;
-                            }
-                            if (visit.getStartDate() != null && visit.getEndDate() != null && visit.getEndDate().before(visit.getStartDate())) {
-                                finalHandleFeedback.println("WARNING:   The Period (" + sighting.getVisitName() + ") has an End Date that is before the Start Date.");
-                                finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have a valid date range.");
-                                badVisitDates++;
-                            }
-                            LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
-                            if ((visit.getStartDate() != null && sightingDate.isBefore(UtilsTime.getLocalDateFromDate(visit.getStartDate()))) 
-                                    || (visit.getEndDate() != null && sightingDate.isAfter(UtilsTime.getLocalDateFromDate(visit.getEndDate())))) {
-                                finalHandleFeedback.println("WARNING:   The date for Observation (" + sighting.getSightingCounter() + ") does not fall within the dates from Period (" + sighting.getVisitName() + ").");
-                                finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Observations to use dates that fall within the Start date and End Date of the linked Period.");
-                                badVisitDates++;
+                            if (processedVisits.add(sighting.getVisitName())) {
+                                Visit visit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                                if (visit.getStartDate() == null) {
+                                    finalHandleFeedback.println("WARNING:   The Period (" + sighting.getVisitName() + ") does not have a Start Date.");
+                                    finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Reports and Maps.");
+                                    badVisitDates++;
+                                }
+                                if (visit.getStartDate() != null && visit.getEndDate() != null && visit.getEndDate().before(visit.getStartDate())) {
+                                    finalHandleFeedback.println("WARNING:   The Period (" + sighting.getVisitName() + ") has an End Date that is before the Start Date.");
+                                    finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have a valid date range.");
+                                    badVisitDates++;
+                                }
+                                LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+                                if ((visit.getStartDate() != null && sightingDate.isBefore(UtilsTime.getLocalDateFromDate(visit.getStartDate()))) 
+                                        || (visit.getEndDate() != null && sightingDate.isAfter(UtilsTime.getLocalDateFromDate(visit.getEndDate())))) {
+                                    finalHandleFeedback.println("WARNING:   The date for Observation (" + sighting.getSightingCounter() + ") does not fall within the dates from Period (" + sighting.getVisitName() + ").");
+                                    finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Observations to use dates that fall within the Start date and End Date of the linked Period.");
+                                    badVisitDates++;
+                                }
                             }
                             setProgress(76 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
                             setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + getProgress() + "%");

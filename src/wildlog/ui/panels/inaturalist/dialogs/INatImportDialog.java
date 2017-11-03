@@ -371,7 +371,9 @@ public class INatImportDialog extends JDialog {
 
             private Sighting createSighting(JsonObject iNatFullObs, String locationName, String visitName) {
                 Sighting sighting = new Sighting();
+                
 // FIXME: Die timezone storie werk steeds nie reg nie (kan bv. nie die Hawaii een load nie...)
+
                 LocalDateTime localDateTime = ZonedDateTime.parse(
                         iNatFullObs.get("time_observed_at").getAsString() + " " + iNatFullObs.get("time_zone").getAsString(),
                         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX' 'VV")).toLocalDateTime();

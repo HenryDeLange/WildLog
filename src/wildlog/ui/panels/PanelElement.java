@@ -1428,7 +1428,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 else {
                     txtPrimaryName.setBackground(Color.RED);
                     element.setPrimaryName(oldName);
-                    txtPrimaryName.setText(txtPrimaryName.getText() + "_cannot_save");
+                    txtPrimaryName.setText(oldName);
+                    WLOptionPane.showMessageDialog(this, 
+                            "The Creature could not be saved.", 
+                            "Not Saved!", JOptionPane.ERROR_MESSAGE);
                 }
 
                 lblElementName.setText(element.getPrimaryName());
@@ -1448,11 +1451,16 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
             else {
                 txtPrimaryName.setBackground(Color.RED);
+                WLOptionPane.showMessageDialog(this, 
+                        "Please provide a Primary Name before trying to save.", 
+                        "Not Saved!", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
-            txtPrimaryName.setText(txtPrimaryName.getText() + "_unsupported_character");
             txtPrimaryName.setBackground(Color.RED);
+            WLOptionPane.showMessageDialog(this, 
+                    "The Primary Name contains unsupported characters and could not be saved.", 
+                    "Not Saved!", JOptionPane.ERROR_MESSAGE);
         }
 
 }//GEN-LAST:event_btnUpdateActionPerformed

@@ -1667,8 +1667,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
             if (result == false) {
                 WLOptionPane.showMessageDialog(this,
-                        "Could not save the Observation.",
-                        "Error Saving", JOptionPane.ERROR_MESSAGE);
+                        "The Observation could not be saved.", 
+                        "Not Saved!", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }

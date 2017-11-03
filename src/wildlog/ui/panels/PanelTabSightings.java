@@ -570,7 +570,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_tblSightingsMouseClicked
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
-        if (tblSightings.getSelectedRowCount() == 1) {
+        if (tblSightings.getSelectedRowCount() == 1 && tblSightings.getModel().getColumnCount() > 8) {
             long sightingCounter = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
             int fotoCount = app.getDBI().countWildLogFiles(null, Sighting.WILDLOGFILE_ID_PREFIX + sightingCounter);
             if (fotoCount > 0 ) {

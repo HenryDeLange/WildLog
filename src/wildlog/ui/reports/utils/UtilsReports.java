@@ -197,72 +197,99 @@ public final class UtilsReports {
     }
     
     public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate) {
-        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null);
+        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null, false);
     }
     
-    public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate, Map<Integer, String> inMapAxisToNames) {
+    public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate, boolean inIsStackedBarchart) {
+        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null, inIsStackedBarchart);
+    }
+    
+    private static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate, 
+            Map<Integer, String> inMapAxisToNames, boolean inIsStackedBarchart) {
+        // Get the node that will be at the top (the one being clicked) for each value
+        Map<String, Node> mapTopNode = new HashMap<>();
+        Map<String, String> mapTopTooltip = new HashMap<>();
         for (XYChart.Series<Object, Object> series : (List<XYChart.Series<Object, Object>>) inChart.getData()) {
             for (XYChart.Data<Object, Object> data : series.getData()) {
-                data.getNode().setOnMousePressed(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent inEvent) {
-                        String text = "";
-                        if (data.getExtraValue() != null && !data.getExtraValue().toString().isEmpty()) {
-                            // If the list of Element names get too long split it into multiple lines
-                            text = text + data.getExtraValue().toString();
-                            final int LINE_LIMIT = 100;
-                            if (text.length() > LINE_LIMIT) {
-                                StringBuilder builder = new StringBuilder(text.length() + 30);
-                                int currentLineLength = 0;
-                                for (String entry : text.split(",", -1)) {
-                                    if (currentLineLength > LINE_LIMIT) {
-                                        builder.append(System.lineSeparator()).append("   ");
-                                        currentLineLength = 0;
-                                    }
-                                    builder.append(entry).append(",");
-                                    currentLineLength = currentLineLength + entry.length() + 2;
+                String xyKey = data.getXValue().toString() + "_" + data.getYValue().toString();
+                if (inIsStackedBarchart) {
+                    xyKey = xyKey + "_" + data.getExtraValue();
+                }
+                // Set top node
+                mapTopNode.put(xyKey, data.getNode());
+                // Generate tooltip
+                if (data.getNode() == mapTopNode.get(xyKey)) {
+                    String text = "";
+                    if (data.getExtraValue() != null && !data.getExtraValue().toString().isEmpty()) {
+                        // If the list of Element names get too long split it into multiple lines
+                        text = text + data.getExtraValue().toString();
+                        final int LINE_LIMIT = 100;
+                        if (text.length() > LINE_LIMIT) {
+                            StringBuilder builder = new StringBuilder(text.length() + 30);
+                            int currentLineLength = 0;
+                            for (String entry : text.split(",", -1)) {
+                                if (currentLineLength > LINE_LIMIT) {
+                                    builder.append(System.lineSeparator()).append("   ");
+                                    currentLineLength = 0;
                                 }
-                                text = builder.toString();
-                                if (text.endsWith(",")) {
-                                    text = text.substring(0, text.length() - 2);
-                                }
+                                builder.append(entry).append(",");
+                                currentLineLength = currentLineLength + entry.length() + 2;
                             }
-                            text = text + System.lineSeparator();
+                            text = builder.toString();
+                            if (text.endsWith(",")) {
+                                text = text.substring(0, text.length() - 2);
+                            }
                         }
-                        String name;
-                        String value;
-                        if (inValueAxisIsY) {
-                            name = data.getXValue().toString();
-                            value = data.getYValue().toString();
-                        }
-                        else {
-                            name = data.getYValue().toString();
-                            value = data.getXValue().toString();
-                        }
-                        if (inFormatLongAsDate) {
-                            name = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(new Date(Long.parseLong(name))));
-                        }
-                        if (inMapAxisToNames == null) {
-                            text = text + name + System.lineSeparator();
-                            text = text + "[Value = " + value + "]";
-                        }
-                        else {
-                            name = inMapAxisToNames.get(Integer.parseInt(name));
-                            value = inMapAxisToNames.get(Integer.parseInt(value));
-                            text = name + " and " + value + System.lineSeparator() + "[Value = " + text.trim() + "]";
-                        }
-                        Tooltip tooltip = new Tooltip(text);
-                        tooltip.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 16));
-                        tooltip.setAutoHide(true);
-                        tooltip.show((Node) inEvent.getSource(), inEvent.getScreenX(), inEvent.getScreenY());
+                        text = text + System.lineSeparator();
                     }
-                });
-                data.getNode().setCursor(Cursor.HAND);
+                    String name;
+                    String value;
+                    if (inValueAxisIsY) {
+                        name = data.getXValue().toString();
+                        value = data.getYValue().toString();
+                    }
+                    else {
+                        name = data.getYValue().toString();
+                        value = data.getXValue().toString();
+                    }
+                    if (inFormatLongAsDate) {
+                        name = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(new Date(Long.parseLong(name))));
+                    }
+                    if (inMapAxisToNames == null) {
+                        text = text + name + System.lineSeparator();
+                        text = text + "[Value = " + value + "]";
+                    }
+                    else {
+                        name = inMapAxisToNames.get(Integer.parseInt(name));
+                        value = inMapAxisToNames.get(Integer.parseInt(value));
+                        text = name + " and " + value + System.lineSeparator() + "[Value = " + text.trim() + "]";
+                    }
+                    String oldText = mapTopTooltip.get(xyKey);
+                    if (oldText != null && !oldText.isEmpty() && !text.isEmpty()) {
+                        text = oldText + System.lineSeparator() + "-------------" + System.lineSeparator() + text;
+                    }
+                    if (!text.isEmpty()) {
+                        mapTopTooltip.put(xyKey, text);
+                    }
+                }
             }
             // For Line / Area Charts make the area fill transparent to clicks (otherwise the first points can't be clicked)
             if (series.getNode() != null) {
                 series.getNode().setMouseTransparent(true);
             }
+        }
+        // Setup the tooltips on the top node
+        for (Map.Entry<String, Node> entry : mapTopNode.entrySet()) {
+            entry.getValue().setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent inEvent) {
+                    Tooltip tooltip = new Tooltip(mapTopTooltip.get(entry.getKey()));
+                    tooltip.setFont(Font.font(Font.getDefault().getFamily(), FontWeight.BOLD, 16));
+                    tooltip.setAutoHide(true);
+                    tooltip.show((Node) inEvent.getSource(), inEvent.getScreenX(), inEvent.getScreenY());
+                }
+            });
+            entry.getValue().setCursor(Cursor.HAND);
         }
     }
     

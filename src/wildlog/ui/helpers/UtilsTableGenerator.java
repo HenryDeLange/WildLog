@@ -1429,8 +1429,10 @@ public final class UtilsTableGenerator {
     
     public static String[] getSelectedRowIDs(JTable inTable, int inCol) {
         String[] selectedRowIDs = new String[inTable.getSelectedRowCount()];
-        for (int t = 0; t < inTable.getSelectedRowCount(); t++) {
-            selectedRowIDs[t] = inTable.getModel().getValueAt(inTable.convertRowIndexToModel(inTable.getSelectedRows()[t]), inCol).toString();
+        if (inTable.getModel().getColumnCount() > inCol) {
+            for (int t = 0; t < inTable.getSelectedRowCount(); t++) {
+                selectedRowIDs[t] = inTable.getModel().getValueAt(inTable.convertRowIndexToModel(inTable.getSelectedRows()[t]), inCol).toString();
+            }
         }
         return selectedRowIDs;
     }

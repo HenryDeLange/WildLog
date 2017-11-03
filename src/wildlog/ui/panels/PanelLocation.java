@@ -1416,7 +1416,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                 else {
                     txtName.setBackground(Color.RED);
                     locationWL.setName(oldName);
-                    txtName.setText(txtName.getText() + "_cannot_save");
+                    txtName.setText(oldName);
+                    WLOptionPane.showMessageDialog(this, 
+                            "The Place could not be saved.", 
+                            "Not Saved!", JOptionPane.ERROR_MESSAGE);
                 }
 
                 lblLocation.setText(locationWL.getName());
@@ -1436,11 +1439,16 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
             else {
                 txtName.setBackground(Color.RED);
+                WLOptionPane.showMessageDialog(this, 
+                        "Please provide a Place Name before trying to save.", 
+                        "Not Saved!", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
-            txtName.setText(txtName.getText() + "_unsupported_character");
             txtName.setBackground(Color.RED);
+            WLOptionPane.showMessageDialog(this, 
+                    "The Place Name contains unsupported characters and could not be saved.", 
+                    "Not Saved!", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 

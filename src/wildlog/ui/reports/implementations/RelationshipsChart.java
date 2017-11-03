@@ -48,11 +48,12 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
     private final ComboBox<String> cmbGPS;
     private final ComboBox<String> cmbCompareDates;
     private final ComboBox<String> cmbType;
+    private final ComboBox<String> cmbCreature;
     
     
     public RelationshipsChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
         super("Relationship Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
-        lstCustomButtons = new ArrayList<>(6);
+        lstCustomButtons = new ArrayList<>(8);
         ToggleButton btnPieChartElementTypes = new ToggleButton("Creature Associations");
         btnPieChartElementTypes.setToggleGroup(BUTTON_GROUP);
         btnPieChartElementTypes.setCursor(Cursor.HAND);
@@ -106,6 +107,20 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         cmbType.getSelectionModel().clearSelection();
         cmbType.getSelectionModel().select(3);
         lstCustomButtons.add(cmbType);
+        lstCustomButtons.add(new Label("Filtered Creature:"));
+        List<String> lstElements = new ArrayList<>();
+        lstElements.add("");
+        for (Sighting sighting : inLstData) {
+            if (!lstElements.contains(sighting.getElementName(reportsBaseDialog.getOptionName()))) {
+                lstElements.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            }
+        }
+        Collections.sort(lstElements);
+        cmbCreature = new ComboBox<>(FXCollections.observableList(lstElements));
+        cmbCreature.setCursor(Cursor.HAND);
+        cmbCreature.setVisibleRowCount(10);
+        cmbCreature.getSelectionModel().clearSelection();
+        lstCustomButtons.add(cmbCreature);
     }
 
     @Override
@@ -179,6 +194,11 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
     }
     
     private Chart createElementRelationshipChart(List<Sighting> inSightings) {
+        // Get the filtered element's name
+        String filterElement = null;
+        if (cmbCreature.getSelectionModel().getSelectedIndex() > 0) {
+            filterElement = new Sighting(cmbCreature.getSelectionModel().getSelectedItem(), null, null).getElementName(reportsBaseDialog.getOptionName());
+        }
         // Calculate the values
         Set<String> elements = new HashSet<>();
         Map<String, ReportDataWrapper> mapChartData = new HashMap<>();
@@ -237,6 +257,10 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         BarChart.Series<Number, String> series = new BarChart.Series<>();
         for (String key : keys) {
+            if (filterElement != null && !key.contains(filterElement)) {
+                // If a filtered element was provided, then skip any other keys
+                continue;
+            }
             ReportDataWrapper dataWrapper = mapChartData.get(key);
             if (dataWrapper != null && dataWrapper.count > 0) {
                 int value = dataWrapper.count;
