@@ -1657,12 +1657,7 @@ public abstract class DBI_JDBC implements DBI {
         else {
             state.setDate(5, null);
         }
-        if (inWildLogFile.isDefaultFile()) {
-            state.setBoolean(6, true);
-        }
-        else {
-            state.setBoolean(6, false);
-        }
+        state.setBoolean(6, inWildLogFile.isDefaultFile());
         if (inWildLogFile.getFileDate() != null) {
             state.setTimestamp(7, new Timestamp(inWildLogFile.getFileDate().getTime()));
         }
