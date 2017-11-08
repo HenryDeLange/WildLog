@@ -43,7 +43,7 @@ public class DistributionLayersDialog extends JDialog {
     private List<Path> lstSelectedPaths = null;
     private List<Sighting> lstData;
     
-    public DistributionLayersDialog(JFrame inParent, List<Sighting> inLstData) {
+    public DistributionLayersDialog(JFrame inParent, String inElementName, List<Sighting> inLstData) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[DistributionLayersDialog]");
         lstData = inLstData;
@@ -88,15 +88,17 @@ public class DistributionLayersDialog extends JDialog {
         // Load the layers table
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSpeciesLayers);
         UtilsTableGenerator.setupDistributionMapLayerTable(WildLogApp.getApplication(), tblSpeciesLayers, mapAllLayers.keySet());
+        // Setup row sorter for the checkboxes (nadat die table data klaar geload het)
+        applyTableFilter();
         // If we are dealing with only one species, then automatically select it
-        String elementName = null;
+        String elementName = inElementName;
         for (Sighting sighting : lstData) {
             if (elementName == null) {
                 elementName = sighting.getElementName();
                 continue;
             }
             if (!elementName.equalsIgnoreCase(sighting.getElementName())) {
-                // The list contains more than one Creature
+                // Don't use the element becasue the list contains more than one Creature
                 elementName = null;
                 break;
             }
@@ -128,8 +130,6 @@ public class DistributionLayersDialog extends JDialog {
                 }
             });
         }
-        // Setup row sorter for the checkboxes (nadat die table data klaar geload het)
-        applyTableFilter();
     }
 
     private void applyTableFilter() {

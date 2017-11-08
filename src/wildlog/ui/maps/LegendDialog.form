@@ -80,7 +80,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;To change the colour of a Layer on the Map, select a new colour and press Save.&lt;br/&gt;Note: Currently only shapefile Layers can be recoloured.&lt;br/&gt;Note: If the shapefile has a SLD style then it will be used instead and can&apos;t be recoloured.&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;To change the colour of a Layer on the Map, select a new colour and press Save.&lt;br/&gt;&lt;b&gt;Note:&lt;/b&gt; Currently only shapefile Layers can be recoloured.&lt;br/&gt;&lt;b&gt;Note:&lt;/b&gt; If the shapefile has a SLD style then it will be used (can&apos;t be recoloured).&lt;/html&gt;"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JPanel" name="pnlLegendContent">

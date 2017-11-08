@@ -1629,7 +1629,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + element.getDisplayName(),
-                    app.getDBI().listSightings(0, element.getPrimaryName(), null, null, true, Sighting.class));
+                    app.getDBI().listSightings(0, element.getPrimaryName(), null, null, true, Sighting.class), 
+                    element.getPrimaryName());
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapActionPerformed

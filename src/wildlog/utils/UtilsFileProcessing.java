@@ -478,6 +478,14 @@ public final class UtilsFileProcessing {
     }
     
     public static void copyMapLayersWithPopup() {
+        try {
+            Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_MAPS_SPECIES.getAbsoluteFullPath());
+        }
+        catch (IOException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
         Collection<Callable<Object>> listCallables = new ArrayList<>(1);
         listCallables.add(new Callable<Object>() {
             @Override

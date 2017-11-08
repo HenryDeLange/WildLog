@@ -34,9 +34,12 @@ import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.Certainty;
 import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.inaturalist.INatAPI;
 import wildlog.maps.utils.UtilsGPS;
@@ -372,7 +375,10 @@ public class INatImportDialog extends JDialog {
             private Sighting createSighting(JsonObject iNatFullObs, String locationName, String visitName) {
                 Sighting sighting = new Sighting();
                 
-// FIXME: Die timezone storie werk steeds nie reg nie (kan bv. nie die Hawaii een load nie...)
+// FIXME: Die timezone storie werk steeds nie reg nie (kan bv. nie die Hawaii een load nie...) (Maak ook seker die tyd download reg)
+
+// FIXME: baie van die bestaande downloaded observations se tyd is 2 ure uit omdat die timezone stuff nie reg werk nie... 
+//        (sal tydelikke code moet in sit om die dates te update as dit verkeerd is)
 
                 LocalDateTime localDateTime = ZonedDateTime.parse(
                         iNatFullObs.get("time_observed_at").getAsString() + " " + iNatFullObs.get("time_zone").getAsString(),
@@ -428,6 +434,9 @@ public class INatImportDialog extends JDialog {
                 sighting.setLonMinutes(UtilsGPS.getMinutes(longitude));
                 sighting.setLonSeconds(UtilsGPS.getSeconds(longitude));
                 sighting.setGPSAccuracy(GPSAccuracy.AVERAGE);
+                sighting.setLifeStatus(LifeStatus.ALIVE);
+                sighting.setSightingEvidence(SightingEvidence.SEEN);
+                sighting.setCertainty(Certainty.SURE);
                 UtilsTime.calculateSunAndMoon(sighting);
                 // Save the Sighting
                 app.getDBI().createSighting(sighting, false);

@@ -1306,21 +1306,22 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                 Location location = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + location.getDisplayName(), 
-                                        app.getDBI().listSightings(0, null, location.getName(), null, true, Sighting.class));
+                                        app.getDBI().listSightings(0, null, location.getName(), null, true, Sighting.class), null);
                                 dialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                 Element element = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + element.getDisplayName(), 
-                                        app.getDBI().listSightings(0, element.getPrimaryName(), null, null, true, Sighting.class));
+                                        app.getDBI().listSightings(0, element.getPrimaryName(), null, null, true, Sighting.class), 
+                                        element.getPrimaryName());
                                 dialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                 Visit visit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                                 MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
-                                        app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class));
+                                        app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class), null);
                                 dialog.setVisible(true);
                             }
                             else
@@ -1328,7 +1329,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 Sighting sighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
                                 List<Sighting> lstSightings = new ArrayList<>(1);
                                 lstSightings.add(sighting);
-                                MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + sighting.getDisplayName(), lstSightings);
+                                MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + sighting.getDisplayName(), lstSightings, null);
                                 dialog.setVisible(true);
                             }
                         }

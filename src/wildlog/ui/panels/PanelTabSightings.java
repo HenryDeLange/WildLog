@@ -797,7 +797,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void btnViewMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMapActionPerformed
         List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
         if (!lstSightingsToUse.isEmpty()) {
-            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - Observations", lstSightingsToUse);
+            MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - Observations", lstSightingsToUse, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnViewMapActionPerformed

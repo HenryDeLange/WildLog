@@ -112,7 +112,7 @@ public class LegendDialog extends JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Map Legend:");
 
-        jLabel2.setText("<html>To change the colour of a Layer on the Map, select a new colour and press Save.<br/>Note: Currently only shapefile Layers can be recoloured.<br/>Note: If the shapefile has a SLD style then it will be used instead and can't be recoloured.</html>");
+        jLabel2.setText("<html>To change the colour of a Layer on the Map, select a new colour and press Save.<br/><b>Note:</b> Currently only shapefile Layers can be recoloured.<br/><b>Note:</b> If the shapefile has a SLD style then it will be used (can't be recoloured).</html>");
 
         pnlLegendContent.setLayout(new java.awt.BorderLayout());
 

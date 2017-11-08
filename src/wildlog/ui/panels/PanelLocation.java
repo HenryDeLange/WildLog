@@ -1302,7 +1302,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + locationWL.getDisplayName(), 
-                    app.getDBI().listSightings(0, null, locationWL.getName(), null, true, Sighting.class));
+                    app.getDBI().listSightings(0, null, locationWL.getName(), null, true, Sighting.class), null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapActionPerformed

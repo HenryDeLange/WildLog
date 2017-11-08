@@ -1366,7 +1366,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
-                    app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class));
+                    app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class), null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapSightingActionPerformed
