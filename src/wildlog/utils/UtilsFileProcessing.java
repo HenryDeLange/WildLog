@@ -401,7 +401,7 @@ public final class UtilsFileProcessing {
                 }
                 synchronized (lock) {
                     Files.createDirectories(inFileToWrite.getParent());
-// FIXME: Die gee steeds 'n error...
+// FIXME: Die gee steeds soms 'n error...
                     Files.copy(inFileToRead, inFileToWrite, StandardCopyOption.REPLACE_EXISTING);
                 }
             }

@@ -51,19 +51,22 @@ public final class UtilsConcurency {
         if (inExecutorService != null) {
             inExecutorService.shutdown();
             try {
-                final int TOTAL_RETRIES_ALLOWED = 20;
+                final int TOTAL_RETRIES_ALLOWED = 24;
                 int count = 0;
-                while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < TOTAL_RETRIES_ALLOWED) {
+                while(!inExecutorService.awaitTermination(10, TimeUnit.MINUTES) && count < TOTAL_RETRIES_ALLOWED) {
                     count++;
-                    WildLogApp.LOGGER.log(Level.INFO, "ExecutorService expired while shutting down... Retry: {} of {}", new Object[]{count, TOTAL_RETRIES_ALLOWED});
+                    WildLogApp.LOGGER.log(Level.WARN, "ExecutorService expired while shutting down... Retry: {} of {}", new Object[]{count, TOTAL_RETRIES_ALLOWED});
                 }
                 if (!inExecutorService.isTerminated()) {
                     List<Runnable> terminationList  = inExecutorService.shutdownNow();
                     if (terminationList == null) {
                         terminationList = new ArrayList<>(0);
                     }
-                    WildLogApp.LOGGER.log(Level.ERROR, "ExecutorService Shutdown Error... Unexecuted tasks remaining: {}", terminationList.size());
+                    WildLogApp.LOGGER.log(Level.ERROR, "ExecutorService SHUTDOWN ERROR... Unexecuted tasks remaining: {}", terminationList.size());
                     return false;
+                }
+                else {
+                    WildLogApp.LOGGER.log(Level.INFO, "ExecutorService shutdown correctly...");
                 }
             }
             catch (InterruptedException ex) {
@@ -83,6 +86,7 @@ public final class UtilsConcurency {
      * @param inParent - If the parent is a JDialog pass it in, otherwise use null to use the application's main frame.
      * @return
      */
+    @Deprecated
     public static boolean waitForExecutorToShutdownWithPopup(final ExecutorService inExecutorService, JDialog inParent) {
         if (inExecutorService != null) {
             inExecutorService.shutdown();
@@ -168,19 +172,16 @@ public final class UtilsConcurency {
     public static <T> boolean waitForExecutorToRunTasks(ExecutorService inExecutorService, Collection<? extends Callable<T>> inTaskList) {
         if (inExecutorService != null) {
             try {
-                List<Future<T>> listResults = inExecutorService.invokeAll(inTaskList, 10, TimeUnit.MINUTES);
+                List<Future<T>> listResults = inExecutorService.invokeAll(inTaskList, 30, TimeUnit.MINUTES);
                 for (Future<T> future : listResults) {
                     if (future.isCancelled()) {
-                        WildLogApp.LOGGER.log(Level.ERROR, "ExecutorService Error... Due to the timeout some tasks were cancled.");
+                        WildLogApp.LOGGER.log(Level.ERROR, "ExecutorService Error... Due to the timeout some tasks were cancled.", 
+                                new Exception("STACKTRACE of current ExecutorService:"));
                         return false;
                     }
                 }
             }
-            catch (CancellationException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                return false;
-            }
-            catch (InterruptedException | RejectedExecutionException ex) {
+            catch (CancellationException | InterruptedException | RejectedExecutionException ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 return false;
             }

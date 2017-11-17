@@ -736,6 +736,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
+                WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnUpdateActionPerformed() - The data will be saved to the workspace.");
+                long time = System.currentTimeMillis();
                 this.setTaskProgress(0);
                 this.setMessage("Saving the Bulk Import: Validating...");
                 // Make sure the location is OK
@@ -802,7 +804,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     final Location locationHandle = location;
                     final Visit visitHandle = visit;
                     final Object saveSightingLock = new Object();
-                    ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_BulkImport(Save)"));
+                    String executorServiceName = "WL_BulkImport(Save)";
+                    ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory(executorServiceName));
                     final AtomicInteger counter = new AtomicInteger();
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
                         final int row = rowCount;
@@ -891,10 +894,19 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             }
                         });
                     }
+                    long startTime = System.currentTimeMillis();
                     if (!UtilsConcurency.waitForExecutorToShutdown(executorService)) {
                         WLOptionPane.showMessageDialog(app.getMainFrame(),
                                 "There was an unexpected problem while saving.",
                                 "Problem Saving", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else {
+                        long duration = System.currentTimeMillis() - startTime;
+                        int hours = (int) (((double) duration)/(1000.0*60.0*60.0));
+                        int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
+                        int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
+                        WildLogApp.LOGGER.log(Level.INFO, "ExecutorService {} took {} hours, {} minutes, {} seconds to save the sigtings", 
+                                new Object[]{executorServiceName, hours, minutes, seconds});
                     }
                     // Process the Visit (only after saving all of the sightings, otherwise the user can edit/delete it while the bulk import is busy)
                     visit.setLocationName(location.getName());
@@ -934,6 +946,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             "Please provide a Place name and Period name before saving.",
                             "Can't Save", JOptionPane.ERROR_MESSAGE);
                 }
+                WildLogApp.LOGGER.log(Level.INFO, "Finished BulkUploadPanel.btnUpdateActionPerformed() - The process took {} seconds.", (System.currentTimeMillis() - time)/1000);
                 return null;
             }
         });

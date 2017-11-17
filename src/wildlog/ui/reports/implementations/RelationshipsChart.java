@@ -66,7 +66,7 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         lstCustomButtons.add(btnPieChartElementTypes);
         // Chart options
         
-// TODO: Sit 'n beskrywing onder aan die chart (en dalk in die titel) wat verduidelik hoe die opsies dinge beinvloed
+// TODO: Sit 'n beskrywing onder aan die chart self (en dalk in die titel) wat verduidelik hoe die opsies dinge beinvloed
 
         lstCustomButtons.add(new Label("Chart Options:"));
         chkCompareVisits = new CheckBox("Must be in the same Period");

@@ -73,7 +73,7 @@ public abstract class PanelCanSetupHeader extends JPanel {
         tempTabHeader.setBorder(null);
         tempTabHeader.setFocusable(false);
         tempTabHeader.setTabType(inTabType);
-// FIXME: Issue waar die scrolling nie werk as mens nie in die panel is nie (die panel moet die hele tab vol stretch...)
+// FIXME: Issue waar die mouse wheel scrolling nie werk as die mouse nie in die panel is nie (die panel moet die hele tab vol stretch...)
         tempTabHeader.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
         // Setup Icon
         ImageIcon icon = new ImageIcon(inIconURL);

@@ -886,7 +886,6 @@ public final class UtilsTableGenerator {
                                         "",
                                         "Creature Name",
                                         "Type",
-                                        "Class",
                                         "Observations"
                                         };
                 // Load data from DB
@@ -911,8 +910,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][0] = setupThumbnailIcon(inApp, tempElement.getWildLogFileID());
                                     data[finalT][1] = tempElement.getPrimaryName();
                                     data[finalT][2] = tempElement.getType();
-                                    data[finalT][3] = tempElement.getFeedingClass();
-                                    data[finalT][4] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), null, inVisitName);
+                                    data[finalT][3] = inApp.getDBI().countSightings(0, tempElement.getPrimaryName(), null, inVisitName);
                                     return null;
                                 }
                             });
@@ -932,17 +930,14 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(2).setMinWidth(70);
                         inTable.getColumnModel().getColumn(2).setPreferredWidth(80);
                         inTable.getColumnModel().getColumn(2).setMaxWidth(85);
-                        inTable.getColumnModel().getColumn(3).setMinWidth(70);
-                        inTable.getColumnModel().getColumn(3).setPreferredWidth(80);
-                        inTable.getColumnModel().getColumn(3).setMaxWidth(105);
-                        inTable.getColumnModel().getColumn(4).setMinWidth(65);
-                        inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
-                        inTable.getColumnModel().getColumn(4).setMaxWidth(85);
+                        inTable.getColumnModel().getColumn(3).setMinWidth(65);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(75);
+                        inTable.getColumnModel().getColumn(3).setMaxWidth(85);
                         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
                             inTable.removeColumn(inTable.getColumnModel().getColumn(0));
                         }
                         // Setup default sorting
-                        setupRowSorter(inTable, 4, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                        setupRowSorter(inTable, 3, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                         // Setup row selection
                         setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                     }
