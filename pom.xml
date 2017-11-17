@@ -11,10 +11,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- THE GEOTIFFS SEEM TO WORK IN 16.1 -->
+        <!-- THE GEOTIFFS SEEM TO WORK IN 16.1 AND LATER -->
         <!--<geotools.version>16.2</geotools.version>-->
-        <geotools.version>17.1</geotools.version>
-        <!-- THE GEOTIFFS WORKS DON'T WORK IN THE NEWER VERSIONS -->
+        <!--<geotools.version>17.1</geotools.version>-->
+        <geotools.version>17.3</geotools.version>
+        <!-- THE GEOTIFFS WORKS DON'T WORK IN THESE VERSIONS -->
         <!--<geotools.version>15-SNAPSHOT</geotools.version>-->
         <!--<geotools.version>14-RC1</geotools.version>-->
         <!--<geotools.version>13.2</geotools.version>-->
