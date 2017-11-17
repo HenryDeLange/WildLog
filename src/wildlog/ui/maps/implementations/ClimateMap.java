@@ -163,6 +163,7 @@ public class ClimateMap extends AbstractGeoToolsMap<Sighting> {
                     long startTime = System.currentTimeMillis();
 // FIXME: Hierdie is nie baie smooth nie, maar werk OK vir nou. Kyk dalk later of dit smoother (vinniger en meer voorspelbaar kan wees) as ek die layers move en nie replace nie.
                     map.replaceLayer(0, getGeoTiffLayersForMonth(activeBaseLayer, activeMonth++));
+                    map.reloadMap();
                     if (activeMonth > 11) {
                         activeMonth = 0;
                     }

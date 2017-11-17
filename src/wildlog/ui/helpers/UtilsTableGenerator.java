@@ -609,12 +609,13 @@ public final class UtilsTableGenerator {
                                     if (tempSighting.isCachedLinkedToINaturalist()) {
                                         data[finalT][7] = new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist.png"));
                                     }
-                                    else
-                                    if (UtilsGPS.hasGPSData(tempSighting)) {
-                                        data[finalT][7] = "GPS";
-                                    }
                                     else {
-                                        data[finalT][7] = "";
+                                        if (UtilsGPS.hasGPSData(tempSighting)) {
+                                            data[finalT][7] = new ImageIcon(WildLogApp.class.getResource("resources/icons/GPS_word.png"));
+                                        }
+                                        else {
+                                            data[finalT][7] = new ImageIcon();
+                                        }
                                     }
                                     return null;
                                 }
@@ -757,12 +758,13 @@ public final class UtilsTableGenerator {
                                     if (tempSighting.isCachedLinkedToINaturalist()) {
                                         rowData[9] = new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist.png"));
                                     }
-                                    else
-                                    if (UtilsGPS.hasGPSData(tempSighting)) {
-                                        rowData[9] = "GPS";
-                                    }
                                     else {
-                                        rowData[9] = "";
+                                        if (UtilsGPS.hasGPSData(tempSighting)) {
+                                            rowData[9] = new ImageIcon(WildLogApp.class.getResource("resources/icons/GPS_word.png"));
+                                        }
+                                        else {
+                                            rowData[9] = new ImageIcon();
+                                        }
                                     }
                                     data.add(rowData);
                                 }

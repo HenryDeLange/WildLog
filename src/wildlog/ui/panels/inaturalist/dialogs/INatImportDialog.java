@@ -448,6 +448,9 @@ public class INatImportDialog extends JDialog {
     }//GEN-LAST:event_btnImportActionPerformed
 
     private void importPhotos(JsonArray inJsonArrayPhotos, Sighting inSighting) throws MalformedURLException, IOException {
+        
+// FIXME: Die foto se EXIF data gaan verlore... Find uit hoe ek die oorspronklikke foto met EXIF kan kry...
+        
         if (inJsonArrayPhotos != null) {
             for (int imageCounterINat = 0; imageCounterINat < inJsonArrayPhotos.size(); imageCounterINat++) {
                 String photoURL = inJsonArrayPhotos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject().get("large_url").getAsString()
