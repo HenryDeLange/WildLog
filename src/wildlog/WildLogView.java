@@ -390,6 +390,8 @@ public final class WildLogView extends JFrame {
         mnuMergeElements = new javax.swing.JMenuItem();
         jSeparator21 = new javax.swing.JPopupMenu.Separator();
         mnuReduceImagesSize = new javax.swing.JMenuItem();
+        jSeparator24 = new javax.swing.JPopupMenu.Separator();
+        mnuINaturalistToken = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuConvertCoordinates = new javax.swing.JMenuItem();
@@ -414,8 +416,6 @@ public final class WildLogView extends JFrame {
         chkMnuIncludeCountInSightingPath = new javax.swing.JCheckBoxMenuItem();
         chkMnuUploadLogs = new javax.swing.JCheckBoxMenuItem();
         chkMnuUseBundledMediaViewers = new javax.swing.JCheckBoxMenuItem();
-        jSeparator24 = new javax.swing.JPopupMenu.Separator();
-        mnuINaturalistToken = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         mnuAboutWildNote = new javax.swing.JMenuItem();
         jSeparator16 = new javax.swing.JPopupMenu.Separator();
@@ -1223,6 +1223,20 @@ public final class WildLogView extends JFrame {
         });
         advancedMenu.add(mnuReduceImagesSize);
 
+        jSeparator24.setName("jSeparator24"); // NOI18N
+        advancedMenu.add(jSeparator24);
+
+        mnuINaturalistToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
+        mnuINaturalistToken.setText("Setup iNaturalist Authorization");
+        mnuINaturalistToken.setToolTipText("Configure the iNaturalist Authorization Token for this WildLog session.");
+        mnuINaturalistToken.setName("mnuINaturalistToken"); // NOI18N
+        mnuINaturalistToken.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuINaturalistTokenActionPerformed(evt);
+            }
+        });
+        advancedMenu.add(mnuINaturalistToken);
+
         menuBar.add(advancedMenu);
 
         extraMenu.setText("Extra");
@@ -1456,20 +1470,6 @@ public final class WildLogView extends JFrame {
         mnuOther.add(chkMnuUseBundledMediaViewers);
 
         settingsMenu.add(mnuOther);
-
-        jSeparator24.setName("jSeparator24"); // NOI18N
-        settingsMenu.add(jSeparator24);
-
-        mnuINaturalistToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
-        mnuINaturalistToken.setText("iNaturalist Authorization");
-        mnuINaturalistToken.setToolTipText("Configure the iNaturalist Authorization Token for this WildLog session.");
-        mnuINaturalistToken.setName("mnuINaturalistToken"); // NOI18N
-        mnuINaturalistToken.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuINaturalistTokenActionPerformed(evt);
-            }
-        });
-        settingsMenu.add(mnuINaturalistToken);
 
         menuBar.add(settingsMenu);
 
@@ -2124,13 +2124,24 @@ public final class WildLogView extends JFrame {
                                 String fileName = inWildLogFile.getRelativePath().getFileName().toString();
                                 if (inDAOWithFile instanceof Sighting) {
                                     String tempFileName = fileName.substring(0, fileName.lastIndexOf('.'));
+                                    // Remove the sequence number (if present) from the name,
+                                    // to make sure we compare the expected names without the sequence number interfering
                                     int seqIndex = tempFileName.lastIndexOf('[');
                                     if (seqIndex > 0) {
                                         tempFileName = tempFileName.substring(0, seqIndex - 1);
                                     }
-                                    if (!((Sighting)inDAOWithFile).getCustomFileName().equals(tempFileName)) {
+                                    LocalDateTime fileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFile(inWildLogFile.getAbsolutePath()));
+                                    List<WildLogFile> lstGroupedFiles = app.getDBI().listWildLogFiles(inDAOWithFile.getWildLogFileID(), null, WildLogFile.class);
+                                    LocalDateTime firstFileDate = null;
+                                    for (WildLogFile wildLogFile : lstGroupedFiles) {
+                                        LocalDateTime groupedFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFile(wildLogFile.getAbsolutePath()));
+                                        if (firstFileDate == null || (groupedFileDate != null && groupedFileDate.isBefore(firstFileDate))) {
+                                            firstFileDate = groupedFileDate;
+                                        }
+                                    }
+                                    if (!((Sighting)inDAOWithFile).getCustomFileName(firstFileDate, fileDate).equals(tempFileName)) {
                                         renameBasedOnSighting = true;
-                                        fileName = ((Sighting)inDAOWithFile).getCustomFileName() + fileName.substring(fileName.lastIndexOf('.'));
+                                        fileName = ((Sighting)inDAOWithFile).getCustomFileName(firstFileDate, fileDate) + fileName.substring(fileName.lastIndexOf('.'));
                                     }
                                 }
                                 if (!shouldBePath.equals(currentPath) || renameBasedOnSighting) {

@@ -1693,8 +1693,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     @Override
                     public int compareTo(ComparableFile inComparableFile) {
                         if (inComparableFile != null && inComparableFile.originalFile != null && originalFile != null) {
-                            Date date1 = UtilsImageProcessing.getDateFromFileDate(originalFile.toPath());
-                            Date date2 = UtilsImageProcessing.getDateFromFileDate(inComparableFile.originalFile.toPath());
+                            Date date1 = UtilsImageProcessing.getDateFromFile(originalFile.toPath());
+                            Date date2 = UtilsImageProcessing.getDateFromFile(inComparableFile.originalFile.toPath());
                             if (date1 != null && date2 != null) {
                                 return date1.compareTo(date2);
                             }

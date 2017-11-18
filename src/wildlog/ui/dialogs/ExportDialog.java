@@ -1014,7 +1014,7 @@ public class ExportDialog extends JDialog {
                         int fileCount = 1;
                         for (WildLogFile wildLogFile : lstFiles) {
                             String fileName = wildLogFile.getRelativePath().getFileName().toString();
-                            fileName = tempSighting.getCustomFileName() + UtilsFileProcessing.getFormattedSequence(fileCount++) 
+                            fileName = tempSighting.getCustomFileName(null, null) + UtilsFileProcessing.getFormattedSequence(fileCount++) 
                                     + fileName.substring(fileName.lastIndexOf('.'));
                             UtilsFileProcessing.copyFile(wildLogFile.getAbsolutePath(), 
                                     path.resolve(currentVisit).toAbsolutePath().resolve(fileName), true, true);
@@ -1026,7 +1026,7 @@ public class ExportDialog extends JDialog {
                         else { 
                             extraZero = "";
                         }
-                        row.createCell(col++).setCellValue(tempSighting.getCustomFileName() + " [01 to " + extraZero + lstFiles.size() + "]");
+                        row.createCell(col++).setCellValue(tempSighting.getCustomFileName(null, null) + " [01 to " + extraZero + lstFiles.size() + "]");
                     }
                     else {
                         row.createCell(col++).setCellValue("");

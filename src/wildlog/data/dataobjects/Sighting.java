@@ -2,7 +2,9 @@ package wildlog.data.dataobjects;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
@@ -84,13 +86,22 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         }
     }
     
-    public String getCustomFileName() {
+    public String getCustomFileName(LocalDateTime inFirstFileDate, LocalDateTime inCurrentFileDate) {
+        LocalDateTime finalCurrentFileDate;
         if (date != null) {
-            return UtilsTime.WL_DATE_FORMATTER_FOR_FILES_CAMERATRAP_TIMESTAMP.format(UtilsTime.getLocalDateTimeFromDate(date));
+            LocalDateTime sightingDate = UtilsTime.getLocalDateTimeFromDate(date);
+            if (inFirstFileDate != null && inCurrentFileDate != null) {
+                TemporalAmount dateAdjustment = Duration.between(inFirstFileDate, inCurrentFileDate);
+                finalCurrentFileDate = sightingDate.plus(dateAdjustment);
+            }
+            else {
+                finalCurrentFileDate = sightingDate;
+            }
         }
         else {
-            return UtilsTime.WL_DATE_FORMATTER_FOR_FILES_CAMERATRAP_TIMESTAMP.format(LocalDateTime.now());
+            finalCurrentFileDate = LocalDateTime.now();
         }
+        return UtilsTime.WL_DATE_FORMATTER_FOR_FILES_CAMERATRAP_TIMESTAMP.format(finalCurrentFileDate);
     }
 
     @Override
