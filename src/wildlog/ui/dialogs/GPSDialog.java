@@ -1011,9 +1011,6 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_btnUseGPXActionPerformed
 
     private void btnUsePreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsePreviousActionPerformed
-        
-// FIXME: Ek dink nie die storie werk lekker nie. dit copy dalk nie die + / - sign nie...
-        
         DataObjectWithGPS temp = new DataObjectWithGPS() {};
         temp.setLatitude(getPrevLat());
         temp.setLatDegrees(getPrevLatDeg());
@@ -1706,7 +1703,7 @@ public class GPSDialog extends JDialog {
         public void gpsMoves(Object inLat, Object inLon) {
 //            uiLatitude = (double) inLat;
 //            uiLongitude = (double) inLon;
-//// FIXME: Hierdie storie werk skielik nie meer reg nie... Of Google maps update, maar tien teen een 'n Java JRE update wat dinge gebreek het...
+//// NOTA: Hierdie storie werk skielik nie meer reg nie... Of Google maps update, maar tien teen een 'n Java JRE update wat dinge gebreek het...
 ////        Om een of ander vreemde rede hou dit net skielik op werk, dit sal 3 keer reg update en dan net skielik ophou update...
 ////        Sien my vraag: http://stackoverflow.com/questions/41197762/javafx-webengine-upcall-stops-working-when-moving-marker-on-map
 ////System.out.println("Lat=" + uiLatitude + "   /   Lon=" + uiLongitude);
