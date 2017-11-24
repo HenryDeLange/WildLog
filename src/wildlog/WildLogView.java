@@ -2123,13 +2123,18 @@ public final class WildLogView extends JFrame {
                                 boolean renameBasedOnSighting = false;
                                 String fileName = inWildLogFile.getRelativePath().getFileName().toString();
                                 if (inDAOWithFile instanceof Sighting) {
-                                    String tempFileName = fileName.substring(0, fileName.lastIndexOf('.'));
-                                    // Remove the sequence number (if present) from the name,
+                                    String currentName = fileName.substring(0, fileName.lastIndexOf('.'));
+                                    // Remove the sequence number (if present) and original filename from the name,
                                     // to make sure we compare the expected names without the sequence number interfering
-                                    int seqIndex = tempFileName.lastIndexOf('[');
-                                    if (seqIndex > 0) {
-                                        tempFileName = tempFileName.substring(0, seqIndex - 1);
+                                    int indexSeq = currentName.lastIndexOf(UtilsFileProcessing.INDICATOR_SEQ);
+                                    if (indexSeq > 0) {
+                                        currentName = currentName.substring(0, indexSeq);
                                     }
+                                    int indexFile = currentName.lastIndexOf(UtilsFileProcessing.INDICATOR_FILE);
+                                    if (indexFile > 0) {
+                                        currentName = currentName.substring(0, indexFile);
+                                    }
+                                    // Get the dates to use for the expected name
                                     LocalDateTime fileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFile(inWildLogFile.getAbsolutePath()));
                                     List<WildLogFile> lstGroupedFiles = app.getDBI().listWildLogFiles(inDAOWithFile.getWildLogFileID(), null, WildLogFile.class);
                                     LocalDateTime firstFileDate = null;
@@ -2139,13 +2144,14 @@ public final class WildLogView extends JFrame {
                                             firstFileDate = groupedFileDate;
                                         }
                                     }
-                                    if (!((Sighting)inDAOWithFile).getCustomFileName(firstFileDate, fileDate).equals(tempFileName)) {
+                                    // Compare the actual and expected names
+                                    if (!((Sighting)inDAOWithFile).getCustomFileName(firstFileDate, fileDate).equals(currentName)) {
                                         renameBasedOnSighting = true;
                                         fileName = ((Sighting)inDAOWithFile).getCustomFileName(firstFileDate, fileDate) + fileName.substring(fileName.lastIndexOf('.'));
                                     }
                                 }
                                 if (!shouldBePath.equals(currentPath) || renameBasedOnSighting) {
-                                    finalHandleFeedback.println("PROBLEM:   Incorrect or outdated file path: " + inWildLogFile.getAbsolutePath());
+                                    finalHandleFeedback.println("PROBLEM:   Incorrect or outdated file path   : " + inWildLogFile.getAbsolutePath());
                                     finalHandleFeedback.println("+RESOLVED: Moved the file to the correct path: " + shouldBePath.resolve(fileName));
                                     // "Re-upload" the file to the correct location
                                     UtilsFileProcessing.performFileUpload(

@@ -43,6 +43,9 @@ public final class UtilsFileProcessing {
     private static final ExecutorService executorService = 
             Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_FileUpload"));
     private static final Map<String, Object> fileLocks = Collections.synchronizedMap(new HashMap<>(50));
+    private static final char[] SEQ = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X' ,'Y', 'Z'};
+    public static final String INDICATOR_SEQ = "_WLSEQ_";
+    public static final String INDICATOR_FILE = "_WLFILE_";
     private static Path lastFilePath = null;
 
     private UtilsFileProcessing() {
@@ -240,19 +243,31 @@ public final class UtilsFileProcessing {
     private static WildLogFile doTheFileSave(Path toFolder, Path inFromFile, DataObjectWithWildLogFile inDAOWithID, 
             WildLogFileType inFileType, int inSequenceIndex, WildLogApp inApp, LocalDateTime inFirstFileDate) {
         // Setup the output files
-        String fileName = inFromFile.getFileName().toString();
-        if (inDAOWithID instanceof Sighting && fileName.lastIndexOf('.') > 0) {
+        String fromFileName = inFromFile.getFileName().toString();
+        if (inDAOWithID instanceof Sighting && fromFileName.lastIndexOf('.') > 0) {
             // Rename the Sighting files to reflect the date of the Sighting (useful for external camera trap data tools)
             LocalDateTime fileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFile(inFromFile));
-            String tempFileName = ((Sighting) inDAOWithID).getCustomFileName(inFirstFileDate, fileDate);
-//            tempFileName = tempFileName + getFormattedSequence(inSequenceIndex);
-            fileName = tempFileName + fileName.substring(fileName.lastIndexOf('.'));
+            String customFileName = ((Sighting) inDAOWithID).getCustomFileName(inFirstFileDate, fileDate);
+            // Sluit die oorspronklikke naam in sodat die volgorde nie verlore gaan as die fotos 
+            // dieselfde EXIF datum het nie. (soos die geval is met sommige camera trap)
+            // Vir bestaande files met reeds veranderde name, probeer om dan net die sequence naam / file naam te hou.
+            String origFileNameOrSequence = fromFileName.substring(0, fromFileName.lastIndexOf('.'));
+            int indexFile = fromFileName.lastIndexOf(INDICATOR_FILE);
+            if (indexFile > 0) {
+                origFileNameOrSequence = fromFileName.substring(indexFile + INDICATOR_FILE.length());
+                origFileNameOrSequence = origFileNameOrSequence.substring(0, origFileNameOrSequence.lastIndexOf('.'));
+            }
+            int indexSeq = origFileNameOrSequence.lastIndexOf(INDICATOR_SEQ);
+            if (indexSeq > 0) {
+                origFileNameOrSequence = origFileNameOrSequence.substring(0, indexSeq);
+            }
+            fromFileName = customFileName + INDICATOR_FILE + origFileNameOrSequence + fromFileName.substring(fromFileName.lastIndexOf('.'));
         }
-        Path toFile = toFolder.resolve(fileName);
+        Path toFile = toFolder.resolve(fromFileName);
         // Check that the filename is unique
         while (Files.exists(toFile)) {
-            String tempFileName = fileName.substring(0, fileName.lastIndexOf('.'));
-            toFile = toFolder.resolve(tempFileName + getFormattedSequence(++inSequenceIndex) + fileName.substring(fileName.lastIndexOf('.')));
+            String tempFileName = fromFileName.substring(0, fromFileName.lastIndexOf('.'));
+            toFile = toFolder.resolve(tempFileName + getFormattedSequence(++inSequenceIndex) + fromFileName.substring(fromFileName.lastIndexOf('.')));
         }
         // Copy the original file into WildLog's folders. (Don't overwrite other files, and give an error if it already exists.)
         copyFile(inFromFile, toFile, false, false);
@@ -278,14 +293,19 @@ public final class UtilsFileProcessing {
     }
     
     public static String getFormattedSequence(int inCount) {
-        String count;
-        if (inCount < 10) {
-            count = "0" + Integer.toString(inCount);
+        int count = inCount;
+        String sequence = "";
+        do {
+            if (count < SEQ.length) {
+                sequence = sequence + SEQ[count % SEQ.length];
+            }
+            else {
+                sequence = sequence + SEQ[SEQ.length - 1];
+            }
+            count = count - SEQ.length;
         }
-        else {
-            count = Integer.toString(inCount);
-        }
-        return " [" + count + "]";
+        while (count >= 0);
+        return INDICATOR_SEQ + sequence;
     }
 
     public static void openFile(String inID, int inIndex, WildLogApp inApp) {
