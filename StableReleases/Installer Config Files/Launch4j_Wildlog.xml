@@ -33,12 +33,12 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>5.0.0.0</fileVersion>
-    <txtFileVersion>WildLog v5.0.0 Launcher</txtFileVersion>
+    <fileVersion>5.1.0.0</fileVersion>
+    <txtFileVersion>WildLog v5.1.0 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
     <copyright>2017</copyright>
-    <productVersion>5.0.0.0</productVersion>
-    <txtProductVersion>WildLog v5.0.0</txtProductVersion>
+    <productVersion>5.1.0.0</productVersion>
+    <txtProductVersion>WildLog v5.1.0</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>
