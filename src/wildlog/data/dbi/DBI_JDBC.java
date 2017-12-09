@@ -217,6 +217,9 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableWildLogOptions);
                 closeStatement(state);
+                if (inCreateDefaultRecords) {
+                    createWildLogOptions(new WildLogOptions());
+                }
                 // Since this is the first time the database is being created, also update the cache size for H2 (might fail on other DBs)
                 try {
                     state = conn.createStatement();
