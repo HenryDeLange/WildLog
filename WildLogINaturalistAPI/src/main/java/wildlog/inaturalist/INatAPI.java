@@ -225,7 +225,7 @@ public class INatAPI {
     
     public static JsonElement deleteObservation(long inINaturalistID, String inToken) {
         try {
-            // DELETE die data na iNaturalist
+            // DELETE die data op iNaturalist
             URL url = new URL("https://www.inaturalist.org/observations/" + inINaturalistID + ".json");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("DELETE");
@@ -344,6 +344,30 @@ public class INatAPI {
                 writer.write(stringBuilder.toString());
                 writer.flush();
             }
+            // Lees die terugvoer (dit doen ook dan eers die stuur)
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
+                JsonElement jsonElement = PARSER.parse(reader);
+                return jsonElement;
+            }
+            finally {
+                urlConnection.disconnect();
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+    
+    public static JsonElement removeObservationFieldValue(int inId, String inToken) {
+        try {
+            // DELETE die data op iNaturalist
+            URL url = new URL("https://www.inaturalist.org/observation_field_values/" + inId + ".json");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("DELETE");
+            urlConnection.setDoInput(true);
+            urlConnection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("Authorization", "Bearer " + inToken);
             // Lees die terugvoer (dit doen ook dan eers die stuur)
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
                 JsonElement jsonElement = PARSER.parse(reader);
