@@ -2148,6 +2148,11 @@ public abstract class DBI_JDBC implements DBI {
                 temp.setINaturalistID(results.getLong("INATURALISTID"));
                 temp.setINaturalistData(results.getString("INATURALISTDATA"));
             }
+            if (results.next()) {
+                temp = null;
+                throw new Exception("More than one iNaturalist database records matched the parameters: "
+                        + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
+            }
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -2156,6 +2161,9 @@ public abstract class DBI_JDBC implements DBI {
             ex.printStackTrace(System.err);
         }
         catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         finally {
