@@ -2155,6 +2155,8 @@ public abstract class DBI_JDBC implements DBI {
             }
         }
         catch (SQLException ex) {
+            System.err.println("More than one iNaturalist database records matched the parameters: "
+                    + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
             printSQLException(ex);
         }
         catch (InstantiationException ex) {
@@ -2184,6 +2186,8 @@ public abstract class DBI_JDBC implements DBI {
             state.executeUpdate();
         }
         catch (SQLException ex) {
+            System.err.println("More than one iNaturalist database records matched the parameters: "
+                    + "WildLogID = " + inINaturalistLinkedData.getWildlogID() + " | iNaturalistID = " + inINaturalistLinkedData.getINaturalistID());
             printSQLException(ex);
             return false;
         }
@@ -2207,6 +2211,8 @@ public abstract class DBI_JDBC implements DBI {
             state.executeUpdate();
         }
         catch (SQLException ex) {
+            System.err.println("More than one iNaturalist database records matched the parameters: "
+                    + "WildLogID = " + inINaturalistLinkedData.getWildlogID() + " | iNaturalistID = " + inINaturalistLinkedData.getINaturalistID());
             printSQLException(ex);
             return false;
         }
@@ -2232,6 +2238,8 @@ public abstract class DBI_JDBC implements DBI {
             state.executeUpdate();
         }
         catch (SQLException ex) {
+            System.err.println("More than one iNaturalist database records matched the parameters: "
+                    + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
             printSQLException(ex);
             return false;
         }
