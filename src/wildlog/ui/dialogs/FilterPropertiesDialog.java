@@ -670,7 +670,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         spnNumberOfElements.setModel(new javax.swing.SpinnerNumberModel(0, 0, 2147483647, 1));
         spnNumberOfElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel12.setText("Sex:");
+        jLabel12.setText("Gender:");
 
         lsbSex.setBackground(new java.awt.Color(230, 226, 224));
         lsbSex.setForeground(new java.awt.Color(176, 153, 145));

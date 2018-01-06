@@ -133,13 +133,13 @@ public class MapsBaseDialog extends JFrame {
                 + "A description of the active map is provided at the bottom of the window.\n\n"
                 + "You can filter the number of Observations that are used in the map by using the buttons in the Map Data Filters section.\n\n"
                 + "Maps can be exported using the Export Map button.\n\n"
-                + "<i>It is recommended, whenever possible, to define accurate start and end dates for all Periods. These dates are used by some maps.</i>\n\n"
+                + "It is recommended, whenever possible, to define accurate start and end dates for all Periods. These dates are used by some maps.\n\n"
                 + "Warning: \n"
                 + "Some maps may display incorrectly when there is too much data to represent visually on the map.\n"
                 + "Using very large datasets with some maps can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.\n\n"
                 + "Note: \n"
                 + "This is not a full GIS solution and some large map layers may not display or render correctly. "
-                + "If you experience problems loading custom layers, please try to use smaller layers instead.");
+                + "If you experience problems try to use smaller layers.");
         lblInfo.setPadding(new Insets(20));
         lblInfo.setFont(new Font(18));
         lblInfo.setWrapText(true);

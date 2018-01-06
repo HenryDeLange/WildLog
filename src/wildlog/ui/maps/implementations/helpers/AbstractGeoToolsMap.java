@@ -216,6 +216,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
     }
     
     protected Layer getLayerForSightings(final List<Sighting> inLstSightings) {
+        System.out.println("getting lsighting layer");
 // TODO: Figure uit hoe om die map te zoom na waar die punte geplot is
         FeatureLayer pointLayer = null;
         try {
@@ -229,6 +230,10 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                     SimpleFeature feature = builder.buildFeature(Long.toString(sighting.getSightingCounter()), new Object[] {sighting.toString()});
                     collection.add(feature);
                 }
+            }
+            if (collection.isEmpty()) {
+                // Ek moet steeds iets in die collection sit andersins gooi GeoTools 'n NullPointerException
+                collection.add(builder.buildFeature("Nothing"));
             }
             Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 0.8, 0.5, 14);
             pointLayer = new FeatureLayer(collection, pointStyle, "WildLogPointLayer");

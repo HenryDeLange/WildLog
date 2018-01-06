@@ -37,7 +37,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     private ChartType chartType;
     private Chart displayedChart;
     private final ComboBoxToShowReports<String> cmbCategories;
-    private final String[] options = new String[] {"Number of Individuals", "Sex", "Age", "Life Status", 
+    private final String[] options = new String[] {"Number of Individuals", "Gender", "Age", "Life Status", 
         "Evidence", "Certainty", "Rating", "Info Tag", "Creature Type", "Has GPS"};
     private Scene scene = null;
     
@@ -104,7 +104,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         }
         else
         if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[1])) {
-            title = "Number of Observations with the specified Sex";
+            title = "Number of Observations with the specified Gender";
         }
         else
         if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[2])) {

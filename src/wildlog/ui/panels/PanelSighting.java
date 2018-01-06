@@ -1038,7 +1038,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel14.setText("Time of Day:");
         jLabel14.setName("jLabel14"); // NOI18N
 
-        jLabel15.setText("Sex:");
+        jLabel15.setText("Gender:");
         jLabel15.setName("jLabel15"); // NOI18N
 
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));

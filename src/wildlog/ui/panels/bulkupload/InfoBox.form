@@ -344,7 +344,7 @@
         <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="Sex.NONE" type="code"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Sex of the creature."/>
+        <Property name="toolTipText" type="java.lang.String" value="Gender of the creature."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

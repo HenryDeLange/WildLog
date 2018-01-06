@@ -122,7 +122,7 @@ public class ReportsBaseDialog extends JFrame {
                 + "You can filter the number of Observations that are used in the report by using the buttons in the Report Data Filters section.\n\n"
                 + "Reports can be exported using the Export Report button.\n\n"
                 + "You can click on the report to view the data values at the selected point.\n\n"
-                + "<i>It is recommended, whenever possible, to define accurate start and end dates for all Periods. These dates are used by some reports.</i>\n\n"
+                + "It is recommended, whenever possible, to define accurate start and end dates for all Periods. These dates are used by some reports.\n\n"
                 + "Warning: \n"
                 + "Some reports may display incorrectly when there is too much data to represent visually on the chart.\n"
                 + "Using very large datasets with some reports can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.");

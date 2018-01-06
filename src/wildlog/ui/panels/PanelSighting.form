@@ -1365,7 +1365,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel15">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Sex:"/>
+                <Property name="text" type="java.lang.String" value="Gender:"/>
                 <Property name="name" type="java.lang.String" value="jLabel15" noResource="true"/>
               </Properties>
             </Component>

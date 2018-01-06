@@ -149,7 +149,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         }
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Details:</b><br/>", details, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Sex:</b><br/>", sex, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Gender:</b><br/>", sex, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Age:</b><br/>", age, true);
             if (moonPhase >= 0) {
                 UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moon Phase:</b><br/>", moonPhase + " % Full", true);
@@ -384,7 +384,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         builder.append("<sightingEvidence>").append(sightingEvidence).append("</sightingEvidence>");
         builder.append("<moonPhase>").append(moonPhase).append("</moonPhase>");
         builder.append("<moonlight>").append(moonlight).append("</moonlight>");
-        builder.append("<sex>").append(sex).append("</sex>");
+        builder.append("<gender>").append(sex).append("</gender>");
         builder.append("<lifeStatus>").append(lifeStatus).append("</lifeStatus>");
         builder.append("<tag><![CDATA[").append(tag).append("]]></tag>");
         builder.append("<temperature>").append(temperature).append("</temperature>");

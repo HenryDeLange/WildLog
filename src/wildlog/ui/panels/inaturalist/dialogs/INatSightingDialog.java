@@ -215,10 +215,11 @@ public class INatSightingDialog extends JDialog {
         pnlButtons = new javax.swing.JPanel();
         btnOK = new javax.swing.JButton();
         btnViewWebsite = new javax.swing.JButton();
-        btnUnlink = new javax.swing.JButton();
+        btnRemoveFromINat = new javax.swing.JButton();
         rdbGPSOpen = new javax.swing.JRadioButton();
         rdbGPSObscured = new javax.swing.JRadioButton();
         rdbGPSPrivate = new javax.swing.JRadioButton();
+        btnUnlinkFromWildLog = new javax.swing.JButton();
         pnlIDs = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblWildLogID = new javax.swing.JLabel();
@@ -282,16 +283,16 @@ public class INatSightingDialog extends JDialog {
             }
         });
 
-        btnUnlink.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnUnlink.setText("<html>Remove from iNaturalist</html>");
-        btnUnlink.setToolTipText("Delete this Observation from iNaturalist.");
-        btnUnlink.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUnlink.setFocusPainted(false);
-        btnUnlink.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnUnlink.setMargin(new java.awt.Insets(2, 6, 2, 2));
-        btnUnlink.addActionListener(new java.awt.event.ActionListener() {
+        btnRemoveFromINat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnRemoveFromINat.setText("<html>Delete from iNaturalist</html>");
+        btnRemoveFromINat.setToolTipText("Delete this Observation from iNaturalist.");
+        btnRemoveFromINat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRemoveFromINat.setFocusPainted(false);
+        btnRemoveFromINat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnRemoveFromINat.setMargin(new java.awt.Insets(2, 6, 2, 2));
+        btnRemoveFromINat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUnlinkActionPerformed(evt);
+                btnRemoveFromINatActionPerformed(evt);
             }
         });
 
@@ -314,6 +315,19 @@ public class INatSightingDialog extends JDialog {
         rdbGPSPrivate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbGPSPrivate.setFocusPainted(false);
 
+        btnUnlinkFromWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnUnlinkFromWildLog.setText("<html>Unlink from WildLog</html>");
+        btnUnlinkFromWildLog.setToolTipText("Unlink this Observation from iNaturalist.");
+        btnUnlinkFromWildLog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUnlinkFromWildLog.setFocusPainted(false);
+        btnUnlinkFromWildLog.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnUnlinkFromWildLog.setMargin(new java.awt.Insets(2, 6, 2, 2));
+        btnUnlinkFromWildLog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUnlinkFromWildLogActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlButtonsLayout = new javax.swing.GroupLayout(pnlButtons);
         pnlButtons.setLayout(pnlButtonsLayout);
         pnlButtonsLayout.setHorizontalGroup(
@@ -325,7 +339,8 @@ public class INatSightingDialog extends JDialog {
                         .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnViewWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                             .addComponent(btnOK, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(btnUnlink, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
+                            .addComponent(btnRemoveFromINat, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                            .addComponent(btnUnlinkFromWildLog, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(rdbGPSOpen))
@@ -335,23 +350,25 @@ public class INatSightingDialog extends JDialog {
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(rdbGPSPrivate)))
-                .addGap(5, 5, 5))
+                .addGap(0, 0, 0))
         );
         pnlButtonsLayout.setVerticalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(2, 2, 2)
                 .addComponent(btnOK, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnViewWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnUnlink, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(rdbGPSOpen)
+                .addGap(4, 4, 4)
+                .addComponent(btnViewWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(btnUnlinkFromWildLog, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(btnRemoveFromINat, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(rdbGPSOpen, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rdbGPSObscured)
+                .addComponent(rdbGPSObscured, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rdbGPSPrivate)
+                .addComponent(rdbGPSPrivate, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -681,7 +698,7 @@ public class INatSightingDialog extends JDialog {
                     .addComponent(pnlImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 585, Short.MAX_VALUE)
+                            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pnlIDs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pnlData, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(5, 5, 5)
@@ -765,10 +782,9 @@ public class INatSightingDialog extends JDialog {
                         iNatObservation = new INaturalistUpdateObservation();
                     }
                     iNatObservation.setSpecies_guess(element.getScientificName());
+// FIXME: Stel ook die timezone hier want anders default iNat dit soms na snaakse plekke... 
+//        (Maar hoe kry ek die regte waardes??? Tans werk ek deur die regte default timezone te stel op die website...)
                     iNatObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
-                    
-// FIXME: Stel maar die timezone hier, want anders default iNat dit soms na snaakse plekke... (maar hoe kry ek die regte waardes???)
-
                     iNatObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
                     iNatObservation.setLongitude(UtilsGPS.getLonDecimalDegree(sighting));
                     if (sighting.getGPSAccuracy() != null && sighting.getGPSAccuracy().getMeters() <= GPSAccuracy.TERRIBLE.getMeters()) {
@@ -833,54 +849,60 @@ public class INatSightingDialog extends JDialog {
         }
     }//GEN-LAST:event_btnUploadDataActionPerformed
 
-    private void btnUnlinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnlinkActionPerformed
+    private void btnRemoveFromINatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveFromINatActionPerformed
         if (linkedData.getINaturalistID() != 0) {
-            // Maak seker die Auth Token is OK
-            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
-                INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
-                dialog.setVisible(true);
+            int result = WLOptionPane.showConfirmDialog(this, 
+                    "Remove this Observation from iNaturalist?", 
+                    "Remove from iNaturalist?", 
+                    WLOptionPane.YES_NO_CANCEL_OPTION, WLOptionPane.WARNING_MESSAGE);
+            if (result == WLOptionPane.YES_OPTION) {
+                // Maak seker die Auth Token is OK
                 if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
-                    return;
+                    INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
+                    dialog.setVisible(true);
+                    if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                        return;
+                    }
                 }
-            }
-            try {
-                getGlassPane().setVisible(true);
-                getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                // Roep iNaturalist
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        INatAPI.deleteObservation(linkedData.getINaturalistID(), WildLogApp.getINaturalistToken());
-                        // Verwysder die inligting in WildLog
-                        app.getDBI().deleteINaturalistLinkedData(sighting.getSightingCounter(), 0);
-                    }
-                });
-            }
-            catch (Exception ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                WLOptionPane.showMessageDialog(this,
-                        "<html>The Observation was not removed from iNaturalist.</html>",
-                        "Delete Error", WLOptionPane.ERROR_MESSAGE);
-            }
-            finally {
-                // Opdateer die UI
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (app.getWildLogOptions().isEnableSounds()) {
-                            Toolkit.getDefaultToolkit().beep();
+                try {
+                    getGlassPane().setVisible(true);
+                    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    // Roep iNaturalist
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            INatAPI.deleteObservation(linkedData.getINaturalistID(), WildLogApp.getINaturalistToken());
+                            // Verwysder die inligting in WildLog
+                            app.getDBI().deleteINaturalistLinkedData(sighting.getSightingCounter(), 0);
                         }
-                        getGlassPane().setCursor(Cursor.getDefaultCursor());
-                        getGlassPane().setVisible(false);
-                        setupUI();
-                    }
-                });
+                    });
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    WLOptionPane.showMessageDialog(this,
+                            "<html>The Observation was not successfully deleted from iNaturalist.</html>",
+                            "Delete Error", WLOptionPane.ERROR_MESSAGE);
+                }
+                finally {
+                    // Opdateer die UI
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (app.getWildLogOptions().isEnableSounds()) {
+                                Toolkit.getDefaultToolkit().beep();
+                            }
+                            getGlassPane().setCursor(Cursor.getDefaultCursor());
+                            getGlassPane().setVisible(false);
+                            setupUI();
+                        }
+                    });
+                }
             }
         }
         else {
             showMessageForNoINatID();
         }
-    }//GEN-LAST:event_btnUnlinkActionPerformed
+    }//GEN-LAST:event_btnRemoveFromINatActionPerformed
 
     private void lblImageWLMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageWLMouseReleased
         UtilsFileProcessing.openFile(sighting.getWildLogFileID(), imageCounterWL, app);
@@ -1086,6 +1108,76 @@ public class INatSightingDialog extends JDialog {
         setupUI();
     }//GEN-LAST:event_rdbSummaryItemStateChanged
 
+    private void btnUnlinkFromWildLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnlinkFromWildLogActionPerformed
+        if (linkedData.getINaturalistID() != 0) {
+            int result = WLOptionPane.showConfirmDialog(this, 
+                    "Delete the this Observation's link data from the Workspace and remove the link field from iNaturalist?", 
+                    "Unlink from iNaturalist?", 
+                    WLOptionPane.YES_NO_CANCEL_OPTION, WLOptionPane.WARNING_MESSAGE);
+            if (result == WLOptionPane.YES_OPTION) {
+                // Maak seker die Auth Token is OK
+                if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                    INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
+                    dialog.setVisible(true);
+                    if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                        return;
+                    }
+                }
+                try {
+                    getGlassPane().setVisible(true);
+                    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    // Roep iNaturalist
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            int observationFieldID = 0;
+                            JsonObject iNatFullObs = INatAPI.getObservation(linkedData.getINaturalistID()).getAsJsonObject();
+                            JsonElement observationFieldValues = iNatFullObs.get("observation_field_values");
+                            if (observationFieldValues != null) {
+                                JsonArray arrayObsFieldValues = observationFieldValues.getAsJsonArray();
+                                for (int i = 0; i < arrayObsFieldValues.size(); i++) {
+                                    // Soek vir "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
+                                    if (arrayObsFieldValues.get(i).getAsJsonObject().get("observation_field_id").getAsInt() == 7112) {
+                                        observationFieldID = arrayObsFieldValues.get(i).getAsJsonObject().get("id").getAsInt();
+                                        break;
+                                    }
+                                }
+                            }
+                            if (observationFieldID != 0) {
+                                INatAPI.removeObservationFieldValue(observationFieldID, WildLogApp.getINaturalistToken());
+                            }
+                            // Verwysder die inligting in WildLog
+                            app.getDBI().deleteINaturalistLinkedData(sighting.getSightingCounter(), 0);
+                        }
+                    });
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    WLOptionPane.showMessageDialog(this,
+                            "<html>The Observation was not successfully unlinked from iNaturalist.</html>",
+                            "Unlink Error", WLOptionPane.ERROR_MESSAGE);
+                }
+                finally {
+                    // Opdateer die UI
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (app.getWildLogOptions().isEnableSounds()) {
+                                Toolkit.getDefaultToolkit().beep();
+                            }
+                            getGlassPane().setCursor(Cursor.getDefaultCursor());
+                            getGlassPane().setVisible(false);
+                            setupUI();
+                        }
+                    });
+                }
+            }
+        }
+        else {
+            showMessageForNoINatID();
+        }
+    }//GEN-LAST:event_btnUnlinkFromWildLogActionPerformed
+
     public void showMessageForNoINatID() throws HeadlessException {
         WLOptionPane.showMessageDialog(this,
                 "<html>The iNaturalist ID was not found. "
@@ -1120,7 +1212,8 @@ public class INatSightingDialog extends JDialog {
     private javax.swing.JButton btnOK;
     private javax.swing.JButton btnPreviousImageINat;
     private javax.swing.JButton btnPreviousImageWL;
-    private javax.swing.JButton btnUnlink;
+    private javax.swing.JButton btnRemoveFromINat;
+    private javax.swing.JButton btnUnlinkFromWildLog;
     private javax.swing.JButton btnUploadData;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.JButton btnViewWebsite;

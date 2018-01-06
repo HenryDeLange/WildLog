@@ -256,7 +256,7 @@ public class InfoBox extends JPanel {
 
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
         cmbSex.setSelectedItem(Sex.NONE);
-        cmbSex.setToolTipText("Sex of the creature.");
+        cmbSex.setToolTipText("Gender of the creature.");
         cmbSex.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbSex.setFocusable(false);
         cmbSex.setName("cmbSex"); // NOI18N
