@@ -5,7 +5,7 @@ public enum SightingEvidence {
     SEEN("Seen"),
     TRACK("Tracks"),
     SCAT("Scat"),
-    HAIR_ETC("Body Covering (Hair, etc.)"),
+    HAIR_ETC("Body Covering"),
     MARKING("Marking"),
     HEARD("Heard"),
     SMELL("Smell"),
