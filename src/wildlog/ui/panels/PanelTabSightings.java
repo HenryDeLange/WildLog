@@ -13,9 +13,20 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
+import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Age;
+import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.LifeStatus;
+import wildlog.data.enums.Moonlight;
+import wildlog.data.enums.Sex;
+import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.TimeAccuracy;
+import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterGPSDialog;
@@ -112,6 +123,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         lblFilterDetails = new javax.swing.JLabel();
         btnPrevFile = new javax.swing.JButton();
         btnNextFile = new javax.swing.JButton();
+        btnBulkEditSighting = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -507,6 +519,18 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         });
 
+        btnBulkEditSighting.setBackground(new java.awt.Color(235, 233, 221));
+        btnBulkEditSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
+        btnBulkEditSighting.setText("Bulk Edit");
+        btnBulkEditSighting.setToolTipText("Open a popup box to edit all of the selected Observations at once.");
+        btnBulkEditSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBulkEditSighting.setFocusPainted(false);
+        btnBulkEditSighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBulkEditSightingActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -519,7 +543,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                     .addComponent(btnDeleteSighting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAddSighting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnGoSighting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(btnBulkEditSighting, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
@@ -549,13 +574,15 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                             .addComponent(btnNextFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
-                        .addGap(13, 13, 13)
-                        .addComponent(btnGoSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnGoSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
                         .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
+                        .addGap(15, 15, 15)
                         .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
+                        .addComponent(btnBulkEditSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlViews, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlFeatures, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -624,7 +651,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                     tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 3), Visit.class);
             PanelSighting dialog = new PanelSighting(
                     app, app.getMainFrame(), "Edit an Existing Observation",
-                    sighting, location, visit, element, this, false, false, false);
+                    sighting, location, visit, element, this, false, false, false, false);
             dialog.setVisible(true);
         }
         else {
@@ -652,7 +679,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         tblSightings.clearSelection();
         PanelSighting dialog = new PanelSighting(
                 app, app.getMainFrame(), "Add a New Observation",
-                new Sighting(), null, null, null, this, true, false, false);
+                new Sighting(), null, null, null, this, true, false, false, false);
         dialog.setVisible(true);
         doTheRefresh(this);
     }//GEN-LAST:event_btnAddSightingActionPerformed
@@ -858,6 +885,87 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
     }//GEN-LAST:event_btnFilterMapActionPerformed
 
+    private void btnBulkEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkEditSightingActionPerformed
+        List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
+        if (!lstSightingsToUse.isEmpty()) {
+            Sighting bulkSighting = new Sighting();
+            PanelSighting dialog = new PanelSighting(
+                    app, app.getMainFrame(), "Bulk Edit Observations",
+                    bulkSighting, null, null, null, this, false, false, false, true);
+            dialog.setVisible(true);
+            for (Sighting sighting : lstSightingsToUse) {
+                if (bulkSighting.getDate() != null) {
+                    sighting.setDate(bulkSighting.getDate());
+                }
+                if (bulkSighting.getTimeAccuracy() != null && !TimeAccuracy.NONE.equals(bulkSighting.getTimeAccuracy())) {
+                    sighting.setTimeAccuracy(bulkSighting.getTimeAccuracy());
+                }
+                if (UtilsGPS.hasGPSData(bulkSighting)) {
+                    UtilsGPS.copyGpsBetweenDOs(sighting, bulkSighting);
+                }
+                if (bulkSighting.getTimeOfDay() != null && !ActiveTimeSpesific.NONE.equals(bulkSighting.getTimeOfDay())) {
+                    sighting.setTimeOfDay(bulkSighting.getTimeOfDay());
+                }
+                if (bulkSighting.getMoonPhase() >= 0) {
+                    sighting.setMoonPhase(bulkSighting.getMoonPhase());
+                }
+                if (bulkSighting.getMoonlight() != null && !Moonlight.NONE.equals(bulkSighting.getMoonlight())) {
+                    sighting.setMoonlight(bulkSighting.getMoonlight());
+                }
+                if (bulkSighting.getTemperature() >= 0) {
+                    sighting.setTemperature(bulkSighting.getTemperature());
+                }
+                if (bulkSighting.getWeather() != null && !Weather.NONE.equals(bulkSighting.getWeather())) {
+                    sighting.setWeather(bulkSighting.getWeather());
+                }
+                if (bulkSighting.getDurationMinutes() >= 0) {
+                    sighting.setDurationMinutes(bulkSighting.getDurationMinutes());
+                }
+                if (bulkSighting.getDurationSeconds() >= 0) {
+                    sighting.setDurationSeconds(bulkSighting.getDurationSeconds());
+                }
+                if (bulkSighting.getNumberOfElements() >= 0) {
+                    sighting.setNumberOfElements(bulkSighting.getNumberOfElements());
+                }
+                if (bulkSighting.getSex() != null && !Sex.NONE.equals(bulkSighting.getSex())) {
+                    sighting.setSex(bulkSighting.getSex());
+                }
+                if (bulkSighting.getAge() != null && !Age.NONE.equals(bulkSighting.getAge())) {
+                    sighting.setAge(bulkSighting.getAge());
+                }
+                if (bulkSighting.getLifeStatus() != null && !LifeStatus.NONE.equals(bulkSighting.getLifeStatus())) {
+                    sighting.setLifeStatus(bulkSighting.getLifeStatus());
+                }
+                if (bulkSighting.getSightingEvidence() != null && !SightingEvidence.NONE.equals(bulkSighting.getSightingEvidence())) {
+                    sighting.setSightingEvidence(bulkSighting.getSightingEvidence());
+                }
+                if (bulkSighting.getCertainty() != null && !Certainty.NONE.equals(bulkSighting.getCertainty())) {
+                    sighting.setCertainty(bulkSighting.getCertainty());
+                }
+                if (bulkSighting.getViewRating() != null && !ViewRating.NONE.equals(bulkSighting.getViewRating())) {
+                    sighting.setViewRating(bulkSighting.getViewRating());
+                }
+                if (bulkSighting.getTag() != null && !bulkSighting.getTag().isEmpty()) {
+                    sighting.setTag(bulkSighting.getTag());
+                }
+                if (bulkSighting.getDetails() != null && !bulkSighting.getDetails().isEmpty()) {
+                    sighting.setDetails(bulkSighting.getDetails());
+                }
+                if (bulkSighting.getElementName() != null && !bulkSighting.getElementName().isEmpty()) {
+                    sighting.setElementName(bulkSighting.getElementName());
+                }
+                if (bulkSighting.getLocationName() != null && !bulkSighting.getLocationName().isEmpty()) {
+                    sighting.setLocationName(bulkSighting.getLocationName());
+                }
+                if (bulkSighting.getVisitName() != null && !bulkSighting.getVisitName().isEmpty()) {
+                    sighting.setVisitName(bulkSighting.getVisitName());
+                }
+                app.getDBI().updateSighting(sighting);
+            }
+            doTheRefresh(this);
+        }
+    }//GEN-LAST:event_btnBulkEditSightingActionPerformed
+
     private List<Sighting> getListOfSightingsFromTable() {
         List<Sighting> lstSightingsToMap;
         if (tblSightings.getColumnCount() == 1) {
@@ -923,6 +1031,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
+    private javax.swing.JButton btnBulkEditSighting;
     private javax.swing.JButton btnDeleteSighting;
     private javax.swing.JButton btnFilterElements;
     private javax.swing.JButton btnFilterLocation;

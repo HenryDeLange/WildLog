@@ -60,7 +60,7 @@ public class INatImportDialog extends JDialog {
     
     public INatImportDialog(JFrame inParent) {
         super(inParent);
-        WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[INatImportDialog]");
         initComponents();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addEscapeKeyListener(this);
@@ -70,7 +70,7 @@ public class INatImportDialog extends JDialog {
     
     public INatImportDialog(JDialog inParent) {
         super(inParent);
-        WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[INatImportDialog]");
         initComponents();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addEscapeKeyListener(this);
@@ -362,7 +362,7 @@ public class INatImportDialog extends JDialog {
                             }
                             else {
                                 // CASE 2: The WildLogID is not found on the iNat observation, but the iNat observation is already linked in the Workspace
-                                feedback.println("ReLinkINat - The iNaturalist Observation " + iNatID + " is alrady linked to the WildLog Observation " 
+                                feedback.println("ReLinkINat - The iNaturalist Observation " + iNatID + " is already linked to the WildLog Observation " 
                                         + foundLinkedOnINatID.getWildlogID() + " but the link was on the iNaturalist website. "
                                         + "The link on the website will be recreated.");
                                 // Update the iNaturalist observation_field_values

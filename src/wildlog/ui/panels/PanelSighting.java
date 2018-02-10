@@ -80,6 +80,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private boolean treatAsNewSighting;
     private boolean disableEditing = false;
     private boolean bulkUploadMode = false;
+    private boolean bulkEditMode = false;
     private TimeFormat prevTimeFormat;
 
     // Constructor
@@ -99,10 +100,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
      * @param inTreatAsNewSighting
      * @param inDisableEditing
      * @param inBulkUploadMode
+     * @param inBulkEditMode
      */
     public PanelSighting(WildLogApp inApp, JFrame inOwner, String inTitle, Sighting inSighting, Location inLocation, Visit inVisit,
             Element inElement, PanelNeedsRefreshWhenDataChanges inPanelToRefresh,
-            boolean inTreatAsNewSighting, boolean inDisableEditing, boolean inBulkUploadMode) {
+            boolean inTreatAsNewSighting, boolean inDisableEditing, boolean inBulkUploadMode, boolean inBulkEditMode) {
         super(inOwner, inTitle);
         if (inSighting == null) {
             WildLogApp.LOGGER.log(Level.ERROR, "PanelSighting: The passed in Sighting is not allowed to be null.");
@@ -113,6 +115,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         treatAsNewSighting = inTreatAsNewSighting;
         disableEditing = inDisableEditing;
         bulkUploadMode = inBulkUploadMode;
+        bulkEditMode = inBulkEditMode;
         app = inApp;
         locationWL = inLocation;
         visit = inVisit;
@@ -238,7 +241,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         SpinnerFixer.configureSpinners(spnDurationMinutes);
         SpinnerFixer.configureSpinners(spnDurationSeconds);
         // Handle editable flags
-        if (!disableEditing && !bulkUploadMode) {
+        if (!disableEditing && !bulkUploadMode && !bulkEditMode) {
             // Only enable drag-and-drop if editing is allowed and not in bulk upload mode
             FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
                 @Override
@@ -299,6 +302,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 JComponent.WHEN_FOCUSED);
         // Make dates pretty
         dtpSightingDate.getComponent(1).setBackground(sightingIncludes.getBackground());
+        // Stel fokus op die Element search box, sodat mens maklik datelik kan begin soek
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                txtSearch.requestFocus();
+            }
+        });
     }
 
     private void uploadFiles(List<File> inFiles) {
@@ -540,7 +550,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnDeleteImage.setText("Delete File");
         btnDeleteImage.setToolTipText("Delete the current file.");
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnDeleteImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnDeleteImage.setFocusPainted(false);
         btnDeleteImage.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
@@ -555,7 +565,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnSetMainImage.setText("Default");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Observation.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetMainImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnSetMainImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnSetMainImage.setFocusPainted(false);
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
@@ -568,6 +578,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnPreviousImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImage.setToolTipText("Load previous file.");
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPreviousImage.setEnabled( !bulkEditMode);
         btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
@@ -580,6 +591,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnNextImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImage.setToolTipText("Load next file.");
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNextImage.setEnabled( !bulkEditMode);
         btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
@@ -593,7 +605,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Observation. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUploadImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnUploadImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnUploadImage.setFocusPainted(false);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
@@ -1420,7 +1432,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnCalculateDuration.setText("<html>Get Duration from Images</html>");
         btnCalculateDuration.setToolTipText("Attempt to calculate the Duration of the Observation based on times specified on the uploaded images.");
         btnCalculateDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode);
+        btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnCalculateDuration.setFocusPainted(false);
         btnCalculateDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCalculateDuration.setIconTextGap(8);
@@ -1437,7 +1449,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnCalculateSunAndMoon.setText("<html>Calculate Time of Day and Moon Phase</html>");
         btnCalculateSunAndMoon.setToolTipText("Automatically calculate the Sun and Moon phase based on the date and GPS co-ordinates.");
         btnCalculateSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCalculateSunAndMoon.setEnabled(!disableEditing);
+        btnCalculateSunAndMoon.setEnabled(!disableEditing && !bulkEditMode);
         btnCalculateSunAndMoon.setFocusPainted(false);
         btnCalculateSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCalculateSunAndMoon.setIconTextGap(8);
@@ -1454,7 +1466,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnGetGPSFromImage.setText("<html>Use GPS from Images</html>");
         btnGetGPSFromImage.setToolTipText("Attempt to load the GPS from the image's EXIF data.");
         btnGetGPSFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGetGPSFromImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnGetGPSFromImage.setDoubleBuffered(true);
+        btnGetGPSFromImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnGetGPSFromImage.setFocusPainted(false);
         btnGetGPSFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGetGPSFromImage.setIconTextGap(8);
@@ -1471,7 +1484,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnGetDateFromImage.setText("<html>Use Date from Images</html>");
         btnGetDateFromImage.setToolTipText("Attempt to load the date and time from the image's EXIF data.");
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnGetDateFromImage.setFocusPainted(false);
         btnGetDateFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGetDateFromImage.setIconTextGap(8);
@@ -1501,7 +1514,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnINaturalist.setText("<html>Link with iNaturalist</html>");
         btnINaturalist.setToolTipText("Link this Observatin with an iNaturalist account.");
         btnINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnINaturalist.setEnabled(!disableEditing && !bulkUploadMode);
+        btnINaturalist.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnINaturalist.setFocusPainted(false);
         btnINaturalist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnINaturalist.setIconTextGap(8);
@@ -1615,10 +1628,15 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private boolean saveSighting() {
         // Set Location, Element and Visit
-        sighting.setLocationName(locationWL.getName());
-        sighting.setElementName(element.getPrimaryName());
-        sighting.setVisitName(visit.getName());
-
+        if (locationWL != null) {
+            sighting.setLocationName(locationWL.getName());
+        }
+        if (element != null) {
+            sighting.setElementName(element.getPrimaryName());
+        }
+        if (visit != null) {
+            sighting.setVisitName(visit.getName());
+        }
         // Set variables
         setupSightingDateFromUIFields();
         sighting.setCertainty((Certainty)cmbCertainty.getSelectedItem());
@@ -1653,11 +1671,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sighting.setDurationSeconds(Double.parseDouble(spnDurationSeconds.getValue().toString()));
         sighting.setTimeAccuracy((TimeAccuracy)cmbTimeAccuracy.getSelectedItem());
         sighting.setAge((Age)cmbAge.getSelectedItem());
-
         // NOTE: The GPS info is already set on the Sighting object by the GPS popup component
-
         // SAVE (Only save to DB if not in bulk upload mode)
-        if (!bulkUploadMode) {
+        if (!bulkUploadMode && !bulkEditMode) {
             boolean result;
             if (sighting.getSightingCounter() == 0) {
                 result = app.getDBI().createSighting(sighting, false);
@@ -1672,7 +1688,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 return false;
             }
         }
-
         return true;
     }
 
@@ -1770,32 +1785,34 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         WildLogApp.LOGGER.log(Level.INFO, "[PanelSighting-Save]");
         // Check the required fields' borders
         Color green = new Color(0,204,51);
-        if (element == null) {
-            sclElement.setBorder(new LineBorder(Color.RED, 2));
-        }
-        else {
-            sclElement.setBorder(new LineBorder(green, 1));
-        }
-        if (locationWL == null) {
-            sclLocation.setBorder(new LineBorder(Color.RED, 2));
-        }
-        else {
-            sclLocation.setBorder(new LineBorder(green, 1));
-        }
-        if (visit == null) {
-            sclVisit.setBorder(new LineBorder(Color.RED, 2));
-        }
-        else {
-            sclVisit.setBorder(new LineBorder(green, 1));
-        }
-        if (dtpSightingDate.getDate() == null) {
-            dtpSightingDate.setBorder(new LineBorder(Color.ORANGE, 2));
-        }
-        else {
-            dtpSightingDate.setBorder(new LineBorder(green, 2));
+        if (!bulkEditMode) {
+            if (element == null) {
+                sclElement.setBorder(new LineBorder(Color.RED, 2));
+            }
+            else {
+                sclElement.setBorder(new LineBorder(green, 1));
+            }
+            if (locationWL == null) {
+                sclLocation.setBorder(new LineBorder(Color.RED, 2));
+            }
+            else {
+                sclLocation.setBorder(new LineBorder(green, 1));
+            }
+            if (visit == null) {
+                sclVisit.setBorder(new LineBorder(Color.RED, 2));
+            }
+            else {
+                sclVisit.setBorder(new LineBorder(green, 1));
+            }
+            if (dtpSightingDate.getDate() == null) {
+                dtpSightingDate.setBorder(new LineBorder(Color.ORANGE, 2));
+            }
+            else {
+                dtpSightingDate.setBorder(new LineBorder(green, 2));
+            }
         }
         // Perform the save action
-        if (locationWL != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
+        if (locationWL != null && element != null && visit != null && dtpSightingDate.getDate() != null || bulkEditMode) {
             if (saveSighting()) {
                 if (app.getWildLogOptions().isEnableSounds()) {
                     Toolkit.getDefaultToolkit().beep();

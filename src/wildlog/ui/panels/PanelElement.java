@@ -1581,7 +1581,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     Sighting sighting = app.getDBI().findSighting((Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 3), Sighting.class);
                     PanelSighting dialog = new PanelSighting(
                             app, app.getMainFrame(), "Edit an Existing Observation",
-                            sighting, location, app.getDBI().findVisit(sighting.getVisitName(), Visit.class), element, this, false, false, false);
+                            sighting, location, app.getDBI().findVisit(sighting.getVisitName(), Visit.class), element, 
+                            this, false, false, false, false);
                     dialog.setVisible(true);
                 }
                 else {
@@ -1648,7 +1649,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             sighting.setElementName(element.getPrimaryName());
             PanelSighting dialog = new PanelSighting(
                     app, app.getMainFrame(), "Add a New Observation",
-                    sighting, null, null, element, this, true, false, false);
+                    sighting, null, null, element, this, true, false, false, false);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed

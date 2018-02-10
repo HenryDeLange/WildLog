@@ -281,7 +281,7 @@ public class InfoBox extends JPanel {
                 new Visit(txtVisit.getText()),
                 new Element(sightingWrapper.getElementName()),
                 null,
-                false, false, true);
+                false, false, true, false);
         dialog.setVisible(true);
         // Update the UI
         table.getCellEditor().stopCellEditing();

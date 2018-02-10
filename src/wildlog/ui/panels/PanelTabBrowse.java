@@ -989,7 +989,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     app.getDBI().findVisit(tempSighting.getVisitName(), Visit.class),
                     app.getDBI().findElement(tempSighting.getElementName(), Element.class),
                     this,
-                    false, false, false);
+                    false, false, false, false);
                 dialog.setVisible(true);
             }
         }
@@ -1173,7 +1173,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         app, app.getMainFrame(), "Add a New Observation",
                                         new Sighting(), null, null, 
                                         (Element) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject(), 
-                                        tabBrowseHandle, true, false, false);
+                                        tabBrowseHandle, true, false, false, false);
                                 dialog.setVisible(true);
                             }
                         });
@@ -1191,7 +1191,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         new Sighting(), 
                                         app.getDBI().findLocation(((Visit) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getLocationName(), Location.class), 
                                         (Visit) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject(), 
-                                        null, tabBrowseHandle, true, false, false);
+                                        null, tabBrowseHandle, true, false, false, false);
                                 dialog.setVisible(true);
                             }
                         });

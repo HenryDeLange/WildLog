@@ -1201,7 +1201,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             refreshSightingInfo();
             PanelSighting dialog = new PanelSighting(
                     app, app.getMainFrame(), "Add a New Observation",
-                    sighting, locationForVisit, visit, null, this, true, false, false);
+                    sighting, locationForVisit, visit, null, this, true, false, false, false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
             sighting = null;
@@ -1214,7 +1214,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (sighting != null) {
                 PanelSighting dialog = new PanelSighting(
                         app, app.getMainFrame(), "Edit an Existing Observation",
-                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getElementName(), Element.class), this, false, false, false);
+                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getElementName(), Element.class), 
+                        this, false, false, false, false);
                 dialog.setVisible(true);
                 // Reset Sighting on this panel
                 sighting = null;
