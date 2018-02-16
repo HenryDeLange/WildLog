@@ -2029,7 +2029,9 @@ public final class WildLogView extends JFrame {
             }
             // Shutdown
             WLOptionPane.showMessageDialog(app.getMainFrame(),
-                    "The WildLog Workspace has been changed. Please restart the application.",
+                    "The WildLog Workspace has been changed to: " + System.lineSeparator() 
+                    + WildLogPaths.getFullWorkspacePrefix().toString() + System.lineSeparator()
+                    + "Please restart the application.",
                     "Workspace Changed!", JOptionPane.INFORMATION_MESSAGE);
 //            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
 //            this.setVisible(false);

@@ -396,6 +396,7 @@ public class WildLogApp extends Application {
      * @param args
      */
     public static void main(String[] args) {
+System.out.println("args = " + Arrays.toString(args));
         // Set default startup settings
         ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath().normalize();
         System.setProperty("settingsFolderLocation", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
@@ -510,6 +511,7 @@ public class WildLogApp extends Application {
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Setting Folder: {}", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Application Folder: {}", ACTIVEWILDLOG_CODE_FOLDER.toAbsolutePath().toString());
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Version: {}", WILDLOG_VERSION);
+        WildLogApp.LOGGER.log(Level.INFO, "Command Line Arguments: {}", Arrays.toString(args));
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
     }
