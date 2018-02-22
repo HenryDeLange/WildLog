@@ -160,7 +160,7 @@ public class ZoomDialog extends JDialog {
     }//GEN-LAST:event_lblZoomedFileMouseReleased
 
     private void setupFile(Path inPath) {
-        setTitle("Zoom Popup - " + inPath.toString());
+        setTitle("Zoom Popup - " + inPath.getFileName().toString());
         if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
             ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.VERY_LARGE.getSize(), true);
             lblZoomedFile.setIcon(imageIcon);

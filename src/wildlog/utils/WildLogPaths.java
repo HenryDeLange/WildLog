@@ -75,7 +75,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_XLS_PAARL              (Paths.get("Export", "Excel", "Paarl Format")),
     WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace")),
     WILDLOG_BUNDLED_APPLICATION           (Paths.get("WildLogApplication")),
-    // Folder for temporary files
+    /** Folder for temporary files */
     WILDLOG_TEMP                          (Paths.get(System.getProperty("user.home"), "WildLogSettings", "Temp"));
 
     private static Path activeWorkspacePrefix;

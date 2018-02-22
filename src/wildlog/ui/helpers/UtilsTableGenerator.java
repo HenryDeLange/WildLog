@@ -674,8 +674,8 @@ public final class UtilsTableGenerator {
     }
     
     public static void setupSightingTableForMainTab(final WildLogApp inApp, final JTable inTable, final JLabel inLblFilterDetails,
-            final FilterProperties inFilterProperties, final List<Location> inActiveLocations, 
-            final List<Visit> inActiveVisits, final List<Element> inActiveElements, 
+            final FilterProperties inFilterProperties, 
+            final List<Location> inActiveLocations, final List<Visit> inActiveVisits, final List<Element> inActiveElements, 
             final double inNorthEast_Lat, final double inNorthEast_Lon, final double inSouthWest_Lat, final double inSouthWest_Lon) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 8);
@@ -714,7 +714,7 @@ public final class UtilsTableGenerator {
                 else {
                     endDateTime = null;
                 }
-                final List<Sighting> listSightings = inApp.getDBI().searchSightings(
+                final List<Sighting> listSightings = inApp.getDBI().searchSightings(inFilterProperties.getSightingIDs(), 
                         UtilsTime.getDateFromLocalDateTime(startDateTime), UtilsTime.getDateFromLocalDateTime(endDateTime), 
                         inActiveLocations, inActiveVisits, inActiveElements, true, Sighting.class);
                 if (!listSightings.isEmpty()) {

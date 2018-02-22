@@ -41,6 +41,7 @@ import wildlog.inaturalist.queryobjects.INaturalistUpdateObservation;
 import wildlog.inaturalist.queryobjects.INaturalistUploadPhoto;
 import wildlog.inaturalist.queryobjects.enums.INaturalistGeoprivacy;
 import wildlog.maps.utils.UtilsGPS;
+import wildlog.ui.dialogs.CropDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsTime;
@@ -239,6 +240,7 @@ public class INatSightingDialog extends JDialog {
         lblImageWL = new javax.swing.JLabel();
         lblNumberOfImagesWL = new javax.swing.JLabel();
         btnNextImageWL = new javax.swing.JButton();
+        btnUploadCroppedImage = new javax.swing.JButton();
         pnlINatImages = new javax.swing.JPanel();
         btnNextImageINat = new javax.swing.JButton();
         lblNumberOfImagesINat = new javax.swing.JLabel();
@@ -517,8 +519,8 @@ public class INatSightingDialog extends JDialog {
         });
 
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UpdateGPS.png"))); // NOI18N
-        btnUploadImage.setText("Upload Image");
-        btnUploadImage.setToolTipText("Upload this Observation to iNaturalist.");
+        btnUploadImage.setText("Upload Original Image");
+        btnUploadImage.setToolTipText("Upload this image to iNaturalist.");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setFocusPainted(false);
         btnUploadImage.setMargin(new java.awt.Insets(2, 8, 2, 2));
@@ -556,6 +558,18 @@ public class INatSightingDialog extends JDialog {
             }
         });
 
+        btnUploadCroppedImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UpdateGPS.png"))); // NOI18N
+        btnUploadCroppedImage.setText("Upload Cropped Image");
+        btnUploadCroppedImage.setToolTipText("Opens a popup to select a crop of this image which will then be uploaded to iNaturalist.");
+        btnUploadCroppedImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUploadCroppedImage.setFocusPainted(false);
+        btnUploadCroppedImage.setMargin(new java.awt.Insets(2, 8, 2, 2));
+        btnUploadCroppedImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadCroppedImageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlWildLogImagesLayout = new javax.swing.GroupLayout(pnlWildLogImages);
         pnlWildLogImages.setLayout(pnlWildLogImagesLayout);
         pnlWildLogImagesLayout.setHorizontalGroup(
@@ -563,21 +577,26 @@ public class INatSightingDialog extends JDialog {
             .addGroup(pnlWildLogImagesLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addGroup(pnlWildLogImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnUploadImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlWildLogImagesLayout.createSequentialGroup()
                         .addComponent(btnPreviousImageWL, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(lblNumberOfImagesWL, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnNextImageWL, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblImageWL, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblImageWL, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlWildLogImagesLayout.createSequentialGroup()
+                        .addComponent(btnUploadImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(2, 2, 2)
+                        .addComponent(btnUploadCroppedImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(3, 3, 3))
         );
         pnlWildLogImagesLayout.setVerticalGroup(
             pnlWildLogImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWildLogImagesLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlWildLogImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUploadCroppedImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(lblImageWL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
@@ -972,13 +991,13 @@ public class INatSightingDialog extends JDialog {
                     return;
                 }
             }
-            try {
-                getGlassPane().setVisible(true);
-                getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                // Stuur die file na iNaturalist
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
+            getGlassPane().setVisible(true);
+            getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            // Stuur die file na iNaturalist
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
                         List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
                         if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
                                 && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
@@ -993,28 +1012,28 @@ public class INatSightingDialog extends JDialog {
                                     "Can't Upload", WLOptionPane.WARNING_MESSAGE);
                         }
                     }
-                });
-            }
-            catch (Exception ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                WLOptionPane.showMessageDialog(this,
-                        "<html>The WildLog Image was not uploaded to iNaturalist.</html>",
-                        "Upload Error", WLOptionPane.ERROR_MESSAGE);
-            }
-            finally {
-                // Opdateer die UI en kry die volledige nuutste WildLog linked data
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (app.getWildLogOptions().isEnableSounds()) {
-                            Toolkit.getDefaultToolkit().beep();
-                        }
-                        getGlassPane().setCursor(Cursor.getDefaultCursor());
-                        getGlassPane().setVisible(false);
-                        btnDownloadActionPerformed(null);
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        WLOptionPane.showMessageDialog(INatSightingDialog.this,
+                                "<html>The WildLog Image was not uploaded to iNaturalist.</html>",
+                                "Upload Error", WLOptionPane.ERROR_MESSAGE);
                     }
-                });
-            }
+                    finally {
+                        // Opdateer die UI en kry die volledige nuutste WildLog linked data
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (app.getWildLogOptions().isEnableSounds()) {
+                                    Toolkit.getDefaultToolkit().beep();
+                                }
+                                getGlassPane().setCursor(Cursor.getDefaultCursor());
+                                getGlassPane().setVisible(false);
+                                btnDownloadActionPerformed(null);
+                            }
+                        });
+                    }
+                }
+            });
         }
         else {
             showMessageForNoINatID();
@@ -1178,6 +1197,77 @@ public class INatSightingDialog extends JDialog {
         }
     }//GEN-LAST:event_btnUnlinkFromWildLogActionPerformed
 
+    private void btnUploadCroppedImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadCroppedImageActionPerformed
+        if (linkedData.getINaturalistID() != 0) {
+            // Maak seker die Auth Token is OK
+            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
+                dialog.setVisible(true);
+                if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                    return;
+                }
+            }
+            getGlassPane().setVisible(true);
+            getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            // Stuur die file na iNaturalist
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    getGlassPane().setVisible(true);
+                    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    try {
+                        List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+                        if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
+                                && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
+                            CropDialog dialog = new CropDialog(INatSightingDialog.this, lstWildLogFiles.get(imageCounterWL));
+                            final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
+                            dialog.setINaturalistUploadFile(tempFile);
+                            dialog.setVisible(true);
+                            INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
+                            iNatPhoto.setObservation_id(linkedData.getINaturalistID());
+                            iNatPhoto.setFile(tempFile);
+                            INatAPI.uploadPhoto(iNatPhoto, WildLogApp.getINaturalistToken());
+                            try {
+                                Files.delete(tempFile);
+                            }
+                            catch (IOException ex) {
+                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            }
+                        }
+                        else {
+                            WLOptionPane.showMessageDialog(INatSightingDialog.this,
+                                    "<html>Please select an <i>image</i> file linked to this Observation to be uploaded to iNaturalist.</html>",
+                                    "Can't Upload", WLOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        WLOptionPane.showMessageDialog(INatSightingDialog.this,
+                                "<html>The WildLog Image was not uploaded to iNaturalist.</html>",
+                                "Upload Error", WLOptionPane.ERROR_MESSAGE);
+                    }
+                    finally {
+                        // Opdateer die UI en kry die volledige nuutste WildLog linked data
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (app.getWildLogOptions().isEnableSounds()) {
+                                    Toolkit.getDefaultToolkit().beep();
+                                }
+                                getGlassPane().setCursor(Cursor.getDefaultCursor());
+                                getGlassPane().setVisible(false);
+                                btnDownloadActionPerformed(null);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else {
+            showMessageForNoINatID();
+        }
+    }//GEN-LAST:event_btnUploadCroppedImageActionPerformed
+
     public void showMessageForNoINatID() throws HeadlessException {
         WLOptionPane.showMessageDialog(this,
                 "<html>The iNaturalist ID was not found. "
@@ -1214,6 +1304,7 @@ public class INatSightingDialog extends JDialog {
     private javax.swing.JButton btnPreviousImageWL;
     private javax.swing.JButton btnRemoveFromINat;
     private javax.swing.JButton btnUnlinkFromWildLog;
+    private javax.swing.JButton btnUploadCroppedImage;
     private javax.swing.JButton btnUploadData;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.JButton btnViewWebsite;

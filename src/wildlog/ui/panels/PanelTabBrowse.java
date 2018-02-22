@@ -63,6 +63,7 @@ import wildlog.data.enums.ElementType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTMLExportTypes;
+import wildlog.ui.dialogs.CropDialog;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.LazyTreeNode;
@@ -108,7 +109,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         app = inApp;
         tabbedPanel = inTabbedPanel;
         initComponents();
-        b.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+        imageView.setCursor(new Cursor(Cursor.MOVE_CURSOR));
         // Set some configuration for the tree browser
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer());
@@ -162,7 +163,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         scrTextArea = new javax.swing.JScrollPane();
         txtBrowseInfo = new javax.swing.JTextPane();
         btnDefault = new javax.swing.JButton();
-        b = new org.jdesktop.swingx.JXImageView();
+        imageView = new org.jdesktop.swingx.JXImageView();
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
         btnGoBrowseSelection = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -180,6 +181,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnZoomOut = new javax.swing.JButton();
         btnBrowsePrev = new javax.swing.JButton();
         btnZoomIn = new javax.swing.JButton();
+        btnRotate1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 213, 186));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -312,7 +314,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnDefault.setBackground(new java.awt.Color(204, 213, 186));
         btnDefault.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnDefault.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
-        btnDefault.setText("Set as Default File");
+        btnDefault.setText("Set Default File");
         btnDefault.setToolTipText("Set the current file as the default (first) file for the selected node in the tree.");
         btnDefault.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDefault.setFocusPainted(false);
@@ -324,17 +326,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        b.setBackground(new java.awt.Color(0, 0, 0));
-        b.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        imageView.setBackground(new java.awt.Color(0, 0, 0));
+        imageView.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        javax.swing.GroupLayout bLayout = new javax.swing.GroupLayout(b);
-        b.setLayout(bLayout);
-        bLayout.setHorizontalGroup(
-            bLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout imageViewLayout = new javax.swing.GroupLayout(imageView);
+        imageView.setLayout(imageViewLayout);
+        imageViewLayout.setHorizontalGroup(
+            imageViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
-        bLayout.setVerticalGroup(
-            bLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        imageViewLayout.setVerticalGroup(
+            imageViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
@@ -378,7 +380,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultElementImage.setBackground(new java.awt.Color(204, 213, 186));
         btnSetDefaultElementImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnSetDefaultElementImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
-        btnSetDefaultElementImage.setText("Set as Creature File");
+        btnSetDefaultElementImage.setText("Set Creature File");
         btnSetDefaultElementImage.setToolTipText("Set this file as the default for the related Creature.");
         btnSetDefaultElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetDefaultElementImage.setFocusPainted(false);
@@ -392,7 +394,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultLocationImage.setBackground(new java.awt.Color(204, 213, 186));
         btnSetDefaultLocationImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnSetDefaultLocationImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
-        btnSetDefaultLocationImage.setText("Set as Place File");
+        btnSetDefaultLocationImage.setText("Set Place File");
         btnSetDefaultLocationImage.setToolTipText("Set this file as the default for the related Place.");
         btnSetDefaultLocationImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetDefaultLocationImage.setFocusPainted(false);
@@ -406,7 +408,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultVisitImage.setBackground(new java.awt.Color(204, 213, 186));
         btnSetDefaultVisitImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnSetDefaultVisitImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
-        btnSetDefaultVisitImage.setText("Set as Period File");
+        btnSetDefaultVisitImage.setText("Set Period File");
         btnSetDefaultVisitImage.setToolTipText("Set this file as the default for the related Period.");
         btnSetDefaultVisitImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetDefaultVisitImage.setFocusPainted(false);
@@ -577,6 +579,20 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 .addGap(0, 0, 0))
         );
 
+        btnRotate1.setBackground(new java.awt.Color(204, 213, 186));
+        btnRotate1.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnRotate1.setText("Crop");
+        btnRotate1.setToolTipText("Rotate the image clockwise.");
+        btnRotate1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRotate1.setFocusPainted(false);
+        btnRotate1.setFocusable(false);
+        btnRotate1.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnRotate1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRotate1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -615,8 +631,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addGap(2, 2, 2)
                         .addComponent(btnSetDefaultVisitImage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(b, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRotate1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(imageView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -625,10 +643,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addComponent(btnDeleteFile, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnViewEXIF)
-                        .addGap(8, 8, 8)
-                        .addComponent(btnCopyImage)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnViewImage)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCopyImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
@@ -642,7 +660,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             .addComponent(btnSetDefaultElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSetDefaultLocationImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSetDefaultVisitImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRotate1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -654,7 +673,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     .addComponent(btnAddFile, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnDeleteFile, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(1, 1, 1)
-                                .addComponent(b, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(imageView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))))
@@ -697,7 +716,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -722,7 +741,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(true);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -746,7 +765,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -903,7 +922,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnRefreshDatesActionPerformed
 
     private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
-        b.setScale(b.getScale()/1.5);
+        imageView.setScale(imageView.getScale()/1.5);
     }//GEN-LAST:event_btnZoomOutActionPerformed
 
     private void btnDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDefaultActionPerformed
@@ -959,7 +978,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnBrowsePrevActionPerformed
 
     private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
-        b.setScale(b.getScale()*1.5);
+        imageView.setScale(imageView.getScale()*1.5);
     }//GEN-LAST:event_btnZoomInActionPerformed
 
     private void btnGoBrowseSelectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBrowseSelectionActionPerformed
@@ -1372,7 +1391,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
                             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
                                     + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
-                                    app.getDBI().searchSightings(dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class));
+                                    app.getDBI().searchSightings(null, dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class));
                             dialog.setVisible(true);
                             somethingToReportOn = true;
                         }
@@ -1676,6 +1695,23 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_btnDeleteFileActionPerformed
 
+    private void btnRotate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotate1ActionPerformed
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
+                DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                if (temp != null) {
+                    List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(temp.getWildLogFileID(), null, WildLogFile.class);
+                    if (!lstFiles.isEmpty()) {
+// TODO: Doen slegs vir images, wys error popup vir ander files
+                        CropDialog dialog = new CropDialog(app.getMainFrame(), lstFiles.get(imageIndex));
+                        dialog.setVisible(true);
+                        doTheRefresh(null);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnRotate1ActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         List<Location> locations = app.getDBI().listLocations(null, Location.class);
@@ -1708,7 +1744,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
             Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
-            List<Sighting> sightings = app.getDBI().searchSightings(dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class);
+            List<Sighting> sightings = app.getDBI().searchSightings(null, dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class);
             if (sightings.isEmpty()) {
                 DefaultMutableTreeNode lazyNode = new DefaultMutableTreeNode("No Observations found.");
                 root.add(lazyNode);
@@ -1762,9 +1798,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void noFiles() {
         try {
-            b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+            imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
             lblNumberOfImages.setText("0 of 0");
-            b.setToolTipText("");
+            imageView.setToolTipText("");
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -1773,9 +1809,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void lookupCachedImage(final List<WildLogFile> inFiles) throws IOException {
         // Maak die finale grote twee keer groter om te help met die zoom, dan hoef ek nie weer images te load nie, en mens kan altyd dan original kyk vir ful resolution
-        int size = (int) b.getSize().getWidth();
-        if (size > (int) b.getSize().getHeight()) {
-            size = (int) b.getSize().getHeight();
+        int size = (int) imageView.getSize().getWidth();
+        if (size > (int) imageView.getSize().getHeight()) {
+            size = (int) imageView.getSize().getHeight();
         }
         final int finalSize = size*2;
         final Map<String, Image> newPreloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
@@ -1793,7 +1829,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             String tempKey = inFiles.get(imageIndex).getAbsolutePath().toString();
             if (!preloadedImages.containsKey(tempKey)) {
                 // The image will be loaded, so setup the loading screen so long.
-                b.setImage(app.getClass().getResource("resources/icons/Loading.png"));
+                imageView.setImage(app.getClass().getResource("resources/icons/Loading.png"));
             }
             int t = startIndex;
             for (; t < inFiles.size() && t < startIndex + CACHE_LIMIT_FOR_SELECTED_NODE; t++) {
@@ -1909,12 +1945,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.MOVIE)) {
-                        b.setImage(app.getClass().getResource("resources/icons/Movie.png"));
+                        imageView.setImage(app.getClass().getResource("resources/icons/Movie.png"));
                         lookupCachedImage(inFotos);
                     }
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.OTHER)) {
-                        b.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
+                        imageView.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
                         lookupCachedImage(inFotos);
                     }
                 }
@@ -1922,12 +1958,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 finally {
-                    b.setToolTipText(inFotos.get(imageIndex).getFilename());
+                    imageView.setToolTipText(inFotos.get(imageIndex).getFilename());
                 }
             }
             else {
                 try {
-                    b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                    imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                     lblNumberOfImages.setText("0 of 0");
                     lookupCachedImage(inFotos);
                 }
@@ -1935,20 +1971,20 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
                 finally {
-                    b.setToolTipText("");
+                    imageView.setToolTipText("");
                 }
             }
         }
         else {
             try {
-                b.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
             finally {
-                b.setToolTipText("");
+                imageView.setToolTipText("");
             }
         }
     }
@@ -1957,46 +1993,46 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         // Only display the image if it is the current active node.
         // (This is to prevent old node's files that finished after the active node from overwriting the displayed image.)
         if (inImageIndex == imageIndex && treBrowsePhoto.getLastSelectedPathComponent() == inSelectedNode) {
-            b.setImage(inImage);
+            imageView.setImage(inImage);
             double ratio;
             // Adjust the longest side's size
             int imageWidth = inImage.getWidth(null);
             int imageHeight = inImage.getHeight(null);
             if (imageHeight >= imageWidth) {
                 // Portrait image
-                if (imageHeight >= b.getHeight()) {
-                    ratio = (double)imageHeight/b.getHeight();
+                if (imageHeight >= imageView.getHeight()) {
+                    ratio = (double)imageHeight/imageView.getHeight();
                 }
                 else {
-                    ratio = (double)b.getHeight()/imageHeight;
+                    ratio = (double)imageView.getHeight()/imageHeight;
                 }
             }
             else {
                 // Landscape image
-                if (imageWidth >= b.getWidth()) {
-                    ratio = (double)imageWidth/b.getWidth();
+                if (imageWidth >= imageView.getWidth()) {
+                    ratio = (double)imageWidth/imageView.getWidth();
                 }
                 else {
-                    ratio = (double)b.getWidth()/imageWidth;
+                    ratio = (double)imageView.getWidth()/imageWidth;
                 }
             }
             // Check the shortest side's sizes to make sure they also fit into the display size (since it isn't a square)
             imageWidth = (int) (inImage.getWidth(null)/ratio);
             imageHeight = (int) (inImage.getHeight(null)/ratio);
-            if (b.getHeight() >= imageWidth) {
+            if (imageView.getHeight() >= imageWidth) {
                 // Portrait image
-                if (imageWidth >= b.getWidth()) {
-                    ratio = ratio*(double)imageWidth/b.getWidth();
+                if (imageWidth >= imageView.getWidth()) {
+                    ratio = ratio*(double)imageWidth/imageView.getWidth();
                 }
             }
             else {
                 // Landscape image
-                if (imageHeight >= b.getHeight()) {
-                    ratio = ratio*(double)imageHeight/b.getHeight();
+                if (imageHeight >= imageView.getHeight()) {
+                    ratio = ratio*(double)imageHeight/imageView.getHeight();
                 }
             }
             // Adjust the scale of the image to fit
-            b.setScale(1/ratio);
+            imageView.setScale(1/ratio);
         }
     }
 
@@ -2130,7 +2166,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private org.jdesktop.swingx.JXImageView b;
     private javax.swing.JButton btnAddFile;
     private javax.swing.JButton btnBrowseNext;
     private javax.swing.JButton btnBrowsePrev;
@@ -2141,6 +2176,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private javax.swing.JButton btnRefreshBrowseTree;
     private javax.swing.JButton btnRefreshDates;
     private javax.swing.JButton btnRotate;
+    private javax.swing.JButton btnRotate1;
     private javax.swing.JButton btnSetDefaultElementImage;
     private javax.swing.JButton btnSetDefaultLocationImage;
     private javax.swing.JButton btnSetDefaultVisitImage;
@@ -2152,6 +2188,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private javax.swing.JComboBox cmbElementTypesBrowseTab;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
+    private org.jdesktop.swingx.JXImageView imageView;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblNumberOfImages;
