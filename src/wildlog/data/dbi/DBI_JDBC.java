@@ -1980,7 +1980,7 @@ public abstract class DBI_JDBC implements DBI {
 
     @Override
     public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> 
-        List<S> searchSightings(Date inStartDate, Date inEndDate, 
+        List<S> searchSightings(List<Long> inActiveSightingIDs, Date inStartDate, Date inEndDate, 
             List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
             boolean inIncludeCachedValues, Class<S> inReturnType) {
         PreparedStatement state = null;
@@ -2000,6 +2000,14 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Build SQL
             String andKeyword = " WHERE";
+            if (inActiveSightingIDs != null && inActiveSightingIDs.size() > 0) {
+                sql = sql + andKeyword + " SIGHTINGS.SIGHTINGCOUNTER IN (";
+                for (int t = 0; t < inActiveSightingIDs.size(); t++) {
+                    sql = sql + "?,";
+                }
+                sql = sql.substring(0, sql.length() - 1) + ")";
+                andKeyword = " AND";
+            }
             if (inStartDate != null) {
                 sql = sql + andKeyword + " SIGHTINGDATE >= ?";
                 andKeyword = " AND";
@@ -2035,6 +2043,11 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.prepareStatement(sql);
             // Add parameters
             int paramCounter = 1;
+            if (inActiveSightingIDs != null && inActiveSightingIDs.size() > 0) {
+                for (Long sightingID : inActiveSightingIDs) {
+                    state.setLong(paramCounter++, sightingID);
+                }
+            }
             if (inStartDate != null) {
                 state.setTimestamp(paramCounter++, new Timestamp(inStartDate.getTime()));
             }
