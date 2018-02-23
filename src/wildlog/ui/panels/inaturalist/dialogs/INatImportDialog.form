@@ -52,9 +52,10 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btnFindMissingInWildLog" alignment="0" max="32767" attributes="0"/>
+                  <Component id="btnFindMissingInWildLog" alignment="0" pref="530" max="32767" attributes="0"/>
                   <Component id="btnImport" alignment="0" max="32767" attributes="0"/>
                   <Component id="btnFindMissingInINaturalist" alignment="1" max="32767" attributes="0"/>
+                  <Component id="btnCompareScientificNames" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -72,9 +73,11 @@
                   </Group>
                   <Component id="pnlButtons" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="20" max="32767" attributes="0"/>
-              <Component id="btnImport" min="-2" pref="80" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="btnImport" min="-2" pref="70" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+              <Component id="btnCompareScientificNames" min="-2" pref="25" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Component id="btnFindMissingInWildLog" min="-2" pref="25" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Component id="btnFindMissingInINaturalist" min="-2" pref="25" max="-2" attributes="0"/>
@@ -189,11 +192,32 @@
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="iconTextGap" type="int" value="8"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[6, 20, 6, 20]"/>
+          <Insets value="[6, 15, 6, 15]"/>
         </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImportActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnCompareScientificNames">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="13" style="0"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Report: Compare Scientific Names used in WildLog and iNaturalist"/>
+        <Property name="toolTipText" type="java.lang.String" value="List all observations where the Scientific Name in the WildLog Workspace does not match with iNaturalist."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="iconTextGap" type="int" value="8"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[6, 20, 6, 20]"/>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCompareScientificNamesActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnFindMissingInWildLog">
@@ -201,12 +225,13 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="13" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Report: Linked iNaturalist Observations not present in this WildLog Workspace"/>
+        <Property name="text" type="java.lang.String" value="Report: Find linked iNaturalist Observations not present in this WildLog Workspace"/>
         <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;List all iNaturalist Observations on the specified account which have a &lt;i&gt;WildLog_ID&lt;/i&gt;, &#xa;&lt;br /&gt;but the matching WildLog Observation could not be found in this Workspace.&lt;/html&gt;"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="8"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[6, 20, 6, 20]"/>
@@ -221,12 +246,13 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="13" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Report: Linked WildLog Observations not present on the iNaturalist Account"/>
+        <Property name="text" type="java.lang.String" value="Report: Find linked WildLog Observations not present on the iNaturalist Account"/>
         <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;List all WildLog Observations in this Workspace which have a linked iNaturalist record, &#xa;&lt;br /&gt;but the iNaturalist Observation could not be found on the specified account.&lt;/html&gt;"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="8"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[6, 20, 6, 20]"/>

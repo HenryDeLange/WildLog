@@ -1210,58 +1210,53 @@ public class INatSightingDialog extends JDialog {
             getGlassPane().setVisible(true);
             getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             // Stuur die file na iNaturalist
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    getGlassPane().setVisible(true);
-                    getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    try {
-                        List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
-                        if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
-                                && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
-                            CropDialog dialog = new CropDialog(INatSightingDialog.this, lstWildLogFiles.get(imageCounterWL));
-                            final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
-                            dialog.setINaturalistUploadFile(tempFile);
-                            dialog.setVisible(true);
-                            INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
-                            iNatPhoto.setObservation_id(linkedData.getINaturalistID());
-                            iNatPhoto.setFile(tempFile);
-                            INatAPI.uploadPhoto(iNatPhoto, WildLogApp.getINaturalistToken());
-                            try {
-                                Files.delete(tempFile);
-                            }
-                            catch (IOException ex) {
-                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            }
+            try {
+                List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+                if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
+                        && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
+                    CropDialog dialog = new CropDialog(INatSightingDialog.this, lstWildLogFiles.get(imageCounterWL));
+                    final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
+                    dialog.setINaturalistUploadFile(tempFile);
+                    dialog.setVisible(true);
+                    if (Files.exists(tempFile)) {
+                        INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
+                        iNatPhoto.setObservation_id(linkedData.getINaturalistID());
+                        iNatPhoto.setFile(tempFile);
+                        INatAPI.uploadPhoto(iNatPhoto, WildLogApp.getINaturalistToken());
+                        try {
+                            Files.delete(tempFile);
                         }
-                        else {
-                            WLOptionPane.showMessageDialog(INatSightingDialog.this,
-                                    "<html>Please select an <i>image</i> file linked to this Observation to be uploaded to iNaturalist.</html>",
-                                    "Can't Upload", WLOptionPane.WARNING_MESSAGE);
+                        catch (IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
-                    }
-                    catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        WLOptionPane.showMessageDialog(INatSightingDialog.this,
-                                "<html>The WildLog Image was not uploaded to iNaturalist.</html>",
-                                "Upload Error", WLOptionPane.ERROR_MESSAGE);
-                    }
-                    finally {
-                        // Opdateer die UI en kry die volledige nuutste WildLog linked data
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (app.getWildLogOptions().isEnableSounds()) {
-                                    Toolkit.getDefaultToolkit().beep();
-                                }
-                                getGlassPane().setCursor(Cursor.getDefaultCursor());
-                                getGlassPane().setVisible(false);
-                                btnDownloadActionPerformed(null);
-                            }
-                        });
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
                     }
                 }
-            });
+                else {
+                    WLOptionPane.showMessageDialog(INatSightingDialog.this,
+                            "<html>Please select an <i>image</i> file linked to this Observation to be uploaded to iNaturalist.</html>",
+                            "Can't Upload", WLOptionPane.WARNING_MESSAGE);
+                }
+            }
+            catch (Exception ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                WLOptionPane.showMessageDialog(INatSightingDialog.this,
+                        "<html>The WildLog Image was not uploaded to iNaturalist.</html>",
+                        "Upload Error", WLOptionPane.ERROR_MESSAGE);
+            }
+            finally {
+                // Opdateer die UI en kry die volledige nuutste WildLog linked data
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        getGlassPane().setCursor(Cursor.getDefaultCursor());
+                        getGlassPane().setVisible(false);
+                        btnDownloadActionPerformed(null);
+                    }
+                });
+            }
         }
         else {
             showMessageForNoINatID();

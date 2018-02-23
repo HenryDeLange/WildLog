@@ -203,13 +203,22 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         Set<String> elements = new HashSet<>();
         Map<String, ReportDataWrapper> mapChartData = new HashMap<>();
         Map<String, Integer> elementTotalCounts = new HashMap<>(2);
+        Map<String, String> cacheNames = new HashMap<>(20);
         int maxCount = 0;
         for (Sighting sighting1 : inSightings) {
-            String elementName1 = sighting1.getElementName(reportsBaseDialog.getOptionName());
+            String elementName1 = cacheNames.get(sighting1.getElementName());
+            if (elementName1 == null) {
+                elementName1 = sighting1.getElementName(reportsBaseDialog.getOptionName());
+                cacheNames.put(sighting1.getElementName(), elementName1);
+            }
             elements.add(elementName1);
             for (Sighting sighting2 : inSightings) {
                 if (isRelated(sighting1, sighting2)) {
-                    String elementName2 = sighting2.getElementName(reportsBaseDialog.getOptionName());
+                    String elementName2 = cacheNames.get(sighting2.getElementName());
+                    if (elementName2 == null) {
+                        elementName2 = sighting2.getElementName(reportsBaseDialog.getOptionName());
+                        cacheNames.put(sighting2.getElementName(), elementName2);
+                    }
                     String groupName;
                     if (elementName1.compareTo(elementName2) < 0) {
                         groupName = elementName1 + " - " + elementName2;

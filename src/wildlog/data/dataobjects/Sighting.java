@@ -47,6 +47,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
      * 2 = Scientific Name
      */
     public String getElementName(int inNameChoice) {
+// FIXME: Hierdie is handig, maar kan baie stadig word binne groot FOR loops...
         String primaryName = super.getElementName();
         if (inNameChoice == 0) {
             return primaryName;

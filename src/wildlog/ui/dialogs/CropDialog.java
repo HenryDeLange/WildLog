@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -301,19 +300,6 @@ public class CropDialog extends JDialog {
                     WLOptionPane.showMessageDialog(CropDialog.this,
                             "There was an unexpected error while trying to crop the current image.",
                             "Could Not Crop Image", JOptionPane.ERROR_MESSAGE);
-                }
-                finally {
-                    // Opdateer die UI en kry die volledige nuutste WildLog linked data
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                                Toolkit.getDefaultToolkit().beep();
-                            }
-                            getGlassPane().setCursor(Cursor.getDefaultCursor());
-                            getGlassPane().setVisible(false);
-                        }
-                    });
                 }
                 setVisible(false);
                 dispose();

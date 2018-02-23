@@ -18,7 +18,7 @@ import wildlog.data.enums.VisitType;
 
 
 public class FilterProperties implements Serializable {
-    public static String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    public static final String[] MONTHS = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     private static final long serialVersionUID = 100000001L; // This class is actually serialized when stored in the database (Adhoc table)
     private LocalDate startDate;
     private LocalDate endDate;
@@ -50,6 +50,8 @@ public class FilterProperties implements Serializable {
     private boolean durationIsLess;
     private boolean durationIsMore;
     private List<String> months;
+    private boolean iNatUploaded;
+    private boolean iNatNotUploaded;
 
     public FilterProperties() {
     }
@@ -292,6 +294,22 @@ public class FilterProperties implements Serializable {
 
     public void setMonths(List<String> inMonths) {
         months = inMonths;
+    }
+
+    public boolean isINatUploaded() {
+        return iNatUploaded;
+    }
+
+    public void setINatUploaded(boolean inINatUploaded) {
+        iNatUploaded = inINatUploaded;
+    }
+
+    public boolean isINatNotUploaded() {
+        return iNatNotUploaded;
+    }
+
+    public void setINatNotUploaded(boolean inINatNotUploaded) {
+        iNatNotUploaded = inINatNotUploaded;
     }
     
 }

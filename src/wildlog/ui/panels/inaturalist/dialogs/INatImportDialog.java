@@ -23,7 +23,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -91,6 +93,7 @@ public class INatImportDialog extends JDialog {
         btnViewWebsite = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         btnImport = new javax.swing.JButton();
+        btnCompareScientificNames = new javax.swing.JButton();
         btnFindMissingInWildLog = new javax.swing.JButton();
         btnFindMissingInINaturalist = new javax.swing.JButton();
 
@@ -163,18 +166,33 @@ public class INatImportDialog extends JDialog {
         btnImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnImport.setFocusPainted(false);
         btnImport.setIconTextGap(8);
-        btnImport.setMargin(new java.awt.Insets(6, 20, 6, 20));
+        btnImport.setMargin(new java.awt.Insets(6, 15, 6, 15));
         btnImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnImportActionPerformed(evt);
             }
         });
 
+        btnCompareScientificNames.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        btnCompareScientificNames.setText("Report: Compare Scientific Names used in WildLog and iNaturalist");
+        btnCompareScientificNames.setToolTipText("List all observations where the Scientific Name in the WildLog Workspace does not match with iNaturalist.");
+        btnCompareScientificNames.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCompareScientificNames.setFocusPainted(false);
+        btnCompareScientificNames.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCompareScientificNames.setIconTextGap(8);
+        btnCompareScientificNames.setMargin(new java.awt.Insets(6, 20, 6, 20));
+        btnCompareScientificNames.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompareScientificNamesActionPerformed(evt);
+            }
+        });
+
         btnFindMissingInWildLog.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        btnFindMissingInWildLog.setText("Report: Linked iNaturalist Observations not present in this WildLog Workspace");
+        btnFindMissingInWildLog.setText("Report: Find linked iNaturalist Observations not present in this WildLog Workspace");
         btnFindMissingInWildLog.setToolTipText("<html>List all iNaturalist Observations on the specified account which have a <i>WildLog_ID</i>, \n<br />but the matching WildLog Observation could not be found in this Workspace.</html>");
         btnFindMissingInWildLog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFindMissingInWildLog.setFocusPainted(false);
+        btnFindMissingInWildLog.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFindMissingInWildLog.setIconTextGap(8);
         btnFindMissingInWildLog.setMargin(new java.awt.Insets(6, 20, 6, 20));
         btnFindMissingInWildLog.addActionListener(new java.awt.event.ActionListener() {
@@ -184,10 +202,11 @@ public class INatImportDialog extends JDialog {
         });
 
         btnFindMissingInINaturalist.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        btnFindMissingInINaturalist.setText("Report: Linked WildLog Observations not present on the iNaturalist Account");
+        btnFindMissingInINaturalist.setText("Report: Find linked WildLog Observations not present on the iNaturalist Account");
         btnFindMissingInINaturalist.setToolTipText("<html>List all WildLog Observations in this Workspace which have a linked iNaturalist record, \n<br />but the iNaturalist Observation could not be found on the specified account.</html>");
         btnFindMissingInINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFindMissingInINaturalist.setFocusPainted(false);
+        btnFindMissingInINaturalist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFindMissingInINaturalist.setIconTextGap(8);
         btnFindMissingInINaturalist.setMargin(new java.awt.Insets(6, 20, 6, 20));
         btnFindMissingInINaturalist.addActionListener(new java.awt.event.ActionListener() {
@@ -212,9 +231,10 @@ public class INatImportDialog extends JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnFindMissingInWildLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnFindMissingInWildLog, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
                     .addComponent(btnImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnFindMissingInINaturalist, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnFindMissingInINaturalist, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnCompareScientificNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -227,9 +247,11 @@ public class INatImportDialog extends JDialog {
                         .addGap(15, 15, 15)
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(btnImport, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnImport, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(btnCompareScientificNames, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
                 .addComponent(btnFindMissingInWildLog, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btnFindMissingInINaturalist, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -431,6 +453,7 @@ public class INatImportDialog extends JDialog {
                     }
                     feedback.println("");
                     feedback.println("+++++++++++ SUMMARY +++++++++++");
+                    feedback.println("");
                     feedback.println("Added    : " + added);
                     feedback.println("Updated  : " + updated);
                     feedback.println("ReLinked : " + fixed);
@@ -798,8 +821,135 @@ public class INatImportDialog extends JDialog {
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnFindMissingInINaturalistActionPerformed
+
+    private void btnCompareScientificNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompareScientificNamesActionPerformed
+        // Maak seker die Auth Token is OK
+        if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+            INatAuthTokenDialog dialog = new INatAuthTokenDialog(this);
+            dialog.setVisible(true);
+            if (WildLogApp.getINaturalistToken() == null || WildLogApp.getINaturalistToken().isEmpty()) {
+                return;
+            }
+        }
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setTaskProgress(0);
+                setMessage("Starting the iNaturalist-WildLog scientific name comparison");
+                setTaskProgress(1);
+                setMessage("Busy with the iNaturalist-WildLog scientific name comparison... " + getProgress() + "%");
+                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+                PrintWriter feedback = null;
+                try {
+                    feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                    feedback.println("--------------------------------------------------------------------");
+                    feedback.println("---------- iNaturalist and WildLog Scientific Name Report ----------");
+                    feedback.println("--------------------------------------------------------------------");
+                    feedback.println("");
+                    JsonElement userJsonElement = INatAPI.getAuthenticatedUser(WildLogApp.getINaturalistToken());
+                    String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
+                    setTaskProgress(2);
+                    setMessage("Busy with the iNaturalist-WildLog scientific name comparison... " + getProgress() + "%");
+                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
+                    setTaskProgress(5);
+                    setMessage("Busy with the iNaturalist-WildLog scientific name comparison... " + getProgress() + "%");
+                    Map<String, List<String>> mapMismatches = new HashMap<>(15);
+                    int namesMatch = 0;
+                    for (int t = 0; t < lstObservationsJsonObjects.size(); t++) {
+                        // Need to load the full iNat data to get the observation_field_values as well
+                        JsonObject iNatFullObs = INatAPI.getObservation(lstObservationsJsonObjects.get(t).get("id").getAsLong()).getAsJsonObject();
+                        long iNatID = iNatFullObs.get("id").getAsLong();
+                        JsonElement observationFieldValues = iNatFullObs.get("observation_field_values");
+                        long foundWildLogID = 0;
+                        if (observationFieldValues != null) {
+                            JsonArray arrayObsFieldValues = observationFieldValues.getAsJsonArray();
+                            for (int i = 0; i < arrayObsFieldValues.size(); i++) {
+                                // Soek vir "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
+                                if (arrayObsFieldValues.get(i).getAsJsonObject().get("observation_field_id").getAsInt() == 7112) {
+                                    foundWildLogID = arrayObsFieldValues.get(i).getAsJsonObject().get("value").getAsLong();
+                                    break;
+                                }
+                            }
+                        }
+                        // Get the scientific names
+                        String iNatScientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
+                        String[] words = iNatScientificName.split(" ");
+                        if (words.length > 2) {
+                            iNatScientificName = words[1] + " " + words[2];
+                        }
+                        if (foundWildLogID > 0) {
+                            Sighting sighting = app.getDBI().findSighting(foundWildLogID, Sighting.class);
+                            if (sighting != null) {
+                                Element element = app.getDBI().findElement(sighting.getElementName(), Element.class);
+                                if (element != null) {
+                                    if (element.getScientificName() != null && element.getScientificName().equalsIgnoreCase(iNatScientificName)) {
+                                        namesMatch++;
+                                    }
+                                    else {
+                                        List<String> lstMismatches = mapMismatches.get(iNatScientificName);
+                                        if (lstMismatches == null) {
+                                            lstMismatches = new ArrayList<>(5);
+                                            mapMismatches.put(iNatScientificName, lstMismatches);
+                                        }
+                                        lstMismatches.add("WildLogID [" + foundWildLogID + "] / iNaturalistID [" + iNatID + "]");
+                                    }
+                                }
+                            }
+                        }
+                        setTaskProgress(5 + (int) (((double) (t + 1) / (double) lstObservationsJsonObjects.size()) * 94));
+                        setMessage("Busy with the iNaturalist-WildLog scientific name comparison... " + getProgress() + "%");
+                    }
+                    feedback.println("");
+                    feedback.println("There are " + namesMatch + " observations with correct matches between Scientific Names used in iNaturalist and this WildLog Workspace.");
+                    feedback.println("");
+                    feedback.println("");
+                    feedback.println("+++++ MISMATCHED SCIENTIFIC NAMES +++++");
+                    for (Map.Entry<String, List<String>> entry : mapMismatches.entrySet()) {
+                        feedback.println(entry.getKey() + " [" + entry.getValue().size() + " mismatches]");
+                        for (String mismatch : entry.getValue()) {
+                            feedback.println("    " + mismatch);
+                        }
+                        feedback.println("");
+                    }
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    WLOptionPane.showMessageDialog(INatImportDialog.this,
+                            "<html>There was a problem processing the iNaturalist data.</html>",
+                            "Processing Error", WLOptionPane.ERROR_MESSAGE);
+                    if (feedback != null) {
+                        feedback.println("");
+                        feedback.println("------------------------------");
+                        feedback.println("----------- ERROR ------------");
+                        feedback.println(ex.toString());
+                        feedback.println("------------------------------");
+                        feedback.println("");
+                    }
+                }
+                finally {
+                    if (feedback != null) {
+                        feedback.println("");
+                        feedback.println("------------------------------");
+                        feedback.println("---------- FINISHED ----------");
+                        feedback.println("------------------------------");
+                        feedback.println("");
+                        feedback.flush();
+                        feedback.close();
+                    }
+                }
+                // Open the summary document
+                UtilsFileProcessing.openFile(feedbackFile);
+                setTaskProgress(100);
+                setMessage("Done with the iNaturalist-WildLog scientific name comparison");
+                return null;
+            }
+        });
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnCompareScientificNamesActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCompareScientificNames;
     private javax.swing.JButton btnFindMissingInINaturalist;
     private javax.swing.JButton btnFindMissingInWildLog;
     private javax.swing.JButton btnImport;

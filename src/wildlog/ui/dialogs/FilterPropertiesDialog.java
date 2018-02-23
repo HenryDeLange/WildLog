@@ -21,6 +21,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
@@ -182,6 +183,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jLabel25 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        chkINaturalistUploaded = new javax.swing.JCheckBox();
+        chkINaturalistNotUploaded = new javax.swing.JCheckBox();
         btnTemplates = new javax.swing.JButton();
         btnSelectAll = new javax.swing.JButton();
         btnClearAll = new javax.swing.JButton();
@@ -728,6 +732,16 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         jLabel27.setForeground(new java.awt.Color(102, 102, 102));
         jLabel27.setText("(separate by newline)");
 
+        jLabel30.setText("iNaturalist:");
+
+        chkINaturalistUploaded.setText("Uploaded");
+        chkINaturalistUploaded.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkINaturalistUploaded.setFocusPainted(false);
+
+        chkINaturalistNotUploaded.setText("Not uploaded");
+        chkINaturalistNotUploaded.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkINaturalistNotUploaded.setFocusPainted(false);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -737,40 +751,18 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13)
                     .addComponent(jLabel10))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jScrollPane2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkIncludeEmptyTags)
-                            .addComponent(jLabel27)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(264, 264, 264)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(chkIncludeEmptyTags)
+                    .addComponent(jLabel27))
                 .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addComponent(jLabel24)
                 .addGap(5, 5, 5)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(chkIndividualsLess)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(chkIndividualsMore))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel11)
-                                        .addGap(13, 13, 13)
-                                        .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel12)))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(spnDurationMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
@@ -782,8 +774,38 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                         .addGap(10, 10, 10)
                         .addComponent(chkDurationLess)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chkDurationMore)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(chkDurationMore)
+                        .addGap(10, 10, 10))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel30)
+                                        .addGap(5, 5, 5)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(chkINaturalistNotUploaded)
+                                            .addComponent(chkINaturalistUploaded))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel11)
+                                                .addGap(13, 13, 13)
+                                                .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel12)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                                        .addGap(5, 5, 5))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(chkIndividualsLess)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(chkIndividualsMore)
+                                .addContainerGap())))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -791,21 +813,28 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 .addGap(3, 3, 3)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane5)
+                        .addGap(5, 5, 5))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
                             .addComponent(jLabel12)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
+                        .addGap(5, 5, 5)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(spnNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel11))
-                        .addGap(3, 3, 3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(chkIndividualsLess)
                             .addComponent(chkIndividualsMore))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane5))
-                .addGap(5, 5, 5)
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel30)
+                            .addComponent(chkINaturalistUploaded))
+                        .addGap(0, 0, 0)
+                        .addComponent(chkINaturalistNotUploaded)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel24)
                     .addComponent(spnDurationMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -998,6 +1027,8 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         inFilterProperties.setDurationIsLess(chkDurationLess.isSelected());
         inFilterProperties.setDurationIsMore(chkDurationMore.isSelected());
         inFilterProperties.setMonths(lsbMonths.getSelectedValuesList());
+        inFilterProperties.setINatUploaded(chkINaturalistUploaded.isSelected());
+        inFilterProperties.setINatNotUploaded(chkINaturalistNotUploaded.isSelected());
     }
 
     private void lblTimeOfDayInfoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimeOfDayInfoMousePressed
@@ -1048,6 +1079,8 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         inFilterProperties.setDurationIsLess(true);
         inFilterProperties.setDurationIsMore(true);
         inFilterProperties.setMonths(Arrays.asList(FilterProperties.MONTHS));
+        inFilterProperties.setINatUploaded(false);
+        inFilterProperties.setINatNotUploaded(false);
     }
 
     private void btnClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllActionPerformed
@@ -1081,6 +1114,8 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         filterProperties.setDurationIsLess(true);
         filterProperties.setDurationIsMore(true);
         filterProperties.setMonths(new ArrayList<>(0));
+        filterProperties.setINatUploaded(false);
+        filterProperties.setINatNotUploaded(false);
         populateToUI(filterProperties);
     }//GEN-LAST:event_btnClearAllActionPerformed
 
@@ -1153,6 +1188,8 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         chkDurationLess.setSelected(inFilterProperties.isDurationIsLess());
         chkDurationMore.setSelected(inFilterProperties.isDurationIsMore());
         selectValuesInJList(lsbMonths, inFilterProperties.getMonths());
+        chkINaturalistUploaded.setSelected(inFilterProperties.isINatUploaded());
+        chkINaturalistNotUploaded.setSelected(inFilterProperties.isINatNotUploaded());
     }
     
     private void selectValuesInJList(JList inList, List inValues) {
@@ -1524,6 +1561,17 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     return false;
                 }
             }
+            // iNaturalist
+            if (inFilterProperties.isINatUploaded() != inFilterProperties.isINatNotUploaded()) {
+                INaturalistLinkedData linkedData = WildLogApp.getApplication().getDBI().findINaturalistLinkedData(
+                        inSighting.getSightingCounter(), 0, INaturalistLinkedData.class);
+                if (inFilterProperties.isINatNotUploaded() && linkedData != null && linkedData.getWildlogID() != 0) {
+                    return false;
+                }
+                if (inFilterProperties.isINatUploaded() && (linkedData == null || linkedData.getWildlogID() == 0)) {
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -1536,6 +1584,8 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private javax.swing.ButtonGroup buttonGroupIDs;
     private javax.swing.JCheckBox chkDurationLess;
     private javax.swing.JCheckBox chkDurationMore;
+    private javax.swing.JCheckBox chkINaturalistNotUploaded;
+    private javax.swing.JCheckBox chkINaturalistUploaded;
     private javax.swing.JCheckBox chkIncludeEmptyTags;
     private javax.swing.JCheckBox chkIndividualsLess;
     private javax.swing.JCheckBox chkIndividualsMore;
@@ -1565,6 +1615,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
