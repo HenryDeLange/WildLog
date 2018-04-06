@@ -852,6 +852,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     if (imageWrapper.getDate().getTime() > endDate.getTime()) {
                                         endDate = imageWrapper.getDate();
                                     }
+// TODO: Kyk of ek hierdie weer kan terug bring om te help met performance...
 //                                    if (!uploadListContainsDuplicates) {
 //                                        for (File testDuplicateFiles : files) {
 //                                            if (testDuplicateFiles.equals(imageWrapper.getFile().toFile())) {
@@ -908,6 +909,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         WildLogApp.LOGGER.log(Level.INFO, "ExecutorService {} took {} hours, {} minutes, {} seconds to save the sightings", 
                                 new Object[]{executorServiceName, hours, minutes, seconds});
                     }
+                    this.setTaskProgress(99);
+                    this.setMessage("Saving the Bulk Import: Saving the Period... " + this.getProgress() + "%");
                     // Process the Visit (only after saving all of the sightings, otherwise the user can edit/delete it while the bulk import is busy)
                     visit.setLocationName(location.getName());
                     visit.setStartDate(dtpStartDate.getDate());
@@ -928,7 +931,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()),
                             visitFiles,
                             null, 
-                            app, false, null, true, true);
+                            app, false, null, true, false);
                     // Saving is done, now open the visits's tab
                     this.setMessage("Saving the Bulk Import: Finished");
                     this.setTaskProgress(100);
