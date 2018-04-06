@@ -1,5 +1,10 @@
 package wildlog.ui.dialogs;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -15,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -23,8 +29,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import mediautil.gen.Log;
-import mediautil.gen.directio.IterativeReader;
-import mediautil.gen.directio.IterativeWriter;
 import mediautil.image.jpeg.LLJTran;
 import mediautil.image.jpeg.LLJTranException;
 import org.apache.logging.log4j.Level;
@@ -254,46 +258,113 @@ public class CropDialog extends JDialog {
                     LLJTran lljTran = new LLJTran(wildLogFile.getAbsolutePath().toFile());
                     // If you pass the 2nd parameter as false, Exif information is not loaded and hence will not be written.
                     lljTran.read(LLJTran.READ_ALL, true);
-                    lljTran.transform(LLJTran.CROP);
                     // Get a name for the new cropped file
-                    WildLogFile croppedWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), 
+                    WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), 
                             wildLogFile.getDBFilePath(), wildLogFile.getFileType(), new Date(), null, -1);
                     if (iNaturalistUploadFile == null) {
-                        while (Files.exists(croppedWildLogFile.getAbsolutePath())) {
-                            String newFilename = croppedWildLogFile.getFilename();
+                        while (Files.exists(newWildLogFile.getAbsolutePath())) {
+                            String newFilename = newWildLogFile.getFilename();
                             newFilename = newFilename.substring(0, newFilename.lastIndexOf('.')) + "_c.jpg";
-                            croppedWildLogFile.setDBFilePath(croppedWildLogFile.getRelativePath().getParent().resolve(newFilename).toString());
-                            croppedWildLogFile.setFilename(newFilename);
+                            newWildLogFile.setDBFilePath(newWildLogFile.getRelativePath().getParent().resolve(newFilename).toString());
+                            newWildLogFile.setFilename(newFilename);
                         }
                     }
                     else {
-                        croppedWildLogFile.setDBFilePath(iNaturalistUploadFile.toAbsolutePath().toString());
+                        newWildLogFile.setDBFilePath(iNaturalistUploadFile.toAbsolutePath().toString());
                     }
-                    // Save the Image which is already transformed as specified by the input transformation earlier, along with the Exif header.
-                    try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(croppedWildLogFile.getAbsolutePath().toFile()))) {
+                    // Apply rotation (if needed)
+                    try {
+                        Metadata metadata = ImageMetadataReader.readMetadata(wildLogFile.getAbsolutePath().toFile());
+                        Collection<ExifIFD0Directory> directories = metadata.getDirectoriesOfType(ExifIFD0Directory.class);
+                        int orientation = 0;
+                        if (directories != null) {
+                            for (ExifIFD0Directory directory : directories) {
+                                if (directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                                    orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+                                }
+                            }
+                        }
+                        if (orientation > 1) {
+                            switch (orientation) {
+                                case 1:
+                                    // No rotation
+                                    // do nothing...
+                                    break;
+                                case 2: 
+                                    // Flip H
+                                    lljTran.transform(LLJTran.FLIP_H, 
+                                            LLJTran.OPT_XFORM_APPX | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL);
+                                    break;
+                                case 3: 
+                                    // Rotate 180
+                                    lljTran.transform(LLJTran.ROT_180, 
+                                            LLJTran.OPT_XFORM_APPX | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL);
+                                    break;
+                                case 4: 
+                                    // flip V
+                                    lljTran.transform(LLJTran.FLIP_V, 
+                                            LLJTran.OPT_XFORM_APPX | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL);
+                                    break;
+                                case 5: 
+                                    // Transpose
+                                    lljTran.transform(LLJTran.TRANSPOSE, 
+                                            LLJTran.OPT_XFORM_APPX | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL);
+                                    break;
+                                case 6: 
+                                    // Rotate 90
+                                    lljTran.transform(LLJTran.ROT_90, 
+                                            LLJTran.OPT_XFORM_APPX | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL);
+                                    break;
+                                case 7: 
+                                    // Transverse
+                                    lljTran.transform(LLJTran.TRANSVERSE, 
+                                            LLJTran.OPT_XFORM_APPX | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL);
+                                    break;
+                                case 8: 
+                                    // Rotate 270
+                                    lljTran.transform(LLJTran.ROT_270, 
+                                            LLJTran.OPT_XFORM_APPX | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL);
+                                    break;
+                            }
+                        }
+                    }
+                    catch (MetadataException | ImageProcessingException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                    // Save the cropped Image (which has already been rotated - if needed)
+                    try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newWildLogFile.getAbsolutePath().toFile()))) {
+                        // Get crop coordinates
                         CroppingPanel panel = ((CroppingPanel) pnlImage);
-                        double ratio = ((double) lljTran.getWidth()) / ((double) panel.getImageWidth());
+                        double ratio = ((double) Math.max(lljTran.getWidth(), lljTran.getHeight())) / ((double) WildLogThumbnailSizes.VERY_LARGE.getSize());
                         int firstX = Math.min(panel.getBeginX(), panel.getEndX());
                         int firstY = Math.min(panel.getBeginY(), panel.getEndY());
                         int lastX = Math.max(panel.getBeginX(), panel.getEndX());
                         int lastY = Math.max(panel.getBeginY(), panel.getEndY());
-                        // Based on the code in lljTran.save()
-                        IterativeWriter writer = lljTran.initWrite(outputStream, LLJTran.CROP, LLJTran.OPT_WRITE_ALL,
+                        // Apply the crop
+                        lljTran.transform(LLJTran.CROP, 
+                                LLJTran.OPT_XFORM_APPX | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL, 
                                 new Rectangle(
                                         (int) (firstX * ratio),
                                         (int) (firstY * ratio),
                                         (int) ((lastX - firstX) * ratio),
-                                        (int) ((lastY - firstY) * ratio)),
-                                0);
-                        while (writer.nextWrite(10000000) == IterativeReader.CONTINUE);
+                                        (int) ((lastY - firstY) * ratio)));
+                        lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
+                    }
+                    finally {
+                        // Cleanup
+                        lljTran.freeMemory();
                     }
                     if (iNaturalistUploadFile == null) {
-                        croppedWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(croppedWildLogFile.getAbsolutePath()));
-                        croppedWildLogFile.setFileSize(Files.size(croppedWildLogFile.getAbsolutePath()));
-                        WildLogApp.getApplication().getDBI().createWildLogFile(croppedWildLogFile);
+                        // Not a iNat crop, so the image will be added to the Workspace
+                        newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(newWildLogFile.getAbsolutePath()));
+                        newWildLogFile.setFileSize(Files.size(newWildLogFile.getAbsolutePath()));
+                        WildLogApp.getApplication().getDBI().createWildLogFile(newWildLogFile);
                     }
-                    // Cleanup
-                    lljTran.freeMemory();
+                    else {
+                        // An iNat crop, so the image can be resized to 2048px 
+                        // (to make uploads faster because iNat will just resize anything bigger on their side)
+                        UtilsImageProcessing.resizeImage(newWildLogFile, WildLogThumbnailSizes.INAT_LIMIT.getSize());
+                    }
                 }
                 catch (IOException | LLJTranException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

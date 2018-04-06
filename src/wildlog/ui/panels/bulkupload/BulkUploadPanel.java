@@ -905,7 +905,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         int hours = (int) (((double) duration)/(1000.0*60.0*60.0));
                         int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
                         int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
-                        WildLogApp.LOGGER.log(Level.INFO, "ExecutorService {} took {} hours, {} minutes, {} seconds to save the sigtings", 
+                        WildLogApp.LOGGER.log(Level.INFO, "ExecutorService {} took {} hours, {} minutes, {} seconds to save the sightings", 
                                 new Object[]{executorServiceName, hours, minutes, seconds});
                     }
                     // Process the Visit (only after saving all of the sightings, otherwise the user can edit/delete it while the bulk import is busy)

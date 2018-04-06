@@ -135,51 +135,53 @@ public class UtilsImageProcessing {
                                 // No rotation
                                 break;
                             case 2: 
-                                // Flip X
+                                // Flip H
                                 transform.scale(-1.0, 1.0);
                                 transform.translate(-1 * finalWidth, 0);
                                 break;
                             case 3: 
-                                // PI rotation 
+                                // Rotate 180
                                 transform.translate(finalWidth, finalHeight);
                                 transform.rotate(Math.PI);
                                 break;
                             case 4: 
-                                // Flip Y
+                                // flip V
                                 transform.scale(1.0, -1.0);
                                 transform.translate(0, -1 * finalHeight);
                                 break;
                             case 5: 
-                                // - PI/2 and Flip X
+                                // Transpose
                                 transform.rotate(-Math.PI / 2);
                                 transform.scale(-1.0, 1.0);
                                 break;
                             case 6: 
-                                // -PI/2 and -width
-                                transform.translate(finalWidth, 0);
-                                transform.rotate(Math.PI / 2);
+                                // Rotate 90
+                                transform.rotate(Math.PI / 2, finalWidth / 2, finalHeight / 2);
+                                double offset = (finalWidth - finalHeight) / 2;
+                                transform.translate(offset, offset);
                                 break;
                             case 7: 
-                                // PI/2 and Flip
+                                // Transverse
                                 transform.scale(-1.0, 1.0);
                                 transform.translate(-1 * finalHeight, 0);
                                 transform.translate(0, finalWidth);
                                 transform.rotate(3 * Math.PI / 2);
                                 break;
                             case 8: 
-                                // PI / 2
+                                // Rotate 270
                                 transform.translate(0, finalWidth);
                                 transform.rotate(3 * Math.PI / 2);
                                 break;
                         }
                         // Get BufferedImage of scaled image
-                        BufferedImage bufferedImage = new BufferedImage(inSize, inSize, BufferedImage.TYPE_INT_RGB);
+                        BufferedImage bufferedImage = new BufferedImage(finalWidth, finalHeight, BufferedImage.TYPE_INT_RGB);
                         Graphics2D bufferedImageG2D = bufferedImage.createGraphics();
                         // Maak 'n ImageIcon sodat die scaledImage actually klaar gelees word (nie net blank bly nie)
-                        new ImageIcon(scaledImage).paintIcon(null, bufferedImageG2D, (inSize - finalWidth) / 2, (inSize - finalHeight) / 2);
+                        new ImageIcon(scaledImage).paintIcon(null, bufferedImageG2D, 0, 0);
                         // Rotate the thumbnail
                         AffineTransformOp transformOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
                         BufferedImage rotatedImage = transformOp.createCompatibleDestImage(bufferedImage, bufferedImage.getColorModel());
+//                        rotatedImage.getWidth() rotatedImage.getHeight()
                         rotatedImage = transformOp.filter(bufferedImage, rotatedImage);
                         return new ImageIcon(rotatedImage);
                     }
