@@ -76,7 +76,7 @@
     <ROW Directory="unlimited_Dir" Directory_Parent="policy_Dir" DefaultDir="UNLIMI~1|unlimited"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
-    <ROW Component="AbsoluteLayout.jar" ComponentId="{CAA31849-4CD3-4EE4-BA19-346B109BD34C}" Directory_="lib_Dir" Attributes="0" KeyPath="AbsoluteLayout.jar" Type="0"/>
+    <ROW Component="AbsoluteLayout.jar" ComponentId="{13DB868D-A030-4CCA-8FFE-FCAF7ABD05EA}" Directory_="lib_Dir" Attributes="0" KeyPath="AbsoluteLayout.jar" Type="0"/>
     <ROW Component="Authors.txt" ComponentId="{07C4AAC1-BE6B-42BC-A4F9-246F18FFE530}" Directory_="MPCHC_Dir" Attributes="0" KeyPath="Authors.txt" Type="0"/>
     <ROW Component="CIEXYZ.pf" ComponentId="{A969269E-040C-4BC1-99F1-E0BFE37591AA}" Directory_="cmm_Dir" Attributes="0" KeyPath="CIEXYZ.pf" Type="0"/>
     <ROW Component="COPYRIGHT" ComponentId="{7200FBF7-9D95-4E60-A116-94A6622B856C}" Directory_="jre_1_8_0_162_Dir" Attributes="0" KeyPath="COPYRIGHT" Type="0"/>
@@ -98,7 +98,7 @@
     <ROW Component="WICLoader.dll" ComponentId="{79F85391-BDDB-4F3E-AC2B-5C9525014258}" Directory_="JPEGView_Dir" Attributes="0" KeyPath="WICLoader.dll"/>
     <ROW Component="WILDLOG_README_v5.1.1.txt" ComponentId="{DDB5D823-CDCD-4C5D-95BB-D2D57F51FDBA}" Directory_="APPDIR" Attributes="0" KeyPath="WILDLOG_README_v5.1.1.txt" Type="0"/>
     <ROW Component="WildLog.exe" ComponentId="{FD8E7268-F4F7-4E26-84BC-D9DF7506549A}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog.exe"/>
-    <ROW Component="WildLog.jar" ComponentId="{6207D399-32C1-4091-8FC7-1923CF5B82CF}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog.jar" Type="0"/>
+    <ROW Component="WildLog.jar" ComponentId="{6207D399-32C1-4091-8FC7-1923CF5B82CF}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog_Windows.bat" Type="0"/>
     <ROW Component="WildLogLicense.txt" ComponentId="{C66967C9-CAD6-4C68-9BBC-2919196E37A6}" Directory_="licenses_Dir" Attributes="0" KeyPath="WildLogLicense.txt"/>
     <ROW Component="WildLogUserGuide.pdf" ComponentId="{5961DA33-978A-4CD2-9C60-268C7A3D035A}" Directory_="documentation_Dir" Attributes="0" KeyPath="WildLogUserGuide.pdf"/>
     <ROW Component="WildLog_Portable.exe" ComponentId="{57F4CF65-554E-4930-8E9B-DDFE2F2B47AD}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog_Portable.exe"/>
@@ -378,12 +378,12 @@
     <ROW File="US_export_policy.jar" Component_="local_policy.jar" FileName="US_EXP~1.JAR|US_export_policy.jar" Attributes="0" SourcePath="WildLog\application\jre_1_8_0_162\lib\security\policy\limited\US_export_policy.jar" SelfReg="false" NextFile="local_policy.jar_1"/>
     <ROW File="US_export_policy.jar_1" Component_="local_policy.jar_1" FileName="US_EXP~1.JAR|US_export_policy.jar" Attributes="0" SourcePath="WildLog\application\jre_1_8_0_162\lib\security\policy\unlimited\US_export_policy.jar" SelfReg="false" NextFile="trusted.libraries"/>
     <ROW File="UninstallNotes.txt" Component_="UninstallNotes.txt" FileName="UNINST~1.TXT|Uninstall Notes.txt" Attributes="0" SourcePath="WildLog\documentation\Uninstall Notes.txt" SelfReg="false" NextFile="GeoToolsLicense.txt"/>
-    <ROW File="WICLoader.dll" Component_="WICLoader.dll" FileName="WICLOA~1.DLL|WICLoader.dll" Attributes="0" SourcePath="WildLog\application\JPEGView\WICLoader.dll" SelfReg="false" NextFile="AbsoluteLayout.jar"/>
-    <ROW File="WILDLOG_README_v5.1.1.txt" Component_="WILDLOG_README_v5.1.1.txt" FileName="WILDLO~1.TXT|WILDLOG_README_v5.1.1.txt" Attributes="0" SourcePath="WildLog\WILDLOG_README_v5.1.1.txt" SelfReg="false" NextFile="WildLog.jar"/>
+    <ROW File="WICLoader.dll" Component_="WICLoader.dll" FileName="WICLOA~1.DLL|WICLoader.dll" Attributes="0" SourcePath="WildLog\application\JPEGView\WICLoader.dll" SelfReg="false" NextFile="Authors.txt"/>
+    <ROW File="WILDLOG_README_v5.1.1.txt" Component_="WILDLOG_README_v5.1.1.txt" FileName="WILDLO~1.TXT|WILDLOG_README_v5.1.1.txt" Attributes="0" SourcePath="WildLog\WILDLOG_README_v5.1.1.txt" SelfReg="false" NextFile="wildlog.properties"/>
     <ROW File="Wave.hlsl" Component_="to16235.hlsl" FileName="WAVE~1.HLS|Wave.hlsl" Attributes="0" SourcePath="WildLog\application\MPC-HC\Shaders\Wave.hlsl" SelfReg="false" NextFile="YV12chromaupsampling.hlsl"/>
-    <ROW File="Welcome.html" Component_="COPYRIGHT" FileName="WELCOM~1.HTM|Welcome.html" Attributes="0" SourcePath="WildLog\application\jre_1_8_0_162\Welcome.html" SelfReg="false"/>
+    <ROW File="Welcome.html" Component_="COPYRIGHT" FileName="WELCOM~1.HTM|Welcome.html" Attributes="0" SourcePath="WildLog\application\jre_1_8_0_162\Welcome.html" SelfReg="false" NextFile="WildLog.jar"/>
     <ROW File="WildLog.exe" Component_="WildLog.exe" FileName="WildLog.exe" Attributes="0" SourcePath="WildLog\application\WildLog.exe" SelfReg="false" NextFile="HowtorunWildLog.txt" DigSign="true"/>
-    <ROW File="WildLog.jar" Component_="WildLog.jar" FileName="WildLog.jar" Attributes="0" SourcePath="WildLog\application\WildLog.jar" SelfReg="false" NextFile="wildlog.properties"/>
+    <ROW File="WildLog.jar" Component_="WildLog.jar" FileName="WildLog.jar" Attributes="0" SourcePath="WildLog\application\WildLog.jar" SelfReg="false" NextFile="AbsoluteLayout.jar"/>
     <ROW File="WildLogDataCore.jar" Component_="AbsoluteLayout.jar" FileName="WILDLO~1.JAR|WildLogDataCore.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogDataCore.jar" SelfReg="false" NextFile="WildLogGeoTools1.2SNAPSHOT.jar"/>
     <ROW File="WildLogGeoTools1.2SNAPSHOT.jar" Component_="AbsoluteLayout.jar" FileName="WILDLO~2.JAR|WildLogGeoTools-1.2-SNAPSHOT.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogGeoTools-1.2-SNAPSHOT.jar" SelfReg="false" NextFile="WildLogHTMLTemplates.jar"/>
     <ROW File="WildLogHTMLTemplates.jar" Component_="AbsoluteLayout.jar" FileName="WILDLO~3.JAR|WildLogHTMLTemplates.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogHTMLTemplates.jar" SelfReg="false" NextFile="WildLogINaturalistAPI1.0SNAPSHOT.jar"/>
@@ -758,7 +758,7 @@
     <ROW File="win32_MoveNoDrop32x32.gif" Component_="cursors.properties" FileName="WIN32_~6.GIF|win32_MoveNoDrop32x32.gif" Attributes="0" SourcePath="WildLog\application\jre_1_8_0_162\lib\images\cursors\win32_MoveNoDrop32x32.gif" SelfReg="false" NextFile="javafx.properties"/>
     <ROW File="wsdetect.dll" Component_="wsdetect.dll" FileName="wsdetect.dll" Attributes="0" SourcePath="WildLog\application\jre_1_8_0_162\bin\wsdetect.dll" SelfReg="false" NextFile="zip.dll"/>
     <ROW File="xmpbox2.0.6.jar" Component_="AbsoluteLayout.jar" FileName="XMPBOX~1.JAR|xmpbox-2.0.6.jar" Attributes="0" SourcePath="WildLog\application\lib\xmpbox-2.0.6.jar" SelfReg="false" NextFile="xmpcore5.1.3.jar"/>
-    <ROW File="xmpcore5.1.3.jar" Component_="AbsoluteLayout.jar" FileName="XMPCOR~1.JAR|xmpcore-5.1.3.jar" Attributes="0" SourcePath="WildLog\application\lib\xmpcore-5.1.3.jar" SelfReg="false" NextFile="Authors.txt"/>
+    <ROW File="xmpcore5.1.3.jar" Component_="AbsoluteLayout.jar" FileName="XMPCOR~1.JAR|xmpcore-5.1.3.jar" Attributes="0" SourcePath="WildLog\application\lib\xmpcore-5.1.3.jar" SelfReg="false"/>
     <ROW File="zip.dll" Component_="zip.dll" FileName="zip.dll" Attributes="0" SourcePath="WildLog\application\jre_1_8_0_162\bin\zip.dll" SelfReg="false" NextFile="COPYRIGHT"/>
     <ROW File="zipfs.jar" Component_="accessbridge32.jar" FileName="zipfs.jar" Attributes="0" SourcePath="WildLog\application\jre_1_8_0_162\lib\ext\zipfs.jar" SelfReg="false" NextFile="flavormap.properties"/>
   </COMPONENT>
