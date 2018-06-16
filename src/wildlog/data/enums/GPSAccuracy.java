@@ -3,26 +3,28 @@ package wildlog.data.enums;
 
 public enum GPSAccuracy {
     /** 1-5m */
-    VERY_GOOD     ("Very Good (1-5m)", 5),
+    VERY_GOOD     ("Very Good (1-5m)", Double.MIN_NORMAL, 5),
     /** 5-10m */
-    GOOD          ("Good (5-10m)", 10),
+    GOOD          ("Good (5-10m)", 5, 10),
     /** 10-100m */
-    AVERAGE       ("Average (10-100m)", 100),
+    AVERAGE       ("Average (10-100m)", 10, 100),
     /** 100-500m */
-    BAD           ("Bad (100-500m)", 500),
+    BAD           ("Bad (100-500m)", 100, 500),
     /** 500+m */
-    TERRIBLE      ("Terrible (500m or more)", Integer.MAX_VALUE),
+    TERRIBLE      ("Terrible (500m or more)", 500, 9999),
     /** ??m */
-    EDUCATED_GUESS("Educated Guess", Integer.MAX_VALUE),
-    UNKNOWN       ("Unknown", Integer.MAX_VALUE),
-    NONE          ("", Integer.MAX_VALUE);
+    EDUCATED_GUESS("Educated Guess", 9999, 9999),
+    UNKNOWN       ("Unknown", 0, 0),
+    NONE          ("", 0, 0);
 
     private final String text;
-    private final int meters;
-
-    GPSAccuracy(String inText, int inMeters) {
+    private final double minMeters;
+    private final int maxMeters;
+    
+    GPSAccuracy(String inText, double inMinMeters, int inMaxMeters) {
         text = inText;
-        meters = inMeters;
+        minMeters = inMinMeters;
+        maxMeters = inMaxMeters;
     }
 
     @Override
@@ -30,8 +32,12 @@ public enum GPSAccuracy {
         return text;
     }
 
-    public int getMeters() {
-        return meters;
+    public double getMinMeters() {
+        return minMeters;
+    }
+    
+    public int getMaxMeters() {
+        return maxMeters;
     }
 
     public static GPSAccuracy getEnumFromText(String inText) {

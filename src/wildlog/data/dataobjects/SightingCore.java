@@ -116,6 +116,7 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
             sighting.setDurationSeconds(durationSeconds);
             sighting.setElementName(elementName);
             sighting.setGPSAccuracy(gpsAccuracy);
+            sighting.setGPSAccuracyValue(gpsAccuracyValue);
             sighting.setLatDegrees(latDegrees);
             sighting.setLatMinutes(latMinutes);
             sighting.setLatSeconds(latSeconds);

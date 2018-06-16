@@ -94,7 +94,8 @@ public class LocationCore extends DataObjectWithGPS implements DataObjectWithWil
                 && UtilsData.isTheSame(getLonMinutes(), inLocation.getLonMinutes())
                 && UtilsData.isTheSame(getLonSeconds(), inLocation.getLonSeconds())
                 && UtilsData.isTheSame(getLongitude(), inLocation.getLongitude())
-                && UtilsData.isTheSame(getGPSAccuracy(), inLocation.getGPSAccuracy());
+                && UtilsData.isTheSame(getGPSAccuracy(), inLocation.getGPSAccuracy())
+                && UtilsData.isTheSame(getGPSAccuracyValue(), inLocation.getGPSAccuracyValue());
     }
 
     public <T extends LocationCore> T cloneShallow() {
@@ -119,6 +120,7 @@ public class LocationCore extends DataObjectWithGPS implements DataObjectWithWil
             location.setLonSeconds(lonSeconds);
             location.setLongitude(longitude);
             location.setGPSAccuracy(gpsAccuracy);
+            location.setGPSAccuracyValue(gpsAccuracyValue);
             return location;
         }
         catch (InstantiationException ex) {

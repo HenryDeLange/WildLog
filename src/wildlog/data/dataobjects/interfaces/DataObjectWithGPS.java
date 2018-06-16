@@ -15,6 +15,7 @@ public abstract class DataObjectWithGPS {
     protected int lonMinutes;
     protected double lonSeconds;
     protected GPSAccuracy gpsAccuracy;
+    protected double gpsAccuracyValue;
 
 
     public int getLatDegrees() {
@@ -87,6 +88,14 @@ public abstract class DataObjectWithGPS {
 
     public void setGPSAccuracy(GPSAccuracy inGPSAccuracy) {
         gpsAccuracy = inGPSAccuracy;
+    }
+
+    public double getGPSAccuracyValue() {
+        return gpsAccuracyValue;
+    }
+
+    public void setGPSAccuracyValue(double gpsAccuracyValue) {
+        this.gpsAccuracyValue = gpsAccuracyValue;
     }
 
 }
