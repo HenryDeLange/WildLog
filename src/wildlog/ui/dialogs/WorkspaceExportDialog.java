@@ -545,6 +545,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         location.setLatSeconds(0.0);
                         location.setLonSeconds(0.0);
                         location.setGPSAccuracy(GPSAccuracy.TERRIBLE);
+                        location.setGPSAccuracyValue(GPSAccuracy.TERRIBLE.getMaxMeters());
                     }
                     if (chkRemoveDescriptions.isSelected()) {
                         location.setDescription("");
@@ -587,6 +588,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             sighting.setLatSeconds(0.0);
                             sighting.setLonSeconds(0.0);
                             sighting.setGPSAccuracy(GPSAccuracy.TERRIBLE);
+                            sighting.setGPSAccuracyValue(GPSAccuracy.TERRIBLE.getMaxMeters());
                         }
                         if (chkRemoveDescriptions.isSelected()) {
                             sighting.setDetails("");

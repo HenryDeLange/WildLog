@@ -42,6 +42,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/>", UtilsGPS.getLatitudeString(this), true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/>", UtilsGPS.getLongitudeString(this), true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy:</b><br/>", gpsAccuracy, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy Value:</b><br/>", gpsAccuracyValue, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/>", rating, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/>", gameViewingRating, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Habitat:</b><br/>", habitatType, true);

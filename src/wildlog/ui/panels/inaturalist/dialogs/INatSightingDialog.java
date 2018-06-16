@@ -806,8 +806,13 @@ public class INatSightingDialog extends JDialog {
                     iNatObservation.setObserved_on_string(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).atZone(ZoneId.systemDefault()));
                     iNatObservation.setLatitude(UtilsGPS.getLatDecimalDegree(sighting));
                     iNatObservation.setLongitude(UtilsGPS.getLonDecimalDegree(sighting));
-                    if (sighting.getGPSAccuracy() != null && sighting.getGPSAccuracy().getMeters() <= GPSAccuracy.TERRIBLE.getMeters()) {
-                        iNatObservation.setPositional_accuracy(sighting.getGPSAccuracy().getMeters());
+                    if (sighting.getGPSAccuracyValue() != GPSAccuracy.NONE.getMinMeters()) {
+                        iNatObservation.setPositional_accuracy(sighting.getGPSAccuracyValue());
+                    }
+                    else {
+                        if (sighting.getGPSAccuracy() != null && sighting.getGPSAccuracy().getMinMeters() != GPSAccuracy.NONE.getMinMeters()) {
+                            iNatObservation.setPositional_accuracy(sighting.getGPSAccuracy().getMaxMeters());
+                        }
                     }
                     if (rdbGPSOpen.isSelected()) {
                         iNatObservation.setGeoprivacy(INaturalistGeoprivacy.open);

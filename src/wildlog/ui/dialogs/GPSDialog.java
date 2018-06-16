@@ -30,6 +30,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
@@ -91,6 +92,7 @@ public class GPSDialog extends JDialog {
     private static int prevLonMin;
     private static double prevLonSec;
     private static GPSAccuracy prevAccuracy;
+    private static double prevAccuracyValue;
     private WildLogApp app;
     private boolean selectionMade = false;
     private DataObjectWithGPS dataObjectWithGPS;
@@ -152,6 +154,7 @@ public class GPSDialog extends JDialog {
         SpinnerFixer.configureSpinners(spnLonDeg);
         SpinnerFixer.configureSpinners(spnLonMin);
         SpinnerFixer.configureSpinners(spnLonSec);
+        SpinnerFixer.configureSpinners(spnAccuracy);
         // Setup the ui Lat and Lon
         // Get existing value from passed in dataObjectWithGPS
         loadUIValues(dataObjectWithGPS);
@@ -380,6 +383,7 @@ public class GPSDialog extends JDialog {
             }
             // Setup the accuracy
             cmbAccuracy.setSelectedItem(inDataObjectWithGPS.getGPSAccuracy());
+            spnAccuracy.setValue(inDataObjectWithGPS.getGPSAccuracyValue());
             // Populate the initial values into the spinners
             tglDecimalDegrees.setSelected(true);
             tglDecimalDegrees.requestFocus();
@@ -433,6 +437,7 @@ public class GPSDialog extends JDialog {
         spnLonDecimal = new javax.swing.JSpinner();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
+        spnAccuracy = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure GPS Point");
@@ -646,6 +651,11 @@ public class GPSDialog extends JDialog {
         cmbAccuracy.setSelectedItem(GPSAccuracy.AVERAGE);
         cmbAccuracy.setFocusable(false);
         cmbAccuracy.setName("cmbAccuracy"); // NOI18N
+        cmbAccuracy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbAccuracyActionPerformed(evt);
+            }
+        });
 
         spnLatDecimal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         spnLatDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, -90.0d, 90.0d, 0.01d));
@@ -763,6 +773,16 @@ public class GPSDialog extends JDialog {
         jLabel2.setText("Logitude:");
         jLabel2.setName("jLabel2"); // NOI18N
 
+        spnAccuracy.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 9999.0d, 1.0d));
+        spnAccuracy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnAccuracy.setEditor(new javax.swing.JSpinner.NumberEditor(spnAccuracy, "#.###"));
+        spnAccuracy.setName("spnAccuracy"); // NOI18N
+        spnAccuracy.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnAccuracyStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -770,40 +790,46 @@ public class GPSDialog extends JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
-                    .addComponent(jSeparator2)
-                    .addComponent(cmbAccuracy, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tglNorth, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(tglEast, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tglSouth, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tglWest, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(spnLatDeg, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(spnLatMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(spnLatSec))
-                            .addComponent(spnLatDecimal)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(120, 120, 120)
-                                .addComponent(spnLonSec))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(60, 60, 60)
-                                .addComponent(spnLonMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(spnLonDecimal)
-                            .addComponent(spnLonDeg, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel3))
-                        .addGap(56, 56, 56)))
-                .addGap(0, 0, 0))
+                        .addGap(56, 56, 56))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jSeparator1)
+                        .addComponent(jSeparator2)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tglNorth, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel2)
+                                        .addComponent(tglEast, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(tglSouth, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(tglWest, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(spnAccuracy, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(10, 10, 10)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(cmbAccuracy, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(spnLatDeg, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(10, 10, 10)
+                                    .addComponent(spnLatMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(10, 10, 10)
+                                    .addComponent(spnLatSec, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
+                                .addComponent(spnLatDecimal)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGap(120, 120, 120)
+                                    .addComponent(spnLonSec))
+                                .addComponent(spnLonDecimal)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGap(60, 60, 60)
+                                            .addComponent(spnLonMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(spnLonDeg, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(0, 0, Short.MAX_VALUE)))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -839,7 +865,9 @@ public class GPSDialog extends JDialog {
                 .addGap(10, 10, 10)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbAccuracy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbAccuracy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spnAccuracy, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -958,6 +986,7 @@ public class GPSDialog extends JDialog {
                 dataObjectWithGPS.setLonSeconds((Double)spnLonSec.getValue());
             }
             dataObjectWithGPS.setGPSAccuracy((GPSAccuracy)cmbAccuracy.getSelectedItem());
+            dataObjectWithGPS.setGPSAccuracyValue((double)spnAccuracy.getValue());
             selectionMade = true;
             // Now update the "previous" GPS value
             setPrevLat(dataObjectWithGPS.getLatitude());
@@ -969,6 +998,7 @@ public class GPSDialog extends JDialog {
             setPrevLonMin(dataObjectWithGPS.getLonMinutes());
             setPrevLonSec(dataObjectWithGPS.getLonSeconds());
             setPrevAccuracy(dataObjectWithGPS.getGPSAccuracy());
+            setPrevAccuracyValue(dataObjectWithGPS.getGPSAccuracyValue());
             // We are done, dispose this dialog
             setVisible(false);
             dispose();
@@ -1021,6 +1051,7 @@ public class GPSDialog extends JDialog {
         temp.setLonMinutes(getPrevLonMin());
         temp.setLonSeconds(getPrevLonSec());
         temp.setGPSAccuracy(getPrevAccuracy());
+        temp.setGPSAccuracyValue(getPrevAccuracyValue());
         cmbAccuracy.setSelectedItem(temp.getGPSAccuracy());
         loadUIValues(temp);
         btnSaveActionPerformed(evt);
@@ -1480,6 +1511,44 @@ public class GPSDialog extends JDialog {
         }
     }//GEN-LAST:event_btnUpdateGPSOnMapActionPerformed
 
+    private void spnAccuracyStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnAccuracyStateChanged
+        double tempAccuracy = 0;
+        if (spnAccuracy.getValue() instanceof Double) {
+            tempAccuracy = (double) spnAccuracy.getValue();
+        }
+        else
+        if (spnAccuracy.getValue() instanceof Integer) {
+            tempAccuracy = (double) (int) spnAccuracy.getValue();
+        }
+        for (GPSAccuracy gpsAccuracy : GPSAccuracy.values()) {
+            if (tempAccuracy >= gpsAccuracy.getMinMeters() && tempAccuracy <= gpsAccuracy.getMaxMeters()) {
+                cmbAccuracy.setSelectedItem(gpsAccuracy);
+                break;
+            }
+        }
+    }//GEN-LAST:event_spnAccuracyStateChanged
+
+    private void cmbAccuracyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAccuracyActionPerformed
+        double tempAccuracy = 0;
+        if (spnAccuracy.getValue() instanceof Double) {
+            tempAccuracy = (double) spnAccuracy.getValue();
+        }
+        else
+        if (spnAccuracy.getValue() instanceof Integer) {
+            tempAccuracy = (double) (int) spnAccuracy.getValue();
+        }
+        if (cmbAccuracy.getSelectedItem() != null) {
+            if (tempAccuracy < ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMinMeters()
+                    || tempAccuracy > ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMaxMeters()) {
+                tempAccuracy = (double) ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMaxMeters();
+            }
+        }
+        if (tempAccuracy >= (double)((SpinnerNumberModel) spnAccuracy.getModel()).getMaximum()) {
+            tempAccuracy = ((int) (double)((SpinnerNumberModel) spnAccuracy.getModel()).getMaximum());
+        }
+        spnAccuracy.setValue(tempAccuracy);
+    }//GEN-LAST:event_cmbAccuracyActionPerformed
+
     private void doGpxInput(Path inFile) {
         String gpxValue = WLOptionPane.showInputDialog(this,
                 "<html><b>Please enter the GPX Waypoint's name. </b>"
@@ -1640,6 +1709,14 @@ public class GPSDialog extends JDialog {
     public static void setPrevAccuracy(GPSAccuracy inPrevAccuracy) {
         prevAccuracy = inPrevAccuracy;
     }
+
+    public static double getPrevAccuracyValue() {
+        return prevAccuracyValue;
+    }
+
+    public static void setPrevAccuracyValue(double iPrevAccuracyValue) {
+        prevAccuracyValue = iPrevAccuracyValue;
+    }
     
     private WebView createPointMapGoogle() {
         webView = new WebView();
@@ -1777,6 +1854,7 @@ public class GPSDialog extends JDialog {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel pnlMap;
     private javax.swing.JPanel pnlMapTools;
+    private javax.swing.JSpinner spnAccuracy;
     private javax.swing.JSpinner spnLatDecimal;
     private javax.swing.JSpinner spnLatDeg;
     private javax.swing.JSpinner spnLatMin;

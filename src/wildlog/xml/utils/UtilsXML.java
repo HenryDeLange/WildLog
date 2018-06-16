@@ -38,6 +38,7 @@ public final class UtilsXML {
         StringBuilder builder = new StringBuilder(100);
         builder.append("<GPS>");
         builder.append("<gpsAccuracy>").append(inDataObjectWithGPS.getGPSAccuracy()).append("</gpsAccuracy>");
+        builder.append("<gpsAccuracyValue>").append(inDataObjectWithGPS.getGPSAccuracyValue()).append("</gpsAccuracyValue>");
         builder.append("<Latitude>");
         builder.append("<latValue>").append(inDataObjectWithGPS.getLatitude()).append("</latValue>");
         builder.append("<latDegrees>").append(inDataObjectWithGPS.getLatDegrees()).append("</latDegrees>");

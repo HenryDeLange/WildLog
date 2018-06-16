@@ -341,6 +341,7 @@ public class InfoBox extends JPanel {
             temp.setLonMinutes(GPSDialog.getPrevLonMin());
             temp.setLonSeconds(GPSDialog.getPrevLonSec());
             temp.setGPSAccuracy(GPSDialog.getPrevAccuracy());
+            temp.setGPSAccuracyValue(GPSDialog.getPrevAccuracyValue());
             UtilsGPS.copyGpsBetweenDOs(sightingWrapper, temp);
             lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
             lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));

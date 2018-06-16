@@ -156,6 +156,7 @@ public final class UtilsGPS {
             inToGpsDO.setLonMinutes(inFromGpsDO.getLonMinutes());
             inToGpsDO.setLonSeconds(inFromGpsDO.getLonSeconds());
             inToGpsDO.setGPSAccuracy(inFromGpsDO.getGPSAccuracy());
+            inToGpsDO.setGPSAccuracyValue(inFromGpsDO.getGPSAccuracyValue());
         }
     }
     

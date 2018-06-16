@@ -43,6 +43,7 @@ public class UtilsGPX {
             inDataObjectWithGPS.setLonSeconds(UtilsGPS.getSeconds(decimalLon));
             // Get the accuracy (There doen't seem to be a standard value for accuracy in GPX 1.1). Assuming it's decent.
             inDataObjectWithGPS.setGPSAccuracy(GPSAccuracy.GOOD);
+            inDataObjectWithGPS.setGPSAccuracyValue(GPSAccuracy.GOOD.getMaxMeters());
         }
         else {
             WLOptionPane.showMessageDialog(inParent, 

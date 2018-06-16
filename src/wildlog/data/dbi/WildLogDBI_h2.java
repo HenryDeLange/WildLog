@@ -286,14 +286,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state = conn.createStatement();
             String sql = "SELECT " +
                         " E.PRIMARYNAME AS CREATURE, E.SCIENTIFICNAME AS SCIENTIFIC_NAME, E.ELEMENTTYPE AS CREATURE_TYPE, " +
-                        " L.NAME AS PLACE, L.GPSACCURACY AS PLACE_GPS_ACCURACY, " +
+                        " L.NAME AS PLACE, L.GPSACCURACY AS PLACE_GPS_ACCURACY, L.GPSACCURACYVALUE AS PLACE_GPS_ACCURACY_VALUE, " +
                         " ((CASE WHEN L.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN L.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (L.LatDEGREES + (L.LatMINUTES + L.LatSECONDS /60.0)/60.0)) AS PLACE_LATITUDE, " +
                         " ((CASE WHEN L.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN L.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (L.LonDEGREES + (L.LonMINUTES + L.LonSECONDS /60.0)/60.0)) AS PLACE_LONGITUDE, " +
                         " V.NAME AS PERIOD, V.VISITTYPE AS PERIOD_TYPE, V.STARTDATE AS PERIOD_START_DATE, V.ENDDATE AS PERIOD_END_DATE, V.DESCRIPTION AS PERIOD_DESCRIPTION, " +
                         " S.SIGHTINGCOUNTER AS OBSERVATION, S.CERTAINTY, S.SIGHTINGEVIDENCE AS EVIDENCE, " +
                         " S.TIMEACCURACY AS TIME_ACCURACY, S.TIMEOFDAY AS TIME_OF_DAY, " +
                         " trunc(S.SIGHTINGDATE) OBSERVATION_DATE, cast(S.SIGHTINGDATE as time) OBSERVATION_TIME, " +
-                        " S.GPSACCURACY AS OBSERVATION_GPS_ACCURACY, " +
+                        " S.GPSACCURACY AS OBSERVATION_GPS_ACCURACY, S.GPSACCURACYVALUE AS OBSERVATION_GPS_ACCURACY_VALUE, " +
                         " ((CASE WHEN S.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN S.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (S.LatDEGREES + (S.LatMINUTES + S.LatSECONDS /60.0)/60.0)) AS OBSERVATION_LATITUDE, " +
                         " ((CASE WHEN S.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN S.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (S.LonDEGREES + (S.LonMINUTES + S.LonSECONDS /60.0)/60.0)) AS OBSERVATION_LONGITUDE, " +
                         " S.NUMBEROFELEMENTS AS NUMBER_OF_CREATURES, S.LIFESTATUS AS LIFE_STATUS, S.TAG, S.DETAILS " +
@@ -462,6 +462,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Location location = new Location();
                     location.setName(inPrefix + resultSet.getString("PLACE"));
                     location.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("PLACE_GPS_ACCURACY")));
+                    location.setGPSAccuracyValue(resultSet.getDouble("PLACE_GPS_ACCURACY_VALUE"));
                     double lat = resultSet.getDouble("PLACE_LATITUDE");
                     if (lat != 0) {
                         Latitudes latitude;
@@ -545,6 +546,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         }
                     }
                     sighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("OBSERVATION_GPS_ACCURACY")));
+                    sighting.setGPSAccuracyValue(resultSet.getDouble("OBSERVATION_GPS_ACCURACY_VALUE"));
                     double lat = resultSet.getDouble("OBSERVATION_LATITUDE");
                     if (lat != 0) {
                         Latitudes latitude;
@@ -898,6 +900,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 if (results.getInt("VERSION") == 9) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v9 (before upgrade to 10)"));
                                     doUpdate10();
+                                }
+                                else
+                                if (results.getInt("VERSION") == 10) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v10 (before upgrade to 11)"));
+                                    doUpdate11();
                                 }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
@@ -1302,6 +1309,28 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 10");
+    }
+    
+    private void doUpdate11() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 11");
+        // This update added the new INATURALIST table
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Add the Accuracy column to sightings and locations
+            state.execute("ALTER TABLE LOCATIONS ADD COLUMN GPSACCURACYVALUE double DEFAULT 0");
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN GPSACCURACYVALUE double DEFAULT 0");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=11");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 11");
     }
 
 }

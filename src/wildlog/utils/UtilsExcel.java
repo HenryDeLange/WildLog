@@ -24,6 +24,7 @@ public final class UtilsExcel {
         row.createCell(col++).setCellValue("CREATURE_TYPE");
         row.createCell(col++).setCellValue("PLACE");
         row.createCell(col++).setCellValue("PLACE_GPS_ACCURACY");
+        row.createCell(col++).setCellValue("PLACE_GPS_ACCURACY_VALUE");
         row.createCell(col++).setCellValue("PLACE_LATITUDE");
         row.createCell(col++).setCellValue("PLACE_LONGITUDE");
         row.createCell(col++).setCellValue("PERIOD");
@@ -39,6 +40,7 @@ public final class UtilsExcel {
         row.createCell(col++).setCellValue("OBSERVATION_DATE");
         row.createCell(col++).setCellValue("OBSERVATION_TIME");
         row.createCell(col++).setCellValue("OBSERVATION_GPS_ACCURACY");
+        row.createCell(col++).setCellValue("OBSERVATION_GPS_ACCURACY_VALUE");
         row.createCell(col++).setCellValue("OBSERVATION_LATITUDE");
         row.createCell(col++).setCellValue("OBSERVATION_LONGITUDE");
         row.createCell(col++).setCellValue("NUMBER_OF_CREATURES");
@@ -64,10 +66,12 @@ public final class UtilsExcel {
         Location tempLocation = inApp.getDBI().findLocation(tempSighting.getLocationName(), Location.class);
         if (tempLocation != null) {
             row.createCell(col++).setCellValue(getStringValue(tempLocation.getGPSAccuracy()));
+            row.createCell(col++).setCellValue(getStringValue(tempLocation.getGPSAccuracyValue()));
             row.createCell(col++).setCellValue(UtilsGPS.getLatDecimalDegree(tempLocation));
             row.createCell(col++).setCellValue(UtilsGPS.getLonDecimalDegree(tempLocation));
         }
         else {
+            row.createCell(col++).setCellValue("");
             row.createCell(col++).setCellValue("");
             row.createCell(col++).setCellValue("");
             row.createCell(col++).setCellValue("");
@@ -107,6 +111,7 @@ public final class UtilsExcel {
                 UtilsTime.getLocalDateFromDate(tempSighting.getDate())));
         row.createCell(col++).setCellValue(UtilsTime.getLocalTimeFromDate(tempSighting.getDate()).toString());
         row.createCell(col++).setCellValue(getStringValue(tempSighting.getGPSAccuracy()));
+        row.createCell(col++).setCellValue(getStringValue(tempSighting.getGPSAccuracyValue()));
         row.createCell(col++).setCellValue(UtilsGPS.getLatDecimalDegree(tempSighting));
         row.createCell(col++).setCellValue(UtilsGPS.getLonDecimalDegree(tempSighting));
         row.createCell(col++).setCellValue(tempSighting.getNumberOfElements());

@@ -2629,6 +2629,7 @@ public final class WildLogView extends JFrame {
                                     && sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
                                     && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
                                 sighting.setGPSAccuracy(GPSAccuracy.AVERAGE);
+                                sighting.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
                                 app.getDBI().updateSighting(sighting);
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:   GPS information found without GPS Accuracy for Observation (" + sighting.getSightingCounter() + ").");
@@ -2639,11 +2640,20 @@ public final class WildLogView extends JFrame {
                                         && (sighting.getLatitude() == null || Latitudes.NONE.equals(sighting.getLatitude())
                                         || sighting.getLongitude() == null || Longitudes.NONE.equals(sighting.getLongitude()))) {
                                     sighting.setGPSAccuracy(GPSAccuracy.NONE);
+                                    sighting.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
                                     app.getDBI().updateSighting(sighting);
                                     badGPSAccuracy++;
                                     finalHandleFeedback.println("PROBLEM:   GPS Accuracy information found without GPS location for Observation (" + sighting.getSightingCounter() + ").");
                                     finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
                                 }
+                            }
+                            if (sighting.getGPSAccuracy() != null && (sighting.getGPSAccuracyValue() < sighting.getGPSAccuracy().getMinMeters()
+                                    || sighting.getGPSAccuracyValue() > sighting.getGPSAccuracy().getMaxMeters())) {
+                                sighting.setGPSAccuracyValue(sighting.getGPSAccuracy().getMaxMeters());
+                                app.getDBI().updateSighting(sighting);
+                                badGPSAccuracy++;
+                                finalHandleFeedback.println("PROBLEM:   GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Observation (" + sighting.getSightingCounter() + ").");
+                                finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                             }
                             countGPSAccuracy++;
                             setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
@@ -2656,6 +2666,7 @@ public final class WildLogView extends JFrame {
                                     && location.getLatitude() != null && !Latitudes.NONE.equals(location.getLatitude())
                                     && location.getLongitude() != null && !Longitudes.NONE.equals(location.getLongitude())) {
                                 location.setGPSAccuracy(GPSAccuracy.AVERAGE);
+                                location.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
                                 app.getDBI().updateLocation(location, location.getName());
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:   GPS information found without GPS Accuracy for Place (" + location.getName() + ").");
@@ -2666,11 +2677,20 @@ public final class WildLogView extends JFrame {
                                         && (location.getLatitude() == null || Latitudes.NONE.equals(location.getLatitude())
                                         || location.getLongitude() == null || Longitudes.NONE.equals(location.getLongitude()))) {
                                     location.setGPSAccuracy(GPSAccuracy.NONE);
+                                    location.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
                                     app.getDBI().updateLocation(location, location.getName());
                                     badGPSAccuracy++;
                                     finalHandleFeedback.println("PROBLEM:   GPS Accuracy information found without GPS location for Place (" + location.getName() + ").");
                                     finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
                                 }
+                            }
+                            if (location.getGPSAccuracy() != null && (location.getGPSAccuracyValue() < location.getGPSAccuracy().getMinMeters()
+                                    || location.getGPSAccuracyValue() > location.getGPSAccuracy().getMaxMeters())) {
+                                location.setGPSAccuracyValue(location.getGPSAccuracy().getMaxMeters());
+                                app.getDBI().updateLocation(location, location.getName());
+                                badGPSAccuracy++;
+                                finalHandleFeedback.println("PROBLEM:   GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Place (" + location.getName() + ").");
+                                finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                             }
                             countGPSAccuracy++;
                             setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
@@ -2685,6 +2705,7 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("8) Check the Period and linked Observation date ranges.");
                         allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
                         int badVisitDates = 0;
+                        int linkCount = 0;
                         Set<String> processedVisits = new HashSet<>();
                         for (Sighting sighting : allSightings) {
                             if (processedVisits.add(sighting.getVisitName())) {
@@ -2707,7 +2728,8 @@ public final class WildLogView extends JFrame {
                                     badVisitDates++;
                                 }
                             }
-                            setProgress(76 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
+                            linkCount++;
+                            setProgress(76 + (int)(linkCount/(double)allSightings.size()*2));
                             setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + getProgress() + "%");
                         }
                         
@@ -3305,7 +3327,7 @@ public final class WildLogView extends JFrame {
                             UtilsTime.calculateSunAndMoon(sighting);
                             app.getDBI().createSighting(sighting, false);
                             // Check if there are any images to link
-                            // TODO: Ek kan ook in die toekoms die "HasFoto" checkbox op WildNote gebruik om die linking meer akkuraat te maak...
+// TODO: Ek kan ook in die toekoms die "HasFoto" checkbox op WildNote gebruik om die linking meer akkuraat te maak...
                             if (mapFilesToLink != null && mapFilesToLink.get(sighting.getDate().getTime()/IMAGE_LINK_INTERVAL) != null) {
                                 List<File> lstFiles = mapFilesToLink.get(sighting.getDate().getTime()/IMAGE_LINK_INTERVAL);
                                 UtilsFileProcessing.performFileUpload(sighting,

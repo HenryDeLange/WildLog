@@ -1002,6 +1002,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 sightingWrapper.setLonMinutes(tempSighting.getLonMinutes());
                 sightingWrapper.setLonSeconds(tempSighting.getLonSeconds());
                 sightingWrapper.setGPSAccuracy(tempSighting.getGPSAccuracy());
+                sightingWrapper.setGPSAccuracyValue(tempSighting.getGPSAccuracyValue());
             }
         }
     }//GEN-LAST:event_btnGPSForAllActionPerformed

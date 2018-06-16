@@ -511,7 +511,10 @@ public class UtilsImageProcessing {
                                 tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
                             }
                         }
+                        // Die accuracy word ongelukkig nie gestoor in meeste EXIF tags nie...
+                        // Sien bv.: https://gis.stackexchange.com/questions/22223/does-a-geotagged-image-contain-information-about-its-accuracy
                         tempDataObjectWithGPS.setGPSAccuracy(GPSAccuracy.GOOD);
+                        tempDataObjectWithGPS.setGPSAccuracyValue(GPSAccuracy.GOOD.getMaxMeters());
                     }
                     catch (NumberFormatException ex) {
                         WildLogApp.LOGGER.log(Level.ERROR, "Could not parse GPS info from image EXIF data: {} = {}", new Object[]{tag.getTagName(), tag.getDescription()});

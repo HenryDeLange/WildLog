@@ -273,6 +273,7 @@ public class AdvancedDialog extends JDialog {
                 sighting.setLonMinutes(dataObjectWithGPS.getLonMinutes());
                 sighting.setLonSeconds(dataObjectWithGPS.getLonSeconds());
                 sighting.setGPSAccuracy(dataObjectWithGPS.getGPSAccuracy());
+                sighting.setGPSAccuracyValue(dataObjectWithGPS.getGPSAccuracyValue());
                 // Because the sighting's GPS point changed I need to recalculate the Sun and Moon phase
                 UtilsTime.calculateSunAndMoon(sighting);
                 // Save the changes
