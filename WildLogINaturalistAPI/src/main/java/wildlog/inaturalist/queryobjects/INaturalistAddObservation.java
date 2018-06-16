@@ -24,7 +24,7 @@ public class INaturalistAddObservation {
     private double latitude;
     private double longitude;
     private int map_scale;
-    private int positional_accuracy;
+    private double positional_accuracy;
     private INaturalistGeoprivacy geoprivacy;
     private Map<String, String> observation_field_values;
 
@@ -203,7 +203,7 @@ public class INaturalistAddObservation {
         map_scale = inMap_scale;
     }
 
-    public int getPositional_accuracy() {
+    public double getPositional_accuracy() {
         return positional_accuracy;
     }
 
@@ -211,7 +211,7 @@ public class INaturalistAddObservation {
      * Positional accuracy of the observation coordinates in meters. 
      * Any positive integer.
      */
-    public void setPositional_accuracy(int inPositional_accuracy) {
+    public void setPositional_accuracy(double inPositional_accuracy) {
         positional_accuracy = inPositional_accuracy;
     }
 

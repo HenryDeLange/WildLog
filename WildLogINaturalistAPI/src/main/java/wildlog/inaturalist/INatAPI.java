@@ -42,6 +42,7 @@ public class INatAPI {
 //    https://www.inaturalist.org/observation_fields/7112
     }
     
+// TODO: Kyk of ek meeste van hierdie services kan skuif na die NodeJS API want dit lyk vinniger
     
     public static JsonElement getObservation(long inINaturalistID) {
         try {
