@@ -525,7 +525,7 @@ public class INatImportDialog extends JDialog {
                 String scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
                 String[] words = scientificName.split(" ");
                 if (words.length > 2) {
-                    scientificName = words[1] + " " + words[2];
+                    scientificName = words[0] + " " + words[1];
                 }
                 List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
                 if (lstElements != null && lstElements.size() == 1) {
@@ -909,7 +909,7 @@ public class INatImportDialog extends JDialog {
                         String iNatScientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
                         String[] words = iNatScientificName.split(" ");
                         if (words.length > 2) {
-                            iNatScientificName = words[1] + " " + words[2];
+                            iNatScientificName = words[0] + " " + words[1];
                         }
                         if (foundWildLogID > 0) {
                             Sighting sighting = app.getDBI().findSighting(foundWildLogID, Sighting.class);
