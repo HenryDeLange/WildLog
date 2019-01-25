@@ -1,0 +1,27 @@
+
+Copy die WildLog folder wat in die installer moet kom in hierdie folder in.
+
+Bou die exe files deur Launch4j.
+
+Maak die .aip file oop en bou die nuwe installer.
+
+As mens die version verander in AdvancedInstaller vra hy of mens wil 
+Major Upgrade of Patch, kies die Major Upgrade keuse (new product code).
+
+Maak seker die non-bundled zip se .bat en .exe werk reg.
+
+-------------------------------------------
+Om 'n LINUX .sh file glo double-clickable te maak kan mens seker die UI gebruik 
+of die "chmod +x filename.sh" command gebruik.
+
+-------------------------------------------
+
+Die ZIP en MSI is dieselfde, met die JRE gebundle.
+Die portable ZIP version is dieselfde as die res maar net sonder die JRE.
+
+-------------------------------------------
+
+Klien Installer Bug:
+Lyk my soms werk die upgrade nie lekker nie (iets met die DLL files in die JRE wil raak weg).
+As mens dan tid einstall Repair of 'n uninstall en skoon uwe install doen dan is al die files reg teenwoordig.
+Om die upgrade issue te probeer voorkom rename ek die JRE met die version nommer sodat dit elke keer 'n nuwe file is.

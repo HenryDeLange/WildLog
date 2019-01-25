@@ -1,6 +1,0 @@
-Using WildLog is at your own risk and the developer of the software can't be help responsible for any loss or damage resulting form the use of this software.
-You are granted permission to use this application for its intended purposes free of charge as long as it is for personal or non-commercial use only. If you plan to use this application for any form of business, academic or commercial purposes, then please contact support@mywild.co.za for a commercial license. Commercial licenses are negotiable and extremely affordable.
-You are not allowed to re-sell this application, in any way (directly or indirectly) without a valid commercial license.
-No alterations to this application are allowed.
-WildLog is developed and owned (Copyright, Intellectual Property, Trademarks, etc.) by Henry de Lange.
-If you have any questions please feel free to contact me at: support@mywild.co.za

@@ -1,0 +1,76 @@
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Point Map</title>
+    <style>
+        #map-canvas {
+            height: 100%;
+            width: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyD7qkkj7grAHta_s5EmALVl_JsGFaXtSj8"></script>
+    <script type="text/javascript">
+        var marker;
+        
+        function getMarkerLatitude() {
+            return marker.getPosition().lat();
+        }
+
+        function getMarkerLongitude() {
+            return marker.getPosition().lng();
+        }
+        
+        function setMarkerLatLon(lat, lon) {
+            marker.setPosition(new google.maps.LatLng(lat, lon));
+        }
+    
+        function initializeMap() {
+            // Inititalize map, spiderfier and bounds
+            var map = new google.maps.Map(document.getElementById('map-canvas'), {mapTypeId: google.maps.MapTypeId.SATELLITE});
+            var bounds = new google.maps.LatLngBounds();
+            // Add markers
+//___MAP_CLICKABLE_DATA_POINTS_START___
+            marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(-32, 25),
+                    map: map,
+                    draggable: true,
+                    title: "GPS Point"
+            });
+            marker.desc = "GPS Point";
+            bounds.extend(marker.position);
+//___MAP_CLICKABLE_DATA_POINTS_END___
+            // Add the drag event to notify the Java code that the marker was moved
+            google.maps.event.addListener(marker, 'dragend', function() {
+//            google.maps.event.addListener(marker, 'drag', function() {
+                try {
+                    JavaMethodExposer.gpsMoves(marker.getPosition().lat(), marker.getPosition().lng());
+                }
+                catch (err) {
+//                    document.getElementById("error").innerHTML = err.message;
+                }
+            });
+            // Set the map location and zoom to fit all markers
+            map.fitBounds(bounds);
+            // Prevent the bounds from zooming in too much
+            var center = bounds.getCenter();
+            if (center.lat() === 0 && center.lng() === 0) {
+                // For some reason the (0, 0) point doesn't seem to return a result from the MaxZoomService
+                center = new google.maps.LatLng(0.1, 0.1);
+            }
+            maxZoomService = new google.maps.MaxZoomService();
+            maxZoomService.getMaxZoomAtLatLng(center, function(response) {
+                if (map.getZoom() > response.zoom) {
+                    map.setZoom(response.zoom);
+                }
+            });
+        }
+        // Load the map
+        google.maps.event.addDomListener(window, 'load', initializeMap);
+    </script>
+</head>
+<body>
+    <!--<p id="error"></p>-->
+    <div id="map-canvas"></div>
+</body>
+</html>

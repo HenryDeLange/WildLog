@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Point Map</title>
+        <style type="text/css">
+            html { height: 100% }
+            body { height: 100%; margin: 0px; padding: 0px }
+            #map_canvas { height: 100%; background-color: #666970; }
+        </style>
+        <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?branch=experimental&callback=loadMapScenario' async defer></script>
+        <script type="text/javascript">
+            function loadMapScenario() {
+                var map = new Microsoft.Maps.Map(document.getElementById('map_canvas'), {
+                    credentials: 'Ahirv76UMX7WvQyajoCeQ0neN6AbLMQWh2ZNfrJUyYbHZ-c8flld3L8_9Q0XlMFk',
+                     mapTypeId: Microsoft.Maps.MapTypeId.aerial
+                });
+//___PINS_START___
+                var locationZZZ = new Microsoft.Maps.Location(-33, 23);
+                var pinZZZ = new Microsoft.Maps.Pushpin(locationZZZ, null);
+                var boxZZZ = new Microsoft.Maps.Infobox(locationZZZ, {
+                    title: "ZZZ-title", 
+                    description: "ZZZ-content"
+                });
+                boxZZZ.setMap(map);
+                boxZZZ.setOptions({
+                    visible: false,
+                    width: 350,
+                    height: 350
+                });
+                Microsoft.Maps.Events.addHandler(pinZZZ, 'click', function () {
+                    boxZZZ.setOptions({
+                        visible: true,
+                        width: 350,
+                        height: 350
+                    });
+                });
+                map.entities.push(pinZZZ);
+//___PINS_END___
+                map.setView({
+                    center: new Microsoft.Maps.Location(0, 0),
+                    zoom: 0
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div id="map_canvas" style="width:100%; height:100%"></div>
+    </body>
+</html>
