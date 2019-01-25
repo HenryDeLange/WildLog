@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>___THE_TITLE___</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Gradient background -->
+        <link rel="stylesheet" type="text/css" href="../Scripts/gradient/gradient.css">
+        <!-- jQuery -->
+        <script type="text/javascript" src="../Scripts/jquery/jquery-1.11.3.min.js"></script>
+        <!-- jQuery UI -->
+        <link rel="stylesheet" type="text/css" href="../Scripts/theme/smoothness/theme.css">
+        <script type="text/javascript" src="../Scripts/jqueryui/jquery-ui.min.js"></script>
+        <!-- PrimeUI -->
+        <link rel="stylesheet" type="text/css" href="../Scripts/font-awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="../Scripts/primeui/primeui-2.0-min.css.css" />
+        <script type="text/javascript" src="../Scripts/primeui/primeui-2.0-min.js"></script>
+        <!--bxSlider-->
+        <link rel="stylesheet" type="text/css" href="../Scripts/bxSlider/jquery.bxslider.min.css" />
+        <script type="text/javascript" src="../Scripts/bxSlider/jquery.bxslider.min.js"></script>
+        <!-- Custom Scripts -->
+        <style type="text/css">
+            html {
+                height: 100%;
+                font-family: sans-serif;
+            }
+            body {
+                height: 100%;
+                width: 800px;
+                margin: 0 auto;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+            h2 {
+                text-align: center;
+            }
+            .pui-fieldset-toggleable .pui-fieldset-legend {
+                cursor: pointer;
+            }
+            .wrapper {
+                width: 100%;
+                overflow: hidden;
+            }
+            .first {
+                width: 55%;
+                float: left;
+            }
+            .second {
+                width: 45%;
+                float: left;
+            }
+            /** Mapping **/
+            #map-canvas {
+                min-width: 200px;
+                width: 100%;
+                min-height: 300px;
+                height: 400px;
+                margin: 0px;
+                padding: 0px
+            }
+            /** SLIDESHOW MARKUP **/
+            .imgSlider {
+                text-align: center;
+                width: auto;
+                height: auto;
+                max-width: 300px;
+                max-height: 300px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            /** LIGHTBOX MARKUP **/
+            .imgThumbs {
+                text-align: center;
+                width: auto;
+                height: auto;
+                max-width: 100px;
+                max-height: 100px;
+            }
+            .lightbox {
+                /** Default lightbox to hidden */
+                display: none;
+                /** Position and style */
+                position: fixed;
+                z-index: 99999;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                top: 0;
+                left: 0;
+                background: rgba(0,0,0,0.8);
+            }
+            .lightbox img {
+                /** Pad the lightbox image */
+                max-width: 90%;
+                max-height: 80%;
+                margin-top: 2%;
+            }
+            .lightbox:target {
+                /** Remove default browser outline */
+                outline: none;
+                /** Unhide lightbox **/
+                display: block;
+            }
+	</style>
+        <!--Mapping scripts-->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+        <script src="../Scripts/markerspider/oms.min.js"></script>
+        <script type="text/javascript">
+            function initializeMap() {
+                // Inititalize map, spiderfier and bounds
+                var map = new google.maps.Map(document.getElementById('map-canvas'), {mapTypeId: google.maps.MapTypeId.SATELLITE});
+                var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true});
+                var bounds = new google.maps.LatLngBounds();
+                // Create the single info window that will display the content
+                var infoWindow = new google.maps.InfoWindow();
+                oms.addListener('click', function(marker, event) {
+                    infoWindow.setContent(marker.desc);
+                    infoWindow.open(map, marker);
+                });
+                oms.addListener('spiderfy', function(markers) {
+                    infoWindow.close();
+                });
+                // Add markers
+//___MAP_CLICKABLE_DATA_POINTS_START___
+                var markerZZZ = new google.maps.Marker({
+                        position: new google.maps.LatLng(44.5403, -78.5463),
+                        map: map,
+                        title: "ZZZ-title"
+                });
+                markerZZZ.desc = "ZZZ-content";
+                oms.addMarker(markerZZZ);
+                bounds.extend(markerZZZ.position);
+//___MAP_CLICKABLE_DATA_POINTS_END___
+                // Set the map location and zoom to fit all markers
+                map.fitBounds(bounds);
+            }
+            google.maps.event.addDomListener(window, 'load', initializeMap);
+        </script>
+        <!--UI scripts-->
+        <script type="text/javascript">
+            $(function() {
+                $('#infoBox').puifieldset({
+                    toggleable: true, collapsed: false
+                });
+                $('#filesSlideshow').puifieldset({
+                    toggleable: true, collapsed: false
+                });
+                $('#filesBox').puifieldset({
+                    toggleable: true, collapsed: false
+                });
+                $('#mapBox').puifieldset({
+                    toggleable: true, collapsed: false
+                });
+                $('#relatedRecordsFieldBox').puifieldset({
+                    toggleable: true, collapsed: false
+                });
+//___REGISTER_RELATED_RECORDS_FIELD_BOXES_START___
+                $('#relatedRecordsFieldBoxZZZ').puifieldset({
+                    toggleable: true, collapsed: false
+                });
+//___REGISTER_RELATED_RECORDS_FIELD_BOXES_END___
+                $('#mainSlider').bxSlider({
+                    mode: 'fade',
+                    auto: true,
+                    autoControls: false,
+                    pause: 3000,
+//                    pager: false,
+                    pagerType: 'short',
+//                    controls: false,
+//                    autoHover: true
+                });
+//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_START___
+                $('#subSliderZZZ').bxSlider({
+                    mode: 'fade',
+                    auto: true,
+                    autoControls: false,
+                    pause: 3000,
+                    pagerType: 'short'
+                });
+//___REGISTER_RELATED_RECORDS_IMAGE_SLIDER_END___
+            });
+        </script>
+    </head>
+    <body>
+        <br>
+        <h2><u>___THE_HEADING___</u></h2>
+        <hr />
+        <br>
+        <div class="wrapper">
+            <div class="first">
+                <fieldset id="infoBox">
+                    <legend>Information</legend>
+                    ___INFORMATION_CONTENT___
+                </fieldset>
+            </div>
+            <div class="second">
+                <fieldset id="filesSlideshow">
+                    <legend>Images</legend>
+                    <ul id="mainSlider" class="bxslider">
+                        ___MAIN_SLIDER_START___
+                        <li><a href="#bigImgZZZ1"><img src="./ZZZ1.jpg" alt="ZZZ1-alt" title="ZZZ1-title" class="imgSlider" /></a></li>
+                        ___MAIN_SLIDER_END___
+                    </ul>
+                </fieldset>
+            </div>
+        </div>
+        <br>
+        <fieldset id="filesBox">
+            <legend>All Files</legend>
+            ___MAIN_LIGHTBOX_START___
+            <a id="smallImgZZZ1" href="#bigImgZZZ1"><img src="./ZZZ1.jpg1" alt="ZZZ1-alt1" title="ZZZ1-title1" class="imgThumbs" /></a>
+            <a id="bigImgZZZ1" href="#_" class="lightbox" ><img src="./ZZZ1.jpg2" alt="ZZZ1-alt2" title="ZZZ1-title2" /></a>
+            ___MAIN_LIGHTBOX_END___
+        </fieldset>
+        <br>
+        <fieldset id="mapBox">
+            <legend>Map</legend>
+            <div id="map-canvas"></div>
+        </fieldset>
+        <br>
+        <div>
+            <fieldset id="relatedRecordsFieldBox">
+                <legend>Related Records</legend>
+<!--___REPEAT_RELATED_RECORDS_START___-->
+                <fieldset id="relatedRecordsFieldBoxZZZ">
+                    <legend>___RELATED_RECORD_NAME___</legend>
+                    <div class="wrapper" style="min-height: 300px">
+                        <div class="first">
+                            ___RELATED_INFORMATION_CONTENT___
+                        </div>
+                        <div class="second">
+                            <ul id="subSliderZZZ" style="min-height: 300px" class="bxslider">
+                                ___SUB_SLIDER_START___
+                                <li><a href="#bigImgZZZ2"><img src="./ZZZ2.jpg" alt="ZZZ2-alt" title="ZZZ2-title" class="imgSlider" /></a></li>
+                                ___SUB_SLIDER_END___
+                            </ul>
+                             ___SUB_LIGHTBOX_START___
+                            <a id="bigImgZZZ2" href="#_" class="lightbox" ><img src="./ZZZ2.jpg" alt="ZZZ2-alt" title="ZZZ2-title" /></a>
+                            ___SUB_LIGHTBOX_END___
+                        </div>
+                    </div>
+                </fieldset>
+<!--___REPEAT_RELATED_RECORDS_END___-->
+            </fieldset>
+        </div>
+    </body>
+</html>
