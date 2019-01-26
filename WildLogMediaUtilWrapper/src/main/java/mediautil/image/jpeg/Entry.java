@@ -18,7 +18,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *	$Id: Entry.java,v 1.1.1.1 2005/07/27 03:03:14 drogatkin Exp $
+ *	$Id: Entry.java,v 1.4 2006/02/10 17:09:47 msuresh Exp $
  *
  * Some ideas and algorithms were borrowed from:
  * Thomas G. Lane, and James R. Weeks
@@ -74,9 +74,9 @@ public class Entry implements Serializable {
     }
 
 	public void setValue(int index, Object newValue) {
-		if (newValue instanceof String) 
+		if (newValue instanceof String)
 			str = (String)newValue;
-        else if (value != null && index <= value.length)
+        else if (value != null && index < value.length)
                 value[index] = newValue;
         else {
             Object[] tempHolder = new Object[index+1];

@@ -18,7 +18,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *	$Id: BasicJpeg.java,v 1.7 2005/08/18 04:35:34 drogatkin Exp $
+ *	$Id: BasicJpeg.java,v 1.4 2005/10/28 21:59:22 drogatkin Exp $
  *
  */
 package mediautil.image.jpeg;
@@ -43,8 +43,10 @@ import mediautil.gen.Log;
 
 public class BasicJpeg extends LLJTran implements MediaFormat {
 
-    public BasicJpeg(File file) {
+    public BasicJpeg(File file, String enc) {
         super(file);
+        if (enc != null)
+        	setEncoding(enc);
         read();
     }
 
@@ -215,9 +217,9 @@ public class BasicJpeg extends LLJTran implements MediaFormat {
     }
 
     public void setComment(String comment) {
-        in_comment = comment;
+        out_comment = comment;
         if (imageinfo != null)
-            imageinfo.setAttribute(imageinfo.COMMENTS, in_comment);
+            imageinfo.setAttribute(imageinfo.COMMENTS, out_comment);
     }
 
     protected void transformAppHeader(int op, boolean transformThumbnail) throws IOException {
@@ -301,7 +303,7 @@ public class BasicJpeg extends LLJTran implements MediaFormat {
     public boolean transform(String destname, int op, boolean preserve_appxs, Class custom_appx) {
         if (new File(destname).exists()) {
             if(Log.debugLevel >= Log.LEVEL_ERROR)
-                System.err.println("File " + destname + " already exists.");
+                System.err.println("File " + destname + " already exists. The operation abandoned.");
         } else {
             OutputStream os = null;
             try {
@@ -327,7 +329,7 @@ public class BasicJpeg extends LLJTran implements MediaFormat {
         int additionalInfo = OPT_WRITE_COMMENTS;
         boolean transformThumbnail = false;
         if (preserve_appxs) {
-            additionalInfo = OPT_WRITE_ALL | OPT_XFORM_THUMBNAIL;
+            additionalInfo |= OPT_WRITE_ALL | OPT_XFORM_THUMBNAIL;
             transformThumbnail = true;
         }
         read(false, preserve_appxs);
@@ -351,7 +353,7 @@ public class BasicJpeg extends LLJTran implements MediaFormat {
         if (op == COMMENT)
             comment = in_comment;
         else
-            comment = "Put your copyright here" + (out_comment.length() == 0 ? "" : "\n") + out_comment;
+            comment = "Mediautil (c) 2005 Dmitriy Rogatkin, Suresh Mahalingam " + (out_comment.length() == 0 ? "" : "\n") + out_comment;
 
         if ("".equals(comment))
             comment = null;
@@ -460,7 +462,7 @@ public class BasicJpeg extends LLJTran implements MediaFormat {
             wScale = hScale;
         if (stretchFactor != null && stretchFactor.length > 0)
             stretchFactor[0] = wScale;
-        
+
         return new Dimension((int)(imageSize.width*wScale), (int)(imageSize.height * wScale));
     }
 
@@ -472,13 +474,13 @@ public class BasicJpeg extends LLJTran implements MediaFormat {
         } catch (IOException e) {
             System.err.println(PROGRAMNAME + ": Can't redirect error stream.");
         }
-        new BasicJpeg(new File(args[0])).transform(args[1], Integer.parseInt(args[2]), true);
+        new BasicJpeg(new File(args[0]), null).transform(args[1], Integer.parseInt(args[2]), true);
     }
 
     public void setCropRect(Rectangle cr) {
         rect = cr;
     }
-    
+
     public Rectangle getCropRect() {
         if (rect == null)
             return null;

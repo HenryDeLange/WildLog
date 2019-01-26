@@ -18,7 +18,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *	$Id: AbstractImageInfo.java,v 1.4 2005/08/18 04:35:34 drogatkin Exp $
+ *	$Id: AbstractImageInfo.java,v 1.4 2006/05/13 07:05:54 msuresh Exp $
  *
  * Some ideas and algorithms were borrowed from:
  * Thomas G. Lane, and James R. Weeks
@@ -59,21 +59,21 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 	public static final String NA = "n/a";
 	public final static byte [] BMP_SIG = { 0x42, 0x4D };
 	public final static int BMP24_HDR_SIZE = 54;
-	
+
 	protected static final Class [] EMPTY_PARAMS = {};
 
     protected AdvancedImage advancedImage;
     protected F format;
-	
+
 	// conversions
-	public final static double[] AV_TO_FSTOP = 
+	public final static double[] AV_TO_FSTOP =
 	{1, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32 };
 	public final static Rational[] TV_TO_SEC =
 	{new Rational(1,1), new Rational(1,2), new Rational(1,4), new Rational(1,8),
 			new Rational(1,15), new Rational(1,30), new Rational(1,60), new Rational(1,125),
 			new Rational(1,250), new Rational(1,500), new Rational(1,1000), new Rational(1,2000),
 			new Rational(1,4000), new Rational(1,8000), new Rational(1,16000) };
-	
+
 	public AbstractImageInfo() {
 	}
 
@@ -117,7 +117,7 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
     {
         return advancedImage;
     }
-	
+
     /**
      * writeInfo method without actual imageWidth and imageHeight
 	 * @see #writeInfo(byte[],OutputStream,int,int,boolean,int,int,String)
@@ -125,7 +125,7 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 	public void writeInfo(byte markerData[], OutputStream out, int op, int options, boolean modifyImageInfo) throws IOException {
 		writeInfo(markerData, out, op, options, modifyImageInfo, -1, -1);
 	}
-	
+
     /**
      * writeInfo method using default encoding of ISO8859_1
 	 * @see #writeInfo(byte[],OutputStream,int,int,boolean,int,int,String)
@@ -164,7 +164,7 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 	 */
 	public void writeInfo(byte markerData[], OutputStream out, int op, int options, boolean modifyImageInfo, int imageWidth, int imageHeight, String encoding) throws IOException {
 	}
-	
+
     /**
      * Reads the imageInfo from the Input supplied in Constructor. This is for
      * derived class to implement.
@@ -172,15 +172,15 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 	public abstract void readInfo() throws FileFormatException;
 
 	public abstract String getFormat();
-	
+
 	public abstract int getResolutionX();
 
 	public abstract int getResolutionY();
-	
+
 	public abstract String getMake();
 
 	public abstract String getModel();
-	
+
 	public abstract String getDataTimeOriginalString();
 
 	public abstract float getFNumber();
@@ -194,7 +194,7 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 	public abstract float getFocalLength();
 
 	public abstract int getMetering(); // matrix, dot, CenterWeightedAverage..
-	
+
 	public abstract int getExpoProgram(); // full automatic, ...
 
 	public abstract String getReport();
@@ -242,12 +242,13 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
      * {@link ImageResources#EXT_JPEG ImageResources}
      * which identifies the format of the Thumbnail image.
      * @param newAppHdrOp Output to write out the new Appx data
+     * @return True if successful, false otherwise
      */
-    public void setThumbnail(byte newThumbnailData[], int startIndex,
-                             int len, String thumbnailExt,
-                             OutputStream newAppHdrOp)
+    public boolean setThumbnail(byte newThumbnailData[], int startIndex,
+            int len, String thumbnailExt, OutputStream newAppHdrOp)
     throws IOException
     {
+        return false;
     }
 
     /**
@@ -263,7 +264,7 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
     {
         return false;
     }
-	
+
 	public abstract Icon getThumbnailIcon(Dimension size);
 
 	public String toString() {
@@ -277,8 +278,8 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 	public Object[] getFiveMajorAttributes() {
 		return fiveObjects;
 	}
-	
-	public Icon getThumbnailIcon() { 
+
+	public Icon getThumbnailIcon() {
 		return getThumbnailIcon(null);
 	}
 
@@ -296,7 +297,7 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 	public String getComments() {
 		return comments;
 	}
-    
+
     public File getImageFile() {
         return format.getFile();
     }
@@ -341,17 +342,17 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 		return -1;
 	}
 	// interface AbstractInfo
-	
+
 	public void setAttribute(String name, Object value) {
 		if (COMMENTS.equals(name))
 			comments = value.toString();
 		else
 			throw new RuntimeException("Calling this method not allowed by AbstractImageInfo implementation.");
 	}
-	
+
 	public Object getAttribute(String name) {
 		// TODO: get index from lookup map and use switch
-		if (ESS_CHARACHTER.equals(name)) 			
+		if (ESS_CHARACHTER.equals(name))
 			return getShutter();
 		else if (ESS_TIMESTAMP.equals(name))
 			return getDateTimeOriginal();
@@ -362,7 +363,7 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 		else
 			return getGenericAttribute(name);
 	}
-	
+
 	public int getIntAttribute(String name) {
 		if (ESS_CHARACHTER.equals(name))
 			return (int)getFocalLength();
@@ -390,20 +391,20 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 		}
 		throw new IllegalArgumentException("Not supported attribute name for float "+name);
 	}
-	
+
 	public long getLongAttribute(String name) {
 		throw new IllegalArgumentException("Not supported attribute name for long "+name);
 	}
-	
+
 	public double getDoubleAttribute(String name) {
 		throw new IllegalArgumentException("Not supported attribute name for double "+name);
 	}
-	
+
 	public boolean getBoolAttribute(String name) {
 		if (ESS_CHARACHTER.equals(name))
 			return isFlash();
 		return getGenericBoolAttribute(name).booleanValue();
-	}	
+	}
 
 	protected Object getGenericAttribute(String name) {
 		try {
@@ -412,17 +413,17 @@ public abstract class AbstractImageInfo <F extends LLJTran> extends BasicJpegIo 
 			throw new IllegalArgumentException("Not supported attribute "+name+" <<"+t);
 		}
 	}
-	
+
 	protected Boolean getGenericBoolAttribute(String name) {
 		try {
 			return (Boolean)getClass().getMethod("is"+name, EMPTY_PARAMS).invoke(this, (Object [])EMPTY_PARAMS);
-		} catch(Throwable t) {			
+		} catch(Throwable t) {
 			try {
 				return (Boolean)getGenericAttribute(name);
 			} catch(Throwable t2) {
 				throw new IllegalArgumentException("Not supported boolean attribute "+name+" <<"+t2+" <<"+t);
-			}				
-		}		
+			}
+		}
 	}
 
 	transient protected InputStream is;

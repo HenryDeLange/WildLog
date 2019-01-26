@@ -18,7 +18,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *  $Id: Exif.java,v 1.5 2005/08/13 21:55:51 drogatkin Exp $
+ *  $Id: Exif.java,v 1.6 2006/05/13 07:11:29 msuresh Exp $
  *
  * Some ideas and algorithms were borrowed from:
  * Thomas G. Lane, and James R. Weeks
@@ -70,7 +70,7 @@ import mediautil.gen.Log;
  *      e.setValue(0, new Integer(llj.getWidth()));
  *      exif.setTagValue(Exif.EXIFIMAGEWIDTH, 0, e, true);
  *
- *      // Change the value of the DATETIME Entry 
+ *      // Change the value of the DATETIME Entry
  *      Entry entry = exif.getTagValue(Exif.DATETIME, true);
  *      if(entry != null)
  *          entry.setValue(0, "1998:08:18 11:15:00");
@@ -389,6 +389,69 @@ public class Exif extends AbstractImageInfo<LLJTran> {
     /** Identifies the PRINTMODE tag */
     public final static int PRINTMODE = 0xC4A5;
 
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSVersionID = 0x0000;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSLatitudeRef = 0x0001;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSLatitude = 0x0002;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSLongitudeRef = 0x0003;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSLongitude = 0x0004;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSAltitudeRef = 0x0005;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSAltitude = 0x0006;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSTimeStamp = 0x0007;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSSatellites = 0x0008;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSStatus = 0x0009;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSMeasureMode = 0x000a;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDOP = 0x000b;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSSpeedRef = 0x000c;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSSpeed = 0x000d;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSTrackRef = 0x000e;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSTrack = 0x000f;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSImgDirectionRef = 0x0010;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSImgDirection = 0x0011;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSMapDatum = 0x0012;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDestLatitudeRef = 0x0013;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDestLatitude = 0x0014;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDestLongitudeRef = 0x0015;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDestLongitude = 0x0016;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDestBearingRef = 0x0017;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDestBearing = 0x0018;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDestDistanceRef = 0x0019;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDestDistance = 0x001a;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSProcessingMethod = 0x001b;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSAreaInformation = 0x001c;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDateStamp = 0x001d;
+    /** GPS tag. Make sure you access this under the IFD for GPSINFO */
+    public final static int GPSDifferential = 0x001e;
+
     // Exif directory type of tag definition
     /** Identifies the Byte Data Type */
     public final static int BYTE = 1;
@@ -538,9 +601,9 @@ public class Exif extends AbstractImageInfo<LLJTran> {
     }
 
     /**
-     * Method to get the length of the Thumnail.
+     * Method to get the length of the Thumbnail.
      *
-     * @return Length of the Thumnail
+     * @return Length of the Thumbnail
      */
     public int getThumbnailLength() {
         int retVal = 0;
@@ -556,7 +619,7 @@ public class Exif extends AbstractImageInfo<LLJTran> {
     /**
      * Method to get the offset of the Thumbnail within the imageInfo data.
      *
-     * @return Offset of the Thumnail within the Appx marker data
+     * @return Offset of the Thumbnail within the Appx marker data
      */
     public int getThumbnailOffset() {
         int retVal = 0;
@@ -904,7 +967,7 @@ public class Exif extends AbstractImageInfo<LLJTran> {
     public boolean isFlash() {
         Entry e = getTagValue(FLASH, true);
         if (e != null)
-            return ((Integer) e.getValue(0)).intValue() == 1;
+            return (((Integer) e.getValue(0)).intValue() & 1) == 1;
         return false;
     }
 
@@ -990,6 +1053,10 @@ public class Exif extends AbstractImageInfo<LLJTran> {
             return;
         version = s2n(8, 2);
         processAllIFDs();
+        String msg = correctThumbnailTags(data, 0);
+        if(msg != null)
+            if(Log.debugLevel >= Log.LEVEL_WARNING)
+                System.err.println("Warning: Exif Read: " + msg);
         data = null; // for gc
     }
 
@@ -1261,6 +1328,10 @@ public class Exif extends AbstractImageInfo<LLJTran> {
         int emptySlot = EXIF_MARK.length + 2;
         // write offset of IFD
         out.write(n2s(emptySlot, 4));
+        String msg = correctThumbnailTags(markerData, 4);
+        if(msg != null)
+            if(Log.debugLevel >= Log.LEVEL_WARNING)
+                System.err.println("Warning: Exif Write: " + msg);
         for (int k = 0; k < 2; k++) {
             //System.err.println("--->IFD "+k+" offeset "+emptySlot);
             boolean isLast = false;
@@ -1292,10 +1363,12 @@ public class Exif extends AbstractImageInfo<LLJTran> {
      * which identifies the format of the Thumbnail image. Exif supports only
      * JPEG and BMP formats for Thumbnail.
      * @param newExifOp Output to write out the new Appx data
+     * @return True if successful, false otherwise
      */
-    public void setThumbnail(byte newThumbnailData[], int startIndex, int len,
+    public boolean setThumbnail(byte newThumbnailData[], int startIndex, int len,
             String thumbnailExt, OutputStream newExifOp) throws IOException {
         Entry ent;
+        boolean retVal = true;
 
         if (ifds[1] == null) {
             ifds[1] = new IFD(1);
@@ -1317,9 +1390,13 @@ public class Exif extends AbstractImageInfo<LLJTran> {
             ent = new Entry(SHORT);
             setTagValue(COMPRESSION, 0, ent, false);
         }
-        ent.setValue(0, new Integer(6));
+
+        boolean isJpegThumbnail = false;
+
         if (ImageResources.EXT_JPEG.equals(ext)
                 || ImageResources.EXT_JPG.equals(ext)) {
+            isJpegThumbnail = true;
+            ent.setValue(0, new Integer(6));
             ifds[1].removeEntry(STRIPOFFSETS);
             ifds[1].removeEntry(STRIPBYTECOUNTS);
             ifds[1].removeEntry(PHOTOMETRICINTERPRETATION);
@@ -1366,6 +1443,17 @@ public class Exif extends AbstractImageInfo<LLJTran> {
         }
 
         writeInfo(newThumbnailData, newExifOp, LLJTran.NONE, 0, true);
+
+        if(isJpegThumbnail)
+        {
+            if(getTagValue(JPEGINTERCHANGEFORMAT, false) == null)
+                retVal = false;
+        }
+        else
+            if(getTagValue(STRIPOFFSETS, false) == null)
+                retVal = false;
+
+        return retVal;
     }
 
     /**
@@ -1387,6 +1475,100 @@ public class Exif extends AbstractImageInfo<LLJTran> {
         }
 
         return true;
+    }
+
+    // Removes Thumbnail tags if offset/length are not okay. Truncates
+    // length if it goes outside marker. Returns null if okay or warning
+    // message otherwise.
+    private String correctThumbnailTags(byte markerData[], int leading)
+    {
+        String retVal = null;
+        boolean thumbnailTagsPresent = false;
+        boolean isJpegThumbnail = false;
+        int offsetTagVal = 0;
+        int offset = 0;
+        Entry offsetEnt = getTagValue(JPEGINTERCHANGEFORMAT, false);
+        if (offsetEnt == null)
+            offsetEnt = getTagValue(STRIPOFFSETS, false);
+        else
+            isJpegThumbnail = true;
+        if (offsetEnt != null)
+        {
+            thumbnailTagsPresent = true;
+            offsetTagVal = ((Integer) offsetEnt.getValue(0)).intValue();
+            offset = offsetTagVal + FIRST_IFD_OFF + leading;
+        }
+
+        int length = 0;
+        Entry lengthEnt = getTagValue(JPEGINTERCHANGEFORMATLENGTH, false);
+        if (lengthEnt == null)
+            lengthEnt = getTagValue(STRIPBYTECOUNTS, false);
+        else
+            isJpegThumbnail = true;
+        if (lengthEnt != null)
+        {
+            length = ((Integer) lengthEnt.getValue(0)).intValue();
+            thumbnailTagsPresent = true;
+        }
+        int orgLen = length;
+
+        if(thumbnailTagsPresent)
+        {
+          int lengthOvershoot = 0, skipCount = 0;
+          StringBuffer warnBuf = new StringBuffer();
+            if(markerData == null)
+                retVal = "Removing Thumbnail: No Marker Supplied";
+            else if(offset < 0 || offset > markerData.length)
+                retVal = "Removing Thumbnail: Invalid Offset: " + offset;
+            else if( (lengthOvershoot = offset + length - markerData.length) > 0)
+            {
+                length -= lengthOvershoot;
+                warnBuf.append("; Thumbnail length ").append(orgLen)
+                       .append(" is beyond Exif header. Reducing it to ")
+                       .append(length);
+            }
+
+            if(retVal == null)
+            {
+                if(isJpegThumbnail)
+                {
+                    while (offset < markerData.length - 1 && length > 0 &&
+                           !(markerData[offset] == M_PRX &&
+                             markerData[offset + 1] == M_SOI))
+                    {
+                        length--;
+                        offset++;
+                        skipCount++; // skip garbage in begining including padding FF
+                    }
+
+                    if(skipCount > 0)
+                    {
+                        offsetTagVal += skipCount;
+                        warnBuf.append("; Skipped ").append(skipCount)
+                               .append(" Garbage bytes at the beginning of Jpeg Thumbnail");
+                    }
+                }
+
+                if(length <= MIN_JPEG_SIZE)
+                {
+                    warnBuf.append("; Removing Thumbnail: Invalid length: ")
+                           .append(length);
+                    retVal = warnBuf.substring(2);
+                }
+            }
+
+            if(retVal != null)
+                removeThumbnailTags();
+            else if(lengthOvershoot > 0 || skipCount > 0)
+            {
+                retVal = warnBuf.substring(2);
+                lengthEnt.setValue(0, new Integer(length));
+                offsetEnt.setValue(0, new Integer(offsetTagVal));
+            }
+            warnBuf = null;
+        }
+
+        return retVal;
     }
 
     /** writes IFD from map and returns length
@@ -1487,94 +1669,102 @@ public class Exif extends AbstractImageInfo<LLJTran> {
         if (foundJpegThumbnailTag) {
             int length = getThumbnailLength();
             int jpeg_offset = getThumbnailOffset() + 4;
-            if (markerData != null && length > MIN_JPEG_SIZE
-                    && jpeg_offset >= 0
-                    && (jpeg_offset + length) <= markerData.length) {
-                try {
-                    while (!(markerData[jpeg_offset] == M_PRX && markerData[jpeg_offset + 1] == M_SOI)
-                            && jpeg_offset < markerData.length - 1) {
-                        length--;
-                        jpeg_offset++; // skip garbage in begining including padding FF
+            // Not doing any validity checks. Validation and correction should
+            // have been done by calling correctThumbnailTags
+            try {
+                int l = buf.size();
+                boolean copyThumbnail = true;
+                if ((options & LLJTran.OPT_XFORM_THUMBNAIL) != 0
+                        && op != LLJTran.NONE && op != LLJTran.CROP) {
+                    LLJTran ljt = null;
+                    try
+                    {
+                        ByteArrayInputStream tis = new ByteArrayInputStream(
+                            markerData, jpeg_offset, length);
+                        ljt = new LLJTran(tis);
+                        ljt.read(LLJTran.READ_ALL, false);
+                        ljt.transform(op, 0);
+                        copyThumbnail = false;
+                        tis = null;
+                    } catch (Throwable e)
+                    {
+                        if(Log.debugLevel >= Log.LEVEL_WARNING)
+                        {
+                            System.err.println("Warning: Unable to Transform Thumbnail, will write it unchanged: " + e.getMessage());
+                            e.printStackTrace(System.err);
+                        }
                     }
-                    if (length > MIN_JPEG_SIZE) {
-                        int l = buf.size();
-                        if ((options & LLJTran.OPT_XFORM_THUMBNAIL) != 0
-                                && op != LLJTran.NONE && op != LLJTran.CROP) {
-                            ByteArrayInputStream tis = new ByteArrayInputStream(
-                                    markerData, jpeg_offset, length);
-                            LLJTran ljt = new LLJTran(tis);
-                            ljt.read(LLJTran.READ_ALL, false);
-                            ljt.transform(op, 0);
-                            ljt.save(buf, 0);
-                            tis = null;
-                        } else
-                            buf.write(markerData, jpeg_offset, length);
-                        l = buf.size() - l;
-                        Entry ent = getTagValue(JPEGINTERCHANGEFORMATLENGTH,
-                                false);
-                        if (ent != null)
-                            ent.setValue(0, new Integer(l));
-                        out.write(n2s(JPEGINTERCHANGEFORMATLENGTH, 2));
-                        out.write(n2s(LONG, 2));
-                        out.write(n2s(1, 4));
-                        out.write(n2s(l, 4));
-                        ent = getTagValue(JPEGINTERCHANGEFORMAT, false);
-                        ent.setValue(0, new Integer(emptySlot));
-                        out.write(n2s(JPEGINTERCHANGEFORMAT, 2));
-                        out.write(n2s(ent.getType(), 2));
-                        out.write(n2s(1, 4));
-                        out.write(n2s(emptySlot, 4));
-                        emptySlot += l;
-                    }
-                } catch (Throwable t) {
-                    if(Log.debugLevel >= Log.LEVEL_ERROR)
-                        t.printStackTrace(System.err);
+
+                    // Hope there won't be an exception just now
+                    if(!copyThumbnail)
+                        ljt.save(buf, 0);
                 }
+
+                if(copyThumbnail)
+                    buf.write(markerData, jpeg_offset, length);
+                l = buf.size() - l;
+                Entry ent = getTagValue(JPEGINTERCHANGEFORMATLENGTH,
+                        false);
+                if (ent != null)
+                    ent.setValue(0, new Integer(l));
+                out.write(n2s(JPEGINTERCHANGEFORMATLENGTH, 2));
+                out.write(n2s(LONG, 2));
+                out.write(n2s(1, 4));
+                out.write(n2s(l, 4));
+                ent = getTagValue(JPEGINTERCHANGEFORMAT, false);
+                ent.setValue(0, new Integer(emptySlot));
+                out.write(n2s(JPEGINTERCHANGEFORMAT, 2));
+                out.write(n2s(ent.getType(), 2));
+                out.write(n2s(1, 4));
+                out.write(n2s(emptySlot, 4));
+                emptySlot += l;
+            } catch (Throwable t) {
+                if(Log.debugLevel >= Log.LEVEL_ERROR)
+                    t.printStackTrace(System.err);
             }
         } else if (foundBmpThumbnailTag) {
             int length = getThumbnailLength();
             int offset = getThumbnailOffset() + 4;
-            if (markerData != null && length > 0 && offset >= 0
-                    && (offset + length) <= markerData.length) {
-                try {
-                    if (offset < length - MIN_JPEG_SIZE) {
-                        int l = buf.size();
-                        buf.write(markerData, offset, length);
-                        l = buf.size() - l;
+            // Not doing any validity checks. Validation and correction should
+            // have been done by calling correctThumbnailTags
+            try {
+                int l = buf.size();
+                buf.write(markerData, offset, length);
+                l = buf.size() - l;
 
-                        Entry ent = getTagValue(STRIPBYTECOUNTS, false);
-                        if (ent != null)
-                            ent.setValue(0, new Integer(l));
-                        out.write(n2s(STRIPBYTECOUNTS, 2));
-                        out.write(n2s(LONG, 2));
-                        out.write(n2s(1, 4));
-                        out.write(n2s(l, 4));
-                        ent = getTagValue(STRIPOFFSETS, false);
-                        ent.setValue(0, new Integer(emptySlot));
-                        out.write(n2s(STRIPOFFSETS, 2));
-                        out.write(n2s(ent.getType(), 2));
-                        out.write(n2s(1, 4));
-                        out.write(n2s(emptySlot, 4));
-                        emptySlot += l;
-                    }
-
-                } catch (Throwable t) {
-                    if(Log.debugLevel >= Log.LEVEL_ERROR)
-                        t.printStackTrace(System.err);
-                }
+                Entry ent = getTagValue(STRIPBYTECOUNTS, false);
+                if (ent != null)
+                    ent.setValue(0, new Integer(l));
+                out.write(n2s(STRIPBYTECOUNTS, 2));
+                out.write(n2s(LONG, 2));
+                out.write(n2s(1, 4));
+                out.write(n2s(l, 4));
+                ent = getTagValue(STRIPOFFSETS, false);
+                ent.setValue(0, new Integer(emptySlot));
+                out.write(n2s(STRIPOFFSETS, 2));
+                out.write(n2s(ent.getType(), 2));
+                out.write(n2s(1, 4));
+                out.write(n2s(emptySlot, 4));
+                emptySlot += l;
+            } catch (Throwable t) {
+                if(Log.debugLevel >= Log.LEVEL_ERROR)
+                    t.printStackTrace(System.err);
             }
         }
 
         // write IFDs
         IFD[] ifds = ifd.getIFDs();
-        for (int k = 0; ifds != null && k < ifds.length; k++) {
+        for (int k = 0; ifds != null && k < ifds.length;) {
             IFD ifd1 = ifds[k];
             out.write(n2s(ifd1.getTag(), 2));
             out.write(n2s(ifd1.getType(), 2));
             out.write(n2s(1, 4));
             out.write(n2s(emptySlot, 4));
+            k++;
+            // Passing the isLast parameter for below call assumes that there
+            // are no null entries in SubIfds
             emptySlot = writeIfd(markerData, buf, emptySlot, ifd1, op, options,
-                    false, encoding);
+                    (k==ifds.length), encoding);
         }
         // next IFD
         out.write(n2s(isLast ? 0 : emptySlot, 4));
@@ -1642,7 +1832,7 @@ public class Exif extends AbstractImageInfo<LLJTran> {
                     // Recent Fujifilm and Toshiba cameras have a little subdirectory
                     // here, pointed to by tag 0xA005. Apparently, it's the
                     // "Interoperability IFD", defined in Exif 2.1.
-                    if ((tag == EXIFOFFSET || tag == INTEROPERABILITYOFFSET /*|| tag == MAKERNOTE*/)
+                    if ((tag == EXIFOFFSET || tag == INTEROPERABILITYOFFSET || tag == GPSINFO /*|| tag == MAKERNOTE*/)
                             && j == 0 && ((Integer) values[0]).intValue() > 0) {
                         IFD iifd;
                         storeIFD(((Integer) values[0]).intValue()

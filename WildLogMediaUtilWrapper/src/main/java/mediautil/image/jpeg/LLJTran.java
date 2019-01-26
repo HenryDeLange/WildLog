@@ -18,7 +18,7 @@
  *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *  $Id: LLJTran.java,v 1.4 2005/08/18 04:35:34 drogatkin Exp $
+ *  $Id: LLJTran.java,v 1.6 2006/05/13 07:24:01 msuresh Exp $
  *
  * Some ideas and algorithms were borrowed from:
  * Thomas G. Lane, and James R. Weeks
@@ -53,7 +53,7 @@ class IterativeReadVars
     public int readUpto;
     public int stage;
     public int sections;
-    public boolean keep_appxs;
+    public boolean keep_appxs, appxsCleared;
     public int appxPos, appxLen;
     public boolean throwException;
 
@@ -1220,7 +1220,7 @@ public class LLJTran extends BasicJpegIo
                     System.err.println("Warning:transform: Thumbnail transformation cannot be performed since keep_appxs was passed as false while reading");
             if(writeAppxs)
                 if(Log.debugLevel >= Log.LEVEL_WARNING)
-                    System.err.println("Warning:transform: Cannote write APPXS since keep_appxs was passed as false while reading");
+                    System.err.println("Warning:transform: Cannot write APPXS since keep_appxs was passed as false while reading");
         }
         if(op != NONE)
         {
@@ -1410,7 +1410,7 @@ public class LLJTran extends BasicJpegIo
             throw new RuntimeException("Jpeg cannot be written since No Jpeg has been successfully Read");
         if(writeAppxs && !appxs_read)
             if(Log.debugLevel >= Log.LEVEL_WARNING)
-                System.err.println("Warning:save: Cannote write APPXS since keep_appxs was passed as false while reading");
+                System.err.println("Warning:save: Cannot write APPXS since keep_appxs was passed as false while reading");
         IterativeWriter iWriter =
             initWrite(os, NONE, options, null, restart_interval);
         do ; while(iWriter.nextWrite(10000000) == IterativeReader.CONTINUE);
@@ -1480,17 +1480,19 @@ public class LLJTran extends BasicJpegIo
             // Write out 4 bytes for the marker
             buf.write(markerid);
             buf.write(markerid);
-            imageinfo.setThumbnail(newThumbnailData,
-                        startIndex, len, thumbnailExt, buf);
-            int bytesWritten = buf.size() - 4;
-            if (bytesWritten > 0)
+            if(imageinfo.setThumbnail(newThumbnailData,
+                        startIndex, len, thumbnailExt, buf))
             {
-                byte newAppxs[] = buf.toByteArray();
-                newAppxs[0] = M_PRX;
-                newAppxs[1] = appxs[appHdrIndex][1];
-                bn2s(newAppxs, 2, newAppxs.length-2, 2);
-                appxs[appHdrIndex] = newAppxs;
-                retVal = true;
+                int bytesWritten = buf.size() - 4;
+                if (bytesWritten > 0)
+                {
+                    byte newAppxs[] = buf.toByteArray();
+                    newAppxs[0] = M_PRX;
+                    newAppxs[1] = appxs[appHdrIndex][1];
+                    bn2s(newAppxs, 2, newAppxs.length-2, 2);
+                    appxs[appHdrIndex] = newAppxs;
+                    retVal = true;
+                }
             }
         }
 
@@ -1697,7 +1699,6 @@ public class LLJTran extends BasicJpegIo
 
         OutputStream os = iWriteVars.os;
         int op = iWriteVars.op;
-        String comment = iWriteVars.comment;
         int options = iWriteVars.options;
         int restart_interval = iWriteVars.restart_interval;
         int nextState = iWriteVars.state;
@@ -1725,10 +1726,10 @@ public class LLJTran extends BasicJpegIo
                 nextState = IterativeWriteVars.WRITE_DQT;
                 if((options & OPT_WRITE_COMMENTS) != 0)
                 {
-                    if(comment == null || comment.length() == 0)
+                	if(iWriteVars.comment == null || iWriteVars.comment.length() == 0)
                         writeMarkerComment(os, out_comment, enc);
                     else
-                        writeMarkerComment(os, comment, enc);
+                        writeMarkerComment(os, iWriteVars.comment, enc);
                     break;
                 }
                 // Else fallthrough to next state
@@ -1932,12 +1933,15 @@ public class LLJTran extends BasicJpegIo
         iReadVars.sections = sections;
         iReadVars.keep_appxs = keep_appxs;
         iReadVars.throwException = throwException;
+        iReadVars.appxsCleared = false;
+        appxs_read = keep_appxs;
 
         if(unprocessed_marker == 0 && (sections & HEADER_SECTION) == 0 &&
            (sections & BODY_SECTION) != 0)
             retVal = "Attempt to Read only the Body section when Header has not been successfully read";
 
-        out_comment = "";
+        if (out_comment == null)
+        	out_comment = "";
         // comment_data = null;
         if (file != null)
             valid = file.isFile();
@@ -2164,7 +2168,6 @@ markers:
                             // BasicJpeg reading info section and appxs data
                             // separately.
                             addAppx();
-                            appxs_read = true;
 
                             boolean handledAppHdr[] = new boolean[1];
                             if(sections == INFO_SECTION)
@@ -2493,7 +2496,10 @@ markers:
                   default:
                     len = readMarker(is);
                     if ((0xfffffff0 & markercode) == 0xfffffff0)
+                    {
+                        msg = "Not a Jpeg File but an MP3 file";
                         break markers; // it's MP3
+                    }
                     else
                         if(Log.debugLevel >= Log.LEVEL_WARNING)
                             System.err.println("Unsupported marker "+Integer.toHexString(markercode)+" length "+len+" ("+getLocationName()+")");
@@ -3141,7 +3147,7 @@ markers:
      * Removes the Appx marker data at the given index. In case the appx to be
      * removed contains Image Header Information (Exif) the imageInfo is
      * replaced with a JPEG instance containing basic Image Information.
-     * @param index Index of the marker to remove (0 to getNumAppxs())
+     * @param index Index of the marker to remove (0 to getNumAppxs()-1)
      */
     public void removeAppx(int index)
     {
@@ -3216,8 +3222,12 @@ markers:
         if(iReadVars.keep_appxs)
         {
             // Clear any previous values
-            appxs = null;
-            imageinfo = null;
+            if(!iReadVars.appxsCleared)
+            {
+                appxs = null;
+                imageinfo = null;
+                iReadVars.appxsCleared = true;
+            }
 
             data = new byte[len + 2];
             data[0] = M_PRX;
@@ -3378,13 +3388,13 @@ markers:
                 remaining -= len;
                 writecounter += len;
             } while (true);
+
+            iWriteVars.currentAppx = i;
+            iWriteVars.currentAppxPos = pos;
+
+            if(i >= appxs.length)
+                retVal = false;
         }
-
-        iWriteVars.currentAppx = i;
-        iWriteVars.currentAppxPos = pos;
-
-        if(i >= appxs.length)
-            retVal = false;
 
         return retVal;
     }
