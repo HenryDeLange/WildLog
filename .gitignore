@@ -1,0 +1,12 @@
+/WildLog/nbproject/private/
+/WildLogDataCore/nbproject/private/
+/WildLogHTMLTemplates/nbproject/private/
+/WildLogMapData/nbproject/private/
+/WildLogDataCore/target/
+/WildLogGeoTools/target/
+/WildLogHTMLTemplates/target/
+/WildLogINaturalist/WildLogINaturalistAPI/target/
+/WildLogMapData/target/
+/WildLog/target/
+/WildLogMediaUtilWrapper/target/
+WildLog/AppProperties/WildLogSettings/wildlog_errorlog.txt
