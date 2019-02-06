@@ -1936,27 +1936,25 @@ public abstract class DBI_JDBC implements DBI {
      *
      * @param ex the SQLException from which to print details.
      */
-    protected static void printSQLException(SQLException ex) {
-        // Unwraps the entire exception chain to unveil the real cause of the
-        // Exception.
+    protected void printSQLException(SQLException ex) {
+        // Unwraps the entire exception chain to unveil the real cause of the Exception.
         SQLException nestedEx = ex;
         while (nestedEx != null) {
             System.err.println("\n----- SQLException -----");
             System.err.println("  SQL State:  " + nestedEx.getSQLState());
             System.err.println("  Error Code: " + nestedEx.getErrorCode());
             System.err.println("  Message:    " + nestedEx.getMessage());
-            // for stack traces, refer to derby.log or uncomment this:
             nestedEx.printStackTrace(System.err);
             nestedEx = nestedEx.getNextException();
         }
     }
 
-    protected static void closeStatementAndResultset(Statement inStatement, ResultSet inResultSet) {
+    protected void closeStatementAndResultset(Statement inStatement, ResultSet inResultSet) {
         closeStatement(inStatement);
         closeResultset(inResultSet);
     }
 
-    protected static void closeStatement(Statement inStatement) {
+    protected void closeStatement(Statement inStatement) {
         // PreparedStatement
         try {
             if (inStatement != null) {
@@ -1969,7 +1967,7 @@ public abstract class DBI_JDBC implements DBI {
         }
     }
 
-    protected static void closeResultset(ResultSet inResultSet) {
+    protected void closeResultset(ResultSet inResultSet) {
         // ResultSet
         try {
             if (inResultSet != null) {

@@ -357,7 +357,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         treBrowsePhoto.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        treBrowsePhoto.setToolTipText("");
         treBrowsePhoto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 treBrowsePhotoMouseReleased(evt);

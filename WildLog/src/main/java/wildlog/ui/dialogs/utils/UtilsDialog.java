@@ -50,7 +50,7 @@ public final class UtilsDialog {
     
     public static void setupGlassPaneOnMainFrame(JFrame inFrame) {
         // Setup the glassPane for modal popups
-        JPanel glassPane = (JPanel)inFrame.getGlassPane();
+        JPanel glassPane = (JPanel) inFrame.getGlassPane();
         glassPane.setLayout(new BorderLayout());
         JPanel background = new JPanel();
         background.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
@@ -63,12 +63,12 @@ public final class UtilsDialog {
         // Note: The actual background colour, etc. is set once in the WildLogApp class.
         final JPanel glassPane = (JPanel) inParentContainer.getGlassPane();
         SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    // Maak seker die gebeur na enige setVisible(false) wat dalk vanaf 'n onlangse vorige popup kan plaasvind
-                    glassPane.setVisible(true);
-                }
-            });
+            @Override
+            public void run() {
+                // Maak seker die gebeur na enige setVisible(false) wat dalk vanaf 'n onlangse vorige popup kan plaasvind
+                glassPane.setVisible(true);
+            }
+        });
 //        glassPane.setVisible(true);
         inPopupWindow.addWindowListener(new WindowAdapter() {
             @Override
@@ -110,15 +110,14 @@ public final class UtilsDialog {
 
     public static <T extends Window & RootPaneContainer> ActionListener addEscapeKeyListener(final T inPopup) {
         ActionListener escListiner = new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        inPopup.setVisible(false);
-                        inPopup.dispose();
-                    }
-                };
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inPopup.setVisible(false);
+                inPopup.dispose();
+            }
+        };
         inPopup.getRootPane().registerKeyboardAction(
-                escListiner,
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                escListiner, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
         return escListiner;
     }

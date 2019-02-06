@@ -351,7 +351,7 @@ public class WorkspaceImportDialog extends JDialog {
 // TODO: Improve error handeling and feedback
         if (txtPrefix.getText() == null || txtPrefix.getText().isEmpty()) {
             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                    "<html>It is highly recommended to provide a unique prefix for the imported data, to help provent conflicts."
+                    "<html>It is recommended to provide a unique prefix for the imported data, to help prevent conflicts."
                             + "<br/>Are you sure you want to continue?</html>",
                     "WARNING: Importing Without Prefix", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
             if (result != JOptionPane.YES_OPTION) {
@@ -584,7 +584,7 @@ public class WorkspaceImportDialog extends JDialog {
                         }
                     }
                     else {
-                        // Don't overwrite the file, save a new file and DB record instead if the FileIDs are differnet.
+                        // Don't overwrite the file, save a new file and DB record instead if the FileIDs are different.
                         if (!inExternalWildLogFileID.equalsIgnoreCase(inNewInternalWildLogFileID)) {
                             // Should be safe to import the file to a similar folder and only update the filename and ID in the database.
                             // Get new filename

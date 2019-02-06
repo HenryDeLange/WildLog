@@ -84,7 +84,7 @@ public class WildLogApp extends Application {
     private WildLogOptions wildLogOptions;
     private int threadCount;
     /** 
-     * Make sure the application uses the same WildLogDBI instance...
+    * Make sure the application uses the same WildLogDBI instance...
     * The WildLogDBI is initialized in startup() and closed in shutdown()
     * */
     private WildLogDBI dbi;
@@ -396,7 +396,7 @@ public class WildLogApp extends Application {
      * @param args
      */
     public static void main(String[] args) {
-System.out.println("args = " + Arrays.toString(args));
+        System.out.println("Startup args = " + Arrays.toString(args));
         // Set default startup settings
         ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath().normalize();
         System.setProperty("settingsFolderLocation", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
