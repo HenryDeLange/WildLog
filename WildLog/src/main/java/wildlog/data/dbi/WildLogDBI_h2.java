@@ -44,6 +44,9 @@ import wildlog.utils.WildLogPaths;
 
 
 public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
+    
+// TODO: Make this a startup property to turn it off if needed
+    private boolean H2_AUTO_SERVER = true;
 
     /**
      * Use this constructor to connect to the default Workspace database.
@@ -66,7 +69,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         ResultSet results = null;
         boolean started = true;
         String connection = "jdbc:h2:" + inConnectionURL 
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=50";
+                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=100";
+        if (H2_AUTO_SERVER) {
+            connection = connection + ";AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9229";
+        }
         try {
             Class.forName("org.h2.Driver").newInstance();
             Properties props = new Properties();
@@ -906,6 +912,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v10 (before upgrade to 11)"));
                                     doUpdate11();
                                 }
+                                else
+                                if (results.getInt("VERSION") == 11) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v10 (before upgrade to 12)"));
+                                    doUpdate12();
+                                }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
                             }
@@ -937,7 +948,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         "<html>The database could not be successfully updated!"
                                 + "<br/>Make sure that you are running the latest version of WildLog."
                                 + "<br/>Confirm that the Workspace isn't already open by another WildLog instance."
-                                + "<bt/>It is possible that the datbase might be broken or corrupted. "
+                                + "<br/>It is possible that the datbase might be broken or corrupted. "
                                 + "If this is the case you can restore a backup copy and try again, please consult the Manual for details."
                                 + "<br/>Contact support@mywild.co.za if the problmes persist.</html>",
                         "WildLog Upgrade Error", JOptionPane.ERROR_MESSAGE);
@@ -1187,7 +1198,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 UtilsTime.calculateSunAndMoon(sighting);
                 updateSighting(sighting);
             }
-            // Increase the cache size slightly (doubled)
+            // Increase the cache size slightly (doubled) in KB
             state.execute("SET CACHE_SIZE 32768");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=5");
@@ -1331,6 +1342,27 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 11");
+    }
+    
+    private void doUpdate12() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 12");
+        // This update adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Increase the cache size to 75MB (in KB)
+            state.execute("SET CACHE_SIZE 76800");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=12");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 12");
     }
 
 }

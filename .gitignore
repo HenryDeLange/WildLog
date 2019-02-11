@@ -10,3 +10,8 @@
 /WildLog/target/
 /WildLogMediaUtilWrapper/target/
 WildLog/AppProperties/WildLogSettings/wildlog_errorlog.txt
+WildLogMediaUtilWrapper/nb-configuration.xml
+WildLogMapData/nb-configuration.xml
+WildLogHTMLTemplates/nb-configuration.xml
+WildLogDataCore/nb-configuration.xml
+WildLogINaturalist/WildLogINaturalistAPI/nb-configuration.xml
