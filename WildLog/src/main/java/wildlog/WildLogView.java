@@ -103,6 +103,7 @@ import wildlog.ui.dialogs.MergeLocationDialog;
 import wildlog.ui.dialogs.MergeVisitDialog;
 import wildlog.ui.dialogs.MoveVisitDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
+import wildlog.ui.dialogs.SystemMonitorDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
 import wildlog.ui.dialogs.WildNoteAboutBox;
 import wildlog.ui.dialogs.WorkspaceExportDialog;
@@ -398,6 +399,7 @@ public final class WildLogView extends JFrame {
         mnuCreateSlideshow = new javax.swing.JMenuItem();
         mnuCreateGIF = new javax.swing.JMenuItem();
         mnuSunAndMoon = new javax.swing.JMenuItem();
+        mnuSystemMonitor = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         externalMenu = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
@@ -1305,6 +1307,17 @@ public final class WildLogView extends JFrame {
             }
         });
         extraMenu.add(mnuSunAndMoon);
+
+        mnuSystemMonitor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        mnuSystemMonitor.setText("Open System Monitor");
+        mnuSystemMonitor.setToolTipText("Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location.");
+        mnuSystemMonitor.setName("mnuSystemMonitor"); // NOI18N
+        mnuSystemMonitor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSystemMonitorActionPerformed(evt);
+            }
+        });
+        extraMenu.add(mnuSystemMonitor);
 
         jSeparator3.setName("jSeparator3"); // NOI18N
         extraMenu.add(jSeparator3);
@@ -4183,6 +4196,11 @@ public final class WildLogView extends JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuImportINaturalistActionPerformed
 
+    private void mnuSystemMonitorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSystemMonitorActionPerformed
+        SystemMonitorDialog dialog = new SystemMonitorDialog();
+        dialog.setVisible(true);
+    }//GEN-LAST:event_mnuSystemMonitorActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4322,6 +4340,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuSunAndMoon;
     private javax.swing.JMenuItem mnuSwitchElementNames;
+    private javax.swing.JMenuItem mnuSystemMonitor;
     private javax.swing.JMenuItem mnuUserGuide;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenu settingsMenu;
