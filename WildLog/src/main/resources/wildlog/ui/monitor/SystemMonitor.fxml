@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane prefHeight="811.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="wildlog.ui.monitor.SystemMonitorController">
+<BorderPane prefHeight="811.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wildlog.ui.monitor.SystemMonitorController">
    <center>
       <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="950.0">
          <children>
             <BorderPane>
                <left>
-                  <Label maxWidth="100.0" minHeight="100.0" prefWidth="100.0" text="Processor" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
+                  <VBox BorderPane.alignment="CENTER">
+                     <children>
+                        <Label maxWidth="100.0" prefWidth="100.0" text="Processor">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtProcessor" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtProcessor" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis side="BOTTOM" forceZeroInRange="false" />
+                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -36,16 +44,23 @@
             </BorderPane>
             <BorderPane>
                <left>
-                  <Label maxWidth="100.0" minHeight="100.0" prefWidth="100.0" text="Memory" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
+                  <VBox BorderPane.alignment="CENTER">
+                     <children>
+                        <Label maxWidth="100.0" prefWidth="100.0" text="Memory">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtMemory" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtMemory" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis side="BOTTOM" forceZeroInRange="false" />
+                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -55,16 +70,27 @@
             </BorderPane>
             <BorderPane>
                <left>
-                  <Label maxWidth="100.0" minHeight="100.0" prefWidth="100.0" text="Network" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
+                  <VBox BorderPane.alignment="CENTER">
+                     <children>
+                        <Label maxWidth="100.0" prefWidth="100.0" text="Network">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </Label>
+                        <ChoiceBox fx:id="cmbNetwork" maxWidth="100.0" minWidth="100.0" prefWidth="100.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></ChoiceBox>
+                     </children>
+                  </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtNetwork" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtNetwork" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis side="BOTTOM" forceZeroInRange="false" />
+                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -74,16 +100,27 @@
             </BorderPane>
             <BorderPane>
                <left>
-                  <Label maxWidth="100.0" minHeight="100.0" prefWidth="100.0" text="Disk" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
+                  <VBox BorderPane.alignment="CENTER">
+                     <children>
+                        <Label maxWidth="100.0" prefWidth="100.0" text="Disk">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </Label>
+                        <ChoiceBox fx:id="cmbDisk" maxWidth="100.0" minWidth="100.0" prefWidth="100.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></ChoiceBox>
+                     </children>
+                  </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtDisk" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtDisk" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis side="BOTTOM" forceZeroInRange="false" />
+                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -93,16 +130,31 @@
             </BorderPane>
             <BorderPane prefWidth="930.0">
                <left>
-                  <Label maxWidth="100.0" minHeight="100.0" prefWidth="100.0" text="Database" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
+                  <VBox BorderPane.alignment="CENTER">
+                     <children>
+                        <Label maxWidth="100.0" prefWidth="100.0" text="Database">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="lblConnections" maxWidth="100.0" minWidth="100.0" prefHeight="20.0" prefWidth="100.0" text="connections">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtDatabase" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtDatabase" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis side="BOTTOM" forceZeroInRange="false" />
+                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -120,10 +172,41 @@
       </VBox>
    </center>
    <top>
-      <Label text="WildLog System Monitor" BorderPane.alignment="CENTER">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Label>
+      <BorderPane BorderPane.alignment="CENTER">
+         <right>
+            <HBox alignment="TOP_RIGHT" prefHeight="16.0" prefWidth="136.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#btnResetAction" text="Reset">
+                     <HBox.margin>
+                        <Insets right="15.0" />
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#btnSnapshotAction" text="Snapshot">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
+            </HBox>
+         </right>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+         <left>
+            <Label text="WildLog System Monitor" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </Label>
+         </left>
+      </BorderPane>
    </top>
 </BorderPane>

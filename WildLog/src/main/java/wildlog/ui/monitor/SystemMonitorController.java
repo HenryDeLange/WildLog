@@ -2,11 +2,16 @@ package wildlog.ui.monitor;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import wildlog.ui.dialogs.SystemMonitorDialog;
 
 public class SystemMonitorController implements Initializable {
+    private SystemMonitorDialog dialog;
     
     @FXML
     private LineChart<Long, Integer> crtProcessor;
@@ -18,10 +23,29 @@ public class SystemMonitorController implements Initializable {
     private LineChart<Long, Integer> crtDisk;
     @FXML
     private LineChart<Long, Integer> crtDatabase;
+    @FXML
+    private Label lblConnections;
+    @FXML
+    private ChoiceBox cmbNetwork;
+    @FXML
+    private ChoiceBox cmbDisk;
 
     @Override
     public void initialize(URL inLocation, ResourceBundle inResources) {
-        
+    }
+    
+    @FXML
+    private void btnResetAction(ActionEvent event) {
+        dialog.btnResetAction(event);
+    }
+    
+    @FXML
+    private void btnSnapshotAction(ActionEvent event) {
+        dialog.btnSnapshotAction(event);
+    }
+    
+    public void setDialog(SystemMonitorDialog inDialog) {
+        this.dialog = inDialog;
     }
 
     public LineChart<Long, Integer> getCrtProcessor() {
@@ -62,6 +86,30 @@ public class SystemMonitorController implements Initializable {
 
     public void setCrtDatabase(LineChart<Long, Integer> inCrtDatabase) {
         this.crtDatabase = inCrtDatabase;
+    }
+
+    public Label getLblConnections() {
+        return lblConnections;
+    }
+
+    public void setLblConnections(Label inLblConnections) {
+        this.lblConnections = inLblConnections;
+    }
+
+    public ChoiceBox getCmbNetwork() {
+        return cmbNetwork;
+    }
+
+    public void setCmbNetwork(ChoiceBox inCmbNetwork) {
+        this.cmbNetwork = inCmbNetwork;
+    }
+
+    public ChoiceBox getCmbDisk() {
+        return cmbDisk;
+    }
+
+    public void setCmbDisk(ChoiceBox inCmbDisk) {
+        this.cmbDisk = inCmbDisk;
     }
     
 }
