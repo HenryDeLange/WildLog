@@ -118,6 +118,8 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String queryLocationCountForElement = "select SIGHTINGS.LOCATIONNAME, count(*) cnt from SIGHTINGS where SIGHTINGS.ELEMENTNAME = ? group by SIGHTINGS.LOCATIONNAME order by cnt desc";
     // Variables
     protected Connection conn;
+    // Monitor
+    protected static final String activeSessionsCount = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SESSIONS";
 
     public DBI_JDBC() {
     }
@@ -2262,6 +2264,27 @@ public abstract class DBI_JDBC implements DBI {
             closeStatement(state);
         }
         return true;
+    }
+    
+    @Override
+    public int activeSessionsCount() {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        try {
+            String sql = activeSessionsCount;
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
+            if (results.next()) {
+                return results.getInt(1);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return 0;
     }
 
 }

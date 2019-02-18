@@ -81,4 +81,6 @@ public interface DBI {
 
     public long generateID();
     
+    public int activeSessionsCount();
+    
 }
