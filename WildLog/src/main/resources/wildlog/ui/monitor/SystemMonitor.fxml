@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="811.0" prefWidth="950.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wildlog.ui.monitor.SystemMonitorController">
+<BorderPane prefHeight="811.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wildlog.ui.monitor.SystemMonitorController">
    <center>
       <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="950.0">
          <children>
@@ -152,14 +152,50 @@
                   </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtDatabase" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
-                    <xAxis>
-                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </LineChart>
+                  <HBox BorderPane.alignment="CENTER">
+                     <children>
+                        <LineChart fx:id="crtDBLocations" prefWidth="416.0" title="Places" verticalGridLinesVisible="false">
+                          <xAxis>
+                            <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="crtDBVisits" layoutX="10.0" layoutY="10.0" prefWidth="416.0" title="Periods" verticalGridLinesVisible="false">
+                           <xAxis>
+                              <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="crtDBElements" layoutX="10.0" layoutY="10.0" prefWidth="416.0" title="Creatures" verticalGridLinesVisible="false">
+                           <xAxis>
+                              <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="crtDBSightings" layoutX="287.0" layoutY="10.0" prefWidth="416.0" title="Observations" verticalGridLinesVisible="false">
+                           <xAxis>
+                              <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                        <LineChart fx:id="crtDBFiles" layoutX="632.0" layoutY="10.0" prefWidth="416.0" title="Files" verticalGridLinesVisible="false">
+                           <xAxis>
+                              <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                           </xAxis>
+                           <yAxis>
+                              <NumberAxis side="LEFT" />
+                           </yAxis>
+                        </LineChart>
+                     </children>
+                  </HBox>
                </center>
             </BorderPane>
          </children>

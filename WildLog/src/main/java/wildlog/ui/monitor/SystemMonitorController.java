@@ -22,7 +22,15 @@ public class SystemMonitorController implements Initializable {
     @FXML
     private LineChart<Long, Integer> crtDisk;
     @FXML
-    private LineChart<Long, Integer> crtDatabase;
+    private LineChart<Long, Integer> crtDBLocations;
+    @FXML
+    private LineChart<Long, Integer> crtDBVisits;
+    @FXML
+    private LineChart<Long, Integer> crtDBElements;
+    @FXML
+    private LineChart<Long, Integer> crtDBSightings;
+    @FXML
+    private LineChart<Long, Integer> crtDBFiles;
     @FXML
     private Label lblConnections;
     @FXML
@@ -80,12 +88,44 @@ public class SystemMonitorController implements Initializable {
         this.crtDisk = inCrtDisk;
     }
 
-    public LineChart<Long, Integer> getCrtDatabase() {
-        return crtDatabase;
+    public LineChart<Long, Integer> getCrtDBLocations() {
+        return crtDBLocations;
     }
 
-    public void setCrtDatabase(LineChart<Long, Integer> inCrtDatabase) {
-        this.crtDatabase = inCrtDatabase;
+    public void setCrtDBLocations(LineChart<Long, Integer> inCrtDBLocations) {
+        this.crtDBLocations = inCrtDBLocations;
+    }
+
+    public LineChart<Long, Integer> getCrtDBVisits() {
+        return crtDBVisits;
+    }
+
+    public void setCrtDBVisits(LineChart<Long, Integer> inCrtDBVisits) {
+        this.crtDBVisits = inCrtDBVisits;
+    }
+
+    public LineChart<Long, Integer> getCrtDBElements() {
+        return crtDBElements;
+    }
+
+    public void setCrtDBElements(LineChart<Long, Integer> inCrtDBElements) {
+        this.crtDBElements = inCrtDBElements;
+    }
+
+    public LineChart<Long, Integer> getCrtDBSightings() {
+        return crtDBSightings;
+    }
+
+    public void setCrtDBSightings(LineChart<Long, Integer> inCrtDBSightings) {
+        this.crtDBSightings = inCrtDBSightings;
+    }
+
+    public LineChart<Long, Integer> getCrtDBFiles() {
+        return crtDBFiles;
+    }
+
+    public void setCrtDBFiles(LineChart<Long, Integer> inCrtDBFiles) {
+        this.crtDBFiles = inCrtDBFiles;
     }
 
     public Label getLblConnections() {
