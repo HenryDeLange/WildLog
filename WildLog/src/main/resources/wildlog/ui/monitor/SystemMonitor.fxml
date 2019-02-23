@@ -32,7 +32,7 @@
                   </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtProcessor" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtProcessor" styleClass="wl-line-color-8" stylesheets="@styling/Charts.css" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
                       <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
@@ -58,7 +58,7 @@
                   </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtMemory" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtMemory" styleClass="wl-line-color-8" stylesheets="@styling/Charts.css" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
                       <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
@@ -80,15 +80,11 @@
                               <Insets top="10.0" />
                            </padding>
                         </Label>
-                        <ChoiceBox fx:id="cmbNetwork" maxWidth="100.0" minWidth="100.0" prefWidth="100.0">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></ChoiceBox>
                      </children>
                   </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtNetwork" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtNetwork" styleClass="wl-line-color-2" stylesheets="@styling/Charts.css" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
                       <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
@@ -110,15 +106,11 @@
                               <Insets top="10.0" />
                            </padding>
                         </Label>
-                        <ChoiceBox fx:id="cmbDisk" maxWidth="100.0" minWidth="100.0" prefWidth="100.0">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></ChoiceBox>
                      </children>
                   </VBox>
                </left>
                <center>
-                  <LineChart fx:id="crtDisk" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
+                  <LineChart fx:id="crtDisk" styleClass="wl-line-color-2" stylesheets="@styling/Charts.css" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
                       <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                     </xAxis>
@@ -154,7 +146,7 @@
                <center>
                   <HBox BorderPane.alignment="CENTER">
                      <children>
-                        <LineChart fx:id="crtDBLocations" prefWidth="416.0" title="Places" verticalGridLinesVisible="false">
+                        <LineChart fx:id="crtDBLocations" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Places" verticalGridLinesVisible="false">
                           <xAxis>
                             <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                           </xAxis>
@@ -162,7 +154,7 @@
                             <NumberAxis side="LEFT" />
                           </yAxis>
                         </LineChart>
-                        <LineChart fx:id="crtDBVisits" layoutX="10.0" layoutY="10.0" prefWidth="416.0" title="Periods" verticalGridLinesVisible="false">
+                        <LineChart fx:id="crtDBVisits" layoutX="10.0" layoutY="10.0" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Periods" verticalGridLinesVisible="false">
                            <xAxis>
                               <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                            </xAxis>
@@ -170,7 +162,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="crtDBElements" layoutX="10.0" layoutY="10.0" prefWidth="416.0" title="Creatures" verticalGridLinesVisible="false">
+                        <LineChart fx:id="crtDBElements" layoutX="10.0" layoutY="10.0" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Creatures" verticalGridLinesVisible="false">
                            <xAxis>
                               <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                            </xAxis>
@@ -178,7 +170,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="crtDBSightings" layoutX="287.0" layoutY="10.0" prefWidth="416.0" title="Observations" verticalGridLinesVisible="false">
+                        <LineChart fx:id="crtDBSightings" layoutX="287.0" layoutY="10.0" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Observations" verticalGridLinesVisible="false">
                            <xAxis>
                               <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                            </xAxis>
@@ -186,7 +178,7 @@
                               <NumberAxis side="LEFT" />
                            </yAxis>
                         </LineChart>
-                        <LineChart fx:id="crtDBFiles" layoutX="632.0" layoutY="10.0" prefWidth="416.0" title="Files" verticalGridLinesVisible="false">
+                        <LineChart fx:id="crtDBFiles" layoutX="632.0" layoutY="10.0" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Files" verticalGridLinesVisible="false">
                            <xAxis>
                               <NumberAxis forceZeroInRange="false" side="BOTTOM" />
                            </xAxis>
@@ -210,20 +202,34 @@
    <top>
       <BorderPane BorderPane.alignment="CENTER">
          <right>
-            <HBox alignment="TOP_RIGHT" prefHeight="16.0" prefWidth="136.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="259.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#btnResetAction" text="Reset">
+                  <Label text="Actions:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#btnResetAction" prefWidth="80.0" text="Reset">
                      <HBox.margin>
                         <Insets right="15.0" />
                      </HBox.margin>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#btnSnapshotAction" text="Snapshot">
+                  <Button mnemonicParsing="false" onAction="#btnSnapshotAction" prefWidth="80.0" text="Snapshot">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                     </cursor>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Button>
                </children>
                <BorderPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -234,7 +240,7 @@
             <Insets left="5.0" right="5.0" />
          </padding>
          <left>
-            <Label text="WildLog System Monitor" BorderPane.alignment="CENTER">
+            <Label prefHeight="35.0" prefWidth="306.0" text="WildLog System Monitor" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -243,6 +249,38 @@
                </padding>
             </Label>
          </left>
+         <center>
+            <HBox alignment="CENTER" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Network:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+                  <ChoiceBox fx:id="chbNetwork" minWidth="150.0" prefWidth="200.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ChoiceBox>
+                  <Label text="Disk:">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets left="20.0" right="5.0" />
+                     </padding>
+                  </Label>
+                  <ChoiceBox fx:id="chbDisk" minWidth="150.0" prefWidth="200.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+         </center>
       </BorderPane>
    </top>
 </BorderPane>

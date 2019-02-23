@@ -34,9 +34,9 @@ public class SystemMonitorController implements Initializable {
     @FXML
     private Label lblConnections;
     @FXML
-    private ChoiceBox cmbNetwork;
+    private ChoiceBox chbNetwork;
     @FXML
-    private ChoiceBox cmbDisk;
+    private ChoiceBox chbDisk;
 
     @Override
     public void initialize(URL inLocation, ResourceBundle inResources) {
@@ -136,20 +136,20 @@ public class SystemMonitorController implements Initializable {
         this.lblConnections = inLblConnections;
     }
 
-    public ChoiceBox getCmbNetwork() {
-        return cmbNetwork;
+    public ChoiceBox getChbNetwork() {
+        return chbNetwork;
     }
 
-    public void setCmbNetwork(ChoiceBox inCmbNetwork) {
-        this.cmbNetwork = inCmbNetwork;
+    public void setChbNetwork(ChoiceBox inChbNetwork) {
+        this.chbNetwork = inChbNetwork;
     }
 
-    public ChoiceBox getCmbDisk() {
-        return cmbDisk;
+    public ChoiceBox getChbDisk() {
+        return chbDisk;
     }
 
-    public void setCmbDisk(ChoiceBox inCmbDisk) {
-        this.cmbDisk = inCmbDisk;
+    public void setChbDisk(ChoiceBox inChbDisk) {
+        this.chbDisk = inChbDisk;
     }
     
 }

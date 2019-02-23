@@ -1,0 +1,39 @@
+// ------ STYLE: wl-line-color-1 -------
+.wl-line-color-1 .chart-line-symbol {
+    -fx-background-radius: 2px;
+    -fx-padding: 2px;
+}
+.wl-line-color-1 .default-color0.chart-series-line       { -fx-stroke: #5E8325; }
+.wl-line-color-1 .default-color0.chart-line-symbol       { -fx-background-color: #5E8325; }
+
+// ------ STYLE: wl-line-color-2 -------
+.wl-line-color-2 .chart-line-symbol {
+    -fx-background-radius: 3px;
+    -fx-padding: 3px;
+}
+.wl-line-color-2 .default-color0.chart-series-line       { -fx-stroke: #AD3B34; }
+.wl-line-color-2 .default-color1.chart-series-line       { -fx-stroke: #3E9DFA; }
+.wl-line-color-2 .default-color0.chart-line-symbol       { -fx-background-color: #AD3B34; }
+.wl-line-color-2 .default-color1.chart-line-symbol       { -fx-background-color: #3E9DFA; }
+
+// ------ STYLE: wl-line-color-8 -------
+.wl-line-color-8 .chart-line-symbol {
+    -fx-background-radius: 3px;
+    -fx-padding: 3px;
+}
+.wl-line-color-8 .default-color0.chart-series-line       { -fx-stroke: #7BD159; }
+.wl-line-color-8 .default-color1.chart-series-line       { -fx-stroke: #7276D9; }
+.wl-line-color-8 .default-color2.chart-series-line       { -fx-stroke: #9E5533; }
+.wl-line-color-8 .default-color3.chart-series-line       { -fx-stroke: #27AAD9; }
+.wl-line-color-8 .default-color4.chart-series-line       { -fx-stroke: #9E2440; }
+.wl-line-color-8 .default-color5.chart-series-line       { -fx-stroke: #D1CA40; }
+.wl-line-color-8 .default-color6.chart-series-line       { -fx-stroke: #48D9B2; }
+.wl-line-color-8 .default-color7.chart-series-line       { -fx-stroke: #7E429E; }
+.wl-line-color-8 .default-color0.chart-line-symbol       { -fx-background-color: #7BD159; }
+.wl-line-color-8 .default-color1.chart-line-symbol       { -fx-background-color: #7276D9; }
+.wl-line-color-8 .default-color2.chart-line-symbol       { -fx-background-color: #9E5533; }
+.wl-line-color-8 .default-color3.chart-line-symbol       { -fx-background-color: #27AAD9; }
+.wl-line-color-8 .default-color4.chart-line-symbol       { -fx-background-color: #9E2440; }
+.wl-line-color-8 .default-color5.chart-line-symbol       { -fx-background-color: #D1CA40; }
+.wl-line-color-8 .default-color6.chart-line-symbol       { -fx-background-color: #48D9B2; }
+.wl-line-color-8 .default-color7.chart-line-symbol       { -fx-background-color: #7E429E; }

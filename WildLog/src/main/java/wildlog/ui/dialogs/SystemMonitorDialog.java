@@ -24,10 +24,13 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.StringConverter;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import org.apache.logging.log4j.Level;
 import oshi.SystemInfo;
+import oshi.hardware.HWDiskStore;
 import oshi.hardware.HardwareAbstractionLayer;
+import oshi.hardware.NetworkIF;
 import oshi.software.os.OperatingSystem;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -53,8 +56,6 @@ public class SystemMonitorDialog extends JFrame {
     private ObservableList<XYChart.Series<Long, Integer>> seriesDBElements;
     private ObservableList<XYChart.Series<Long, Integer>> seriesDBSightings;
     private ObservableList<XYChart.Series<Long, Integer>> seriesDBFiles;
-    private int activeNetwork = 0;
-    private int activeDisk = 0;
         
     public SystemMonitorDialog() {
         WildLogApp.LOGGER.log(Level.INFO, "[SystemMonitorDialog]");
@@ -149,7 +150,6 @@ public class SystemMonitorDialog extends JFrame {
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
                 controller.getCrtMemory().setLegendVisible(false);
                 // Network
-// TODO: Add a droplist to select the network connection to use (can be many present)
                 seriesNetwork = FXCollections.observableList(new ArrayList<>(2));
                 seriesNetwork.add(new XYChart.Series<>());
                 seriesNetwork.get(0).setName("Sent");
@@ -177,7 +177,6 @@ public class SystemMonitorDialog extends JFrame {
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
                 controller.getCrtNetwork().setLegendVisible(false);
                 // Disk
-// TODO: Add a droplist to select the disk to use (can be many present)
                 seriesDisk = FXCollections.observableList(new ArrayList<>(2));
                 seriesDisk.add(new XYChart.Series<>());
                 seriesDisk.get(0).setName("Read");
@@ -332,6 +331,9 @@ public class SystemMonitorDialog extends JFrame {
                         load();
                     });
                 }, 1, TICK_RATE, TimeUnit.SECONDS);
+                // Doen die eerste load datelik (en dan 1 sekonde later sal die eerste tick gebeur)
+                btnResetAction(null); // Om die droplists op te stel
+                load();
             }
         });
     }
@@ -404,43 +406,59 @@ public class SystemMonitorDialog extends JFrame {
                 (int) (Runtime.getRuntime().totalMemory() / MB)));
         seriesMemory.get(3).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / MB)));
-        // Network
-        int prevMBs;
+        // Network - Sent
+        int activeNetwork = controller.getChbNetwork().getSelectionModel().getSelectedIndex();
+        int nowMBs = 0;
+        if (activeNetwork < hardware.getNetworkIFs().length) {
+            nowMBs = (int) ((hardware.getNetworkIFs()[activeNetwork].getBytesSent()) / MB);
+        }
+        int prevMBs = 0;
         if (!seriesNetwork.get(0).getData().isEmpty()) {
             prevMBs = (Integer) seriesNetwork.get(0).getData().get(seriesNetwork.get(0).getData().size() - 1).extraValueProperty().getValue();
         }
         else {
-            prevMBs = 0;
+            prevMBs = nowMBs;
         }
-        int nowMBs = (int) ((hardware.getNetworkIFs()[activeNetwork].getBytesSent()) / MB);
         seriesNetwork.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (((double) nowMBs - (double) prevMBs) / (double) TICK_RATE), nowMBs));
+        // Network - Received
+        nowMBs = 0;
+        if (activeNetwork < hardware.getNetworkIFs().length) {
+            nowMBs = (int) ((hardware.getNetworkIFs()[activeNetwork].getBytesRecv()) / MB);
+        }
         if (!seriesNetwork.get(1).getData().isEmpty()) {
             prevMBs = (Integer) seriesNetwork.get(1).getData().get(seriesNetwork.get(1).getData().size() - 1).extraValueProperty().getValue();
         }
         else {
-            prevMBs = 0;
+            prevMBs = nowMBs;
         }
-        nowMBs = (int) ((hardware.getNetworkIFs()[activeNetwork].getBytesRecv()) / MB);
         seriesNetwork.get(1).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (((double) nowMBs - (double) prevMBs) / (double) TICK_RATE), nowMBs));
-        // Disk
+        // Disk - Write
+        int activeDisk = controller.getChbDisk().getSelectionModel().getSelectedIndex();
+        nowMBs = 0;
+        if (activeDisk < hardware.getDiskStores().length) {
+            nowMBs = (int) ((hardware.getDiskStores()[activeDisk].getWriteBytes()) / MB);
+        }
         if (!seriesDisk.get(0).getData().isEmpty()) {
             prevMBs = (Integer) seriesDisk.get(0).getData().get(seriesDisk.get(0).getData().size() - 1).extraValueProperty().getValue();
         }
         else {
-            prevMBs = 0;
+            prevMBs = nowMBs;
         }
-        nowMBs = (int) ((hardware.getDiskStores()[activeDisk].getReadBytes()) / MB);
         seriesDisk.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (((double) nowMBs - (double) prevMBs) / (double) TICK_RATE), nowMBs));
+        // Disk - Read
+        nowMBs = 0;
+        if (activeDisk < hardware.getDiskStores().length) {
+            nowMBs = (int) ((hardware.getDiskStores()[activeDisk].getReadBytes()) / MB);
+        }
         if (!seriesDisk.get(1).getData().isEmpty()) {
             prevMBs = (Integer) seriesDisk.get(1).getData().get(seriesDisk.get(1).getData().size() - 1).extraValueProperty().getValue();
         }
         else {
-            prevMBs = 0;
+            prevMBs = nowMBs;
         }
-        nowMBs = (int) ((hardware.getDiskStores()[activeDisk].getWriteBytes()) / MB);
         seriesDisk.get(1).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (((double) nowMBs - (double) prevMBs) / (double) TICK_RATE), nowMBs));
         // Database
@@ -468,6 +486,8 @@ public class SystemMonitorDialog extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog System Monitor");
+        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
+        setMinimumSize(new java.awt.Dimension(350, 200));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -477,12 +497,13 @@ public class SystemMonitorDialog extends JFrame {
         lblLoading.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblLoading.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLoading.setText("Loading...");
-        getContentPane().add(lblLoading, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(lblLoading, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     public void btnResetAction(ActionEvent event) {
+        // Reset the data series
         for (XYChart.Series series : seriesCPUs) {
             series.getData().clear();
         }
@@ -510,10 +531,22 @@ public class SystemMonitorDialog extends JFrame {
         for (XYChart.Series series : seriesDBFiles) {
             series.getData().clear();
         }
+        // Reconfigure the droplists
+        controller.getChbNetwork().getItems().clear();
+        for (NetworkIF network : hardware.getNetworkIFs()) {
+            controller.getChbNetwork().getItems().add(network.getDisplayName() + " - " + network.getName());
+        }
+        controller.getChbNetwork().getSelectionModel().selectFirst();
+        controller.getChbDisk().getItems().clear();
+        for (HWDiskStore disk : hardware.getDiskStores()) {
+            controller.getChbDisk().getItems().add(disk.getModel() + " - " + disk.getName());
+        }
+        controller.getChbDisk().getSelectionModel().selectFirst();
     }
     
     public void btnSnapshotAction(ActionEvent event) {
 // TODO: Print ALL info into the logs and a new file + save a JavaFx screenshot
+        
     }
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
