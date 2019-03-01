@@ -104,6 +104,7 @@ import wildlog.ui.dialogs.MergeVisitDialog;
 import wildlog.ui.dialogs.MoveVisitDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.SystemMonitorDialog;
+import wildlog.ui.dialogs.UserManagementDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
 import wildlog.ui.dialogs.WildNoteAboutBox;
 import wildlog.ui.dialogs.WorkspaceExportDialog;
@@ -336,6 +337,8 @@ public final class WildLogView extends JFrame {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
+        mnuWorkspaceUsers = new javax.swing.JMenuItem();
+        jSeparator26 = new javax.swing.JPopupMenu.Separator();
         mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
         mnuCreateWorkspaceMenuItem = new javax.swing.JMenuItem();
         jSeparator14 = new javax.swing.JPopupMenu.Separator();
@@ -759,6 +762,20 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         workspaceMenu.setText("Workspace");
         workspaceMenu.setName("workspaceMenu"); // NOI18N
+
+        mnuWorkspaceUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        mnuWorkspaceUsers.setText("Workspace Users");
+        mnuWorkspaceUsers.setToolTipText("Limit access to this Workspace to only certain users.");
+        mnuWorkspaceUsers.setName("mnuWorkspaceUsers"); // NOI18N
+        mnuWorkspaceUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuWorkspaceUsersActionPerformed(evt);
+            }
+        });
+        workspaceMenu.add(mnuWorkspaceUsers);
+
+        jSeparator26.setName("jSeparator26"); // NOI18N
+        workspaceMenu.add(jSeparator26);
 
         mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuChangeWorkspaceMenuItem.setText("Switch Active Workspace");
@@ -4201,6 +4218,11 @@ public final class WildLogView extends JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuSystemMonitorActionPerformed
 
+    private void mnuWorkspaceUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuWorkspaceUsersActionPerformed
+        UserManagementDialog dialog = new UserManagementDialog(this);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_mnuWorkspaceUsersActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4275,6 +4297,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator24;
     private javax.swing.JPopupMenu.Separator jSeparator25;
+    private javax.swing.JPopupMenu.Separator jSeparator26;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
@@ -4342,6 +4365,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuSwitchElementNames;
     private javax.swing.JMenuItem mnuSystemMonitor;
     private javax.swing.JMenuItem mnuUserGuide;
+    private javax.swing.JMenuItem mnuWorkspaceUsers;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu slideshowMenu;

@@ -67,6 +67,7 @@ import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.LoggingPrintStream;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogPaths;
 
 /**
@@ -75,6 +76,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     public final static String WILDLOG_VERSION = "5.1.3";
+    public static WildLogApplicationTypes WILDLOG_TYPE = WildLogApplicationTypes.WILDLOG;
     public static Logger LOGGER;
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
