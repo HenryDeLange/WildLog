@@ -1,19 +1,25 @@
 package wildlog.ui.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -48,10 +54,13 @@ import oshi.hardware.NetworkIF;
 import oshi.hardware.PowerSource;
 import oshi.hardware.SoundCard;
 import oshi.hardware.UsbDevice;
+import oshi.software.os.OSFileStore;
+import oshi.software.os.OSProcess;
 import oshi.software.os.OperatingSystem;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.monitor.SystemMonitorController;
+import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsFileProcessing;
@@ -408,9 +417,6 @@ public class SystemMonitorDialog extends JFrame {
             }
         }
         // Add new data points
-        
-// TODO: Maak dat mens die charts kan kliek
-        
         // CPU
         seriesCPUs.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (hardware.getProcessor().getSystemCpuLoadBetweenTicks() * 100.0)));
@@ -418,6 +424,7 @@ public class SystemMonitorDialog extends JFrame {
             seriesCPUs.get(t + 1).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                     (int) (hardware.getProcessor().getProcessorCpuLoadBetweenTicks()[t] * 25.0)));
         }
+        UtilsReports.setupChartTooltips(controller.getCrtProcessor(), true, true, false, false, true, seriesCPUs.get(0).getData().size() - 1);
         // Memory
         seriesMemory.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (hardware.getMemory().getTotal() / MB)));
@@ -427,6 +434,7 @@ public class SystemMonitorDialog extends JFrame {
                 (int) (Runtime.getRuntime().totalMemory() / MB)));
         seriesMemory.get(3).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / MB)));
+        UtilsReports.setupChartTooltips(controller.getCrtMemory(), true, true, false, false, true, seriesMemory.get(0).getData().size() - 1);
         // Network - Sent
         int activeNetwork = controller.getChbNetwork().getSelectionModel().getSelectedIndex();
         int nowMBs = 0;
@@ -455,6 +463,7 @@ public class SystemMonitorDialog extends JFrame {
         }
         seriesNetwork.get(1).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (((double) nowMBs - (double) prevMBs) / (double) TICK_RATE), nowMBs));
+        UtilsReports.setupChartTooltips(controller.getCrtNetwork(), true, true, false, false, true, seriesNetwork.get(0).getData().size() - 1);
         // Disk - Write
         int activeDisk = controller.getChbDisk().getSelectionModel().getSelectedIndex();
         nowMBs = 0;
@@ -482,17 +491,23 @@ public class SystemMonitorDialog extends JFrame {
         }
         seriesDisk.get(1).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (((double) nowMBs - (double) prevMBs) / (double) TICK_RATE), nowMBs));
+        UtilsReports.setupChartTooltips(controller.getCrtDisk(), true, true, false, false, true, seriesDisk.get(0).getData().size() - 1);
         // Database
         seriesDBLocations.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countLocations(null)));
+        UtilsReports.setupChartTooltips(controller.getCrtDBLocations(), true, true, false, false, true, seriesDBLocations.get(0).getData().size() - 1);
         seriesDBVisits.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countVisits(null, null)));
+        UtilsReports.setupChartTooltips(controller.getCrtDBVisits(), true, true, false, false, true, seriesDBVisits.get(0).getData().size() - 1);
         seriesDBElements.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countElements(null, null)));
+        UtilsReports.setupChartTooltips(controller.getCrtDBElements(), true, true, false, false, true, seriesDBElements.get(0).getData().size() - 1);
         seriesDBSightings.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countSightings(0, null, null, null)));
+        UtilsReports.setupChartTooltips(controller.getCrtDBSightings(), true, true, false, false, true, seriesDBSightings.get(0).getData().size() - 1);
         seriesDBFiles.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countWildLogFiles(null, null)));
+        UtilsReports.setupChartTooltips(controller.getCrtDBFiles(), true, true, false, false, true, seriesDBFiles.get(0).getData().size() - 1);
         controller.getLblConnections().setText(WildLogApp.getApplication().getDBI().activeSessionsCount() + " connections");
     }
 
@@ -554,23 +569,34 @@ public class SystemMonitorDialog extends JFrame {
         }
         // Reconfigure the droplists
         // Network
-// TODO: Choose the network with the most triffic as default
         controller.getChbNetwork().getItems().clear();
-        for (NetworkIF network : hardware.getNetworkIFs()) {
+        int selectedNetworkIndex = 0;
+        long selectedNetworkUsage = -1;
+        for (int t = 0; t < hardware.getNetworkIFs().length; t++) {
+            NetworkIF network = hardware.getNetworkIFs()[t];
             controller.getChbNetwork().getItems().add(network.getDisplayName() + " - " + network.getName());
+            if (selectedNetworkUsage < (network.getBytesRecv() + network.getBytesSent())) {
+                selectedNetworkIndex = t;
+                selectedNetworkUsage = network.getBytesRecv() + network.getBytesSent();
+            }
         }
-        controller.getChbNetwork().getSelectionModel().selectFirst();
+        controller.getChbNetwork().getSelectionModel().select(selectedNetworkIndex);
         // Disk
-// TODO: Choose the first disk as default (not first in arrya, but first in name)
         controller.getChbDisk().getItems().clear();
-        for (HWDiskStore disk : hardware.getDiskStores()) {
+        int selectedDiskIndex = 0;
+        String selectedDiskName = null;
+        for (int t = 0; t < hardware.getDiskStores().length; t++) {
+            HWDiskStore disk = hardware.getDiskStores()[t];
             controller.getChbDisk().getItems().add(disk.getModel() + " - " + disk.getName());
+            if (selectedDiskName == null || selectedDiskName.compareTo(disk.getName()) > 0) {
+                selectedDiskIndex = t;
+                selectedDiskName = disk.getName();
+            }
         }
-        controller.getChbDisk().getSelectionModel().selectFirst();
+        controller.getChbDisk().getSelectionModel().select(selectedDiskIndex);
     }
     
     public void btnSnapshotAction(ActionEvent event) {
-// TODO: Print ALL info into the logs and a new file + save a JavaFx screenshot + Threads
         snapshotService.submit(() -> {
             String dateString = UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now());
             Path path = WildLogPaths.WILDLOG_EXPORT_SYSTEM_MONITOR.getAbsoluteFullPath();
@@ -606,6 +632,15 @@ public class SystemMonitorDialog extends JFrame {
                 write(feedback, "**********************************", "");
                 write(feedback, "", "");
                 write(feedback, "Date: ", dateString);
+                // Save operating system data
+                write(feedback, "", "");
+                write(feedback, "***** Operating System *****", "");
+                write(feedback, "Manufacturer: ", operatingSystem.getManufacturer());
+                write(feedback, "Family      : ", operatingSystem.getFamily());
+                write(feedback, "Version     : ", operatingSystem.getVersion().getVersion());
+                write(feedback, "CodeName    : ", operatingSystem.getVersion().getCodeName());
+                write(feedback, "BuildNumber : ", operatingSystem.getVersion().getBuildNumber());
+                write(feedback, "Bitness     : ", operatingSystem.getBitness());
                 // Save OSHI data
                 write(feedback, "", "");
                 write(feedback, "***** Computer System *****", "");
@@ -653,6 +688,25 @@ public class SystemMonitorDialog extends JFrame {
                         write(feedback, "Major         : ", partition.getMajor());
                         write(feedback, "Minor         : ", partition.getMinor());
                     }
+                }
+                write(feedback, "", "");
+                write(feedback, ">>> Operating System >>> File System", "");
+                write(feedback, "MaxFileDescriptors : ", operatingSystem.getFileSystem().getMaxFileDescriptors());
+                write(feedback, "OpenFileDescriptors: ", operatingSystem.getFileSystem().getOpenFileDescriptors());
+                for (int t = 0; t < operatingSystem.getFileSystem().getFileStores().length; t++) {
+                    write(feedback, ">>> Operating System >>> File System " + t, "");
+                    OSFileStore fileStore = operatingSystem.getFileSystem().getFileStores()[t];
+                    write(feedback, "Name         : ", fileStore.getName());
+                    write(feedback, "Description  : ", fileStore.getDescription());
+                    write(feedback, "Type         : ", fileStore.getType());
+                    write(feedback, "Mount        : ", fileStore.getMount());
+                    write(feedback, "UUID         : ", fileStore.getUUID());
+                    write(feedback, "TotalSpace   : ", Math.round(fileStore.getTotalSpace() / MB) + " MB");
+                    write(feedback, "UsableSpace  : ", Math.round(fileStore.getUsableSpace() / MB) + " MB");
+                    write(feedback, "TotalInodes  : ", fileStore.getTotalInodes());
+                    write(feedback, "FreeInodes   : ", fileStore.getFreeInodes());
+                    write(feedback, "Volume       : ", fileStore.getVolume());
+                    write(feedback, "LogicalVolume: ", fileStore.getLogicalVolume());
                 }
                 write(feedback, "", "");
                 write(feedback, "***** Displays *****", "");
@@ -711,27 +765,70 @@ public class SystemMonitorDialog extends JFrame {
                     while (network.getNetworkInterface().getSubInterfaces().hasMoreElements()) {
                         write(feedback, "SubInterfaces  : ", network.getNetworkInterface().getSubInterfaces().nextElement().getName());
                     }
-    // FIXME: Hierdie gaan in infanite loop in...
-    //                while (network.getNetworkInterface().getInetAddresses().hasMoreElements()) {
-    //                    InetAddress inetAddress = network.getNetworkInterface().getInetAddresses().nextElement();
-    //                    write(feedback, "InetAddresses - HostName         : ", inetAddress.getHostName());
-    //                    write(feedback, "InetAddresses - HostAddress      : ", inetAddress.getHostAddress());
-    //                    write(feedback, "InetAddresses - CanonicalHostName: ", inetAddress.getCanonicalHostName());
-    //                    write(feedback, "InetAddresses - Address          : ", Arrays.toString(inetAddress.getAddress()));
-    //                    write(feedback, "InetAddresses - AnyLocalAddress  : ", inetAddress.isAnyLocalAddress());
-    //                    write(feedback, "InetAddresses - LinkLocalAddress : ", inetAddress.isLinkLocalAddress());
-    //                    write(feedback, "InetAddresses - LoopbackAddress  : ", inetAddress.isLoopbackAddress());
-    //                    write(feedback, "InetAddresses - MCGlobal         : ", inetAddress.isMCGlobal());
-    //                    write(feedback, "InetAddresses - MCLinkLocal      : ", inetAddress.isMCLinkLocal());
-    //                    write(feedback, "InetAddresses - MCNodeLocal      : ", inetAddress.isMCNodeLocal());
-    //                    write(feedback, "InetAddresses - MCOrgLocal       : ", inetAddress.isMCOrgLocal());
-    //                    write(feedback, "InetAddresses - MCSiteLocal      : ", inetAddress.isMCSiteLocal());
-    //                    write(feedback, "InetAddresses - MulticastAddress : ", inetAddress.isMulticastAddress());
-    //                    write(feedback, "InetAddresses - SiteLocalAddress : ", inetAddress.isSiteLocalAddress());
-    //                }
-    //                for (InterfaceAddress interfaceAddress : network.getNetworkInterface().getInterfaceAddresses()) {
-
-    //                }
+// FIXME: Hierdie gaan in infanite loop in...
+//                    while (network.getNetworkInterface().getInetAddresses().hasMoreElements()) {
+//                        InetAddress inetAddress = network.getNetworkInterface().getInetAddresses().nextElement();
+//                        write(feedback, "InetAddresses - HostName         : ", inetAddress.getHostName());
+//                        write(feedback, "InetAddresses - HostAddress      : ", inetAddress.getHostAddress());
+//                        write(feedback, "InetAddresses - CanonicalHostName: ", inetAddress.getCanonicalHostName());
+//                        write(feedback, "InetAddresses - Address          : ", Arrays.toString(inetAddress.getAddress()));
+//                        write(feedback, "InetAddresses - AnyLocalAddress  : ", inetAddress.isAnyLocalAddress());
+//                        write(feedback, "InetAddresses - LinkLocalAddress : ", inetAddress.isLinkLocalAddress());
+//                        write(feedback, "InetAddresses - LoopbackAddress  : ", inetAddress.isLoopbackAddress());
+//                        write(feedback, "InetAddresses - MCGlobal         : ", inetAddress.isMCGlobal());
+//                        write(feedback, "InetAddresses - MCLinkLocal      : ", inetAddress.isMCLinkLocal());
+//                        write(feedback, "InetAddresses - MCNodeLocal      : ", inetAddress.isMCNodeLocal());
+//                        write(feedback, "InetAddresses - MCOrgLocal       : ", inetAddress.isMCOrgLocal());
+//                        write(feedback, "InetAddresses - MCSiteLocal      : ", inetAddress.isMCSiteLocal());
+//                        write(feedback, "InetAddresses - MulticastAddress : ", inetAddress.isMulticastAddress());
+//                        write(feedback, "InetAddresses - SiteLocalAddress : ", inetAddress.isSiteLocalAddress());
+//                    }
+                    for (int i = 0; i < network.getNetworkInterface().getInterfaceAddresses().size(); i++) {
+                        InterfaceAddress interfaceAddress = network.getNetworkInterface().getInterfaceAddresses().get(i);
+                        write(feedback, ">>> Network " + t + " >>> Interface Address " + i, "");
+                        write(feedback, "InterfaceAddress - NetworkPrefixLength: ", interfaceAddress.getNetworkPrefixLength());
+                        InetAddress inetAddress = interfaceAddress.getAddress();
+                        write(feedback, "InetAddresses - HostName         : ", inetAddress.getHostName());
+                        write(feedback, "InetAddresses - HostAddress      : ", inetAddress.getHostAddress());
+                        write(feedback, "InetAddresses - CanonicalHostName: ", inetAddress.getCanonicalHostName());
+                        write(feedback, "InetAddresses - Address          : ", Arrays.toString(inetAddress.getAddress()));
+                        write(feedback, "InetAddresses - AnyLocalAddress  : ", inetAddress.isAnyLocalAddress());
+                        write(feedback, "InetAddresses - LinkLocalAddress : ", inetAddress.isLinkLocalAddress());
+                        write(feedback, "InetAddresses - LoopbackAddress  : ", inetAddress.isLoopbackAddress());
+                        write(feedback, "InetAddresses - MCGlobal         : ", inetAddress.isMCGlobal());
+                        write(feedback, "InetAddresses - MCLinkLocal      : ", inetAddress.isMCLinkLocal());
+                        write(feedback, "InetAddresses - MCNodeLocal      : ", inetAddress.isMCNodeLocal());
+                        write(feedback, "InetAddresses - MCOrgLocal       : ", inetAddress.isMCOrgLocal());
+                        write(feedback, "InetAddresses - MCSiteLocal      : ", inetAddress.isMCSiteLocal());
+                        write(feedback, "InetAddresses - MulticastAddress : ", inetAddress.isMulticastAddress());
+                        write(feedback, "InetAddresses - SiteLocalAddress : ", inetAddress.isSiteLocalAddress());
+                        inetAddress = interfaceAddress.getBroadcast();
+                        if (inetAddress != null) {
+                            write(feedback, "Broadcast - HostName         : ", inetAddress.getHostName());
+                            write(feedback, "Broadcast - HostAddress      : ", inetAddress.getHostAddress());
+                            write(feedback, "Broadcast - CanonicalHostName: ", inetAddress.getCanonicalHostName());
+                            write(feedback, "Broadcast - Address          : ", Arrays.toString(inetAddress.getAddress()));
+                            write(feedback, "Broadcast - AnyLocalAddress  : ", inetAddress.isAnyLocalAddress());
+                            write(feedback, "Broadcast - LinkLocalAddress : ", inetAddress.isLinkLocalAddress());
+                            write(feedback, "Broadcast - LoopbackAddress  : ", inetAddress.isLoopbackAddress());
+                            write(feedback, "Broadcast - MCGlobal         : ", inetAddress.isMCGlobal());
+                            write(feedback, "Broadcast - MCLinkLocal      : ", inetAddress.isMCLinkLocal());
+                            write(feedback, "Broadcast - MCNodeLocal      : ", inetAddress.isMCNodeLocal());
+                            write(feedback, "Broadcast - MCOrgLocal       : ", inetAddress.isMCOrgLocal());
+                            write(feedback, "Broadcast - MCSiteLocal      : ", inetAddress.isMCSiteLocal());
+                            write(feedback, "Broadcast - MulticastAddress : ", inetAddress.isMulticastAddress());
+                            write(feedback, "Broadcast - SiteLocalAddress : ", inetAddress.isSiteLocalAddress());
+                        }
+                    }
+                }
+                write(feedback, "", "");
+                write(feedback, ">>> Operating System >>> Network Params", "");
+                write(feedback, "HostName          : ", operatingSystem.getNetworkParams().getHostName());
+                write(feedback, "DomainName        : ", operatingSystem.getNetworkParams().getDomainName());
+                write(feedback, "Ipv4DefaultGateway: ", operatingSystem.getNetworkParams().getIpv4DefaultGateway());
+                write(feedback, "Ipv6DefaultGateway: ", operatingSystem.getNetworkParams().getIpv6DefaultGateway());
+                for (String dnsServer : operatingSystem.getNetworkParams().getDnsServers()) {
+                    write(feedback, "DnsServers        : ", dnsServer);
                 }
                 write(feedback, "", "");
                 write(feedback, "***** Power Sources *****", "");
@@ -814,12 +911,89 @@ public class SystemMonitorDialog extends JFrame {
                 for (int t = 0; t < hardware.getUsbDevices(true).length; t++) {
                     write(feedback, ">>> USB Device " + t, "");
                     UsbDevice usbDevice = hardware.getUsbDevices(true)[t];
-                    writeNestedUSBDevices("Controller[" + t + "]", feedback, usbDevice);
+                    writeNestedUSBDevices(feedback, "Controller[" + t + "]", usbDevice);
                 }
-                // Save operating system data
-
+                write(feedback, "", "");
+                write(feedback, ">>> Operating System >>> Processes", "");
+                write(feedback, "ThreadCount : ", operatingSystem.getThreadCount());
+                write(feedback, "ProcessCount: ", operatingSystem.getProcessCount());
+                write(feedback, ">>> Operating System >>> WildLog Process", "");
+                OSProcess process = operatingSystem.getProcess(operatingSystem.getProcessId());
+                write(feedback, "Name                   : ", process.getName());
+                write(feedback, "ProcessId              : ", process.getProcessID());
+                write(feedback, "ParentProcessID        : ", process.getParentProcessID());
+                write(feedback, "Group                  : ", process.getGroup());
+                write(feedback, "GroupID                : ", process.getGroupID());
+                write(feedback, "User                   : ", process.getUser());
+                write(feedback, "UserID                 : ", process.getUserID());
+                write(feedback, "State                  : ", process.getState());
+                write(feedback, "Priority               : ", process.getPriority());
+                write(feedback, "StartTime              : ", UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(UtilsTime.getLocalDateTimeFromDate(new Date(process.getStartTime()))));
+                write(feedback, "UpTime                 : ", Math.round(((double) process.getUpTime()) / 1000.0 / 60.0) + " minutes");
+                write(feedback, "KernelTime             : ", Math.round(((double) process.getKernelTime()) / 1000.0 / 60.0) + " minutes");
+                write(feedback, "UserTime               : ", Math.round(((double) process.getUserTime()) / 1000.0 / 60.0) + " minutes");
+                write(feedback, "ThreadCount            : ", process.getThreadCount());
+                write(feedback, "CommandLine            : ", process.getCommandLine());
+                write(feedback, "CurrentWorkingDirectory: ", process.getCurrentWorkingDirectory());
+                write(feedback, "Path                   : ", process.getPath());
+                write(feedback, "OpenFiles              : ", process.getOpenFiles());
+                write(feedback, "BytesRead              : ", Math.round(process.getBytesRead() / MB) + " MB");
+                write(feedback, "BytesWritten           : ", Math.round(process.getBytesWritten() / MB) + " MB");
+                write(feedback, "ResidentSetSize        : ", Math.round(process.getResidentSetSize() / MB) + " MB");
+                write(feedback, "VirtualSize            : ", Math.round(process.getVirtualSize() / MB) + " MB");
+                write(feedback, "CpuPercent             : ", Math.round(process.calculateCpuPercent() * 100.0) + "%");
                 // Save Java data
-
+                write(feedback, "", "");
+                write(feedback, "***** Java *****", "");
+                write(feedback, ">>> Java Properties", "");
+                write(feedback, "user.name      : ", System.getProperty("user.name"));
+                write(feedback, "os.name        : ", System.getProperty("os.name"));
+                write(feedback, "os.version     : ", System.getProperty("os.version"));
+                write(feedback, "os.arch        : ", System.getProperty("os.arch"));
+                write(feedback, ">>> Java Time", "");
+                write(feedback, "Timezone       : ", TimeZone.getDefault().getDisplayName() + " [" + ZonedDateTime.now().format(DateTimeFormatter.ofPattern("(z) VV")) + "]");
+                write(feedback, ">>> Java Runtime", "");
+                write(feedback, "JVM CPU cores  : ", Runtime.getRuntime().availableProcessors());
+                write(feedback, "JVM Max Memory : ", Math.round(Runtime.getRuntime().maxMemory() / MB) + " MB");
+                write(feedback, "JVM Used Memory: ", Math.round((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / MB) + " MB");
+                write(feedback, ">>> Java Graphics", "");
+                write(feedback, "MaximumWindowBounds: ", GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getWidth() + " width");
+                write(feedback, "MaximumWindowBounds: ", GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getHeight() + "height");
+                write(feedback, "Screen Count       : ", GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length);
+                for (int t = 0; t < GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length; t++) {
+                    write(feedback, ">>> Java Graphics >>> Graphics Device " + t, "");
+                    GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[t];
+                    write(feedback, "IDstring                  : ", graphicsDevice.getIDstring());
+                    write(feedback, "Width                     : ", graphicsDevice.getDisplayMode().getWidth());
+                    write(feedback, "Height                    : ", graphicsDevice.getDisplayMode().getHeight());
+                    write(feedback, "FullScreenSupported       : ", graphicsDevice.isFullScreenSupported());
+                    if (graphicsDevice.getAvailableAcceleratedMemory() < 0) {
+                        write(feedback, "AvailableAcceleratedMemory: ", "unknown");
+                    }
+                    else {
+                        write(feedback, "AvailableAcceleratedMemory: ", graphicsDevice.getAvailableAcceleratedMemory());
+                    }
+                    write(feedback, ">>> Java Graphics >>> Graphics Device " + t + " >>> Display Mode", "");
+                    write(feedback, "BitDepth   : ", graphicsDevice.getDisplayMode().getBitDepth());
+                    write(feedback, "RefreshRate: ", graphicsDevice.getDisplayMode().getRefreshRate());
+                    write(feedback, "Width      : ", graphicsDevice.getDisplayMode().getWidth());
+                    write(feedback, "Height     : ", graphicsDevice.getDisplayMode().getHeight());
+                }
+                write(feedback, ">>> Java Threads", "");
+                write(feedback, "Thread Count: ", Thread.getAllStackTraces().size());
+                int threadCounter = 0;
+                for (Thread thread : Thread.getAllStackTraces().keySet()) {
+                    write(feedback, ">>> Java Threads >>> Thread " + threadCounter++, "");
+                    write(feedback, "Name       : ", thread.getName());
+                    write(feedback, "ThreadGroup: ", thread.getThreadGroup().getName());
+                    write(feedback, "Id         : ", thread.getId());
+                    write(feedback, "Priority   : ", thread.getPriority());
+                    write(feedback, "State      : ", thread.getState());
+                    write(feedback, "Alive      : ", thread.isAlive());
+                    write(feedback, "Daemon     : ", thread.isDaemon());
+                    write(feedback, "Interrupted: ", thread.isInterrupted());
+                }
+                // Make sure all text is flushed to the feedback file
                 feedback.flush();
             }
             catch (IOException ex) {
@@ -830,7 +1004,7 @@ public class SystemMonitorDialog extends JFrame {
         });
     }
 
-    private void writeNestedUSBDevices(String parentChain, final PrintWriter inFeedback, UsbDevice inUsbDevice) {
+    private void writeNestedUSBDevices(final PrintWriter inFeedback, String parentChain, UsbDevice inUsbDevice) {
         write(inFeedback, "Name            : ", inUsbDevice.getName());
         write(inFeedback, "Vendor          : ", inUsbDevice.getVendor());
         write(inFeedback, "VendorId        : ", inUsbDevice.getVendorId());
@@ -840,7 +1014,7 @@ public class SystemMonitorDialog extends JFrame {
         for (int i = 0; i < inUsbDevice.getConnectedDevices().length; i++) {
             write(inFeedback, ">>> Connected Device " + i + " >>> USB Device Chain: " + parentChain, "");
             UsbDevice connectedUsbDevice = inUsbDevice.getConnectedDevices()[i];
-            writeNestedUSBDevices(parentChain + "_Connected(" + i + ")",inFeedback, connectedUsbDevice);
+            writeNestedUSBDevices(inFeedback, parentChain + "_Connected(" + i + ")", connectedUsbDevice);
         }
     }
     

@@ -1,6 +1,7 @@
 package wildlog.ui.reports.utils;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -197,20 +198,33 @@ public final class UtilsReports {
     }
     
     public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate) {
-        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null, false);
+        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null, false, true, false, -1);
     }
     
     public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate, boolean inIsStackedBarchart) {
-        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null, inIsStackedBarchart);
+        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null, inIsStackedBarchart, true, false, -1);
+    }
+    
+    public static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate, boolean inIsStackedBarchart, 
+            boolean inShowExtraData, boolean inShowSeriesName, int inDataIndex) {
+        setupChartTooltips(inChart, inValueAxisIsY, inFormatLongAsDate, null, inIsStackedBarchart, inShowExtraData, inShowSeriesName, inDataIndex);
     }
     
     private static void setupChartTooltips(XYChart inChart, boolean inValueAxisIsY, boolean inFormatLongAsDate, 
-            Map<Integer, String> inMapAxisToNames, boolean inIsStackedBarchart) {
+            Map<Integer, String> inMapAxisToNames, boolean inIsStackedBarchart, boolean inShowExtraData, boolean inShowSeriesName, int inDataIndex) {
         // Get the node that will be at the top (the one being clicked) for each value
         Map<String, Node> mapTopNode = new HashMap<>();
         Map<String, String> mapTopTooltip = new HashMap<>();
         for (XYChart.Series<Object, Object> series : (List<XYChart.Series<Object, Object>>) inChart.getData()) {
-            for (XYChart.Data<Object, Object> data : series.getData()) {
+            List<XYChart.Data<Object, Object>> lstData;
+            if (inDataIndex < 0) {
+                lstData = series.getData();
+            }
+            else {
+                lstData = new ArrayList<>(1);
+                lstData.add(series.getData().get(inDataIndex));
+            }
+            for (XYChart.Data<Object, Object> data : lstData) {
                 String xyKey = data.getXValue().toString() + "_" + data.getYValue().toString();
                 if (inIsStackedBarchart) {
                     xyKey = xyKey + "_" + data.getExtraValue();
@@ -220,7 +234,10 @@ public final class UtilsReports {
                 // Generate tooltip
                 if (data.getNode() == mapTopNode.get(xyKey)) {
                     String text = "";
-                    if (data.getExtraValue() != null && !data.getExtraValue().toString().isEmpty()) {
+                    if (inShowSeriesName) {
+                        text = text + series.getName() + System.lineSeparator();
+                    }
+                    if (inShowExtraData && data.getExtraValue() != null && !data.getExtraValue().toString().isEmpty()) {
                         // If the list of Element names get too long split it into multiple lines
                         text = text + data.getExtraValue().toString();
                         final int LINE_LIMIT = 100;
