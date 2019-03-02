@@ -133,6 +133,7 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsExcel;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogSystemImages;
@@ -224,6 +225,12 @@ public final class WildLogView extends JFrame {
         setupTabHeaderBrowse(4);
         // Set the minimum size of the frame
         setMinimumSize(new Dimension(1024, 705));
+        // Changes based on WildLog Application Type
+        if (WildLogApp.WILDLOG_TYPE == WildLogApplicationTypes.WILDLOG) {
+            mnuWorkspaceUsers.setEnabled(false);
+            mnuWorkspaceUsers.setVisible(false);
+            sptWorkspaceUsers.setVisible(false);
+        }
     }
 
     private void setupTabHeaderHome() {
@@ -337,12 +344,12 @@ public final class WildLogView extends JFrame {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
-        mnuWorkspaceUsers = new javax.swing.JMenuItem();
-        jSeparator26 = new javax.swing.JPopupMenu.Separator();
         mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
         mnuCreateWorkspaceMenuItem = new javax.swing.JMenuItem();
         jSeparator14 = new javax.swing.JPopupMenu.Separator();
         mnuChangeWorkspaceName = new javax.swing.JMenuItem();
+        sptWorkspaceUsers = new javax.swing.JPopupMenu.Separator();
+        mnuWorkspaceUsers = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuCleanWorkspace = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
@@ -763,20 +770,6 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setText("Workspace");
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
-        mnuWorkspaceUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
-        mnuWorkspaceUsers.setText("Workspace Users");
-        mnuWorkspaceUsers.setToolTipText("Limit access to this Workspace to only certain users.");
-        mnuWorkspaceUsers.setName("mnuWorkspaceUsers"); // NOI18N
-        mnuWorkspaceUsers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuWorkspaceUsersActionPerformed(evt);
-            }
-        });
-        workspaceMenu.add(mnuWorkspaceUsers);
-
-        jSeparator26.setName("jSeparator26"); // NOI18N
-        workspaceMenu.add(jSeparator26);
-
         mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuChangeWorkspaceMenuItem.setText("Switch Active Workspace");
         mnuChangeWorkspaceMenuItem.setToolTipText("Select another Workspace to use.");
@@ -812,6 +805,20 @@ public final class WildLogView extends JFrame {
             }
         });
         workspaceMenu.add(mnuChangeWorkspaceName);
+
+        sptWorkspaceUsers.setName("sptWorkspaceUsers"); // NOI18N
+        workspaceMenu.add(sptWorkspaceUsers);
+
+        mnuWorkspaceUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        mnuWorkspaceUsers.setText("Manage Workspace Users");
+        mnuWorkspaceUsers.setToolTipText("Limit access to this Workspace to only certain users.");
+        mnuWorkspaceUsers.setName("mnuWorkspaceUsers"); // NOI18N
+        mnuWorkspaceUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuWorkspaceUsersActionPerformed(evt);
+            }
+        });
+        workspaceMenu.add(mnuWorkspaceUsers);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         workspaceMenu.add(jSeparator1);
@@ -4297,7 +4304,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator24;
     private javax.swing.JPopupMenu.Separator jSeparator25;
-    private javax.swing.JPopupMenu.Separator jSeparator26;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
@@ -4369,6 +4375,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu slideshowMenu;
+    private javax.swing.JPopupMenu.Separator sptWorkspaceUsers;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;

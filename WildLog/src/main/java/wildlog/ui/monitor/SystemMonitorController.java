@@ -53,7 +53,7 @@ public class SystemMonitorController implements Initializable {
     }
     
     public void setDialog(SystemMonitorDialog inDialog) {
-        this.dialog = inDialog;
+        dialog = inDialog;
     }
 
     public LineChart<Long, Integer> getCrtProcessor() {
@@ -61,7 +61,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtProcessor(LineChart<Long, Integer> inCrtProcessor) {
-        this.crtProcessor = inCrtProcessor;
+        crtProcessor = inCrtProcessor;
     }
 
     public LineChart<Long, Integer> getCrtMemory() {
@@ -69,7 +69,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtMemory(LineChart<Long, Integer> inCrtMemory) {
-        this.crtMemory = inCrtMemory;
+        crtMemory = inCrtMemory;
     }
 
     public LineChart<Long, Integer> getCrtNetwork() {
@@ -77,7 +77,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtNetwork(LineChart<Long, Integer> inCrtNetwork) {
-        this.crtNetwork = inCrtNetwork;
+        crtNetwork = inCrtNetwork;
     }
 
     public LineChart<Long, Integer> getCrtDisk() {
@@ -85,7 +85,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtDisk(LineChart<Long, Integer> inCrtDisk) {
-        this.crtDisk = inCrtDisk;
+        crtDisk = inCrtDisk;
     }
 
     public LineChart<Long, Integer> getCrtDBLocations() {
@@ -93,7 +93,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtDBLocations(LineChart<Long, Integer> inCrtDBLocations) {
-        this.crtDBLocations = inCrtDBLocations;
+        crtDBLocations = inCrtDBLocations;
     }
 
     public LineChart<Long, Integer> getCrtDBVisits() {
@@ -101,7 +101,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtDBVisits(LineChart<Long, Integer> inCrtDBVisits) {
-        this.crtDBVisits = inCrtDBVisits;
+        crtDBVisits = inCrtDBVisits;
     }
 
     public LineChart<Long, Integer> getCrtDBElements() {
@@ -109,7 +109,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtDBElements(LineChart<Long, Integer> inCrtDBElements) {
-        this.crtDBElements = inCrtDBElements;
+        crtDBElements = inCrtDBElements;
     }
 
     public LineChart<Long, Integer> getCrtDBSightings() {
@@ -117,7 +117,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtDBSightings(LineChart<Long, Integer> inCrtDBSightings) {
-        this.crtDBSightings = inCrtDBSightings;
+        crtDBSightings = inCrtDBSightings;
     }
 
     public LineChart<Long, Integer> getCrtDBFiles() {
@@ -125,7 +125,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setCrtDBFiles(LineChart<Long, Integer> inCrtDBFiles) {
-        this.crtDBFiles = inCrtDBFiles;
+        crtDBFiles = inCrtDBFiles;
     }
 
     public Label getLblConnections() {
@@ -133,7 +133,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setLblConnections(Label inLblConnections) {
-        this.lblConnections = inLblConnections;
+        lblConnections = inLblConnections;
     }
 
     public ChoiceBox getChbNetwork() {
@@ -141,7 +141,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setChbNetwork(ChoiceBox inChbNetwork) {
-        this.chbNetwork = inChbNetwork;
+        chbNetwork = inChbNetwork;
     }
 
     public ChoiceBox getChbDisk() {
@@ -149,7 +149,7 @@ public class SystemMonitorController implements Initializable {
     }
 
     public void setChbDisk(ChoiceBox inChbDisk) {
-        this.chbDisk = inChbDisk;
+        chbDisk = inChbDisk;
     }
     
 }
