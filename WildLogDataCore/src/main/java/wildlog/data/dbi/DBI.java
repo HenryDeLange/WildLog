@@ -11,10 +11,12 @@ import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.WildLogUserTypes;
 
 
 public interface DBI {
@@ -27,6 +29,7 @@ public interface DBI {
     public int countVisits(String inName, String inLocationName);
     public int countSightings(long inSightingCounter, String inElementName, String inLocationName, String inVisitName);
     public int countWildLogFiles(String inDBFilePath, String inWildLogFileID);
+    public int countUsers();
 
     public <T extends ElementCore> T findElement(String inPrimaryName, Class<T> inReturnType);
     public <T extends LocationCore> T findLocation(String inName, Class<T> inReturnType);
@@ -36,6 +39,7 @@ public interface DBI {
     public <T extends WildLogOptions> T findWildLogOptions(Class<T> inReturnType);
     public <T extends AdhocData> T findAdhocData(String inFieldID, String inDataKey, Class<T> inReturnType);
     public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType);
+    public <T extends WildLogUser> T findUser(String inUsername, Class<T> inReturnType);
 
     public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, Class<T> inReturnType);
     public <T extends LocationCore> List<T> listLocations(String inName, Class<T> inReturnType);
@@ -45,6 +49,7 @@ public interface DBI {
     public <T extends WildLogFileCore> List<T> listWildLogFiles(String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
     public <T extends AdhocData> List<T> listAdhocDatas(String inFieldID, Class<T> inReturnType);
     public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType);
+    public <T extends WildLogUser> List<T> listUsers(WildLogUserTypes inType, Class<T> inReturnType);
 
     public <T extends ElementCore> boolean createElement(T inElement);
     public <T extends LocationCore> boolean createLocation(T inLocation);
@@ -54,6 +59,7 @@ public interface DBI {
     public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean createAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData);
+    public <T extends WildLogUser> boolean createUser(T inWildLogUser);
     
     public <T extends ElementCore> boolean updateElement(T inElement, String inOldName);
     public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName);
@@ -63,6 +69,7 @@ public interface DBI {
     public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean updateAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData);
+    public <T extends WildLogUser> boolean updateUser(T inWildLogUser);
 
     public boolean deleteElement(String inPrimaryName);
     public boolean deleteLocation(String inName);
@@ -71,6 +78,7 @@ public interface DBI {
     public boolean deleteWildLogFile(String inDBFilePath);
     public boolean deleteAdhocData(String inFieldID, String inDataKey);
     public boolean deleteINaturalistLinkedData(long inWildLogID, long inINaturalistID);
+    public boolean deleteUser(String inUsername);
 
     public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> List<S> 
         searchSightings(List<Long> inActiveSightingIDs, Date inStartDate, Date inEndDate, 

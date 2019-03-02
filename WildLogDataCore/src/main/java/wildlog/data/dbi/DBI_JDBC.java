@@ -18,6 +18,7 @@ import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.ActiveTime;
@@ -49,6 +50,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
 
@@ -66,12 +68,14 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG (VERSION int DEFAULT " + WILDLOG_DB_VERSION + ", DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 750, USETHUMBNAILTABLES smallint DEFAULT true, USETHUMBNAILBROWSE smallint DEFAULT false, ENABLESOUNDS smallint DEFAULT true, USESCIENTIFICNAMES smallint DEFAULT true, WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace', WORKSPACEID bigint DEFAULT 0, UPLOADLOGS smallint DEFAULT true, BUNDLEDPLAYERS smallint DEFAULT true, USEINDVCOUNTINPATH smallint DEFAULT false)";
     protected static final String tableAdhocData = "CREATE TABLE ADHOC (FIELDID varchar(150) NOT NULL, DATAKEY varchar(150) NOT NULL, DATAVALUE TEXT)";
     protected static final String tableINaturalistLinkedData = "CREATE TABLE INATURALIST (WILDLOGID bigint PRIMARY KEY NOT NULL, INATURALISTID bigint NOT NULL, INATURALISTDATA TEXT)";
+    protected static final String tableUsers = "CREATE TABLE WILDLOGUSERS (USERNAME varchar(150) PRIMARY KEY NOT NULL, PASSWORD varchar(512) NOT NULL, TYPE varchar(50) NOT NULL)";
     // Count
     protected static final String countLocation = "SELECT count(*) FROM LOCATIONS";
     protected static final String countVisit = "SELECT count(*) FROM VISITS";
     protected static final String countSighting = "SELECT count(*) FROM SIGHTINGS";
     protected static final String countElement = "SELECT count(*) FROM ELEMENTS";
     protected static final String countFile = "SELECT count(*) FROM FILES";
+    protected static final String countUsers = "SELECT count(*) FROM WILDLOGUSERS";
     // Find
     protected static final String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
     protected static final String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
@@ -81,6 +85,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String findWildLogOptions = "SELECT * FROM WILDLOG";
     protected static final String findAdhocData = "SELECT * FROM ADHOC WHERE FIELDID = ? AND DATAKEY = ?";
     protected static final String findINaturalistLinkedData = "SELECT * FROM INATURALIST WHERE WILDLOGID = ? OR INATURALISTID = ?";
+    protected static final String findUser = "SELECT * FROM WILDLOGUSERS WHERE USERNAME = ?";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listVisit = "SELECT * FROM VISITS";
@@ -88,6 +93,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String listFile = "SELECT * FROM FILES";
     protected static final String listAdhocData = "SELECT * FROM ADHOC";
     protected static final String listINaturalistLinkedData = "SELECT * FROM INATURALIST";
+    protected static final String listUsers = "SELECT * FROM WILDLOGUSERS";
     // Create
     protected static final String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS,GPSACCURACY,GPSACCURACYVALUE) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
@@ -97,6 +103,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String createWildLogOptions = "INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, ?, DEFAULT, DEFAULT, DEFAULT)";
     protected static final String createAdhocData = "INSERT INTO ADHOC (FIELDID, DATAKEY, DATAVALUE) VALUES (?, ?, ?)";
     protected static final String createINaturalistLinkedData = "INSERT INTO INATURALIST (WILDLOGID, INATURALISTID, INATURALISTDATA) VALUES (?, ?, ?)";
+    protected static final String createUser = "INSERT INTO WILDLOGUSERS (USERNAME, PASSWORD, TYPE) VALUES (?, ?, ?)";
     // Update
     protected static final String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ?, GPSACCURACY = ?, GPSACCURACYVALUE = ? WHERE NAME = ?";
     protected static final String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
@@ -106,6 +113,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String updateWildLogOptions = "UPDATE WILDLOG SET DEFAULTLATITUDE = ?, DEFAULTLONGITUDE = ?, DEFAULTSLIDESHOWSPEED = ?, DEFAULTSLIDESHOWSIZE = ?, USETHUMBNAILTABLES = ?, USETHUMBNAILBROWSE =?, ENABLESOUNDS = ?, USESCIENTIFICNAMES = ?, WORKSPACENAME = ?, WORKSPACEID = ?, UPLOADLOGS = ?, BUNDLEDPLAYERS = ?, USEINDVCOUNTINPATH = ?";
     protected static final String updateAdhocData = "UPDATE ADHOC SET FIELDID = ?, DATAKEY = ?, DATAVALUE = ? WHERE FIELDID = ? AND DATAKEY = ?";
     protected static final String updateINaturalistLinkedData = "UPDATE INATURALIST SET WILDLOGID = ?, INATURALISTID = ?, INATURALISTDATA = ? WHERE WILDLOGID = ? OR INATURALISTID = ?";
+    protected static final String updateUser = "UPDATE WILDLOGUSERS SET USERNAME = ?, PASSWORD = ?, TYPE = ? WHERE USERNAME = ?";
     // Delete
     protected static final String deleteLocation = "DELETE FROM LOCATIONS WHERE NAME = ?";
     protected static final String deleteVisit = "DELETE FROM VISITS WHERE NAME = ?";
@@ -114,12 +122,13 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteFile = "DELETE FROM FILES WHERE ORIGINALPATH = ?";
     protected static final String deleteAdhocData = "DELETE FROM ADHOC WHERE FIELDID = ? AND DATAKEY = ?";
     protected static final String deleteINaturalistLinkedData = "DELETE FROM INATURALIST WHERE WILDLOGID = ? OR INATURALISTID = ?";
+    protected static final String deleteUser = "DELETE FROM WILDLOGUSERS WHERE USERNAME = ?";
     // Queries
     protected static final String queryLocationCountForElement = "select SIGHTINGS.LOCATIONNAME, count(*) cnt from SIGHTINGS where SIGHTINGS.ELEMENTNAME = ? group by SIGHTINGS.LOCATIONNAME order by cnt desc";
-    // Variables
-    protected Connection conn;
     // Monitor
     protected static final String activeSessionsCount = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SESSIONS";
+    // Variables
+    protected Connection conn;
 
     public DBI_JDBC() {
     }
@@ -211,6 +220,13 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableINaturalistLinkedData);
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ID_LINKS ON INATURALIST (WILDLOGID, INATURALISTID)");
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "WILDLOGUSERS", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableUsers);
                 closeStatement(state);
             }
             closeResultset(results);
@@ -445,6 +461,28 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 state = conn.prepareStatement(sql);
             }
+            results = state.executeQuery();
+            while (results.next()) {
+                count = results.getInt(1);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return count;
+    }
+    
+    @Override
+    public int countUsers() {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        int count = 0;
+        try {
+            String sql = countUsers;
+            state = conn.prepareStatement(sql);
             results = state.executeQuery();
             while (results.next()) {
                 count = results.getInt(1);
@@ -1194,6 +1232,45 @@ public abstract class DBI_JDBC implements DBI {
                 temp.setWildlogID(results.getLong("WILDLOGID"));
                 temp.setINaturalistID(results.getLong("INATURALISTID"));
                 temp.setINaturalistData(results.getString("INATURALISTDATA"));
+                tempList.add(temp);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+    
+    @Override
+    public <T extends WildLogUser> List<T> listUsers(WildLogUserTypes inType, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<T> tempList = new ArrayList<T>();
+        try {
+            String sql = listUsers;
+            if (inType != null) {
+                sql = sql + " WHERE TYPE = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.stringFromObject(inType));
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                T temp = inReturnType.newInstance();
+                temp.setUsername(results.getString("USERNAME"));
+                temp.setPassword(results.getString("PASSWORD"));
+                temp.setType(WildLogUserTypes.getEnumFromText(results.getString("TYPE")));
                 tempList.add(temp);
             }
         }
@@ -2257,6 +2334,107 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             System.err.println("More than one iNaturalist database records matched the parameters: "
                     + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends WildLogUser> T findUser(String inUsername, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        T temp = null;
+        try {
+            state = conn.prepareStatement(findUser);
+            state.setString(1, inUsername);
+            results = state.executeQuery();
+            if (results.next()) {
+                temp = inReturnType.newInstance();
+                temp.setUsername(results.getString("USERNAME"));
+                temp.setPassword(results.getString("PASSWORD"));
+                temp.setType(WildLogUserTypes.getEnumFromText(results.getString("TYPE")));
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return temp;
+    }
+    
+    @Override
+    public <T extends WildLogUser> boolean createUser(T inWildLogUser) {
+        PreparedStatement state = null;
+        try {
+            //Insert
+            state = conn.prepareStatement(createUser);
+            // Populate the values
+            maintainUser(state, inWildLogUser);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+
+    @Override
+    public <T extends WildLogUser> boolean updateUser(T inWildLogUser) {
+        PreparedStatement state = null;
+        try {
+            // Update
+            state = conn.prepareStatement(updateUser);
+            // Populate the values
+            maintainUser(state, inWildLogUser);
+            state.setString(4, inWildLogUser.getUsername());
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    private <T extends WildLogUser> void maintainUser(PreparedStatement state, T inWildLogUser) throws SQLException {
+        state.setString(1, UtilsData.limitLength(inWildLogUser.getUsername(), 150));
+        state.setString(2, inWildLogUser.getPassword());
+        state.setString(3, UtilsData.stringFromObject(inWildLogUser.getType()));
+    }
+
+    @Override
+    public boolean deleteUser(String inUsername) {
+        PreparedStatement state = null;
+        try {
+            state = conn.prepareStatement(deleteUser);
+            state.setString(1, inUsername);
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
             printSQLException(ex);
             return false;
         }
