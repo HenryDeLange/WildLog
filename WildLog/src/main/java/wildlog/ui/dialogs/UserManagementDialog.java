@@ -1,11 +1,15 @@
 package wildlog.ui.dialogs;
 
+import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.WildLogUser;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.WLOptionPane;
 
 
@@ -19,6 +23,7 @@ public class UserManagementDialog extends JDialog {
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(this, null);
         // If this is the first time managing users, then show a warning and add the owner first
         if (app.getDBI().countUsers() < 2) {
             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
@@ -27,7 +32,7 @@ public class UserManagementDialog extends JDialog {
                             + "<br><b>Continue to enable Workspace User Management?</b></html>",
                     "Enable Workspace User Management?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
-                UserCreateDialog dialog = new UserCreateDialog(inParent, false);
+                UserCreateDialog dialog = new UserCreateDialog(inParent, true);
                 dialog.setVisible(true);
             }
             else {
@@ -38,7 +43,7 @@ public class UserManagementDialog extends JDialog {
         }
         // Load table data
         if (app.getDBI().countUsers() >= 2) {
-            
+            UtilsTableGenerator.setupUsersTable(app, tblUsers);
         }
         else {
 // FIXME: hierdie werk nie... die popup maak steeds oop...
@@ -62,6 +67,7 @@ public class UserManagementDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Workspace User Management");
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -70,6 +76,7 @@ public class UserManagementDialog extends JDialog {
         btnAddUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         btnAddUser.setToolTipText("Add a new user to the Workspace.");
         btnAddUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddUser.setEnabled(WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER);
         btnAddUser.setFocusPainted(false);
         btnAddUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,6 +87,7 @@ public class UserManagementDialog extends JDialog {
         btnDeleteUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnDeleteUser.setToolTipText("Delete the selected user from the Workspace.");
         btnDeleteUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteUser.setEnabled(WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER);
         btnDeleteUser.setFocusPainted(false);
         btnDeleteUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -87,37 +95,22 @@ public class UserManagementDialog extends JDialog {
             }
         });
 
+        tblUsers.setAutoCreateRowSorter(true);
+        tblUsers.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblUsers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "Type", "Username"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
+        tblUsers.setFocusable(false);
+        tblUsers.setRowHeight(20);
+        tblUsers.setSelectionBackground(new java.awt.Color(116, 171, 89));
+        tblUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tblUsers);
-        if (tblUsers.getColumnModel().getColumnCount() > 0) {
-            tblUsers.getColumnModel().getColumn(0).setPreferredWidth(50);
-            tblUsers.getColumnModel().getColumn(1).setPreferredWidth(150);
-        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,10 +149,56 @@ public class UserManagementDialog extends JDialog {
     private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddUserActionPerformed
         UserCreateDialog dialog = new UserCreateDialog(this, false);
         dialog.setVisible(true);
+        // Reload the table
+        UtilsTableGenerator.setupUsersTable(app, tblUsers);
     }//GEN-LAST:event_btnAddUserActionPerformed
 
     private void btnDeleteUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserActionPerformed
-        // TODO add your handling code here:
+        if (tblUsers.getSelectedRowCount() > 0) {
+            String usernameToDelete = (String) tblUsers.getModel().getValueAt(tblUsers.convertRowIndexToModel(tblUsers.getSelectedRow()), 0);
+            // Validate
+            WildLogUser userToDelete = app.getDBI().findUser(usernameToDelete, WildLogUser.class);
+            if (WildLogUserTypes.WILDLOG_MASTER == userToDelete.getType()) {
+                WLOptionPane.showMessageDialog(this.getParent(),
+                        "The WildLog Master user can't be deleted.",
+                        "Invalid User Type", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.ADMIN && userToDelete.getType() != WildLogUserTypes.VOLUNTEER) {
+                WLOptionPane.showMessageDialog(this.getParent(),
+                        "Admin users can only delete Volunteer users.",
+                        "Invalid User Type", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            // As daar geen Owners oor is nie, dan moet al die ander users ook delete word
+            List<WildLogUser> lstOwners = app.getDBI().listUsers(WildLogUserTypes.OWNER, WildLogUser.class);
+            if (lstOwners.size() == 1 && lstOwners.get(0).getUsername().equalsIgnoreCase(usernameToDelete)) {
+                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                    "<html>This WildLog Workspace is currently only accessable by registered users. "
+                            + "<br>If the last Workspace Owner is deleted, then all remaining users will also be deleted "
+                            + "and access to this Workspace will be open to everybody (no login screen will be shown)."
+                            + "<br><b>Continue to disable Workspace User Management?</b></html>",
+                    "Disable Workspace User Management?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (result == JOptionPane.YES_OPTION) {
+                    List<WildLogUser> lstUsers = app.getDBI().listUsers(null, WildLogUser.class);
+                    for (WildLogUser user : lstUsers) {
+                        app.getDBI().deleteUser(user.getUsername());
+                    }
+                    setVisible(false);
+                    dispose();
+                }
+            }
+            else {
+                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "Are you sure you want to delete the selected user?",
+                        "Delete User", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (result == JOptionPane.YES_OPTION) {
+                    app.getDBI().deleteUser(usernameToDelete);
+                }
+            }
+            // Reload the table
+            UtilsTableGenerator.setupUsersTable(app, tblUsers);
+        }
     }//GEN-LAST:event_btnDeleteUserActionPerformed
 
 

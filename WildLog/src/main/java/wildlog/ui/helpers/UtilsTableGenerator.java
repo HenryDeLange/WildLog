@@ -36,6 +36,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.queryobjects.LocationCount;
@@ -1313,20 +1314,20 @@ public final class UtilsTableGenerator {
 
 
     private static void setupRowSorter(JTable inTable, int inColumn) {
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<>(1);
         tempList.add(new SortKey(inColumn, SortOrder.ASCENDING));
         inTable.getRowSorter().setSortKeys(tempList);
     }
 
     private static void setupRowSorter(JTable inTable, int inColumn1, int inColumn2, SortOrder inSortOrder1, SortOrder inSortOrder2) {
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<>(2);
         tempList.add(new SortKey(inColumn1, inSortOrder1));
         tempList.add(new SortKey(inColumn2, inSortOrder2));
         inTable.getRowSorter().setSortKeys(tempList);
     }
 
     private static void setupRowSorter(JTable inTable, int inColumn1, int inColumn2, int inColumn3, SortOrder inSortOrder1, SortOrder inSortOrder2, SortOrder inSortOrder3) {
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<>(3);
         tempList.add(new SortKey(inColumn1, inSortOrder1));
         tempList.add(new SortKey(inColumn2, inSortOrder2));
         tempList.add(new SortKey(inColumn3, inSortOrder3));
@@ -1334,7 +1335,7 @@ public final class UtilsTableGenerator {
     }
     
     private static void setupRowSorter(JTable inTable, int inColumn1, int inColumn2, int inColumn3, int inColumn4, SortOrder inSortOrder1, SortOrder inSortOrder2, SortOrder inSortOrder3, SortOrder inSortOrder4) {
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<>(4);
         tempList.add(new SortKey(inColumn1, inSortOrder1));
         tempList.add(new SortKey(inColumn2, inSortOrder2));
         tempList.add(new SortKey(inColumn3, inSortOrder3));
@@ -1747,4 +1748,58 @@ public final class UtilsTableGenerator {
             }
         });
      }
+    
+    public static void setupUsersTable(final WildLogApp inApp, final JTable inTable) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Load the table content
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // Setup column names
+                String[] columnNames = {
+                                        "Username",
+                                        "Type"
+                                        };
+                // Load data from DB
+                final List<WildLogUser> listUsers = inApp.getDBI().listUsers(null, WildLogUser.class);
+                if (!listUsers.isEmpty()) {
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listUsers.size());
+                    // Setup new table data
+                    final Object[][] data = new Object[listUsers.size()][columnNames.length + 1];
+                    for (int t = 0; t < listUsers.size(); t++) {
+                        final int finalT = t;
+                        listCallables.add(new Callable<Object>() {
+                            @Override
+                            public Object call() throws Exception {
+                                WildLogUser tempUser = listUsers.get(finalT);
+                                data[finalT][0] = tempUser.getUsername();
+                                data[finalT][1] = tempUser.getType();
+                                return null;
+                            }
+                        });
+                    }
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                    // Create the new model
+                    setupTableModel(inTable, data, columnNames);
+                    // Setup the column and row sizes etc.
+                    inTable.getColumnModel().getColumn(0).setMinWidth(100);
+                    inTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(100);
+                    inTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+                    // Setup default sorting
+                    setupRowSorter(inTable, 1, 0, SortOrder.ASCENDING, SortOrder.ASCENDING);
+                }
+                else {
+                    inTable.setModel(new DefaultTableModel(new String[]{"No Users"}, 0));
+                }
+            }
+        });
+    }
+    
 }

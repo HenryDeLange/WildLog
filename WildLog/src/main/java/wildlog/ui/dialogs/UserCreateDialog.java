@@ -33,6 +33,7 @@ public class UserCreateDialog extends JDialog {
         // Setup the default behavior (this is for JFrames)
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(this, null);
     }
     
     private void doSetup(boolean inForceOwner) {
@@ -41,13 +42,18 @@ public class UserCreateDialog extends JDialog {
         lblWorkspaceName.setText(WildLogApp.getApplication().getWildLogOptions().getWorkspaceName());
         cmbUserType.removeItem(WildLogUserTypes.WILDLOG_MASTER);
         cmbUserType.removeItem(WildLogUserTypes.NONE);
+        if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.ADMIN) {
+            cmbUserType.removeItem(WildLogUserTypes.OWNER);
+            cmbUserType.removeItem(WildLogUserTypes.ADMIN);
+        }
         // If this is the owner then show a message first
         if (inForceOwner) {
+            cmbUserType.setSelectedItem(WildLogUserTypes.OWNER);
+            cmbUserType.setEnabled(false);
+// FIXME: Op al die nuwe opups werk die glasspane nie reg nie...
             WLOptionPane.showMessageDialog(this.getParent(),
                     "<html>Please specify the Workspace Owner. This user will be able to create and remove all other users.</html>",
                     "Create Workspace Owner", JOptionPane.INFORMATION_MESSAGE);
-            cmbUserType.setSelectedItem(WildLogUserTypes.OWNER);
-            cmbUserType.setEditable(false);
         }
     }
 
@@ -179,19 +185,19 @@ public class UserCreateDialog extends JDialog {
     private void btnCreateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateUserActionPerformed
         // Validate the input
         if (txtUsername.getText() == null || txtUsername.getText().length() < 3) {
-            WLOptionPane.showMessageDialog(this.getParent(),
+            WLOptionPane.showMessageDialog(this,
                     "Please specify a username that is at least 3 characters in length.",
                     "Invalid Username", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (txtPassword.getPassword() == null || txtPassword.getPassword().length < 8) {
-            WLOptionPane.showMessageDialog(this.getParent(),
+            WLOptionPane.showMessageDialog(this,
                     "Please specify a password that is at least 8 characters in length.",
                     "Invalid Password", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!Arrays.equals(txtPassword.getPassword(), txtPasswordConfirm.getPassword())) {
-            WLOptionPane.showMessageDialog(this.getParent(),
+            WLOptionPane.showMessageDialog(this,
                     "Please make sure the password was typed in correctly.",
                     "Incorrect Password", JOptionPane.WARNING_MESSAGE);
             return;
@@ -204,15 +210,16 @@ public class UserCreateDialog extends JDialog {
                     WildLogUserTypes.WILDLOG_MASTER));
         }
         // Create the new user
-        try {
-            app.getDBI().createUser(new WildLogUser(
-                    txtUsername.getText(), 
-                    PasswordEncryptor.generateHashedPassword(txtPassword.getPassword()), 
-                    (WildLogUserTypes) cmbUserType.getSelectedItem()));
+        if (app.getDBI().createUser(new WildLogUser(
+                txtUsername.getText(), 
+                PasswordEncryptor.generateHashedPassword(txtPassword.getPassword()), 
+                (WildLogUserTypes) cmbUserType.getSelectedItem()))) {
+            // Close this dialog
+            setVisible(false);
+            dispose();
         }
-        catch (Exception ex) {
-            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            WLOptionPane.showMessageDialog(this.getParent(),
+        else {
+            WLOptionPane.showMessageDialog(this,
                     "The user was not created. Make sure to specify a valid username and password.",
                     "Error: Could not create User!", JOptionPane.ERROR_MESSAGE);
         }

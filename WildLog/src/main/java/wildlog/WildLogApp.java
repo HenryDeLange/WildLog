@@ -59,6 +59,8 @@ import org.jdesktop.application.TaskService;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
+import wildlog.data.enums.WildLogUserTypes;
+import wildlog.ui.dialogs.LoginDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
@@ -77,8 +79,9 @@ import wildlog.utils.WildLogPaths;
 public class WildLogApp extends Application {
     public final static String WILDLOG_VERSION = "5.1.3";
 // FIXME: Hardcoding user, for easier testing...
-public static WildLogApplicationTypes WILDLOG_TYPE = WildLogApplicationTypes.WILDLOG_WEI_ADMIN;
-//    public static WildLogApplicationTypes WILDLOG_TYPE = WildLogApplicationTypes.WILDLOG;
+    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG_WEI_ADMIN;
+    public static String WILDLOG_USER_NAME = "wildlog_owner"; // Default username (when user management is off)
+    public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
     public static Logger LOGGER;
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
@@ -325,6 +328,31 @@ public static WildLogApplicationTypes WILDLOG_TYPE = WildLogApplicationTypes.WIL
                 WildLogApp.LOGGER.log(Level.INFO, "Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
             }
         }
+        // Perform login (optional)
+        if (dbi.countUsers() > 0) {
+            LoginDialog dialog = new LoginDialog(null);
+            dialog.setVisible(true);
+            // Exit if login was incorrect
+            if (!dialog.isLoginSuccess()) {
+                WildLogApp.LOGGER.log(Level.WARN, "Failed login attempt...");
+                WLOptionPane.showMessageDialog(null,
+                        "This Workspace can only be accessed using a valid username and password.",
+                        "Incorrect Login!", 
+                        JOptionPane.ERROR_MESSAGE);
+                exit();
+                return;
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "Successful login attempt...");
+            // Exit if the user type is not allowed to access this application type
+            if (WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER && WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                WLOptionPane.showMessageDialog(null,
+                        "This user can only use the Volunteer application.",
+                        "Incorrect Application Type!", 
+                        JOptionPane.ERROR_MESSAGE);
+                exit();
+                return;
+            }
+        }
         // Show the main frame
         view = new WildLogView(this);
         view.addWindowListener(new WindowAdapter() {
@@ -515,6 +543,7 @@ public static WildLogApplicationTypes WILDLOG_TYPE = WildLogApplicationTypes.WIL
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Setting Folder: {}", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Application Folder: {}", ACTIVEWILDLOG_CODE_FOLDER.toAbsolutePath().toString());
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Version: {}", WILDLOG_VERSION);
+        WildLogApp.LOGGER.log(Level.INFO, "WildLog Application Type: {}", WILDLOG_APPLICATION_TYPE);
         WildLogApp.LOGGER.log(Level.INFO, "Command Line Arguments: {}", Arrays.toString(args));
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);

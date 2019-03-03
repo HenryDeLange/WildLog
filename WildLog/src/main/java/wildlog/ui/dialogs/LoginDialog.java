@@ -1,25 +1,26 @@
 package wildlog.ui.dialogs;
 
+import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.WildLogUser;
 import wildlog.encryption.PasswordEncryptor;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class LoginDialog extends JDialog {
+    private final WildLogApp app = WildLogApp.getApplication();
+    private boolean loginSuccess = false;
 
     public LoginDialog(JFrame inParent) {
         super(inParent, true);
         WildLogApp.LOGGER.log(Level.INFO, "[LoginDialog]");
         initComponents();
         pack();
+        setLocationRelativeTo(null);
         lblWorkspaceName.setText(WildLogApp.getApplication().getWildLogOptions().getWorkspaceName());
-        // Setup the default behavior
-        UtilsDialog.setDialogToCenter(inParent, this);
-        UtilsDialog.addModalBackgroundPanel(inParent, this);
     }
 
     /**
@@ -67,6 +68,12 @@ public class LoginDialog extends JDialog {
         jLabel4.setText("Password:");
 
         lblWorkspaceName.setText("<workspace name>");
+
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyPressed(evt);
+            }
+        });
 
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnLogin.setText("Login");
@@ -136,9 +143,30 @@ public class LoginDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String passwordHash = PasswordEncryptor.generateHashedPassword(txtPassword.getPassword());
-        System.out.println("password = " + passwordHash);
+        WildLogUser user = app.getDBI().findUser(txtUsername.getText(), WildLogUser.class);
+        if (user != null) {
+            String passwordHash = PasswordEncryptor.generateHashedPassword(txtPassword.getPassword());
+            if (user.getPassword().equals(passwordHash)) {
+                WildLogApp.WILDLOG_USER_NAME = user.getUsername();
+                WildLogApp.LOGGER.log(Level.INFO, "WildLog User Name: {}", user.getUsername());
+                WildLogApp.WILDLOG_USER_TYPE = user.getType();
+                WildLogApp.LOGGER.log(Level.INFO, "WildLog User Type: {}", user.getType());
+                loginSuccess = true;
+            }
+        }
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnLoginActionPerformed(null);
+        }
+    }//GEN-LAST:event_txtPasswordKeyPressed
+
+    public boolean isLoginSuccess() {
+        return loginSuccess;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;

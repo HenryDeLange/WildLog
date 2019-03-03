@@ -226,7 +226,7 @@ public final class WildLogView extends JFrame {
         // Set the minimum size of the frame
         setMinimumSize(new Dimension(1024, 705));
         // Changes based on WildLog Application Type
-        if (WildLogApp.WILDLOG_TYPE == WildLogApplicationTypes.WILDLOG) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG) {
             mnuWorkspaceUsers.setEnabled(false);
             mnuWorkspaceUsers.setVisible(false);
             sptWorkspaceUsers.setVisible(false);
