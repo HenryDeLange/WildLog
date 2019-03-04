@@ -988,6 +988,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void btnGPSForAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSForAllActionPerformed
         Sighting tempSighting = new Sighting();
+        tempSighting.setLocationName(selectedLocationName);
         GPSDialog dialog = new GPSDialog(app, app.getMainFrame(), tempSighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {

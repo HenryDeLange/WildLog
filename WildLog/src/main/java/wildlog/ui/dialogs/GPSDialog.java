@@ -1212,19 +1212,50 @@ public class GPSDialog extends JDialog {
             // Is a Sighting
             if (dataObjectWithGPS instanceof Sighting) {
                 Sighting sighting = (Sighting) dataObjectWithGPS;
-                if (sighting.getSightingCounter() != 0) {
-                    int option = WLOptionPane.showOptionDialog(this, 
-                            "Please select where to search for related GPS points.", 
-                            "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                            null, new String[]{
-                                "Files from this Observation", 
-                                "GPS from the linked Place", 
-                                "Files from the linked Place"}, 
-                            null);
-                    if (option != JOptionPane.CLOSED_OPTION) {
-                        if (option == 0) {
-                            // Search in the Files
-                            List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+                int option = WLOptionPane.showOptionDialog(this, 
+                        "Please select where to search for related GPS points.", 
+                        "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                        null, new String[]{
+                            "Files from this Observation", 
+                            "GPS from the linked Place", 
+                            "Files from the linked Place"}, 
+                        null);
+                if (option != JOptionPane.CLOSED_OPTION) {
+                    if (option == 0) {
+                        // Search in the Files
+                        List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+                        for (WildLogFile wildLogFile : lstFiles) {
+                            if (WildLogFileExtentions.Images.isKnownExtention(wildLogFile.getAbsolutePath())) {
+                                DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
+                                if (UtilsGPS.hasGPSData(temp)) {
+                                    showNothingFoundDialog = false;
+                                    loadUIValues(temp);
+                                    if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                        Toolkit.getDefaultToolkit().beep();
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    if (option == 1) {
+                        // Use the Location's GPS
+                        Location location = app.getDBI().findLocation(sighting.getLocationName(), Location.class);
+                        if (location != null && UtilsGPS.hasGPSData(location)) {
+                            showNothingFoundDialog = false;
+                            loadUIValues(location);
+                            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                Toolkit.getDefaultToolkit().beep();
+                            }
+                        }
+                    }
+                    else
+                    if (option == 2) {
+                        // Use the Location's Files
+                        Location location = app.getDBI().findLocation(sighting.getLocationName(), Location.class);
+                        if (location != null) {
+                            List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(location.getWildLogFileID(), null, WildLogFile.class);
                             for (WildLogFile wildLogFile : lstFiles) {
                                 if (WildLogFileExtentions.Images.isKnownExtention(wildLogFile.getAbsolutePath())) {
                                     DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
@@ -1239,43 +1270,10 @@ public class GPSDialog extends JDialog {
                                 }
                             }
                         }
-                        else
-                        if (option == 1) {
-                            // Use the Location's GPS
-                            Location location = app.getDBI().findLocation(sighting.getLocationName(), Location.class);
-                            if (location != null && UtilsGPS.hasGPSData(location)) {
-                                showNothingFoundDialog = false;
-                                loadUIValues(location);
-                                if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                                    Toolkit.getDefaultToolkit().beep();
-                                }
-                            }
-                        }
-                        else
-                        if (option == 2) {
-                            // Use the Location's Files
-                            Location location = app.getDBI().findLocation(sighting.getLocationName(), Location.class);
-                            if (location != null) {
-                                List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(location.getWildLogFileID(), null, WildLogFile.class);
-                                for (WildLogFile wildLogFile : lstFiles) {
-                                    if (WildLogFileExtentions.Images.isKnownExtention(wildLogFile.getAbsolutePath())) {
-                                        DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
-                                        if (UtilsGPS.hasGPSData(temp)) {
-                                            showNothingFoundDialog = false;
-                                            loadUIValues(temp);
-                                            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                                                Toolkit.getDefaultToolkit().beep();
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
-                    else {
-                        showNothingFoundDialog = false;
-                    }
+                }
+                else {
+                    showNothingFoundDialog = false;
                 }
             }
             else
