@@ -87,7 +87,6 @@ public class WildLogApp extends Application {
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static String iNaturalistToken;
     private static boolean useNimbusLF = false;
-// TODO: Make this a startup property to turn it off if needed
     private static boolean useH2AutoServer = true;
     private WildLogView view;
     private WildLogOptions wildLogOptions;
@@ -451,8 +450,11 @@ public class WildLogApp extends Application {
             reader = new BufferedReader(new FileReader(propsPath.toFile()));
             Properties props = new Properties();
             props.load(reader);
+            // Print the properties to the logs
+            WildLogApp.LOGGER.log(Level.INFO, "WildLog Properties: {}", props.toString());
             // Set the settings
             useNimbusLF = Boolean.parseBoolean(props.getProperty("useNimbus"));
+            useH2AutoServer = Boolean.parseBoolean(props.getProperty("useAutoServer"));
             if (props.getProperty("settingsFolderLocation") != null && !props.getProperty("settingsFolderLocation").trim().isEmpty()) {
                 ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(props.getProperty("settingsFolderLocation")).normalize().toAbsolutePath().normalize();
                 // Once the setting folder has been determined the logger can be reconfigured to use it instead of the default one
