@@ -33,12 +33,13 @@ public class UserCreateDialog extends JDialog {
         // Setup the default behavior (this is for JFrames)
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
-        UtilsDialog.addModalBackgroundPanel(this, null);
     }
     
     private void doSetup(boolean inForceOwner) {
         initComponents();
         pack();
+        UtilsDialog.addModalBackgroundPanel(this, null);
+        UtilsDialog.addEscapeKeyListener(this);
         lblWorkspaceName.setText(WildLogApp.getApplication().getWildLogOptions().getWorkspaceName());
         cmbUserType.removeItem(WildLogUserTypes.WILDLOG_MASTER);
         cmbUserType.removeItem(WildLogUserTypes.NONE);
@@ -50,7 +51,6 @@ public class UserCreateDialog extends JDialog {
         if (inForceOwner) {
             cmbUserType.setSelectedItem(WildLogUserTypes.OWNER);
             cmbUserType.setEnabled(false);
-// FIXME: Op al die nuwe opups werk die glasspane nie reg nie...
             WLOptionPane.showMessageDialog(this.getParent(),
                     "<html>Please specify the Workspace Owner. This user will be able to create and remove all other users.</html>",
                     "Create Workspace Owner", JOptionPane.INFORMATION_MESSAGE);

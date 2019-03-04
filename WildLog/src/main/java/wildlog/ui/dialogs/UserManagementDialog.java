@@ -4,6 +4,7 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogUser;
@@ -24,6 +25,7 @@ public class UserManagementDialog extends JDialog {
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
         UtilsDialog.addModalBackgroundPanel(this, null);
+        UtilsDialog.addEscapeKeyListener(this);
         // If this is the first time managing users, then show a warning and add the owner first
         if (app.getDBI().countUsers() < 2) {
             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
@@ -36,9 +38,13 @@ public class UserManagementDialog extends JDialog {
                 dialog.setVisible(true);
             }
             else {
-// FIXME: hierdie werk nie... die popup maak steeds oop...
-                setVisible(false);
-                dispose();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        setVisible(false);
+                        dispose();
+                    }
+                });
             }
         }
         // Load table data
@@ -46,9 +52,13 @@ public class UserManagementDialog extends JDialog {
             UtilsTableGenerator.setupUsersTable(app, tblUsers);
         }
         else {
-// FIXME: hierdie werk nie... die popup maak steeds oop...
-            setVisible(false);
-            dispose();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    setVisible(false);
+                    dispose();
+                }
+            });
         }
     }
 
@@ -159,13 +169,13 @@ public class UserManagementDialog extends JDialog {
             // Validate
             WildLogUser userToDelete = app.getDBI().findUser(usernameToDelete, WildLogUser.class);
             if (WildLogUserTypes.WILDLOG_MASTER == userToDelete.getType()) {
-                WLOptionPane.showMessageDialog(this.getParent(),
+                WLOptionPane.showMessageDialog(this,
                         "The WildLog Master user can't be deleted.",
                         "Invalid User Type", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.ADMIN && userToDelete.getType() != WildLogUserTypes.VOLUNTEER) {
-                WLOptionPane.showMessageDialog(this.getParent(),
+                WLOptionPane.showMessageDialog(this,
                         "Admin users can only delete Volunteer users.",
                         "Invalid User Type", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -173,7 +183,7 @@ public class UserManagementDialog extends JDialog {
             // As daar geen Owners oor is nie, dan moet al die ander users ook delete word
             List<WildLogUser> lstOwners = app.getDBI().listUsers(WildLogUserTypes.OWNER, WildLogUser.class);
             if (lstOwners.size() == 1 && lstOwners.get(0).getUsername().equalsIgnoreCase(usernameToDelete)) {
-                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                int result = WLOptionPane.showConfirmDialog(this,
                     "<html>This WildLog Workspace is currently only accessable by registered users. "
                             + "<br>If the last Workspace Owner is deleted, then all remaining users will also be deleted "
                             + "and access to this Workspace will be open to everybody (no login screen will be shown)."
@@ -189,7 +199,7 @@ public class UserManagementDialog extends JDialog {
                 }
             }
             else {
-                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                int result = WLOptionPane.showConfirmDialog(this,
                         "Are you sure you want to delete the selected user?",
                         "Delete User", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (result == JOptionPane.YES_OPTION) {
