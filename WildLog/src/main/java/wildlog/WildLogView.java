@@ -3099,7 +3099,7 @@ public final class WildLogView extends JFrame {
                     // Setup export DB
                     setTaskProgress(10);
                     setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
-                    syncDBI = new WildLogDBI_h2(syncDatabase.toAbsolutePath().toString(), false);
+                    syncDBI = new WildLogDBI_h2(syncDatabase.toAbsolutePath().toString(), false, false);
                     // Export the elements
                     List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
                     setTaskProgress(20);
@@ -3226,9 +3226,6 @@ public final class WildLogView extends JFrame {
                     selectedPath = fileChooser.getSelectedFile().getParentFile().toPath();
                 }
                 // Make sure it's a valid workspace that was selected
-                if (!selectedPath.endsWith(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath())) {
-                    selectedPath = selectedPath.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
-                }
                 if (Files.exists(selectedPath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))) {
                     // Open the import window
                     WorkspaceImportDialog dialog = new WorkspaceImportDialog(app, selectedPath);
@@ -3246,8 +3243,7 @@ public final class WildLogView extends JFrame {
     private void mnuExportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportWorkspaceActionPerformed
         WorkspaceExportDialog dialog = new WorkspaceExportDialog(app, 
                 WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                    .resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()
-                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()))),
+                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now())),
                 null);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuExportWorkspaceActionPerformed
@@ -3318,7 +3314,7 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(10);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         syncDBI = new WildLogDBI_h2(fileChooser.getSelectedFile().toPath().toAbsolutePath().getParent().resolve(
-                                WildLogConstants.WILDNOTE_SYNC_DATABASE).toString(), false);
+                                WildLogConstants.WILDNOTE_SYNC_DATABASE).toString(), false, false);
                         setTaskProgress(11);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Setup the Location

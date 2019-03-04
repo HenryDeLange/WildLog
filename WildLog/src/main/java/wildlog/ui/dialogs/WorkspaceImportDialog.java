@@ -55,7 +55,7 @@ public class WorkspaceImportDialog extends JDialog {
         importWorkspace = inImportPath;
         try {
         importDBI = new WildLogDBI_h2((importWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(
-                WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath().toString(), false);
+                WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath().toString(), false, false);
         }
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

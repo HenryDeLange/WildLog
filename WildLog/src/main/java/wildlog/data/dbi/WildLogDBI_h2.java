@@ -45,15 +45,12 @@ import wildlog.utils.WildLogPaths;
 
 public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     
-// TODO: Make this a startup property to turn it off if needed
-    private boolean H2_AUTO_SERVER = true;
-
     /**
      * Use this constructor to connect to the default Workspace database.
      * @throws Exception 
      */
-    public WildLogDBI_h2() throws Exception {
-        this(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath()).toString(), true);
+    public WildLogDBI_h2(boolean inH2AutoServer) throws Exception {
+        this(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath()).toString(), true, inH2AutoServer);
     }
 
     /**
@@ -63,14 +60,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
      * @param inCreateDefaultRecords
      * @throws java.lang.Exception
      */
-    public WildLogDBI_h2(String inConnectionURL, boolean inCreateDefaultRecords) throws Exception {
+    public WildLogDBI_h2(String inConnectionURL, boolean inCreateDefaultRecords, boolean inH2AutoServer) throws Exception {
         super();
         Statement state = null;
         ResultSet results = null;
         boolean started = true;
         String connection = "jdbc:h2:" + inConnectionURL 
                 + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=100";
-        if (H2_AUTO_SERVER) {
+        if (inH2AutoServer) {
             connection = connection + ";AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9229";
         }
         try {

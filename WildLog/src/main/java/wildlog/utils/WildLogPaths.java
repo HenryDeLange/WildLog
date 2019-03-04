@@ -92,14 +92,10 @@ public enum WildLogPaths {
      */
     public static void setWorkspacePrefix(String inPrefix) {
         if (inPrefix == null || inPrefix.isEmpty()) {
-            activeWorkspacePrefix = Paths.get(File.separator).toAbsolutePath().normalize();
+            activeWorkspacePrefix = Paths.get(File.separator).resolve(DEFAULT_WORKSPACE_NAME.getRelativePath()).toAbsolutePath().normalize();
         }
         else {
             activeWorkspacePrefix = Paths.get(inPrefix).toAbsolutePath().normalize();
-        }
-        // Add the WildLog folder to the prefix if it was not selected
-        if (!activeWorkspacePrefix.endsWith(DEFAULT_WORKSPACE_NAME.getRelativePath())) {
-            activeWorkspacePrefix = activeWorkspacePrefix.resolve(DEFAULT_WORKSPACE_NAME.getRelativePath()).normalize();
         }
     }
 

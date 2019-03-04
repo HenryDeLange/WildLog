@@ -417,7 +417,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             Files.write(destinationWorkspace.resolve(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getRelativePath()).toAbsolutePath(), 
                                     WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
                             newDBI = new WildLogDBI_h2((destinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(
-                                    WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath().toString(), false);
+                                    WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath().toString(), false, false);
                             int totalNodes = getNumberOfNodes(treWorkspace.getModel());
                             setProgress(2);
                             setMessage("Workspace Export: " + getProgress() + "%");

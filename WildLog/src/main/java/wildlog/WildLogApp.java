@@ -87,6 +87,8 @@ public class WildLogApp extends Application {
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static String iNaturalistToken;
     private static boolean useNimbusLF = false;
+// TODO: Make this a startup property to turn it off if needed
+    private static boolean useH2AutoServer = true;
     private WildLogView view;
     private WildLogOptions wildLogOptions;
     private int threadCount;
@@ -291,7 +293,7 @@ public class WildLogApp extends Application {
     private boolean openWorkspace() {
         try {
             WildLogApp.LOGGER.log(Level.INFO, "Opening Workspace at: {}", WildLogPaths.getFullWorkspacePrefix().toString());
-            dbi = new WildLogDBI_h2();
+            dbi = new WildLogDBI_h2(useH2AutoServer);
         }
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, "Could not open the Workspace. Will try to ask the user to try a new Workspace folder.");
