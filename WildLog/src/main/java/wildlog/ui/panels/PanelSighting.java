@@ -197,7 +197,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         else {
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
-        // Setup virist table after the Location has been setup
+        // Setup visit table after the Location has been setup
         if (locationWL != null) {
             UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getName());
         }
@@ -2086,6 +2086,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_spnTemperatureStateChanged
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
+        if (locationWL != null) {
+            sighting.setLocationName(locationWL.getName());
+        }
+        else {
+            sighting.setLocationName(null);
+        }
         GPSDialog dialog = new GPSDialog(app, this, sighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
