@@ -1333,7 +1333,7 @@ public final class WildLogView extends JFrame {
         extraMenu.add(mnuSunAndMoon);
 
         mnuSystemMonitor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
-        mnuSystemMonitor.setText("Open System Monitor");
+        mnuSystemMonitor.setText("System Monitor");
         mnuSystemMonitor.setToolTipText("Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location.");
         mnuSystemMonitor.setName("mnuSystemMonitor"); // NOI18N
         mnuSystemMonitor.addActionListener(new java.awt.event.ActionListener() {

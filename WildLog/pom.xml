@@ -74,6 +74,11 @@
             <version>2.11.1</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.26</version>
+        </dependency>
+        <dependency>
             <groupId>org.jdesktop</groupId>
             <artifactId>appframework</artifactId>
             <version>1.0.3</version>

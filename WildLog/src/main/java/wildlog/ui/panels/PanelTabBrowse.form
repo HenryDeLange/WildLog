@@ -410,6 +410,9 @@
             <LineBorder/>
           </Border>
         </Property>
+        <Property name="backgroundPainter" type="org.jdesktop.swingx.painter.Painter" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new MattePainter(Color.BLACK)" type="code"/>
+        </Property>
       </Properties>
 
       <Layout>

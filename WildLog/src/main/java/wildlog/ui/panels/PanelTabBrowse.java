@@ -1,5 +1,6 @@
 package wildlog.ui.panels;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Image;
@@ -50,6 +51,7 @@ import mediautil.gen.Log;
 import mediautil.image.jpeg.LLJTran;
 import mediautil.image.jpeg.LLJTranException;
 import org.apache.logging.log4j.Level;
+import org.jdesktop.swingx.painter.MattePainter;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -328,6 +330,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         imageView.setBackground(new java.awt.Color(0, 0, 0));
         imageView.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        imageView.setBackgroundPainter(new MattePainter(Color.BLACK));
 
         javax.swing.GroupLayout imageViewLayout = new javax.swing.GroupLayout(imageView);
         imageView.setLayout(imageViewLayout);

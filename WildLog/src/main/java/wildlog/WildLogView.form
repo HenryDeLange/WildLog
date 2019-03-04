@@ -705,7 +705,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Open System Monitor"/>
+                <Property name="text" type="java.lang.String" value="System Monitor"/>
                 <Property name="toolTipText" type="java.lang.String" value="Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location."/>
                 <Property name="name" type="java.lang.String" value="mnuSystemMonitor" noResource="true"/>
               </Properties>
