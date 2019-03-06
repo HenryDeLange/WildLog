@@ -77,10 +77,10 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    public final static String WILDLOG_VERSION = "5.1.3";
+    public static String WILDLOG_VERSION = "5.1.3";
 // FIXME: Hardcoding user, for easier testing...
-    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG_WEI_ADMIN;
-    public static String WILDLOG_USER_NAME = "wildlog_owner"; // Default username (when user management is off)
+    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
+    public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
     public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
     public static Logger LOGGER;
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
