@@ -44,7 +44,7 @@ import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.CropDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;

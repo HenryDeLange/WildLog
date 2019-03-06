@@ -41,7 +41,7 @@ import wildlog.ui.helpers.CtrlClickSelectionModel;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.reports.utils.UtilsReports;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 
 

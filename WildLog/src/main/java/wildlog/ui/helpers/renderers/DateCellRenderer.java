@@ -6,7 +6,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 
 
 public class DateCellRenderer extends DefaultTableCellRenderer {

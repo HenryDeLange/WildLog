@@ -22,7 +22,7 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogSystemImages;

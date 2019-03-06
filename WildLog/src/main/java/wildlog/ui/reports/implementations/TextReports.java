@@ -39,7 +39,7 @@ import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 
 
 public class TextReports extends AbstractReport<Sighting> {

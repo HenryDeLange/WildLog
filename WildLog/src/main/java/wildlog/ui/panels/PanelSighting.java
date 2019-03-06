@@ -61,7 +61,7 @@ import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.panels.inaturalist.dialogs.INatSightingDialog;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import static wildlog.ui.utils.UtilsUI.doClipboardCopy;
 import wildlog.utils.UtilsFileProcessing;

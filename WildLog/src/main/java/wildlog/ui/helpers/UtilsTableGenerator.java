@@ -56,7 +56,7 @@ import wildlog.ui.helpers.renderers.WildLogTableModel;
 import wildlog.ui.helpers.renderers.WildLogTableModelDataWrapper;
 import wildlog.ui.helpers.renderers.editors.ButtonTableEditor;
 import wildlog.ui.maps.implementations.helpers.DistributionLayerCellRenderer;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;

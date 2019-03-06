@@ -1,4 +1,4 @@
-package wildlog.ui.utils;
+package wildlog.utils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

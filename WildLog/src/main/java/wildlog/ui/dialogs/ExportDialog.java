@@ -33,7 +33,7 @@ import wildlog.maps.kml.UtilsKML;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsExcel;
 import wildlog.utils.UtilsFileProcessing;

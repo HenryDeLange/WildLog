@@ -6,7 +6,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 
 /**
  * This class wraps a Sighting object in order to return custom toString() values for the Browse Tab.

@@ -26,7 +26,7 @@ import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 
 

@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 
 
 public class AstroCalculator {

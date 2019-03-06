@@ -61,7 +61,7 @@ import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.monitor.SystemMonitorController;
 import wildlog.ui.reports.utils.UtilsReports;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;

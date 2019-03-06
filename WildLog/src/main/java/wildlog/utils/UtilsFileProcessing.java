@@ -37,7 +37,6 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.filters.MovieFilter;
 import wildlog.ui.maps.implementations.helpers.UtilsMaps;
-import wildlog.ui.utils.UtilsTime;
 
 public final class UtilsFileProcessing {
     private static final ExecutorService executorService = 

@@ -31,7 +31,7 @@ import wildlog.WildLogApp;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.implementations.helpers.IntegerTickLabelFormatter;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 
 
 public final class UtilsReports {

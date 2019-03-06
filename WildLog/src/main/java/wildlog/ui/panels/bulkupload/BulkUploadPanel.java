@@ -60,7 +60,7 @@ import wildlog.ui.panels.bulkupload.renderers.ImageBoxRenderer;
 import wildlog.ui.panels.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;

@@ -37,7 +37,7 @@ import wildlog.ui.reports.implementations.helpers.BarChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportCountWrapper;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 
 
 public class VisitChart extends AbstractReport<Sighting> {

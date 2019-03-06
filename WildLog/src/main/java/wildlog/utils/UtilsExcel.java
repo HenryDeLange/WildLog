@@ -8,7 +8,6 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.maps.utils.UtilsGPS;
-import wildlog.ui.utils.UtilsTime;
 
 
 public final class UtilsExcel {

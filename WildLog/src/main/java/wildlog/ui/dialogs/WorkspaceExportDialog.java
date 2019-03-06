@@ -50,7 +50,7 @@ import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.renderers.WorkspaceTreeCellRenderer;
 import wildlog.ui.helpers.renderers.WorkspaceTreeDataWrapper;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;

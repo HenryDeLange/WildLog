@@ -21,7 +21,7 @@ import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.maps.kml.generator.KmlEntry;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.xml.utils.UtilsXML;
 
 

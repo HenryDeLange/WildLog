@@ -49,7 +49,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -125,8 +124,9 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.ui.utils.WildLogMainView;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsConcurency;
@@ -142,9 +142,9 @@ import wildlog.xml.utils.UtilsXML;
 /**
  * The application's main frame.
  */
-public final class WildLogView extends JFrame {
+public final class WildLogView extends WildLogMainView {
     private final int STATIC_TAB_COUNT = 5;
-    private final WildLogApp app;
+    private final WildLogApp app = WildLogApp.getApplication();
     private final Timer messageTimer;
     private final Timer busyIconTimer;
     private final Icon idleIcon;
@@ -152,8 +152,7 @@ public final class WildLogView extends JFrame {
     private int busyIconIndex = 0;
     private PanelTabBrowse panelTabBrowse;
 
-    public WildLogView(WildLogApp inApp) {
-        app = inApp;
+    public WildLogView() {
         // Call the generated code to build the GUI
         initComponents();
         // status bar initialization - message timeout, idle icon and busy animation, etc

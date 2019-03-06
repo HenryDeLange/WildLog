@@ -37,7 +37,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.WLOptionPane;
-import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;

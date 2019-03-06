@@ -40,7 +40,6 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.ui.utils.UtilsTime;
 
 
 public class UtilsImageProcessing {
