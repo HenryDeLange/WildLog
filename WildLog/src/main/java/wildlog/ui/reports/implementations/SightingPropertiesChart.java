@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -72,6 +71,8 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
                     chartType = ChartType.PIE_CHART;
                     setupChartDescriptionLabel("<html>These charts will display a pie chart with the number of Observations for each of the entries of the selected category.</html>");
                     createReport(scene);
+                    // Add the watermark overlay
+                    reportsBaseDialog.applyWatermark();
                 }
             }
         });
@@ -81,20 +82,15 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     @Override
     public void createReport(Scene inScene) {
         scene = inScene;
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType != null) {
-                    if (chartType.equals(ChartType.PIE_CHART)) {
-                        setActiveSubCategoryTitle(cmbCategories.getSelectionModel().getSelectedItem());
-                        displayedChart = createPieChart(lstData);
-                    }
-                    displayedChart.setBackground(Background.EMPTY);
-                    inScene.setRoot(displayedChart);
-                }
+        displayedChart = null;
+        if (chartType != null) {
+            if (chartType.equals(ChartType.PIE_CHART)) {
+                setActiveSubCategoryTitle(cmbCategories.getSelectionModel().getSelectedItem());
+                displayedChart = createPieChart(lstData);
             }
-        });
+            displayedChart.setBackground(Background.EMPTY);
+            inScene.setRoot(displayedChart);
+        }
     }
     
     private Chart createPieChart(List<Sighting> inSightings) {

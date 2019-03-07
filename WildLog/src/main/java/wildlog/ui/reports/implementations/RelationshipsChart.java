@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -125,72 +124,67 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.CHART_ELEMENTS)) {
-                    setActiveSubCategoryTitle("Creature Associations");
-                    String info = "<html>This chart shows the number of times two Creatures (species) where observed together.";
-                    // Visit
-                    if (chkCompareVisits.isSelected()) {
-                        info = info + " Only Observations from the same Period are compared to each other.";
-                    }
-                    else {
-                        info = info + " Observations from all Periods are compared to each other.";
-                    }
-                    // GPS
-                    if (cmbGPS.getSelectionModel().isSelected(0)) {
-                        info = info + " The GPS coordinates are not taken into account.";
-                    }
-                    else {
-                        info = info + " The GPS coordinates are taken into account, if no GPS coordinates are available then the Observation is ignored.";
-                    }
-                    // Dates
-                    if (cmbCompareDates.getSelectionModel().isSelected(0)) {
-                        info = info + " The Date and Time of Observations are not taken into account.";
-                    }
-                    else {
-                        info = info + " The number of day-night cycles between Observations are compared.";
-                    }
-                    // Type
-                    if (cmbType.getSelectionModel().isSelected(0)) {
-                        info = info + " <br/>Showing the total number of times two Creatures had related Observations.";
-                    }
-                    else
-                    if (cmbType.getSelectionModel().isSelected(1)) {
-                        info = info + " <br/><b>Showing:</b> The total number of times two Creatures had related Observations,"
-                                + " adjusted by how exclusive the pairing is. The number will be reduced in relation to"
-                                + " how often, on average, each Creature was also observed not this related pairing.";
-                    }
-                    else
-                    if (cmbType.getSelectionModel().isSelected(2)) {
-                        info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
-                                + " for the Creature in the pairing with the minimum related percentage.";
-                    }
-                    else
-                    if (cmbType.getSelectionModel().isSelected(3)) {
-                        info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
-                                + " for average related percentage of both Creatures.";
-                    }
-                    else
-                    if (cmbType.getSelectionModel().isSelected(4)) {
-                        info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
-                                + " for the Creature in the pairing with the maximum related percentage.";
-                    }
-                    else {
-                        info = info + " <br/><b>Showing:</b> The two related Creatures with emphasys on the extent to which"
-                                + " there is a difference in how strongly the one Creature is related to the other Creature."
-                                + " The higher the number the more one-sided the relationship is.";
-                    }
-                    info = info + "</html>";
-                    setupChartDescriptionLabel(info);
-                    displayedChart = createElementRelationshipChart(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
+        displayedChart = null;
+        if (chartType.equals(ChartType.CHART_ELEMENTS)) {
+            setActiveSubCategoryTitle("Creature Associations");
+            String info = "<html>This chart shows the number of times two Creatures (species) where observed together.";
+            // Visit
+            if (chkCompareVisits.isSelected()) {
+                info = info + " Only Observations from the same Period are compared to each other.";
             }
-        });
+            else {
+                info = info + " Observations from all Periods are compared to each other.";
+            }
+            // GPS
+            if (cmbGPS.getSelectionModel().isSelected(0)) {
+                info = info + " The GPS coordinates are not taken into account.";
+            }
+            else {
+                info = info + " The GPS coordinates are taken into account, if no GPS coordinates are available then the Observation is ignored.";
+            }
+            // Dates
+            if (cmbCompareDates.getSelectionModel().isSelected(0)) {
+                info = info + " The Date and Time of Observations are not taken into account.";
+            }
+            else {
+                info = info + " The number of day-night cycles between Observations are compared.";
+            }
+            // Type
+            if (cmbType.getSelectionModel().isSelected(0)) {
+                info = info + " <br/>Showing the total number of times two Creatures had related Observations.";
+            }
+            else
+            if (cmbType.getSelectionModel().isSelected(1)) {
+                info = info + " <br/><b>Showing:</b> The total number of times two Creatures had related Observations,"
+                        + " adjusted by how exclusive the pairing is. The number will be reduced in relation to"
+                        + " how often, on average, each Creature was also observed not this related pairing.";
+            }
+            else
+            if (cmbType.getSelectionModel().isSelected(2)) {
+                info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
+                        + " for the Creature in the pairing with the minimum related percentage.";
+            }
+            else
+            if (cmbType.getSelectionModel().isSelected(3)) {
+                info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
+                        + " for average related percentage of both Creatures.";
+            }
+            else
+            if (cmbType.getSelectionModel().isSelected(4)) {
+                info = info + " <br/><b>Showing:</b> The percentage of Observations where one of the Creatures was related to the other,"
+                        + " for the Creature in the pairing with the maximum related percentage.";
+            }
+            else {
+                info = info + " <br/><b>Showing:</b> The two related Creatures with emphasys on the extent to which"
+                        + " there is a difference in how strongly the one Creature is related to the other Creature."
+                        + " The higher the number the more one-sided the relationship is.";
+            }
+            info = info + "</html>";
+            setupChartDescriptionLabel(info);
+            displayedChart = createElementRelationshipChart(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createElementRelationshipChart(List<Sighting> inSightings) {

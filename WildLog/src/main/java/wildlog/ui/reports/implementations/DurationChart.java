@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -95,23 +94,18 @@ public class DurationChart extends AbstractReport<Sighting> {
     
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.TIMELINE_FOR_ALL)) {
-                    setActiveSubCategoryTitle("Duration for All Observations");
-                    displayedChart = createTimelineForAllChart(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.TIMELINE_PER_ELEMENT)) {
-                    setActiveSubCategoryTitle("Duration per Creature");
-                    displayedChart = createTimelinePerElementChart(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.TIMELINE_FOR_ALL)) {
+            setActiveSubCategoryTitle("Duration for All Observations");
+            displayedChart = createTimelineForAllChart(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.TIMELINE_PER_ELEMENT)) {
+            setActiveSubCategoryTitle("Duration per Creature");
+            displayedChart = createTimelinePerElementChart(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
 
     private Chart createTimelineForAllChart(List<Sighting> inSightings) {

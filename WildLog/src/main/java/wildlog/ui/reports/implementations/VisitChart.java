@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -160,58 +159,53 @@ public class VisitChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.PIE_CHART_TYPE)) {
-                    setActiveSubCategoryTitle("Observations per Period Type");
-                    displayedChart = createPieChartVisitTypes(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.PIE_CHART_SIGHTING_COUNT)) {
-                    setActiveSubCategoryTitle("Observations per Period (Pie)");
-                    displayedChart = createPieChartSightingCount(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_SIGHTING_COUNT)) {
-                    setActiveSubCategoryTitle("Observations per Period (Bar)");
-                    displayedChart = createBarChartSightingCount(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_COMBINED_DURATION)) {
-                    setActiveSubCategoryTitle("Grouped Period Duration");
-                    displayedChart = createBarChartDurationCombined(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_DURATION)) {
-                    setActiveSubCategoryTitle("Period Duration");
-                    displayedChart = createBarChartDuration(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_ABUNDANCE)) {
-                    setActiveSubCategoryTitle("Abundance of Observations");
-                    displayedChart = createBarChartAbundance(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_ELEMENT_ABUNDANCE)) {
-                    setActiveSubCategoryTitle("Abundance of Creatures");
-                    displayedChart = createBarChartElementAbundance(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_ELEMENT_COUNT)) {
-                    setActiveSubCategoryTitle("Creatures per Period");
-                    displayedChart = createBarChartElementCount(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_RICHNESS)) {
-                    setActiveSubCategoryTitle("Richness of Creatures");
-                    displayedChart = createBarChartRichness(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.PIE_CHART_TYPE)) {
+            setActiveSubCategoryTitle("Observations per Period Type");
+            displayedChart = createPieChartVisitTypes(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.PIE_CHART_SIGHTING_COUNT)) {
+            setActiveSubCategoryTitle("Observations per Period (Pie)");
+            displayedChart = createPieChartSightingCount(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_SIGHTING_COUNT)) {
+            setActiveSubCategoryTitle("Observations per Period (Bar)");
+            displayedChart = createBarChartSightingCount(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_COMBINED_DURATION)) {
+            setActiveSubCategoryTitle("Grouped Period Duration");
+            displayedChart = createBarChartDurationCombined(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_DURATION)) {
+            setActiveSubCategoryTitle("Period Duration");
+            displayedChart = createBarChartDuration(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_ABUNDANCE)) {
+            setActiveSubCategoryTitle("Abundance of Observations");
+            displayedChart = createBarChartAbundance(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_ELEMENT_ABUNDANCE)) {
+            setActiveSubCategoryTitle("Abundance of Creatures");
+            displayedChart = createBarChartElementAbundance(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_ELEMENT_COUNT)) {
+            setActiveSubCategoryTitle("Creatures per Period");
+            displayedChart = createBarChartElementCount(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_RICHNESS)) {
+            setActiveSubCategoryTitle("Richness of Creatures");
+            displayedChart = createBarChartRichness(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createPieChartSightingCount(List<Sighting> inSightings) {

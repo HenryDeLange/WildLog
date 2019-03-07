@@ -10,7 +10,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -132,38 +131,33 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.NUMBER_PER_SIGHTING_CHART)) {
-                    setActiveSubCategoryTitle("Number of Individuals");
-                    displayedChart = createNumOfElementsPerSightingBarChart(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.SUBSEQUENT_CHART)) {
-                    setActiveSubCategoryTitle("Subsequent Observations");
-                    displayedChart = createSubsequentSightingBarChart(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.SIGHTINGS_PER_DAY_CHART)) {
-                    setActiveSubCategoryTitle("Observations per Day-Cycle");
-                    displayedChart = createSightingPerDayBarChart(lstData);
-                }
-//                else
-//                if (chartType.equals(ChartType.ABUNDANCE_CHART)) {
-//                    setActiveSubCategoryTitle("Relative Abundance (Bar)");
-//                    displayedChart = createAbundanceBarChart(lstData);
-//                }
-                else
-                if (chartType.equals(ChartType.FIRST_SIGHTING_CHART)) {
-                    setActiveSubCategoryTitle("Days to first Observation");
-                    displayedChart = createFirstSightingBarChart(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.NUMBER_PER_SIGHTING_CHART)) {
+            setActiveSubCategoryTitle("Number of Individuals");
+            displayedChart = createNumOfElementsPerSightingBarChart(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.SUBSEQUENT_CHART)) {
+            setActiveSubCategoryTitle("Subsequent Observations");
+            displayedChart = createSubsequentSightingBarChart(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.SIGHTINGS_PER_DAY_CHART)) {
+            setActiveSubCategoryTitle("Observations per Day-Cycle");
+            displayedChart = createSightingPerDayBarChart(lstData);
+        }
+//        else
+//        if (chartType.equals(ChartType.ABUNDANCE_CHART)) {
+//            setActiveSubCategoryTitle("Relative Abundance (Bar)");
+//            displayedChart = createAbundanceBarChart(lstData);
+//        }
+        else
+        if (chartType.equals(ChartType.FIRST_SIGHTING_CHART)) {
+            setActiveSubCategoryTitle("Days to first Observation");
+            displayedChart = createFirstSightingBarChart(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createNumOfElementsPerSightingBarChart(List<Sighting> inSightings) {

@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -93,33 +92,28 @@ public class ElementsChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.PIE_CHART_SIGHTINGS)) {
-                    setActiveSubCategoryTitle("Observations per Creature (Pie)");
-                    displayedChart = createPieChartSightings(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.PIE_CHART_ELEMENT_TYPES)) {
-                    setActiveSubCategoryTitle("Creatures per Type");
-                    displayedChart = createPieChartElementType(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_SIGHTINGS)) {
-                    setActiveSubCategoryTitle("Observations per Creature (Bar)");
-                    displayedChart = createBarChartSightings(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_LOCATIONS)) {
-                    setActiveSubCategoryTitle("Places per Creature");
-                    displayedChart = createBarChartElements(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.PIE_CHART_SIGHTINGS)) {
+            setActiveSubCategoryTitle("Observations per Creature (Pie)");
+            displayedChart = createPieChartSightings(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.PIE_CHART_ELEMENT_TYPES)) {
+            setActiveSubCategoryTitle("Creatures per Type");
+            displayedChart = createPieChartElementType(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_SIGHTINGS)) {
+            setActiveSubCategoryTitle("Observations per Creature (Bar)");
+            displayedChart = createBarChartSightings(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_LOCATIONS)) {
+            setActiveSubCategoryTitle("Places per Creature");
+            displayedChart = createBarChartElements(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createBarChartSightings(List<Sighting> inSightings) {

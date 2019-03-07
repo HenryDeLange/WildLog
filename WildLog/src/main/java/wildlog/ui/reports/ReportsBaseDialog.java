@@ -22,8 +22,12 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -114,7 +118,7 @@ public class ReportsBaseDialog extends JFrame {
         AnchorPane.setLeftAnchor(scrollPaneForButtons, 0.0);
         AnchorPane.setRightAnchor(scrollPaneForButtons, 0.0);
         anchorPaneForButtons.getChildren().add(scrollPaneForButtons);
-        // Setup the report panel (om een of ander rede mot die een tweede wees)
+        // Setup the report panel (om een of ander rede moet die een tweede wees)
         VBox vbox = new VBox();
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
         Label lblInfo = new Label("Please select the report you would like to view from the list on the left.\n\n"
@@ -149,12 +153,6 @@ public class ReportsBaseDialog extends JFrame {
         reports.add(new RelationshipsChart(lstFilteredData, lblReportDescription, this));
         reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription, this));
         reports.add(new TextReports(lstFilteredData, lblReportDescription, this));
-        // Setup loading label
-        final Label lblLoading = new Label("... LOADING ...");
-        lblLoading.setPadding(new Insets(20));
-        lblLoading.setFont(new Font(24));
-        lblLoading.setTextAlignment(TextAlignment.CENTER);
-        lblLoading.setAlignment(Pos.CENTER);
         // Add the reports
         for (final AbstractReport<Sighting> report : reports) {
             VBox vBox = new VBox(5);
@@ -166,8 +164,27 @@ public class ReportsBaseDialog extends JFrame {
                         @Override
                         public void handle(ActionEvent inEvent) {
                             activeReport = report;
-                            jfxReportChartPanel.getScene().setRoot(lblLoading);
-                            activeReport.createReport(jfxReportChartPanel.getScene());
+                            // Setup loading label
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Label lblLoading = new Label("... LOADING ...");
+                                    lblLoading.setPadding(new Insets(20));
+                                    lblLoading.setFont(new Font(24));
+                                    lblLoading.setTextAlignment(TextAlignment.CENTER);
+                                    lblLoading.setAlignment(Pos.CENTER);
+                                    jfxReportChartPanel.getScene().setRoot(lblLoading);
+                                }
+                            });
+                            // Create the chart
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    activeReport.createReport(jfxReportChartPanel.getScene());
+                                    // Add the watermark overlay
+                                    applyWatermark();
+                                }
+                            });
                         }
                     });
                 }
@@ -179,6 +196,17 @@ public class ReportsBaseDialog extends JFrame {
             }
             accordion.getPanes().add(reportButton);
         }
+    }
+    
+    public void applyWatermark() {
+        StackPane stackPane = new StackPane();
+        stackPane.setStyle("-fx-padding: 5;");
+        stackPane.setBackground(Background.EMPTY);
+        stackPane.getChildren().add(jfxReportChartPanel.getScene().getRoot());
+        ImageView watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/icons/WildLog Report Icon.gif")));
+        stackPane.getChildren().add(watermark);
+        StackPane.setAlignment(watermark, Pos.TOP_LEFT);
+        jfxReportChartPanel.getScene().setRoot(stackPane);
     }
 
     /**

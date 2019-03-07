@@ -17,7 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -146,55 +145,50 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.ACCUMULATION_LINE_CHART)) {
-                    chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Creature Accumulation");
-                    displayedChart = createAccumulationReport(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.ACCUMULATION_SIGHTING_LINE_CHART)) {
-                    chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Observation Accumulation");
-                    displayedChart = createAccumulationSightingReport(lstData, true);
-                }
-                else
-                if (chartType.equals(ChartType.ACCUMULATION_SIGHTING_ELEMENT_LINE_CHART)) {
-                    chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Observations per Creature");
-                    displayedChart = createAccumulationSightingReport(lstData, false);
-                }
-                else
-                if (chartType.equals(ChartType.ACC_VISIT_ELEMENT_CHART)) {
-                    chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Creatures per Period");
-                    displayedChart = createAccumulationVisitReport(lstData, false);
-                }
-                else
-                if (chartType.equals(ChartType.ACC_VISIT_SIGHTING_CHART)) {
-                    chkShowDayOrNight.setDisable(true);
-                    setActiveSubCategoryTitle("Observations per Period");
-                    displayedChart = createAccumulationVisitReport(lstData, true);
-                }
-                else
-                if (chartType.equals(ChartType.DAILY_CREATURE_LINE_CHART)) {
-                    chkShowDayOrNight.setDisable(false);
-                    setActiveSubCategoryTitle("Daily Creature Count");
-                    displayedChart = createDailyReport(lstData, false);
-                }
-                else
-                if (chartType.equals(ChartType.DAILY_OBSERVATION_LINE_CHART)) {
-                    chkShowDayOrNight.setDisable(false);
-                    setActiveSubCategoryTitle("Daily Observation Count");
-                    displayedChart = createDailyReport(lstData, true);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.ACCUMULATION_LINE_CHART)) {
+            chkShowDayOrNight.setDisable(true);
+            setActiveSubCategoryTitle("Creature Accumulation");
+            displayedChart = createAccumulationReport(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.ACCUMULATION_SIGHTING_LINE_CHART)) {
+            chkShowDayOrNight.setDisable(true);
+            setActiveSubCategoryTitle("Observation Accumulation");
+            displayedChart = createAccumulationSightingReport(lstData, true);
+        }
+        else
+        if (chartType.equals(ChartType.ACCUMULATION_SIGHTING_ELEMENT_LINE_CHART)) {
+            chkShowDayOrNight.setDisable(true);
+            setActiveSubCategoryTitle("Observations per Creature");
+            displayedChart = createAccumulationSightingReport(lstData, false);
+        }
+        else
+        if (chartType.equals(ChartType.ACC_VISIT_ELEMENT_CHART)) {
+            chkShowDayOrNight.setDisable(true);
+            setActiveSubCategoryTitle("Creatures per Period");
+            displayedChart = createAccumulationVisitReport(lstData, false);
+        }
+        else
+        if (chartType.equals(ChartType.ACC_VISIT_SIGHTING_CHART)) {
+            chkShowDayOrNight.setDisable(true);
+            setActiveSubCategoryTitle("Observations per Period");
+            displayedChart = createAccumulationVisitReport(lstData, true);
+        }
+        else
+        if (chartType.equals(ChartType.DAILY_CREATURE_LINE_CHART)) {
+            chkShowDayOrNight.setDisable(false);
+            setActiveSubCategoryTitle("Daily Creature Count");
+            displayedChart = createDailyReport(lstData, false);
+        }
+        else
+        if (chartType.equals(ChartType.DAILY_OBSERVATION_LINE_CHART)) {
+            chkShowDayOrNight.setDisable(false);
+            setActiveSubCategoryTitle("Daily Observation Count");
+            displayedChart = createDailyReport(lstData, true);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createAccumulationReport(List<Sighting> inSightings) {
