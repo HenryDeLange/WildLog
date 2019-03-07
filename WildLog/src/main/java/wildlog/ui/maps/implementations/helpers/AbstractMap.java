@@ -12,10 +12,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
+import wildlog.WildLogApp;
 import wildlog.ui.maps.MapsBaseDialog;
 
 
@@ -60,11 +65,31 @@ public abstract class AbstractMap<T> {
         lblLoading.setFont(new Font(24));
         lblLoading.setTextAlignment(TextAlignment.CENTER);
         lblLoading.setAlignment(Pos.CENTER);
+        lblLoading.setBackground(Background.EMPTY);
         mapsBaseDialog.getJFXMapPanel().getScene().setRoot(lblLoading);
-        createMap(mapsBaseDialog.getJFXMapPanel().getScene());
-        // Hide waiting cursor
-        mapsBaseDialog.getGlassPane().setCursor(Cursor.getDefaultCursor());
-        mapsBaseDialog.getGlassPane().setVisible(false);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                createMap(mapsBaseDialog.getJFXMapPanel().getScene());
+                // Add the watermark overlay
+                applyWatermark();
+                // Hide waiting cursor
+                mapsBaseDialog.getGlassPane().setCursor(Cursor.getDefaultCursor());
+                mapsBaseDialog.getGlassPane().setVisible(false);
+            }
+        });
+        
+    }
+    
+    protected void applyWatermark() {
+        StackPane stackPane = new StackPane();
+        stackPane.setStyle("-fx-padding: 5;");
+        stackPane.setBackground(Background.EMPTY);
+        stackPane.getChildren().add(mapsBaseDialog.getJFXMapPanel().getScene().getRoot());
+        ImageView watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/icons/WildLog Map Icon.gif")));
+        stackPane.getChildren().add(watermark);
+        StackPane.setAlignment(watermark, Pos.TOP_LEFT);
+        mapsBaseDialog.getJFXMapPanel().getScene().setRoot(stackPane);
     }
     
     public abstract void createMap(Scene inScene);

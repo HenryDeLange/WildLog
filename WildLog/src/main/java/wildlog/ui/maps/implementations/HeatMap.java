@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -233,53 +232,48 @@ public class HeatMap extends AbstractMap<Sighting> {
 
     @Override
     public void createMap(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedMap = null;
-                if (activeMapType.equals(MapType.TOTAL_OBSERVATIONS_MAP)) {
-                    setActiveSubCategoryTitle("Observation Count Map");
-                    setupChartDescriptionLabel("<html>This Heat Map can be used to show areas with higher or lower density of data points.</html>");
-                    displayedMap = createSightingsHeatMapClient(lstData);
-                }
-                else
-                if (activeMapType.equals(MapType.TOTAL_ELEMENTS_MAP)) {
-                    setActiveSubCategoryTitle("Creature Count Map");
-                    setupChartDescriptionLabel("<html>This Heat Map can be used to show areas with higher or lower density of recorded Creatures.</html>");
-                    displayedMap = createElementsHeatMapClient(lstData);
-                }
-                else
-                if (activeMapType.equals(MapType.ABUNDANCE_MAP)) {
-                    setActiveSubCategoryTitle("Abundance of Observations Map");
-                    setupChartDescriptionLabel("<html>This map can be used as a simplified Observation Abundance Map."
-                            + "<br/>It shows the number of Observations, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
-                            + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location "
-                            + "and all Periods have similar durations. "
-                            + "Such as camera trapp data.</html>");
-                    displayedMap = createAbundanceMapClient(lstData);
-                }
-                else
-                if (activeMapType.equals(MapType.RICHNESS_MAP)) {
-                    setActiveSubCategoryTitle("Richness of Creatures Map");
-                    setupChartDescriptionLabel("<html>This map can be used as a simplified Creature Richness Map."
-                            + "<br/>It shows the number of Creatures, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
-                            + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location "
-                            + "and all Periods have similar durations. "
-                            + "Such as camera trap data.</html>");
-                    displayedMap = createRichnessMapClient(lstData);
-                }
-                else
-                if (activeMapType.equals(MapType.SAMPLE_EFFORT_MAP)) {
-                    setActiveSubCategoryTitle("Sampling Effort Map");
-                    setupChartDescriptionLabel("<html>This map can be used as a simplified Sampling Effort Map."
-                            + "<br/>It shows for each GPS point how many days the associated Period was active. (The list of unique GPS points is based on the active Obseravations. The duration is based on the Period's start and end dates.)"
-                            + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location. "
-                            + "Such as camera trap data.</html>");
-                    displayedMap = createSampleEffortMapClient(lstData);
-                }
-                inScene.setRoot(displayedMap);
-            }
-        });
+        displayedMap = null;
+        if (activeMapType.equals(MapType.TOTAL_OBSERVATIONS_MAP)) {
+            setActiveSubCategoryTitle("Observation Count Map");
+            setupChartDescriptionLabel("<html>This Heat Map can be used to show areas with higher or lower density of data points.</html>");
+            displayedMap = createSightingsHeatMapClient(lstData);
+        }
+        else
+        if (activeMapType.equals(MapType.TOTAL_ELEMENTS_MAP)) {
+            setActiveSubCategoryTitle("Creature Count Map");
+            setupChartDescriptionLabel("<html>This Heat Map can be used to show areas with higher or lower density of recorded Creatures.</html>");
+            displayedMap = createElementsHeatMapClient(lstData);
+        }
+        else
+        if (activeMapType.equals(MapType.ABUNDANCE_MAP)) {
+            setActiveSubCategoryTitle("Abundance of Observations Map");
+            setupChartDescriptionLabel("<html>This map can be used as a simplified Observation Abundance Map."
+                    + "<br/>It shows the number of Observations, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
+                    + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location "
+                    + "and all Periods have similar durations. "
+                    + "Such as camera trapp data.</html>");
+            displayedMap = createAbundanceMapClient(lstData);
+        }
+        else
+        if (activeMapType.equals(MapType.RICHNESS_MAP)) {
+            setActiveSubCategoryTitle("Richness of Creatures Map");
+            setupChartDescriptionLabel("<html>This map can be used as a simplified Creature Richness Map."
+                    + "<br/>It shows the number of Creatures, at each GPS location, devided by the number of active days for each Period (based on the start and end dates)."
+                    + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location "
+                    + "and all Periods have similar durations. "
+                    + "Such as camera trap data.</html>");
+            displayedMap = createRichnessMapClient(lstData);
+        }
+        else
+        if (activeMapType.equals(MapType.SAMPLE_EFFORT_MAP)) {
+            setActiveSubCategoryTitle("Sampling Effort Map");
+            setupChartDescriptionLabel("<html>This map can be used as a simplified Sampling Effort Map."
+                    + "<br/>It shows for each GPS point how many days the associated Period was active. (The list of unique GPS points is based on the active Obseravations. The duration is based on the Period's start and end dates.)"
+                    + "<br/><b>Note:</b> This map works best when comparing data where each Observation for a Period have the same GPS location. "
+                    + "Such as camera trap data.</html>");
+            displayedMap = createSampleEffortMapClient(lstData);
+        }
+        inScene.setRoot(displayedMap);
     }
     
     private Parent createSightingsHeatMapClient(List<Sighting> inLstSightings) {

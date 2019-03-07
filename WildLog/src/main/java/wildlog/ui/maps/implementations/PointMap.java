@@ -7,7 +7,6 @@ import java.io.Reader;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -106,24 +105,19 @@ public class PointMap extends AbstractMap<Sighting> {
 
     @Override
     public void createMap(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedMap = null;
-                if (activeMapType.equals(MapType.POINT_MAP_GOOGLE)) {
-                    setActiveSubCategoryTitle("Markers on Google Maps");
-                    setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Google Earth. Click on a marker to see more details.</html>");
-                    displayedMap = createPointMapGoogle(lstData);
-                }
-                else
-                if (activeMapType.equals(MapType.POINT_MAP_BING)) {
-                    setActiveSubCategoryTitle("Markers on Bing Maps");
-                    setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Microsoft Bing Maps. Click on a marker to see more details.</html>");
-                    displayedMap = createPointMapBing(lstData);
-                }
-                inScene.setRoot(displayedMap);
-            }
-        });
+        displayedMap = null;
+        if (activeMapType.equals(MapType.POINT_MAP_GOOGLE)) {
+            setActiveSubCategoryTitle("Markers on Google Maps");
+            setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Google Earth. Click on a marker to see more details.</html>");
+            displayedMap = createPointMapGoogle(lstData);
+        }
+        else
+        if (activeMapType.equals(MapType.POINT_MAP_BING)) {
+            setActiveSubCategoryTitle("Markers on Bing Maps");
+            setupChartDescriptionLabel("<html>The data points are displayed on the imagery provided by Microsoft Bing Maps. Click on a marker to see more details.</html>");
+            displayedMap = createPointMapBing(lstData);
+        }
+        inScene.setRoot(displayedMap);
     }
     
     private Parent createPointMapGoogle(List<Sighting> inLstSightings) {

@@ -171,6 +171,8 @@ public class MapsBaseDialog extends JFrame {
                         public void handle(ActionEvent inEvent) {
                             activeMap = map;
                             activeMap.loadMap();
+                            
+                            
                             if (activeMap instanceof AbstractGeoToolsMap) {
                                 btnZoomIn.setEnabled(true);
                                 btnZoomOut.setEnabled(true);

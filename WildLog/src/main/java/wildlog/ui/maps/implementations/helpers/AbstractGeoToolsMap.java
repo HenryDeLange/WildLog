@@ -89,6 +89,8 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
                 }
                 // Continue to create the layers for the map
                 createMap(mapsBaseDialog.getJFXMapPanel().getScene());
+                // Add the watermark overlay
+                applyWatermark();
                 // Refresh the map to display the added layers
                 map.reloadMap();
                 // Hide waiting cursor
@@ -122,6 +124,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
         lstCustomButtons.add(chkEnhanceContrast);
     }
 
+    @Override
     public abstract void createMap(Scene inScene);
     
     protected void createMapDefault(final List<Sighting> inLstSightings, final BundledMapLayers inBundledMapLayers) {
