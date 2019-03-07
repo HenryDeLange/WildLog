@@ -60,6 +60,7 @@ import oshi.software.os.OperatingSystem;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.monitor.SystemMonitorController;
+import wildlog.ui.reports.implementations.helpers.IntegerTickLabelFormatter;
 import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
@@ -131,6 +132,7 @@ public class SystemMonitorDialog extends JFrame {
                 controller.getCrtProcessor().setData(seriesCPUs);
                 NumberAxis dateAxis = (NumberAxis) (Axis) controller.getCrtProcessor().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -148,6 +150,10 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                NumberAxis valueAxis = (NumberAxis) (Axis) controller.getCrtProcessor().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(true);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtProcessor().setLegendVisible(false);
                 // Memory
                 seriesMemory = FXCollections.observableList(new ArrayList<>(4));
@@ -162,6 +168,7 @@ public class SystemMonitorDialog extends JFrame {
                 controller.getCrtMemory().setData(seriesMemory);
                 dateAxis = (NumberAxis) (Axis) controller.getCrtMemory().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -179,6 +186,10 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                valueAxis = (NumberAxis) (Axis) controller.getCrtMemory().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(true);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtMemory().setLegendVisible(false);
                 // Network
                 seriesNetwork = FXCollections.observableList(new ArrayList<>(2));
@@ -189,6 +200,7 @@ public class SystemMonitorDialog extends JFrame {
                 controller.getCrtNetwork().setData(seriesNetwork);
                 dateAxis = (NumberAxis) (Axis) controller.getCrtNetwork().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -206,16 +218,21 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                valueAxis = (NumberAxis) (Axis) controller.getCrtNetwork().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(true);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtNetwork().setLegendVisible(false);
                 // Disk
                 seriesDisk = FXCollections.observableList(new ArrayList<>(2));
                 seriesDisk.add(new XYChart.Series<>());
-                seriesDisk.get(0).setName("Read");
+                seriesDisk.get(0).setName("Write");
                 seriesDisk.add(new XYChart.Series<>());
-                seriesDisk.get(1).setName("Write");
+                seriesDisk.get(1).setName("Read");
                 controller.getCrtDisk().setData(seriesDisk);
                 dateAxis = (NumberAxis) (Axis) controller.getCrtDisk().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -233,6 +250,10 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                valueAxis = (NumberAxis) (Axis) controller.getCrtDisk().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(true);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtDisk().setLegendVisible(false);
                 // Database
                 // NOTE: See also http://www.h2database.com/html/functions.html#memory_free
@@ -254,6 +275,7 @@ public class SystemMonitorDialog extends JFrame {
                 controller.getCrtDBLocations().setData(seriesDBLocations);
                 dateAxis = (NumberAxis) (Axis) controller.getCrtDBLocations().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -271,10 +293,15 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                valueAxis = (NumberAxis) (Axis) controller.getCrtDBLocations().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(false);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtDBLocations().setLegendVisible(false);
                 controller.getCrtDBVisits().setData(seriesDBVisits);
                 dateAxis = (NumberAxis) (Axis) controller.getCrtDBVisits().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -292,10 +319,15 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                valueAxis = (NumberAxis) (Axis) controller.getCrtDBVisits().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(false);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtDBVisits().setLegendVisible(false);
                 controller.getCrtDBElements().setData(seriesDBElements);
                 dateAxis = (NumberAxis) (Axis) controller.getCrtDBElements().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -313,10 +345,15 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                valueAxis = (NumberAxis) (Axis) controller.getCrtDBElements().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(false);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtDBElements().setLegendVisible(false);
                 controller.getCrtDBSightings().setData(seriesDBSightings);
                 dateAxis = (NumberAxis) (Axis) controller.getCrtDBSightings().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -334,10 +371,15 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                valueAxis = (NumberAxis) (Axis) controller.getCrtDBSightings().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(false);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtDBSightings().setLegendVisible(false);
                 controller.getCrtDBFiles().setData(seriesDBFiles);
                 dateAxis = (NumberAxis) (Axis) controller.getCrtDBFiles().getXAxis();
                 dateAxis.setAutoRanging(true);
+                dateAxis.setForceZeroInRange(false);
                 dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
                     private final DateTimeFormatter TIMEFORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
                     @Override
@@ -355,6 +397,10 @@ public class SystemMonitorDialog extends JFrame {
                     }
                 });
                 dateAxis.setTickLabelFont(Font.font(Font.getDefault().getFamily(), FontWeight.NORMAL, 10));
+                valueAxis = (NumberAxis) (Axis) controller.getCrtDBFiles().getYAxis();
+                valueAxis.setAutoRanging(true);
+                valueAxis.setForceZeroInRange(false);
+                valueAxis.setTickLabelFormatter(new IntegerTickLabelFormatter());
                 controller.getCrtDBFiles().setLegendVisible(false);
                 // Start the service to load the data
                 tickService.scheduleAtFixedRate(() -> {

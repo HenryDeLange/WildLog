@@ -34,7 +34,7 @@
                <center>
                   <LineChart fx:id="crtProcessor" styleClass="wl-line-color-8" stylesheets="@styling/Charts.css" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                      <NumberAxis side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -60,7 +60,7 @@
                <center>
                   <LineChart fx:id="crtMemory" styleClass="wl-line-color-8" stylesheets="@styling/Charts.css" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                      <NumberAxis side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -86,7 +86,7 @@
                <center>
                   <LineChart fx:id="crtNetwork" styleClass="wl-line-color-2" stylesheets="@styling/Charts.css" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                      <NumberAxis side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -112,7 +112,7 @@
                <center>
                   <LineChart fx:id="crtDisk" styleClass="wl-line-color-2" stylesheets="@styling/Charts.css" verticalGridLinesVisible="false" BorderPane.alignment="CENTER">
                     <xAxis>
-                      <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                      <NumberAxis side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis side="LEFT" />
@@ -148,7 +148,7 @@
                      <children>
                         <LineChart fx:id="crtDBLocations" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Places" verticalGridLinesVisible="false">
                           <xAxis>
-                            <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                            <NumberAxis side="BOTTOM" />
                           </xAxis>
                           <yAxis>
                             <NumberAxis side="LEFT" />
@@ -156,7 +156,7 @@
                         </LineChart>
                         <LineChart fx:id="crtDBVisits" layoutX="10.0" layoutY="10.0" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Periods" verticalGridLinesVisible="false">
                            <xAxis>
-                              <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                              <NumberAxis side="BOTTOM" />
                            </xAxis>
                            <yAxis>
                               <NumberAxis side="LEFT" />
@@ -164,7 +164,7 @@
                         </LineChart>
                         <LineChart fx:id="crtDBElements" layoutX="10.0" layoutY="10.0" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Creatures" verticalGridLinesVisible="false">
                            <xAxis>
-                              <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                              <NumberAxis side="BOTTOM" />
                            </xAxis>
                            <yAxis>
                               <NumberAxis side="LEFT" />
@@ -172,7 +172,7 @@
                         </LineChart>
                         <LineChart fx:id="crtDBSightings" layoutX="287.0" layoutY="10.0" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Observations" verticalGridLinesVisible="false">
                            <xAxis>
-                              <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                              <NumberAxis side="BOTTOM" />
                            </xAxis>
                            <yAxis>
                               <NumberAxis side="LEFT" />
@@ -180,7 +180,7 @@
                         </LineChart>
                         <LineChart fx:id="crtDBFiles" layoutX="632.0" layoutY="10.0" prefWidth="416.0" styleClass="wl-line-color-1" stylesheets="@styling/Charts.css" title="Files" verticalGridLinesVisible="false">
                            <xAxis>
-                              <NumberAxis forceZeroInRange="false" side="BOTTOM" />
+                              <NumberAxis side="BOTTOM" />
                            </xAxis>
                            <yAxis>
                               <NumberAxis side="LEFT" />
