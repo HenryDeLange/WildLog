@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -78,28 +77,23 @@ public class LocationChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.PIE_CHART_SIGHITNGS)) {
-                    setActiveSubCategoryTitle("Observations per Place (Pie)");
-                    displayedChart = createPieChartSightings(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_SIGHITNGS)) {
-                    setActiveSubCategoryTitle("Observations per Place (Bar)");
-                    displayedChart = createBarChartSightings(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
-                    setActiveSubCategoryTitle("Creatures per Place");
-                    displayedChart = createBarChartElements(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.PIE_CHART_SIGHITNGS)) {
+            setActiveSubCategoryTitle("Observations per Place (Pie)");
+            displayedChart = createPieChartSightings(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_SIGHITNGS)) {
+            setActiveSubCategoryTitle("Observations per Place (Bar)");
+            displayedChart = createBarChartSightings(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
+            setActiveSubCategoryTitle("Creatures per Place");
+            displayedChart = createBarChartElements(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createBarChartSightings(List<Sighting> inSightings) {

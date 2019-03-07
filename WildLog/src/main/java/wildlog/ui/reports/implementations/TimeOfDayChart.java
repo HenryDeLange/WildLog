@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -78,28 +77,23 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.LINE_CHART)) {
-                    setActiveSubCategoryTitle("Creature Time of Day");
-                    displayedChart = createLineChart(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART)) {
-                    setActiveSubCategoryTitle("Observation Time of Day (Bar)");
-                    displayedChart = createBarChart(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.PIE_CHART)) {
-                    setActiveSubCategoryTitle("Observation Time of Day (Pie)");
-                    displayedChart = createPieChart(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.LINE_CHART)) {
+            setActiveSubCategoryTitle("Creature Time of Day");
+            displayedChart = createLineChart(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART)) {
+            setActiveSubCategoryTitle("Observation Time of Day (Bar)");
+            displayedChart = createBarChart(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.PIE_CHART)) {
+            setActiveSubCategoryTitle("Observation Time of Day (Pie)");
+            displayedChart = createPieChart(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createBarChart(List<Sighting> inSightings) {

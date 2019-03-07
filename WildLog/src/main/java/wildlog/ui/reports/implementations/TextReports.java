@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -91,22 +90,17 @@ public class TextReports extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedReport = null;
-                if (chartType.equals(ChartType.PERIOD_SUMMARY)) {
-                    setActiveSubCategoryTitle("Period Summary");
-                    displayedReport = createPeriodReport(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.DATA_SUMMARY)) {
-                    setActiveSubCategoryTitle("Data Summary");
-                    displayedReport = createDataReport(lstData);
-                }
-                inScene.setRoot(displayedReport);
-            }
-        });
+        displayedReport = null;
+        if (chartType.equals(ChartType.PERIOD_SUMMARY)) {
+            setActiveSubCategoryTitle("Period Summary");
+            displayedReport = createPeriodReport(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.DATA_SUMMARY)) {
+            setActiveSubCategoryTitle("Data Summary");
+            displayedReport = createDataReport(lstData);
+        }
+        inScene.setRoot(displayedReport);
     }
     
     private Parent createPeriodReport(List<Sighting> inSightings) {

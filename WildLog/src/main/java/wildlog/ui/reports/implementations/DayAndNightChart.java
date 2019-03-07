@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -82,28 +81,23 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.PIE_CHART)) {
-                    setActiveSubCategoryTitle("Day and Night Observations (Pie)");
-                    displayedChart = createPieChart(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.LINE_CHART)) {
-                    setActiveSubCategoryTitle("Day and Night Observations (Line)");
-                    displayedChart = createLineChartForAll(lstData);
-                }
-                else
-                if (chartType.equals(ChartType.STACKED_LINE_CHART)) {
-                    setActiveSubCategoryTitle("Day and Night Observations (Stacked)");
-                    displayedChart = createStackedChartForAll(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.PIE_CHART)) {
+            setActiveSubCategoryTitle("Day and Night Observations (Pie)");
+            displayedChart = createPieChart(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.LINE_CHART)) {
+            setActiveSubCategoryTitle("Day and Night Observations (Line)");
+            displayedChart = createLineChartForAll(lstData);
+        }
+        else
+        if (chartType.equals(ChartType.STACKED_LINE_CHART)) {
+            setActiveSubCategoryTitle("Day and Night Observations (Stacked)");
+            displayedChart = createStackedChartForAll(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createPieChart(List<Sighting> inSightings) {

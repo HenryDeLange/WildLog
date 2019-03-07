@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -157,38 +156,33 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
 
     @Override
     public void createReport(Scene inScene) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                displayedChart = null;
-                if (chartType.equals(ChartType.BAR_CHART_ALL)) {
-                    setActiveSubCategoryTitle("All Observations Together");
-                    displayedChart = createBarChart(lstData, true);
-                }
-                else
-                if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
-                    setActiveSubCategoryTitle("Grouped by Creatures");
-                    displayedChart = createBarChart(lstData, false);
-                }
-                else
-                if (chartType.equals(ChartType.LINE_CHART_ALL)) {
-                    setActiveSubCategoryTitle("All Observations Together");
-                    displayedChart = createLineChart(lstData, true);
-                }
-                else
-                if (chartType.equals(ChartType.LINE_CHART_ELEMENTS)) {
-                    setActiveSubCategoryTitle("Grouped by Creatures");
-                    displayedChart = createLineChart(lstData, false);
-                }
-                else
-                if (chartType.equals(ChartType.PIE_CHART)) {
-                    setActiveSubCategoryTitle("All Observations Together");
-                    displayedChart = createPieChart(lstData);
-                }
-                displayedChart.setBackground(Background.EMPTY);
-                inScene.setRoot(displayedChart);
-            }
-        });
+        displayedChart = null;
+        if (chartType.equals(ChartType.BAR_CHART_ALL)) {
+            setActiveSubCategoryTitle("All Observations Together");
+            displayedChart = createBarChart(lstData, true);
+        }
+        else
+        if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
+            setActiveSubCategoryTitle("Grouped by Creatures");
+            displayedChart = createBarChart(lstData, false);
+        }
+        else
+        if (chartType.equals(ChartType.LINE_CHART_ALL)) {
+            setActiveSubCategoryTitle("All Observations Together");
+            displayedChart = createLineChart(lstData, true);
+        }
+        else
+        if (chartType.equals(ChartType.LINE_CHART_ELEMENTS)) {
+            setActiveSubCategoryTitle("Grouped by Creatures");
+            displayedChart = createLineChart(lstData, false);
+        }
+        else
+        if (chartType.equals(ChartType.PIE_CHART)) {
+            setActiveSubCategoryTitle("All Observations Together");
+            displayedChart = createPieChart(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
+        inScene.setRoot(displayedChart);
     }
     
     private Chart createBarChart(List<Sighting> inSightings, boolean inIsForAllObservations) {
