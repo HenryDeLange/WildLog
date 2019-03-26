@@ -52,39 +52,39 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         }
         if (typeInstance instanceof Element) {
             setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Element.gif")).getImage());
-            Set<String> setOriginalData = new HashSet<>();
+            Set<Long> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
-                setOriginalData.add(sighting.getElementName());
+                setOriginalData.add(sighting.getElementID());
             }
             List<Element> originalData = new ArrayList<>(setOriginalData.size());
-            for (String temp : setOriginalData) {
-                originalData.add(new Element(temp));
+            for (long temp : setOriginalData) {
+                originalData.add(WildLogApp.getApplication().getDBI().findElement(temp, null, Element.class));
             }
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, originalData);
         }
         else
         if (typeInstance instanceof Location) {
             setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Location.gif")).getImage());
-            Set<String> setOriginalData = new HashSet<>();
+            Set<Long> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
-                setOriginalData.add(sighting.getLocationName());
+                setOriginalData.add(sighting.getLocationID());
             }
             List<Location> originalData = new ArrayList<>(setOriginalData.size());
-            for (String temp : setOriginalData) {
-                originalData.add(new Location(temp));
+            for (long temp : setOriginalData) {
+                originalData.add(WildLogApp.getApplication().getDBI().findLocation(temp, null, Location.class));
             }
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, originalData);
         }
         else
         if (typeInstance instanceof Visit) {
             setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Visit.gif")).getImage());
-            Set<String> setOriginalData = new HashSet<>();
+            Set<Long> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
-                setOriginalData.add(sighting.getVisitName());
+                setOriginalData.add(sighting.getVisitID());
             }
             List<Visit> originalData = new ArrayList<>(setOriginalData.size());
-            for (String temp : setOriginalData) {
-                originalData.add(new Visit(temp));
+            for (long temp : setOriginalData) {
+                originalData.add(WildLogApp.getApplication().getDBI().findVisit(temp, null, false, Visit.class));
             }
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, originalData);
         }
@@ -371,7 +371,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         }
         else
         if (typeInstance instanceof Sighting) {
-            ((Sighting) typeInstance).setSightingCounter(Long.parseLong(selectedID));
+            ((Sighting) typeInstance).setID(Long.parseLong(selectedID));
         }
     }
 

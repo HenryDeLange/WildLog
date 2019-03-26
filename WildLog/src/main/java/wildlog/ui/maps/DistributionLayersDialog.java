@@ -43,7 +43,7 @@ public class DistributionLayersDialog extends JDialog {
     private List<Path> lstSelectedPaths = null;
     private List<Sighting> lstData;
     
-    public DistributionLayersDialog(JFrame inParent, String inElementName, List<Sighting> inLstData) {
+    public DistributionLayersDialog(JFrame inParent, long inElementID, List<Sighting> inLstData) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[DistributionLayersDialog]");
         lstData = inLstData;
@@ -91,21 +91,21 @@ public class DistributionLayersDialog extends JDialog {
         // Setup row sorter for the checkboxes (nadat die table data klaar geload het)
         applyTableFilter();
         // If we are dealing with only one species, then automatically select it
-        String elementName = inElementName;
+        long elementID = inElementID;
         for (Sighting sighting : lstData) {
-            if (elementName == null) {
-                elementName = sighting.getElementName();
+            if (elementID <= 0) {
+                elementID = sighting.getElementID();
                 continue;
             }
-            if (!elementName.equalsIgnoreCase(sighting.getElementName())) {
-                // Don't use the element becasue the list contains more than one Creature
-                elementName = null;
+            if (elementID != sighting.getElementID()) {
+                // Don't use the element because the list contains more than one Creature
+                elementID = 0;
                 break;
             }
         }
         String scientificName;
-        if (elementName != null) {
-            scientificName = WildLogApp.getApplication().getDBI().findElement(elementName, Element.class).getScientificName();
+        if (elementID > 0) {
+            scientificName = WildLogApp.getApplication().getDBI().findElement(elementID, null, Element.class).getScientificName();
         }
         else {
             scientificName = null;
@@ -151,12 +151,12 @@ public class DistributionLayersDialog extends JDialog {
                             }
                         }
                         if (include == true && chkOnlyActiveCreatures.isSelected()) {
-                            Map<String, Element> mapLoadedElements = new HashMap<>();
+                            Map<Long, Element> mapLoadedElements = new HashMap<>();
                             for (Sighting sighting : lstData) {
-                                Element element = mapLoadedElements.get(sighting.getElementName());
+                                Element element = mapLoadedElements.get(sighting.getElementID());
                                 if (element == null) {
-                                    element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementName(), Element.class);
-                                    mapLoadedElements.put(sighting.getElementName(), element);
+                                    element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementID(), null, Element.class);
+                                    mapLoadedElements.put(sighting.getElementID(), element);
                                 }
                                 if (inEntry != null && element.getScientificName() != null && !element.getScientificName().trim().isEmpty() 
                                         && inEntry.getStringValue(1).equalsIgnoreCase(element.getScientificName())) {

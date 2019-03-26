@@ -197,11 +197,11 @@ public class ChecklistDialog extends JDialog {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (dtpDate.getDate() != null) {
             for (int t = 0; t < lstSightedCreatures.getModel().getSize(); t++) {
-                String elementName = lstSightedCreatures.getModel().getElementAt(t).toString();
+                Element element = (Element) lstSightedCreatures.getModel().getElementAt(t);
                 Sighting tempSighting = new Sighting();
-                tempSighting.setElementName(elementName);
-                tempSighting.setLocationName(location.getName());
-                tempSighting.setVisitName(visit.getName());
+                tempSighting.setElementID(element.getID());
+                tempSighting.setLocationID(location.getID());
+                tempSighting.setVisitID(visit.getID());
                 tempSighting.setDate(dtpDate.getDate());
                 tempSighting.setCertainty(Certainty.SURE);
                 app.getDBI().createSighting(tempSighting, false);
@@ -223,11 +223,11 @@ public class ChecklistDialog extends JDialog {
 
     private void lstFromCreaturesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFromCreaturesMouseClicked
         if (evt == null || evt.getClickCount() == 2) {
-            String temp = (String)lstFromCreatures.getSelectedValue();
+            Element temp = (Element) lstFromCreatures.getSelectedValue();
             DefaultListModel model = (DefaultListModel)lstSightedCreatures.getModel();
             if (temp != null) {
-                if (!model.contains(temp.toString())) {
-                    model.addElement(temp.toString());
+                if (!model.contains(temp)) {
+                    model.addElement(temp);
                 }
             }
         }
@@ -236,7 +236,7 @@ public class ChecklistDialog extends JDialog {
     private void lstSightedCreaturesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstSightedCreaturesMouseClicked
         if (evt == null || evt.getClickCount() == 2) {
             if (lstSightedCreatures.getSelectedIndex() >= 0) {
-                String temp = lstSightedCreatures.getSelectedValue().toString();
+                Element temp = (Element) lstSightedCreatures.getSelectedValue();
                 DefaultListModel model = (DefaultListModel)lstSightedCreatures.getModel();
                 if (model.contains(temp)) {
                     model.removeElement(temp);
@@ -288,7 +288,7 @@ public class ChecklistDialog extends JDialog {
         DefaultListModel model = (DefaultListModel)lstFromCreatures.getModel();
         model.clear();
         for (Element tempElement : elements) {
-            model.addElement(tempElement.getPrimaryName());
+            model.addElement(tempElement);
         }
     }
 

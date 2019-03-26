@@ -193,17 +193,17 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     
     private Chart createAccumulationReport(List<Sighting> inSightings) {
         // Get the fisrt and last Visit date
-        Map<String, DateWrapper> mapVisitDates = new HashMap<>();
+        Map<Long, DateWrapper> mapVisitDates = new HashMap<>();
         LocalDate startDate = null; 
         LocalDate endDate = null;
         for (Sighting sighting : inSightings) {
-            DateWrapper visitDates = mapVisitDates.get(sighting.getVisitName());
+            DateWrapper visitDates = mapVisitDates.get(sighting.getVisitID());
             if (visitDates == null) {
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 visitDates = new DateWrapper();
                 visitDates.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
                 visitDates.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
-                mapVisitDates.put(sighting.getVisitName(), visitDates);
+                mapVisitDates.put(sighting.getVisitID(), visitDates);
             }
             // Get Start Date
             // If no date was found then use the Sighting's date
@@ -231,7 +231,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         Collections.sort(inSightings);
         Map<String, LocalDateTime> mapAccumulation = new LinkedHashMap<>();
         for (Sighting sighting : inSightings) {
-            mapAccumulation.putIfAbsent(sighting.getElementName(reportsBaseDialog.getOptionName()), UtilsTime.getLocalDateTimeFromDate(sighting.getDate()));
+            mapAccumulation.putIfAbsent(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), UtilsTime.getLocalDateTimeFromDate(sighting.getDate()));
         }
         // Construct the final list of series that needs to be displayed
         int counter = 0;
@@ -276,17 +276,17 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     
     private Chart createAccumulationSightingReport(List<Sighting> inSightings, boolean inIsForAllCreatures) {
         // Get the fisrt and last Visit date
-        Map<String, DateWrapper> mapVisitDates = new HashMap<>();
+        Map<Long, DateWrapper> mapVisitDates = new HashMap<>();
         LocalDate startDate = null; 
         LocalDate endDate = null;
         for (Sighting sighting : inSightings) {
-            DateWrapper visitDates = mapVisitDates.get(sighting.getVisitName());
+            DateWrapper visitDates = mapVisitDates.get(sighting.getVisitID());
             if (visitDates == null) {
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 visitDates = new DateWrapper();
                 visitDates.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
                 visitDates.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
-                mapVisitDates.put(sighting.getVisitName(), visitDates);
+                mapVisitDates.put(sighting.getVisitID(), visitDates);
             }
             // Get Start Date
             // If no date was found then use the Sighting's date
@@ -320,7 +320,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                 key = "All Creatures";
             }
             else {
-                key = sighting.getElementName(reportsBaseDialog.getOptionName());
+                key = sighting.getCachedElementName(reportsBaseDialog.getOptionName());
             }
             ObservableList<AreaChart.Data<Number, Number>> lstChartData = mapGroupedData.get(key);
             if (lstChartData == null) {
@@ -328,7 +328,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                 mapGroupedData.put(key, lstChartData);
             }
             lstChartData.add(new AreaChart.Data<>(sighting.getDate().getTime(), lstChartData.size() + 1, 
-                    sighting.getElementName(reportsBaseDialog.getOptionName())));
+                    sighting.getCachedElementName(reportsBaseDialog.getOptionName())));
         }
         // Get the final list of series
         ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
@@ -396,7 +396,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                 }
             }
             else {
-                key = sighting.getElementName(reportsBaseDialog.getOptionName());
+                key = sighting.getCachedElementName(reportsBaseDialog.getOptionName());
                 if (chkShowDayOrNight.isSelected()) {
                     key = key + " - " + ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()).toString();
                 }
@@ -409,7 +409,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             String dayString = UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()));
             ReportDataWrapper dataWrapper = mapColumnData.get(dayString);
             if (dataWrapper == null) {
-                dataWrapper = new ReportDataWrapper(dayString, sighting.getElementName(reportsBaseDialog.getOptionName()), 0);
+                dataWrapper = new ReportDataWrapper(dayString, sighting.getCachedElementName(reportsBaseDialog.getOptionName()), 0);
                 mapColumnData.put(dayString, dataWrapper);
             }
             dataWrapper.increaseCount();
@@ -503,13 +503,13 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         Map<String, DateWrapper> mapVisitDates = new HashMap<>();
         TemporalAmount dateDiffRange = null;
         for (Sighting sighting : inSightings) {
-            DateWrapper visitDates = mapVisitDates.get(sighting.getVisitName());
+            DateWrapper visitDates = mapVisitDates.get(sighting.getCachedVisitName());
             if (visitDates == null) {
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 visitDates = new DateWrapper();
                 visitDates.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
                 visitDates.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
-                mapVisitDates.put(sighting.getVisitName(), visitDates);
+                mapVisitDates.put(sighting.getCachedVisitName(), visitDates);
             }
             LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
             // Get Start Date
@@ -539,27 +539,27 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         Map<String, ObservableList<AreaChart.Data<Number, Number>>> mapGroupedData = new HashMap<>();
         Map<String, Set<String>> mapVisitElementCount = new HashMap<>(mapVisitDates.size());
         for (Sighting sighting : inSightings) {
-            ObservableList<AreaChart.Data<Number, Number>> lstChartData = mapGroupedData.get(sighting.getVisitName());
+            ObservableList<AreaChart.Data<Number, Number>> lstChartData = mapGroupedData.get(sighting.getCachedVisitName());
             if (lstChartData == null) {
                 lstChartData = FXCollections.observableArrayList();
-                mapGroupedData.put(sighting.getVisitName(), lstChartData);
+                mapGroupedData.put(sighting.getCachedVisitName(), lstChartData);
             }
-            TemporalAmount tempDifference = Duration.between(mapVisitDates.get(sighting.getVisitName()).startDate.atTime(LocalTime.MIN), 
+            TemporalAmount tempDifference = Duration.between(mapVisitDates.get(sighting.getCachedVisitName()).startDate.atTime(LocalTime.MIN), 
                     UtilsTime.getLocalDateTimeFromDate(sighting.getDate()));
             if (inIsForObservations) {
                 lstChartData.add(new AreaChart.Data<>(tempDifference.get(ChronoUnit.SECONDS), lstChartData.size() + 1, 
-                    sighting.getElementName(reportsBaseDialog.getOptionName()) + " [" + sighting.getVisitName() + "]"));
+                    sighting.getCachedElementName(reportsBaseDialog.getOptionName()) + " [" + sighting.getCachedVisitName() + "]"));
             }
             else {
-                Set<String> elementCount = mapVisitElementCount.get(sighting.getVisitName());
+                Set<String> elementCount = mapVisitElementCount.get(sighting.getCachedVisitName());
                 if (elementCount == null) {
                     elementCount = new HashSet<>();
-                    mapVisitElementCount.put(sighting.getVisitName(), elementCount);
+                    mapVisitElementCount.put(sighting.getCachedVisitName(), elementCount);
                 }
-                if (!elementCount.contains(sighting.getElementName(reportsBaseDialog.getOptionName()))) {
-                    elementCount.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
+                if (!elementCount.contains(sighting.getCachedElementName(reportsBaseDialog.getOptionName()))) {
+                    elementCount.add(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
                     lstChartData.add(new AreaChart.Data<>(tempDifference.get(ChronoUnit.SECONDS), elementCount.size(), 
-                        sighting.getElementName(reportsBaseDialog.getOptionName()) + " [" + sighting.getVisitName() + "]"));
+                        sighting.getCachedElementName(reportsBaseDialog.getOptionName()) + " [" + sighting.getCachedVisitName() + "]"));
                 }
             }
         }

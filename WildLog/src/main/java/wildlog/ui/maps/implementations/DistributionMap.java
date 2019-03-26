@@ -80,7 +80,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
     private final ComboBox<Transparency> cmbTransparity;
 
     
-    public DistributionMap(List<Sighting> inLstData, String inElementName, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
+    public DistributionMap(List<Sighting> inLstData, long inElementID, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         super("Distribution Layer Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Maps
@@ -91,7 +91,7 @@ public class DistributionMap extends AbstractGeoToolsMap<Sighting> {
             @Override
             public void handle(Event event) {
                 activeMapType = MapType.SPECIES_DISTRIBUTION;
-                DistributionLayersDialog dialog = new DistributionLayersDialog(mapsBaseDialog, inElementName, lstData);
+                DistributionLayersDialog dialog = new DistributionLayersDialog(mapsBaseDialog, inElementID, lstData);
                 dialog.setVisible(true);
                 lstLayers.clear();
                 if (dialog.getLstSelectedPaths() != null) {

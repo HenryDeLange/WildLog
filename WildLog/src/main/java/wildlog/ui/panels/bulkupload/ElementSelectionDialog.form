@@ -164,7 +164,7 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Use Previous Creature"/>
             <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="&quot;This will set the Creature to: &quot; + previousElement" type="code"/>
+              <Connection code="&quot;This will set the Creature to the previously selected Creature.&quot;" type="code"/>
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>

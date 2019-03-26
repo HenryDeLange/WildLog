@@ -387,13 +387,13 @@ public class HeatMap extends AbstractMap<Sighting> {
             if (UtilsGPS.hasGPSData(sighting)) {
                 double lat = UtilsGPS.getLatDecimalDegree(sighting);
                 double lon = UtilsGPS.getLonDecimalDegree(sighting);
-                String key = sighting.getElementName() + ":" + sighting.getVisitName() + ":" + lat + ":" + lon;
+                String key = sighting.getElementID()+ ":" + sighting.getVisitID()+ ":" + lat + ":" + lon;
                 HeatPoint heatPoint = mapHeatPoints.get(key);
                 if (heatPoint == null) {
                     heatPoint = new HeatPoint();
                     heatPoint.lat = lat;
                     heatPoint.lon = lon;
-                    heatPoint.key = sighting.getElementName() + ":" + sighting.getVisitName();
+                    heatPoint.key = sighting.getElementID() + ":" + sighting.getVisitID();
                     heatPoint.weight = 1;
                     mapHeatPoints.put(key, heatPoint);
                 }
@@ -470,9 +470,9 @@ public class HeatMap extends AbstractMap<Sighting> {
         for (Sighting sighting : inLstSightings) {
             if (UtilsGPS.hasGPSData(sighting)) {
                 // Get the visit data
-                String visitDurationKey = sighting.getVisitName();
+                String visitDurationKey = Long.toString(sighting.getVisitID());
                 // Lyk my nie dis nodig om die visits self hier te cache nie... Maar dalk eendag...
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 if (visit != null && visit.getStartDate() != null) {
                     if (!cmbSplitIndicator.getSelectionModel().getSelectedItem().equals(HeatMap.SplitIndicator.NEVER)) {
                         visitDurationKey = visitDurationKey + ":" + getSplitNumber(visit, sighting);
@@ -599,9 +599,9 @@ public class HeatMap extends AbstractMap<Sighting> {
         for (Sighting sighting : inLstSightings) {
             if (UtilsGPS.hasGPSData(sighting)) {
                 // Get the visit data
-                String visitDurationKey = sighting.getVisitName();
+                String visitDurationKey = Long.toString(sighting.getVisitID());
                 // Lyk my nie dis nodig om die visits self hier te cache nie... Maar dalk eendag...
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 if (visit != null && visit.getStartDate() != null) {
                     if (!cmbSplitIndicator.getSelectionModel().getSelectedItem().equals(HeatMap.SplitIndicator.NEVER)) {
                         visitDurationKey = visitDurationKey + ":" + getSplitNumber(visit, sighting);
@@ -627,7 +627,7 @@ public class HeatMap extends AbstractMap<Sighting> {
                 // Add the heat map data
                 double lat = UtilsGPS.getLatDecimalDegree(sighting);
                 double lon = UtilsGPS.getLonDecimalDegree(sighting);
-                String heatMapKey = visitDurationKey + ":" + sighting.getElementName() + ":" + lat + ":" + lon;
+                String heatMapKey = visitDurationKey + ":" + sighting.getElementID() + ":" + lat + ":" + lon;
                 HeatPoint heatPoint = mapHeatPoints.get(heatMapKey);
                 if (heatPoint == null) {
                     heatPoint = new HeatPoint();
@@ -724,17 +724,17 @@ public class HeatMap extends AbstractMap<Sighting> {
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();
         StringBuilder gpsBuilder = new StringBuilder(50 * inLstSightings.size());
         Map<String, HeatPoint> mapHeatPoints = new HashMap<>();
-        Map<String, Long> mapVisitDuration = new HashMap<>();
+        Map<Long, Long> mapVisitDuration = new HashMap<>();
         for (Sighting sighting : inLstSightings) {
-            if (!mapVisitDuration.containsKey(sighting.getVisitName())) {
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+            if (!mapVisitDuration.containsKey(sighting.getVisitID())) {
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 if (visit != null && visit.getStartDate() != null) {
                     LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
                     if (endDate == null) {
                         endDate = LocalDate.now();
                     }
                     long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
-                    mapVisitDuration.put(sighting.getVisitName(), days);
+                    mapVisitDuration.put(sighting.getVisitID(), days);
                 }
                 else {
                     // If this visit does not have a valid date range, then don't process it, continue to the next record instead
@@ -744,13 +744,13 @@ public class HeatMap extends AbstractMap<Sighting> {
             if (UtilsGPS.hasGPSData(sighting)) {
                 double lat = UtilsGPS.getLatDecimalDegree(sighting);
                 double lon = UtilsGPS.getLonDecimalDegree(sighting);
-                String key = sighting.getVisitName() + ":" + lat + ":" + lon;
+                String key = sighting.getVisitID() + ":" + lat + ":" + lon;
                 HeatPoint heatPoint = mapHeatPoints.get(key);
                 if (heatPoint == null) {
                     heatPoint = new HeatPoint();
                     heatPoint.lat = lat;
                     heatPoint.lon = lon;
-                    heatPoint.key = sighting.getVisitName();
+                    heatPoint.key = Long.toString(sighting.getVisitID());
                     mapHeatPoints.put(key, heatPoint);
                 }
             }

@@ -7,9 +7,6 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithTXT;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
-import wildlog.data.enums.ElementType;
-import wildlog.data.enums.UnitsSize;
-import wildlog.data.enums.UnitsWeight;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -22,12 +19,8 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         super();
     }
 
-    public Element(String inPrimaryName) {
-        super(inPrimaryName);
-    }
-
-    public Element(ElementType inElementType) {
-        super(inElementType);
+    public Element(long inID, String inPrimaryName) {
+        super(inID, inPrimaryName);
     }
 
 
@@ -56,39 +49,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Distribution:</b><br/>", distribution, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Behaviour:</b><br/>", behaviourDescription, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Active Time:</b><br/>", activeTime, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Water Need:</b><br/>", waterDependance, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Food/Nutrition:</b><br/>", nutrition, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Add Frequency:</b><br/>", addFrequency, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Wish List Rating:</b><br/>", wishListRating, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Lifespan:</b><br/>", lifespan, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Breeding:</b><br/>", breedingDuration, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Number of Young:</b><br/>", breedingNumber, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Size Type:</b> ", sizeType, true);
-            if (sizeMaleMin > 0 && !UnitsSize.NONE.equals(sizeUnit)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Male Size:</b><br/>", sizeMaleMin + " " + UtilsHTML.formatObjectAsString(sizeUnit));
-            }
-            if (sizeMaleMax > 0 && !UnitsSize.NONE.equals(sizeUnit)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Male Size:</b><br/>", sizeMaleMax + " " + UtilsHTML.formatObjectAsString(sizeUnit));
-            }
-            if (sizeFemaleMin > 0 && !UnitsSize.NONE.equals(sizeUnit)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Female Size:</b><br/>", sizeFemaleMin + " " + UtilsHTML.formatObjectAsString(sizeUnit));
-            }
-            if (sizeFemaleMax > 0 && !UnitsSize.NONE.equals(sizeUnit)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Female Size:</b><br/>", sizeFemaleMax + " " + UtilsHTML.formatObjectAsString(sizeUnit));
-            }
-            if (weightMaleMin > 0 && !UnitsWeight.NONE.equals(weightUnit)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Male Weight:</b><br/>", weightMaleMin + " " + UtilsHTML.formatObjectAsString(weightUnit));
-            }
-            if (weightMaleMax > 0 && !UnitsWeight.NONE.equals(weightUnit)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Male Weight:</b><br/>", weightMaleMax + " " + UtilsHTML.formatObjectAsString(weightUnit));
-            }
-            if (weightFemaleMin > 0 && !UnitsWeight.NONE.equals(weightUnit)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Female Weight:</b><br/>", weightFemaleMin + " " + UtilsHTML.formatObjectAsString(weightUnit));
-            }
-            if (weightFemaleMax > 0 && !UnitsWeight.NONE.equals(weightUnit)) {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Female Weight:</b><br/>", weightFemaleMax + " " + UtilsHTML.formatObjectAsString(weightUnit));
-            }
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
@@ -110,7 +71,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
             htmlElement.append("<br/>");
             htmlElement.append("</td></tr>");
             htmlElement.append("<tr><td>");
-            List<Sighting> sightings = inApp.getDBI().listSightings(0, primaryName, null, null, false, Sighting.class);
+            List<Sighting> sightings = inApp.getDBI().listSightings(id, 0, 0, true, Sighting.class);
             int counter = 0;
             for (Sighting temp : sightings) {
                 htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inIsSummary, inApp, inExportType, null));
@@ -144,30 +105,12 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         builder.append("<referenceID><![CDATA[").append(referenceID).append("]]></referenceID>");
         builder.append("<type>").append(type).append("</type>");
         builder.append("<feedingClass>").append(feedingClass).append("</feedingClass>");
-        builder.append("<addFrequency>").append(addFrequency).append("</addFrequency>");
-        builder.append("<wishListRating>").append(wishListRating).append("</wishListRating>");
-        builder.append("<activeTime>").append(activeTime).append("</activeTime>");
         builder.append("<endangeredStatus>").append(endangeredStatus).append("</endangeredStatus>");
-        builder.append("<waterDependance>").append(waterDependance).append("</waterDependance>");
         builder.append("<nutrition><![CDATA[").append(nutrition).append("]]></nutrition>");
         builder.append("<diagnosticDescription><![CDATA[").append(diagnosticDescription).append("]]></diagnosticDescription>");
         builder.append("<description><![CDATA[").append(description).append("]]></description>");
         builder.append("<distribution><![CDATA[").append(distribution).append("]]></distribution>");
         builder.append("<behaviourDescription><![CDATA[").append(behaviourDescription).append("]]></behaviourDescription>");
-        builder.append("<lifespan><![CDATA[").append(lifespan).append("]]></lifespan>");
-        builder.append("<breedingDuration><![CDATA[").append(breedingDuration).append("]]></breedingDuration>");
-        builder.append("<breedingNumber><![CDATA[").append(breedingNumber).append("]]></breedingNumber>");
-        builder.append("<sizeType>").append(sizeType).append("</sizeType>");
-        builder.append("<sizeMaleMin>").append(sizeMaleMin).append("</sizeMaleMin>");
-        builder.append("<sizeMaleMax>").append(sizeMaleMax).append("</sizeMaleMax>");
-        builder.append("<sizeFemaleMin>").append(sizeFemaleMin).append("</sizeFemaleMin>");
-        builder.append("<sizeFemaleMax>").append(sizeFemaleMax).append("</sizeFemaleMax>");
-        builder.append("<sizeUnit>").append(sizeUnit).append("</sizeUnit>");
-        builder.append("<weightMaleMin>").append(weightMaleMin).append("</weightMaleMin>");
-        builder.append("<weightMaleMax>").append(weightMaleMax).append("</weightMaleMax>");
-        builder.append("<weightFemaleMin>").append(weightFemaleMin).append("</weightFemaleMin>");
-        builder.append("<weightFemaleMax>").append(weightFemaleMax).append("</weightFemaleMax>");
-        builder.append("<weightUnit>").append(weightUnit).append("</weightUnit>");
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(5);
         }
@@ -191,7 +134,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         }
         if (inIncludeSightings) {
             StringBuilder sightingString = new StringBuilder(1024);
-            List<Sighting> sightings = inApp.getDBI().listSightings(0, primaryName, null, null, false, Sighting.class);
+            List<Sighting> sightings = inApp.getDBI().listSightings(id, 0, 0, true, Sighting.class);
             counter = 0;
             for (Sighting temp : sightings) {
                 sightingString.append(temp.toXML(inApp, null, false));
@@ -211,13 +154,13 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
     @Override
     public String toTXT(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         StringBuilder builder = new StringBuilder(50);
-        List<Sighting> lstSightingsToUse = inApp.getDBI().listSightings(0, primaryName, null, null, false, Sighting.class);
+        List<Sighting> lstSightingsToUse = inApp.getDBI().listSightings(id, 0, 0, true, Sighting.class);
         builder.append(primaryName).append(" was observed at the following Places:").append(System.lineSeparator());
         Set<String> uniqueNames = new HashSet<>();
         for (Sighting tempsighting : lstSightingsToUse) {
-            if (!uniqueNames.contains(tempsighting.getLocationName())) {
-                builder.append(tempsighting.getLocationName()).append(System.lineSeparator());
-                uniqueNames.add(tempsighting.getLocationName());
+            if (!uniqueNames.contains(tempsighting.getCachedLocationName())) {
+                builder.append(tempsighting.getCachedLocationName()).append(System.lineSeparator());
+                uniqueNames.add(tempsighting.getCachedLocationName());
             }
         }
         return builder.toString();

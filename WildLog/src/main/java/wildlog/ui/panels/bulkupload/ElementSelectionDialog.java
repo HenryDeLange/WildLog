@@ -26,9 +26,10 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public class ElementSelectionDialog extends JDialog {
-    private static String previousElement = "";
+    private static long previousElementID = 0;
     private final WildLogApp app;
     private boolean selectionMade = false;
+    private long selectedElementID;
     private String selectedElementName;
 
 
@@ -181,7 +182,7 @@ public class ElementSelectionDialog extends JDialog {
 
         btnPreviousElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         btnPreviousElement.setText("Use Previous Creature");
-        btnPreviousElement.setToolTipText("This will set the Creature to: " + previousElement);
+        btnPreviousElement.setToolTipText("This will set the Creature to the previously selected Creature.");
         btnPreviousElement.setFocusPainted(false);
         btnPreviousElement.setFocusable(false);
         btnPreviousElement.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -224,25 +225,31 @@ public class ElementSelectionDialog extends JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    protected String getElementName() {
+    protected long getSelectedElementID() {
+        return selectedElementID;
+    }
+
+    public String getSelectedElementName() {
         return selectedElementName;
     }
 
-    protected Icon getElementIcon() {
+    protected Icon getSelectedElementIcon() {
         return lblElementImage.getIcon();
     }
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
-            UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX + tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1), 0, app);
+            UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX 
+                    + tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3), 0, app);
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         if (tblElement.getSelectedRowCount() == 1) {
             selectionMade = true;
-            selectedElementName = tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1).toString();
-            previousElement = selectedElementName;
+            selectedElementID = (Long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
+            previousElementID = selectedElementID;
+            selectedElementName = (String) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1);
             tblElement.setBorder(null);
             setVisible(false);
             dispose();
@@ -260,7 +267,7 @@ public class ElementSelectionDialog extends JDialog {
             public void run() {
                 // Select the previous element
                 for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                    if (tblElement.getValueAt(t, 1).equals(previousElement)) {
+                    if (tblElement.getValueAt(t, 3).equals(previousElementID)) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getModel().getRowCount()) - 1) {
@@ -271,7 +278,7 @@ public class ElementSelectionDialog extends JDialog {
                     }
                 }
                 // Update the icon
-                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + previousElement, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + previousElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
                 // Do the select action
                 btnSelectActionPerformed(null);
             }
@@ -284,9 +291,9 @@ public class ElementSelectionDialog extends JDialog {
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
-            String selectedName = tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1).toString();
+            String selectedID = tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3).toString();
             // Change the image
-            UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedName, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+            UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
         }
         else {
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
@@ -345,12 +352,12 @@ public class ElementSelectionDialog extends JDialog {
         selectionMade = inSelectionMade;
     }
 
-    public static String getPreviousElement() {
-        return previousElement;
+    public static long getPreviousElementID() {
+        return previousElementID;
     }
 
-    public static void setPreviousElement(String inPreviousElement) {
-        ElementSelectionDialog.previousElement = inPreviousElement;
+    public static void setPreviousElementID(long inPreviousElementID) {
+        previousElementID = inPreviousElementID;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

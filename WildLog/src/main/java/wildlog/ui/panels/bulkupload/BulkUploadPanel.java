@@ -76,18 +76,18 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private final CustomMouseWheelScroller mouseWheel;
     private final List<Path> lstVisitFiles;
     private final PanelNeedsRefreshWhenDataChanges panelToRefresh;
-    final private String existingVisitName;
-    private String selectedLocationName;
+    final private Visit existingVisit;
+    private Location selectedLocation;
     private List<Path> lstImportPaths = null;
     private boolean showAsTab = false;
 
 
-    public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, String inLocationName, String inExistingVisitName, 
+    public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, Location inLocation, Visit inExistingVisit, 
             List<Path> inlstImportPaths, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         WildLogApp.LOGGER.log(Level.INFO, "[BulkUploadPanel]");
         app = inApp;
-        selectedLocationName = inLocationName;
-        existingVisitName = inExistingVisitName;
+        selectedLocation = inLocation;
+        existingVisit = inExistingVisit;
         panelToRefresh = inPanelToRefresh;
         if (inlstImportPaths != null) {
             lstImportPaths = inlstImportPaths;
@@ -118,22 +118,22 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 }
             }
         });
-        // Load the location icon
-        UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedLocationName, 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        // Load the location detials
+        lblLocation.setText(selectedLocation.getName());
+        UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
         // If this bulk import was called from the Visit then set the name and disable the fields
-        if (existingVisitName != null && !existingVisitName.isEmpty()) {
+        if (existingVisit != null && existingVisit.getID() > 0) {
             // Location fields
             lblLocation.setEnabled(false);
             //lblImageLocation.setEnabled(false);
             btnSelectLocation.setEnabled(false);
-            // Visti fields
-            Visit tempVisit = app.getDBI().findVisit(existingVisitName, Visit.class);
-            txtVisitName.setText(existingVisitName);
+            // Visit fields
+            txtVisitName.setText(existingVisit.getName());
             txtVisitName.setEnabled(false);
-            cmbVisitType.setSelectedItem(tempVisit.getType());
+            cmbVisitType.setSelectedItem(existingVisit.getType());
             cmbVisitType.setEnabled(false);
-            dtpStartDate.setDate(tempVisit.getStartDate());
-            dtpEndDate.setDate(tempVisit.getEndDate());
+            dtpStartDate.setDate(existingVisit.getStartDate());
+            dtpEndDate.setDate(existingVisit.getEndDate());
         }
         // Setup the tab's content
         setupTab(inProgressbarTask);
@@ -141,6 +141,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         UtilsUI.attachClipboardPopup(txtVisitName);
         // Setup info for tab headers
         tabTitle = "Bulk Import";
+        tabID = 0;
         tabIconURL = app.getClass().getResource("resources/icons/Bulk Import.png");
         // Spinner selection fix
         SpinnerFixer.configureSpinners(spnInactivityTime);
@@ -188,7 +189,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     }
                 });
                 // Setup the dates
-                if (existingVisitName != null && !existingVisitName.isEmpty()) {
+                if (existingVisit != null && existingVisit.getID() > 0) {
                     if (dtpStartDate.getDate() == null || wrapper.getStartDate().before(dtpStartDate.getDate())) {
                         dtpStartDate.setDate(wrapper.getStartDate());
                     }
@@ -492,7 +493,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         });
 
         lblLocation.setBackground(new java.awt.Color(233, 239, 244));
-        lblLocation.setText(selectedLocationName);
         lblLocation.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 2, 1, 1));
         lblLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         lblLocation.setName("lblLocation"); // NOI18N
@@ -566,12 +566,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(2, 2, 2))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(2, 2, 2))))
+                            .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(2, 2, 2))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSelectLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -690,8 +687,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             tblBulkImport.getColumnModel().getColumn(0).setMinWidth(240);
             tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(240);
             tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(240);
-            tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, lblLocation, txtVisitName));
-            tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, lblLocation, txtVisitName));
+            tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, selectedLocation, existingVisit));
+            tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, selectedLocation, existingVisit));
             tblBulkImport.getColumnModel().getColumn(1).setCellEditor(new ImageBoxEditor());
             tblBulkImport.getColumnModel().getColumn(1).setCellRenderer(new ImageBoxRenderer());
         }
@@ -741,23 +738,23 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 this.setTaskProgress(0);
                 this.setMessage("Saving the Bulk Import: Validating...");
                 // Make sure the location is OK
-                if (selectedLocationName != null && !selectedLocationName.isEmpty() && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
+                if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
                     // Make sure the visit is OK
-                    Visit visit = app.getDBI().findVisit(txtVisitName.getText(), Visit.class);
-                    if ((existingVisitName == null || existingVisitName.isEmpty()) && visit != null) {
+                    Visit visit = app.getDBI().findVisit(0, txtVisitName.getText(), false, Visit.class);
+                    if ((existingVisit == null || existingVisit.getID() == 0) && visit != null) {
                         WLOptionPane.showMessageDialog(app.getMainFrame(),
                                 "The Period name is not unique, please specify another one.",
                                 "Can't Save", JOptionPane.ERROR_MESSAGE);
                         return null;
                     }
                     if (visit == null) {
-                        visit = new Visit(txtVisitName.getText());
+                        visit = new Visit(0, txtVisitName.getText());
                     }
                     // Make sure all sightings have a creature set
                     final DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
                         BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
-                        if (sightingWrapper.getElementName() == null || sightingWrapper.getElementName().isEmpty()) {
+                        if (sightingWrapper.getElementID() == 0) {
                             final int finalRowCount = rowCount;
                             SwingUtilities.invokeLater(new Runnable() {
                                 @Override
@@ -798,10 +795,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     this.setTaskProgress(0);
                     this.setMessage("Saving the Bulk Import: Starting...");
                     closeTab();
-                    // Process the Location
-                    Location location = app.getDBI().findLocation(selectedLocationName, Location.class);
                     // Processs the sightings
-                    final Location locationHandle = location;
+                    final long locationHandle = selectedLocation.getID();
                     final Visit visitHandle = visit;
                     final Object saveSightingLock = new Object();
                     String executorServiceName = "WL_BulkImport(Save)";
@@ -815,8 +810,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             public void run() {
                                 BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
                                 // Continue processing the Sighting
-                                sightingWrapper.setLocationName(locationHandle.getName());
-                                sightingWrapper.setVisitName(visitHandle.getName());
+                                sightingWrapper.setLocationID(locationHandle);
+                                sightingWrapper.setVisitID(visitHandle.getID());
                                 // If the sighting's Date and GPS point is set then try to calculate Sun and Moon
                                 if (sightingWrapper.getDate() != null && sightingWrapper.getTimeAccuracy() != null && sightingWrapper.getTimeAccuracy().isUsableTime()) {
                                     if (sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
@@ -912,15 +907,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     this.setTaskProgress(99);
                     this.setMessage("Saving the Bulk Import: Saving the Period... " + this.getProgress() + "%");
                     // Process the Visit (only after saving all of the sightings, otherwise the user can edit/delete it while the bulk import is busy)
-                    visit.setLocationName(location.getName());
+                    visit.setLocationID(selectedLocation.getID());
                     visit.setStartDate(dtpStartDate.getDate());
                     visit.setEndDate(dtpEndDate.getDate());
                     visit.setType((VisitType)cmbVisitType.getSelectedItem());
-                    if (existingVisitName == null || existingVisitName.isEmpty()) {
+                    if (existingVisit == null || existingVisit.getID() == 0) {
                         app.getDBI().createVisit(visit);
                     }
                     else {
-                        app.getDBI().updateVisit(visit, existingVisitName);
+                        app.getDBI().updateVisit(visit, existingVisit.getName());
                     }
                     // Save the images associated with the Visit
                     File[] visitFiles = new File[lstVisitFiles.size()];
@@ -935,8 +930,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     // Saving is done, now open the visits's tab
                     this.setMessage("Saving the Bulk Import: Finished");
                     this.setTaskProgress(100);
-                    if (existingVisitName == null || existingVisitName.isEmpty()) {
-                        UtilsPanelGenerator.openPanelAsTab(app, visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, location);
+                    if (existingVisit == null || existingVisit.getID() == 0) {
+                        UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, selectedLocation);
                     }
                     else {
                         if (panelToRefresh != null) {
@@ -957,27 +952,24 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // Reload the location (espesially the image) as it might have changed
-        if (app.getDBI().findLocation(selectedLocationName, Location.class) == null) {
-            selectedLocationName = "";
-            lblLocation.setText(selectedLocationName);
-        }
-        UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedLocationName, 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        lblLocation.setText(selectedLocation.getName());
+        UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
         // Re-check all species images already assigned since some might have changed
         DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
         for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
             BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) model.getValueAt(rowCount, 0);
-            if (sightingWrapper.getElementName() != null && !sightingWrapper.getElementName().isEmpty()) {
-                Element element = app.getDBI().findElement(sightingWrapper.getElementName(), Element.class);
+            if (sightingWrapper.getElementID() > 0) {
+                Element element = app.getDBI().findElement(sightingWrapper.getElementID(), null, Element.class);
                 if (element != null) {
                     JLabel tempLabel = new JLabel();
                     UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_SMALL, app);
                     sightingWrapper.setIcon(tempLabel.getIcon());
                 }
                 else {
-                    if (sightingWrapper.getElementName().equalsIgnoreCase(ElementSelectionDialog.getPreviousElement())) {
-                        ElementSelectionDialog.setPreviousElement("");
+                    if (sightingWrapper.getElementID() == ElementSelectionDialog.getPreviousElementID()) {
+                        ElementSelectionDialog.setPreviousElementID(0);
                     }
-                    sightingWrapper.setElementName("");
+                    sightingWrapper.setElementID(0);
                     sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
                 }
                 ((DefaultTableModel) tblBulkImport.getModel()).fireTableDataChanged();
@@ -988,7 +980,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void btnGPSForAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSForAllActionPerformed
         Sighting tempSighting = new Sighting();
-        tempSighting.setLocationName(selectedLocationName);
+        tempSighting.setLocationID(selectedLocation.getID());
         GPSDialog dialog = new GPSDialog(app, app.getMainFrame(), tempSighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
@@ -1011,10 +1003,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private void btnSelectLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectLocationActionPerformed
         LocationSelectionDialog dialog = new LocationSelectionDialog(app.getMainFrame(), app, lblLocation.getText());
         dialog.setVisible(true);
-        if (dialog.isSelectionMade() && dialog.getLocationName() != null && dialog.getLocationName().length() > 0) {
-            selectedLocationName = dialog.getLocationName();
-            lblLocation.setText(selectedLocationName);
-            UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedLocationName, 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        if (dialog.isSelectionMade() && dialog.getSelectedLocationID() > 0) {
+            selectedLocation = app.getDBI().findLocation(dialog.getSelectedLocationID(), null, Location.class);
+            lblLocation.setText(selectedLocation.getName());
+            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
         }
     }//GEN-LAST:event_btnSelectLocationActionPerformed
 
@@ -1025,7 +1017,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lblImageLocationMouseReleased
 
     private void lblLocationMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationMousePressed
-        if (existingVisitName == null || existingVisitName.isEmpty()) {
+        if (existingVisit == null || existingVisit.getID() == 0) {
             btnSelectLocationActionPerformed(null);
         }
     }//GEN-LAST:event_lblLocationMousePressed

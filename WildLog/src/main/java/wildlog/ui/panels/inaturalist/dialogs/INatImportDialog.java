@@ -332,12 +332,14 @@ public class INatImportDialog extends JDialog {
                     setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
                     String locationName = "iNaturalist Observations";
                     if (app.getDBI().countLocations(locationName) == 0) {
-                        app.getDBI().createLocation(new Location(locationName));
+                        app.getDBI().createLocation(new Location(0, locationName));
                     }
+                    Location iNatLocation = app.getDBI().findLocation(0, locationName, Location.class);
                     String visitName = "iNaturalist Import " + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now());
-                    if (app.getDBI().countVisits(visitName, locationName) == 0) {
-                        app.getDBI().createVisit(new Visit(visitName, locationName));
+                    if (app.getDBI().countVisits(visitName, iNatLocation.getID()) == 0) {
+                        app.getDBI().createVisit(new Visit(0, visitName, iNatLocation.getID()));
                     }
+                    Visit iNatVisit = app.getDBI().findVisit(0, visitName, false, Visit.class);
                     int added = 0;
                     int updated = 0;
                     int fixed = 0;
@@ -362,21 +364,21 @@ public class INatImportDialog extends JDialog {
                                 if (foundLinkedOnINatID == null) {
                                     // CASE 1: The WildLogID is not found on the iNat observation, and the iNat observation is not linked in the Workspace
                                     // Create sighting
-                                    Sighting sighting = createSighting(iNatFullObs, locationName, visitName);
+                                    Sighting sighting = createSighting(iNatFullObs, iNatLocation.getID(), iNatVisit.getID());
                                     feedback.println("DownloadWL - The iNaturalist Observation " + iNatID + " will be imported as the new WildLog Observation " 
-                                            + sighting.getSightingCounter() + ". The records will be linked.");
+                                            + sighting.getID() + ". The records will be linked.");
                                     // Update the iNaturalist observation_field_values
                                     // Add "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
-                                    INatAPI.addObservationFieldValue(iNatID, 7112, Long.toString(sighting.getSightingCounter()), 
+                                    INatAPI.addObservationFieldValue(iNatID, 7112, Long.toString(sighting.getID()), 
                                             WildLogApp.getINaturalistToken());
                                     // Save the LinkedData
                                     try {
                                         app.getDBI().createINaturalistLinkedData(new INaturalistLinkedData(
-                                                sighting.getSightingCounter(), iNatID, GSON.toJson(INatAPI.getObservation(iNatID))));
+                                                sighting.getID(), iNatID, GSON.toJson(INatAPI.getObservation(iNatID))));
                                     }
                                     catch (Exception ex) {
                                         WildLogApp.LOGGER.log(Level.ERROR, "ERROR: WildLog Database Error: WildLogID = {} | iNatID = {}", 
-                                                sighting.getSightingCounter(), iNatID);
+                                                sighting.getID(), iNatID);
                                         WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                         feedback.println("ERROR: WildLog Database Error!!!");
                                     }
@@ -418,15 +420,15 @@ public class INatImportDialog extends JDialog {
                                 else {
                                     // CASE 4: The WildLogID is present on the iNat observation, but the iNat observation is not linked in the Workspace
                                     // Create sighting
-                                    Sighting sighting = app.getDBI().findSighting(foundWildLogID, Sighting.class);
+                                    Sighting sighting = app.getDBI().findSighting(foundWildLogID, false, Sighting.class);
                                     if (sighting == null) {
                                         feedback.println("ReCreateWL - The iNaturalist Observation " + iNatID + " already has a linked WildLog Observation " 
                                                 + foundWildLogID + " but it is not linked in the Workspace and the WildLog Observation does not exist. "
                                                 + "The WildLog Observation and link in the Workspace will be recreated.");
-                                        sighting = createSighting(iNatFullObs, locationName, visitName);
+                                        sighting = createSighting(iNatFullObs, iNatLocation.getID(), iNatVisit.getID());
                                         // Update the iNaturalist observation_field_values
                                         // Add "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
-                                        INatAPI.addObservationFieldValue(iNatID, 7112, Long.toString(sighting.getSightingCounter()), 
+                                        INatAPI.addObservationFieldValue(iNatID, 7112, Long.toString(sighting.getID()), 
                                                 WildLogApp.getINaturalistToken());
                                     }
                                     else {
@@ -436,11 +438,11 @@ public class INatImportDialog extends JDialog {
                                     // Insert the LinkedData
                                     try {
                                         app.getDBI().createINaturalistLinkedData(new INaturalistLinkedData(
-                                                sighting.getSightingCounter(), iNatID, GSON.toJson(iNatFullObs)));
+                                                sighting.getID(), iNatID, GSON.toJson(iNatFullObs)));
                                     }
                                     catch (Exception ex) {
                                         WildLogApp.LOGGER.log(Level.ERROR, "ERROR: WildLog Database Error: WildLogID = {} | iNatID = {}", 
-                                                sighting.getSightingCounter(), iNatID);
+                                                sighting.getID(), iNatID);
                                         WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                         feedback.println("ERROR: WildLog Database Error!!!");
                                     }
@@ -503,7 +505,7 @@ public class INatImportDialog extends JDialog {
                 return null;
             }
 
-            private Sighting createSighting(JsonObject iNatFullObs, String locationName, String visitName) {
+            private Sighting createSighting(JsonObject iNatFullObs, long locationID, long visitID) {
                 Sighting sighting = new Sighting();
                 if (!iNatFullObs.get("time_observed_at_utc").isJsonNull()) {
                     ZonedDateTime zonedDateTime = ZonedDateTime.parse(iNatFullObs.get("time_observed_at_utc").getAsString(),
@@ -520,8 +522,8 @@ public class INatImportDialog extends JDialog {
                     sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDate.atStartOfDay()));
                     sighting.setTimeAccuracy(TimeAccuracy.GOOD);
                 }
-                sighting.setLocationName(locationName);
-                sighting.setVisitName(visitName);
+                sighting.setLocationID(locationID);
+                sighting.setVisitID(visitID);
                 String scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
                 String[] words = scientificName.split(" ");
                 if (words.length > 2) {
@@ -529,16 +531,17 @@ public class INatImportDialog extends JDialog {
                 }
                 List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
                 if (lstElements != null && lstElements.size() == 1) {
-                    sighting.setElementName(lstElements.get(0).getPrimaryName());
+                    sighting.setElementID(lstElements.get(0).getID());
                 }
                 else {
                     // If no match was found on an Element's Scientific Name, then use it as the Primary Name
                     if (app.getDBI().countElements(scientificName, null) == 0) {
-                        Element element = new Element(scientificName);
+                        Element element = new Element(0, scientificName);
                         element.setScientificName(scientificName);
                         app.getDBI().createElement(element);
                     }
-                    sighting.setElementName(scientificName);
+                    Element element = app.getDBI().findElement(0, scientificName, Element.class);
+                    sighting.setElementID(element.getID());
                 }
                 double latitude = iNatFullObs.get("latitude").getAsDouble();
                 if (latitude < 0) {
@@ -674,7 +677,7 @@ public class INatImportDialog extends JDialog {
                         if (foundWildLogID > 0) {
                             INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(0, iNatID, INaturalistLinkedData.class);
                             if (linkedData == null || linkedData.getWildlogID() == 0) {
-                                if (app.getDBI().countSightings(foundWildLogID, null, null, null) == 0) {
+                                if (app.getDBI().countSightings(foundWildLogID, 0, 0, 0) == 0) {
                                     feedback.println("iNatWrongLink  - The iNaturalist observation " + iNatID + " references the WildLog Observation "
                                             + foundWildLogID + " which is not in this Workspace.");
                                 }
@@ -690,7 +693,7 @@ public class INatImportDialog extends JDialog {
                                             + "data in this Workspace.");
                                 }
                                 else {
-                                    if (app.getDBI().countSightings(foundWildLogID, null, null, null) == 0) {
+                                    if (app.getDBI().countSightings(foundWildLogID, 0, 0, 0) == 0) {
                                         feedback.println("iNatBadLink    - The iNaturalist observation " + iNatID + " references the WildLog Observation "
                                                 + foundWildLogID + " which is not in this Workspace.");
                                     }
@@ -793,7 +796,7 @@ public class INatImportDialog extends JDialog {
                     int countGoodLinks = 0;
                     t = 0;
                     for (INaturalistLinkedData linkedData : lstLinkedData) {
-                        if (app.getDBI().countSightings(linkedData.getWildlogID(), null, null, null) == 0) {
+                        if (app.getDBI().countSightings(linkedData.getWildlogID(), 0, 0, 0) == 0) {
                             feedback.println("WildLogBadData - The Workspace data references the " + linkedData.getWildlogID() 
                                     + " WildLog Observation which does not exist in this WildLog Workspace.");
                         }
@@ -912,9 +915,9 @@ public class INatImportDialog extends JDialog {
                             iNatScientificName = words[0] + " " + words[1];
                         }
                         if (foundWildLogID > 0) {
-                            Sighting sighting = app.getDBI().findSighting(foundWildLogID, Sighting.class);
+                            Sighting sighting = app.getDBI().findSighting(foundWildLogID, false, Sighting.class);
                             if (sighting != null) {
-                                Element element = app.getDBI().findElement(sighting.getElementName(), Element.class);
+                                Element element = app.getDBI().findElement(sighting.getElementID(), null, Element.class);
                                 if (element != null) {
                                     if (element.getScientificName() != null && element.getScientificName().equalsIgnoreCase(iNatScientificName)) {
                                         namesMatch++;

@@ -334,24 +334,24 @@ public final class UtilsHTML {
         // Setup the Map and Related data
         List<Sighting> lstSightings;
         if (inDataObject instanceof Element) {
-            lstSightings = inApp.getDBI().listSightings(0, inDataObject.getIDField(), null, null, false, Sighting.class);
+            lstSightings = inApp.getDBI().listSightings(inDataObject.getIDField(), 0, 0, true, Sighting.class);
         }
         else
         if (inDataObject instanceof Location) {
-            lstSightings = inApp.getDBI().listSightings(0, null, inDataObject.getIDField(), null, false, Sighting.class);
+            lstSightings = inApp.getDBI().listSightings(0, inDataObject.getIDField(), 0, true, Sighting.class);
         }
         else
         if (inDataObject instanceof Visit) {
-            lstSightings = inApp.getDBI().listSightings(0, null, null, inDataObject.getIDField(), false, Sighting.class);
+            lstSightings = inApp.getDBI().listSightings(0, 0, inDataObject.getIDField(), true, Sighting.class);
         }
         else {
             lstSightings = new ArrayList<>(3);
         }
         List<DataObjectWithHTML> lstRelatedData = new ArrayList<>(lstSightings);
         if (inDataObject instanceof Sighting) {
-            lstRelatedData.add(inApp.getDBI().findLocation(((Sighting) inDataObject).getLocationName(), Location.class));
-            lstRelatedData.add(inApp.getDBI().findVisit(((Sighting) inDataObject).getVisitName(), Visit.class));
-            lstRelatedData.add(inApp.getDBI().findElement(((Sighting) inDataObject).getElementName(), Element.class));
+            lstRelatedData.add(inApp.getDBI().findLocation(((Sighting) inDataObject).getLocationID(), null, Location.class));
+            lstRelatedData.add(inApp.getDBI().findVisit(((Sighting) inDataObject).getVisitID(), null, true, Visit.class));
+            lstRelatedData.add(inApp.getDBI().findElement(((Sighting) inDataObject).getElementID(), null, Element.class));
         }
         int counter = 0;
         int mapBeginIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_START___") + "//___MAP_CLICKABLE_DATA_POINTS_START___".length();

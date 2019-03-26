@@ -219,25 +219,25 @@ public class MergeVisitDialog extends JDialog {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstFromVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0 && lstToVisit.getSelectedIndex() >= 0) {
             // Update the Visit
-            for (String tempFromVisitName : (List<String>) lstFromVisit.getSelectedValuesList()) {
+            for (Visit tempFromVisit : (List<Visit>) lstFromVisit.getSelectedValuesList()) {
                 // Update the sightings
-                List<Sighting> sightings = app.getDBI().listSightings(0, null, null, tempFromVisitName, false, Sighting.class);
+                List<Sighting> sightings = app.getDBI().listSightings(0, 0, tempFromVisit.getID(), false, Sighting.class);
                 for (Sighting sighting : sightings) {
-                    sighting.setLocationName((String) lstToLocation.getSelectedValue());
-                    sighting.setVisitName((String) lstToVisit.getSelectedValue());
+                    sighting.setLocationID(((Location) lstToLocation.getSelectedValue()).getID());
+                    sighting.setVisitID(((Visit) lstToVisit.getSelectedValue()).getID());
                     app.getDBI().updateSighting(sighting);
                 }
                 // Update the files
                 if (chkMergeVisitFiles.isSelected()) {
                     List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(
-                            Visit.WILDLOGFILE_ID_PREFIX + tempFromVisitName, null, WildLogFile.class);
+                            Visit.WILDLOGFILE_ID_PREFIX + tempFromVisit, null, WildLogFile.class);
                     for (WildLogFile wildLogFile : lstWildLogFiles) {
                         wildLogFile.setId(Visit.WILDLOGFILE_ID_PREFIX + (String) lstToVisit.getSelectedValue());
                         app.getDBI().updateWildLogFile(wildLogFile);
                     }
                 }
                 // Delete the visit
-                app.getDBI().deleteVisit(tempFromVisitName);
+                app.getDBI().deleteVisit(tempFromVisit.getID());
             }
             setVisible(false);
             dispose();
@@ -250,26 +250,26 @@ public class MergeVisitDialog extends JDialog {
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void lstFromLocationValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFromLocationValueChanged
-        DefaultListModel<String> visitModel = new DefaultListModel<String>();
+        DefaultListModel<Visit> visitModel = new DefaultListModel<>();
         if (lstFromLocation.getSelectedIndex() >= 0) {
-            String tempLocation = (String)lstFromLocation.getSelectedValue();
-            List<Visit> visits = app.getDBI().listVisits(null, tempLocation, null, Visit.class);
+            Location tempLocation = (Location) lstFromLocation.getSelectedValue();
+            List<Visit> visits = app.getDBI().listVisits(null, tempLocation.getID(), null, false, Visit.class);
             Collections.sort(visits);
             for (Visit tempVisit : visits) {
-                visitModel.addElement(tempVisit.getName());
+                visitModel.addElement(tempVisit);
             }
         }
         lstFromVisit.setModel(visitModel);
     }//GEN-LAST:event_lstFromLocationValueChanged
 
     private void lstToLocationValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstToLocationValueChanged
-        DefaultListModel<String> visitModel = new DefaultListModel<String>();
+        DefaultListModel<Visit> visitModel = new DefaultListModel<>();
         if (lstToLocation.getSelectedIndex() >= 0) {
-            String tempLocation = (String)lstToLocation.getSelectedValue();
-            List<Visit> visits = app.getDBI().listVisits(null, tempLocation, null, Visit.class);
+            Location tempLocation = (Location) lstToLocation.getSelectedValue();
+            List<Visit> visits = app.getDBI().listVisits(null, tempLocation.getID(), null, false, Visit.class);
             Collections.sort(visits);
             for (Visit tempVisit : visits) {
-                visitModel.addElement(tempVisit.getName());
+                visitModel.addElement(tempVisit);
             }
         }
         lstToVisit.setModel(visitModel);
@@ -281,11 +281,11 @@ public class MergeVisitDialog extends JDialog {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
         List<Location> locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
         Collections.sort(locations);
-        DefaultListModel<String> fromLocationModel = new DefaultListModel<String>();
-        DefaultListModel<String> toLocationModel = new DefaultListModel<String>();
+        DefaultListModel<Location> fromLocationModel = new DefaultListModel<>();
+        DefaultListModel<Location> toLocationModel = new DefaultListModel<>();
         for (Location tempLocation : locations) {
-            fromLocationModel.addElement(tempLocation.getName());
-            toLocationModel.addElement(tempLocation.getName());
+            fromLocationModel.addElement(tempLocation);
+            toLocationModel.addElement(tempLocation);
         }
         lstFromLocation.setModel(fromLocationModel);
         lstToLocation.setModel(toLocationModel);

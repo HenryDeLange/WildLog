@@ -5,7 +5,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 
 
-public abstract class DataObjectWithGPS {
+public abstract class DataObjectWithGPS extends DataObjectWithAudit {
     protected Latitudes latitude;
     protected int latDegrees;
     protected int latMinutes;

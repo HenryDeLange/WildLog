@@ -124,20 +124,20 @@ public class WebDistributionMap extends AbstractGeoToolsMap<Sighting> {
         if (activeMapType.equals(MapType.SPECIES_DISTRIBUTION)) {
             setActiveSubCategoryTitle("Creature Distribution Map");
             // Get the scientific name
-            String elementName = null;
+            Long elementID = null;
             for (Sighting sighting : lstData) {
-                if (elementName == null) {
-                    elementName = sighting.getElementName();
+                if (elementID == null) {
+                    elementID = sighting.getElementID();
                     continue;
                 }
-                if (!elementName.equalsIgnoreCase(sighting.getElementName())) {
+                if (elementID != sighting.getElementID()) {
                     // The list contains more than one Creature
-                    elementName = null;
+                    elementID = null;
                     break;
                 }
             }
-            if (elementName != null) {
-                String newScientificName = WildLogApp.getApplication().getDBI().findElement(elementName, Element.class).getScientificName();
+            if (elementID != null) {
+                String newScientificName = WildLogApp.getApplication().getDBI().findElement(elementID, null, Element.class).getScientificName();
                 if (newScientificName != null && !newScientificName.isEmpty()) {
                     // Add base layer
                     map.addLayer(getGeoTiffLayers(BundledMapLayers.EARTH_MODERN));

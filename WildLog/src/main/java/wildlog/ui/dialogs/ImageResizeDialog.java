@@ -56,14 +56,14 @@ public class ImageResizeDialog extends JDialog {
         jLabel2 = new javax.swing.JLabel();
         cmbRating = new javax.swing.JComboBox<>();
         scrSecondary = new javax.swing.JScrollPane();
-        lstSecondary = new javax.swing.JList<>();
+        lstSecondary = new javax.swing.JList();
         rdbElements = new javax.swing.JRadioButton();
         rdbLocations = new javax.swing.JRadioButton();
         rdbVisits = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         scrPrimary = new javax.swing.JScrollPane();
-        lstPrimary = new javax.swing.JList<>();
+        lstPrimary = new javax.swing.JList();
         lblPrimary = new javax.swing.JLabel();
         lblSecondary = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
@@ -272,37 +272,37 @@ public class ImageResizeDialog extends JDialog {
         List<WildLogFile> lstWildLogFiles = new ArrayList<>();
         List<Sighting> lstSightings = new ArrayList<>();
         if (rdbElements.isSelected() && !lstPrimary.getSelectionModel().isSelectionEmpty()) {
-            for (String element : lstPrimary.getSelectedValuesList()) {
+            for (Element element : (List<Element>) lstPrimary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
                             Element.WILDLOGFILE_ID_PREFIX + element, WildLogFileType.IMAGE, WildLogFile.class));
                 }
                 if (chkIncludeSightings.isSelected()) {
-                    lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(0, element, null, null, false, Sighting.class));
+                    lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class));
                 }
             }
         }
         else
         if (rdbLocations.isSelected() && !lstPrimary.getSelectionModel().isSelectionEmpty()) {
-            for (String location : lstPrimary.getSelectedValuesList()) {
+            for (Location location : (List<Location>) lstPrimary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
                             Location.WILDLOGFILE_ID_PREFIX + location, WildLogFileType.IMAGE, WildLogFile.class));
                 }
                 if (chkIncludeSightings.isSelected()) {
-                    lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(0, null, location, null, false, Sighting.class));
+                    lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(0, 0, location.getID(), false, Sighting.class));
                 }
             }
         }
         else
         if (rdbVisits.isSelected() && !lstSecondary.getSelectionModel().isSelectionEmpty()) {
-            for (String visit : lstSecondary.getSelectedValuesList()) {
+            for (Visit visit : (List<Visit>) lstSecondary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
                             Visit.WILDLOGFILE_ID_PREFIX + visit, WildLogFileType.IMAGE, WildLogFile.class));
                 }
                 if (chkIncludeSightings.isSelected()) {
-                    lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(0, null, null, visit, false, Sighting.class));
+                    lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class));
                 }
             }
         }
@@ -361,7 +361,7 @@ public class ImageResizeDialog extends JDialog {
         Collections.sort(lstElements);
         DefaultListModel model = new DefaultListModel();
         for (Element tempElement : lstElements) {
-            model.addElement(tempElement.getPrimaryName());
+            model.addElement(tempElement);
         }
         lstPrimary.setModel(model);
     }//GEN-LAST:event_rdbElementsItemStateChanged
@@ -377,7 +377,7 @@ public class ImageResizeDialog extends JDialog {
         Collections.sort(lstLocations);
         DefaultListModel model = new DefaultListModel();
         for (Location tempLocation : lstLocations) {
-            model.addElement(tempLocation.getName());
+            model.addElement(tempLocation);
         }
         lstPrimary.setModel(model);
     }//GEN-LAST:event_rdbLocationsItemStateChanged
@@ -393,13 +393,13 @@ public class ImageResizeDialog extends JDialog {
     private void lstPrimaryValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPrimaryValueChanged
         if (rdbVisits.isSelected()) {
             List<Visit> lstVisits = new ArrayList<>();
-            for (String locationName : lstPrimary.getSelectedValuesList()) {
-                lstVisits.addAll(WildLogApp.getApplication().getDBI().listVisits(null, locationName, null, Visit.class));
+            for (Location location : (List<Location>) lstPrimary.getSelectedValuesList()) {
+                lstVisits.addAll(WildLogApp.getApplication().getDBI().listVisits(null, location.getID(), null, false, Visit.class));
             }
             Collections.sort(lstVisits);
             DefaultListModel model = new DefaultListModel();
             for (Visit tempVisit : lstVisits) {
-                model.addElement(tempVisit.getName());
+                model.addElement(tempVisit);
             }
             lstSecondary.setModel(model);
         }
@@ -421,8 +421,8 @@ public class ImageResizeDialog extends JDialog {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblPrimary;
     private javax.swing.JLabel lblSecondary;
-    private javax.swing.JList<String> lstPrimary;
-    private javax.swing.JList<String> lstSecondary;
+    private javax.swing.JList lstPrimary;
+    private javax.swing.JList lstSecondary;
     private javax.swing.JRadioButton rdbElements;
     private javax.swing.JRadioButton rdbLocations;
     private javax.swing.JRadioButton rdbVisits;

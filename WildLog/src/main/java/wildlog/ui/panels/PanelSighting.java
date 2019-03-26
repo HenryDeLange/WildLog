@@ -199,10 +199,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
         // Setup visit table after the Location has been setup
         if (locationWL != null) {
-            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getName());
+            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID());
         }
         else {
-            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, null);
+            UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, 0);
         }
         // Select the visit
         if (visit != null) {
@@ -336,7 +336,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void setupSightingInfo() {
         // Display the ID
-        lblSightingID.setText("<html><p align='center'>Observation ID: " + Long.toString(sighting.getSightingCounter()) + "</p></html>");
+        lblSightingID.setText("<html><p align='center'>Observation ID: " + Long.toString(sighting.getID()) + "</p></html>");
         // Load the values from the Sighting object
         setUIFieldsFromSightingDate(sighting.getDate());
         cmbCertainty.setSelectedItem(sighting.getCertainty());
@@ -1629,13 +1629,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private boolean saveSighting() {
         // Set Location, Element and Visit
         if (locationWL != null) {
-            sighting.setLocationName(locationWL.getName());
+            sighting.setLocationID(locationWL.getID());
         }
         if (element != null) {
-            sighting.setElementName(element.getPrimaryName());
+            sighting.setElementID(element.getID());
         }
         if (visit != null) {
-            sighting.setVisitName(visit.getName());
+            sighting.setVisitID(visit.getID());
         }
         // Set variables
         setupSightingDateFromUIFields();
@@ -1675,7 +1675,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // SAVE (Only save to DB if not in bulk upload mode)
         if (!bulkUploadMode && !bulkEditMode) {
             boolean result;
-            if (sighting.getSightingCounter() == 0) {
+            if (sighting.getID() == 0) {
                 result = app.getDBI().createSighting(sighting, false);
             }
             else {
@@ -1975,7 +1975,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             copyItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    doClipboardCopy(Long.toString(sighting.getSightingCounter()));
+                    doClipboardCopy(Long.toString(sighting.getID()));
                 }
             });
             clipboardPopup.add(copyItem);
@@ -2087,10 +2087,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
         if (locationWL != null) {
-            sighting.setLocationName(locationWL.getName());
+            sighting.setLocationID(locationWL.getID());
         }
         else {
-            sighting.setLocationName(null);
+            sighting.setLocationID(0);
         }
         GPSDialog dialog = new GPSDialog(app, this, sighting);
         dialog.setVisible(true);
@@ -2153,7 +2153,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
         if (!bulkUploadMode) {
             if (tblVisit.getSelectedRowCount() == 1) {
-                visit = app.getDBI().findVisit(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 1).toString(), Visit.class);
+                visit = app.getDBI().findVisit((Long) tblVisit.getModel().getValueAt(
+                        tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 4), null, false, Visit.class);
             }
             else {
                 visit = null;
@@ -2176,15 +2177,16 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (!bulkUploadMode) {
             if (tblLocation.getSelectedRowCount() == 1) {
-                locationWL = app.getDBI().findLocation(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1).toString(), Location.class);
-                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getName());
+                locationWL = app.getDBI().findLocation((Long) tblLocation.getModel().getValueAt(
+                        tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1), null, Location.class);
+                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID());
                 btnAddNewVisit.setEnabled(true);
                 visit = null;
                 UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.SMALL, app);
             }
             else {
                 locationWL = null;
-                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, null);
+                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, 0);
                 btnAddNewVisit.setEnabled(false);
                 visit = null;
                 lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
@@ -2227,7 +2229,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
-            element = app.getDBI().findElement((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1), Element.class);
+            element = app.getDBI().findElement((Long) tblElement.getModel().getValueAt(
+                    tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3), null, Element.class);
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
         }
         else {

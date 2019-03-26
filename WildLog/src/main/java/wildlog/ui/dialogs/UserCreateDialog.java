@@ -44,7 +44,9 @@ public class UserCreateDialog extends JDialog {
         cmbUserType.removeItem(WildLogUserTypes.WILDLOG_MASTER);
         cmbUserType.removeItem(WildLogUserTypes.NONE);
         if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.ADMIN) {
-            cmbUserType.removeItem(WildLogUserTypes.OWNER);
+            if (!inForceOwner) {
+                cmbUserType.removeItem(WildLogUserTypes.OWNER);
+            }
             cmbUserType.removeItem(WildLogUserTypes.ADMIN);
         }
         // If this is the owner then show a message first

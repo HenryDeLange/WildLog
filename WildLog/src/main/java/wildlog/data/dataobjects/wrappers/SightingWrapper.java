@@ -27,10 +27,10 @@ public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWit
     public String toString() {
         String dateString = UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(UtilsTime.getLocalDateFromDate(sighting.getDate()));
         if (isForLocation) {
-            return dateString + " " + sighting.getElementName();
+            return dateString + " " + sighting.getCachedElementName();
         }
         else {
-            return dateString + " " + sighting.getLocationName();
+            return dateString + " " + sighting.getCachedLocationName();
         }
     }
 
@@ -65,7 +65,7 @@ public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWit
     }
     
     @Override
-    public String getIDField() {
+    public long getIDField() {
         return sighting.getIDField();
     }
 

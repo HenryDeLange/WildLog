@@ -17,6 +17,7 @@ import wildlog.ui.utils.UtilsUI;
 
 public abstract class PanelCanSetupHeader extends JPanel {
     protected String tabTitle;
+    protected long tabID;
     protected URL tabIconURL;
     protected HeaderPanel tabHeader;
 
@@ -29,6 +30,7 @@ public abstract class PanelCanSetupHeader extends JPanel {
         private String title;
         private Icon icon;
         private TabTypes tabType;
+        private long id;
 
         public JPanel getParentPanel() {
             return parentPanel;
@@ -61,13 +63,22 @@ public abstract class PanelCanSetupHeader extends JPanel {
         public void setTabType(TabTypes inTabType) {
             tabType = inTabType;
         }
+
+        public long getID() {
+            return id;
+        }
+
+        public void setID(long inID) {
+            id = inID;
+        }
+        
     }
 
     public void setupTabHeader(TabTypes inTabType) {
-        doSetupTabHeader(tabTitle, tabIconURL, inTabType);
+        doSetupTabHeader(tabTitle, tabID, tabIconURL, inTabType);
     }
 
-    private void doSetupTabHeader(String inTitleText, URL inIconURL, TabTypes inTabType) {
+    private void doSetupTabHeader(String inTitleText, long inID, URL inIconURL, TabTypes inTabType) {
         HeaderPanel tempTabHeader = new HeaderPanel();
         tempTabHeader.setBackground(new Color(0, 0, 0, 0));
         tempTabHeader.setBorder(null);
@@ -88,6 +99,7 @@ public abstract class PanelCanSetupHeader extends JPanel {
             titleLabel.setText("[new] ");
             tempTabHeader.setTitle("[new]");
         }
+        tempTabHeader.setID(inID);
         Dimension dimension = titleLabel.getPreferredSize();
         dimension.height = 30;
         titleLabel.setPreferredSize(dimension);

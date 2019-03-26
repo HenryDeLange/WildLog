@@ -230,7 +230,7 @@ public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
             for (Sighting sighting : inLstSightings) {
                 if (UtilsGPS.hasGPSData(sighting)) {
                     builder.add(geometryFactory.createPoint(new Coordinate(UtilsGPS.getLonDecimalDegree(sighting), UtilsGPS.getLatDecimalDegree(sighting))));
-                    SimpleFeature feature = builder.buildFeature(Long.toString(sighting.getSightingCounter()), new Object[] {sighting.toString()});
+                    SimpleFeature feature = builder.buildFeature(Long.toString(sighting.getID()), new Object[] {sighting.toString()});
                     collection.add(feature);
                 }
             }

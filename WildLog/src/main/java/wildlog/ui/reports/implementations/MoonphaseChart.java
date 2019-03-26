@@ -194,7 +194,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         }
         for (Sighting sighting : inSightings) {
             if (!inIsForAllObservations) {
-                temp = sighting.getElementName(reportsBaseDialog.getOptionName());
+                temp = sighting.getCachedElementName(reportsBaseDialog.getOptionName());
             }
             Map<String, ReportDataWrapper> mapChartData = mapChartDataGroupedForSeries.get(temp + getDetailsString(sighting));
             if (mapChartData == null) {
@@ -299,7 +299,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         }
         for (Sighting sighting : inSightings) {
             if (!inIsForAllObservations) {
-                temp = sighting.getElementName(reportsBaseDialog.getOptionName());
+                temp = sighting.getCachedElementName(reportsBaseDialog.getOptionName());
             }
             ReportDataWrapper dataWrapper = mapInitialCountedData.get(temp + getDetailsString(sighting) + "-" + getMoonIntervalPercentage(sighting.getMoonPhase()));
             if (dataWrapper == null) {
@@ -461,10 +461,10 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     private Map<String, VisitDates> getBaselineDates(List<Sighting> inLstSightings) {
         Map<String, VisitDates> mapDates = new HashMap<>();
         for (Sighting sighting : inLstSightings) {
-            VisitDates visitDates = mapDates.get(sighting.getVisitName());
+            VisitDates visitDates = mapDates.get(sighting.getCachedVisitName());
             if (visitDates == null) {
                 visitDates = new VisitDates();
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 if (visit.getStartDate() != null) {
                     visitDates.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
                     visitDates.startDateFromVisit = true;
@@ -473,7 +473,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     visitDates.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
                     visitDates.endDateFromVisit = true;
                 }
-                mapDates.put(sighting.getVisitName(), visitDates);
+                mapDates.put(sighting.getCachedVisitName(), visitDates);
             }
             if (!visitDates.startDateFromVisit || !visitDates.endDateFromVisit) {
                 LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());

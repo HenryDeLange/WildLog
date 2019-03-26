@@ -5,28 +5,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.Location;
-import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.WildLogFileType;
@@ -420,111 +409,111 @@ public class WorkspaceImportDialog extends JDialog {
     }
 
     private void saveChildren(DefaultMutableTreeNode inNode, int inTotalNodes, ProgressbarTask inProgressbarTask, ProgressCounter inCounter) {
-        if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
-            WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
-            if (dataWrapper.isSelected()) {
-                if (dataWrapper.getDataObject()instanceof Location) {
-                    Location importLocation = importDBI.findLocation(((Location) dataWrapper.getDataObject()).getName(), Location.class);
-                    String originalWildLogFileID = importLocation.getWildLogFileID();
-                    importLocation.setName(txtPrefix.getText() + importLocation.getName());
-                    Location workspaceLocation = app.getDBI().findLocation(importLocation.getName(), Location.class);
-                    if (workspaceLocation == null) {
-                        // New
-                        app.getDBI().createLocation(importLocation);
-                    }
-                    else {
-                        // Update, only if the option was selected to overwrite the active workspace's entry
-                        if (rdbKeepImport.isSelected()) {
-                            app.getDBI().updateLocation(importLocation, importLocation.getName());
-                        }
-                        // If the records matching the prefix already exists, then update FileID
-                        // (Because the same entry can be in the tree more than once.)
-                        originalWildLogFileID = importLocation.getWildLogFileID();
-                    }
-                    saveFiles(originalWildLogFileID, importLocation.getWildLogFileID());
-                }
-                else
-                if (dataWrapper.getDataObject() instanceof Visit) {
-                    Visit importVisit = importDBI.findVisit(((Visit) dataWrapper.getDataObject()).getName(), Visit.class);
-                    String originalWildLogFileID = importVisit.getWildLogFileID();
-                    importVisit.setName(txtPrefix.getText() + importVisit.getName());
-                    importVisit.setLocationName(txtPrefix.getText() + importVisit.getLocationName());
-                    Visit workspaceVisit = app.getDBI().findVisit(importVisit.getName(), Visit.class);
-                    if (workspaceVisit == null) {
-                        // New
-                        app.getDBI().createVisit(importVisit);
-                    }
-                    else {
-                        // Update, only if the option was selected to overwrite the active workspace's entry
-                        if (rdbKeepImport.isSelected()) {
-                            app.getDBI().updateVisit(importVisit, importVisit.getName());
-                        }
-                        // If the records matching the prefix already exists, then update FileID
-                        // (Because the same entry can be in the tree more than once.)
-                        originalWildLogFileID = importVisit.getWildLogFileID();
-                    }
-                    saveFiles(originalWildLogFileID, importVisit.getWildLogFileID());
-                }
-                else
-                if (dataWrapper.getDataObject() instanceof Element) {
-                    Element importElement = importDBI.findElement(((Element) dataWrapper.getDataObject()).getPrimaryName(), Element.class);
-                    String originalWildLogFileID = importElement.getWildLogFileID();
-                    importElement.setPrimaryName(txtPrefix.getText() + importElement.getPrimaryName());
-                    Element workspaceElement = app.getDBI().findElement(importElement.getPrimaryName(), Element.class);
-                    if (workspaceElement == null) {
-                        // New
-                        app.getDBI().createElement(importElement);
-                    }
-                    else {
-                        // Update, only if the option was selected to overwrite the active workspace's entry
-                        if (rdbKeepImport.isSelected()) {
-                            app.getDBI().updateElement(importElement, importElement.getPrimaryName());
-                        }
-                        // If the records matching the prefix already exists, then update FileID
-                        // (Because the same entry can be in the tree more than once.)
-                        originalWildLogFileID = importElement.getWildLogFileID();
-                    }
-                    saveFiles(originalWildLogFileID, importElement.getWildLogFileID());
-                }
-                else
-                if (dataWrapper.getDataObject() instanceof SightingWrapper) {
-                    Sighting importSighting = importDBI.findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getSightingCounter(), Sighting.class);
-                    String originalWildLogFileID = importSighting.getWildLogFileID();
-                    importSighting.setLocationName(txtPrefix.getText() + importSighting.getLocationName());
-                    importSighting.setVisitName(txtPrefix.getText() + importSighting.getVisitName());
-                    importSighting.setElementName(txtPrefix.getText() + importSighting.getElementName());
-                    Sighting workpaceSighting = app.getDBI().findSighting(importSighting.getSightingCounter(), Sighting.class);
-                    if (workpaceSighting == null) {
-                        // New
-                        // Note: The sighting ID needs to be the same in the new workspace for the linked images to work...
-                        app.getDBI().createSighting(importSighting, true);
-                    }
-                    else {
-                        // Update, only if the option was selected to overwrite the active workspace's entry
-                        if (rdbKeepImport.isSelected()) {
-                            app.getDBI().updateSighting(importSighting);
-                        }
-                        else {
-                            // Make a new copy of the sighting with a new unique ID.
-                            // (Only when a prefix was given, else assume that it is the same sighting.)
-                            if (txtPrefix.getText() != null && !txtPrefix.getText().isEmpty()) {
-                                importSighting.setSightingCounter(0);
-                                app.getDBI().createSighting(importSighting, false);
-                            }
-                            // No need to worry about the sighting being in the tree more than once...
-                        }
-                    }
-                    saveFiles(originalWildLogFileID, importSighting.getWildLogFileID());
-                }
-            }
-            inProgressbarTask.setTaskProgress(2 + (int)(inCounter.counter/(double)inTotalNodes*97));
-            inProgressbarTask.setMessage("Workspace Import: " + inProgressbarTask.getProgress() + "%");
-            inCounter.counter++;
-        }
-        for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
-            DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
-            saveChildren(childNode, inTotalNodes, inProgressbarTask, inCounter);
-        }
+//        if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
+//            WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
+//            if (dataWrapper.isSelected()) {
+//                if (dataWrapper.getDataObject()instanceof Location) {
+//                    Location importLocation = importDBI.findLocation(((Location) dataWrapper.getDataObject()).getName(), Location.class);
+//                    String originalWildLogFileID = importLocation.getWildLogFileID();
+//                    importLocation.setName(txtPrefix.getText() + importLocation.getName());
+//                    Location workspaceLocation = app.getDBI().findLocation(importLocation.getName(), Location.class);
+//                    if (workspaceLocation == null) {
+//                        // New
+//                        app.getDBI().createLocation(importLocation);
+//                    }
+//                    else {
+//                        // Update, only if the option was selected to overwrite the active workspace's entry
+//                        if (rdbKeepImport.isSelected()) {
+//                            app.getDBI().updateLocation(importLocation, importLocation.getName());
+//                        }
+//                        // If the records matching the prefix already exists, then update FileID
+//                        // (Because the same entry can be in the tree more than once.)
+//                        originalWildLogFileID = importLocation.getWildLogFileID();
+//                    }
+//                    saveFiles(originalWildLogFileID, importLocation.getWildLogFileID());
+//                }
+//                else
+//                if (dataWrapper.getDataObject() instanceof Visit) {
+//                    Visit importVisit = importDBI.findVisit(((Visit) dataWrapper.getDataObject()).getName(), Visit.class);
+//                    String originalWildLogFileID = importVisit.getWildLogFileID();
+//                    importVisit.setName(txtPrefix.getText() + importVisit.getName());
+//                    importVisit.setLocationName(txtPrefix.getText() + importVisit.getLocationName());
+//                    Visit workspaceVisit = app.getDBI().findVisit(importVisit.getName(), Visit.class);
+//                    if (workspaceVisit == null) {
+//                        // New
+//                        app.getDBI().createVisit(importVisit);
+//                    }
+//                    else {
+//                        // Update, only if the option was selected to overwrite the active workspace's entry
+//                        if (rdbKeepImport.isSelected()) {
+//                            app.getDBI().updateVisit(importVisit, importVisit.getName());
+//                        }
+//                        // If the records matching the prefix already exists, then update FileID
+//                        // (Because the same entry can be in the tree more than once.)
+//                        originalWildLogFileID = importVisit.getWildLogFileID();
+//                    }
+//                    saveFiles(originalWildLogFileID, importVisit.getWildLogFileID());
+//                }
+//                else
+//                if (dataWrapper.getDataObject() instanceof Element) {
+//                    Element importElement = importDBI.findElement(((Element) dataWrapper.getDataObject()).getPrimaryName(), Element.class);
+//                    String originalWildLogFileID = importElement.getWildLogFileID();
+//                    importElement.setPrimaryName(txtPrefix.getText() + importElement.getPrimaryName());
+//                    Element workspaceElement = app.getDBI().findElement(importElement.getPrimaryName(), Element.class);
+//                    if (workspaceElement == null) {
+//                        // New
+//                        app.getDBI().createElement(importElement);
+//                    }
+//                    else {
+//                        // Update, only if the option was selected to overwrite the active workspace's entry
+//                        if (rdbKeepImport.isSelected()) {
+//                            app.getDBI().updateElement(importElement, importElement.getPrimaryName());
+//                        }
+//                        // If the records matching the prefix already exists, then update FileID
+//                        // (Because the same entry can be in the tree more than once.)
+//                        originalWildLogFileID = importElement.getWildLogFileID();
+//                    }
+//                    saveFiles(originalWildLogFileID, importElement.getWildLogFileID());
+//                }
+//                else
+//                if (dataWrapper.getDataObject() instanceof SightingWrapper) {
+//                    Sighting importSighting = importDBI.findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getSightingCounter(), Sighting.class);
+//                    String originalWildLogFileID = importSighting.getWildLogFileID();
+//                    importSighting.setLocationName(txtPrefix.getText() + importSighting.getLocationName());
+//                    importSighting.setVisitName(txtPrefix.getText() + importSighting.getVisitName());
+//                    importSighting.setElementName(txtPrefix.getText() + importSighting.getElementName());
+//                    Sighting workpaceSighting = app.getDBI().findSighting(importSighting.getSightingCounter(), Sighting.class);
+//                    if (workpaceSighting == null) {
+//                        // New
+//                        // Note: The sighting ID needs to be the same in the new workspace for the linked images to work...
+//                        app.getDBI().createSighting(importSighting, true);
+//                    }
+//                    else {
+//                        // Update, only if the option was selected to overwrite the active workspace's entry
+//                        if (rdbKeepImport.isSelected()) {
+//                            app.getDBI().updateSighting(importSighting);
+//                        }
+//                        else {
+//                            // Make a new copy of the sighting with a new unique ID.
+//                            // (Only when a prefix was given, else assume that it is the same sighting.)
+//                            if (txtPrefix.getText() != null && !txtPrefix.getText().isEmpty()) {
+//                                importSighting.setSightingCounter(0);
+//                                app.getDBI().createSighting(importSighting, false);
+//                            }
+//                            // No need to worry about the sighting being in the tree more than once...
+//                        }
+//                    }
+//                    saveFiles(originalWildLogFileID, importSighting.getWildLogFileID());
+//                }
+//            }
+//            inProgressbarTask.setTaskProgress(2 + (int)(inCounter.counter/(double)inTotalNodes*97));
+//            inProgressbarTask.setMessage("Workspace Import: " + inProgressbarTask.getProgress() + "%");
+//            inCounter.counter++;
+//        }
+//        for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
+//            DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
+//            saveChildren(childNode, inTotalNodes, inProgressbarTask, inCounter);
+//        }
     }
 
     private void saveFiles(String inExternalWildLogFileID, String inNewInternalWildLogFileID) {
@@ -697,95 +686,95 @@ public class WorkspaceImportDialog extends JDialog {
     }//GEN-LAST:event_formWindowClosed
 
     private void loadLocationTree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
-        List<Location> locations = new ArrayList<Location>(importDBI.listLocations(null, Location.class));
-        Map<String, DefaultMutableTreeNode> mapElements;
-        Map<String, DefaultMutableTreeNode> mapVisits;
-        Collections.sort(locations);
-        for (Location location : locations) {
-            mapElements = new HashMap<>(500);
-            mapVisits = new HashMap<>(500);
-            DefaultMutableTreeNode locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(location, false));
-            root.add(locationNode);
-            List<Sighting> sightings = importDBI.listSightings(0, null, location.getName(), null, false, Sighting.class);
-            Collections.sort(sightings, new Comparator<Sighting>() {
-                @Override
-                public int compare(Sighting sighting1, Sighting sighting2) {
-                    int result = sighting1.getVisitName().compareTo(sighting2.getVisitName());
-                    if (result == 0) {
-                        result = sighting1.getElementName().compareTo(sighting2.getElementName());
-                        if (result == 0) {
-                            result = sighting1.getDate().compareTo(sighting2.getDate());
-                        }
-                    }
-                    return result;
-                }
-            });
-            for (Sighting sighting : sightings) {
-                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
-                if (visitNode == null) {
-                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
-                    mapVisits.put(sighting.getVisitName(), visitNode);
-                    // Clear die hashmap hier as 'n nuwe visit gelaai word (die sightings behoort volgens visit gesort te wees, so die visit sal nie weer verskyn nie.
-                    mapElements.clear();
-                }
-                locationNode.add(visitNode);
-                DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementName());
-                if (elementNode == null) {
-                    elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Element(sighting.getElementName()), false));
-                    mapElements.put(sighting.getElementName(), elementNode);
-                }
-                visitNode.add(elementNode);
-                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
-                elementNode.add(sightingNode);
-            }
-        }
-        treWorkspace.setModel(new DefaultTreeModel(root));
+//        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
+//        List<Location> locations = new ArrayList<Location>(importDBI.listLocations(null, Location.class));
+//        Map<String, DefaultMutableTreeNode> mapElements;
+//        Map<String, DefaultMutableTreeNode> mapVisits;
+//        Collections.sort(locations);
+//        for (Location location : locations) {
+//            mapElements = new HashMap<>(500);
+//            mapVisits = new HashMap<>(500);
+//            DefaultMutableTreeNode locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(location, false));
+//            root.add(locationNode);
+//            List<Sighting> sightings = importDBI.listSightings(0, null, location.getName(), null, false, Sighting.class);
+//            Collections.sort(sightings, new Comparator<Sighting>() {
+//                @Override
+//                public int compare(Sighting sighting1, Sighting sighting2) {
+//                    int result = sighting1.getVisitName().compareTo(sighting2.getVisitName());
+//                    if (result == 0) {
+//                        result = sighting1.getElementName().compareTo(sighting2.getElementName());
+//                        if (result == 0) {
+//                            result = sighting1.getDate().compareTo(sighting2.getDate());
+//                        }
+//                    }
+//                    return result;
+//                }
+//            });
+//            for (Sighting sighting : sightings) {
+//                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
+//                if (visitNode == null) {
+//                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
+//                    mapVisits.put(sighting.getVisitName(), visitNode);
+//                    // Clear die hashmap hier as 'n nuwe visit gelaai word (die sightings behoort volgens visit gesort te wees, so die visit sal nie weer verskyn nie.
+//                    mapElements.clear();
+//                }
+//                locationNode.add(visitNode);
+//                DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementName());
+//                if (elementNode == null) {
+//                    elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Element(sighting.getElementName()), false));
+//                    mapElements.put(sighting.getElementName(), elementNode);
+//                }
+//                visitNode.add(elementNode);
+//                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
+//                elementNode.add(sightingNode);
+//            }
+//        }
+//        treWorkspace.setModel(new DefaultTreeModel(root));
     }
 
     private void loadElementTree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
-        List<Element> elements = new ArrayList<Element>(importDBI.listElements(null, null, null, Element.class));
-        Map<String, DefaultMutableTreeNode> mapLocations;
-        Map<String, DefaultMutableTreeNode> mapVisits;
-        Collections.sort(elements);
-        for (Element element : elements) {
-            mapLocations = new HashMap<>(100);
-            mapVisits = new HashMap<>(500);
-            DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(element, false));
-            root.add(elementNode);
-            List<Sighting> sightings = importDBI.listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
-            Collections.sort(sightings, new Comparator<Sighting>() {
-                @Override
-                public int compare(Sighting sighting1, Sighting sighting2) {
-                    int result = sighting1.getLocationName().compareTo(sighting2.getLocationName());
-                    if (result == 0) {
-                        result = sighting1.getVisitName().compareTo(sighting2.getVisitName());
-                        if (result == 0) {
-                            result = sighting1.getDate().compareTo(sighting2.getDate());
-                        }
-                    }
-                    return result;
-                }
-            });
-            for (Sighting sighting : sightings) {
-                DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationName());
-                if (locationNode == null) {
-                    locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Location(sighting.getLocationName()), false));
-                    mapLocations.put(sighting.getLocationName(), locationNode);
-                }
-                elementNode.add(locationNode);
-                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
-                if (visitNode == null) {
-                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
-                    mapVisits.put(sighting.getVisitName(), visitNode);
-                }
-                locationNode.add(visitNode);
-                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
-                visitNode.add(sightingNode);
-            }
-        }
-        treWorkspace.setModel(new DefaultTreeModel(root));
+//        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
+//        List<Element> elements = new ArrayList<Element>(importDBI.listElements(null, null, null, Element.class));
+//        Map<String, DefaultMutableTreeNode> mapLocations;
+//        Map<String, DefaultMutableTreeNode> mapVisits;
+//        Collections.sort(elements);
+//        for (Element element : elements) {
+//            mapLocations = new HashMap<>(100);
+//            mapVisits = new HashMap<>(500);
+//            DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(element, false));
+//            root.add(elementNode);
+//            List<Sighting> sightings = importDBI.listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
+//            Collections.sort(sightings, new Comparator<Sighting>() {
+//                @Override
+//                public int compare(Sighting sighting1, Sighting sighting2) {
+//                    int result = sighting1.getLocationName().compareTo(sighting2.getLocationName());
+//                    if (result == 0) {
+//                        result = sighting1.getVisitName().compareTo(sighting2.getVisitName());
+//                        if (result == 0) {
+//                            result = sighting1.getDate().compareTo(sighting2.getDate());
+//                        }
+//                    }
+//                    return result;
+//                }
+//            });
+//            for (Sighting sighting : sightings) {
+//                DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationName());
+//                if (locationNode == null) {
+//                    locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Location(sighting.getLocationName()), false));
+//                    mapLocations.put(sighting.getLocationName(), locationNode);
+//                }
+//                elementNode.add(locationNode);
+//                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
+//                if (visitNode == null) {
+//                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
+//                    mapVisits.put(sighting.getVisitName(), visitNode);
+//                }
+//                locationNode.add(visitNode);
+//                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
+//                visitNode.add(sightingNode);
+//            }
+//        }
+//        treWorkspace.setModel(new DefaultTreeModel(root));
     }
 
 

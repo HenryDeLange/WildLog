@@ -108,8 +108,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                             @Override
                             protected Object doInBackground() throws Exception {
                                 UtilsPanelGenerator.openBulkUploadTab(
-                                        new BulkUploadPanel(app, this, visit.getLocationName(), visit.getName(), lstSelectedPaths, panelVisitHandle), 
-                                        (JTabbedPane)getParent());
+                                        new BulkUploadPanel(app, this, locationForVisit, visit, lstSelectedPaths, panelVisitHandle), (JTabbedPane) getParent());
                                 return null;
                             }
                         });
@@ -153,6 +152,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         UtilsUI.attachClipboardPopup(txtDescription);
         // Setup info for tab headers
         tabTitle = visit.getName();
+        tabID = visit.getID();
         tabIconURL = app.getClass().getResource("resources/icons/Visit.gif");
         // Make dates pretty
         dtpStartDate.getComponent(1).setBackground(visitIncludes.getBackground());
@@ -235,7 +235,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 public void run() {
                     if (tblSightings.getSelectedRowCount() == 0 && inIndicator != null) {
                         UtilsTableGenerator.setupPreviousRowSelection(tblSightings, 
-                                new String[]{Long.toString(((PanelSighting) inIndicator).getSighting().getSightingCounter())}, 6);
+                                new String[]{Long.toString(((PanelSighting) inIndicator).getSighting().getID())}, 6);
                     }
                 }
             });
@@ -255,10 +255,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void refreshSightingInfo() {
         if (sighting != null) {
-            if (sighting.getElementName() != null) {
-                int fotoCount = app.getDBI().countWildLogFiles(null, Element.WILDLOGFILE_ID_PREFIX + sighting.getElementName());
+            if (sighting.getElementID() > 0) {
+                int fotoCount = app.getDBI().countWildLogFiles(null, Element.WILDLOGFILE_ID_PREFIX + sighting.getElementID());
                 if (fotoCount > 0) {
-                    UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + sighting.getElementName(), 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+                    UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + sighting.getElementID(), 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
                 }
                 else {
                     lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
@@ -1124,20 +1124,20 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         lblSightingImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         if (visit.getName() != null) {
-            UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, visit.getName());
-            List<Sighting> sightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
+            UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, visit.getID());
+            List<Sighting> sightings = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
             lblNumberOfSightings.setText(Integer.toString(sightings.size()));
             setupNumberOfSightingImages();
-            List<String> allElements = new ArrayList<String>();
+            List<Long> allElements = new ArrayList<>();
             for (int i = 0; i < sightings.size(); i++) {
-                if (!allElements.contains(sightings.get(i).getElementName())) {
-                    allElements.add(sightings.get(i).getElementName());
+                if (!allElements.contains(sightings.get(i).getID())) {
+                    allElements.add(sightings.get(i).getID());
                 }
             }
             lblNumberOfElements.setText(Integer.toString(allElements.size()));
         }
         else {
-            UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, null);
+            UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, 0);
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
@@ -1159,14 +1159,12 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (sighting != null) {
             int select = -1;
             for (int t = 0; t < tblSightings.getModel().getRowCount(); t++) {
-                if ((Long)(tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(t), 6)) == sighting.getSightingCounter())
-                {
+                if ((Long)(tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(t), 6)) == sighting.getID()) {
                     select = t;
                     break;
                 }
             }
             if (select >= 0) {
-//                tblSightings.getSelectionModel().setSelectionInterval(select, select);
                 tblSightings.scrollRectToVisible(tblSightings.getCellRect(select, 0, true));
             }
         }
@@ -1196,7 +1194,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnUpdateActionPerformed(null);
         if (!txtName.getBackground().equals(Color.RED)) {
             sighting = new Sighting();
-            sighting.setLocationName(locationForVisit.getName());
+            sighting.setLocationID(locationForVisit.getID());
             tblSightings.clearSelection();
             refreshSightingInfo();
             PanelSighting dialog = new PanelSighting(
@@ -1214,7 +1212,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (sighting != null) {
                 PanelSighting dialog = new PanelSighting(
                         app, app.getMainFrame(), "Edit an Existing Observation",
-                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getElementName(), Element.class), 
+                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getID(), null, Element.class), 
                         this, false, false, false, false);
                 dialog.setVisible(true);
                 // Reset Sighting on this panel
@@ -1244,8 +1242,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRowCount() == 1) {
-            sighting = app.getDBI().findSighting((Long)tblSightings.getModel().getValueAt(
-                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6), Sighting.class);
+            sighting = app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6), true, Sighting.class);
         }
         else {
             sighting = null;
@@ -1272,7 +1270,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         if (sighting != null) {
-            UtilsPanelGenerator.openPanelAsTab(app, sighting.getElementName(), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
+            UtilsPanelGenerator.openPanelAsTab(app, sighting.getElementID(), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
 
@@ -1296,8 +1294,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (sighting != null) {
-            if (sighting.getElementName() != null) {
-                UtilsFileProcessing.openFile(app.getDBI().findElement(sighting.getElementName(), Element.class).getWildLogFileID(), 0, app);
+            if (sighting.getElementID() > 0) {
+                UtilsFileProcessing.openFile(app.getDBI().findElement(sighting.getElementID(), null, Element.class).getWildLogFileID(), 0, app);
             }
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
@@ -1340,8 +1338,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (tblSightings.getSelectedRowCount() > 0) {
                 lstSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
                 for (int row : tblSightings.getSelectedRows())  {
-                    lstSightings.add(app.getDBI().findSighting((Long)tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 6), Sighting.class));
+                    lstSightings.add(app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 6), true, Sighting.class));
                 }
             }
             ExportDialog dialog = new ExportDialog(app, null, null, visit, null, lstSightings);
@@ -1355,8 +1353,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (tblSightings.getSelectedRowCount() > 0) {
                 lstSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
                 for (int row : tblSightings.getSelectedRows())  {
-                    lstSightings.add(app.getDBI().findSighting((Long)tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 6), Sighting.class));
+                    lstSightings.add(app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 6), true, Sighting.class));
                 }
             }
             SlideshowDialog dialog = new SlideshowDialog(app, visit, null, null, lstSightings);
@@ -1367,7 +1365,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - " + visit.getDisplayName(), 
-                    app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class), null);
+                    app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class), 0);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapSightingActionPerformed
@@ -1375,7 +1373,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + visit.getName(), 
-                    app.getDBI().listSightings(0, null, null, visit.getName(), true, Sighting.class));
+                    app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed
@@ -1387,7 +1385,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
-        UtilsPanelGenerator.openPanelAsTab(app, locationForVisit.getName(), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
+        UtilsPanelGenerator.openPanelAsTab(app, locationForVisit.getID(), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
     }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -1430,10 +1428,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                             "The Period could not be saved.", 
                             "Not Saved!", JOptionPane.ERROR_MESSAGE);
                 }
-
                 lblVisitName.setText(txtName.getText() + " - [" + locationForVisit.getName() + "]");
-
                 tabTitle = visit.getName();
+                tabID = visit.getID();
                 if (!isPopup) {
                     setupTabHeader(PanelCanSetupHeader.TabTypes.VISIT);
                 }
@@ -1475,7 +1472,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 @Override
                 protected Object doInBackground() throws Exception {
                     UtilsPanelGenerator.openBulkUploadTab(
-                            new BulkUploadPanel(app, this, visit.getLocationName(), visit.getName(), null, panelVisitHandle), (JTabbedPane)getParent());
+                            new BulkUploadPanel(app, this, locationForVisit, visit, null, panelVisitHandle), (JTabbedPane)getParent());
                     return null;
                 }
             });
@@ -1489,7 +1486,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         visit.setGameWatchingIntensity((GameWatchIntensity)cmbGameWatchIntensity.getSelectedItem());
         visit.setType((VisitType)cmbType.getSelectedItem());
         visit.setDescription(txtDescription.getText());
-        visit.setLocationName(locationForVisit.getName());
+        visit.setLocationID(locationForVisit.getID());
     }
 
     private void setupNumberOfImages() {

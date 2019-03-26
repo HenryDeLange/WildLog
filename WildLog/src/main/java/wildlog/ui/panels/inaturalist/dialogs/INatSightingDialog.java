@@ -89,7 +89,7 @@ public class INatSightingDialog extends JDialog {
     }
 
     private void setupUI() {
-        if (sighting.getSightingCounter() == 0) {
+        if (sighting.getID() == 0) {
             WLOptionPane.showMessageDialog(this,
                     "<html>Please first save this WildLog Observation before uploading it to iNaturalist.</html>",
                     "Unsaved WildLog Observation", WLOptionPane.ERROR_MESSAGE);
@@ -97,8 +97,8 @@ public class INatSightingDialog extends JDialog {
             dispose();
             return;
         }
-        linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
-        lblWildLogID.setText(Long.toString(sighting.getSightingCounter()));
+        linkedData = app.getDBI().findINaturalistLinkedData(sighting.getID(), 0, INaturalistLinkedData.class);
+        lblWildLogID.setText(Long.toString(sighting.getID()));
         if (linkedData != null && linkedData.getINaturalistData() != null && !linkedData.getINaturalistData().isEmpty()) {
             if (rdbSummary.isSelected()) {
                 try {
@@ -138,7 +138,7 @@ public class INatSightingDialog extends JDialog {
             loadINaturalistImage();
         }
         else {
-            linkedData = new INaturalistLinkedData(sighting.getSightingCounter(), 0, null);
+            linkedData = new INaturalistLinkedData(sighting.getID(), 0, null);
             txtInfo.setText("");
             imageCounterINat = 0;
             lblImageINat.setIcon(new ImageIcon(
@@ -770,7 +770,7 @@ public class INatSightingDialog extends JDialog {
                     "Incompatible WildLog Observation", WLOptionPane.ERROR_MESSAGE);
             return;
         }
-        Element element = app.getDBI().findElement(sighting.getElementName(), Element.class);
+        Element element = app.getDBI().findElement(sighting.getElementID(), null, Element.class);
         if (element.getScientificName() == null || element.getScientificName().isEmpty()) {
             WLOptionPane.showMessageDialog(this,
                     "<html>WildLog Observation without a Scientific Name cannot be uploaded to iNaturalist.</html>",
@@ -827,7 +827,7 @@ public class INatSightingDialog extends JDialog {
                     }
                     // Stel die "WildLog_ID" (iNaturalist Observation Field = https://www.inaturalist.org/observation_fields/7112)
                     iNatObservation.setObservation_field_values(new HashMap<>(1));
-                    iNatObservation.getObservation_field_values().put("7112", Long.toString(sighting.getSightingCounter()));
+                    iNatObservation.getObservation_field_values().put("7112", Long.toString(sighting.getID()));
                     // Roep iNaturalist
                     JsonElement jsonElement;
                     if (oldINaturalistID == 0) {
@@ -839,7 +839,7 @@ public class INatSightingDialog extends JDialog {
                         jsonElement = INatAPI.updateObservation(updateObservation, WildLogApp.getINaturalistToken());
                     }
                     // Save die inligting in WildLog
-                    linkedData = new INaturalistLinkedData(sighting.getSightingCounter(), 
+                    linkedData = new INaturalistLinkedData(sighting.getID(), 
                             jsonElement.getAsJsonArray().get(0).getAsJsonObject().get("id").getAsLong(), 
                             GSON.toJson(jsonElement));
                     if (oldINaturalistID == 0) {
@@ -897,7 +897,7 @@ public class INatSightingDialog extends JDialog {
                         public void run() {
                             INatAPI.deleteObservation(linkedData.getINaturalistID(), WildLogApp.getINaturalistToken());
                             // Verwysder die inligting in WildLog
-                            app.getDBI().deleteINaturalistLinkedData(sighting.getSightingCounter(), 0);
+                            app.getDBI().deleteINaturalistLinkedData(sighting.getID(), 0);
                         }
                     });
                 }
@@ -943,7 +943,7 @@ public class INatSightingDialog extends JDialog {
                     public void run() {
                         JsonElement jsonElement = INatAPI.getObservation(linkedData.getINaturalistID());
                         // Save die inligting in WildLog
-                        linkedData = new INaturalistLinkedData(sighting.getSightingCounter(), 
+                        linkedData = new INaturalistLinkedData(sighting.getID(), 
                                 jsonElement.getAsJsonObject().get("id").getAsLong(), 
                                 GSON.toJson(jsonElement));
                         app.getDBI().updateINaturalistLinkedData(linkedData);
@@ -1171,7 +1171,7 @@ public class INatSightingDialog extends JDialog {
                                 INatAPI.removeObservationFieldValue(observationFieldID, WildLogApp.getINaturalistToken());
                             }
                             // Verwysder die inligting in WildLog
-                            app.getDBI().deleteINaturalistLinkedData(sighting.getSightingCounter(), 0);
+                            app.getDBI().deleteINaturalistLinkedData(sighting.getID(), 0);
                         }
                     });
                 }

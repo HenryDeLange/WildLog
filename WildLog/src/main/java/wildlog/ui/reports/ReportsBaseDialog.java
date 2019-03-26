@@ -671,7 +671,7 @@ public class ReportsBaseDialog extends JFrame {
             if (inLstFilteredElements != null) {
                 boolean found = false;
                 for (Element element : inLstFilteredElements) {
-                    if (sighting.getElementName().equals(element.getPrimaryName())) {
+                    if (sighting.getElementID() == element.getID()) {
                         found = true;
                         break;
                     }
@@ -684,7 +684,7 @@ public class ReportsBaseDialog extends JFrame {
             if (inLstFilteredLocations != null) {
                 boolean found = false;
                 for (Location location : inLstFilteredLocations) {
-                    if (sighting.getLocationName().equals(location.getName())) {
+                    if (sighting.getLocationID() == location.getID()) {
                         found = true;
                         break;
                     }
@@ -697,7 +697,7 @@ public class ReportsBaseDialog extends JFrame {
             if (inLstFilteredVisits != null) {
                 boolean found = false;
                 for (Visit visit : inLstFilteredVisits) {
-                    if (sighting.getVisitName().equals(visit.getName())) {
+                    if (sighting.getVisitID() == visit.getID()) {
                         found = true;
                         break;
                     }

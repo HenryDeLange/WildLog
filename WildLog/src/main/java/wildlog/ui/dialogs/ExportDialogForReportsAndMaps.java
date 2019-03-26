@@ -408,11 +408,11 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 html.append("</tr>");
                 for (Sighting inSighting : lstSightings) {
                     html.append("<tr>");
-                    html.append("<td>").append(inSighting.getSightingCounter()).append("</td>");
+                    html.append("<td>").append(inSighting.getID()).append("</td>");
                     html.append("<td>").append(UtilsHTML.formatDateAsString(inSighting.getDate(), true)).append("</td>");
-                    html.append("<td>").append(inSighting.getElementName()).append("</td>");
-                    html.append("<td>").append(inSighting.getLocationName()).append("</td>");
-                    html.append("<td>").append(inSighting.getVisitName()).append("</td>");
+                    html.append("<td>").append(inSighting.getCachedElementName()).append("</td>");
+                    html.append("<td>").append(inSighting.getCachedLocationName()).append("</td>");
+                    html.append("<td>").append(inSighting.getCachedVisitName()).append("</td>");
                     html.append("</tr>");
                 }
                 html.append("</table border='1'>");

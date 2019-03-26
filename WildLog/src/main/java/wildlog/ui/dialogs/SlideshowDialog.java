@@ -359,13 +359,13 @@ public class SlideshowDialog extends JDialog {
 
     private void btnSlideshowAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowAllSightingsActionPerformed
         if (visit != null) {
-            createSlideshowWithSightings(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
+            createSlideshowWithSightings(visit.getName(), app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class));
         }
         if (location != null) {
-            createSlideshowWithSightings(location.getName(), app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
+            createSlideshowWithSightings(location.getName(), app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class));
         }
         if (element != null) {
-            createSlideshowWithSightings(element.getPrimaryName(), app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
+            createSlideshowWithSightings(element.getPrimaryName(), app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class));
         }
         setVisible(false);
         dispose();
@@ -373,15 +373,15 @@ public class SlideshowDialog extends JDialog {
 
     private void btnGIFAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGIFAllSightingsActionPerformed
         if (element != null) {
-            createGIF(element.getPrimaryName(), app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
+            createGIF(element.getPrimaryName(), app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class));
         }
         else
         if (location != null) {
-            createGIF(location.getName(), app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
+            createGIF(location.getName(), app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class));
         }
         else
         if (visit != null) {
-            createGIF(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
+            createGIF(visit.getName(), app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class));
         }
         setVisible(false);
         dispose();
@@ -405,15 +405,15 @@ public class SlideshowDialog extends JDialog {
 
     private void btnPowerPointAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPowerPointAllSightingsActionPerformed
         if (element != null) {
-            createPowerPoint(element.getPrimaryName(), app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
+            createPowerPoint(element.getPrimaryName(), app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class));
         }
         else
         if (location != null) {
-            createPowerPoint(location.getName(), app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
+            createPowerPoint(location.getName(), app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class));
         }
         else
         if (visit != null) {
-            createPowerPoint(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
+            createPowerPoint(visit.getName(), app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class));
         }
         setVisible(false);
         dispose();
@@ -421,15 +421,15 @@ public class SlideshowDialog extends JDialog {
 
     private void btnPDFAllSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPDFAllSightingsActionPerformed
         if (element != null) {
-            createPDF(element.getPrimaryName(), app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
+            createPDF(element.getPrimaryName(), app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class));
         }
         else
         if (location != null) {
-            createPDF(location.getName(), app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
+            createPDF(location.getName(), app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class));
         }
         else
         if (visit != null) {
-            createPDF(visit.getName(), app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
+            createPDF(visit.getName(), app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class));
         }
         setVisible(false);
         dispose();

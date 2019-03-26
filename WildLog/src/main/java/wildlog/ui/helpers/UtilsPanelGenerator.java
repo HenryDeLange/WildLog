@@ -18,8 +18,8 @@ public final class UtilsPanelGenerator {
         return new PanelElement(inApp, new Element());
     }
 
-    private static PanelElement getElementPanel(WildLogApp inApp, String inPrimaryName) {
-        Element tempElement = inApp.getDBI().findElement(inPrimaryName, Element.class);
+    private static PanelElement getElementPanel(WildLogApp inApp, long inID) {
+        Element tempElement = inApp.getDBI().findElement(inID, null, Element.class);
         return new PanelElement(inApp, tempElement);
     }
 
@@ -27,8 +27,8 @@ public final class UtilsPanelGenerator {
         return new PanelLocation(inApp, new Location());
     }
 
-    private static PanelLocation getLocationPanel(WildLogApp inApp, String inName) {
-        Location tempLocation = inApp.getDBI().findLocation(inName, Location.class);
+    private static PanelLocation getLocationPanel(WildLogApp inApp, long inID) {
+        Location tempLocation = inApp.getDBI().findLocation(inID, null, Location.class);
         return new PanelLocation(inApp, tempLocation);
     }
 
@@ -36,8 +36,8 @@ public final class UtilsPanelGenerator {
         return new PanelVisit(inApp, inLocation, new Visit());
     }
 
-    private static PanelVisit getVisitPanel(WildLogApp inApp, Location inLocation, String inName) {
-        Visit tempVisit = inApp.getDBI().findVisit(inName, Visit.class);
+    private static PanelVisit getVisitPanel(WildLogApp inApp, Location inLocation, long inID) {
+        Visit tempVisit = inApp.getDBI().findVisit(inID, null, true, Visit.class);
         return new PanelVisit(inApp, inLocation, tempVisit);
     }
 
@@ -45,14 +45,13 @@ public final class UtilsPanelGenerator {
      * This will open a tab for the provided panel, showing an existing tab if already opened
      * or showing a new tab if not already opened.
      */
-    public static void openPanelAsTab(final WildLogApp inApp, final String inName, final PanelCanSetupHeader.TabTypes inTabType, final JTabbedPane inTabPane, final Location inLocationForVisit) {
-        if (inName != null && inTabType != null && inTabPane != null) {
+    public static void openPanelAsTab(final WildLogApp inApp, final long inID, final PanelCanSetupHeader.TabTypes inTabType, final JTabbedPane inTabPane, final Location inLocationForVisit) {
+        if (inID > 0 && inTabType != null && inTabPane != null) {
             int foundAt = -1;
             for (int t = 0; t < inTabPane.getTabCount(); t++) {
                 if (inTabPane.getTabComponentAt(t) instanceof PanelCanSetupHeader.HeaderPanel) {
                     PanelCanSetupHeader.HeaderPanel headerPanel = (PanelCanSetupHeader.HeaderPanel)inTabPane.getTabComponentAt(t);
-                    if (headerPanel.getTitle() != null && inName.equalsIgnoreCase(headerPanel.getTitle())
-                        && headerPanel.getTabType() != null && inTabType.equals(headerPanel.getTabType())) {
+                    if (headerPanel.getID() == inID && headerPanel.getTabType() != null && inTabType.equals(headerPanel.getTabType())) {
                         foundAt = t;
                         inTabPane.setSelectedIndex(foundAt);
                         break;
@@ -63,19 +62,19 @@ public final class UtilsPanelGenerator {
                 // The tab wasn't found so we'll have to open a new one.
                 PanelCanSetupHeader panelCanSetupHeader = null;
                 if (PanelCanSetupHeader.TabTypes.LOCATION.equals(inTabType)) {
-                    panelCanSetupHeader = getLocationPanel(inApp, inName);
+                    panelCanSetupHeader = getLocationPanel(inApp, inID);
                 }
                 else
                 if (PanelCanSetupHeader.TabTypes.ELEMENT.equals(inTabType)) {
-                    panelCanSetupHeader = getElementPanel(inApp, inName);
+                    panelCanSetupHeader = getElementPanel(inApp, inID);
                 }
                 else
                 if (PanelCanSetupHeader.TabTypes.VISIT.equals(inTabType)) {
-                    panelCanSetupHeader = getVisitPanel(inApp, inLocationForVisit, inName);
+                    panelCanSetupHeader = getVisitPanel(inApp, inLocationForVisit, inID);
                 }
                 else
                 if (PanelCanSetupHeader.TabTypes.BULK_UPLOAD.equals(inTabType)) {
-                    panelCanSetupHeader = getVisitPanel(inApp, inLocationForVisit, inName);
+                    panelCanSetupHeader = getVisitPanel(inApp, inLocationForVisit, inID);
                 }
                 if (panelCanSetupHeader != null) {
                     inTabPane.add(panelCanSetupHeader);
@@ -114,13 +113,12 @@ public final class UtilsPanelGenerator {
     /**
      * Removes the tab with the given name and type.
      */
-    public static void removeOpenedTab(String inName, PanelCanSetupHeader.TabTypes inTabType, JTabbedPane inTabPane) {
-        if (inName != null && inTabType != null && inTabPane != null) {
+    public static void removeOpenedTab(long inID, PanelCanSetupHeader.TabTypes inTabType, JTabbedPane inTabPane) {
+        if (inID > 0 && inTabType != null && inTabPane != null) {
             for (int t = 0; t < inTabPane.getTabCount(); t++) {
                 if (inTabPane.getTabComponentAt(t) instanceof PanelCanSetupHeader.HeaderPanel) {
                     PanelCanSetupHeader.HeaderPanel headerPanel = (PanelCanSetupHeader.HeaderPanel)inTabPane.getTabComponentAt(t);
-                    if (headerPanel.getTitle() != null && inName.equalsIgnoreCase(headerPanel.getTitle())
-                        && headerPanel.getTabType() != null && inTabType.equals(headerPanel.getTabType())) {
+                    if (inID == headerPanel.getID() && headerPanel.getTabType() != null && inTabType.equals(headerPanel.getTabType())) {
                         inTabPane.remove(t);
                         break;
                     }

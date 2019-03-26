@@ -107,11 +107,13 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         cmbType.getSelectionModel().select(3);
         lstCustomButtons.add(cmbType);
         lstCustomButtons.add(new Label("Filtered Creature:"));
+        Set<Long> addedElementNames = new HashSet<>();
         List<String> lstElements = new ArrayList<>();
         lstElements.add("");
         for (Sighting sighting : inLstData) {
-            if (!lstElements.contains(sighting.getElementName(reportsBaseDialog.getOptionName()))) {
-                lstElements.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            // Only add the name once per element
+            if (addedElementNames.add(sighting.getElementID())) {
+                lstElements.add(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             }
         }
         Collections.sort(lstElements);
@@ -191,27 +193,27 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         // Get the filtered element's name
         String filterElement = null;
         if (cmbCreature.getSelectionModel().getSelectedIndex() > 0) {
-            filterElement = new Sighting(cmbCreature.getSelectionModel().getSelectedItem(), null, null).getElementName(reportsBaseDialog.getOptionName());
+            filterElement = cmbCreature.getSelectionModel().getSelectedItem();
         }
         // Calculate the values
         Set<String> elements = new HashSet<>();
         Map<String, ReportDataWrapper> mapChartData = new HashMap<>();
         Map<String, Integer> elementTotalCounts = new HashMap<>(2);
-        Map<String, String> cacheNames = new HashMap<>(20);
+        Map<Long, String> cacheNames = new HashMap<>(20);
         int maxCount = 0;
         for (Sighting sighting1 : inSightings) {
-            String elementName1 = cacheNames.get(sighting1.getElementName());
+            String elementName1 = cacheNames.get(sighting1.getElementID());
             if (elementName1 == null) {
-                elementName1 = sighting1.getElementName(reportsBaseDialog.getOptionName());
-                cacheNames.put(sighting1.getElementName(), elementName1);
+                elementName1 = sighting1.getCachedElementName(reportsBaseDialog.getOptionName());
+                cacheNames.put(sighting1.getElementID(), elementName1);
             }
             elements.add(elementName1);
             for (Sighting sighting2 : inSightings) {
                 if (isRelated(sighting1, sighting2)) {
-                    String elementName2 = cacheNames.get(sighting2.getElementName());
+                    String elementName2 = cacheNames.get(sighting2.getElementID());
                     if (elementName2 == null) {
-                        elementName2 = sighting2.getElementName(reportsBaseDialog.getOptionName());
-                        cacheNames.put(sighting2.getElementName(), elementName2);
+                        elementName2 = sighting2.getCachedElementName(reportsBaseDialog.getOptionName());
+                        cacheNames.put(sighting2.getElementID(), elementName2);
                     }
                     String groupName;
                     if (elementName1.compareTo(elementName2) < 0) {
@@ -227,10 +229,10 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
                         mapChartData.put(groupName, dataWrapper);
                     }
                     BubbleInfo bubbleInfo = (BubbleInfo) dataWrapper.value;
-                    if (!bubbleInfo.processedSightings.contains(sighting1.getSightingCounter())) {
+                    if (!bubbleInfo.processedSightings.contains(sighting1.getID())) {
                         // Keep track of the total number of pairs
                         dataWrapper.increaseCount();
-                        bubbleInfo.processedSightings.add(sighting1.getSightingCounter());
+                        bubbleInfo.processedSightings.add(sighting1.getID());
                         if (maxCount < dataWrapper.count) {
                             maxCount = dataWrapper.count;
                         }
@@ -238,10 +240,10 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
                         int counter = bubbleInfo.elementRatio.getOrDefault(elementName1, 0);
                         bubbleInfo.elementRatio.put(elementName1, counter + 1);
                     }
-                    if (!bubbleInfo.processedSightings.contains(sighting2.getSightingCounter())) {
+                    if (!bubbleInfo.processedSightings.contains(sighting2.getID())) {
                         // Keep track of the total number of pairs
                         dataWrapper.increaseCount();
-                        bubbleInfo.processedSightings.add(sighting2.getSightingCounter());
+                        bubbleInfo.processedSightings.add(sighting2.getID());
                         if (maxCount < dataWrapper.count) {
                             maxCount = dataWrapper.count;
                         }
@@ -364,12 +366,12 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
     
     private boolean isRelated(Sighting inSighting1, Sighting inSighting2) {
         // Maak seker dis ander Element
-        if (inSighting1.getElementName(reportsBaseDialog.getOptionName()).equals(inSighting2.getElementName(reportsBaseDialog.getOptionName()))) {
+        if (inSighting1.getElementID() == inSighting2.getElementID()) {
             return false;
         }
         // Check Visit
         if (chkCompareVisits.isSelected()) {
-            if (!inSighting1.getVisitName().equals(inSighting2.getVisitName())) {
+            if (inSighting1.getVisitID() != inSighting2.getVisitID()) {
                 return false;
             }
         }

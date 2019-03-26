@@ -28,10 +28,15 @@ public class MoveVisitDialog extends JDialog {
         loadLists();
         // If a visit was specified, select and lock the UI
         if (inVisit != null) {
-            lstFromLocation.setSelectedValue(inVisit.getLocationName(), true);
-            lstFromLocation.setEnabled(false);
+            for (int t = 0; t < lstFromLocation.getModel().getSize(); t++) {
+                if (((Location) lstFromLocation.getModel().getElementAt(t)).getID() == inVisit.getLocationID()) {
+                    lstFromLocation.setSelectedValue(lstFromLocation.getModel().getElementAt(t), true);
+                    lstFromLocation.setEnabled(false);
+                    break;
+                }
+            }
             lstFromLocationValueChanged(null);
-            lstVisit.setSelectedValue(inVisit.getName(), true);
+            lstVisit.setSelectedValue(inVisit, true);
             lstVisit.setEnabled(false);
         }
         // Setup the default behavior
@@ -161,17 +166,16 @@ public class MoveVisitDialog extends JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-            String tempLocation = (String)lstToLocation.getSelectedValue();
+            Location tempLocation = (Location) lstToLocation.getSelectedValue();
             // Update the Visit
-            for (String tempVisitName : (List<String>) lstVisit.getSelectedValuesList()) {
-                Visit tempVisit = app.getDBI().findVisit(tempVisitName, Visit.class);
-                tempVisit.setLocationName(tempLocation);
+            for (Visit tempVisit : (List<Visit>) lstVisit.getSelectedValuesList()) {
+                tempVisit.setLocationID(tempLocation.getID());
                 app.getDBI().updateVisit(tempVisit, tempVisit.getName());
                 // Update the sightings
-                List<Sighting> sightings = app.getDBI().listSightings(0, null, null, tempVisit.getName(), false, Sighting.class);
+                List<Sighting> sightings = app.getDBI().listSightings(0, 0, tempVisit.getID(), false, Sighting.class);
                 for (Sighting tempSighting : sightings) {
-                    tempSighting.setLocationName(tempLocation);
-                    tempSighting.setVisitName(tempVisit.getName());
+                    tempSighting.setLocationID(tempLocation.getID());
+                    tempSighting.setVisitID(tempVisit.getID());
                     app.getDBI().updateSighting(tempSighting);
                 }
             }
@@ -186,13 +190,13 @@ public class MoveVisitDialog extends JDialog {
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void lstFromLocationValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFromLocationValueChanged
-        DefaultListModel<String> visitModel = new DefaultListModel<String>();
+        DefaultListModel<Visit> visitModel = new DefaultListModel<>();
         if (lstFromLocation.getSelectedIndex() >= 0) {
-            String tempLocation = (String)lstFromLocation.getSelectedValue();
-            List<Visit> visits = app.getDBI().listVisits(null, tempLocation, null, Visit.class);
+            Location tempLocation = (Location)lstFromLocation.getSelectedValue();
+            List<Visit> visits = app.getDBI().listVisits(null, tempLocation.getID(), null, false, Visit.class);
             Collections.sort(visits);
             for (Visit tempVisit : visits) {
-                visitModel.addElement(tempVisit.getName());
+                visitModel.addElement(tempVisit);
             }
         }
         lstVisit.setModel(visitModel);
@@ -204,11 +208,11 @@ public class MoveVisitDialog extends JDialog {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
         List<Location> locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
         Collections.sort(locations);
-        DefaultListModel<String> fromLocationModel = new DefaultListModel<String>();
-        DefaultListModel<String> toLocationModel = new DefaultListModel<String>();
+        DefaultListModel<Location> fromLocationModel = new DefaultListModel<>();
+        DefaultListModel<Location> toLocationModel = new DefaultListModel<>();
         for (Location tempLocation : locations) {
-            fromLocationModel.addElement(tempLocation.getName());
-            toLocationModel.addElement(tempLocation.getName());
+            fromLocationModel.addElement(tempLocation);
+            toLocationModel.addElement(tempLocation);
         }
         lstFromLocation.setModel(fromLocationModel);
         lstToLocation.setModel(toLocationModel);

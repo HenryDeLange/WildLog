@@ -472,7 +472,7 @@ public class ExportDialog extends JDialog {
                     .resolve(Element.WILDLOG_FOLDER_PREFIX)
                     .resolve(element.getDisplayName())
                     .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
-            lstSightings = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
+            lstSightings = app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class);
         }
         else
         if (location != null) {
@@ -480,7 +480,7 @@ public class ExportDialog extends JDialog {
                     .resolve(Location.WILDLOG_FOLDER_PREFIX)
                     .resolve(location.getDisplayName())
                     .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
-            lstSightings = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
+            lstSightings = app.getDBI().listSightings(0, location.getID(), 0, true, Sighting.class);
         }
         else
         if (visit != null) {
@@ -488,7 +488,7 @@ public class ExportDialog extends JDialog {
                     .resolve(Visit.WILDLOG_FOLDER_PREFIX)
                     .resolve(visit.getDisplayName())
                     .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
-            lstSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
+            lstSightings = app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class);
         }
         else
         if (sighting != null) {
@@ -496,8 +496,8 @@ public class ExportDialog extends JDialog {
                     .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
                     .resolve(sighting.getDisplayName())
                     .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
-            lstSightings = app.getDBI().listSightings(sighting.getSightingCounter(), 
-                    sighting.getElementName(), sighting.getLocationName(), sighting.getVisitName(), false, Sighting.class);
+            lstSightings = new ArrayList<>(1);
+            lstSightings.add(sighting);
         }
         else
         if (lstSightings != null && !lstSightings.isEmpty()) {
@@ -584,21 +584,21 @@ public class ExportDialog extends JDialog {
                 if (location != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName());
                     if (lstSightingsToUse == null) {
-                        lstSightingsToUse = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
+                        lstSightingsToUse = app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class);
                     }
                 }
                 else
                 if (visit != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName());
                     if (lstSightingsToUse == null) {
-                        lstSightingsToUse = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
+                        lstSightingsToUse = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
                     }
                 }
                 else
                 if (element != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName());
                     if (lstSightingsToUse == null) {
-                        lstSightingsToUse = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
+                        lstSightingsToUse = app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class);
                     }
                 }
                 else
@@ -625,13 +625,13 @@ public class ExportDialog extends JDialog {
 
     private void btnExportFilesObservationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportFilesObservationsActionPerformed
         if (element != null) {
-            exportAllSightingFiles(element, app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class));
+            exportAllSightingFiles(element, app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class));
         }
         if (location != null) {
-            exportAllSightingFiles(location, app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class));
+            exportAllSightingFiles(location, app.getDBI().listSightings(0, location.getID(), 0, true, Sighting.class));
         }
         if (visit != null) {
-            exportAllSightingFiles(visit, app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class));
+            exportAllSightingFiles(visit, app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class));
         }
         setVisible(false);
         dispose();
@@ -925,17 +925,17 @@ public class ExportDialog extends JDialog {
                 List<Sighting> lstSightingsToUse;
                 if (location != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName());
-                    lstSightingsToUse = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class);
                 }
                 else
                 if (visit != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName());
-                    lstSightingsToUse = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
                 }
                 else
                 if (element != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName());
-                    lstSightingsToUse = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class);
                 }
                 else
                 if (sighting != null) {
@@ -960,12 +960,12 @@ public class ExportDialog extends JDialog {
                 Collections.sort(lstSightingsToUse, new Comparator<Sighting>() {
                     @Override
                     public int compare(Sighting inSighting1, Sighting inSighting2) {
-                        return inSighting1.getVisitName().compareTo(inSighting2.getVisitName());
+                        return inSighting1.getCachedVisitName().compareTo(inSighting2.getCachedVisitName());
                     }
                 });
                 String currentVisit = null;
                 // Add content rows
-                Map<String, Element> mapElements = new HashMap<>();
+                Map<Long, Element> mapElements = new HashMap<>();
                 Map<String, Visit> mapVisits = new LinkedHashMap<>(); // Using LinkedHashMap to keep the GPS points from the same visit together
                 HSSFWorkbook workbook = null;
                 HSSFSheet sheet = null;
@@ -975,9 +975,9 @@ public class ExportDialog extends JDialog {
                 int counter = 0;
                 for (Sighting tempSighting : lstSightingsToUse) {
                     // Check whether to start a new spreadsheet (for a new visit)
-                    if (!tempSighting.getVisitName().equals(currentVisit)) {
+                    if (!tempSighting.getCachedVisitName().equals(currentVisit)) {
                         // Maak seker die folders bestaan
-                        Files.createDirectories(path.resolve(tempSighting.getVisitName()));
+                        Files.createDirectories(path.resolve(tempSighting.getCachedVisitName()));
                         // Write the previous visit's register file (sightings)
                         if (currentVisit != null) {
                             try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Register.xls").toFile())) {
@@ -988,7 +988,7 @@ public class ExportDialog extends JDialog {
                             }
                         }
                         // Stel die huidige visit se naam
-                        currentVisit = tempSighting.getVisitName();
+                        currentVisit = tempSighting.getCachedVisitName();
                         // Create workbook and sheet
                         workbook = new HSSFWorkbook();
                         sheet = workbook.createSheet(currentVisit);
@@ -1031,15 +1031,15 @@ public class ExportDialog extends JDialog {
                     else {
                         row.createCell(col++).setCellValue("");
                     }
-                    Element tempElement = mapElements.get(tempSighting.getElementName());
+                    Element tempElement = mapElements.get(tempSighting.getElementID());
                     if (tempElement == null) {
-                        tempElement = app.getDBI().findElement(tempSighting.getElementName(), Element.class);
+                        tempElement = app.getDBI().findElement(tempSighting.getElementID(), null, Element.class);
                         if (tempElement.getScientificName() == null || tempElement.getScientificName().isEmpty()) {
                             tempElement.setScientificName(tempElement.getPrimaryName());
                         }
-                        mapElements.put(tempSighting.getElementName(), tempElement);
+                        mapElements.put(tempSighting.getElementID(), tempElement);
                     }
-                    row.createCell(col++).setCellValue(tempElement.getScientificName() + " (" + tempSighting.getElementName() + ")");
+                    row.createCell(col++).setCellValue(tempElement.getScientificName() + " (" + tempElement.getPrimaryName() + ")");
                     row.createCell(col++).setCellValue(UtilsTime.WL_DATE_FORMATTER_WITH_HHMM.format(
                             UtilsTime.getLocalDateTimeFromDate(tempSighting.getDate())));
                     String comment = tempSighting.getDetails();
@@ -1064,7 +1064,7 @@ public class ExportDialog extends JDialog {
                     }
                     Visit tempVisit = mapVisits.get(gps);
                     if (tempVisit == null) {
-                        mapVisits.put(gps, app.getDBI().findVisit(currentVisit, Visit.class));
+                        mapVisits.put(gps, app.getDBI().findVisit(0, currentVisit, true, Visit.class));
                     }
                     // Update progress
                     setTaskProgress(5 + (int)((counter++/(double)lstSightingsToUse.size())*85));
@@ -1156,17 +1156,17 @@ public class ExportDialog extends JDialog {
                 String name;
                 if (location != null) {
                     name = location.getDisplayName();
-                    lstSightingsToUse = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class);
                 }
                 else
                 if (visit != null) {
                     name = visit.getDisplayName();
-                    lstSightingsToUse = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
                 }
                 else
                 if (element != null) {
                     name = element.getDisplayName();
-                    lstSightingsToUse = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class);
                 }
                 else
                 if (sighting != null) {

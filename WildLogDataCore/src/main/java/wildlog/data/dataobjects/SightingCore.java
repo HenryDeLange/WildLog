@@ -19,10 +19,9 @@ import wildlog.data.enums.Weather;
 
 
 public class SightingCore extends DataObjectWithGPS implements DataObjectWithWildLogFile {
-    public static final String WILDLOGFILE_ID_PREFIX = "SIGHTING-";
+    public static final String WILDLOGFILE_ID_PREFIX = "S";
     public static final String WILDLOG_FOLDER_PREFIX = "Observations";
-    protected long sightingCounter; // Used as index (ID)
-    protected Date date; // must include time
+    protected Date date; // Must include the time
     protected ActiveTimeSpesific timeOfDay;
     protected Weather weather;
     protected ViewRating viewRating;
@@ -30,9 +29,9 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     protected int numberOfElements;
     protected String details;
     protected SightingEvidence sightingEvidence;
-    protected String elementName;
-    protected String locationName;
-    protected String visitName;
+    protected long elementID;
+    protected long locationID;
+    protected long visitID;
     protected int moonPhase = -1;
     protected Moonlight moonlight;
     protected Sex sex;
@@ -45,6 +44,9 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     protected TimeAccuracy timeAccuracy;
     protected Age age;
     // Adding some extra fields that can optionally be cached for performance reasons
+    protected String cachedElementName;
+    protected String cachedLocationName;
+    protected String cachedVisitName;
     protected ElementType cachedElementType;
     protected VisitType cachedVisitType;
     protected boolean cachedLinkedToINaturalist;
@@ -53,19 +55,19 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     public SightingCore() {
     }
 
-    public SightingCore(long inSightingCounter) {
-        sightingCounter = inSightingCounter;
+    public SightingCore(long inID) {
+        id = inID;
     }
 
-    public SightingCore(String inElementName, String inLocationName, String inVisitName) {
-        elementName = inElementName;
-        locationName = inLocationName;
-        visitName = inVisitName;
+    public SightingCore(Long inElementID, Long inLocationID, Long inVisitID) {
+        elementID = inElementID;
+        locationID = inLocationID;
+        visitID = inVisitID;
     }
 
     @Override
     public String toString() {
-        return locationName + " (" + elementName + ") [" + sightingCounter + "]";
+        return cachedLocationName + " (" + cachedElementName + ") [" + id + "]";
     }
 
     @Override
@@ -77,7 +79,7 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
                 int result = (date.compareTo(compareSighting.getDate()));
                 if (result == 0) {
                     //From Long.compare(..) (since Java 7)
-                    result = (sightingCounter < compareSighting.getSightingCounter()) ? -1 : ((sightingCounter == compareSighting.getSightingCounter()) ? 0 : 1);
+                    result = (id < compareSighting.getID()) ? -1 : ((id == compareSighting.getID()) ? 0 : 1);
                 }
                 return result;
             }
@@ -87,7 +89,7 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
 
     @Override
     public String getWildLogFileID() {
-        return WILDLOGFILE_ID_PREFIX + sightingCounter;
+        return WILDLOGFILE_ID_PREFIX + id;
     }
     
     @Override
@@ -101,20 +103,22 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     }
     
     @Override
-    public String getIDField() {
-        return Long.toString(sightingCounter);
+    public long getIDField() {
+        return id;
     }
     
     public <T extends SightingCore> T cloneShallow() {
         try {
             T sighting = (T) this.getClass().newInstance();
+            sighting.setID(id);
             sighting.setAge(age);
             sighting.setCertainty(certainty);
             sighting.setDate(date);
             sighting.setDetails(details);
             sighting.setDurationMinutes(durationMinutes);
             sighting.setDurationSeconds(durationSeconds);
-            sighting.setElementName(elementName);
+            sighting.setElementID(elementID);
+            sighting.setCachedElementName(cachedElementName);
             sighting.setGPSAccuracy(gpsAccuracy);
             sighting.setGPSAccuracyValue(gpsAccuracyValue);
             sighting.setLatDegrees(latDegrees);
@@ -122,7 +126,8 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
             sighting.setLatSeconds(latSeconds);
             sighting.setLatitude(latitude);
             sighting.setLifeStatus(lifeStatus);
-            sighting.setLocationName(locationName);
+            sighting.setLocationID(locationID);
+            sighting.setCachedLocationName(cachedLocationName);
             sighting.setLonDegrees(lonDegrees);
             sighting.setLonMinutes(lonMinutes);
             sighting.setLonSeconds(lonSeconds);
@@ -131,7 +136,6 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
             sighting.setMoonlight(moonlight);
             sighting.setNumberOfElements(numberOfElements);
             sighting.setSex(sex);
-            sighting.setSightingCounter(sightingCounter);
             sighting.setSightingEvidence(sightingEvidence);
             sighting.setTag(tag);
             sighting.setTemperature(temperature);
@@ -139,10 +143,13 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
             sighting.setTimeOfDay(timeOfDay);
             sighting.setUnitsTemperature(unitsTemperature);
             sighting.setViewRating(viewRating);
-            sighting.setVisitName(visitName);
+            sighting.setVisitID(visitID);
+            sighting.setCachedVisitName(cachedVisitName);
             sighting.setWeather(weather);
             sighting.setCachedElementType(cachedElementType);
             sighting.setCachedVisitType(cachedVisitType);
+            sighting.setAuditTime(auditTime);
+            sighting.setAuditUser(auditUser);
             return sighting;
         }
         catch (InstantiationException ex) {
@@ -189,10 +196,6 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
         return sightingEvidence;
     }
 
-    public long getSightingCounter() {
-        return sightingCounter;
-    }
-
     public void setDate(Date inDate) {
         date = inDate;
     }
@@ -224,33 +227,53 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     public void setSightingEvidence(SightingEvidence inSightingEvidence) {
         sightingEvidence = inSightingEvidence;
     }
-
-    public void setSightingCounter(long inSightingCounter) {
-        sightingCounter = inSightingCounter;
+    
+    public long getElementID() {
+        return elementID;
     }
 
-    public String getElementName() {
-        return elementName;
+    public void setElementID(long inElementID) {
+        elementID = inElementID;
     }
 
-    public void setElementName(String inElementName) {
-        elementName = inElementName;
+    public long getLocationID() {
+        return locationID;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public void setLocationID(long inLocationID) {
+        locationID = inLocationID;
     }
 
-    public void setLocationName(String inLocationName) {
-        locationName = inLocationName;
+    public long getVisitID() {
+        return visitID;
     }
 
-    public String getVisitName() {
-        return visitName;
+    public void setVisitID(long inVisitID) {
+        visitID = inVisitID;
     }
 
-    public void setVisitName(String inVisitName) {
-        visitName = inVisitName;
+    public String getCachedElementName() {
+        return cachedElementName;
+    }
+
+    public void setCachedElementName(String inCachedElementName) {
+        cachedElementName = inCachedElementName;
+    }
+
+    public String getCachedLocationName() {
+        return cachedLocationName;
+    }
+
+    public void setCachedLocationName(String inCachedLocationName) {
+        cachedLocationName = inCachedLocationName;
+    }
+
+    public String getCachedVisitName() {
+        return cachedVisitName;
+    }
+
+    public void setCachedVisitName(String inCachedVisitName) {
+        cachedVisitName = inCachedVisitName;
     }
 
     public int getMoonPhase() {

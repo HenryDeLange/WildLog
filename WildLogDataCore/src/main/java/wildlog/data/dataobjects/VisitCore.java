@@ -1,36 +1,39 @@
 package wildlog.data.dataobjects;
 
 import java.util.Date;
+import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.data.utils.UtilsData;
 
 
-public class VisitCore implements DataObjectWithWildLogFile {
-    public static final String WILDLOGFILE_ID_PREFIX = "VISIT-";
+public class VisitCore extends DataObjectWithAudit implements DataObjectWithWildLogFile {
+    public static final String WILDLOGFILE_ID_PREFIX = "V";
     public static final String WILDLOG_FOLDER_PREFIX = "Periods";
-    protected String name; // Used as index (ID)
+    protected String name; // Must be unique
     protected Date startDate;
     protected Date endDate;
     protected String description;
     protected GameWatchIntensity gameWatchingIntensity;
     protected VisitType type;
-    protected String locationName;
+    protected long locationID;
+    protected String cachedLocationName;
 
 
     public VisitCore() {
     }
 
-    public VisitCore(String inName) {
+    public VisitCore(long inID, String inName) {
+        id = inID;
         name = inName;
     }
 
-    public VisitCore(String inName, String inLocationName) {
+    public VisitCore(long inID, String inName, long inLocationID) {
+        id = inID;
         name = inName;
-        locationName = inLocationName;
+        locationID = inLocationID;
     }
-
 
     @Override
     public String toString() {
@@ -51,7 +54,7 @@ public class VisitCore implements DataObjectWithWildLogFile {
 
     @Override
     public String getWildLogFileID() {
-        return WILDLOGFILE_ID_PREFIX + name;
+        return WILDLOGFILE_ID_PREFIX + id;
     }
     
     @Override
@@ -65,8 +68,8 @@ public class VisitCore implements DataObjectWithWildLogFile {
     }
     
     @Override
-    public String getIDField() {
-        return name;
+    public long getIDField() {
+        return id;
     }
 
     public boolean hasTheSameContent(VisitCore inVisit) {
@@ -74,25 +77,33 @@ public class VisitCore implements DataObjectWithWildLogFile {
             return false;
         }
         return UtilsData.isTheSame(this, inVisit)
+                && UtilsData.isTheSame(getID(), inVisit.getID())
                 && UtilsData.isTheSame(getDescription(), inVisit.getDescription())
                 && UtilsData.isTheSame(getEndDate(), inVisit.getEndDate())
                 && UtilsData.isTheSame(getGameWatchingIntensity(), inVisit.getGameWatchingIntensity())
-                && UtilsData.isTheSame(getLocationName(), inVisit.getLocationName())
+                && UtilsData.isTheSame(getLocationID(), inVisit.getLocationID())
+                && UtilsData.isTheSame(getCachedLocationName(), inVisit.getCachedLocationName())
                 && UtilsData.isTheSame(getName(), inVisit.getName())
                 && UtilsData.isTheSame(getStartDate(), inVisit.getStartDate())
-                && UtilsData.isTheSame(getType(), inVisit.getType());
+                && UtilsData.isTheSame(getType(), inVisit.getType())
+                && UtilsData.isTheSame(getAuditTime(), inVisit.getAuditTime())
+                && UtilsData.isTheSame(getAuditUser(), inVisit.getAuditUser());
     }
 
      public <T extends VisitCore> T cloneShallow() {
         try {
             T visit = (T) this.getClass().newInstance();
+            visit.setID(id);
             visit.setDescription(description);
             visit.setEndDate(endDate);
             visit.setGameWatchingIntensity(gameWatchingIntensity);
-            visit.setLocationName(locationName);
+            visit.setLocationID(locationID);
+            visit.setCachedLocationName(cachedLocationName);
             visit.setName(name);
             visit.setStartDate(startDate);
             visit.setType(type);
+            visit.setAuditTime(auditTime);
+            visit.setAuditUser(auditUser);
             return visit;
         }
         catch (InstantiationException ex) {
@@ -152,12 +163,20 @@ public class VisitCore implements DataObjectWithWildLogFile {
         type = inType;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public long getLocationID() {
+        return locationID;
     }
 
-    public void setLocationName(String inLocationName) {
-        locationName = inLocationName;
+    public void setLocationID(long inLocationID) {
+        locationID = inLocationID;
+    }
+
+    public String getCachedLocationName() {
+        return cachedLocationName;
+    }
+
+    public void setCachedLocationName(String inCachedLocationName) {
+        cachedLocationName = inCachedLocationName;
     }
 
 }

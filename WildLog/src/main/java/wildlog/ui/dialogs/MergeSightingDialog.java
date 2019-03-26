@@ -160,7 +160,7 @@ public class MergeSightingDialog extends JDialog {
         if (lstSightingsTo.getSelectedIndex() >= 0 && lstSightingsFrom.getSelectedIndex() >= 0) {
             Sighting destinationSighting = (Sighting) lstSightingsTo.getSelectedValue();
             INaturalistLinkedData destinationLinkedData = app.getDBI().findINaturalistLinkedData(
-                    destinationSighting.getSightingCounter(), 0, INaturalistLinkedData.class);
+                    destinationSighting.getID(), 0, INaturalistLinkedData.class);
             for (Sighting sighting : (List<Sighting>) lstSightingsFrom.getSelectedValuesList()) {
                 // Move files
                 List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
@@ -169,15 +169,15 @@ public class MergeSightingDialog extends JDialog {
                     app.getDBI().updateWildLogFile(file);
                 }
                 // Move iNaturalist link (if none is already present on the To Sighting)
-                INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
+                INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(sighting.getID(), 0, INaturalistLinkedData.class);
                 if (destinationLinkedData == null && linkedData != null && linkedData.getINaturalistID() != 0) {
                     destinationLinkedData = linkedData;
-                    destinationLinkedData.setWildlogID(destinationSighting.getSightingCounter());
+                    destinationLinkedData.setWildlogID(destinationSighting.getID());
                     app.getDBI().updateINaturalistLinkedData(destinationLinkedData);
                 }
                 // Delete Sighting
                 if (chkDeleteSightings.isSelected()) {
-                    app.getDBI().deleteSighting(sighting.getSightingCounter());
+                    app.getDBI().deleteSighting(sighting.getID());
                 }
             }
             setVisible(false);
@@ -193,9 +193,9 @@ public class MergeSightingDialog extends JDialog {
 
     // Private Methods
     private void loadLists() {
-        List<Sighting> lstSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
-        DefaultListModel<Sighting> fromSightingModel = new DefaultListModel<Sighting>();
-        DefaultListModel<Sighting> toSightingModel = new DefaultListModel<Sighting>();
+        List<Sighting> lstSightings = app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class);
+        DefaultListModel<Sighting> fromSightingModel = new DefaultListModel<>();
+        DefaultListModel<Sighting> toSightingModel = new DefaultListModel<>();
         for (Sighting sighting : lstSightings) {
             fromSightingModel.addElement(sighting);
             toSightingModel.addElement(sighting);
@@ -213,9 +213,9 @@ public class MergeSightingDialog extends JDialog {
             if (component instanceof JLabel) {
                 Sighting sighting = (Sighting) inSighting;
                 StringBuilder builder = new StringBuilder(100);
-                builder.append("[").append(sighting.getSightingCounter()).append("] ");
+                builder.append("[").append(sighting.getID()).append("] ");
                 builder.append(UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(sighting.getDate())));
-                builder.append(" - ").append(sighting.getElementName());
+                builder.append(" - ").append(sighting.getCachedElementName());
                 ((JLabel) component).setText(builder.toString());
             }
             return component;

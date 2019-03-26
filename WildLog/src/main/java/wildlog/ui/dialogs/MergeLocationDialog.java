@@ -148,18 +148,19 @@ public class MergeLocationDialog extends JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-            String tempFromLocationName = (String)lstFromLocation.getSelectedValue();
-            List<Visit> listVisits = app.getDBI().listVisits(null, tempFromLocationName, null, Visit.class);
+            Location tempFromLocation = (Location) lstFromLocation.getSelectedValue();
+            Location tempToLocation = (Location) lstToLocation.getSelectedValue();
+            List<Visit> listVisits = app.getDBI().listVisits(null, tempFromLocation.getID(), null, false, Visit.class);
             for (Visit visit : listVisits) {
-                visit.setLocationName((String)lstToLocation.getSelectedValue());
+                visit.setLocationID(tempToLocation.getID());
                 app.getDBI().updateVisit(visit, visit.getName());
             }
-            List<Sighting> listSightings = app.getDBI().listSightings(0, null, (String)lstFromLocation.getSelectedValue(), null, false, Sighting.class);
+            List<Sighting> listSightings = app.getDBI().listSightings(0, tempFromLocation.getID(), 0, false, Sighting.class);
             for (Sighting sighting : listSightings) {
-                sighting.setLocationName((String)lstToLocation.getSelectedValue());
+                sighting.setLocationID(tempToLocation.getID());
                 app.getDBI().updateSighting(sighting);
             }
-            app.getDBI().deleteLocation(tempFromLocationName);
+            app.getDBI().deleteLocation(tempToLocation.getID());
             setVisible(false);
             dispose();
         }
@@ -176,11 +177,11 @@ public class MergeLocationDialog extends JDialog {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
         List<Location> locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
         Collections.sort(locations);
-        DefaultListModel<String> fromLocationModel = new DefaultListModel<String>();
-        DefaultListModel<String> toLocationModel = new DefaultListModel<String>();
+        DefaultListModel<Location> fromLocationModel = new DefaultListModel<>();
+        DefaultListModel<Location> toLocationModel = new DefaultListModel<>();
         for (Location tempLocation : locations) {
-            fromLocationModel.addElement(tempLocation.getName());
-            toLocationModel.addElement(tempLocation.getName());
+            fromLocationModel.addElement(tempLocation);
+            toLocationModel.addElement(tempLocation);
         }
         lstFromLocation.setModel(fromLocationModel);
         lstToLocation.setModel(toLocationModel);

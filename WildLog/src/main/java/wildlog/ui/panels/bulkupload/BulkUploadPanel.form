@@ -495,9 +495,6 @@
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f4" green="ef" red="e9" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="selectedLocationName" type="code"/>
-                </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
                     <EmptyBorder bottom="1" left="2" right="1" top="1"/>
@@ -681,10 +678,10 @@
                 <Column maxWidth="240" minWidth="240" prefWidth="240" resizable="true">
                   <Title/>
                   <Editor editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="new InfoBoxEditor(app, lblLocation, txtVisitName)" type="code"/>
+                    <Connection code="new InfoBoxEditor(app, selectedLocation, existingVisit)" type="code"/>
                   </Editor>
                   <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="new InfoBoxRenderer(app, lblLocation, txtVisitName)" type="code"/>
+                    <Connection code="new InfoBoxRenderer(app, selectedLocation, existingVisit)" type="code"/>
                   </Renderer>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">

@@ -22,8 +22,8 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         super();
     }
 
-    public Location(String inName) {
-        super(inName);
+    public Location(long inID, String inName) {
+        super(inID, inName);
     }
 
 
@@ -46,22 +46,6 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/>", rating, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/>", gameViewingRating, true);
             UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Habitat:</b><br/>", habitatType, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Directions:</b><br/>", directions, true);
-            if (website != null) {
-                if (website.length() > 0) {
-                    UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/>", "<a href=\"" + website + "\">" + website + "</a>", true);
-                }
-                else {
-                    UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/>", website, true);
-                }
-            }
-            else {
-                UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/>", website, true);
-            }
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Email:</b><br/>", email, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Phone Number:</b><br/>", contactNumbers, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Catering:</b><br/>", catering, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Accomodation:</b><br/>", accommodationType, true);
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
@@ -83,7 +67,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             htmlLocation.append("<br/>");
             htmlLocation.append("</td></tr>");
             htmlLocation.append("<tr><td>");
-            List<Visit> visits = inApp.getDBI().listVisits(null, name, null, Visit.class);
+            List<Visit> visits = inApp.getDBI().listVisits(null, id, null, true, Visit.class);
             int counter = 0;
             for (int t = 0; t < visits.size(); t++) {
                 htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
@@ -123,12 +107,6 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         builder.append("<rating>").append(rating).append("</rating>");
         builder.append("<gameViewingRating>").append(gameViewingRating).append("</gameViewingRating>");
         builder.append("<habitatType><![CDATA[").append(habitatType).append("]]></habitatType>");
-        builder.append("<accommodationType>").append(accommodationType).append("</accommodationType>");
-        builder.append("<catering>").append(catering).append("</catering>");
-        builder.append("<contactNumbers><![CDATA[").append(contactNumbers).append("]]></contactNumbers>");
-        builder.append("<website><![CDATA[").append(website).append("]]></website>");
-        builder.append("<email><![CDATA[").append(email).append("]]></email>");
-        builder.append("<directions><![CDATA[").append(directions).append("]]></directions>");
         builder.append(UtilsXML.getGPSInfoAsXML(this));
         StringBuilder filesString = new StringBuilder(200);
         List<WildLogFile> files = inApp.getDBI().listWildLogFiles(getWildLogFileID(), null, WildLogFile.class);
@@ -145,7 +123,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         builder.append("<Files>").append(filesString).append("</Files>");
         if (inIncludeSightings) {
             StringBuilder sightingString = new StringBuilder(1024);
-            List<Sighting> sightings = inApp.getDBI().listSightings(0, null, name, null, false, Sighting.class);
+            List<Sighting> sightings = inApp.getDBI().listSightings(0, id, 0, true, Sighting.class);
             counter = 0;
             for (Sighting temp : sightings) {
                 sightingString.append(temp.toXML(inApp, null, false));
@@ -165,13 +143,13 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
     @Override
     public String toTXT(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         StringBuilder builder = new StringBuilder(50);
-        List<Sighting> lstSightingsToUse = inApp.getDBI().listSightings(0, null, name, null, false, Sighting.class);
+        List<Sighting> lstSightingsToUse = inApp.getDBI().listSightings(0, id, 0, true, Sighting.class);
         builder.append("The following Creatures were observed at ").append(name).append(":").append(System.lineSeparator());
         Set<String> uniqueNames = new HashSet<>();
         for (Sighting tempsighting : lstSightingsToUse) {
-            if (!uniqueNames.contains(tempsighting.getElementName())) {
-                builder.append(tempsighting.getElementName()).append(System.lineSeparator());
-                uniqueNames.add(tempsighting.getElementName());
+            if (!uniqueNames.contains(tempsighting.getCachedElementName())) {
+                builder.append(tempsighting.getCachedElementName()).append(System.lineSeparator());
+                uniqueNames.add(tempsighting.getCachedElementName());
             }
         }
         return builder.toString();

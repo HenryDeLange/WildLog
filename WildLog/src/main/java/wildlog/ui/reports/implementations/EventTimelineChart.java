@@ -131,7 +131,7 @@ public class EventTimelineChart extends AbstractReport<Sighting> {
                     key = "All Observations";
                 }
                 else {
-                    key = sighting.getElementName(reportsBaseDialog.getOptionName());
+                    key = sighting.getCachedElementName(reportsBaseDialog.getOptionName());
                 }
                 Map<String, ReportDataWrapper> mapSpeciesData = mapDataPerElement.get(key);
                 if (mapSpeciesData == null) {

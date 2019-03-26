@@ -263,8 +263,8 @@ public class WildLogApp extends Application {
                                 printStream.print("&SystemInfo=" + info);
                                 printStream.print("&NumberOfElements=" + dbi.countElements(null, null));
                                 printStream.print("&NumberOfLocations=" + dbi.countLocations(null));
-                                printStream.print("&NumberOfVisits=" + dbi.countVisits(null, null));
-                                printStream.print("&NumberOfSightings=" + dbi.countSightings(0, null, null, null));
+                                printStream.print("&NumberOfVisits=" + dbi.countVisits(null, 0));
+                                printStream.print("&NumberOfSightings=" + dbi.countSightings(0, 0, 0, 0));
                                 printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(null, null));
                                 printStream.print("&PartialLog=" + logFileSnippit);
                                 printStream.print("&ZippedLog=" + Base64.getEncoder().encodeToString(logFileZip.toByteArray()).replaceAll("\\+", "%2B"));

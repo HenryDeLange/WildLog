@@ -5,7 +5,7 @@ import wildlog.data.enums.WildLogFileType;
 
 
 public class WildLogFileCore {
-    protected String id; // The id should be in the format: location-kruger or creature-rooibok
+    protected String id; // The id should be in the format [WILDLOGFILE_ID_PREFIX + id] of the parent data object
     protected String filename;
     protected String originalFileLocation; // This is used as the DB table ID
     protected Date uploadDate;

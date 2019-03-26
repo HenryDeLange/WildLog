@@ -2,23 +2,23 @@ package wildlog.data.dbi.queryobjects;
 
 
 public class LocationCount {
-    private String locationName;
+    private long locationID;
     private int count;
 
     public LocationCount() {
     }
 
-    public LocationCount(String inLocationName, int inCount) {
-        locationName = inLocationName;
+    public LocationCount(long inLocationID, int inCount) {
+        locationID = inLocationID;
         count = inCount;
     }
 
-    public String getLocationName() {
-        return locationName;
+    public long getLocationID() {
+        return locationID;
     }
 
-    public void setLocationName(String inLocationName) {
-        locationName = inLocationName;
+    public void setLocationID(long inLocationID) {
+        locationID = inLocationID;
     }
 
     public int getCount() {

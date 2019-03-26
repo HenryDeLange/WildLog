@@ -543,13 +543,13 @@ public class SystemMonitorDialog extends JFrame {
                 WildLogApp.getApplication().getDBI().countLocations(null)));
         UtilsReports.setupChartTooltips(controller.getCrtDBLocations(), true, true, false, false, true, seriesDBLocations.get(0).getData().size() - 1);
         seriesDBVisits.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
-                WildLogApp.getApplication().getDBI().countVisits(null, null)));
+                WildLogApp.getApplication().getDBI().countVisits(null, 0)));
         UtilsReports.setupChartTooltips(controller.getCrtDBVisits(), true, true, false, false, true, seriesDBVisits.get(0).getData().size() - 1);
         seriesDBElements.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countElements(null, null)));
         UtilsReports.setupChartTooltips(controller.getCrtDBElements(), true, true, false, false, true, seriesDBElements.get(0).getData().size() - 1);
         seriesDBSightings.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
-                WildLogApp.getApplication().getDBI().countSightings(0, null, null, null)));
+                WildLogApp.getApplication().getDBI().countSightings(0, 0, 0, 0)));
         UtilsReports.setupChartTooltips(controller.getCrtDBSightings(), true, true, false, false, true, seriesDBSightings.get(0).getData().size() - 1);
         seriesDBFiles.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countWildLogFiles(null, null)));

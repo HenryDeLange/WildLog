@@ -107,11 +107,11 @@ public class TextReports extends AbstractReport<Sighting> {
         // Load the data
         Map<String, VisitData> mapReportData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            VisitData data = mapReportData.get(sighting.getVisitName());
+            VisitData data = mapReportData.get(sighting.getCachedVisitName());
             if (data == null) {
                 data = new VisitData();
-                data.visitName = sighting.getVisitName();
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                data.visitName = sighting.getCachedVisitName();
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 if (visit != null) {
                     data.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
                     data.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
@@ -119,7 +119,7 @@ public class TextReports extends AbstractReport<Sighting> {
                     data.totalSightings = 0;
                     data.mapElementsAndCount = new HashMap<>();
                 }
-                mapReportData.put(sighting.getVisitName(), data);
+                mapReportData.put(sighting.getCachedVisitName(), data);
             }
             if (UtilsGPS.hasGPSData(sighting)) {
                 Sighting tempSighting;
@@ -134,8 +134,8 @@ public class TextReports extends AbstractReport<Sighting> {
                 data.gpsPoints.add(UtilsGPS.getLatitudeString(tempSighting) + System.lineSeparator() + UtilsGPS.getLongitudeString(tempSighting));
             }
             data.totalSightings = data.totalSightings + 1;
-            data.mapElementsAndCount.put(sighting.getElementName(reportsBaseDialog.getOptionName()), 
-                    data.mapElementsAndCount.getOrDefault(sighting.getElementName(reportsBaseDialog.getOptionName()), 0) + 1);
+            data.mapElementsAndCount.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), 
+                    data.mapElementsAndCount.getOrDefault(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), 0) + 1);
         }
         // Display the info
         List<VisitData> lstReportData = new ArrayList<>(mapReportData.values());
@@ -313,29 +313,29 @@ public class TextReports extends AbstractReport<Sighting> {
         Set<String> setLocationNames = new HashSet<>();
         Set<String> setVisitNames = new HashSet<>();
         for (Sighting sighting : inSightings) {
-            setElementNames.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
-            setLocationNames.add(sighting.getLocationName());
-            setVisitNames.add(sighting.getVisitName());
+            setElementNames.add(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
+            setLocationNames.add(sighting.getCachedLocationName());
+            setVisitNames.add(sighting.getCachedVisitName());
         }
         // Dates
         if (!inSightings.isEmpty()) {
             Collections.sort(inSightings);
             lstReportData.add(new DataPair("First Observation: ", UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(inSightings.get(0).getDate()))));
             lstReportData.add(new DataPair("Last Observation: ", UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(inSightings.get(inSightings.size() - 1).getDate()))));
-            lstReportData.add(new DataPair("First Place: ", inSightings.get(0).getLocationName()));
-            lstReportData.add(new DataPair("Last Place: ", inSightings.get(inSightings.size() - 1).getLocationName()));
-            lstReportData.add(new DataPair("First Creature: ", inSightings.get(0).getElementName(reportsBaseDialog.getOptionName())));
-            lstReportData.add(new DataPair("Last Creature: ", inSightings.get(inSightings.size() - 1).getElementName(reportsBaseDialog.getOptionName())));
+            lstReportData.add(new DataPair("First Place: ", inSightings.get(0).getCachedLocationName()));
+            lstReportData.add(new DataPair("Last Place: ", inSightings.get(inSightings.size() - 1).getCachedLocationName()));
+            lstReportData.add(new DataPair("First Creature: ", inSightings.get(0).getCachedElementName(reportsBaseDialog.getOptionName())));
+            lstReportData.add(new DataPair("Last Creature: ", inSightings.get(inSightings.size() - 1).getCachedElementName(reportsBaseDialog.getOptionName())));
         }
         // Number of Sightings
         lstReportData.add(new DataPair("Total Observations: ", Integer.toString(inSightings.size())));
         // Max/Min Sightings of Element per Location
         Map<String, ReportDataWrapper> mapMinMax = new HashMap<>(setElementNames.size() * setLocationNames.size());
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper countWrapper = mapMinMax.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            ReportDataWrapper countWrapper = mapMinMax.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (countWrapper == null) {
-                countWrapper = new ReportDataWrapper(sighting.getElementName(reportsBaseDialog.getOptionName()), null, 0);
-                mapMinMax.put(sighting.getElementName(reportsBaseDialog.getOptionName()), countWrapper);
+                countWrapper = new ReportDataWrapper(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), null, 0);
+                mapMinMax.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), countWrapper);
             }
             countWrapper.count++;
         }
@@ -359,12 +359,12 @@ public class TextReports extends AbstractReport<Sighting> {
         // Elements per Location
         Map<String, Set<String>> mapCounts = new HashMap<>(setLocationNames.size());
         for (Sighting sighting : inSightings) {
-            Set<String> countSet = mapCounts.get(sighting.getLocationName());
+            Set<String> countSet = mapCounts.get(sighting.getCachedLocationName());
             if (countSet == null) {
                 countSet = new HashSet<>(setElementNames.size());
-                mapCounts.put(sighting.getLocationName(), countSet);
+                mapCounts.put(sighting.getCachedLocationName(), countSet);
             }
-            countSet.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            countSet.add(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
         }
         min = inSightings.size();
         ave = 0;
@@ -384,12 +384,12 @@ public class TextReports extends AbstractReport<Sighting> {
         // Elements per Visit
         mapCounts = new HashMap<>(setVisitNames.size());
         for (Sighting sighting : inSightings) {
-            Set<String> countSet = mapCounts.get(sighting.getVisitName());
+            Set<String> countSet = mapCounts.get(sighting.getCachedVisitName());
             if (countSet == null) {
                 countSet = new HashSet<>(setElementNames.size());
-                mapCounts.put(sighting.getVisitName(), countSet);
+                mapCounts.put(sighting.getCachedVisitName(), countSet);
             }
-            countSet.add(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            countSet.add(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
         }
         min = inSightings.size();
         ave = 0;
@@ -409,12 +409,12 @@ public class TextReports extends AbstractReport<Sighting> {
         // Visits per Location
         mapCounts = new HashMap<>(setLocationNames.size());
         for (Sighting sighting : inSightings) {
-            Set<String> countSet = mapCounts.get(sighting.getLocationName());
+            Set<String> countSet = mapCounts.get(sighting.getCachedLocationName());
             if (countSet == null) {
                 countSet = new HashSet<>(setVisitNames.size());
-                mapCounts.put(sighting.getLocationName(), countSet);
+                mapCounts.put(sighting.getCachedLocationName(), countSet);
             }
-            countSet.add(sighting.getVisitName());
+            countSet.add(sighting.getCachedVisitName());
         }
         min = inSightings.size();
         ave = 0;

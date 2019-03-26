@@ -119,10 +119,10 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private Chart createBarChartSightings(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapData.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            ReportDataWrapper dataWrapper = mapData.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (dataWrapper == null) {
-                dataWrapper = new ReportDataWrapper(sighting.getElementName(reportsBaseDialog.getOptionName()), null, 0);
-                mapData.put(sighting.getElementName(reportsBaseDialog.getOptionName()), dataWrapper);
+                dataWrapper = new ReportDataWrapper(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), null, 0);
+                mapData.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), dataWrapper);
             }
             dataWrapper.increaseCount();
         }
@@ -162,14 +162,14 @@ public class ElementsChart extends AbstractReport<Sighting> {
     }
 
     private Chart createBarChartElements(List<Sighting> inSightings) {
-        Map<String, Set<String>> mapData = new HashMap<>();
+        Map<String, Set<Long>> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Set<String> set = mapData.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            Set<Long> set = mapData.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (set == null) {
                 set = new HashSet<>();
-                mapData.put(sighting.getElementName(reportsBaseDialog.getOptionName()), set);
+                mapData.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), set);
             }
-            set.add(sighting.getLocationName());
+            set.add(sighting.getLocationID());
         }
         ObservableList<BarChart.Series<Number, String>> chartData = FXCollections.observableArrayList();
         ObservableList<BarChart.Data<Number, String>> allSightings = FXCollections.observableArrayList();
@@ -209,10 +209,10 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private Chart createPieChartSightings(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper("", "", 0);
-                mapGroupedData.put(sighting.getElementName(reportsBaseDialog.getOptionName()), dataWrapper);
+                mapGroupedData.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), dataWrapper);
             }
             dataWrapper.increaseCount();
         }
@@ -232,13 +232,13 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private Chart createPieChartElementType(List<Sighting> inSightings) {
         Map<String, Set<String>> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Element element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementName(), Element.class);
+            Element element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementID(), null, Element.class);
             Set<String> setElements = mapGroupedData.get(UtilsData.stringFromObject(element.getType()));
             if (setElements == null) {
                 setElements = new HashSet<>();
                 mapGroupedData.put(UtilsData.stringFromObject(element.getType()), setElements);
             }
-            setElements.add(sighting.getElementName());
+            setElements.add(sighting.getCachedElementName());
         }
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapGroupedData.keySet());

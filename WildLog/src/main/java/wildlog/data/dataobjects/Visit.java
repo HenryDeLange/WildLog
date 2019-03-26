@@ -19,12 +19,12 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         super();
     }
 
-    public Visit(String inName) {
-        super(inName);
+    public Visit(long inID, String inName) {
+        super(inID, inName);
     }
 
-    public Visit(String inName, String inLocationName) {
-        super(inName, inLocationName);
+    public Visit(long inID, String inName, long inLocationID) {
+        super(inID, inName, inLocationID);
     }
 
 
@@ -65,7 +65,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
             htmlVisit.append("<br/>");
             htmlVisit.append("</td></tr>");
             htmlVisit.append("<tr><td>");
-            List<Sighting> sightings = inApp.getDBI().listSightings(0, null, null, name, false, Sighting.class);
+            List<Sighting> sightings = inApp.getDBI().listSightings(0, 0, id, true, Sighting.class);
             int counter = 0;
             for (int t = 0; t < sightings.size(); t++) {
                 htmlVisit.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
@@ -94,7 +94,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         builder.append("<description><![CDATA[").append(description).append("]]></description>");
         builder.append("<gameWatchingIntensity>").append(gameWatchingIntensity).append("</gameWatchingIntensity>");
         builder.append("<type>").append(type).append("</type>");
-        builder.append("<locationName>").append(locationName).append("</locationName>");
+        builder.append("<locationName>").append(cachedLocationName).append("</locationName>");
         StringBuilder filesString = new StringBuilder(200);
         List<WildLogFile> files = inApp.getDBI().listWildLogFiles(getWildLogFileID(), null, WildLogFile.class);
         int counter = 0;
@@ -110,7 +110,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         builder.append("<Files>").append(filesString).append("</Files>");
         if (inIncludeSightings) {
             StringBuilder sightingString = new StringBuilder(1024);
-            List<Sighting> sightings = inApp.getDBI().listSightings(0, null, null, name, false, Sighting.class);
+            List<Sighting> sightings = inApp.getDBI().listSightings(0, 0, id, true, Sighting.class);
             counter = 0;
             for (Sighting temp : sightings) {
                 sightingString.append(temp.toXML(inApp, null, false));
@@ -130,13 +130,13 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
     @Override
     public String toTXT(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         StringBuilder builder = new StringBuilder(50);
-        List<Sighting> lstSightingsToUse = inApp.getDBI().listSightings(0, null, null, name, false, Sighting.class);
+        List<Sighting> lstSightingsToUse = inApp.getDBI().listSightings(0, 0, id, true, Sighting.class);
         builder.append("The following Creatures were observed during ").append(name).append(":").append(System.lineSeparator());
         Set<String> uniqueNames = new HashSet<>();
         for (Sighting tempsighting : lstSightingsToUse) {
-            if (!uniqueNames.contains(tempsighting.getElementName())) {
-                builder.append(tempsighting.getElementName()).append(System.lineSeparator());
-                uniqueNames.add(tempsighting.getElementName());
+            if (!uniqueNames.contains(tempsighting.getCachedElementName())) {
+                builder.append(tempsighting.getCachedElementName()).append(System.lineSeparator());
+                uniqueNames.add(tempsighting.getCachedElementName());
             }
         }
         return builder.toString();

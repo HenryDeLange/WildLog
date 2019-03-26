@@ -211,9 +211,9 @@ public class VisitChart extends AbstractReport<Sighting> {
     private Chart createPieChartSightingCount(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getVisitName());
+            ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getCachedVisitName());
             if (dataWrapper == null) {
-                mapGroupedData.put(sighting.getVisitName(), new ReportDataWrapper("", "", 1));
+                mapGroupedData.put(sighting.getCachedVisitName(), new ReportDataWrapper("", "", 1));
             }
             else {
                 dataWrapper.increaseCount();
@@ -235,7 +235,7 @@ public class VisitChart extends AbstractReport<Sighting> {
     private Chart createPieChartVisitTypes(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+            Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
             String category = UtilsData.stringFromObject(visit.getType());
             if (category == null || category.isEmpty()) {
                 category = "Unknown";
@@ -264,9 +264,9 @@ public class VisitChart extends AbstractReport<Sighting> {
     private Chart createBarChartDuration(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapData.get(sighting.getVisitName());
+            ReportDataWrapper dataWrapper = mapData.get(sighting.getCachedVisitName());
             if (dataWrapper == null) {
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 dataWrapper = new ReportDataWrapper();
                 if (visit != null && visit.getStartDate() != null) {
                     LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
@@ -278,7 +278,7 @@ public class VisitChart extends AbstractReport<Sighting> {
                 else {
                      dataWrapper.count = 0;
                 }
-                mapData.put(sighting.getVisitName(), dataWrapper);
+                mapData.put(sighting.getCachedVisitName(), dataWrapper);
             }
         }
         ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
@@ -315,10 +315,10 @@ public class VisitChart extends AbstractReport<Sighting> {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         Set<String> processedVisits = new HashSet<>();
         for (Sighting sighting : inSightings) {
-            if (!processedVisits.contains(sighting.getVisitName())) {
-                processedVisits.add(sighting.getVisitName());
+            if (!processedVisits.contains(sighting.getCachedVisitName())) {
+                processedVisits.add(sighting.getCachedVisitName());
                 String duration = "Unknown";
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 if (visit != null && visit.getStartDate() != null) {
                     LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
                     if (endDate == null) {
@@ -335,7 +335,7 @@ public class VisitChart extends AbstractReport<Sighting> {
                 if (!dataWrapper.value.toString().isEmpty()) {
                     dataWrapper.value = dataWrapper.value + ", ";
                 }
-                dataWrapper.value = dataWrapper.value + sighting.getVisitName();
+                dataWrapper.value = dataWrapper.value + sighting.getCachedVisitName();
                 dataWrapper.increaseCount();
             }
         }
@@ -380,10 +380,10 @@ public class VisitChart extends AbstractReport<Sighting> {
     private Chart createBarChartSightingCount(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapData.get(sighting.getVisitName());
+            ReportDataWrapper dataWrapper = mapData.get(sighting.getCachedVisitName());
             if (dataWrapper == null) {
-                dataWrapper = new ReportDataWrapper(sighting.getVisitName(), null, 0);
-                mapData.put(sighting.getVisitName(), dataWrapper);
+                dataWrapper = new ReportDataWrapper(sighting.getCachedVisitName(), null, 0);
+                mapData.put(sighting.getCachedVisitName(), dataWrapper);
             }
             dataWrapper.increaseCount();
         }
@@ -423,14 +423,14 @@ public class VisitChart extends AbstractReport<Sighting> {
     }
 
     private Chart createBarChartElementCount(List<Sighting> inSightings) {
-        Map<String, Set<String>> mapData = new HashMap<>();
+        Map<String, Set<Long>> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Set<String> elementSet = mapData.get(sighting.getVisitName());
+            Set<Long> elementSet = mapData.get(sighting.getCachedVisitName());
             if (elementSet == null) {
                 elementSet = new HashSet<>();
-                mapData.put(sighting.getVisitName(), elementSet);
+                mapData.put(sighting.getCachedVisitName(), elementSet);
             }
-            elementSet.add(sighting.getElementName());
+            elementSet.add(sighting.getElementID());
         }
         ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
         ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
@@ -470,17 +470,17 @@ public class VisitChart extends AbstractReport<Sighting> {
     private Chart createBarChartAbundance(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapData.get(sighting.getVisitName());
+            ReportDataWrapper dataWrapper = mapData.get(sighting.getCachedVisitName());
             if (dataWrapper == null) {
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 if (visit != null && visit.getStartDate() != null) {
                     LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
                     if (endDate == null) {
                         endDate = LocalDate.now();
                     }
                     long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
-                    dataWrapper = new ReportDataWrapper(sighting.getVisitName(), days, 0);
-                    mapData.put(sighting.getVisitName(), dataWrapper);
+                    dataWrapper = new ReportDataWrapper(sighting.getCachedVisitName(), days, 0);
+                    mapData.put(sighting.getCachedVisitName(), dataWrapper);
                 }
             }
             if (dataWrapper != null) {
@@ -527,16 +527,16 @@ public class VisitChart extends AbstractReport<Sighting> {
         Map<String, Map<String, ReportDataWrapper>> mapChartDataGroupedForSeries = new HashMap<>();
         Map<String, ReportCountWrapper> mapKnownVisitInfo = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Map<String, ReportDataWrapper> mapPeriodsForElement = mapChartDataGroupedForSeries.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            Map<String, ReportDataWrapper> mapPeriodsForElement = mapChartDataGroupedForSeries.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (mapPeriodsForElement == null) {
                 mapPeriodsForElement = new HashMap<>();
                 // Don't add to the amp yet, because the continue below might want to skip this visit...
             }
-            ReportDataWrapper dataWrapper = mapPeriodsForElement.get(sighting.getVisitName());
-            ReportCountWrapper visitLevelInfo = mapKnownVisitInfo.get(sighting.getVisitName());
+            ReportDataWrapper dataWrapper = mapPeriodsForElement.get(sighting.getCachedVisitName());
+            ReportCountWrapper visitLevelInfo = mapKnownVisitInfo.get(sighting.getCachedVisitName());
             if (dataWrapper == null) {
                 if (visitLevelInfo == null) {
-                    Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                    Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                     if (visit != null && visit.getStartDate() != null) {
                         LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
                         if (endDate == null) {
@@ -544,17 +544,17 @@ public class VisitChart extends AbstractReport<Sighting> {
                         }
                         long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
                         visitLevelInfo = new ReportCountWrapper(0, 0, 0, (int) days);
-                        mapKnownVisitInfo.put(sighting.getVisitName(), visitLevelInfo);
+                        mapKnownVisitInfo.put(sighting.getCachedVisitName(), visitLevelInfo);
                     }
                     else {
                         // If this visit does not have a valid date range, then don't process it, continue to the next record instead
                         continue;
                     }
                 }
-                dataWrapper = new ReportDataWrapper(sighting.getVisitName(), (int) visitLevelInfo.count, 0);
-                mapPeriodsForElement.put(sighting.getVisitName(), dataWrapper);
+                dataWrapper = new ReportDataWrapper(sighting.getCachedVisitName(), (int) visitLevelInfo.count, 0);
+                mapPeriodsForElement.put(sighting.getCachedVisitName(), dataWrapper);
             }
-            mapChartDataGroupedForSeries.putIfAbsent(sighting.getElementName(reportsBaseDialog.getOptionName()), mapPeriodsForElement);
+            mapChartDataGroupedForSeries.putIfAbsent(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), mapPeriodsForElement);
             dataWrapper.increaseCount();
             visitLevelInfo.total = visitLevelInfo.total + 1;
         }
@@ -587,21 +587,21 @@ public class VisitChart extends AbstractReport<Sighting> {
     private Chart createBarChartRichness(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapData.get(sighting.getVisitName());
+            ReportDataWrapper dataWrapper = mapData.get(sighting.getCachedVisitName());
             if (dataWrapper == null) {
-                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                 if (visit != null && visit.getStartDate() != null) {
                     LocalDate endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
                     if (endDate == null) {
                         endDate = LocalDate.now();
                     }
                     long days = ChronoUnit.DAYS.between(UtilsTime.getLocalDateFromDate(visit.getStartDate()), endDate);
-                    dataWrapper = new ReportDataWrapper(sighting.getVisitName(), new HashSet<String>(), (int) days);
-                    mapData.put(sighting.getVisitName(), dataWrapper);
+                    dataWrapper = new ReportDataWrapper(sighting.getCachedVisitName(), new HashSet<String>(), (int) days);
+                    mapData.put(sighting.getCachedVisitName(), dataWrapper);
                 }
             }
             if (dataWrapper != null) {
-                ((HashSet<String>) dataWrapper.value).add(sighting.getElementName());
+                ((HashSet<String>) dataWrapper.value).add(sighting.getCachedElementName());
             }
         }
         ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();

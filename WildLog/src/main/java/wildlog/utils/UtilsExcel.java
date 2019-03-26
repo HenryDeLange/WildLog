@@ -51,8 +51,8 @@ public final class UtilsExcel {
     public static void exportSightingToExcel(HSSFSheet sheet, int rowCount, Sighting tempSighting, WildLogApp inApp) {
         Row row = sheet.createRow(rowCount);
         int col = 0;
-        row.createCell(col++).setCellValue(tempSighting.getElementName());
-        Element tempElement = inApp.getDBI().findElement(tempSighting.getElementName(), Element.class);
+        row.createCell(col++).setCellValue(tempSighting.getCachedElementName());
+        Element tempElement = inApp.getDBI().findElement(tempSighting.getElementID(), null, Element.class);
         if (tempElement != null) {
             row.createCell(col++).setCellValue(tempElement.getScientificName());
             row.createCell(col++).setCellValue(getStringValue(tempElement.getType()));
@@ -61,8 +61,8 @@ public final class UtilsExcel {
             row.createCell(col++).setCellValue("");
             row.createCell(col++).setCellValue("");
         }
-        row.createCell(col++).setCellValue(tempSighting.getLocationName());
-        Location tempLocation = inApp.getDBI().findLocation(tempSighting.getLocationName(), Location.class);
+        row.createCell(col++).setCellValue(tempSighting.getCachedLocationName());
+        Location tempLocation = inApp.getDBI().findLocation(tempSighting.getLocationID(), null, Location.class);
         if (tempLocation != null) {
             row.createCell(col++).setCellValue(getStringValue(tempLocation.getGPSAccuracy()));
             row.createCell(col++).setCellValue(getStringValue(tempLocation.getGPSAccuracyValue()));
@@ -75,8 +75,8 @@ public final class UtilsExcel {
             row.createCell(col++).setCellValue("");
             row.createCell(col++).setCellValue("");
         }
-        row.createCell(col++).setCellValue(tempSighting.getVisitName());
-        Visit tempVisit = inApp.getDBI().findVisit(tempSighting.getVisitName(), Visit.class);
+        row.createCell(col++).setCellValue(tempSighting.getCachedVisitName());
+        Visit tempVisit = inApp.getDBI().findVisit(tempSighting.getVisitID(), null, false, Visit.class);
         if (tempVisit != null) {
             row.createCell(col++).setCellValue(getStringValue(tempVisit.getType()));
             if (tempVisit.getStartDate() != null) {
@@ -101,7 +101,7 @@ public final class UtilsExcel {
             row.createCell(col++).setCellValue("");
             row.createCell(col++).setCellValue("");
         }
-        row.createCell(col++).setCellValue(Long.toString(tempSighting.getSightingCounter()));
+        row.createCell(col++).setCellValue(Long.toString(tempSighting.getID()));
         row.createCell(col++).setCellValue(getStringValue(tempSighting.getCertainty()));
         row.createCell(col++).setCellValue(getStringValue(tempSighting.getSightingEvidence()));
         row.createCell(col++).setCellValue(getStringValue(tempSighting.getTimeAccuracy()));

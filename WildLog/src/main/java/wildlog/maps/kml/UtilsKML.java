@@ -220,21 +220,21 @@ public final class UtilsKML {
         }
         else {
             if (inDataObject instanceof Location) {
-                listSightings = inApp.getDBI().listSightings(0, null, inDataObject.getDisplayName(), null, false, Sighting.class);
+                listSightings = inApp.getDBI().listSightings(0, inDataObject.getIDField(), 0, true, Sighting.class);
             }
             else
             if (inDataObject instanceof Element) {
-                listSightings = inApp.getDBI().listSightings(0, inDataObject.getDisplayName(), null, null, false, Sighting.class);
+                listSightings = inApp.getDBI().listSightings(0, inDataObject.getIDField(), 0, true, Sighting.class);
             }
             else
             if (inDataObject instanceof Visit) {
-                listSightings = inApp.getDBI().listSightings(0, null, null, inDataObject.getDisplayName(), false, Sighting.class);
+                listSightings = inApp.getDBI().listSightings(0, 0, inDataObject.getIDField(), true, Sighting.class);
             }
             else
             if (inDataObject instanceof Sighting) {
                 Sighting tempSighting = (Sighting) inDataObject;
-                listSightings = inApp.getDBI().listSightings(tempSighting.getSightingCounter(), 
-                        tempSighting.getElementName(), tempSighting.getLocationName(), tempSighting.getVisitName(), false, Sighting.class);
+                listSightings = new ArrayList<>(1);
+                listSightings.add(tempSighting);
             }
             else {
                 listSightings = new ArrayList<>(0);
@@ -245,10 +245,10 @@ public final class UtilsKML {
         for (int t = 0; t < listSightings.size(); t++) {
             String key;
             if (!groupByLocationName) {
-                key = listSightings.get(t).getElementName();
+                key = listSightings.get(t).getCachedElementName();
             }
             else{
-                key = listSightings.get(t).getLocationName();
+                key = listSightings.get(t).getCachedLocationName();
             }
             if (!entries.containsKey(key)) {
                 entries.put(key, new ArrayList<KmlEntry>(20));
@@ -265,11 +265,11 @@ public final class UtilsKML {
             }
             else
             if (inDataObject instanceof Visit) {
-                listLocations = inApp.getDBI().listLocations(((Visit) inDataObject).getLocationName(), Location.class);
+                listLocations = inApp.getDBI().listLocations(((Visit) inDataObject).getCachedLocationName(), Location.class);
             }
             else
             if (inDataObject instanceof Sighting) {
-                listLocations = inApp.getDBI().listLocations(((Sighting) inDataObject).getLocationName(), Location.class);
+                listLocations = inApp.getDBI().listLocations(((Sighting) inDataObject).getCachedLocationName(), Location.class);
             }
             else {
                 listLocations = inApp.getDBI().listLocations(null, Location.class);

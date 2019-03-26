@@ -153,16 +153,16 @@ public class DurationChart extends AbstractReport<Sighting> {
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalElements = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds()));
+            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()) + "-" + getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds()));
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper();
-                dataWrapper.key = sighting.getElementName(reportsBaseDialog.getOptionName());
+                dataWrapper.key = sighting.getCachedElementName(reportsBaseDialog.getOptionName());
                 dataWrapper.value = getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds());
                 dataWrapper.count = 0;
-                mapTotalElements.put(sighting.getElementName(reportsBaseDialog.getOptionName()), 0);
+                mapTotalElements.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), 0);
             }
             dataWrapper.count++;
-            mapInitialCountedData.put(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds()), dataWrapper);
+            mapInitialCountedData.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()) + "-" + getTimeAsString(sighting.getDurationMinutes(), sighting.getDurationSeconds()), dataWrapper);
             if (sighting.getDurationMinutes() > maxMinutes) {
                 maxMinutes = sighting.getDurationMinutes();
             }

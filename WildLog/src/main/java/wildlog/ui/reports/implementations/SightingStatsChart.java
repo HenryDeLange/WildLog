@@ -164,10 +164,10 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         // Get the data structured
         Map<String, ReportCountWrapper> mapElemNum = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportCountWrapper countWrapper = mapElemNum.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            ReportCountWrapper countWrapper = mapElemNum.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (countWrapper == null) {
                 countWrapper = new ReportCountWrapper(0, 0, 0, 0);
-                mapElemNum.put(sighting.getElementName(reportsBaseDialog.getOptionName()), countWrapper);
+                mapElemNum.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), countWrapper);
                 countWrapper.min = Double.MAX_VALUE;
             }
             if (sighting.getNumberOfElements() > 0) {
@@ -256,10 +256,10 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         Map<String, Map<LocalDate, ReportCountWrapper>> mapElemCount = new HashMap<>();
         for (Sighting sighting : inSightings) {
             LocalDateTime currentDate = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
-            Map<LocalDate, ReportCountWrapper> mapCount = mapElemCount.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            Map<LocalDate, ReportCountWrapper> mapCount = mapElemCount.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (mapCount == null) {
                 mapCount = new HashMap<>();
-                mapElemCount.put(sighting.getElementName(reportsBaseDialog.getOptionName()), mapCount);
+                mapElemCount.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), mapCount);
             }
             if (ActiveTime.DAY.equals(ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()))) {
                 // Days are easier because the dates simply need to be on the same day
@@ -384,10 +384,10 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         Map<String, Map<LocalDate, ReportCountWrapper>> mapElemCount = new HashMap<>();
         for (Sighting sighting : inSightings) {
             LocalDateTime currentDate = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
-            Map<LocalDate, ReportCountWrapper> mapCount = mapElemCount.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            Map<LocalDate, ReportCountWrapper> mapCount = mapElemCount.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (mapCount == null) {
                 mapCount = new HashMap<>();
-                mapElemCount.put(sighting.getElementName(reportsBaseDialog.getOptionName()), mapCount);
+                mapElemCount.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), mapCount);
             }
             if (ActiveTime.DAY.equals(ActiveTime.getFromActiveTimeSpecific(sighting.getTimeOfDay()))) {
                 // Days are easier because the dates simply need to be on the same day
@@ -555,14 +555,14 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
     private Chart createFirstSightingBarChart(List<Sighting> inSightings) {
         // Remember that the night streches over two calendar days
         // Get the starting dates
-        Map<String, LocalDate> mapVisitDates = new HashMap<>();
+        Map<Long, LocalDate> mapVisitDates = new HashMap<>();
         LocalDate startDate = null; 
         for (Sighting sighting : inSightings) {
-            LocalDate possibleStartDate = mapVisitDates.get(sighting.getVisitName());
-            if (possibleStartDate == null && !mapVisitDates.containsKey(sighting.getVisitName())) {
+            LocalDate possibleStartDate = mapVisitDates.get(sighting.getVisitID());
+            if (possibleStartDate == null && !mapVisitDates.containsKey(sighting.getVisitID())) {
                 possibleStartDate = UtilsTime.getLocalDateFromDate(
-                        WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitName(), Visit.class).getStartDate());
-                mapVisitDates.put(sighting.getVisitName(), possibleStartDate);
+                        WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class).getStartDate());
+                mapVisitDates.put(sighting.getVisitID(), possibleStartDate);
             }
             // If no date was found then use the Sighting's date
             if (possibleStartDate == null) {
@@ -586,14 +586,14 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 }
             }
             // Set the min/max days
-            ReportCountWrapper wrapper = mapElemDate.get(sighting.getElementName(reportsBaseDialog.getOptionName()));
+            ReportCountWrapper wrapper = mapElemDate.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()));
             if (wrapper == null) {
                 wrapper = new ReportCountWrapper();
                 wrapper.min = Double.MAX_VALUE;
                 wrapper.max = 0;
-                mapElemDate.put(sighting.getElementName(reportsBaseDialog.getOptionName()), wrapper);
+                mapElemDate.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), wrapper);
             }
-            LocalDate visitDate = mapVisitDates.get(sighting.getVisitName());
+            LocalDate visitDate = mapVisitDates.get(sighting.getVisitID());
             if (visitDate == null) {
                 visitDate = startDate;
             }
@@ -601,13 +601,13 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
             if (wrapper.min > days) {
                 wrapper.min = days;
                 if (cmbOption.getSelectionModel().isSelected(0)) {
-                    wrapper.value = sighting.getVisitName() + " [Start = " + visitDate + "] [Observed = " + adjustedDate + "]";
+                    wrapper.value = sighting.getCachedVisitName() + " [Start = " + visitDate + "] [Observed = " + adjustedDate + "]";
                 }
             }
             if (wrapper.max < days) {
                 wrapper.max = days;
                 if (cmbOption.getSelectionModel().isSelected(2)) {
-                    wrapper.value = sighting.getVisitName() + " [Start = " + visitDate + "] [Observed = " + adjustedDate + "]";
+                    wrapper.value = sighting.getCachedVisitName() + " [Start = " + visitDate + "] [Observed = " + adjustedDate + "]";
                 }
             }
         }

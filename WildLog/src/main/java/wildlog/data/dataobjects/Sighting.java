@@ -35,8 +35,8 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         super(inSightingCounter);
     }
 
-    public Sighting(String inElementName, String inLocationName, String inVisitName) {
-        super(inElementName, inLocationName, inVisitName);
+    public Sighting(long inElementID, long inLocationID, long inVisitID) {
+        super(inElementID, inLocationID, inVisitID);
     }
     
     
@@ -46,16 +46,21 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
      * 1 = Other Name <br>
      * 2 = Scientific Name
      */
-    public String getElementName(int inNameChoice) {
+    public String getCachedElementName(int inNameChoice) {
 // FIXME: Hierdie is handig, maar kan baie stadig word binne groot FOR loops...
-        String primaryName = super.getElementName();
+        String primaryName = cachedElementName;
+        Element element = null;
+        if (primaryName == null || inNameChoice > 0) {
+            element = WildLogApp.getApplication().getDBI().findElement(id, null, Element.class);
+            primaryName = element.getPrimaryName();
+        }
+        // Primary name
         if (inNameChoice == 0) {
             return primaryName;
         }
         else
         if (inNameChoice == 1) {
             // Other name
-            Element element = WildLogApp.getApplication().getDBI().findElement(primaryName, Element.class);
             if (element.getOtherName() != null && !element.getOtherName().isEmpty()) {
                 return element.getOtherName();
             }
@@ -63,7 +68,6 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         else 
         if (inNameChoice == 2) {
             // Scientific name
-            Element element = WildLogApp.getApplication().getDBI().findElement(primaryName, Element.class);
             if (element.getScientificName()!= null && !element.getScientificName().isEmpty()) {
                 return element.getScientificName();
             }
@@ -79,11 +83,17 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
      * @return
      */
     public Path toPath() {
+        if (cachedLocationName == null || cachedVisitName == null || cachedElementName == null) {
+            Sighting tempSighting = WildLogApp.getApplication().getDBI().findSighting(id, true, Sighting.class);
+            cachedLocationName = tempSighting.getCachedLocationName();
+            cachedVisitName = tempSighting.getCachedVisitName();
+            cachedElementName = tempSighting.getCachedElementName();
+        }
         if (!WildLogApp.getApplication().getWildLogOptions().isUseIndividualsInSightingPath()) {
-            return Paths.get(locationName, visitName, elementName);
+            return Paths.get(cachedLocationName, cachedVisitName, cachedElementName);
         }
         else {
-            return Paths.get(locationName, visitName, elementName, Integer.toString(numberOfElements));
+            return Paths.get(cachedLocationName, cachedVisitName, cachedElementName, Integer.toString(numberOfElements));
         }
     }
     
@@ -109,7 +119,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, boolean inIsSummary, 
             WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
         StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
-        htmlSighting.append("<title>Sightings ID: ").append(sightingCounter).append("</title></head>");
+        htmlSighting.append("<title>Sightings ID: ").append(id).append("</title></head>");
         htmlSighting.append("<body bgcolor='#EEEAD3'>");
         htmlSighting.append("<table bgcolor='#EEEAD3' width='100%'>");
         htmlSighting.append("<tr><td style='font-size:9px;font-family:verdana;'>");
@@ -123,12 +133,12 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
 
     private String getHtmlContent(boolean inIncludeImages, boolean inIsSummary, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
         StringBuilder htmlSighting = new StringBuilder(1000);
-        htmlSighting.append("<b><u>Observation ID: ").append(UtilsHTML.formatObjectAsString(sightingCounter)).append("</u></b>");
+        htmlSighting.append("<b><u>Observation ID: ").append(UtilsHTML.formatObjectAsString(id)).append("</u></b>");
         htmlSighting.append("<br/>");
-        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Creature:</b><br/>", elementName, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Place:</b><br/>", locationName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Creature:</b><br/>", cachedElementName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Place:</b><br/>", cachedLocationName, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Period:</b><br/>", visitName, true);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Period:</b><br/>", cachedVisitName, true);
         }
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date:</b><br/>", UtilsHTML.formatDateAsString(date, true), true);
         if (!inIsSummary) {
@@ -194,9 +204,9 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     public KmlEntry toKML(int inID, WildLogApp inApp) {
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
-        entry.setName(elementName);
+        entry.setName(cachedElementName);
         entry.setDescription(toHTML(false, true, true, inApp, UtilsHTMLExportTypes.ForKML, null));
-        Element element = inApp.getDBI().findElement(elementName, Element.class);
+        Element element = inApp.getDBI().findElement(elementID, null, Element.class);
         if (element.getType() != null) {
             if (element.getType().equals(ElementType.MAMMAL)) {
                 if (element.getFeedingClass() == null) {
@@ -336,7 +346,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             entry.setStyle("otherStyle");
         }
         if (latitude == null || longitude == null) {
-            Location location = inApp.getDBI().findLocation(locationName, Location.class);
+            Location location = inApp.getDBI().findLocation(locationID, null, Location.class);
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
                     entry.setLatitude(UtilsGPS.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
@@ -350,7 +360,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         }
         else
         if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
-            Location location = inApp.getDBI().findLocation(locationName, Location.class);
+            Location location = inApp.getDBI().findLocation(locationID, null, Location.class);
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
                     entry.setLatitude(UtilsGPS.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
@@ -373,11 +383,11 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     public String toXML(WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIncludeSightings) {
         StringBuilder builder = new StringBuilder(700);
         builder.append("<Observation>");
-        builder.append("<sightingCounter>").append(sightingCounter).append("</sightingCounter>");
+        builder.append("<sightingCounter>").append(id).append("</sightingCounter>");
         builder.append("<date>").append(UtilsHTML.formatDateAsString(date, true)).append("</date>");
-        builder.append("<elementName><![CDATA[").append(elementName).append("]]></elementName>");
-        builder.append("<locationName><![CDATA[").append(locationName).append("]]></locationName>");
-        builder.append("<visitName><![CDATA[").append(visitName).append("]]></visitName>");
+        builder.append("<elementName><![CDATA[").append(cachedElementName).append("]]></elementName>");
+        builder.append("<locationName><![CDATA[").append(cachedLocationName).append("]]></locationName>");
+        builder.append("<visitName><![CDATA[").append(cachedVisitName).append("]]></visitName>");
         builder.append("<timeOfDay>").append(timeOfDay).append("</timeOfDay>");
         builder.append("<timeAccuracy>").append(timeAccuracy).append("</timeAccuracy>");
         builder.append("<certainty>").append(certainty).append("</certainty>");
@@ -417,16 +427,16 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     @Override
     public String toTXT(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         StringBuilder builder = new StringBuilder(50);
-        builder.append("Observation ").append(sightingCounter).append(" details:").append(System.lineSeparator());
+        builder.append("Observation ").append(id).append(" details:").append(System.lineSeparator());
         if (date != null) {
             builder.append("Date = ").append(UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(date))).append(System.lineSeparator());
         }
         else {
             builder.append("Date = ").append(System.lineSeparator());
         }
-        builder.append("Creature = ").append(elementName).append(System.lineSeparator());
-        builder.append("Place = ").append(locationName).append(System.lineSeparator());
-        builder.append("Period = ").append(visitName).append(System.lineSeparator());
+        builder.append("Creature = ").append(cachedElementName).append(System.lineSeparator());
+        builder.append("Place = ").append(cachedLocationName).append(System.lineSeparator());
+        builder.append("Period = ").append(cachedVisitName).append(System.lineSeparator());
         return builder.toString();
     }
 

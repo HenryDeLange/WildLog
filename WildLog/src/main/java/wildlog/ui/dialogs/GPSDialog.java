@@ -1063,7 +1063,7 @@ public class GPSDialog extends JDialog {
             // Is a Sighting
             if (dataObjectWithGPS instanceof Sighting) {
                 Sighting sighting = (Sighting) dataObjectWithGPS;
-                if (sighting.getSightingCounter() != 0) {
+                if (sighting.getID() != 0) {
                     int option = WLOptionPane.showOptionDialog(this, 
                             "Please select where to search for GPS points.", 
                             "Where to search?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
@@ -1241,7 +1241,7 @@ public class GPSDialog extends JDialog {
                     else
                     if (option == 1) {
                         // Use the Location's GPS
-                        Location location = app.getDBI().findLocation(sighting.getLocationName(), Location.class);
+                        Location location = app.getDBI().findLocation(sighting.getLocationID(), null, Location.class);
                         if (location != null && UtilsGPS.hasGPSData(location)) {
                             showNothingFoundDialog = false;
                             loadUIValues(location);
@@ -1253,7 +1253,7 @@ public class GPSDialog extends JDialog {
                     else
                     if (option == 2) {
                         // Use the Location's Files
-                        Location location = app.getDBI().findLocation(sighting.getLocationName(), Location.class);
+                        Location location = app.getDBI().findLocation(sighting.getLocationID(), null, Location.class);
                         if (location != null) {
                             List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(location.getWildLogFileID(), null, WildLogFile.class);
                             for (WildLogFile wildLogFile : lstFiles) {
@@ -1310,7 +1310,7 @@ public class GPSDialog extends JDialog {
                         else
                         if (option == 1) {
                             // Use the Sightings' GPS
-                            List<Sighting> lstSightings = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
+                            List<Sighting> lstSightings = app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class);
                             for (Sighting sighting : lstSightings) {
                                 if (UtilsGPS.hasGPSData(sighting)) {
                                     showNothingFoundDialog = false;
@@ -1324,7 +1324,7 @@ public class GPSDialog extends JDialog {
                         else
                         if (option == 2) {
                             // Use the Sightings' Files
-                            List<Sighting> lstSightings = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
+                            List<Sighting> lstSightings = app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class);
                             for (Sighting sighting : lstSightings) {
                                 List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
                                 for (WildLogFile wildLogFile : lstFiles) {

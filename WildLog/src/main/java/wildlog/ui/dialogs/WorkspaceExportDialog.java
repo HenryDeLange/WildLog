@@ -540,7 +540,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
                 if (dataWrapper.getDataObject() instanceof Location) {
-                    Location location = app.getDBI().findLocation(((Location) dataWrapper.getDataObject()).getName(), Location.class);
+                    Location location = app.getDBI().findLocation(((Location) dataWrapper.getDataObject()).getID(), null, Location.class);
                     if (chkReduceGPS.isSelected()) {
                         location.setLatSeconds(0.0);
                         location.setLonSeconds(0.0);
@@ -550,36 +550,36 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     if (chkRemoveDescriptions.isSelected()) {
                         location.setDescription("");
                     }
-                    if (inNewDBI.findLocation(location.getName(), Location.class) == null) {
+                    if (inNewDBI.findLocation(location.getID(), null, Location.class) == null) {
                         inNewDBI.createLocation(location);
                         saveFiles(inNewDBI, inDestinationWorkspace, location);
                     }
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Visit) {
-                    Visit visit = app.getDBI().findVisit(((Visit) dataWrapper.getDataObject()).getName(), Visit.class);
+                    Visit visit = app.getDBI().findVisit(((Visit) dataWrapper.getDataObject()).getID(), null, true, Visit.class);
                     if (chkRemoveDescriptions.isSelected()) {
                         visit.setDescription("");
                     }
-                    if (inNewDBI.findVisit(visit.getName(), Visit.class) == null) {
+                    if (inNewDBI.findVisit(visit.getID(), null, true, Visit.class) == null) {
                         inNewDBI.createVisit(visit);
                         saveFiles(inNewDBI, inDestinationWorkspace, visit);
                     }
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Element) {
-                    Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getPrimaryName(), Element.class);
-                    if (inNewDBI.findElement(element.getPrimaryName(), Element.class) == null) {
+                    Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getID(), null, Element.class);
+                    if (inNewDBI.findElement(element.getID(), null, Element.class) == null) {
                         inNewDBI.createElement(element);
                         saveFiles(inNewDBI, inDestinationWorkspace, element);
                     }
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof SightingWrapper) {
-                    Sighting sighting = app.getDBI().findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getSightingCounter(), Sighting.class);
+                    Sighting sighting = app.getDBI().findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getID(), true, Sighting.class);
                     boolean doExport = true;
                     if (chkOnlyFirstSighting.isSelected()) {
-                        if (!inUniqueElementsPerVisit.add(sighting.getVisitName() + "-" + sighting.getElementName())) {
+                        if (!inUniqueElementsPerVisit.add(sighting.getVisitID()+ "-" + sighting.getElementID())) {
                             doExport = false;
                         }
                     }
@@ -602,12 +602,12 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             calendar.set(Calendar.MILLISECOND, 0);
                             sighting.setDate(calendar.getTime());
                         }
-                        if (inNewDBI.countSightings(sighting.getSightingCounter(), null, null, null) == 0) {
+                        if (inNewDBI.countSightings(sighting.getID(), 0, 0, 0) == 0) {
                             // Note: The sighting ID needs to be the same for the linked images to work...
                             inNewDBI.createSighting(sighting, true);
                             saveFiles(inNewDBI, inDestinationWorkspace, sighting);
                             // Save ook die iNaturalist linked data
-                            INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(sighting.getSightingCounter(), 0, INaturalistLinkedData.class);
+                            INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(sighting.getID(), 0, INaturalistLinkedData.class);
                             if (linkedData != null) {
                                 inNewDBI.createINaturalistLinkedData(linkedData);
                             }
@@ -741,30 +741,30 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
         }
         else {
-            Set<String> uniqueLocations = new HashSet<>();
+            Set<Long> uniqueLocations = new HashSet<>();
             locations = new ArrayList<>();
             for (Sighting sighting : lstSightings) {
-                if (!uniqueLocations.contains(sighting.getLocationName())) {
-                    uniqueLocations.add(sighting.getLocationName());
-                    locations.add(new Location(sighting.getLocationName()));
+                if (!uniqueLocations.contains(sighting.getLocationID())) {
+                    uniqueLocations.add(sighting.getLocationID());
+                    locations.add(app.getDBI().findLocation(sighting.getLocationID(), null, Location.class));
                 }
             }
         }
-        Map<String, DefaultMutableTreeNode> mapElements;
-        Map<String, DefaultMutableTreeNode> mapVisits;
+        Map<Long, DefaultMutableTreeNode> mapElements;
+        Map<Long, DefaultMutableTreeNode> mapVisits;
         Collections.sort(locations);
         for (Location location : locations) {
             mapElements = new HashMap<>(500);
             mapVisits = new HashMap<>(500);
             DefaultMutableTreeNode locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(location, false));
             root.add(locationNode);
-            List<Sighting> sightings = app.getDBI().listSightings(0, null, location.getName(), null, false, Sighting.class);
+            List<Sighting> sightings = app.getDBI().listSightings(0, location.getID(), 0, true, Sighting.class);
             Collections.sort(sightings, new Comparator<Sighting>() {
                 @Override
                 public int compare(Sighting sighting1, Sighting sighting2) {
-                    int result = sighting1.getVisitName().compareTo(sighting2.getVisitName());
+                    int result = sighting1.getCachedVisitName().compareTo(sighting2.getCachedVisitName());
                     if (result == 0) {
-                        result = sighting1.getElementName().compareTo(sighting2.getElementName());
+                        result = sighting1.getCachedElementName().compareTo(sighting2.getCachedElementName());
                         if (result == 0) {
                             result = sighting1.getDate().compareTo(sighting2.getDate());
                         }
@@ -779,25 +779,25 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 }
                 else {
                     for (Sighting tempSighting : lstSightings) {
-                        if (sighting.getSightingCounter() == tempSighting.getSightingCounter()) {
+                        if (sighting.getID()== tempSighting.getID()) {
                             found = true;
                             break;
                         }
                     }
                 }
                 if (found) {
-                    DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
+                    DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitID());
                     if (visitNode == null) {
-                        visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
-                        mapVisits.put(sighting.getVisitName(), visitNode);
+                        visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(app.getDBI().findVisit(sighting.getVisitID(), null, true, Visit.class), false));
+                        mapVisits.put(sighting.getVisitID(), visitNode);
                         // Clear die hashmap hier as 'n nuwe visit gelaai word (die sightings behoort volgens visit gesort te wees, so die visit sal nie weer verskyn nie.
                         mapElements.clear();
                     }
                     locationNode.add(visitNode);
-                    DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementName());
+                    DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementID());
                     if (elementNode == null) {
-                        elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Element(sighting.getElementName()), false));
-                        mapElements.put(sighting.getElementName(), elementNode);
+                        elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(app.getDBI().findElement(sighting.getElementID(), null, Element.class), false));
+                        mapElements.put(sighting.getElementID(), elementNode);
                     }
                     visitNode.add(elementNode);
                     DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
@@ -815,30 +815,30 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             elements = app.getDBI().listElements(null, null, null, Element.class);
         }
         else {
-            Set<String> uniqueLocations = new HashSet<>();
+            Set<Long> uniqueElements = new HashSet<>();
             elements = new ArrayList<>();
             for (Sighting sighting : lstSightings) {
-                if (!uniqueLocations.contains(sighting.getElementName())) {
-                    uniqueLocations.add(sighting.getElementName());
-                    elements.add(new Element(sighting.getElementName()));
+                if (!uniqueElements.contains(sighting.getElementID())) {
+                    uniqueElements.add(sighting.getElementID());
+                    elements.add(app.getDBI().findElement(sighting.getElementID(), null, Element.class));
                 }
             }
         }
-        Map<String, DefaultMutableTreeNode> mapLocations;
-        Map<String, DefaultMutableTreeNode> mapVisits;
+        Map<Long, DefaultMutableTreeNode> mapLocations;
+        Map<Long, DefaultMutableTreeNode> mapVisits;
         Collections.sort(elements);
         for (Element element : elements) {
             mapLocations = new HashMap<>(100);
             mapVisits = new HashMap<>(500);
             DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(element, false));
             root.add(elementNode);
-            List<Sighting> sightings = app.getDBI().listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
+            List<Sighting> sightings = app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class);
             Collections.sort(sightings, new Comparator<Sighting>() {
                 @Override
                 public int compare(Sighting sighting1, Sighting sighting2) {
-                    int result = sighting1.getLocationName().compareTo(sighting2.getLocationName());
+                    int result = sighting1.getCachedLocationName().compareTo(sighting2.getCachedLocationName());
                     if (result == 0) {
-                        result = sighting1.getVisitName().compareTo(sighting2.getVisitName());
+                        result = sighting1.getCachedVisitName().compareTo(sighting2.getCachedVisitName());
                         if (result == 0) {
                             result = sighting1.getDate().compareTo(sighting2.getDate());
                         }
@@ -853,23 +853,23 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 }
                 else {
                     for (Sighting tempSighting : lstSightings) {
-                        if (sighting.getSightingCounter() == tempSighting.getSightingCounter()) {
+                        if (sighting.getID() == tempSighting.getID()) {
                             found = true;
                             break;
                         }
                     }
                 }
                 if (found) {
-                    DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationName());
+                    DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationID());
                     if (locationNode == null) {
-                        locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Location(sighting.getLocationName()), false));
-                        mapLocations.put(sighting.getLocationName(), locationNode);
+                        locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(app.getDBI().findLocation(sighting.getLocationID(), null, Location.class), false));
+                        mapLocations.put(sighting.getLocationID(), locationNode);
                     }
                     elementNode.add(locationNode);
-                    DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
+                    DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitID());
                     if (visitNode == null) {
-                        visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
-                        mapVisits.put(sighting.getVisitName(), visitNode);
+                        visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(app.getDBI().findVisit(sighting.getVisitID(), null, true, Visit.class), false));
+                        mapVisits.put(sighting.getVisitID(), visitNode);
                     }
                     locationNode.add(visitNode);
                     DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));

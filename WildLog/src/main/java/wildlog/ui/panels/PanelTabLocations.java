@@ -294,21 +294,21 @@ public class PanelTabLocations extends JPanel {
                 tblElement.clearSelection();
             }
             // Get Image
-            String tempLocationName = (String) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1);
-            int fotoCount = app.getDBI().countWildLogFiles(null, Location.WILDLOGFILE_ID_PREFIX + tempLocationName);
+            long tempLocationID = (Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 7);
+            int fotoCount = app.getDBI().countWildLogFiles(null, Location.WILDLOGFILE_ID_PREFIX + tempLocationID);
             if (fotoCount > 0) {
-                UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + tempLocationName, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + tempLocationID, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             }
-            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, tempLocationName);
-            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, tempLocationName);
+            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, tempLocationID);
+            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, tempLocationID);
         }
         else {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, null);
-            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, null);
+            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, 0);
+            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, 0);
             if (tblLocation.getSelectedRowCount() == 0) {
                 tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
                 tblElement.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
@@ -355,7 +355,7 @@ public class PanelTabLocations extends JPanel {
         app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 7),
                 PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
         }
         app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
@@ -367,7 +367,7 @@ public class PanelTabLocations extends JPanel {
         app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (Long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 4),
                 PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
         }
         app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
@@ -386,10 +386,10 @@ public class PanelTabLocations extends JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    String locationName = (String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1);
-                    List<Visit> visits = app.getDBI().listVisits(null, locationName, null, Visit.class);
+                    long locationID = (Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 7);
+                    List<Visit> visits = app.getDBI().listVisits(null, locationID, null, false, Visit.class);
                     for (int i = 0; i < visits.size(); i++) {
-                        UtilsPanelGenerator.removeOpenedTab(visits.get(i).getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel);
+                        UtilsPanelGenerator.removeOpenedTab(visits.get(i).getID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel);
                     }
                     // Daar kan steeds tabs wees wat nuwe visits het vir die location wat nog nie gesave was nie wat ek ook moet toe maak...
                     // Build up list and delete on components not index to prevent index issues when removing
@@ -399,8 +399,7 @@ public class PanelTabLocations extends JPanel {
                             PanelCanSetupHeader.HeaderPanel headerPanel = (PanelCanSetupHeader.HeaderPanel)tabbedPanel.getTabComponentAt(i);
                             if (headerPanel.getTabType() != null && PanelCanSetupHeader.TabTypes.VISIT.equals(headerPanel.getTabType())) {
                                 PanelVisit panelVisit = (PanelVisit)headerPanel.getParentPanel();
-                                if (panelVisit.getLocationForVisit() != null
-                                    && locationName.equalsIgnoreCase(panelVisit.getLocationForVisit().getName())) {
+                                if (panelVisit.getLocationForVisit() != null && locationID == panelVisit.getLocationForVisit().getID()) {
                                     tabsToRemove.add(headerPanel);
                                 }
                             }
@@ -410,8 +409,8 @@ public class PanelTabLocations extends JPanel {
                         tabbedPanel.remove(headerPanel.getParentPanel());
                     }
                     // Remove die loation se eie tab
-                    UtilsPanelGenerator.removeOpenedTab(locationName, PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel);
-                    app.getDBI().deleteLocation(locationName);
+                    UtilsPanelGenerator.removeOpenedTab(locationID, PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel);
+                    app.getDBI().deleteLocation(locationID);
                 }
                 formComponentShown(null);
             }
@@ -435,11 +434,11 @@ public class PanelTabLocations extends JPanel {
         if (tblLocation.getSelectedRow() != -1) {
             app.getMainFrame().getGlassPane().setVisible(true);
             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            Location tempLocation = app.getDBI().findLocation((String)tblLocation.getModel().getValueAt(
-                    tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1), Location.class);
+            Location tempLocation = app.getDBI().findLocation((Long) tblLocation.getModel().getValueAt(
+                    tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 7), null, Location.class);
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1)),
+                UtilsPanelGenerator.openPanelAsTab(app, (Long) tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 4),
                     PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, tempLocation);
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
@@ -449,7 +448,7 @@ public class PanelTabLocations extends JPanel {
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
-            String tempLocationName = (String) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1);
+            String tempLocationName = (String) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 7);
             UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + tempLocationName, 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased

@@ -1599,8 +1599,8 @@ public final class WildLogView extends WildLogMainView {
 
     private void tabHomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabHomeComponentShown
         lblLocations.setText("Places: " + app.getDBI().countLocations(null));
-        lblVisits.setText("Periods: " + app.getDBI().countVisits(null, null));
-        lblSightings.setText("Observations: " + app.getDBI().countSightings(0, null, null, null));
+        lblVisits.setText("Periods: " + app.getDBI().countVisits(null, 0));
+        lblSightings.setText("Observations: " + app.getDBI().countSightings(0, 0, 0, 0));
         lblCreatures.setText("Creatures: " + app.getDBI().countElements(null, null));
         lblWorkspaceName.setText(app.getWildLogOptions().getWorkspaceName());
     }//GEN-LAST:event_tabHomeComponentShown
@@ -1749,7 +1749,7 @@ public final class WildLogView extends WildLogMainView {
                             // Update all Observations
                             setMessage("Starting the Sun and Moon Calculation");
                             setProgress(0);
-                            List<Sighting> sightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                            List<Sighting> sightings = app.getDBI().listSightings(0, 0, 0, false, Sighting.class);
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 UtilsTime.calculateSunAndMoon(sighting);
@@ -1765,7 +1765,7 @@ public final class WildLogView extends WildLogMainView {
                             // Update only Observations without Sun and Moon phase
                             setMessage("Starting the Sun and Moon Calculation");
                             setProgress(0);
-                            List<Sighting> sightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                            List<Sighting> sightings = app.getDBI().listSightings(0, 0, 0, false, Sighting.class);
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 if (sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
@@ -1952,7 +1952,7 @@ public final class WildLogView extends WildLogMainView {
                 }
                 setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 // Visits
-                List<Visit> listVisits = app.getDBI().listVisits(null, null, null, Visit.class);
+                List<Visit> listVisits = app.getDBI().listVisits(null, 0, null, false, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     UtilsHTML.exportHTML(listVisits.get(t), app, null);
                     setProgress(50 + (int)((t/(double)listVisits.size())*25));
@@ -1960,7 +1960,7 @@ public final class WildLogView extends WildLogMainView {
                 }
                 setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsHTML.exportHTML(listSightings.get(t), app, null);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));
@@ -1996,13 +1996,13 @@ public final class WildLogView extends WildLogMainView {
                 setProgress(5);
                 setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                 Collections.sort(listSightings);
                 for (int t = 0; t < listSightings.size(); t++) {
-                    String key = listSightings.get(t).getElementName();
+                    String key = listSightings.get(t).getCachedElementName();
                     if (!entries.containsKey(key)) {
                         entries.put(key, new ArrayList<KmlEntry>(30));
-                     }
+                    }
                     entries.get(key).add(listSightings.get(t).toKML(t, app));
                     setProgress(5 + (int)((t/(double)listSightings.size())*80));
                     setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
@@ -2350,7 +2350,8 @@ public final class WildLogView extends WildLogMainView {
                             // Check the WildLogFile's linkage
                             if (wildLogFile.getId().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Element temp = app.getDBI().findElement(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()), Element.class);
+                                final Element temp = app.getDBI().findElement(
+                                        Long.parseLong(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())), null, Element.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:   Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", CreatureName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
@@ -2368,7 +2369,8 @@ public final class WildLogView extends WildLogMainView {
                             else 
                             if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Visit temp = app.getDBI().findVisit(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()), Visit.class);
+                                final Visit temp = app.getDBI().findVisit(
+                                        Long.parseLong(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())), null, true, Visit.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:   Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PeriodName Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
@@ -2380,13 +2382,14 @@ public final class WildLogView extends WildLogMainView {
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(temp, 
                                         wildLogFile,
-                                        Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getLocationName(), temp.getName()).normalize(),
+                                        Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getCachedLocationName(), temp.getName()).normalize(),
                                         filesMoved);
                             }
                             else 
                             if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Location temp = app.getDBI().findLocation(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()), Location.class);
+                                final Location temp = app.getDBI().findLocation(
+                                        Long.parseLong(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())), null, Location.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:   Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PlaceName Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
@@ -2406,7 +2409,8 @@ public final class WildLogView extends WildLogMainView {
                                 // Make sure it is linked
                                 Sighting temp = null;
                                 try {
-                                    temp = app.getDBI().findSighting(Long.parseLong(wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), Sighting.class);
+                                    temp = app.getDBI().findSighting(
+                                            Long.parseLong(wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), true, Sighting.class);
                                 }
                                 catch (NumberFormatException ex) {
                                     finalHandleFeedback.println("PROBLEM:     Can't get linked Observation's ID.");
@@ -2566,23 +2570,23 @@ public final class WildLogView extends WildLogMainView {
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("6) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
                         // Check Visits
-                        List<Visit> allVisits = app.getDBI().listVisits(null, null, null, Visit.class);
+                        List<Visit> allVisits = app.getDBI().listVisits(null, 0, null, true, Visit.class);
                         int badDataLinks = 0;
                         int countVisits = 0;
                         for (Visit visit : allVisits) {
                             // Validate the Visit to Location link
-                            Location temp = app.getDBI().findLocation(visit.getLocationName(), Location.class);
+                            Location temp = app.getDBI().findLocation(visit.getLocationID(), null, Location.class);
                             if (temp == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   Could not find link between Period and Place. "
-                                        + "Period: " + visit.getName() + ", Place: " + visit.getLocationName());
+                                        + "Period: " + visit.getName() + ", Place: " + visit.getCachedLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Period to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
+                                Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
-                                    newLocation = new Location("WildLog_lost_and_found");
+                                    newLocation = new Location(0, "WildLog_lost_and_found");
                                     app.getDBI().createLocation(newLocation);
                                 }
-                                visit.setLocationName("WildLog_lost_and_found");
+                                visit.setLocationID(newLocation.getID());
                                 // Still an issue with sightings not going to point to the correct place... (handled in the code below)
                                 app.getDBI().updateVisit(visit, visit.getName());
                             }
@@ -2591,80 +2595,80 @@ public final class WildLogView extends WildLogMainView {
                             setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
                         }
                         // Check Sightings
-                        List<Sighting> allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                        List<Sighting> allSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                         int countSightings = 0;
                         for (Sighting sighting : allSightings) {
                             // Validate the Sighting to Location link
-                            Location tempLocation = app.getDBI().findLocation(sighting.getLocationName(), Location.class);
+                            Location tempLocation = app.getDBI().findLocation(sighting.getLocationID(), null, Location.class);
                             if (tempLocation == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Place. "
-                                        + "Observation: " + sighting.getSightingCounter() + ", Place: " + sighting.getLocationName());
+                                        + "Observation: " + sighting.getID() + ", Place: " + sighting.getCachedLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
+                                Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
-                                    newLocation = new Location("WildLog_lost_and_found");
+                                    newLocation = new Location(0, "WildLog_lost_and_found");
                                     app.getDBI().createLocation(newLocation);
                                 }
-                                sighting.setLocationName("WildLog_lost_and_found");
+                                sighting.setLocationID(newLocation.getID());
                                 app.getDBI().updateSighting(sighting);
                             }
                             // Validate the Sighting to Element link
-                            Element tempElement = app.getDBI().findElement(sighting.getElementName(), Element.class);
+                            Element tempElement = app.getDBI().findElement(sighting.getElementID(), null, Element.class);
                             if (tempElement == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Creature. "
-                                        + "Observation: " + sighting.getSightingCounter() + ", Creature: " + sighting.getLocationName());
+                                        + "Observation: " + sighting.getID()+ ", Creature: " + sighting.getCachedElementName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Creature called 'WildLog_lost_and_found'.");
-                                Element newElement = app.getDBI().findElement("WildLog_lost_and_found", Element.class);
+                                Element newElement = app.getDBI().findElement(0, "WildLog_lost_and_found", Element.class);
                                 if (newElement == null) {
-                                    newElement = new Element("WildLog_lost_and_found");
+                                    newElement = new Element(0, "WildLog_lost_and_found");
                                     app.getDBI().createElement(newElement);
                                 }
-                                sighting.setElementName("WildLog_lost_and_found");
+                                sighting.setElementID(newElement.getID());
                                 app.getDBI().updateSighting(sighting);
                             }
                             // Validate the Sighting to Visit link
-                            Visit tempVisit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                            Visit tempVisit = app.getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                             if (tempVisit == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Period. "
-                                        + "Observation: " + sighting.getSightingCounter() + ", Period: " + sighting.getVisitName());
+                                        + "Observation: " + sighting.getID() + ", Period: " + sighting.getCachedVisitName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Period called 'WildLog_lost_and_found'.");
-                                // Visit
-                                Visit newVisit = app.getDBI().findVisit("WildLog_lost_and_found", Visit.class);
-                                if (newVisit == null) {
-                                    newVisit = new Visit("WildLog_lost_and_found");
-                                    newVisit.setLocationName("WildLog_lost_and_found");
-                                    app.getDBI().createVisit(newVisit);
-                                }
-                                sighting.setVisitName("WildLog_lost_and_found");
                                 // Location
-                                Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
+                                Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
-                                    newLocation = new Location("WildLog_lost_and_found");
+                                    newLocation = new Location(0, "WildLog_lost_and_found");
                                     app.getDBI().createLocation(newLocation);
                                 }
-                                sighting.setLocationName("WildLog_lost_and_found");
+                                sighting.setLocationID(newLocation.getID());
+                                // Visit
+                                Visit newVisit = app.getDBI().findVisit(0, "WildLog_lost_and_found", false, Visit.class);
+                                if (newVisit == null) {
+                                    newVisit = new Visit(0, "WildLog_lost_and_found");
+                                    newVisit.setLocationID(newLocation.getID());
+                                    app.getDBI().createVisit(newVisit);
+                                }
+                                sighting.setVisitID(newVisit.getID());
                                 app.getDBI().updateSighting(sighting);
                             }
                             // Make sure the Sighting is using a legitimate Location-Visit pair
-                            Visit checkSightingVisit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
-                            if (!checkSightingVisit.getLocationName().equalsIgnoreCase(sighting.getLocationName())) {
+                            Visit checkSightingVisit = app.getDBI().findVisit(sighting.getVisitID(), null, true, Visit.class);
+                            if (checkSightingVisit.getLocationID() != sighting.getLocationID()) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   The Observation and Period references different Places. "
-                                        + "Observation: " + sighting.getLocationName() + ", Period: " + checkSightingVisit.getLocationName());
+                                        + "Observation: " + sighting.getCachedLocationName() + ", Period: " + checkSightingVisit.getCachedLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation and Period to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().findLocation("WildLog_lost_and_found", Location.class);
+                                Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
-                                    newLocation = new Location("WildLog_lost_and_found");
+                                    newLocation = new Location(0, "WildLog_lost_and_found");
                                     app.getDBI().createLocation(newLocation);
                                 }
                                 // Update sighting
-                                sighting.setLocationName("WildLog_lost_and_found");
+                                sighting.setLocationID(newLocation.getID());
                                 app.getDBI().updateSighting(sighting);
                                 // Update visit
-                                checkSightingVisit.setLocationName("WildLog_lost_and_found");
+                                checkSightingVisit.setLocationID(newLocation.getID());
                                 app.getDBI().updateVisit(checkSightingVisit, checkSightingVisit.getName());
                             }
                             countSightings++;
@@ -2678,7 +2682,7 @@ public final class WildLogView extends WildLogMainView {
                         setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("7) Check the GPS Accuracy values.");
-                        allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                        allSightings = app.getDBI().listSightings(0, 0, 0, false, Sighting.class);
                         int countGPSAccuracy = 0;
                         int badGPSAccuracy = 0;
                         for (Sighting sighting : allSightings) {
@@ -2689,7 +2693,7 @@ public final class WildLogView extends WildLogMainView {
                                 sighting.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
                                 app.getDBI().updateSighting(sighting);
                                 badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:   GPS information found without GPS Accuracy for Observation (" + sighting.getSightingCounter() + ").");
+                                finalHandleFeedback.println("PROBLEM:   GPS information found without GPS Accuracy for Observation (" + sighting.getID() + ").");
                                 finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
                             }
                             else {
@@ -2700,7 +2704,7 @@ public final class WildLogView extends WildLogMainView {
                                     sighting.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
                                     app.getDBI().updateSighting(sighting);
                                     badGPSAccuracy++;
-                                    finalHandleFeedback.println("PROBLEM:   GPS Accuracy information found without GPS location for Observation (" + sighting.getSightingCounter() + ").");
+                                    finalHandleFeedback.println("PROBLEM:   GPS Accuracy information found without GPS location for Observation (" + sighting.getID() + ").");
                                     finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
                                 }
                             }
@@ -2709,7 +2713,7 @@ public final class WildLogView extends WildLogMainView {
                                 sighting.setGPSAccuracyValue(sighting.getGPSAccuracy().getMaxMeters());
                                 app.getDBI().updateSighting(sighting);
                                 badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:   GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Observation (" + sighting.getSightingCounter() + ").");
+                                finalHandleFeedback.println("PROBLEM:   GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Observation (" + sighting.getID() + ").");
                                 finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                             }
                             countGPSAccuracy++;
@@ -2760,30 +2764,41 @@ public final class WildLogView extends WildLogMainView {
                         setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + getProgress() + "%");
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("8) Check the Period and linked Observation date ranges.");
-                        allSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                        allSightings = app.getDBI().listSightings(0, 0, 0, false, Sighting.class);
+                        Collections.sort(allSightings, new Comparator<Sighting>() {
+                            @Override
+                            public int compare(Sighting inSighting1, Sighting inSighting2) {
+                                return Long.compare(inSighting1.getVisitID(), inSighting2.getVisitID());
+                            }
+                        });
                         int badVisitDates = 0;
                         int linkCount = 0;
-                        Set<String> processedVisits = new HashSet<>();
+                        Set<Long> processedVisits = new HashSet<>();
                         for (Sighting sighting : allSightings) {
-                            if (processedVisits.add(sighting.getVisitName())) {
-                                Visit visit = app.getDBI().findVisit(sighting.getVisitName(), Visit.class);
+                            Visit visit = app.getDBI().findVisit(sighting.getVisitID(), null, true, Visit.class);
+                            if (processedVisits.add(visit.getID())) {
                                 if (visit.getStartDate() == null) {
-                                    finalHandleFeedback.println("WARNING:   The Period (" + sighting.getVisitName() + ") does not have a Start Date.");
+                                    finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") does not have a Start Date.");
                                     finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Reports and Maps.");
                                     badVisitDates++;
                                 }
+                                if (visit.getStartDate() == null && visit.getEndDate() != null) {
+                                    finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") has an End Date but does not have a Start Date.");
+                                    finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods with an End Date to also have a Start Date.");
+                                    badVisitDates++;
+                                }
                                 if (visit.getStartDate() != null && visit.getEndDate() != null && visit.getEndDate().before(visit.getStartDate())) {
-                                    finalHandleFeedback.println("WARNING:   The Period (" + sighting.getVisitName() + ") has an End Date that is before the Start Date.");
+                                    finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") has an End Date that is before the Start Date.");
                                     finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have a valid date range.");
                                     badVisitDates++;
                                 }
-                                LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
-                                if ((visit.getStartDate() != null && sightingDate.isBefore(UtilsTime.getLocalDateFromDate(visit.getStartDate()))) 
-                                        || (visit.getEndDate() != null && sightingDate.isAfter(UtilsTime.getLocalDateFromDate(visit.getEndDate())))) {
-                                    finalHandleFeedback.println("WARNING:   The date for Observation (" + sighting.getSightingCounter() + ") does not fall within the dates from Period (" + sighting.getVisitName() + ").");
-                                    finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Observations to use dates that fall within the Start date and End Date of the linked Period.");
-                                    badVisitDates++;
-                                }
+                            }
+                            LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+                            if ((visit.getStartDate() != null && sightingDate.isBefore(UtilsTime.getLocalDateFromDate(visit.getStartDate()))) 
+                                    || (visit.getEndDate() != null && sightingDate.isAfter(UtilsTime.getLocalDateFromDate(visit.getEndDate())))) {
+                                finalHandleFeedback.println("WARNING:   The date for Observation (" + sighting.getID() + ") does not fall within the dates from Period (" + visit.getName() + ").");
+                                finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Observations to use dates that fall within the Start date and End Date of the linked Period.");
+                                badVisitDates++;
                             }
                             linkCount++;
                             setProgress(76 + (int)(linkCount/(double)allSightings.size()*2));
@@ -2812,7 +2827,7 @@ public final class WildLogView extends WildLogMainView {
                                     listFiles.add(image);
                                 }
                             }
-                            List<Visit> lstVisit = app.getDBI().listVisits(null, null, null, Visit.class);
+                            List<Visit> lstVisit = app.getDBI().listVisits(null, 0, null, false, Visit.class);
                             for (Visit visit : lstVisit) {
                                 WildLogFile image = app.getDBI().findWildLogFile(null, visit.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
                                 if (image != null) {
@@ -3043,7 +3058,7 @@ public final class WildLogView extends WildLogMainView {
                             // Update all observations
                             setMessage("Starting the Duration Calculation");
                             setProgress(0);
-                            List<Sighting> sightingList = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                            List<Sighting> sightingList = app.getDBI().listSightings(0, 0, 0, false, Sighting.class);
                             for (int t = 0; t < sightingList.size(); t++) {
                                 Sighting sighting = sightingList.get(t);
                                 // Using only images here since it is more reliable (and safer to automate) than movies
@@ -3071,7 +3086,7 @@ public final class WildLogView extends WildLogMainView {
                             // Update all observations
                             setMessage("Starting the Duration Calculation");
                             setProgress(0);
-                            List<Sighting> sightingList = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                            List<Sighting> sightingList = app.getDBI().listSightings(0, 0, 0, false, Sighting.class);
                             for (int t = 0; t < sightingList.size(); t++) {
                                 Sighting sighting = sightingList.get(t);
                                 if (sighting.getDurationMinutes() == 0 && sighting.getDurationSeconds() == 0.0) {
@@ -3338,18 +3353,18 @@ public final class WildLogView extends WildLogMainView {
                         setTaskProgress(11);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Setup the Location
-                        Location wildNoteLocation = app.getDBI().findLocation(WildLogConstants.WILDNOTE_LOCATION_NAME, Location.class);
+                        Location wildNoteLocation = app.getDBI().findLocation(0, WildLogConstants.WILDNOTE_LOCATION_NAME, Location.class);
                         if (wildNoteLocation == null) {
-                            wildNoteLocation = new Location(WildLogConstants.WILDNOTE_LOCATION_NAME);
+                            wildNoteLocation = new Location(0, WildLogConstants.WILDNOTE_LOCATION_NAME);
                             app.getDBI().createLocation(wildNoteLocation);
                         }
                         setTaskProgress(13);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Setup the Visit
-                        Visit tempVisit = new Visit(WildLogConstants.WILDNOTE_VISIT_NAME + " - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(LocalDateTime.now()),
-                                WildLogConstants.WILDNOTE_LOCATION_NAME);
-                        while (app.getDBI().countVisits(tempVisit.getName(), null) > 0) {
-                            tempVisit = new Visit(tempVisit.getName() + "_wl", tempVisit.getLocationName());
+                        Visit tempVisit = new Visit(0, WildLogConstants.WILDNOTE_VISIT_NAME + " - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(LocalDateTime.now()),
+                                wildNoteLocation.getID());
+                        while (app.getDBI().countVisits(tempVisit.getName(), 0) > 0) {
+                            tempVisit = new Visit(0, tempVisit.getName() + "_wl", tempVisit.getLocationID());
                         }
                         app.getDBI().createVisit(tempVisit);
                         setTaskProgress(15);
@@ -3358,7 +3373,7 @@ public final class WildLogView extends WildLogMainView {
                         List<Element> listElements = syncDBI.listElements(null, null, null, Element.class);
                         for (int t = 0; t < listElements.size(); t++) {
                             Element element = listElements.get(t);
-                            if (app.getDBI().findElement(element.getPrimaryName(), Element.class) == null) {
+                            if (app.getDBI().findElement(element.getID(), null, Element.class) == null) {
                                 app.getDBI().createElement(element);
                             }
                             setTaskProgress(15 + (int)(t/(double)listElements.size()*10));
@@ -3367,11 +3382,11 @@ public final class WildLogView extends WildLogMainView {
                         setTaskProgress(25);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Sightings
-                        List<Sighting> listSightings = syncDBI.listSightings(0, null, null, null, false, Sighting.class);
+                        List<Sighting> listSightings = syncDBI.listSightings(0, 0, 0, false, Sighting.class);
                         for (int t = 0; t < listSightings.size(); t++) {
                             Sighting sighting = listSightings.get(t);
-                            sighting.setVisitName(tempVisit.getName());
-                            sighting.setSightingCounter(0);
+                            sighting.setID(0);
+                            sighting.setVisitID(tempVisit.getID());
                             sighting.setTimeAccuracy(TimeAccuracy.GOOD);
                             // Calculate the "auto" fields (sun, moon, etc.)
                             if (sighting.getCertainty() == null || Certainty.NONE.equals(Certainty.getEnumFromText(sighting.getCertainty().toString()))) {
@@ -3394,7 +3409,7 @@ public final class WildLogView extends WildLogMainView {
                         }
                         setTaskProgress(95);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
-                        UtilsPanelGenerator.openPanelAsTab(app, tempVisit.getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, wildNoteLocation);
+                        UtilsPanelGenerator.openPanelAsTab(app, tempVisit.getID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, wildNoteLocation);
                         setTaskProgress(97);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                     }
@@ -3651,7 +3666,7 @@ public final class WildLogView extends WildLogMainView {
                 }
                 setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
                 // Visits
-                List<Visit> listVisits = app.getDBI().listVisits(null, null, null, Visit.class);
+                List<Visit> listVisits = app.getDBI().listVisits(null, 0, null, true, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     UtilsXML.exportXML(listVisits.get(t), app, null, false);
                     setProgress(50 + (int)((t/(double)listVisits.size())*25));
@@ -3659,7 +3674,7 @@ public final class WildLogView extends WildLogMainView {
                 }
                 setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsXML.exportXML(listSightings.get(t), app, null, false);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));
@@ -3961,7 +3976,7 @@ public final class WildLogView extends WildLogMainView {
                 }
                 setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 // Visits
-                List<Visit> listVisits = app.getDBI().listVisits(null, null, null, Visit.class);
+                List<Visit> listVisits = app.getDBI().listVisits(null, 0, null, true, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     Visit visit = listVisits.get(t);
                     Path tempPath = path.resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName() + ".csv");
@@ -3972,7 +3987,7 @@ public final class WildLogView extends WildLogMainView {
                 }
                 setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                 Path tempPath = path.resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("AllObservations.csv");
                 Files.createDirectories(tempPath.getParent());
                 app.getDBI().doExportBasicCSV(tempPath, null, null, null, null, listSightings);
@@ -4008,7 +4023,7 @@ public final class WildLogView extends WildLogMainView {
                 }
                 setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
                 // Visits
-                List<Visit> listVisits = app.getDBI().listVisits(null, null, null, Visit.class);
+                List<Visit> listVisits = app.getDBI().listVisits(null, 0, null, true, Visit.class);
                 for (int t = 0; t < listVisits.size(); t++) {
                     UtilsHTML.exportFancyHTML(listVisits.get(t), app, null);
                     setProgress(50 + (int)((t/(double)listVisits.size())*25));
@@ -4016,7 +4031,7 @@ public final class WildLogView extends WildLogMainView {
                 }
                 setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                List<Sighting> listSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsHTML.exportFancyHTML(listSightings.get(t), app, null);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));
@@ -4182,7 +4197,7 @@ public final class WildLogView extends WildLogMainView {
                 setTaskProgress(1);
                 setMessage("Busy with the Excel Export... " + getProgress() + "%");
                 Path path;
-                List<Sighting> lstSightingsToUse = app.getDBI().listSightings(0, null, null, null, false, Sighting.class);
+                List<Sighting> lstSightingsToUse = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                 setTaskProgress(3);
                 setMessage("Busy with the Excel Export... " + getProgress() + "%");
                 path = WildLogPaths.WILDLOG_EXPORT_XLS_ALL.getAbsoluteFullPath().resolve("WildLog_Observations.xls");

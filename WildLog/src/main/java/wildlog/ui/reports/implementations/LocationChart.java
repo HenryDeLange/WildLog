@@ -99,10 +99,10 @@ public class LocationChart extends AbstractReport<Sighting> {
     private Chart createBarChartSightings(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapData.get(sighting.getLocationName());
+            ReportDataWrapper dataWrapper = mapData.get(sighting.getCachedLocationName());
             if (dataWrapper == null) {
-                dataWrapper = new ReportDataWrapper(sighting.getLocationName(), null, 0);
-                mapData.put(sighting.getLocationName(), dataWrapper);
+                dataWrapper = new ReportDataWrapper(sighting.getCachedLocationName(), null, 0);
+                mapData.put(sighting.getCachedLocationName(), dataWrapper);
             }
             dataWrapper.increaseCount();
         }
@@ -132,12 +132,12 @@ public class LocationChart extends AbstractReport<Sighting> {
     private Chart createBarChartElements(List<Sighting> inSightings) {
         Map<String, Set<String>> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Set<String> set = mapData.get(sighting.getLocationName());
+            Set<String> set = mapData.get(sighting.getCachedLocationName());
             if (set == null) {
                 set = new HashSet<>();
-                mapData.put(sighting.getLocationName(), set);
+                mapData.put(sighting.getCachedLocationName(), set);
             }
-            set.add(sighting.getElementName());
+            set.add(sighting.getCachedElementName());
         }
         ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
         ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
@@ -165,9 +165,9 @@ public class LocationChart extends AbstractReport<Sighting> {
     private Chart createPieChartSightings(List<Sighting> inSightings) {
          Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-             ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getLocationName());
+             ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getCachedLocationName());
             if (dataWrapper == null) {
-                mapGroupedData.put(sighting.getLocationName(), new ReportDataWrapper("", "", 1));
+                mapGroupedData.put(sighting.getCachedLocationName(), new ReportDataWrapper("", "", 1));
             }
             else {
                 dataWrapper.increaseCount();

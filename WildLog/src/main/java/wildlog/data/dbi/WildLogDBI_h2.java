@@ -7,10 +7,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.JOptionPane;
@@ -21,23 +17,12 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
-import wildlog.data.enums.ActiveTimeSpesific;
-import wildlog.data.enums.Certainty;
+import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
-import wildlog.data.enums.GPSAccuracy;
-import wildlog.data.enums.Latitudes;
-import wildlog.data.enums.LifeStatus;
-import wildlog.data.enums.Longitudes;
-import wildlog.data.enums.SightingEvidence;
-import wildlog.data.enums.TimeAccuracy;
-import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
-import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.WLOptionPane;
-import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
@@ -135,7 +120,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             }
         }
     }
-
+    
+    
+    @Override
+    protected void setupAuditInfo(DataObjectWithAudit inDataObjectWithAudit) {
+        inDataObjectWithAudit.setAuditTime(System.currentTimeMillis());
+        inDataObjectWithAudit.setAuditUser(WildLogApp.WILDLOG_USER_NAME);
+    }
 
     @Override
     public void doBackup(Path inDestinationFolder) {
@@ -242,8 +233,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
                     + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
                     + " FROM SIGHTINGS";
-                if (inSighting != null && inSighting.getSightingCounter() > 0) {
-                    sql = sql + " WHERE SIGHTINGCOUNTER = " +  inSighting.getSightingCounter();
+                if (inSighting != null && inSighting.getID() > 0) {
+                    sql = sql + " WHERE SIGHTINGCOUNTER = " +  inSighting.getID();
                 }
                 state.execute("CALL CSVWRITE('" + inPath.resolve("Observations.csv").toAbsolutePath().toString() + "', '" + sql + "')");
             }
@@ -255,7 +246,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     + " FROM SIGHTINGS";
                 sql = sql + " WHERE SIGHTINGCOUNTER in (";
                 for (Sighting tempSighting : inLstSightings) {
-                    sql = sql + tempSighting.getSightingCounter() + ",";
+                    sql = sql + tempSighting.getID() + ",";
                 }
                 sql = sql.substring(0, sql.length() - 1) + ")";
                 state.execute("CALL CSVWRITE('" + inPath.resolve("Observations.csv").toAbsolutePath().toString() + "', '" + sql + "')");
@@ -317,14 +308,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 sql = sql + andIndicator + " S.VISITNAME = ''" + inVisit.getName().replaceAll("'", "''") + "''";
                 andIndicator = " AND ";
             }
-            if (inSighting != null && inSighting.getSightingCounter() > 0) {
-                sql = sql + andIndicator + " S.SIGHTINGCOUNTER = " + inSighting.getSightingCounter();
+            if (inSighting != null && inSighting.getID()> 0) {
+                sql = sql + andIndicator + " S.SIGHTINGCOUNTER = " + inSighting.getID();
                 andIndicator = " AND ";
             }
             if (inLstSightings != null && !inLstSightings.isEmpty()) {
                 sql = sql + andIndicator + " S.SIGHTINGCOUNTER IN (";
                 for (Sighting tempSighting : inLstSightings) {
-                    sql = sql + tempSighting.getSightingCounter() + ",";
+                    sql = sql + tempSighting.getID() + ",";
                 }
                 sql = sql.substring(0, sql.length() - 1) + ")";
             }
@@ -352,94 +343,94 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         Statement state = null;
         ResultSet results = null;
         boolean success = true;
-        try {
-            state = conn.createStatement();
-            // Import Elements
-            if (Files.exists(inPath.resolve("Creatures.csv").toAbsolutePath())) {
-                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Creatures.csv").toAbsolutePath().toString() + "')");
-                while (results.next()) {
-                    Element tempElement = new Element();
-                    populateElement(results, tempElement);
-                    tempElement.setPrimaryName(inPrefix + results.getString("PRIMARYNAME"));
-                    success = success && createElement(tempElement);
-                }
-                results.close();
-            }
-            // Import Locations
-            if (Files.exists(inPath.resolve("Places.csv").toAbsolutePath())) {
-                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Places.csv").toAbsolutePath().toString() + "')");
-                while (results.next()) {
-                    Location tempLocation = new Location();
-                    populateLocation(results, tempLocation);
-                    tempLocation.setName(inPrefix + results.getString("NAME"));
-                    success = success && createLocation(tempLocation);
-                }
-                results.close();
-            }
-            // Import Visits
-            if (Files.exists(inPath.resolve("Periods.csv").toAbsolutePath())) {
-                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Periods.csv").toAbsolutePath().toString() + "')");
-                while (results.next()) {
-                    Visit tempVisit = new Visit();
-                    populateVisit(results, tempVisit);
-                    tempVisit.setName(inPrefix + results.getString("NAME"));
-                    tempVisit.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
-                    success = success && createVisit(tempVisit);
-                }
-                results.close();
-            }
-            // Import Sightings
-            if (Files.exists(inPath.resolve("Observations.csv").toAbsolutePath())) {
-                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Observations.csv").toAbsolutePath().toString() + "')");
-                while (results.next()) {
-                    Sighting tempSighting = new Sighting();
-                    populateSighting(results, tempSighting);
-                    tempSighting.setSightingCounter(0);
-                    tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
-                    tempSighting.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
-                    tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
-                    success = success && createSighting(tempSighting, false);
-                }
-                results.close();
-            }
-            if (includeWildLogFilesTable) {
-                if (Files.exists(inPath.resolve("Files.csv").toAbsolutePath())) {
-                    results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
-                    while (results.next()) {
-                        WildLogFile wildLogFile = new WildLogFile();
-                        populateWildLogFile(results, wildLogFile);
-                        wildLogFile.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
-                        success = success && createWildLogFile(wildLogFile);
-                    }
-                }
-            }
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-        }
+//        try {
+//            state = conn.createStatement();
+//            // Import Elements
+//            if (Files.exists(inPath.resolve("Creatures.csv").toAbsolutePath())) {
+//                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Creatures.csv").toAbsolutePath().toString() + "')");
+//                while (results.next()) {
+//                    Element tempElement = new Element();
+//                    populateElement(results, tempElement);
+//                    tempElement.setPrimaryName(inPrefix + results.getString("PRIMARYNAME"));
+//                    success = success && createElement(tempElement);
+//                }
+//                results.close();
+//            }
+//            // Import Locations
+//            if (Files.exists(inPath.resolve("Places.csv").toAbsolutePath())) {
+//                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Places.csv").toAbsolutePath().toString() + "')");
+//                while (results.next()) {
+//                    Location tempLocation = new Location();
+//                    populateLocation(results, tempLocation);
+//                    tempLocation.setName(inPrefix + results.getString("NAME"));
+//                    success = success && createLocation(tempLocation);
+//                }
+//                results.close();
+//            }
+//            // Import Visits
+//            if (Files.exists(inPath.resolve("Periods.csv").toAbsolutePath())) {
+//                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Periods.csv").toAbsolutePath().toString() + "')");
+//                while (results.next()) {
+//                    Visit tempVisit = new Visit();
+//                    populateVisit(results, tempVisit);
+//                    tempVisit.setName(inPrefix + results.getString("NAME"));
+//                    tempVisit.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
+//                    success = success && createVisit(tempVisit);
+//                }
+//                results.close();
+//            }
+//            // Import Sightings
+//            if (Files.exists(inPath.resolve("Observations.csv").toAbsolutePath())) {
+//                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Observations.csv").toAbsolutePath().toString() + "')");
+//                while (results.next()) {
+//                    Sighting tempSighting = new Sighting();
+//                    populateSighting(results, tempSighting);
+//                    tempSighting.setSightingCounter(0);
+//                    tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
+//                    tempSighting.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
+//                    tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
+//                    success = success && createSighting(tempSighting, false);
+//                }
+//                results.close();
+//            }
+//            if (includeWildLogFilesTable) {
+//                if (Files.exists(inPath.resolve("Files.csv").toAbsolutePath())) {
+//                    results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
+//                    while (results.next()) {
+//                        WildLogFile wildLogFile = new WildLogFile();
+//                        populateWildLogFile(results, wildLogFile);
+//                        wildLogFile.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
+//                        success = success && createWildLogFile(wildLogFile);
+//                    }
+//                }
+//            }
+//        }
+//        catch (SQLException ex) {
+//            printSQLException(ex);
+//            return false;
+//        }
+//        finally {
+//            // ResultSet
+//            try {
+//                if (results != null) {
+//                    results.close();
+//                    results = null;
+//                }
+//            }
+//            catch (SQLException sqle) {
+//                printSQLException(sqle);
+//            }
+//            // Statement
+//            try {
+//                if (state != null) {
+//                    state.close();
+//                    state = null;
+//                }
+//            }
+//            catch (SQLException sqle) {
+//                printSQLException(sqle);
+//            }
+//        }
         return success;
     }
     
@@ -448,170 +439,170 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         Statement state = null;
         ResultSet resultSet = null;
         boolean success = true;
-        try {
-            state = conn.createStatement();
-            resultSet = state.executeQuery("CALL CSVREAD('" + inPath.toAbsolutePath().toString() + "')");
-            while (resultSet.next() && success) {
-                // Import Elements
-                Element element = new Element();
-                element.setPrimaryName(inPrefix + resultSet.getString("CREATURE"));
-                element.setScientificName(resultSet.getString("SCIENTIFIC_NAME"));
-                element.setType(ElementType.getEnumFromText(resultSet.getString("CREATURE_TYPE")));
-                if (countElements(element.getPrimaryName(), null) == 0) {
-                    success = success && createElement(element);
-                }
-                // Import Locations
-                if (success) {
-                    Location location = new Location();
-                    location.setName(inPrefix + resultSet.getString("PLACE"));
-                    location.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("PLACE_GPS_ACCURACY")));
-                    location.setGPSAccuracyValue(resultSet.getDouble("PLACE_GPS_ACCURACY_VALUE"));
-                    double lat = resultSet.getDouble("PLACE_LATITUDE");
-                    if (lat != 0) {
-                        Latitudes latitude;
-                        if (lat < 0) {
-                            latitude = Latitudes.SOUTH;
-                        }
-                        else {
-                            latitude = Latitudes.NORTH;
-                        }
-                        location.setLatitude(latitude);
-                        location.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
-                        location.setLatMinutes(UtilsGPS.getMinutes(lat));
-                        location.setLatSeconds(UtilsGPS.getSeconds(lat));
-                    }
-                    double lon = resultSet.getDouble("PLACE_LONGITUDE");
-                    if (lon != 0) {
-                        Longitudes longitude;
-                        if (lon < 0) {
-                            longitude = Longitudes.WEST;
-                        }
-                        else {
-                            longitude = Longitudes.EAST;
-                        }
-                        location.setLongitude(longitude);
-                        location.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
-                        location.setLonMinutes(UtilsGPS.getMinutes(lon));
-                        location.setLonSeconds(UtilsGPS.getSeconds(lon));
-                    }
-                    if (countLocations(location.getName()) == 0) {
-                        success = success && createLocation(location);
-                    }
-                }
-                // Import Visits
-                if (success) {
-                    Visit visit = new Visit();
-                    visit.setName(inPrefix + resultSet.getString("PERIOD"));
-                    visit.setLocationName(inPrefix + resultSet.getString("PLACE"));
-                    visit.setType(VisitType.getEnumFromText(resultSet.getString("PERIOD_TYPE")));
-                    if (resultSet.getDate("PERIOD_START_DATE") != null) {
-                        visit.setStartDate(new Date(resultSet.getDate("PERIOD_START_DATE").getTime()));
-                    }
-                    else {
-                        visit.setStartDate(null);
-                    }
-                    if (resultSet.getDate("PERIOD_END_DATE") != null) {
-                        visit.setEndDate(new Date(resultSet.getDate("PERIOD_END_DATE").getTime()));
-                    }
-                    else {
-                        visit.setEndDate(null);
-                    }
-                    visit.setDescription(resultSet.getString("PERIOD_DESCRIPTION"));
-                    if (countVisits(visit.getName(), null) == 0) {
-                        success = success && createVisit(visit);
-                    }
-                }
-                // Import Sightings
-                if (success) {
-                    Sighting sighting = new Sighting();
-                    sighting.setSightingCounter(0); // Indicate a new Sighting ID needs to be created
-                    sighting.setElementName(inPrefix + resultSet.getString("CREATURE"));
-                    sighting.setLocationName(inPrefix + resultSet.getString("PLACE"));
-                    sighting.setVisitName(inPrefix + resultSet.getString("PERIOD"));
-                    sighting.setCertainty(Certainty.getEnumFromText(resultSet.getString("CERTAINTY")));
-                    sighting.setSightingEvidence(SightingEvidence.getEnumFromText(resultSet.getString("EVIDENCE")));
-                    sighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(resultSet.getString("TIME_ACCURACY")));
-                    sighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(resultSet.getString("TIME_OF_DAY")));
-                    if (resultSet.getTimestamp("OBSERVATION_DATE") != null) {
-                        Timestamp timestamp = resultSet.getTimestamp("OBSERVATION_DATE");
-                        if (timestamp != null) {
-                            sighting.setDate(new Date(timestamp.getTime()));
-                        }
-                    }
-                    else {
-                        sighting.setDate(null);
-                    }
-                    if (resultSet.getTime("OBSERVATION_TIME") != null && sighting.getDate() != null) {
-                        Time time = resultSet.getTime("OBSERVATION_TIME");
-                        if (time != null) {
-                            LocalDateTime localDateTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
-                            sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime.with(time.toLocalTime())));
-                        }
-                    }
-                    sighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("OBSERVATION_GPS_ACCURACY")));
-                    sighting.setGPSAccuracyValue(resultSet.getDouble("OBSERVATION_GPS_ACCURACY_VALUE"));
-                    double lat = resultSet.getDouble("OBSERVATION_LATITUDE");
-                    if (lat != 0) {
-                        Latitudes latitude;
-                        if (lat < 0) {
-                            latitude = Latitudes.SOUTH;
-                        }
-                        else {
-                            latitude = Latitudes.NORTH;
-                        }
-                        sighting.setLatitude(latitude);
-                        sighting.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
-                        sighting.setLatMinutes(UtilsGPS.getMinutes(lat));
-                        sighting.setLatSeconds(UtilsGPS.getSeconds(lat));
-                    }
-                    double lon = resultSet.getDouble("OBSERVATION_LONGITUDE");
-                    if (lon != 0) {
-                        Longitudes longitude;
-                        if (lon < 0) {
-                            longitude = Longitudes.WEST;
-                        }
-                        else {
-                            longitude = Longitudes.EAST;
-                        }
-                        sighting.setLongitude(longitude);
-                        sighting.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
-                        sighting.setLonMinutes(UtilsGPS.getMinutes(lon));
-                        sighting.setLonSeconds(UtilsGPS.getSeconds(lon));
-                    }
-                    sighting.setNumberOfElements(resultSet.getInt("NUMBER_OF_CREATURES"));
-                    sighting.setLifeStatus(LifeStatus.getEnumFromText(resultSet.getString("LIFE_STATUS")));
-                    sighting.setTag(resultSet.getString("TAG"));
-                    sighting.setDetails(resultSet.getString("DETAILS"));
-                    success = success && createSighting(sighting, false);
-                }
-            }
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            // ResultSet
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                    resultSet = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-        }
+//        try {
+//            state = conn.createStatement();
+//            resultSet = state.executeQuery("CALL CSVREAD('" + inPath.toAbsolutePath().toString() + "')");
+//            while (resultSet.next() && success) {
+//                // Import Elements
+//                Element element = new Element();
+//                element.setPrimaryName(inPrefix + resultSet.getString("CREATURE"));
+//                element.setScientificName(resultSet.getString("SCIENTIFIC_NAME"));
+//                element.setType(ElementType.getEnumFromText(resultSet.getString("CREATURE_TYPE")));
+//                if (countElements(element.getPrimaryName(), null) == 0) {
+//                    success = success && createElement(element);
+//                }
+//                // Import Locations
+//                if (success) {
+//                    Location location = new Location();
+//                    location.setName(inPrefix + resultSet.getString("PLACE"));
+//                    location.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("PLACE_GPS_ACCURACY")));
+//                    location.setGPSAccuracyValue(resultSet.getDouble("PLACE_GPS_ACCURACY_VALUE"));
+//                    double lat = resultSet.getDouble("PLACE_LATITUDE");
+//                    if (lat != 0) {
+//                        Latitudes latitude;
+//                        if (lat < 0) {
+//                            latitude = Latitudes.SOUTH;
+//                        }
+//                        else {
+//                            latitude = Latitudes.NORTH;
+//                        }
+//                        location.setLatitude(latitude);
+//                        location.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
+//                        location.setLatMinutes(UtilsGPS.getMinutes(lat));
+//                        location.setLatSeconds(UtilsGPS.getSeconds(lat));
+//                    }
+//                    double lon = resultSet.getDouble("PLACE_LONGITUDE");
+//                    if (lon != 0) {
+//                        Longitudes longitude;
+//                        if (lon < 0) {
+//                            longitude = Longitudes.WEST;
+//                        }
+//                        else {
+//                            longitude = Longitudes.EAST;
+//                        }
+//                        location.setLongitude(longitude);
+//                        location.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
+//                        location.setLonMinutes(UtilsGPS.getMinutes(lon));
+//                        location.setLonSeconds(UtilsGPS.getSeconds(lon));
+//                    }
+//                    if (countLocations(location.getName()) == 0) {
+//                        success = success && createLocation(location);
+//                    }
+//                }
+//                // Import Visits
+//                if (success) {
+//                    Visit visit = new Visit();
+//                    visit.setName(inPrefix + resultSet.getString("PERIOD"));
+//                    visit.setLocationName(inPrefix + resultSet.getString("PLACE"));
+//                    visit.setType(VisitType.getEnumFromText(resultSet.getString("PERIOD_TYPE")));
+//                    if (resultSet.getDate("PERIOD_START_DATE") != null) {
+//                        visit.setStartDate(new Date(resultSet.getDate("PERIOD_START_DATE").getTime()));
+//                    }
+//                    else {
+//                        visit.setStartDate(null);
+//                    }
+//                    if (resultSet.getDate("PERIOD_END_DATE") != null) {
+//                        visit.setEndDate(new Date(resultSet.getDate("PERIOD_END_DATE").getTime()));
+//                    }
+//                    else {
+//                        visit.setEndDate(null);
+//                    }
+//                    visit.setDescription(resultSet.getString("PERIOD_DESCRIPTION"));
+//                    if (countVisits(visit.getName(), null) == 0) {
+//                        success = success && createVisit(visit);
+//                    }
+//                }
+//                // Import Sightings
+//                if (success) {
+//                    Sighting sighting = new Sighting();
+//                    sighting.setSightingCounter(0); // Indicate a new Sighting ID needs to be created
+//                    sighting.setElementName(inPrefix + resultSet.getString("CREATURE"));
+//                    sighting.setLocationName(inPrefix + resultSet.getString("PLACE"));
+//                    sighting.setVisitName(inPrefix + resultSet.getString("PERIOD"));
+//                    sighting.setCertainty(Certainty.getEnumFromText(resultSet.getString("CERTAINTY")));
+//                    sighting.setSightingEvidence(SightingEvidence.getEnumFromText(resultSet.getString("EVIDENCE")));
+//                    sighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(resultSet.getString("TIME_ACCURACY")));
+//                    sighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(resultSet.getString("TIME_OF_DAY")));
+//                    if (resultSet.getTimestamp("OBSERVATION_DATE") != null) {
+//                        Timestamp timestamp = resultSet.getTimestamp("OBSERVATION_DATE");
+//                        if (timestamp != null) {
+//                            sighting.setDate(new Date(timestamp.getTime()));
+//                        }
+//                    }
+//                    else {
+//                        sighting.setDate(null);
+//                    }
+//                    if (resultSet.getTime("OBSERVATION_TIME") != null && sighting.getDate() != null) {
+//                        Time time = resultSet.getTime("OBSERVATION_TIME");
+//                        if (time != null) {
+//                            LocalDateTime localDateTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
+//                            sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime.with(time.toLocalTime())));
+//                        }
+//                    }
+//                    sighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("OBSERVATION_GPS_ACCURACY")));
+//                    sighting.setGPSAccuracyValue(resultSet.getDouble("OBSERVATION_GPS_ACCURACY_VALUE"));
+//                    double lat = resultSet.getDouble("OBSERVATION_LATITUDE");
+//                    if (lat != 0) {
+//                        Latitudes latitude;
+//                        if (lat < 0) {
+//                            latitude = Latitudes.SOUTH;
+//                        }
+//                        else {
+//                            latitude = Latitudes.NORTH;
+//                        }
+//                        sighting.setLatitude(latitude);
+//                        sighting.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
+//                        sighting.setLatMinutes(UtilsGPS.getMinutes(lat));
+//                        sighting.setLatSeconds(UtilsGPS.getSeconds(lat));
+//                    }
+//                    double lon = resultSet.getDouble("OBSERVATION_LONGITUDE");
+//                    if (lon != 0) {
+//                        Longitudes longitude;
+//                        if (lon < 0) {
+//                            longitude = Longitudes.WEST;
+//                        }
+//                        else {
+//                            longitude = Longitudes.EAST;
+//                        }
+//                        sighting.setLongitude(longitude);
+//                        sighting.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
+//                        sighting.setLonMinutes(UtilsGPS.getMinutes(lon));
+//                        sighting.setLonSeconds(UtilsGPS.getSeconds(lon));
+//                    }
+//                    sighting.setNumberOfElements(resultSet.getInt("NUMBER_OF_CREATURES"));
+//                    sighting.setLifeStatus(LifeStatus.getEnumFromText(resultSet.getString("LIFE_STATUS")));
+//                    sighting.setTag(resultSet.getString("TAG"));
+//                    sighting.setDetails(resultSet.getString("DETAILS"));
+//                    success = success && createSighting(sighting, false);
+//                }
+//            }
+//        }
+//        catch (SQLException ex) {
+//            printSQLException(ex);
+//            return false;
+//        }
+//        finally {
+//            // ResultSet
+//            try {
+//                if (resultSet != null) {
+//                    resultSet.close();
+//                    resultSet = null;
+//                }
+//            }
+//            catch (SQLException sqle) {
+//                printSQLException(sqle);
+//            }
+//            // Statement
+//            try {
+//                if (state != null) {
+//                    state.close();
+//                    state = null;
+//                }
+//            }
+//            catch (SQLException sqle) {
+//                printSQLException(sqle);
+//            }
+//        }
         return success;
     }
 
@@ -1087,126 +1078,126 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     private void doUpdate4() {
-        WildLogApp.LOGGER.log(Level.INFO, "Starting update 4");
-        // This update removes and alters some tables and adds new wildlog options
-        Statement state = null;
-        ResultSet results = null;
-        try {
-            state = conn.createStatement();
-            // Make changes to Location
-            state.execute("ALTER TABLE LOCATIONS ADD COLUMN GPSACCURACY varchar(50)");
-            // Make changes to Sightings
-            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN GPSACCURACY varchar(50)");
-            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TIMEACCURACY varchar(50)");
-            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN AGE varchar(50)");
-            // Migrate TimeAccuracy data
-            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 1");
-            while (results.next()) {
-                Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
-                sighting.setTimeAccuracy(TimeAccuracy.UNKNOWN);
-                updateSighting(sighting);
-            }
-            results.close();
-            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 0");
-            while (results.next()) {
-                Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
-                sighting.setTimeAccuracy(TimeAccuracy.GOOD);
-                updateSighting(sighting);
-            }
-            results.close();
-            state.execute("ALTER TABLE SIGHTINGS DROP COLUMN UNKNOWNTIME");
-            state.executeUpdate("UPDATE SIGHTINGS SET TIMEACCURACY = 'GOOD' WHERE TIMEACCURACY IS NULL OR TIMEACCURACY = ''");
-            // Make changes to Files
-            // NOTE: It is best to make sure that Clean Workspace in v3 has been run before upgrading
-            state.executeUpdate("UPDATE FILES SET ORIGINALPATH = replace(replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/Files', 'Files'), 'WildLog/Files', 'Files')");
-            // Create indexes
-            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
-            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
-            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
-            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
-            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS VISIT_NAME ON VISITS (NAME)");
-            state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONNAME)");
-            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS SIGHTING_CNT ON SIGHTINGS (SIGHTINGCOUNTER)");
-            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTNAME)");
-            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_LOCATION ON SIGHTINGS (LOCATIONNAME)");
-            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_VISIT ON SIGHTINGS (VISITNAME)");
-            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTNAME, LOCATIONNAME)");
-            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTNAME, VISITNAME)");
-            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
-            try {
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
-            }
-            catch (SQLException ex) {
-                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
-                // Try again to create the index, but settle for non-unique
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
-            }
-            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (ID)");
-            state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
-            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
-            state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
-            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
-            // Make changes to Wildlog settings
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILTABLES smallint DEFAULT true");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILBROWSE smallint DEFAULT false");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN ENABLESOUNDS smallint DEFAULT true");
-            // Update Sightings and WildLog files to use the new UUIDs
-            List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
-            for (Sighting sighting : lstSightings) {
-                long newID = sighting.getDate().getTime()*1000000L + randomGenerator.nextInt(999999);
-                results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
-                while (results.next() && results.getInt(1) > 0) {
-                    // ID already used, try a new ID
-                    newID = System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
-                    results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
-                }
-                state.executeUpdate("UPDATE SIGHTINGS SET SIGHTINGCOUNTER = " + newID + " WHERE SIGHTINGCOUNTER = " + sighting.getSightingCounter());
-                state.executeUpdate("UPDATE FILES SET ID = '" + new Sighting(newID).getWildLogFileID() + "' WHERE ID = '" + sighting.getWildLogFileID() + "'");
-            }
-            // Update the version number
-            state.executeUpdate("UPDATE WILDLOG SET VERSION=4");
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-        }
-        finally {
-            closeStatementAndResultset(state, results);
-        }
-        WildLogApp.LOGGER.log(Level.INFO, "Finished update 4");
+//        WildLogApp.LOGGER.log(Level.INFO, "Starting update 4");
+//        // This update removes and alters some tables and adds new wildlog options
+//        Statement state = null;
+//        ResultSet results = null;
+//        try {
+//            state = conn.createStatement();
+//            // Make changes to Location
+//            state.execute("ALTER TABLE LOCATIONS ADD COLUMN GPSACCURACY varchar(50)");
+//            // Make changes to Sightings
+//            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN GPSACCURACY varchar(50)");
+//            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TIMEACCURACY varchar(50)");
+//            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN AGE varchar(50)");
+//            // Migrate TimeAccuracy data
+//            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 1");
+//            while (results.next()) {
+//                Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
+//                sighting.setTimeAccuracy(TimeAccuracy.UNKNOWN);
+//                updateSighting(sighting);
+//            }
+//            results.close();
+//            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 0");
+//            while (results.next()) {
+//                Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
+//                sighting.setTimeAccuracy(TimeAccuracy.GOOD);
+//                updateSighting(sighting);
+//            }
+//            results.close();
+//            state.execute("ALTER TABLE SIGHTINGS DROP COLUMN UNKNOWNTIME");
+//            state.executeUpdate("UPDATE SIGHTINGS SET TIMEACCURACY = 'GOOD' WHERE TIMEACCURACY IS NULL OR TIMEACCURACY = ''");
+//            // Make changes to Files
+//            // NOTE: It is best to make sure that Clean Workspace in v3 has been run before upgrading
+//            state.executeUpdate("UPDATE FILES SET ORIGINALPATH = replace(replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/Files', 'Files'), 'WildLog/Files', 'Files')");
+//            // Create indexes
+//            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+//            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
+//            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
+//            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
+//            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS VISIT_NAME ON VISITS (NAME)");
+//            state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONNAME)");
+//            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS SIGHTING_CNT ON SIGHTINGS (SIGHTINGCOUNTER)");
+//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTNAME)");
+//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_LOCATION ON SIGHTINGS (LOCATIONNAME)");
+//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_VISIT ON SIGHTINGS (VISITNAME)");
+//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTNAME, LOCATIONNAME)");
+//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTNAME, VISITNAME)");
+//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
+//            try {
+//                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+//            }
+//            catch (SQLException ex) {
+//                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
+//                // Try again to create the index, but settle for non-unique
+//                state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+//            }
+//            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (ID)");
+//            state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
+//            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
+//            state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
+//            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
+//            // Make changes to Wildlog settings
+//            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILTABLES smallint DEFAULT true");
+//            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILBROWSE smallint DEFAULT false");
+//            state.execute("ALTER TABLE WILDLOG ADD COLUMN ENABLESOUNDS smallint DEFAULT true");
+//            // Update Sightings and WildLog files to use the new UUIDs
+//            List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
+//            for (Sighting sighting : lstSightings) {
+//                long newID = sighting.getDate().getTime()*1000000L + randomGenerator.nextInt(999999);
+//                results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
+//                while (results.next() && results.getInt(1) > 0) {
+//                    // ID already used, try a new ID
+//                    newID = System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
+//                    results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
+//                }
+//                state.executeUpdate("UPDATE SIGHTINGS SET SIGHTINGCOUNTER = " + newID + " WHERE SIGHTINGCOUNTER = " + sighting.getSightingCounter());
+//                state.executeUpdate("UPDATE FILES SET ID = '" + new Sighting(newID).getWildLogFileID() + "' WHERE ID = '" + sighting.getWildLogFileID() + "'");
+//            }
+//            // Update the version number
+//            state.executeUpdate("UPDATE WILDLOG SET VERSION=4");
+//        }
+//        catch (SQLException ex) {
+//            printSQLException(ex);
+//        }
+//        finally {
+//            closeStatementAndResultset(state, results);
+//        }
+//        WildLogApp.LOGGER.log(Level.INFO, "Finished update 4");
     }
     
     private void doUpdate5() {
-        WildLogApp.LOGGER.log(Level.INFO, "Starting update 5");
-        // This update adds new wildlog options
-        Statement state = null;
-        ResultSet results = null;
-        try {
-            state = conn.createStatement();
-            // Make changes to WildLog Options
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN USESCIENTIFICNAMES smallint DEFAULT true");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACEID bigint DEFAULT 0");
-            WildLogOptions options = findWildLogOptions(WildLogOptions.class);
-            options.setWorkspaceID(generateID());
-            updateWildLogOptions(options);
-            // Recalculate all sun and moon phase info (the enums changed)
-            List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
-            for (Sighting sighting : lstSightings) {
-                UtilsTime.calculateSunAndMoon(sighting);
-                updateSighting(sighting);
-            }
-            // Increase the cache size slightly (doubled) in KB
-            state.execute("SET CACHE_SIZE 32768");
-            // Update the version number
-            state.executeUpdate("UPDATE WILDLOG SET VERSION=5");
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-        }
-        finally {
-            closeStatementAndResultset(state, results);
-        }
-        WildLogApp.LOGGER.log(Level.INFO, "Finished update 5");
+//        WildLogApp.LOGGER.log(Level.INFO, "Starting update 5");
+//        // This update adds new wildlog options
+//        Statement state = null;
+//        ResultSet results = null;
+//        try {
+//            state = conn.createStatement();
+//            // Make changes to WildLog Options
+//            state.execute("ALTER TABLE WILDLOG ADD COLUMN USESCIENTIFICNAMES smallint DEFAULT true");
+//            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
+//            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACEID bigint DEFAULT 0");
+//            WildLogOptions options = findWildLogOptions(WildLogOptions.class);
+//            options.setWorkspaceID(generateID());
+//            updateWildLogOptions(options);
+//            // Recalculate all sun and moon phase info (the enums changed)
+//            List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
+//            for (Sighting sighting : lstSightings) {
+//                UtilsTime.calculateSunAndMoon(sighting);
+//                updateSighting(sighting);
+//            }
+//            // Increase the cache size slightly (doubled) in KB
+//            state.execute("SET CACHE_SIZE 32768");
+//            // Update the version number
+//            state.executeUpdate("UPDATE WILDLOG SET VERSION=5");
+//        }
+//        catch (SQLException ex) {
+//            printSQLException(ex);
+//        }
+//        finally {
+//            closeStatementAndResultset(state, results);
+//        }
+//        WildLogApp.LOGGER.log(Level.INFO, "Finished update 5");
     }
     
     private void doUpdate6() {
@@ -1350,6 +1341,25 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state = conn.createStatement();
             // Increase the cache size to 75MB (in KB)
             state.execute("SET CACHE_SIZE 76800");
+            // Drop the columns I'm no longer going to support going forward
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WATERDEPENDANCE");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEMALEMIN");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEMALEMAX");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEFEMALEMIN");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEFEMALEMAX");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEUNIT");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZETYPE");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTMALEMIN");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTMALEMAX");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTFEMALEMIN");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTFEMALEMAX");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTUNIT");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN BREEDINGDURATION");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN BREEDINGNUMBER");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WISHLISTRATING");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN ACTIVETIME");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN ADDFREQUENCY");
+            state.execute("ALTER TABLE ELEMENTS DROP COLUMN LIFESPAN");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=12");
         }

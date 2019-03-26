@@ -1507,7 +1507,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
             if (inFilterProperties.getSightingIDs() != null && !inFilterProperties.getSightingIDs().isEmpty()) {
                 boolean found = false;
                 for (Long id : inFilterProperties.getSightingIDs()) {
-                    if (id == inSighting.getSightingCounter()) {
+                    if (id == inSighting.getID()) {
                         found = true;
                         break;
                     }
@@ -1564,7 +1564,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
             // iNaturalist
             if (inFilterProperties.isINatUploaded() != inFilterProperties.isINatNotUploaded()) {
                 INaturalistLinkedData linkedData = WildLogApp.getApplication().getDBI().findINaturalistLinkedData(
-                        inSighting.getSightingCounter(), 0, INaturalistLinkedData.class);
+                        inSighting.getID(), 0, INaturalistLinkedData.class);
                 if (inFilterProperties.isINatNotUploaded() && linkedData != null && linkedData.getWildlogID() != 0) {
                     return false;
                 }

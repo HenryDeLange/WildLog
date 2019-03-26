@@ -184,10 +184,10 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalElements = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + sighting.getTimeOfDay());
+            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getCachedElementName(reportsBaseDialog.getOptionName()) + "-" + sighting.getTimeOfDay());
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper();
-                dataWrapper.key = sighting.getElementName(reportsBaseDialog.getOptionName());
+                dataWrapper.key = sighting.getCachedElementName(reportsBaseDialog.getOptionName());
                 if (sighting.getTimeOfDay() != null) {
                     dataWrapper.value = sighting.getTimeOfDay().toString();
                 }
@@ -195,10 +195,10 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
                     dataWrapper.value = ActiveTimeSpesific.UNKNOWN.toString();
                 }
                 dataWrapper.count = 0;
-                mapTotalElements.put(sighting.getElementName(reportsBaseDialog.getOptionName()), 0);
+                mapTotalElements.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()), 0);
             }
             dataWrapper.count++;
-            mapInitialCountedData.put(sighting.getElementName(reportsBaseDialog.getOptionName()) + "-" + sighting.getTimeOfDay(), dataWrapper);
+            mapInitialCountedData.put(sighting.getCachedElementName(reportsBaseDialog.getOptionName()) + "-" + sighting.getTimeOfDay(), dataWrapper);
         }
         // Add all the points on the chart in the correct order. This also adds the 0 values for the data gaps.
         Map<String, ObservableList<AreaChart.Data<String, Number>>> mapDataPerElement = new HashMap<>(mapInitialCountedData.size());

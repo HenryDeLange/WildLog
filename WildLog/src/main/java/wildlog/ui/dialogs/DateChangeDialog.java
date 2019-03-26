@@ -252,7 +252,7 @@ public class DateChangeDialog extends JDialog {
             // Kry die verskil tussen die twee datums waarvolgens die Sightings geupdate moet word
             TemporalAmount dateDifference = Duration.between(loadBadDateTimeFromUI(), loadGoodDateTimeFromUI());
             // Update the Sightings
-            List<Sighting> listSightings = app.getDBI().listSightings(0, null, null, visit.getName(), false, Sighting.class);
+            List<Sighting> listSightings = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
             for (Sighting sighting : listSightings) {
                 LocalDateTime currentSightingDateTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
                 LocalDateTime newSightingDateTime = currentSightingDateTime.plus(dateDifference);
