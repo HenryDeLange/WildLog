@@ -998,7 +998,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 UtilsPanelGenerator.openPanelAsTab(app, tempVisit.getID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel,
-                    app.getDBI().findLocation(tempVisit.getID(), null, Location.class));
+                    app.getDBI().findLocation(tempVisit.getLocationID(), null, Location.class));
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {

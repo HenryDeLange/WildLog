@@ -73,8 +73,20 @@ public final class UtilsDialog {
         inPopupWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                super.windowClosed(e);
-                glassPane.setVisible(false);
+                // The JavaFX stuff sometimes doesn't shutdown correctly, so I'm putting this in a try-catch to make sure the glasspane gets disabled afterwards
+                try {
+                    super.windowClosed(e);
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.WARN, "Swing-JavaFX integration error:");
+                    WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        glassPane.setVisible(false);
+                    }
+                });
             }
         });
     }

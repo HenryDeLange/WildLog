@@ -31,14 +31,14 @@ import wildlog.ui.utils.UtilsUI;
 public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends JDialog {
     private boolean selectionMade = false;
     private DataObjectWithWildLogFile typeInstance;
-    private List<T> lstSelectedValues;
+    private List<Long> lstSelectedValues;
 
     
     /**
      * Use this constructor when the input is derived from a list of Sightings. 
      * (For example used from the reports popup.)
      */
-    public FilterDataListDialog(JFrame inParent, List<Sighting> inLstOriginalData, List<T> inLstOldSelectedData, Class<T> inClassType) {
+    public FilterDataListDialog(JFrame inParent, List<Sighting> inLstOriginalData, List<Long> inLstOldSelectedData, Class<T> inClassType) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[FilterDataListDialog]");
         // Do the initial shared setup
@@ -106,7 +106,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
      * Use this constructor when working with a known set of Locations, Visits or Elements. 
      * (For example from the All Sightings tab.)
      */
-    public FilterDataListDialog(JFrame inParent, List<T> inLstOriginalData, List<T> inLstOldSelectedData) {
+    public FilterDataListDialog(JFrame inParent, List<T> inLstOriginalData, List<Long> inLstOldSelectedData) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[FilterDataListDialog]");
         // Do the initial shared setup
@@ -165,10 +165,22 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
     }
     
-    private void doSharedSetup_post(List<T> inLstOldSelectedData) {
+    private void doSharedSetup_post(List<Long> inLstOldSelectedData) {
         // Setup previously selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
         final int indexOfID;
+        if (typeInstance instanceof Element) {
+            indexOfID = 4;
+        }
+        else
+        if (typeInstance instanceof Location) {
+            indexOfID = 3;
+        }
+        else
+        if (typeInstance instanceof Visit) {
+            indexOfID = 6;
+        }
+        else
         if (typeInstance instanceof Sighting) {
             indexOfID = 7;
             btnSelect.setEnabled(false);
@@ -177,15 +189,15 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             table.setEnabled(false);
         }
         else {
-            indexOfID = 2;
+            indexOfID = -1;
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 if (inLstOldSelectedData != null) {
                     for (int t = 0; t < table.getModel().getRowCount(); t++) {
-                        for (DataObjectWithWildLogFile dataObject : inLstOldSelectedData) {
-                            if (table.getModel().getValueAt(table.convertRowIndexToModel(t), indexOfID).toString().equals(dataObject.getIDField())) {
+                        for (long oldSelectedID : inLstOldSelectedData) {
+                            if ((long) table.getModel().getValueAt(table.convertRowIndexToModel(t), indexOfID) == oldSelectedID) {
                                 table.getSelectionModel().addSelectionInterval(t, t);
                                 break;
                             }
@@ -349,30 +361,27 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadRowIDForType(int inRow) throws NumberFormatException {
-        int indexOfID;
+    private long loadRowIDForType(int inRow) throws NumberFormatException {
+        final int indexOfID;
+        if (typeInstance instanceof Element) {
+            indexOfID = 4;
+        }
+        else
+        if (typeInstance instanceof Location) {
+            indexOfID = 3;
+        }
+        else
+        if (typeInstance instanceof Visit) {
+            indexOfID = 6;
+        }
+        else
         if (typeInstance instanceof Sighting) {
             indexOfID = 7;
         }
         else {
-            indexOfID = 2;
+            indexOfID = -1;
         }
-        String selectedID = table.getModel().getValueAt(table.convertRowIndexToModel(inRow), indexOfID).toString();
-        if (typeInstance instanceof Element) {
-            ((Element) typeInstance).setPrimaryName(selectedID);
-        }
-        else
-        if (typeInstance instanceof Location) {
-            ((Location) typeInstance).setName(selectedID);
-        }
-        else
-        if (typeInstance instanceof Visit) {
-            ((Visit) typeInstance).setName(selectedID);
-        }
-        else
-        if (typeInstance instanceof Sighting) {
-            ((Sighting) typeInstance).setID(Long.parseLong(selectedID));
-        }
+        return (long) table.getModel().getValueAt(table.convertRowIndexToModel(inRow), indexOfID);
     }
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
@@ -380,14 +389,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         lstSelectedValues = new ArrayList<>(table.getSelectedRowCount());
         int[] selectedRows = table.getSelectedRows();
         for (int row : selectedRows) {
-            try {
-                typeInstance = typeInstance.getClass().newInstance();
-                loadRowIDForType(row);
-                lstSelectedValues.add((T) typeInstance);
-            }
-            catch (IllegalAccessException | InstantiationException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            }
+            lstSelectedValues.add(loadRowIDForType(row));
         }
         setVisible(false);
         dispose();
@@ -426,7 +428,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         selectionMade = inSelectionMade;
     }
 
-    public List<T> getSelectedData() {
+    public List<Long> getSelectedData() {
         return lstSelectedValues;
     }
     

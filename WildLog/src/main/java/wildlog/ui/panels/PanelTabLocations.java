@@ -448,8 +448,8 @@ public class PanelTabLocations extends JPanel {
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
-            String tempLocationName = (String) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 7);
-            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + tempLocationName, 0, app);
+            long tempLocationID = (Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 7);
+            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + tempLocationID, 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 

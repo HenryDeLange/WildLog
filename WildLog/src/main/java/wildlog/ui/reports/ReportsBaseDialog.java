@@ -70,9 +70,9 @@ public class ReportsBaseDialog extends JFrame {
     private final JFXPanel jfxReportListPanel;
     private final List<Sighting> lstOriginalData;
     private final List<Sighting> lstFilteredData;
-    private List<Element> lstFilteredElements;
-    private List<Location> lstFilteredLocations;
-    private List<Visit> lstFilteredVisits;
+    private List<Long> lstFilteredElements;
+    private List<Long> lstFilteredLocations;
+    private List<Long> lstFilteredVisits;
     private FilterProperties filterProperties = null;
     private AbstractReport activeReport = null;
     private int optionName;
@@ -659,7 +659,7 @@ public class ReportsBaseDialog extends JFrame {
     }
     
     private void doFiltering(final List<Sighting> inLstOriginalData, List<Sighting> inLstFilteredData, 
-            List<Element> inLstFilteredElements, List<Location> inLstFilteredLocations, List<Visit> inLstFilteredVisits,
+            List<Long> inLstFilteredElements, List<Long> inLstFilteredLocations, List<Long> inLstFilteredVisits,
             FilterProperties inLilterProperties, JLabel inLblFilteredRecords, AbstractReport inActiveReport, JFXPanel inJfxReportChartPanel) {
         // NOTE: Don't create a new ArrayList (clear existing instead), because the reports are holding on to the reference 
         //       and will be stuck with an old list otherwise. Easiest to just keep the reference constant than to try and 
@@ -670,8 +670,8 @@ public class ReportsBaseDialog extends JFrame {
             // Check filtered Elements
             if (inLstFilteredElements != null) {
                 boolean found = false;
-                for (Element element : inLstFilteredElements) {
-                    if (sighting.getElementID() == element.getID()) {
+                for (long element : inLstFilteredElements) {
+                    if (sighting.getElementID() == element) {
                         found = true;
                         break;
                     }
@@ -683,8 +683,8 @@ public class ReportsBaseDialog extends JFrame {
             // Check filtered Locations
             if (inLstFilteredLocations != null) {
                 boolean found = false;
-                for (Location location : inLstFilteredLocations) {
-                    if (sighting.getLocationID() == location.getID()) {
+                for (long location : inLstFilteredLocations) {
+                    if (sighting.getLocationID() == location) {
                         found = true;
                         break;
                     }
@@ -696,8 +696,8 @@ public class ReportsBaseDialog extends JFrame {
             // Check filtered Visits
             if (inLstFilteredVisits != null) {
                 boolean found = false;
-                for (Visit visit : inLstFilteredVisits) {
-                    if (sighting.getVisitID() == visit.getID()) {
+                for (long visit : inLstFilteredVisits) {
+                    if (sighting.getVisitID() == visit) {
                         found = true;
                         break;
                     }

@@ -135,9 +135,9 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableFiles = "CREATE TABLE FILES ("
-            + "ID varchar(175) PRIMARY KEY NOT NULL, "
+            + "ID varchar(175) NOT NULL, "
             + "FILENAME varchar(255), "
-            + "ORIGINALPATH varchar(500), "
+            + "ORIGINALPATH varchar(500) NOT NULL, "
             + "FILETYPE varchar(50), "
             + "UPLOADDATE date, "
             + "ISDEFAULT smallint, "
@@ -396,6 +396,7 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITUSER = ?"
             + "WHERE ID = ?";
     protected static final String updateElement = "UPDATE ELEMENTS SET "
+            + "ID = ?, "
             + "PRIMARYNAME = ?, "
             + "OTHERNAME = ?, "
             + "SCIENTIFICNAME = ?, "
@@ -454,7 +455,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteLocation = "DELETE FROM LOCATIONS "
             + "WHERE ID = ?";
     protected static final String deleteVisit = "DELETE FROM VISITS "
-            + "WHERE NAME = ?";
+            + "WHERE ID = ?";
     protected static final String deleteSighting = "DELETE FROM SIGHTINGS "
             + "WHERE ID = ?";
     protected static final String deleteElement = "DELETE FROM ELEMENTS "
@@ -2405,9 +2406,8 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> 
-        List<S> searchSightings(List<Long> inActiveSightingIDs, Date inStartDate, Date inEndDate, 
-            List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
+    public <S extends SightingCore> List<S> searchSightings(List<Long> inActiveSightingIDs, Date inStartDate, Date inEndDate, 
+            List<Long> inActiveLocations, List<Long> inActiveVisits, List<Long> inActiveElements, 
             boolean inIncludeCachedValues, Class<S> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
@@ -2477,18 +2477,18 @@ public abstract class DBI_JDBC implements DBI {
                 state.setTimestamp(paramCounter++, new Timestamp(inEndDate.getTime()));
             }
             if (inActiveLocations != null && inActiveLocations.size() > 0) {
-                for (LocationCore activeLocation : inActiveLocations) {
-                    state.setLong(paramCounter++, activeLocation.getID());
+                for (long activeLocation : inActiveLocations) {
+                    state.setLong(paramCounter++, activeLocation);
                 }
             }
             if (inActiveVisits != null && inActiveVisits.size() > 0) {
-                for (VisitCore activeVisit : inActiveVisits) {
-                    state.setLong(paramCounter++, activeVisit.getID());
+                for (long activeVisit : inActiveVisits) {
+                    state.setLong(paramCounter++, activeVisit);
                 }
             }
             if (inActiveElements != null && inActiveElements.size() > 0) {
-                for (ElementCore activeElement : inActiveElements) {
-                    state.setLong(paramCounter++, activeElement.getID());
+                for (long activeElement : inActiveElements) {
+                    state.setLong(paramCounter++, activeElement);
                 }
             }
             // Execute SQL

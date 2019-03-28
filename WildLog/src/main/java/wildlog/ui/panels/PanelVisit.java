@@ -157,6 +157,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         // Make dates pretty
         dtpStartDate.getComponent(1).setBackground(visitIncludes.getBackground());
         dtpEndDate.getComponent(1).setBackground(visitIncludes.getBackground());
+        // Scroll to the top of the text areas
+        txtDescription.setCaretPosition(0);
     }
 
     private void uploadFiles(List<File> inFiles) {
@@ -235,7 +237,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 public void run() {
                     if (tblSightings.getSelectedRowCount() == 0 && inIndicator != null) {
                         UtilsTableGenerator.setupPreviousRowSelection(tblSightings, 
-                                new String[]{Long.toString(((PanelSighting) inIndicator).getSighting().getID())}, 6);
+                                new long[]{((PanelSighting) inIndicator).getSighting().getID()}, 6);
                     }
                 }
             });
@@ -436,7 +438,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnDeleteImage.setToolTipText("Delete the current file.");
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setFocusPainted(false);
-        btnDeleteImage.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnDeleteImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -446,10 +448,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         btnSetMainImage.setBackground(new java.awt.Color(228, 240, 237));
         btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
-        btnSetMainImage.setText("Default");
+        btnSetMainImage.setText("Make First");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Period.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setFocusPainted(false);
+        btnSetMainImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1212,7 +1215,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (sighting != null) {
                 PanelSighting dialog = new PanelSighting(
                         app, app.getMainFrame(), "Edit an Existing Observation",
-                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getID(), null, Element.class), 
+                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getElementID(), null, Element.class), 
                         this, false, false, false, false);
                 dialog.setVisible(true);
                 // Reset Sighting on this panel

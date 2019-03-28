@@ -60,7 +60,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         txtSearch = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        pnlLocationTable = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         btnGoLocation = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -150,6 +150,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         cmbType.setMaximumRowCount(11);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(ElementType.NONE);
+        cmbType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbType.setFocusable(false);
         cmbType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,8 +201,8 @@ public class PanelTabElements extends javax.swing.JPanel {
                 .addGap(25, 25, 25))
         );
 
-        jPanel1.setBackground(new java.awt.Color(201, 218, 199));
-        jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, new java.awt.Color(219, 228, 210), new java.awt.Color(188, 200, 181)));
+        pnlLocationTable.setBackground(new java.awt.Color(201, 218, 199));
+        pnlLocationTable.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, new java.awt.Color(219, 228, 210), new java.awt.Color(188, 200, 181)));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("List of Places where the selected Creature has been observed:");
@@ -231,21 +232,21 @@ public class PanelTabElements extends javax.swing.JPanel {
         });
         jScrollPane6.setViewportView(tblLocation);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlLocationTableLayout = new javax.swing.GroupLayout(pnlLocationTable);
+        pnlLocationTable.setLayout(pnlLocationTableLayout);
+        pnlLocationTableLayout.setHorizontalGroup(
+            pnlLocationTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLocationTableLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlLocationTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        pnlLocationTableLayout.setVerticalGroup(
+            pnlLocationTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlLocationTableLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(jLabel6)
                 .addGap(5, 5, 5)
@@ -273,7 +274,7 @@ public class PanelTabElements extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlLocationTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -301,7 +302,7 @@ public class PanelTabElements extends javax.swing.JPanel {
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(pnlLocationTable, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                         .addGap(5, 5, 5))))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -466,10 +467,10 @@ public class PanelTabElements extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JLabel lblImage;
     private javax.swing.JPanel pnlFilters;
+    private javax.swing.JPanel pnlLocationTable;
     private javax.swing.JScrollPane scrlElement;
     private javax.swing.JTable tblElement;
     private javax.swing.JTable tblLocation;

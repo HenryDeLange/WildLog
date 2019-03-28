@@ -139,12 +139,15 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtName);
-        UtilsUI.attachClipboardPopup(txtHabitat);
+        UtilsUI.attachClipboardPopup(txtHabitatType);
         UtilsUI.attachClipboardPopup(txtDescription);
         // Setup info for tab headers
         tabTitle = locationWL.getName();
         tabID = locationWL.getID();
         tabIconURL = app.getClass().getResource("resources/icons/Location.gif");
+        // Scroll to the top of the text areas
+        txtHabitatType.setCaretPosition(0);
+        txtDescription.setCaretPosition(0);
     }
 
     private void uploadFiles(List<File> inFiles) {
@@ -236,8 +239,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane10 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
         cmbGameRating = new javax.swing.JComboBox();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtHabitat = new javax.swing.JTextPane();
         jLabel48 = new javax.swing.JLabel();
         txtLongitude = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -245,6 +246,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         jLabel36 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
         txtLatitude = new javax.swing.JTextField();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        txtHabitatType = new javax.swing.JTextArea();
         pnlButtons = new javax.swing.JPanel();
         btnMap = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
@@ -310,10 +313,11 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         btnSetMainImage.setBackground(new java.awt.Color(233, 239, 244));
         btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
-        btnSetMainImage.setText("Default");
+        btnSetMainImage.setText("Make First");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Place.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setFocusPainted(false);
+        btnSetMainImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,7 +387,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnDeleteImage.setToolTipText("Delete the current file.");
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setFocusPainted(false);
-        btnDeleteImage.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnDeleteImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -477,12 +481,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         cmbGameRating.setFocusable(false);
         cmbGameRating.setName("cmbGameRating"); // NOI18N
 
-        jScrollPane3.setName("jScrollPane3"); // NOI18N
-
-        txtHabitat.setText(locationWL.getHabitatType());
-        txtHabitat.setName("txtHabitat"); // NOI18N
-        jScrollPane3.setViewportView(txtHabitat);
-
         jLabel48.setText("Place Name:");
         jLabel48.setName("jLabel48"); // NOI18N
 
@@ -509,6 +507,17 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLatitude.setEnabled(false);
         txtLatitude.setName("txtLatitude"); // NOI18N
 
+        jScrollPane13.setName("jScrollPane13"); // NOI18N
+
+        txtHabitatType.setColumns(20);
+        txtHabitatType.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtHabitatType.setLineWrap(true);
+        txtHabitatType.setRows(5);
+        txtHabitatType.setText(locationWL.getHabitatType());
+        txtHabitatType.setWrapStyleWord(true);
+        txtHabitatType.setName("txtHabitatType"); // NOI18N
+        jScrollPane13.setViewportView(txtHabitatType);
+
         javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
         pnlInfo.setLayout(pnlInfoLayout);
         pnlInfoLayout.setHorizontalGroup(
@@ -529,7 +538,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                             .addGroup(pnlInfoLayout.createSequentialGroup()
                                 .addComponent(jLabel40)
                                 .addGap(9, 9, 9)
-                                .addComponent(jScrollPane3)))
+                                .addComponent(jScrollPane13)))
                         .addGap(5, 5, 5))
                     .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -581,11 +590,11 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGap(10, 10, 10)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel40)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
+                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10))
                     .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addComponent(jLabel36)
@@ -862,7 +871,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
                         .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
 
@@ -963,7 +972,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGap(3, 3, 3)
                 .addComponent(jLabel44)
                 .addGap(3, 3, 3)
-                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addGap(3, 3, 3)
                 .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnGoElement, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1133,7 +1142,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             else {
                 if  (tblVisit.getSelectedRowCount() == 1) {
                     UtilsTableGenerator.setupElementsTableMediumForVisit(app, tblElement, (Long) tblVisit.getModel().getValueAt(
-                            tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 4));
+                            tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 7));
                 }
                 else {
                     if (tblVisit.getSelectedRowCount() == 0) {
@@ -1179,7 +1188,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             int[] selectedRows = tblElement.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
                 UtilsPanelGenerator.openPanelAsTab(app, (Long) tblElement.getModel().getValueAt(
-                        tblElement.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
+                        tblElement.convertRowIndexToModel(selectedRows[t]), 4), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
             app.getMainFrame().getGlassPane().setVisible(false);
@@ -1310,7 +1319,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void populateLocationFromUI() {
         locationWL.setName(UtilsData.limitLength(txtName.getText(), 100));
-        locationWL.setHabitatType(txtHabitat.getText());
+        locationWL.setHabitatType(txtHabitatType.getText());
         locationWL.setDescription(txtDescription.getText());
         locationWL.setRating((LocationRating)cmbRating.getSelectedItem());
         locationWL.setGameViewingRating((GameViewRating)cmbGameRating.getSelectedItem());
@@ -1412,7 +1421,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane13;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator7;
@@ -1433,7 +1442,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JTable tblElement;
     private javax.swing.JTable tblVisit;
     private javax.swing.JTextArea txtDescription;
-    private javax.swing.JTextPane txtHabitat;
+    private javax.swing.JTextArea txtHabitatType;
     private javax.swing.JTextField txtLatitude;
     private javax.swing.JTextField txtLongitude;
     private javax.swing.JTextField txtName;

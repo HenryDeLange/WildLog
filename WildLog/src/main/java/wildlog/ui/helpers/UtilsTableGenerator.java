@@ -73,7 +73,7 @@ public final class UtilsTableGenerator {
 
     public static void setupElementTableLarge(final WildLogApp inApp, final JTable inTable, final String inElementPrimaryName, final ElementType inElementType, final String inFilterText) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 6);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -171,7 +171,7 @@ public final class UtilsTableGenerator {
                     sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(inFilterText), 1));
                     inTable.setRowSorter(sorter);
                     // Setup row selection
-                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 6);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
@@ -182,7 +182,7 @@ public final class UtilsTableGenerator {
 
     public static void setupElementTableSmall(final WildLogApp inApp, final JTable inTable, final String inElementPrimaryName, final ElementType inElementType) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 3);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -244,7 +244,7 @@ public final class UtilsTableGenerator {
                         inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                     }
                     // Setup row selection
-                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 3);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
@@ -255,7 +255,7 @@ public final class UtilsTableGenerator {
 
     public static void setupLocationTableLarge(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 7);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -341,7 +341,7 @@ public final class UtilsTableGenerator {
                         inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                     }
                     // Setup row selection
-                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 7);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
@@ -352,7 +352,7 @@ public final class UtilsTableGenerator {
 
     public static void setupVisitTableLarge(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 7);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -441,7 +441,7 @@ public final class UtilsTableGenerator {
                         inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                     }
                     // Setup row selection
-                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 7);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
@@ -452,7 +452,7 @@ public final class UtilsTableGenerator {
 
     public static void setupVisitTableSmallWithSightings(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -520,7 +520,7 @@ public final class UtilsTableGenerator {
                             inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                         }
                         // Setup row selection
-                        setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 4);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
@@ -535,7 +535,7 @@ public final class UtilsTableGenerator {
 
     public static void setupVisitTableSmallWithType(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -568,7 +568,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
                                     data[finalT][3] = tempVisit.getType();
-                                    data[finalT][3] = tempVisit.getID();
+                                    data[finalT][4] = tempVisit.getID();
                                     return null;
                                 }
                             });
@@ -603,7 +603,7 @@ public final class UtilsTableGenerator {
                             inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                         }
                         // Setup row selection
-                        setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 4);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
@@ -618,7 +618,7 @@ public final class UtilsTableGenerator {
 
     public static void setupSightingTableLarge(final WildLogApp inApp, final JTable inTable, final long inVisitID) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 6);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 6);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -655,7 +655,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][2] = tempSighting.getDate();
                                     data[finalT][3] = tempSighting.getSightingEvidence();
                                     data[finalT][4] = tempSighting.getCertainty();
-                                    data[finalT][5] = inApp.getDBI().findElement(tempSighting.getID(), null, Element.class).getType();
+                                    data[finalT][5] = inApp.getDBI().findElement(tempSighting.getElementID(), null, Element.class).getType();
                                     data[finalT][6] = tempSighting.getID();
                                     if (tempSighting.isCachedLinkedToINaturalist()) {
                                         data[finalT][7] = new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist.png"));
@@ -731,10 +731,10 @@ public final class UtilsTableGenerator {
     
     public static void setupSightingTableForMainTab(final WildLogApp inApp, final JTable inTable, final JLabel inLblFilterDetails,
             final FilterProperties inFilterProperties, 
-            final List<Location> inActiveLocations, final List<Visit> inActiveVisits, final List<Element> inActiveElements, 
+            final List<Long> inActiveLocations, final List<Long> inActiveVisits, final List<Long> inActiveElements, 
             final double inNorthEast_Lat, final double inNorthEast_Lon, final double inSouthWest_Lat, final double inSouthWest_Lon) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 8);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 8);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -880,9 +880,10 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(9).setMinWidth(25);
                     inTable.getColumnModel().getColumn(9).setPreferredWidth(30);
                     inTable.getColumnModel().getColumn(9).setMaxWidth(35);
-                    inTable.removeColumn(inTable.getColumnModel().getColumn(10));
-                    inTable.removeColumn(inTable.getColumnModel().getColumn(11));
+                    // Remove in reverse order (andersins is 12 in posisie 10 teen die einde nie)
                     inTable.removeColumn(inTable.getColumnModel().getColumn(12));
+                    inTable.removeColumn(inTable.getColumnModel().getColumn(11));
+                    inTable.removeColumn(inTable.getColumnModel().getColumn(10));
                     // Setup default sorting
                     if (lstPreviousSortKeys == null || lstPreviousSortKeys.isEmpty()) {
                         setupRowSorter(inTable, 0, 1, 2, 3, SortOrder.DESCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING);
@@ -947,7 +948,7 @@ public final class UtilsTableGenerator {
 
     public static void setupElementsTableMediumForVisit(final WildLogApp inApp, final JTable inTable, final long inVisitID) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -1021,7 +1022,7 @@ public final class UtilsTableGenerator {
                             inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                         }
                         // Setup row selection
-                        setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 4);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
@@ -1036,7 +1037,7 @@ public final class UtilsTableGenerator {
 
     public static void setupElementsTableMediumForLocation(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -1110,7 +1111,7 @@ public final class UtilsTableGenerator {
                             inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                         }
                         // Setup row selection
-                        setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 4);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
@@ -1125,7 +1126,7 @@ public final class UtilsTableGenerator {
 
     public static void setupLocationsTableMedium(final WildLogApp inApp, final JTable inTable, final long inElementID) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 3);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -1187,7 +1188,7 @@ public final class UtilsTableGenerator {
                         inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                     }
                     // Setup row selection
-                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 3);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
@@ -1198,7 +1199,7 @@ public final class UtilsTableGenerator {
 
     public static void setupLocationTableSmall(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 2);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -1255,7 +1256,7 @@ public final class UtilsTableGenerator {
                         inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                     }
                     // Setup row selection
-                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 2);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
@@ -1266,10 +1267,10 @@ public final class UtilsTableGenerator {
 
     public static void setupSightingsTableSmall(final WildLogApp inApp, final JTable inTable, final long inElementID) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs;
+        final long[] selectedRowIDs;
         if (inTable.getModel().getColumnCount() < 4) {
             // Note: If the location radio button was previously selected the passed in table will not have 4 columns.
-            selectedRowIDs = new String[0];
+            selectedRowIDs = new long[0];
         }
         else {
             selectedRowIDs = getSelectedRowIDs(inTable, 3);
@@ -1375,12 +1376,12 @@ public final class UtilsTableGenerator {
         inTable.getRowSorter().setSortKeys(tempList);
     }
     
-    public static void setupPreviousRowSelection(JTable inTable, String[] inSelectedRowIDs, int inColWithID) {
+    public static void setupPreviousRowSelection(JTable inTable, long[] inSelectedRowIDs, int inColWithID) {
         if (inSelectedRowIDs.length > 0) {
             int found = 0;
             for (int t = 0; t < inTable.getRowSorter().getViewRowCount(); t++) {
-                for (String selectedRowID : inSelectedRowIDs) {
-                    if (inTable.getModel().getValueAt(inTable.convertRowIndexToModel(t), inColWithID).toString().equals(selectedRowID)) {
+                for (long selectedRowID : inSelectedRowIDs) {
+                    if ((long) inTable.getModel().getValueAt(inTable.convertRowIndexToModel(t), inColWithID) == selectedRowID) {
                         inTable.getSelectionModel().addSelectionInterval(t, t);
                         inTable.scrollRectToVisible(inTable.getCellRect(t, 0, true));
                         int x;
@@ -1535,11 +1536,11 @@ public final class UtilsTableGenerator {
         });
     }
     
-    public static String[] getSelectedRowIDs(JTable inTable, int inCol) {
-        String[] selectedRowIDs = new String[inTable.getSelectedRowCount()];
+    public static long[] getSelectedRowIDs(JTable inTable, int inCol) {
+        long[] selectedRowIDs = new long[inTable.getSelectedRowCount()];
         if (inTable.getModel().getColumnCount() > inCol) {
             for (int t = 0; t < inTable.getSelectedRowCount(); t++) {
-                selectedRowIDs[t] = inTable.getModel().getValueAt(inTable.convertRowIndexToModel(inTable.getSelectedRows()[t]), inCol).toString();
+                selectedRowIDs[t] = (long) inTable.getModel().getValueAt(inTable.convertRowIndexToModel(inTable.getSelectedRows()[t]), inCol);
             }
         }
         return selectedRowIDs;
@@ -1559,14 +1560,16 @@ public final class UtilsTableGenerator {
                         columnNames = new String[] {
                                                     "", "",
                                                     "Creature Name",
-                                                    "Creature Type"
+                                                    "Creature Type",
+                                                    "ID" // Hidden
                                                     };
                     }
                     else
                     if (inList.get(0) instanceof Location) {
                         columnNames = new String[] {
                                                     "", "",
-                                                    "Place Name"
+                                                    "Place Name",
+                                                    "ID" // Hidden
                                                     };
                     }
                     else
@@ -1576,7 +1579,8 @@ public final class UtilsTableGenerator {
                                                     "Period Name",
                                                     "Place Name",
                                                     "Start Date",
-                                                    "Period Type"
+                                                    "Period Type",
+                                                    "ID" // Hidden
                                                     };
                     }
                     else
@@ -1611,18 +1615,22 @@ public final class UtilsTableGenerator {
                                 data[finalT][1] = setupThumbnailIcon(inApp, dataObject.getWildLogFileID());
                                 data[finalT][2] = dataObject.getDisplayName();
                                 if (dataObject instanceof Element) {
-                                    data[finalT][3] = inApp.getDBI().findElement(((Element) dataObject).getID(), null, Element.class).getType();
+                                    Element element = (Element) dataObject;
+                                    data[finalT][3] = element.getType();
+                                    data[finalT][4] = element.getID();
                                 }
                                 else
                                 if (dataObject instanceof Location) {
-                                    // Nothing extra needs loading...
+                                    Location location = (Location) dataObject;
+                                    data[finalT][3] = location.getID();
                                 }
                                 else
                                 if (dataObject instanceof Visit) {
-                                    Visit visit = inApp.getDBI().findVisit(((Visit) dataObject).getID(), null, true, Visit.class);
+                                    Visit visit = (Visit) dataObject;
                                     data[finalT][3] = visit.getCachedLocationName();
                                     data[finalT][4] = visit.getStartDate();
                                     data[finalT][5] = visit.getType();
+                                    data[finalT][6] = visit.getID();
                                 }
                                 else
                                 if (dataObject instanceof Sighting) {
@@ -1654,15 +1662,15 @@ public final class UtilsTableGenerator {
                     setupRenderersAndThumbnailRows(inTable, false, false, 1);
                     inTable.getColumnModel().getColumn(2).setMinWidth(135);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(155);
-                    
                     if (inList.get(0) instanceof Element) {
                         inTable.getColumnModel().getColumn(3).setMinWidth(85);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(125);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(135);
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(4));
                     }
                     else
                     if (inList.get(0) instanceof Location) {
-                        // No exstra columns...
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(3));
                     }
                     else
                     if (inList.get(0) instanceof Visit) {
@@ -1675,6 +1683,7 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(5).setMinWidth(75);
                         inTable.getColumnModel().getColumn(5).setPreferredWidth(85);
                         inTable.getColumnModel().getColumn(5).setMaxWidth(115);
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(6));
                     }
                     else
                     if (inList.get(0) instanceof Sighting) {

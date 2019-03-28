@@ -2178,7 +2178,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (!bulkUploadMode) {
             if (tblLocation.getSelectedRowCount() == 1) {
                 locationWL = app.getDBI().findLocation((Long) tblLocation.getModel().getValueAt(
-                        tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1), null, Location.class);
+                        tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2), null, Location.class);
                 UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID());
                 btnAddNewVisit.setEnabled(true);
                 visit = null;

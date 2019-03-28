@@ -13,6 +13,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
+import wildlog.data.dataobjects.interfaces.DataObjectBasicInfo;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
 import wildlog.data.enums.Certainty;
@@ -47,9 +48,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private final WildLogApp app;
     private final JTabbedPane tabbedPanel;
     private List<Sighting> lstOriginalData;
-    private List<Element> lstFilteredElements;
-    private List<Location> lstFilteredLocations;
-    private List<Visit> lstFilteredVisits;
+    private List<Long> lstFilteredElements;
+    private List<Long> lstFilteredLocations;
+    private List<Long> lstFilteredVisits;
     private FilterProperties filterProperties;
     private int imageIndex;
     private double northEast_Latitude;
@@ -719,19 +720,17 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
 
-        
-// FIXME: Daar is steeds 'n probleem as nuwe visits, sightings ens ge-add was of die name was verander, want dan is hulle nie in die lyste nie... Maak dit reg wanneer die DBI geupgrade word.
-
+// FIXME: Daar is steeds 'n probleem as nuwe data objects ge-add/delete was, want dan is hulle nie in hierdie lyste nie...
 
         // Setup full lists for the first time if they were null
         if (lstFilteredLocations == null) {
-            lstFilteredLocations = app.getDBI().listLocations(null, Location.class);
+            lstFilteredLocations = generateIDList(app.getDBI().listLocations(null, Location.class));
         }
         if (lstFilteredVisits == null) {
-            lstFilteredVisits = app.getDBI().listVisits(null, 0, null, false, Visit.class);
+            lstFilteredVisits = generateIDList(app.getDBI().listVisits(null, 0, null, true, Visit.class));
         }
         if (lstFilteredElements == null) {
-            lstFilteredElements = app.getDBI().listElements(null, null, null, Element.class);
+            lstFilteredElements = generateIDList(app.getDBI().listElements(null, null, null, Element.class));
         }
         // Load the table
         UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
@@ -804,8 +803,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void btnFilterVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterVisitActionPerformed
         List<Visit> lstVisitsWithSelectedLocations = new ArrayList<>(lstFilteredLocations.size() * 5);
-        for (Location location : lstFilteredLocations) {
-            lstVisitsWithSelectedLocations.addAll(app.getDBI().listVisits(null, location.getID(), null, false, Visit.class));
+        for (long location : lstFilteredLocations) {
+            lstVisitsWithSelectedLocations.addAll(app.getDBI().listVisits(null, location, null, true, Visit.class));
         }
         FilterDataListDialog<Visit> dialog = new FilterDataListDialog<Visit>(app.getMainFrame(), 
                 lstVisitsWithSelectedLocations, lstFilteredVisits);
@@ -1017,14 +1016,22 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         filterProperties = new FilterProperties();
         FilterPropertiesDialog.setDefaultValues(true, filterProperties);
         // Also reset the filter lists
-        lstFilteredLocations = app.getDBI().listLocations(null, Location.class);
-        lstFilteredVisits = app.getDBI().listVisits(null, 0, null, false, Visit.class);
-        lstFilteredElements = app.getDBI().listElements(null, null, null, Element.class);
+        lstFilteredLocations = generateIDList(app.getDBI().listLocations(null, Location.class));
+        lstFilteredVisits = generateIDList(app.getDBI().listVisits(null, 0, null, true, Visit.class));
+        lstFilteredElements = generateIDList(app.getDBI().listElements(null, null, null, Element.class));
         // Reset the GPS box
         northEast_Latitude = 0.0;
         northEast_Longitude = 0.0;
         southWest_Latitude = 0.0;
         southWest_Longitude = 0.0;
+    }
+    
+    private <T extends DataObjectBasicInfo> List<Long> generateIDList(List<T> inLstDataObjects) {
+        List<Long> lstIDs = new ArrayList<>(inLstDataObjects.size());
+        for (DataObjectBasicInfo data : inLstDataObjects) {
+            lstIDs.add(data.getIDField());
+        }
+        return lstIDs;
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

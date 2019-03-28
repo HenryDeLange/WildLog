@@ -79,10 +79,9 @@ public interface DBI {
     public boolean deleteINaturalistLinkedData(long inWildLogID, long inINaturalistID);
     public boolean deleteUser(String inUsername);
 
-    public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> List<S> 
-        searchSightings(List<Long> inActiveSightingIDs, Date inStartDate, Date inEndDate, 
-                List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
-                boolean inIncludeCachedValues, Class<S> inReturnType);
+    public <S extends SightingCore> List<S> searchSightings(List<Long> inActiveSightingIDs, Date inStartDate, Date inEndDate, 
+            List<Long> inActiveLocations, List<Long> inActiveVisits, List<Long> inActiveElements, 
+            boolean inIncludeCachedValues, Class<S> inReturnType);
     
     public <T extends LocationCount> List<T> queryLocationCountForElement(long inElementID, Class<T> inReturnType);
 

@@ -63,9 +63,9 @@ public class MapsBaseDialog extends JFrame {
     private final JFXPanel jfxMapListPanel;
     private final List<Sighting> lstOriginalData;
     private final List<Sighting> lstFilteredData;
-    private List<Element> lstFilteredElements;
-    private List<Location> lstFilteredLocations;
-    private List<Visit> lstFilteredVisits;
+    private List<Long> lstFilteredElements;
+    private List<Long> lstFilteredLocations;
+    private List<Long> lstFilteredVisits;
     private FilterProperties filterProperties = null;
     private AbstractMap activeMap = null;
     private long elementID;
@@ -692,7 +692,7 @@ public class MapsBaseDialog extends JFrame {
     }
     
     private void doFiltering(final List<Sighting> lstOriginalData, List<Sighting> lstFilteredData, 
-            List<Element> lstFilteredElements, List<Location> lstFilteredLocations, List<Visit> lstFilteredVisits,
+            List<Long> lstFilteredElements, List<Long> lstFilteredLocations, List<Long> lstFilteredVisits,
             FilterProperties filterProperties, JLabel lblFilteredRecords, AbstractMap activeMap) {
         // NOTE: Don't create a new ArrayList (clear existing instead), because the reports are holding on to the reference 
         //       and will be stuck with an old list otherwise. Easiest to just keep the reference constant than to try and 
@@ -703,8 +703,8 @@ public class MapsBaseDialog extends JFrame {
             // Check filtered Elements
             if (lstFilteredElements != null) {
                 boolean found = false;
-                for (Element element : lstFilteredElements) {
-                    if (sighting.getElementID() == element.getID()) {
+                for (long element : lstFilteredElements) {
+                    if (sighting.getElementID() == element) {
                         found = true;
                         break;
                     }
@@ -716,8 +716,8 @@ public class MapsBaseDialog extends JFrame {
             // Check filtered Locations
             if (lstFilteredLocations != null) {
                 boolean found = false;
-                for (Location location : lstFilteredLocations) {
-                    if (sighting.getLocationID() == location.getID()) {
+                for (long location : lstFilteredLocations) {
+                    if (sighting.getLocationID() == location) {
                         found = true;
                         break;
                     }
@@ -729,8 +729,8 @@ public class MapsBaseDialog extends JFrame {
             // Check filtered Visits
             if (lstFilteredVisits != null) {
                 boolean found = false;
-                for (Visit visit : lstFilteredVisits) {
-                    if (sighting.getVisitID() == visit.getID()) {
+                for (long visit : lstFilteredVisits) {
+                    if (sighting.getVisitID() == visit) {
                         found = true;
                         break;
                     }

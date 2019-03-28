@@ -29,6 +29,7 @@ public class IconCellRenderer extends DefaultTableCellRenderer {
             setIcon(null);
             setText("");
         }
+        else
         if (inValue instanceof ImageIcon) {
             setIcon((ImageIcon) inValue);
             setText("");

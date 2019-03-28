@@ -127,6 +127,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         tabTitle = element.getPrimaryName();
         tabID = element.getID();
         tabIconURL = app.getClass().getResource("resources/icons/Element.gif");
+        // Scroll to the top of the text areas
+        txtBehaviourDescription.setCaretPosition(0);
+        txtDescription.setCaretPosition(0);
+        txtDiagnosticDescription.setCaretPosition(0);
+        txtDistribution.setCaretPosition(0);
+        txtNutrition.setCaretPosition(0);
     }
 
     private void uploadFiles(List<File> inFiles) {
