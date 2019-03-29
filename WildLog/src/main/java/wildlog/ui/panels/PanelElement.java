@@ -309,11 +309,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         btnSetMainImage.setBackground(new java.awt.Color(227, 240, 227));
         btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
-        btnSetMainImage.setText("Make First");
+        btnSetMainImage.setText("Set as First");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Creature.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setFocusPainted(false);
-        btnSetMainImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnSetMainImage.setMargin(new java.awt.Insets(2, 1, 2, 1));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -334,6 +334,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
 
         btnUploadImage.setBackground(new java.awt.Color(227, 240, 227));
+        btnUploadImage.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
         btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Creature. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
@@ -483,7 +484,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnReport.setBackground(new java.awt.Color(227, 240, 227));
         btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
         btnReport.setText("Charts");
-        btnReport.setToolTipText("View reports for this Creature.");
+        btnReport.setToolTipText("View charts for this Creature.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

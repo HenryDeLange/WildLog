@@ -587,7 +587,9 @@ public class MapsBaseDialog extends JFrame {
                                 ExportDialogForReportsAndMaps dialog = new ExportDialogForReportsAndMaps(parent, bufferedImage, 
                                         jfxMapPanel.getScene().getRoot(), 
                                         activeMap.getMapCategoryTitle() + " - " + activeMap.getActiveSubCategoryTitle() + " - ", 
-                                        lstFilteredData, ExportDialogForReportsAndMaps.ExportType.MAPS);
+                                        lstFilteredData, ExportDialogForReportsAndMaps.ExportType.MAPS, 
+// TODO: Implement this
+                                        null);
                                 dialog.setVisible(true);
                             }
                         });

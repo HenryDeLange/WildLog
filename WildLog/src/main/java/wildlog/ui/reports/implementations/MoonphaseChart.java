@@ -43,7 +43,6 @@ import wildlog.utils.UtilsTime;
 public class MoonphaseChart extends AbstractReport<Sighting> {
     private enum ChartType {BAR_CHART_ALL, BAR_CHART_ELEMENTS, LINE_CHART_ALL, LINE_CHART_ELEMENTS, PIE_CHART};
     private ChartType chartType = ChartType.BAR_CHART_ALL;
-    private Chart displayedChart;
     private boolean showDayOrNight = false;
     private boolean showMoonShiningOrNot = false;
     private boolean showBaseline = false;

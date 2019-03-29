@@ -276,6 +276,9 @@ public class UtilsImageProcessing {
                 lstFiles.get(t).setDefaultFile(true);
             }
             inApp.getDBI().updateWildLogFile(lstFiles.get(t));
+            if (inApp.getWildLogOptions().isEnableSounds()) {
+                Toolkit.getDefaultToolkit().beep();
+            }
         }
         newImageIndex = 0;
         return newImageIndex;

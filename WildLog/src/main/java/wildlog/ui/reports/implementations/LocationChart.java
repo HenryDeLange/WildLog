@@ -32,7 +32,6 @@ import wildlog.ui.reports.utils.UtilsReports;
 public class LocationChart extends AbstractReport<Sighting> {
     private enum ChartType {PIE_CHART_SIGHITNGS, BAR_CHART_SIGHITNGS, BAR_CHART_ELEMENTS};
     private ChartType chartType;
-    private Chart displayedChart;
 
     
     public LocationChart(List<Sighting> inLstData,JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {

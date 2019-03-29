@@ -562,11 +562,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnSetMainImage.setBackground(new java.awt.Color(208, 204, 181));
         btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
-        btnSetMainImage.setText("Default");
+        btnSetMainImage.setText("Set as First");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Observation.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnSetMainImage.setFocusPainted(false);
+        btnSetMainImage.setMargin(new java.awt.Insets(2, 1, 2, 1));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -601,6 +602,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         });
 
         btnUploadImage.setBackground(new java.awt.Color(208, 204, 181));
+        btnUploadImage.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
         btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Observation. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
@@ -1609,8 +1611,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         .addComponent(pnlSightingFields, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addGroup(sightingIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlLocationControls, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                            .addComponent(pnlElementControls, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))))
+                            .addComponent(pnlLocationControls, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                            .addComponent(pnlElementControls, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE))))
                 .addGap(5, 5, 5))
         );
 

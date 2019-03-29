@@ -42,7 +42,6 @@ import wildlog.utils.UtilsTime;
 public class RelationshipsChart extends AbstractReport<Sighting> {
     private enum ChartType {CHART_ELEMENTS};
     private ChartType chartType;
-    private Chart displayedChart;
     private final CheckBox chkCompareVisits;
     private final ComboBox<String> cmbGPS;
     private final ComboBox<String> cmbCompareDates;

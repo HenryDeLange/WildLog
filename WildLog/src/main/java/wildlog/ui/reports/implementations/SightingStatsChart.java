@@ -42,7 +42,6 @@ import wildlog.utils.UtilsTime;
 public class SightingStatsChart extends AbstractReport<Sighting> {
     private enum ChartType {NUMBER_PER_SIGHTING_CHART, SUBSEQUENT_CHART, SIGHTINGS_PER_DAY_CHART, /*ABUNDANCE_CHART, */FIRST_SIGHTING_CHART};
     private ChartType chartType = ChartType.NUMBER_PER_SIGHTING_CHART;
-    private Chart displayedChart;
     private final ComboBox<String> cmbOption;
 // TODO: Nog opsies:
 //        [Most Frequent (Mode)]

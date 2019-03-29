@@ -2211,7 +2211,7 @@ public final class WildLogView extends WildLogMainView {
                                 }
                                 if (!shouldBePath.equals(currentPath) || renameBasedOnSighting) {
                                     finalHandleFeedback.println("PROBLEM:   Incorrect or outdated file path   : " + inWildLogFile.getAbsolutePath());
-                                    finalHandleFeedback.println("+RESOLVED: Moved the file to the correct path: " + shouldBePath.resolve(fileName));
+                                    finalHandleFeedback.println("  +RESOLVED: Moved the file to the correct path: " + shouldBePath.resolve(fileName));
                                     // "Re-upload" the file to the correct location
                                     UtilsFileProcessing.performFileUpload(
                                             inDAOWithFile,
@@ -2263,7 +2263,7 @@ public final class WildLogView extends WildLogMainView {
                                             wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile).toString());
                                             if (app.getDBI().findWildLogFile(wildLogFile.getDBFilePath(), null, null, WildLogFile.class) == null) {
                                                 finalHandleFeedback.println("PROBLEM:   File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
-                                                finalHandleFeedback.println("+RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
+                                                finalHandleFeedback.println("  +RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
                                                 // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
                                                 Path destination = WildLogPaths.WILDLOG_LOST_FILES.getAbsoluteFullPath().resolve(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile));
                                                 while (Files.exists(destination)) {
@@ -2313,21 +2313,21 @@ public final class WildLogView extends WildLogMainView {
                             // Check the WildLogFile's content
                             if (wildLogFile.getId() == null) {
                                 finalHandleFeedback.println("PROBLEM:   File record without an ID. FilePath: " + wildLogFile.getDBFilePath());
-                                finalHandleFeedback.println("+RESOLVED: Tried to delete the database file record and file on disk.");
+                                finalHandleFeedback.println("  +RESOLVED: Tried to delete the database file record and file on disk.");
                                 app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                 filesWithoutID++;
                                 continue;
                             }
                             if (wildLogFile.getDBFilePath() == null) {
                                 finalHandleFeedback.println("PROBLEM:   File path missing from database record. FileID: " + wildLogFile.getId());
-                                finalHandleFeedback.println("+RESOLVED: Deleted the database file record.");
+                                finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
                                 app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                 filesWithoutPath++;
                                 continue;
                             }
                             if (!Files.exists(wildLogFile.getAbsolutePath())) {
                                 finalHandleFeedback.println("PROBLEM:   File record in the database can't be found on disk. FilePath: " + wildLogFile.getDBFilePath());
-                                finalHandleFeedback.println("+RESOLVED: Deleted the database file record.");
+                                finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
                                 app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                 filesNotOnDisk++;
                                 continue;
@@ -2336,13 +2336,13 @@ public final class WildLogView extends WildLogMainView {
                                 finalHandleFeedback.println("WARNING:    Database file record missing data. FilePath: " + wildLogFile.getAbsolutePath()
                                         + ", Filename: " + wildLogFile.getFilename()
                                         + ", UploadDate: " + wildLogFile.getUploadDate());
-                                finalHandleFeedback.println("-UNRESOLVED: No action taken...");
+                                finalHandleFeedback.println("  -UNRESOLVED: No action taken...");
                                 filesWithMissingData++;
                             }
                             if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
                                 finalHandleFeedback.println("PROBLEM:   Unknown FileType of database file record. FilePath: " + wildLogFile.getDBFilePath()
                                         + ", FileType: " + wildLogFile.getFileType());
-                                finalHandleFeedback.println("+RESOLVED: Changed FileType to " + WildLogFileType.OTHER + ".");
+                                finalHandleFeedback.println("  +RESOLVED: Changed FileType to " + WildLogFileType.OTHER + ".");
                                 wildLogFile.setFileType(WildLogFileType.OTHER);
                                 app.getDBI().updateWildLogFile(wildLogFile);
                                 filesWithBadType++;
@@ -2355,7 +2355,7 @@ public final class WildLogView extends WildLogMainView {
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:   Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", CreatureName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
+                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
                                     app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                     filesWithBadID++;
                                     continue;
@@ -2374,7 +2374,7 @@ public final class WildLogView extends WildLogMainView {
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:   Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PeriodName Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("+RESOLVED: Deleted the file databse record and file from disk.");
+                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file databse record and file from disk.");
                                     app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                     filesWithBadID++;
                                     continue;
@@ -2393,7 +2393,7 @@ public final class WildLogView extends WildLogMainView {
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:   Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PlaceName Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
+                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
                                     app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                     filesWithBadID++;
                                     continue;
@@ -2414,12 +2414,12 @@ public final class WildLogView extends WildLogMainView {
                                 }
                                 catch (NumberFormatException ex) {
                                     finalHandleFeedback.println("PROBLEM:     Can't get linked Observation's ID.");
-                                    finalHandleFeedback.println("-UNRESOLVED: Try to continue to delete the file.");
+                                    finalHandleFeedback.println("  -UNRESOLVED: Try to continue to delete the file.");
                                 }
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:   Could not find linked Observation for this file. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", ObservationID Used: " + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
+                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
                                     app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                     filesWithBadID++;
                                     continue;
@@ -2432,7 +2432,7 @@ public final class WildLogView extends WildLogMainView {
                             }
                             else {
                                 finalHandleFeedback.println("PROBLEM:   File ID is not correctly formatted.");
-                                finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
+                                finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
                                 app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
                                 filesWithBadID++;
                             }
@@ -2470,7 +2470,7 @@ public final class WildLogView extends WildLogMainView {
                             WildLogApp.LOGGER.log(Level.ERROR, "Could not check all files on disk.");
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                             finalHandleFeedback.println("PROBLEM:     Could not check all files on disk.");
-                            finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
+                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                         }
                         setProgress(40);
 
@@ -2497,7 +2497,7 @@ public final class WildLogView extends WildLogMainView {
                                     else {
                                         oldDate = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()));
                                     }
-                                    finalHandleFeedback.println("+RESOLVED: Updated the database Modified Date value of the file record. "
+                                    finalHandleFeedback.println("  +RESOLVED: Updated the database Modified Date value of the file record. "
                                             + "Changed " + oldDate
                                             + " to " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(actualFileDate));
                                     wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
@@ -2509,7 +2509,7 @@ public final class WildLogView extends WildLogMainView {
                                 if (actualFileSize != wildLogFile.getFileSize()) {
                                     finalHandleFeedback.println("PROBLEM:   The File Size of the file on disk is not the same as the value stored in the database. "
                                             + "FilePath: " + wildLogFile.getAbsolutePath());
-                                    finalHandleFeedback.println("+RESOLVED: Updated the database File Size value of the file record. "
+                                    finalHandleFeedback.println("  +RESOLVED: Updated the database File Size value of the file record. "
                                             + "Changed " + wildLogFile.getFileSize() + " to " + actualFileSize);
                                     wildLogFile.setFileSize(actualFileSize);
                                     app.getDBI().updateWildLogFile(wildLogFile);
@@ -2533,7 +2533,7 @@ public final class WildLogView extends WildLogMainView {
                             WildLogApp.LOGGER.log(Level.ERROR, "Could not delete all empty folders.");
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                             finalHandleFeedback.println("PROBLEM:     Could not delete all empty folders.");
-                            finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
+                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                         }
                         setProgress(52);
 
@@ -2549,7 +2549,7 @@ public final class WildLogView extends WildLogMainView {
                             WildLogApp.LOGGER.log(Level.ERROR, "Could not delete export folders.");
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                             finalHandleFeedback.println("PROBLEM:     Could not delete export folders.");
-                            finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
+                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                         }
                         setProgress(55);
                         setMessage("Cleanup Step 5: Delete exports and thumbnails... " + getProgress() + "%");
@@ -2560,7 +2560,7 @@ public final class WildLogView extends WildLogMainView {
                             WildLogApp.LOGGER.log(Level.ERROR, "Could not delete thumbnail folders.");
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                             finalHandleFeedback.println("PROBLEM:     Could not delete thumbnail folders.");
-                            finalHandleFeedback.println("-UNRESOLVED: Unexpected error accessing file...");
+                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                         }
                         setProgress(65);
 
@@ -2580,7 +2580,7 @@ public final class WildLogView extends WildLogMainView {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   Could not find link between Period and Place. "
                                         + "Period: " + visit.getName() + ", Place: " + visit.getCachedLocationName());
-                                finalHandleFeedback.println("+RESOLVED: Moved Period to a new Place called 'WildLog_lost_and_found'.");
+                                finalHandleFeedback.println("  +RESOLVED: Moved Period to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location(0, "WildLog_lost_and_found");
@@ -2604,7 +2604,7 @@ public final class WildLogView extends WildLogMainView {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Place. "
                                         + "Observation: " + sighting.getID() + ", Place: " + sighting.getCachedLocationName());
-                                finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Place called 'WildLog_lost_and_found'.");
+                                finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location(0, "WildLog_lost_and_found");
@@ -2619,7 +2619,7 @@ public final class WildLogView extends WildLogMainView {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Creature. "
                                         + "Observation: " + sighting.getID()+ ", Creature: " + sighting.getCachedElementName());
-                                finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Creature called 'WildLog_lost_and_found'.");
+                                finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Creature called 'WildLog_lost_and_found'.");
                                 Element newElement = app.getDBI().findElement(0, "WildLog_lost_and_found", Element.class);
                                 if (newElement == null) {
                                     newElement = new Element(0, "WildLog_lost_and_found");
@@ -2634,7 +2634,7 @@ public final class WildLogView extends WildLogMainView {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Period. "
                                         + "Observation: " + sighting.getID() + ", Period: " + sighting.getCachedVisitName());
-                                finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Period called 'WildLog_lost_and_found'.");
+                                finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Period called 'WildLog_lost_and_found'.");
                                 // Location
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
@@ -2658,7 +2658,7 @@ public final class WildLogView extends WildLogMainView {
                                 badDataLinks++;
                                 finalHandleFeedback.println("PROBLEM:   The Observation and Period references different Places. "
                                         + "Observation: " + sighting.getCachedLocationName() + ", Period: " + checkSightingVisit.getCachedLocationName());
-                                finalHandleFeedback.println("+RESOLVED: Moved Observation and Period to a new Place called 'WildLog_lost_and_found'.");
+                                finalHandleFeedback.println("  +RESOLVED: Moved Observation and Period to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location(0, "WildLog_lost_and_found");
@@ -2694,7 +2694,7 @@ public final class WildLogView extends WildLogMainView {
                                 app.getDBI().updateSighting(sighting);
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:   GPS information found without GPS Accuracy for Observation (" + sighting.getID() + ").");
-                                finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
+                                finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
                             }
                             else {
                                 if ((sighting.getGPSAccuracy() != null && !GPSAccuracy.NONE.equals(sighting.getGPSAccuracy()))
@@ -2705,7 +2705,7 @@ public final class WildLogView extends WildLogMainView {
                                     app.getDBI().updateSighting(sighting);
                                     badGPSAccuracy++;
                                     finalHandleFeedback.println("PROBLEM:   GPS Accuracy information found without GPS location for Observation (" + sighting.getID() + ").");
-                                    finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
+                                    finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a value of NONE.");
                                 }
                             }
                             if (sighting.getGPSAccuracy() != null && (sighting.getGPSAccuracyValue() < sighting.getGPSAccuracy().getMinMeters()
@@ -2714,7 +2714,7 @@ public final class WildLogView extends WildLogMainView {
                                 app.getDBI().updateSighting(sighting);
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:   GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Observation (" + sighting.getID() + ").");
-                                finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
+                                finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                             }
                             countGPSAccuracy++;
                             setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
@@ -2731,7 +2731,7 @@ public final class WildLogView extends WildLogMainView {
                                 app.getDBI().updateLocation(location, location.getName());
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:   GPS information found without GPS Accuracy for Place (" + location.getName() + ").");
-                                finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
+                                finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
                             }
                             else {
                                 if ((location.getGPSAccuracy() != null && !GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
@@ -2742,7 +2742,7 @@ public final class WildLogView extends WildLogMainView {
                                     app.getDBI().updateLocation(location, location.getName());
                                     badGPSAccuracy++;
                                     finalHandleFeedback.println("PROBLEM:   GPS Accuracy information found without GPS location for Place (" + location.getName() + ").");
-                                    finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
+                                    finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a value of NONE.");
                                 }
                             }
                             if (location.getGPSAccuracy() != null && (location.getGPSAccuracyValue() < location.getGPSAccuracy().getMinMeters()
@@ -2751,7 +2751,7 @@ public final class WildLogView extends WildLogMainView {
                                 app.getDBI().updateLocation(location, location.getName());
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:   GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Place (" + location.getName() + ").");
-                                finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
+                                finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                             }
                             countGPSAccuracy++;
                             setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
@@ -2779,17 +2779,17 @@ public final class WildLogView extends WildLogMainView {
                             if (processedVisits.add(visit.getID())) {
                                 if (visit.getStartDate() == null) {
                                     finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") does not have a Start Date.");
-                                    finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Reports and Maps.");
+                                    finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Reports and Maps.");
                                     badVisitDates++;
                                 }
                                 if (visit.getStartDate() == null && visit.getEndDate() != null) {
                                     finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") has an End Date but does not have a Start Date.");
-                                    finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods with an End Date to also have a Start Date.");
+                                    finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Periods with an End Date to also have a Start Date.");
                                     badVisitDates++;
                                 }
                                 if (visit.getStartDate() != null && visit.getEndDate() != null && visit.getEndDate().before(visit.getStartDate())) {
                                     finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") has an End Date that is before the Start Date.");
-                                    finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Periods to have a valid date range.");
+                                    finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Periods to have a valid date range.");
                                     badVisitDates++;
                                 }
                             }
@@ -2797,7 +2797,7 @@ public final class WildLogView extends WildLogMainView {
                             if ((visit.getStartDate() != null && sightingDate.isBefore(UtilsTime.getLocalDateFromDate(visit.getStartDate()))) 
                                     || (visit.getEndDate() != null && sightingDate.isAfter(UtilsTime.getLocalDateFromDate(visit.getEndDate())))) {
                                 finalHandleFeedback.println("WARNING:   The date for Observation (" + sighting.getID() + ") does not fall within the dates from Period (" + visit.getName() + ").");
-                                finalHandleFeedback.println("+UNRESOLVED: It is recommended for all Observations to use dates that fall within the Start date and End Date of the linked Period.");
+                                finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Observations to use dates that fall within the Start date and End Date of the linked Period.");
                                 badVisitDates++;
                             }
                             linkCount++;
@@ -2861,7 +2861,7 @@ public final class WildLogView extends WildLogMainView {
                             executorService.shutdown();
                             if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
                                 finalHandleFeedback.println("PROBLEM:     Processing the thumbnails took too long.");
-                                finalHandleFeedback.println("-UNRESOLVED: Thumbnails can be created on demand by the application.");
+                                finalHandleFeedback.println("  -UNRESOLVED: Thumbnails can be created on demand by the application.");
                             }
                             setProgress(99);
                         }
@@ -2917,7 +2917,7 @@ public final class WildLogView extends WildLogMainView {
                             executorService.shutdown();
                             if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
                                 finalHandleFeedback.println("PROBLEM:     Processing the thumbnails took too long.");
-                                finalHandleFeedback.println("-UNRESOLVED: Thumbnails can be created on demand by the application.");
+                                finalHandleFeedback.println("  -UNRESOLVED: Thumbnails can be created on demand by the application.");
                             }
                             setProgress(99);
                         }
@@ -2994,7 +2994,7 @@ public final class WildLogView extends WildLogMainView {
                         WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         if (feedback != null) {
                             feedback.println("PROBLEM:     An exception occured while cleaning the Workspace!!");
-                            feedback.println("-UNRESOLVED: Unexpected error... " + ex.getMessage());
+                            feedback.println("  -UNRESOLVED: Unexpected error... " + ex.getMessage());
                         }
                     }
                     finally {

@@ -35,7 +35,6 @@ import wildlog.ui.reports.utils.UtilsReports;
 public class DurationChart extends AbstractReport<Sighting> {
     private enum ChartType {TIMELINE_FOR_ALL, TIMELINE_PER_ELEMENT};
     private ChartType chartType = ChartType.TIMELINE_FOR_ALL;
-    private Chart displayedChart;
     private final ComboBox<String> cmbIntervalSize;
     private final String[] options = new String[] {"2 seconds", "5 seconds", "10 seconds", "30 seconds", "1 minute", "5 minutes", "15 minutes"};
     private int maxMinutesCap = 30;

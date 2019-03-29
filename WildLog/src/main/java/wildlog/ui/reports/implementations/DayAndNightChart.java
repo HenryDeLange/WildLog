@@ -37,7 +37,6 @@ import wildlog.utils.UtilsTime;
 public class DayAndNightChart extends AbstractReport<Sighting> {
     private enum ChartType {PIE_CHART, LINE_CHART, STACKED_LINE_CHART};
     private ChartType chartType = ChartType.PIE_CHART;
-    private Chart displayedChart;
 
     
     public DayAndNightChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {

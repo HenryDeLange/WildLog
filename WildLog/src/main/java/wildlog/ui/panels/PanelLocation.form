@@ -228,14 +228,14 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/DefaultImage.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Make First"/>
+                <Property name="text" type="java.lang.String" value="Set as First"/>
                 <Property name="toolTipText" type="java.lang.String" value="Make this the default (first) file for the Place."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 2, 2, 2]"/>
+                  <Insets value="[2, 1, 2, 1]"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="btnSetMainImage" noResource="true"/>
               </Properties>
@@ -256,6 +256,9 @@
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f4" green="ef" red="e9" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="12" style="1"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/UploadImage.png"/>
@@ -721,7 +724,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="View Maps"/>
+                <Property name="text" type="java.lang.String" value="Maps"/>
                 <Property name="toolTipText" type="java.lang.String" value="Show maps for this Place."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -841,8 +844,8 @@
                 <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/Report_Small.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="View Reports"/>
-                <Property name="toolTipText" type="java.lang.String" value="View reports for this Place."/>
+                <Property name="text" type="java.lang.String" value="Charts"/>
+                <Property name="toolTipText" type="java.lang.String" value="View charts for this Place."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>

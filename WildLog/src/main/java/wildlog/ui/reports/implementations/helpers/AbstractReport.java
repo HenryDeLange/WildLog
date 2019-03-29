@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javax.swing.JLabel;
@@ -36,6 +37,7 @@ public abstract class AbstractReport<T> {
     protected List<T> lstData;
     protected List<Node> lstCustomButtons;
     protected JLabel lblReportDescription;
+    protected Chart displayedChart;
 
     
     public AbstractReport(String inReportCategoryTitle, List<T> inList, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
@@ -76,6 +78,10 @@ public abstract class AbstractReport<T> {
 
     public List<Node> getLstCustomButtons() {
         return lstCustomButtons;
+    }
+
+    public Chart getDisplayedChart() {
+        return displayedChart;
     }
     
 }

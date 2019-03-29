@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
@@ -13,6 +14,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.chart.Chart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Control;
@@ -559,7 +563,8 @@ public class ReportsBaseDialog extends JFrame {
                                 ExportDialogForReportsAndMaps dialog = new ExportDialogForReportsAndMaps(parent, bufferedImage, 
                                         jfxReportChartPanel.getScene().getRoot(), 
                                         activeReport.getReportCategoryTitle() + " - " + activeReport.getActiveSubCategoryTitle() + " - ", 
-                                        lstFilteredData, ExportDialogForReportsAndMaps.ExportType.REPORTS);
+                                        lstFilteredData, ExportDialogForReportsAndMaps.ExportType.REPORTS, 
+                                        getFinalChartData(activeReport.getDisplayedChart()));
                                 dialog.setVisible(true);
                             }
                         });
@@ -572,6 +577,30 @@ public class ReportsBaseDialog extends JFrame {
         }
     }//GEN-LAST:event_bntExportActionPerformed
 
+    private List<Object[]> getFinalChartData(Chart inChart) {
+        List<Object[]> lstFinalData = new ArrayList();
+        if (inChart != null) {
+            if (inChart instanceof XYChart) {
+                lstFinalData.add(new Object[]{"NAME", "X-VALUE", "Y-VALUE", "EXTRA"});
+                XYChart chart = (XYChart) inChart;
+                for (XYChart.Series series : (ObservableList<XYChart.Series>) chart.getData()) {
+                    for (XYChart.Data data : (ObservableList<XYChart.Data>) series.getData()) {
+                        lstFinalData.add(new Object[]{series.getName(), data.getXValue(), data.getYValue(), data.getExtraValue()});
+                    }
+                }
+            }
+            else
+            if (inChart instanceof PieChart) {
+                lstFinalData.add(new Object[]{"NAME", "VALUE"});
+                PieChart chart = (PieChart) inChart;
+                for (PieChart.Data data : chart.getData()) {
+                    lstFinalData.add(new Object[]{data.getName(), data.getPieValue()});
+                }
+            }
+        }
+        return lstFinalData;
+    }
+    
     private void btnFilterElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementActionPerformed
         FilterDataListDialog<Element> dialog = new FilterDataListDialog<Element>(this, lstOriginalData, lstFilteredElements, Element.class);
         dialog.setVisible(true);

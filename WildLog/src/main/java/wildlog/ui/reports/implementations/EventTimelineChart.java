@@ -41,7 +41,6 @@ import wildlog.utils.UtilsTime;
 public class EventTimelineChart extends AbstractReport<Sighting> {
     private enum ChartType {TIMELINE_FOR_ALL, TIMELINE_PER_ELEMENT};
     private ChartType chartType = ChartType.TIMELINE_FOR_ALL;
-    private Chart displayedChart;
     private final ComboBox<String> cmbIntervalSize;
     private final String[] options = new String[] {"1 hour", "3 hours", "6 hours", "12 hours", "24 hours", "Week", "Month", "Year"};
     private final CheckBox chkGroupYears;

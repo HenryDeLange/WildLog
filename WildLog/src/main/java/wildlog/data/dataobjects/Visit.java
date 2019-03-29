@@ -7,9 +7,11 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithTXT;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.utils.UtilsTime;
 import wildlog.xml.utils.UtilsXML;
 
 
@@ -31,19 +33,26 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, boolean inIsSummary, 
             WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
-        htmlVisit.append("<title>Periods: ").append(name).append("</title></head>");
-        htmlVisit.append("<body bgcolor='#E6E4F0'>");
-        htmlVisit.append("<table bgcolor='#E6E4F0' width='100%'>");
-        htmlVisit.append("<tr><td style='font-size:9px;font-family:verdana;'>");
-        htmlVisit.append("<b><u>").append(name).append("</u></b>");
-        htmlVisit.append("<br/>");
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Start Date:</b><br/>", UtilsHTML.formatDateAsString(startDate, false), true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>End Date:</b><br/>", UtilsHTML.formatDateAsString(endDate, false), true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Type of Visit:</b><br/>", type, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Description:</b><br/>", description, true);
+        StringBuilder html = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
+        html.append("<title>Periods: ").append(name).append("</title></head>");
+        html.append("<body bgcolor='#E6E4F0'>");
+        html.append("<table bgcolor='#E6E4F0' width='100%'>");
+        html.append("<tr><td style='font-size:9px;font-family:verdana;'>");
+        html.append("<b><u>").append(name).append("</u></b>");
+        html.append("<br/>");
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Start Date:</b><br/>", UtilsHTML.formatDateAsString(startDate, false), true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>End Date:</b><br/>", UtilsHTML.formatDateAsString(endDate, false), true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Type of Visit:</b><br/>", type, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Description:</b><br/>", description, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Game Watching:</b><br/>", gameWatchingIntensity, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Game Watching:</b><br/>", gameWatchingIntensity, true);
+        }
+        if (!inIsSummary && (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.WILDLOG_MASTER || WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.OWNER)) {
+            html.append("<br/><hr/>");
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>ID:</b><br/>", id, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit Time:</b><br/>", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(
+                    UtilsTime.getLocalDateTimeFromMilliseconds(auditTime)), true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit User:</b><br/>", auditUser, true);
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
@@ -57,18 +66,18 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
                 }
             }
             if (filesString.length() > 0) {
-                htmlVisit.append("<br/>");
-                htmlVisit.append("<br/><b>Photos:</b><br/>").append(filesString);
+                html.append("<br/>");
+                html.append("<br/><b>Photos:</b><br/>").append(filesString);
             }
         }
         if (inIsRecursive) {
-            htmlVisit.append("<br/>");
-            htmlVisit.append("</td></tr>");
-            htmlVisit.append("<tr><td>");
+            html.append("<br/>");
+            html.append("</td></tr>");
+            html.append("<tr><td>");
             List<Sighting> sightings = inApp.getDBI().listSightings(0, 0, id, true, Sighting.class);
             int counter = 0;
             for (int t = 0; t < sightings.size(); t++) {
-                htmlVisit.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
+                html.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
                 if (inProgressbarTask != null) {
                     inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
@@ -77,11 +86,11 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
                 }
             }
         }
-        htmlVisit.append("</td></tr>");
-        htmlVisit.append("</table>");
-        htmlVisit.append("<br/>");
-        htmlVisit.append("</body>");
-        return htmlVisit.toString();
+        html.append("</td></tr>");
+        html.append("</table>");
+        html.append("<br/>");
+        html.append("</body>");
+        return html.toString();
     }
 
     @Override

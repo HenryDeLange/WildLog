@@ -37,10 +37,12 @@ public class ExportDialogForReportsAndMaps extends JDialog {
     private final Node node;
     private final String name;
     private final List<Sighting> lstSightings;
+    private final List<Object[]> lstOutputData;
     private ExportType type;
     
     
-    public ExportDialogForReportsAndMaps(JFrame inParent, BufferedImage inImage, Node inNode, String inName, List<Sighting> inLstSightings, ExportType inType) {
+    public ExportDialogForReportsAndMaps(JFrame inParent, BufferedImage inImage, Node inNode, String inName, List<Sighting> inLstSightings, 
+            ExportType inType, List<Object[]> inLstOutputData) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[ExportDialogForReportsAndMaps]");
         // Set passed in values
@@ -48,6 +50,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         node = inNode;
         name = inName;
         lstSightings = inLstSightings;
+        lstOutputData = inLstOutputData;
         type = inType;
         // Auto generated code
         initComponents();
@@ -74,9 +77,10 @@ public class ExportDialogForReportsAndMaps extends JDialog {
     private void initComponents() {
 
         btnExportImage = new javax.swing.JButton();
-        btnExportHTML = new javax.swing.JButton();
-        btnExportCSV = new javax.swing.JButton();
+        btnExportCSVInputData = new javax.swing.JButton();
+        btnExportCSVOutputData = new javax.swing.JButton();
         btnExportPDF = new javax.swing.JButton();
+        btnExportHTML = new javax.swing.JButton();
         btnExportKML = new javax.swing.JButton();
         btnPrint = new javax.swing.JButton();
 
@@ -107,43 +111,43 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         });
         getContentPane().add(btnExportImage);
 
-        btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTML.setText("Export as Offline Webpage");
-        btnExportHTML.setToolTipText("Create a basic HTML web page that can be viewed offline to show theObservations used by the active report or map.");
-        btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportHTML.setFocusPainted(false);
-        btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportHTML.setIconTextGap(10);
-        btnExportHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportHTML.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportHTML.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportHTML.setName("btnExportHTML"); // NOI18N
-        btnExportHTML.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportHTML.addActionListener(new java.awt.event.ActionListener() {
+        btnExportCSVInputData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
+        btnExportCSVInputData.setText("Export as Spreadsheet (Input Data)");
+        btnExportCSVInputData.setToolTipText("Create a CSV file of all relevant Observations used by this report or map. Can be opened in Excel, etc.");
+        btnExportCSVInputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportCSVInputData.setFocusPainted(false);
+        btnExportCSVInputData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportCSVInputData.setIconTextGap(10);
+        btnExportCSVInputData.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportCSVInputData.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportCSVInputData.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportCSVInputData.setName("btnExportCSVInputData"); // NOI18N
+        btnExportCSVInputData.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportCSVInputData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportHTMLActionPerformed(evt);
+                btnExportCSVInputDataActionPerformed(evt);
             }
         });
-        getContentPane().add(btnExportHTML);
+        getContentPane().add(btnExportCSVInputData);
 
-        btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSV.setText("Export as Spreadsheet");
-        btnExportCSV.setToolTipText("Create a CSV file of all relevant Observations used by this report or map. Can be opened in Excel, etc.");
-        btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportCSV.setFocusPainted(false);
-        btnExportCSV.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExportCSV.setIconTextGap(10);
-        btnExportCSV.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportCSV.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportCSV.setMinimumSize(new java.awt.Dimension(260, 35));
-        btnExportCSV.setName("btnExportCSV"); // NOI18N
-        btnExportCSV.setPreferredSize(new java.awt.Dimension(260, 35));
-        btnExportCSV.addActionListener(new java.awt.event.ActionListener() {
+        btnExportCSVOutputData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
+        btnExportCSVOutputData.setText("Export as Spreadsheet (Output Data)");
+        btnExportCSVOutputData.setToolTipText("Create a CSV file of the final processed data used by this report or map. Can be opened in Excel, etc.");
+        btnExportCSVOutputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportCSVOutputData.setFocusPainted(false);
+        btnExportCSVOutputData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportCSVOutputData.setIconTextGap(10);
+        btnExportCSVOutputData.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportCSVOutputData.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportCSVOutputData.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportCSVOutputData.setName("btnExportCSVOutputData"); // NOI18N
+        btnExportCSVOutputData.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportCSVOutputData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportCSVActionPerformed(evt);
+                btnExportCSVOutputDataActionPerformed(evt);
             }
         });
-        getContentPane().add(btnExportCSV);
+        getContentPane().add(btnExportCSVOutputData);
 
         btnExportPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF.png"))); // NOI18N
         btnExportPDF.setText("Export as PDF");
@@ -163,6 +167,25 @@ public class ExportDialogForReportsAndMaps extends JDialog {
             }
         });
         getContentPane().add(btnExportPDF);
+
+        btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        btnExportHTML.setText("Export as Offline Webpage");
+        btnExportHTML.setToolTipText("Create a basic HTML web page that can be viewed offline to show theObservations used by the active report or map.");
+        btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportHTML.setFocusPainted(false);
+        btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportHTML.setIconTextGap(10);
+        btnExportHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportHTML.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.setName("btnExportHTML"); // NOI18N
+        btnExportHTML.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportHTMLActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportHTML);
 
         btnExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
         btnExportKML.setText("Export as KML");
@@ -205,12 +228,12 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVActionPerformed
+    private void btnExportCSVInputDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVInputDataActionPerformed
         UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
             @Override
             protected Object doInBackground() throws Exception {
                 setProgress(0);
-                setMessage("Exporting Report CSV for '" + name + "'");
+                setMessage("Exporting Report CSV Input for '" + name + "'");
                 Path root;
                 if (ExportType.REPORTS.equals(type)) {
                     root = WildLogPaths.WILDLOG_EXPORT_REPORTS_CSV.getAbsoluteFullPath();
@@ -218,18 +241,18 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 else {
                     root = WildLogPaths.WILDLOG_EXPORT_MAPS_CSV.getAbsoluteFullPath();
                 }
-                Path filePath = root.resolve(name + " (" + System.currentTimeMillis() + ").csv");
+                Path filePath = root.resolve("Input - " + name + " (" + System.currentTimeMillis() + ").csv");
                 Files.createDirectories(filePath.getParent());
                 WildLogApp.getApplication().getDBI().doExportCSV(filePath, false, null, null, null, null, lstSightings);
                 UtilsFileProcessing.openFile(filePath);
                 setProgress(100);
-                setMessage("Done Exporting Report CSV for '" + name + "'");
+                setMessage("Done Exporting Report CSV Input for '" + name + "'");
                 return null;
             }
         });
         setVisible(false);
         dispose();
-    }//GEN-LAST:event_btnExportCSVActionPerformed
+    }//GEN-LAST:event_btnExportCSVInputDataActionPerformed
 
     private void btnExportImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportImageActionPerformed
         if (bufferedImage != null) {
@@ -443,9 +466,64 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         dispose();
     }//GEN-LAST:event_btnExportKMLActionPerformed
 
+    private void btnExportCSVOutputDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVOutputDataActionPerformed
+        if (lstOutputData != null && !lstOutputData.isEmpty()) {
+            UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setProgress(0);
+                    setMessage("Exporting Report CSV Output for '" + name + "'");
+                    // Create the CSV content
+                    Path rootPath;
+                    if (ExportType.REPORTS.equals(type)) {
+                        rootPath = WildLogPaths.WILDLOG_EXPORT_REPORTS_CSV.getAbsoluteFullPath();
+                    }
+                    else {
+                        rootPath = WildLogPaths.WILDLOG_EXPORT_MAPS_CSV.getAbsoluteFullPath();
+                    }
+                    Path filePath = rootPath.resolve("Output - " + name + " (" + System.currentTimeMillis() + ").csv");
+                    Files.createDirectories(rootPath);
+                    final StringBuilder csvString = new StringBuilder(5000);
+                    for (int i = 0; i < lstOutputData.size(); i++) {
+                        Object[] values = lstOutputData.get(i);
+                        for (int t = 0; t < values.length; t++) {
+                            Object value = values[t];
+                            if (value == null) {
+                                csvString.append("");
+                            }
+                            else {
+                                if (value.toString().contains(",")) {
+                                    csvString.append("\"").append(value.toString()).append("\"");
+                                }
+                                else {
+                                    csvString.append(value.toString());
+                                }
+                            }
+                            if (t < values.length - 1) {
+                                csvString.append(",");
+                            }
+                        }
+                        csvString.append(System.lineSeparator());
+                        setProgress((int) ((((double) i) / ((double) lstOutputData.size())) * 100.0));
+                        setMessage("Done Exporting Report CSV Output for '" + name + "'");
+                    }
+                    UtilsFileProcessing.createFileFromBytes(csvString.toString().getBytes(), filePath);
+                    // Open the file
+                    UtilsFileProcessing.openFile(filePath);
+                    setProgress(100);
+                    setMessage("Done Exporting Report CSV Output for '" + name + "'");
+                    return null;
+                }
+            });
+        }
+        setVisible(false);
+        dispose();
+    }//GEN-LAST:event_btnExportCSVOutputDataActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExportCSV;
+    private javax.swing.JButton btnExportCSVInputData;
+    private javax.swing.JButton btnExportCSVOutputData;
     private javax.swing.JButton btnExportHTML;
     private javax.swing.JButton btnExportImage;
     private javax.swing.JButton btnExportKML;

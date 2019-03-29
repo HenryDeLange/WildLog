@@ -63,16 +63,16 @@ public class ElementSelectionDialog extends JDialog {
         // Wag eers vir die table om klaar te load voor ek iets probeer select
         final int columnToUse;
         if (app.getWildLogOptions().isUseThumbnailTables()) {
-            columnToUse = 1;
+            columnToUse = 3;
         }
         else {
-            columnToUse = 0;
+            columnToUse = 2;
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 for (int t = 0; t < tblElement.getRowCount(); t++) {
-                    if (tblElement.getValueAt(t, columnToUse).equals(inSelectedElement)) {
+                    if (tblElement.getValueAt(t, columnToUse) == inSelectedElement) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getRowCount()) - 1) {
@@ -267,7 +267,7 @@ public class ElementSelectionDialog extends JDialog {
             public void run() {
                 // Select the previous element
                 for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                    if (tblElement.getValueAt(t, 3).equals(previousElementID)) {
+                    if ((long) tblElement.getValueAt(t, 3) == previousElementID) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getModel().getRowCount()) - 1) {

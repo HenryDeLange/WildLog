@@ -32,7 +32,6 @@ import wildlog.ui.reports.utils.UtilsReports;
 public class TimeOfDayChart extends AbstractReport<Sighting> {
     private enum ChartType {LINE_CHART, STACKED_BAR_CHART, BAR_CHART, PIE_CHART};
     private ChartType chartType = ChartType.PIE_CHART;
-    private Chart displayedChart;
     
     public TimeOfDayChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
         super("Time of Day Reports", inLstData, inChartDescLabel, inReportsBaseDialog);

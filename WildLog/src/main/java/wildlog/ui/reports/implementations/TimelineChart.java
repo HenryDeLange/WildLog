@@ -37,7 +37,6 @@ import wildlog.utils.UtilsTime;
 public class TimelineChart extends AbstractReport<Sighting> {
     private enum ChartType {TIMELINE_FOR_ALL, TIMELINE_PER_ELEMENT};
     private ChartType chartType = ChartType.TIMELINE_FOR_ALL;
-    private Chart displayedChart;
     private final ComboBox<String> cmbIntervalSize;
     private final String[] options = new String[] {"5 minutes", "15 minutes", "30 minutes", "1 hour", "2 hours", "4 hours", "6 hours"};
 

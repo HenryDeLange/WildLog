@@ -35,7 +35,6 @@ import wildlog.ui.reports.utils.UtilsReports;
 public class SightingPropertiesChart extends AbstractReport<Sighting> {
     private enum ChartType {PIE_CHART};
     private ChartType chartType;
-    private Chart displayedChart;
     private final ComboBoxToShowReports<String> cmbCategories;
     private final String[] options = new String[] {"Number of Individuals", "Gender", "Age", "Life Status", 
         "Evidence", "Certainty", "Rating", "Info Tag", "Creature Type", "Has GPS"};

@@ -36,7 +36,6 @@ import wildlog.ui.reports.utils.UtilsReports;
 public class ElementsChart extends AbstractReport<Sighting> {
     private enum ChartType {PIE_CHART_SIGHTINGS, PIE_CHART_ELEMENT_TYPES, BAR_CHART_SIGHTINGS, BAR_CHART_ABUNDANCE, BAR_CHART_LOCATIONS};
     private ChartType chartType;
-    private Chart displayedChart;
     
     
     public ElementsChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {

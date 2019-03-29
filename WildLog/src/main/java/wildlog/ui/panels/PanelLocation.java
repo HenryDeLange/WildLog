@@ -313,11 +313,11 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         btnSetMainImage.setBackground(new java.awt.Color(233, 239, 244));
         btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
-        btnSetMainImage.setText("Make First");
+        btnSetMainImage.setText("Set as First");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Place.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setFocusPainted(false);
-        btnSetMainImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnSetMainImage.setMargin(new java.awt.Insets(2, 1, 2, 1));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -330,6 +330,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
 
         btnUploadImage.setBackground(new java.awt.Color(233, 239, 244));
+        btnUploadImage.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
         btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Place. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
@@ -606,7 +607,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         btnMap.setBackground(new java.awt.Color(233, 239, 244));
         btnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
-        btnMap.setText("View Maps");
+        btnMap.setText("Maps");
         btnMap.setToolTipText("Show maps for this Place.");
         btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMap.setFocusPainted(false);
@@ -681,8 +682,8 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         btnReport.setBackground(new java.awt.Color(233, 239, 244));
         btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
-        btnReport.setText("View Reports");
-        btnReport.setToolTipText("View reports for this Place.");
+        btnReport.setText("Charts");
+        btnReport.setToolTipText("View charts for this Place.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

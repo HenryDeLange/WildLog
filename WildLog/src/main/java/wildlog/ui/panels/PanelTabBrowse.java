@@ -316,7 +316,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnDefault.setBackground(new java.awt.Color(204, 213, 186));
         btnDefault.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnDefault.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
-        btnDefault.setText("Set Default File");
+        btnDefault.setText("Set as First");
         btnDefault.setToolTipText("Set the current file as the default (first) file for the selected node in the tree.");
         btnDefault.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDefault.setFocusPainted(false);
@@ -1475,6 +1475,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             uploadedWildLogFile.setDefaultFile(true);
                             app.getDBI().updateWildLogFile(uploadedWildLogFile);
                         }
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
+                        WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "The first image for the Creature '" + sightingWrapper.getSighting().getCachedElementName() + "' was successfully changed.",
+                                "Changed First Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
@@ -1510,6 +1516,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             uploadedWildLogFile.setDefaultFile(true);
                             app.getDBI().updateWildLogFile(uploadedWildLogFile);
                         }
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
+                        WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "The first image for the Place '" + sightingWrapper.getSighting().getCachedLocationName() + "' was successfully changed.",
+                                "Changed First Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
@@ -1541,6 +1553,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             uploadedWildLogFile.setDefaultFile(true);
                             app.getDBI().updateWildLogFile(uploadedWildLogFile);
                         }
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
+                        WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "The first image for the Place '" + visit.getCachedLocationName() + "' was successfully changed.",
+                                "Changed First Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }
@@ -1576,6 +1594,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             uploadedWildLogFile.setDefaultFile(true);
                             app.getDBI().updateWildLogFile(uploadedWildLogFile);
                         }
+                        if (app.getWildLogOptions().isEnableSounds()) {
+                            Toolkit.getDefaultToolkit().beep();
+                        }
+                        WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "The first image for the Period '" + sightingWrapper.getSighting().getCachedVisitName() + "' was successfully changed.",
+                                "Changed First Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
             }

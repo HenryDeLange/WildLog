@@ -42,7 +42,6 @@ import wildlog.utils.UtilsTime;
 public class VisitChart extends AbstractReport<Sighting> {
     private enum ChartType {PIE_CHART_SIGHTING_COUNT, BAR_CHART_SIGHTING_COUNT, BAR_CHART_ABUNDANCE, BAR_CHART_ELEMENT_ABUNDANCE, BAR_CHART_ELEMENT_COUNT, BAR_CHART_RICHNESS, PIE_CHART_TYPE, BAR_CHART_COMBINED_DURATION, BAR_CHART_DURATION};
     private ChartType chartType;
-    private Chart displayedChart;
 
 // TODO: Klompie van hierdie charts sal beter werk as line (area) charts
     

@@ -50,7 +50,6 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     private enum ChartType {ACCUMULATION_LINE_CHART, ACCUMULATION_SIGHTING_LINE_CHART, ACCUMULATION_SIGHTING_ELEMENT_LINE_CHART, 
                             DAILY_CREATURE_LINE_CHART, DAILY_OBSERVATION_LINE_CHART, ACC_VISIT_ELEMENT_CHART, ACC_VISIT_SIGHTING_CHART};
     private ChartType chartType = ChartType.ACCUMULATION_LINE_CHART;
-    private Chart displayedChart;
     private final CheckBox chkShowDayOrNight;
 
     

@@ -7,9 +7,11 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithTXT;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.utils.UtilsTime;
 import wildlog.xml.utils.UtilsXML;
 
 
@@ -27,29 +29,36 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, boolean inIsSummary, 
             WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
-        htmlElement.append("<title>Creature: ").append(primaryName).append("</title></head>");
-        htmlElement.append("<body bgcolor='#E3F0E3'>");
-        htmlElement.append("<table bgcolor='#E3F0E3' width='100%'>");
-        htmlElement.append("<tr><td style='font-size:9px;font-family:verdana;'>");
-        htmlElement.append("<b><u>").append(primaryName).append("</u></b>");
-        htmlElement.append("<br/>");
+        StringBuilder html = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
+        html.append("<title>Creature: ").append(primaryName).append("</title></head>");
+        html.append("<body bgcolor='#E3F0E3'>");
+        html.append("<table bgcolor='#E3F0E3' width='100%'>");
+        html.append("<tr><td style='font-size:9px;font-family:verdana;'>");
+        html.append("<b><u>").append(primaryName).append("</u></b>");
+        html.append("<br/>");
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Other Name:</b><br/>", otherName, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Other Name:</b><br/>", otherName, true);
         }
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Scientific Name:</b><br/>", scientificName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Scientific Name:</b><br/>", scientificName, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Reference ID:</b><br/>", referenceID, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Reference ID:</b><br/>", referenceID, true);
         }
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Creature Type:</b><br/>", type, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Feeding Class:</b><br/>", feedingClass, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Threat Status:</b><br/>", endangeredStatus, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Identification:</b><br/>", diagnosticDescription, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Habitat:</b><br/>", description, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Distribution:</b><br/>", distribution, true);
-        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Behaviour:</b><br/>", behaviourDescription, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Creature Type:</b><br/>", type, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Feeding Class:</b><br/>", feedingClass, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Threat Status:</b><br/>", endangeredStatus, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Identification:</b><br/>", diagnosticDescription, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Habitat:</b><br/>", description, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Distribution:</b><br/>", distribution, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Behaviour:</b><br/>", behaviourDescription, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Food/Nutrition:</b><br/>", nutrition, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Food/Nutrition:</b><br/>", nutrition, true);
+        }
+        if (!inIsSummary && (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.WILDLOG_MASTER || WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.OWNER)) {
+            html.append("<br/><hr/>");
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>ID:</b><br/>", id, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit Time:</b><br/>", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(
+                    UtilsTime.getLocalDateTimeFromMilliseconds(auditTime)), true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit User:</b><br/>", auditUser, true);
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
@@ -63,18 +72,18 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
                 }
             }
             if (filesString.length() > 0) {
-                htmlElement.append("<br/>");
-                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Photos:</b><br/>", filesString);
+                html.append("<br/>");
+                UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Photos:</b><br/>", filesString);
             }
         }
         if (inIsRecursive) {
-            htmlElement.append("<br/>");
-            htmlElement.append("</td></tr>");
-            htmlElement.append("<tr><td>");
+            html.append("<br/>");
+            html.append("</td></tr>");
+            html.append("<tr><td>");
             List<Sighting> sightings = inApp.getDBI().listSightings(id, 0, 0, true, Sighting.class);
             int counter = 0;
             for (Sighting temp : sightings) {
-                htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inIsSummary, inApp, inExportType, null));
+                html.append("<br/>").append(temp.toHTML(false, inIncludeImages, inIsSummary, inApp, inExportType, null));
                 if (inProgressbarTask != null) {
                     inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
@@ -83,11 +92,11 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
                 }
             }
         }
-        htmlElement.append("</td></tr>");
-        htmlElement.append("</table>");
-        htmlElement.append("<br/>");
-        htmlElement.append("</body>");
-        return htmlElement.toString();
+        html.append("</td></tr>");
+        html.append("</table>");
+        html.append("<br/>");
+        html.append("</body>");
+        return html.toString();
     }
 
     @Override

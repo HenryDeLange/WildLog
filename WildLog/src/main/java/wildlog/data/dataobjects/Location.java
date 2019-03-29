@@ -8,11 +8,13 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithTXT;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.maps.kml.generator.KmlEntry;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.utils.UtilsTime;
 import wildlog.xml.utils.UtilsXML;
 
 
@@ -30,22 +32,29 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, boolean inIsSummary, 
             WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
-        htmlLocation.append("<title>Place: ").append(name).append("</title></head>");
-        htmlLocation.append("<body bgcolor='E9EFF4'>");
-        htmlLocation.append("<table bgcolor='#E9EFF4' width='100%'>");
-        htmlLocation.append("<tr><td style='font-size:9px;font-family:verdana;'>");
-        htmlLocation.append("<b><u>").append(name).append("</u></b>");
-        htmlLocation.append("<br/>");
-        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Description:</b><br/>", description, true);
+        StringBuilder html = new StringBuilder("<head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>");
+        html.append("<title>Place: ").append(name).append("</title></head>");
+        html.append("<body bgcolor='E9EFF4'>");
+        html.append("<table bgcolor='#E9EFF4' width='100%'>");
+        html.append("<tr><td style='font-size:9px;font-family:verdana;'>");
+        html.append("<b><u>").append(name).append("</u></b>");
+        html.append("<br/>");
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Description:</b><br/>", description, true);
         if (!inIsSummary) {
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/>", UtilsGPS.getLatitudeString(this), true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/>", UtilsGPS.getLongitudeString(this), true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy:</b><br/>", gpsAccuracy, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>GPS Accuracy Value:</b><br/>", gpsAccuracyValue, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/>", rating, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/>", gameViewingRating, true);
-            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Habitat:</b><br/>", habitatType, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Latitude:</b><br/>", UtilsGPS.getLatitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Longitude:</b><br/>", UtilsGPS.getLongitudeString(this), true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>GPS Accuracy:</b><br/>", gpsAccuracy, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>GPS Accuracy Value:</b><br/>", gpsAccuracyValue, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>General Rating:</b><br/>", rating, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Wildlife Rating:</b><br/>", gameViewingRating, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Habitat:</b><br/>", habitatType, true);
+        }
+        if (!inIsSummary && (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.WILDLOG_MASTER || WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.OWNER)) {
+            html.append("<br/><hr/>");
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>ID:</b><br/>", id, true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit Time:</b><br/>", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(
+                    UtilsTime.getLocalDateTimeFromMilliseconds(auditTime)), true);
+            UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit User:</b><br/>", auditUser, true);
         }
         if (inIncludeImages) {
             StringBuilder filesString = new StringBuilder(300);
@@ -59,18 +68,18 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
                 }
             }
             if (filesString.length() > 0) {
-                htmlLocation.append("<br/>");
-                htmlLocation.append("<br/><b>Photos:</b><br/>").append(filesString);
+                html.append("<br/>");
+                html.append("<br/><b>Photos:</b><br/>").append(filesString);
             }
         }
         if (inIsRecursive) {
-            htmlLocation.append("<br/>");
-            htmlLocation.append("</td></tr>");
-            htmlLocation.append("<tr><td>");
+            html.append("<br/>");
+            html.append("</td></tr>");
+            html.append("<tr><td>");
             List<Visit> visits = inApp.getDBI().listVisits(null, id, null, true, Visit.class);
             int counter = 0;
             for (int t = 0; t < visits.size(); t++) {
-                htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
+                html.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inIsSummary, inApp, inExportType, null)).append("<br/>");
                 if (inProgressbarTask != null) {
                     inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/visits.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
@@ -79,11 +88,11 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
                 }
             }
         }
-        htmlLocation.append("</td></tr>");
-        htmlLocation.append("</table>");
-        htmlLocation.append("<br/>");
-        htmlLocation.append("</body>");
-        return htmlLocation.toString();
+        html.append("</td></tr>");
+        html.append("</table>");
+        html.append("<br/>");
+        html.append("</body>");
+        return html.toString();
     }
 
     @Override

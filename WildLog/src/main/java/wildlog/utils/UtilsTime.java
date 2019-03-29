@@ -1,5 +1,6 @@
 package wildlog.utils;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -168,6 +169,13 @@ public final class UtilsTime {
     public static LocalDateTime getLocalDateTimeFromDate(Date inDate) {
         if (inDate != null) {
             return LocalDateTime.ofInstant(inDate.toInstant(), ZoneId.systemDefault());
+        }
+        return null;
+    }
+    
+    public static LocalDateTime getLocalDateTimeFromMilliseconds(long inMilliseconds) {
+        if (inMilliseconds > 0) {
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(inMilliseconds), ZoneId.systemDefault());
         }
         return null;
     }
