@@ -588,8 +588,7 @@ public class MapsBaseDialog extends JFrame {
                                         jfxMapPanel.getScene().getRoot(), 
                                         activeMap.getMapCategoryTitle() + " - " + activeMap.getActiveSubCategoryTitle() + " - ", 
                                         lstFilteredData, ExportDialogForReportsAndMaps.ExportType.MAPS, 
-// TODO: Implement this
-                                        null);
+                                        activeMap.getFinalMapData());
                                 dialog.setVisible(true);
                             }
                         });
@@ -601,7 +600,7 @@ public class MapsBaseDialog extends JFrame {
             });
         }
     }//GEN-LAST:event_bntExportActionPerformed
-
+    
     private void btnFilterElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementActionPerformed
         FilterDataListDialog<Element> dialog = new FilterDataListDialog<Element>(this, lstOriginalData, lstFilteredElements, Element.class);
         dialog.setVisible(true);

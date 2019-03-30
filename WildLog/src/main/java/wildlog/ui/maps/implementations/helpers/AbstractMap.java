@@ -1,6 +1,7 @@
 package wildlog.ui.maps.implementations.helpers;
 
 import java.awt.Cursor;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -21,10 +22,12 @@ import javafx.scene.text.TextAlignment;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
 
 
-public abstract class AbstractMap<T> {
+public abstract class AbstractMap<T extends DataObjectWithGPS> {
     protected static final ToggleGroup BUTTON_GROUP = new ToggleGroup();
     static {
         // Make sure the button stays selected when pressing it again if already selected
@@ -121,12 +124,31 @@ public abstract class AbstractMap<T> {
         lstData = inList;
     }
 
+    public List<T> getDataList() {
+        return lstData;
+    }
+
     public List<Node> getLstCustomButtons() {
         return lstCustomButtons;
     }
     
     public void dispose() {
         // Be default do nothing...
+    }
+    
+    /**
+     * The default implementation returns the coordinates of the source DataList. 
+     * Maps can overwrite this method to provide custom implementations.
+     */
+    public List<Object[]> getFinalMapData() {
+        List<Object[]> lstFinalData = new ArrayList();
+        lstFinalData.add(new Object[] {"ID", "LATITUDE", "LONGITUDE", "ACCURACY-CATEGORY", "ACCURACY"});
+        for (DataObjectWithGPS gps : lstData) {
+            if (UtilsGPS.hasGPSData(gps)) {
+                lstFinalData.add(new Object[] {gps.getID(), UtilsGPS.getLatDecimalDegree(gps), UtilsGPS.getLonDecimalDegree(gps), gps.getGPSAccuracy(), gps.getGPSAccuracyValue()});
+            }
+        }
+        return lstFinalData;
     }
     
 }

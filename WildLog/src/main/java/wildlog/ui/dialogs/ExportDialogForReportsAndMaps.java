@@ -93,7 +93,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         btnExportImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Image.png"))); // NOI18N
-        btnExportImage.setText("Export as Image (Recommended)");
+        btnExportImage.setText("Export as an Image (Recommended)");
         btnExportImage.setToolTipText("Create a PNG image file of the active report or map. This is the recommened way to export a report or map.");
         btnExportImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportImage.setFocusPainted(false);
@@ -112,7 +112,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().add(btnExportImage);
 
         btnExportCSVInputData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSVInputData.setText("Export as Spreadsheet (Input Data)");
+        btnExportCSVInputData.setText("Exportthe Input Data as a Spreadsheet");
         btnExportCSVInputData.setToolTipText("Create a CSV file of all relevant Observations used by this report or map. Can be opened in Excel, etc.");
         btnExportCSVInputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVInputData.setFocusPainted(false);
@@ -131,7 +131,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().add(btnExportCSVInputData);
 
         btnExportCSVOutputData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSVOutputData.setText("Export as Spreadsheet (Output Data)");
+        btnExportCSVOutputData.setText("Export the Output Data as a Spreadsheet");
         btnExportCSVOutputData.setToolTipText("Create a CSV file of the final processed data used by this report or map. Can be opened in Excel, etc.");
         btnExportCSVOutputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVOutputData.setFocusPainted(false);
@@ -150,7 +150,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().add(btnExportCSVOutputData);
 
         btnExportPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF.png"))); // NOI18N
-        btnExportPDF.setText("Export as PDF");
+        btnExportPDF.setText("Export as a PDF");
         btnExportPDF.setToolTipText("Create a PDF file of the active report or map.");
         btnExportPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportPDF.setFocusPainted(false);
@@ -169,7 +169,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().add(btnExportPDF);
 
         btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTML.setText("Export as Offline Webpage");
+        btnExportHTML.setText("Export as an Offline Webpage");
         btnExportHTML.setToolTipText("Create a basic HTML web page that can be viewed offline to show theObservations used by the active report or map.");
         btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportHTML.setFocusPainted(false);
@@ -188,7 +188,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().add(btnExportHTML);
 
         btnExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
-        btnExportKML.setText("Export as KML");
+        btnExportKML.setText("Export as a KML");
         btnExportKML.setToolTipText("Export a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc.");
         btnExportKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportKML.setFocusPainted(false);

@@ -38,6 +38,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.maps.geotools.BundledMapLayers;
 import wildlog.maps.geotools.GeoToolsLayerUtils;
 import wildlog.maps.geotools.GeoToolsMapJavaFX;
@@ -46,7 +47,7 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.utils.WildLogPaths;
 
 
-public abstract class AbstractGeoToolsMap<T> extends AbstractMap<T> {
+public abstract class AbstractGeoToolsMap<T extends DataObjectWithGPS> extends AbstractMap<T> {
     protected GeoToolsMapJavaFX map = null;
     protected boolean showCountries = false;
     protected BundledMapLayers activeBaseLayer = null;

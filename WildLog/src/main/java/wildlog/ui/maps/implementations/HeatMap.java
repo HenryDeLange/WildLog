@@ -87,6 +87,7 @@ public class HeatMap extends AbstractMap<Sighting> {
     private final ComboBox<HeatMap.SplitIndicator> cmbSplitIndicator;
     private final CheckBox chkUseOneSplit;
     private final CheckBox chkExtendShortSplits;
+    private List<HeatPoint> lstActiveHeatPoints;
 
     
     public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
@@ -153,7 +154,7 @@ public class HeatMap extends AbstractMap<Sighting> {
         chkUseOneSplit.setCursor(Cursor.HAND);
         chkUseOneSplit.setSelected(true);
         lstCustomButtons.add(chkUseOneSplit);
-        chkExtendShortSplits = new CheckBox("Extend short Period to interval legth");
+        chkExtendShortSplits = new CheckBox("Extend short Periods to interval length");
         chkExtendShortSplits.setCursor(Cursor.HAND);
         chkExtendShortSplits.setSelected(true);
         lstCustomButtons.add(chkExtendShortSplits);
@@ -233,6 +234,7 @@ public class HeatMap extends AbstractMap<Sighting> {
     @Override
     public void createMap(Scene inScene) {
         displayedMap = null;
+        lstActiveHeatPoints = null;
         if (activeMapType.equals(MapType.TOTAL_OBSERVATIONS_MAP)) {
             setActiveSubCategoryTitle("Observation Count Map");
             setupChartDescriptionLabel("<html>This Heat Map can be used to show areas with higher or lower density of data points.</html>");
@@ -316,12 +318,14 @@ public class HeatMap extends AbstractMap<Sighting> {
                 heatPoint.weight++;
             }
         }
+        lstActiveHeatPoints = new ArrayList<>();
         for (HeatPoint  heatPoint : mapHeatPoints.values()) {
             String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
             point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
             point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + heatPoint.weight + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
+            lstActiveHeatPoints.add(heatPoint);
         }
         template = UtilsMaps.replace(template, "//___POINTS_START___", "");
         template = UtilsMaps.replace(template, "//___POINTS_END___", "");
@@ -399,12 +403,14 @@ public class HeatMap extends AbstractMap<Sighting> {
                 }
             }
         }
+        lstActiveHeatPoints = new ArrayList<>();
         for (HeatPoint  heatPoint : mapHeatPoints.values()) {
             String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
             point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
             point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + heatPoint.weight + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
+            lstActiveHeatPoints.add(heatPoint);
         }
         template = UtilsMaps.replace(template, "//___POINTS_START___", "");
         template = UtilsMaps.replace(template, "//___POINTS_END___", "");
@@ -522,6 +528,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             });
         }
         Set<String> processedVisits = new HashSet<String>();
+        lstActiveHeatPoints = new ArrayList<>();
         for (HeatPoint  heatPoint : lstHeatPoints) {
             if (chkUseOneSplit.isSelected()) {
                 if (processedVisits.contains(heatPoint.visitName)) {
@@ -534,6 +541,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.key) * 1000.0) / 1000.0) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
+            lstActiveHeatPoints.add(heatPoint);
         }
         template = UtilsMaps.replace(template, "//___POINTS_START___", "");
         template = UtilsMaps.replace(template, "//___POINTS_END___", "");
@@ -651,6 +659,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             });
         }
         Set<String> processedVisits = new HashSet<String>();
+        lstActiveHeatPoints = new ArrayList<>();
         for (HeatPoint  heatPoint : lstHeatPoints) {
             if (chkUseOneSplit.isSelected()) {
                 if (processedVisits.contains(heatPoint.visitName)) {
@@ -663,6 +672,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + (Math.round((double) heatPoint.weight / (double) mapVisitDuration.get(heatPoint.key) * 1000.0) / 1000.0) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
+            lstActiveHeatPoints.add(heatPoint);
         }
         template = UtilsMaps.replace(template, "//___POINTS_START___", "");
         template = UtilsMaps.replace(template, "//___POINTS_END___", "");
@@ -755,12 +765,14 @@ public class HeatMap extends AbstractMap<Sighting> {
                 }
             }
         }
+        lstActiveHeatPoints = new ArrayList<>();
         for (HeatPoint  heatPoint : mapHeatPoints.values()) {
             String point = UtilsMaps.replace(gpsPointTemplate, "LatLng(-32,", "LatLng(" + Double.toString(heatPoint.lat) + ",");
             point = UtilsMaps.replace(point, ", 22), w", ", " + Double.toString(heatPoint.lon) + "), w");
             point = UtilsMaps.replace(point, "weight: 1.0}", "weight: " + mapVisitDuration.get(heatPoint.key) + "}");
             gpsBuilder.append(point);
             gpsBuilder.append(System.lineSeparator());
+            lstActiveHeatPoints.add(heatPoint);
         }
         template = UtilsMaps.replace(template, "//___POINTS_START___", "");
         template = UtilsMaps.replace(template, "//___POINTS_END___", "");
@@ -810,6 +822,18 @@ public class HeatMap extends AbstractMap<Sighting> {
         LocalDate sightingDate = UtilsTime.getLocalDateFromDate(inSighting.getDate());
         long gap = ChronoUnit.DAYS.between(startDate, sightingDate);
         return gap / cmbSplitIndicator.getSelectionModel().getSelectedItem().getDays();
+    }
+    
+    @Override
+    public List<Object[]> getFinalMapData() {
+        List<Object[]> lstFinalData = new ArrayList();
+        lstFinalData.add(new Object[] {"LATITUDE", "LONGITUDE", "WEIGHT", "KEY", "EXTRA"});
+        if (lstActiveHeatPoints != null) {
+            for (HeatPoint heatPoint : lstActiveHeatPoints) {
+                lstFinalData.add(new Object[] {heatPoint.lat, heatPoint.lon, heatPoint.weight, heatPoint.key, heatPoint.visitName});
+            }
+        }
+        return lstFinalData;
     }
     
 }
