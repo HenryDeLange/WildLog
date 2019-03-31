@@ -37,6 +37,7 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogSystemImages;
 
@@ -147,7 +148,13 @@ public class BulkUploadDataLoader {
     }
 
     public static void setDefaultsForNewBulkUploadSightings(BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
-        inBulkUploadSightingWrapper.setCertainty(Certainty.SURE);
+        // Setup the certainty
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            inBulkUploadSightingWrapper.setCertainty(Certainty.NONE);
+        }
+        else {
+            inBulkUploadSightingWrapper.setCertainty(Certainty.SURE);
+        }
         inBulkUploadSightingWrapper.setSightingEvidence(SightingEvidence.SEEN);
         inBulkUploadSightingWrapper.setLifeStatus(LifeStatus.ALIVE);
         inBulkUploadSightingWrapper.setTimeAccuracy(TimeAccuracy.GOOD);

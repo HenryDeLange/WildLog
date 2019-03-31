@@ -65,7 +65,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="30" width="220" height="-1"/>
+              <AbsoluteConstraints x="10" y="30" width="230" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -105,7 +105,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="360" y="140" width="150" height="150"/>
+              <AbsoluteConstraints x="385" y="140" width="125" height="125"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -129,13 +129,13 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="360" y="10" width="150" height="70"/>
+              <AbsoluteConstraints x="385" y="10" width="125" height="70"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JComboBox" name="cmbElementType">
           <Properties>
-            <Property name="maximumRowCount" type="int" value="9"/>
+            <Property name="maximumRowCount" type="int" value="11"/>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new DefaultComboBoxModel(ElementType.values())" type="code"/>
             </Property>
@@ -153,7 +153,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="230" y="30" width="120" height="-1"/>
+              <AbsoluteConstraints x="240" y="30" width="135" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -162,14 +162,12 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Element.gif"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Use Previous Creature"/>
-            <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="&quot;This will set the Creature to the previously selected Creature.&quot;" type="code"/>
-            </Property>
+            <Property name="text" type="java.lang.String" value="Previous Creature"/>
+            <Property name="toolTipText" type="java.lang.String" value="This will set the Creature to the previously selected Creature."/>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 8, 2, 8]"/>
+              <Insets value="[2, 2, 2, 2]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnPreviousElement" noResource="true"/>
           </Properties>
@@ -178,7 +176,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="360" y="90" width="150" height="40"/>
+              <AbsoluteConstraints x="385" y="90" width="125" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -191,7 +189,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="50" width="340" height="510"/>
+              <AbsoluteConstraints x="10" y="50" width="365" height="510"/>
             </Constraint>
           </Constraints>
 
@@ -217,6 +215,29 @@
             </Component>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JButton" name="btnAdd">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="New Creature"/>
+            <Property name="toolTipText" type="java.lang.String" value="Create a new Creature."/>
+            <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="focusable" type="boolean" value="false"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 2, 2, 2]"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="btnAdd" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAddActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="385" y="275" width="125" height="30"/>
+            </Constraint>
+          </Constraints>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

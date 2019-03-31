@@ -1374,7 +1374,7 @@
                       <Font name="Arial" size="14" style="1"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="79" green="a9" red="93" type="rgb"/>
+                      <Color blue="99" green="cc" red="b5" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" value="...workspace..."/>
@@ -1386,8 +1386,7 @@
                               <Color PropertyName="color" blue="20" green="3f" red="32" type="rgb"/>
                             </LineBorder>
                           </Border>
-                          <Font PropertyName="font" name="Tahoma" size="10" style="0"/>
-                          <Color PropertyName="color" blue="5a" green="85" red="6b" type="rgb"/>
+                          <Color PropertyName="color" blue="c0" green="d9" red="ca" type="rgb"/>
                         </TitledBorder>
                       </Border>
                     </Property>
@@ -1400,7 +1399,7 @@
                       <Font name="Arial" size="11" style="0"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="34" green="4e" red="42" type="rgb"/>
+                      <Color blue="5c" green="8c" red="76" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1446,7 +1445,7 @@
                       <Font name="Arial" size="11" style="0"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="34" green="4e" red="42" type="rgb"/>
+                      <Color blue="5c" green="8c" red="76" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1461,7 +1460,7 @@
                       <Font name="Arial" size="11" style="0"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="34" green="4e" red="42" type="rgb"/>
+                      <Color blue="5c" green="8c" red="76" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1476,7 +1475,7 @@
                       <Font name="Arial" size="11" style="0"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="34" green="4e" red="42" type="rgb"/>
+                      <Color blue="5c" green="8c" red="76" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1506,7 +1505,7 @@
                       <Font name="Arial" size="14" style="1"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="79" green="a9" red="93" type="rgb"/>
+                      <Color blue="99" green="cc" red="b5" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1520,8 +1519,7 @@
                               <Color PropertyName="color" blue="20" green="3f" red="32" type="rgb"/>
                             </LineBorder>
                           </Border>
-                          <Font PropertyName="font" name="Tahoma" size="10" style="0"/>
-                          <Color PropertyName="color" blue="5a" green="85" red="6b" type="rgb"/>
+                          <Color PropertyName="color" blue="c0" green="d9" red="ca" type="rgb"/>
                         </TitledBorder>
                       </Border>
                     </Property>

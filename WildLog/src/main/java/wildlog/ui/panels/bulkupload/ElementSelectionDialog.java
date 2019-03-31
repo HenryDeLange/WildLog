@@ -20,20 +20,23 @@ import wildlog.data.enums.ElementType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.panels.PanelElement;
+import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
-public class ElementSelectionDialog extends JDialog {
+public class ElementSelectionDialog extends JDialog implements PanelNeedsRefreshWhenDataChanges {
     private static long previousElementID = 0;
+    private static String previousElementName;
     private final WildLogApp app;
     private boolean selectionMade = false;
     private long selectedElementID;
     private String selectedElementName;
 
 
-    public ElementSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedElement) {
+    public ElementSelectionDialog(JFrame inParent, WildLogApp inApp, final long inSelectedElementID) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[ElementSelectionDialog]");
         app = inApp;
@@ -57,22 +60,20 @@ public class ElementSelectionDialog extends JDialog {
         UtilsUI.attachClipboardPopup(txtSearch);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
+        // Load the UI
+        setupUI(inSelectedElementID);
+    }
+
+    private void setupUI(final long inSelectedElementID) {
         // Setup the table
         UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
         // Load selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
-        final int columnToUse;
-        if (app.getWildLogOptions().isUseThumbnailTables()) {
-            columnToUse = 3;
-        }
-        else {
-            columnToUse = 2;
-        }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 for (int t = 0; t < tblElement.getRowCount(); t++) {
-                    if (tblElement.getValueAt(t, columnToUse) == inSelectedElement) {
+                    if ((long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(t), 3) == inSelectedElementID) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getRowCount()) - 1) {
@@ -84,7 +85,7 @@ public class ElementSelectionDialog extends JDialog {
                 }
             }
         });
-        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + inSelectedElement, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + inSelectedElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
     }
 
     /** This method is called from within the constructor to
@@ -105,6 +106,7 @@ public class ElementSelectionDialog extends JDialog {
         btnPreviousElement = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblElement = new javax.swing.JTable();
+        btnAdd = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a Creature");
@@ -134,7 +136,7 @@ public class ElementSelectionDialog extends JDialog {
                 txtSearchKeyReleased(evt);
             }
         });
-        jPanel1.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 220, -1));
+        jPanel1.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 230, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Please choose a Creature:");
@@ -152,7 +154,7 @@ public class ElementSelectionDialog extends JDialog {
                 lblElementImageMouseReleased(evt);
             }
         });
-        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 140, 150, 150));
+        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 140, 125, 125));
 
         btnSelect.setBackground(new java.awt.Color(230, 237, 220));
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
@@ -165,9 +167,9 @@ public class ElementSelectionDialog extends JDialog {
                 btnSelectActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 150, 70));
+        jPanel1.add(btnSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 10, 125, 70));
 
-        cmbElementType.setMaximumRowCount(9);
+        cmbElementType.setMaximumRowCount(11);
         cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
         cmbElementType.setSelectedItem(ElementType.NONE);
         cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -178,21 +180,21 @@ public class ElementSelectionDialog extends JDialog {
                 cmbElementTypeActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 120, -1));
+        jPanel1.add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 135, -1));
 
         btnPreviousElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
-        btnPreviousElement.setText("Use Previous Creature");
+        btnPreviousElement.setText("Previous Creature");
         btnPreviousElement.setToolTipText("This will set the Creature to the previously selected Creature.");
         btnPreviousElement.setFocusPainted(false);
         btnPreviousElement.setFocusable(false);
-        btnPreviousElement.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnPreviousElement.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnPreviousElement.setName("btnPreviousElement"); // NOI18N
         btnPreviousElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPreviousElementActionPerformed(evt);
             }
         });
-        jPanel1.add(btnPreviousElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 90, 150, 40));
+        jPanel1.add(btnPreviousElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 90, 125, 40));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
@@ -218,7 +220,21 @@ public class ElementSelectionDialog extends JDialog {
         });
         jScrollPane2.setViewportView(tblElement);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 340, 510));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 365, 510));
+
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
+        btnAdd.setText("New Creature");
+        btnAdd.setToolTipText("Create a new Creature.");
+        btnAdd.setFocusPainted(false);
+        btnAdd.setFocusable(false);
+        btnAdd.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnAdd.setName("btnAdd"); // NOI18N
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 275, 125, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 570));
 
@@ -247,9 +263,10 @@ public class ElementSelectionDialog extends JDialog {
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         if (tblElement.getSelectedRowCount() == 1) {
             selectionMade = true;
-            selectedElementID = (Long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
+            selectedElementID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
             previousElementID = selectedElementID;
             selectedElementName = (String) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1);
+            previousElementName = selectedElementName;
             tblElement.setBorder(null);
             setVisible(false);
             dispose();
@@ -267,7 +284,7 @@ public class ElementSelectionDialog extends JDialog {
             public void run() {
                 // Select the previous element
                 for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                    if ((long) tblElement.getValueAt(t, 3) == previousElementID) {
+                    if ((long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(t), 3) == previousElementID) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getModel().getRowCount()) - 1) {
@@ -278,7 +295,7 @@ public class ElementSelectionDialog extends JDialog {
                     }
                 }
                 // Update the icon
-                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + previousElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + previousElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
                 // Do the select action
                 btnSelectActionPerformed(null);
             }
@@ -293,10 +310,10 @@ public class ElementSelectionDialog extends JDialog {
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
             String selectedID = tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3).toString();
             // Change the image
-            UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+            UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
         }
         else {
-            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
+            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
         }
     }//GEN-LAST:event_tblElementMouseReleased
 
@@ -313,7 +330,7 @@ public class ElementSelectionDialog extends JDialog {
     }//GEN-LAST:event_tblElementKeyPressed
 
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
-        ElementType type = (ElementType)cmbElementType.getSelectedItem();
+        ElementType type = (ElementType) cmbElementType.getSelectedItem();
         if (!ElementType.NONE.equals(type)) {
             UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, type);
         }
@@ -344,6 +361,30 @@ public class ElementSelectionDialog extends JDialog {
         }
     }//GEN-LAST:event_txtSearchKeyReleased
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        JDialog popup = new JDialog(this, "Add New Creature", true);
+        ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif"));
+        popup.setIconImage(icon.getImage());
+        PanelElement panel = new PanelElement(app, new Element(), true, this);
+        popup.add(panel);
+        popup.setResizable(false);
+        popup.pack();
+        UtilsDialog.setDialogToCenter(this, popup);
+        UtilsDialog.addModalBackgroundPanel(this, popup);
+        UtilsDialog.addModalBackgroundPanel(popup, null);
+        UtilsDialog.addEscapeKeyListener(popup);
+        popup.setVisible(true);
+        popup.dispose();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    @Override
+    public void doTheRefresh(Object inIndicator) {
+        txtSearch.setText("");
+        cmbElementType.setSelectedItem(ElementType.NONE);
+        lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+        setupUI(selectedElementID);
+    }
+    
     public boolean isSelectionMade() {
         return selectionMade;
     }
@@ -360,7 +401,16 @@ public class ElementSelectionDialog extends JDialog {
         previousElementID = inPreviousElementID;
     }
 
+    public static String getPreviousElementName() {
+        return previousElementName;
+    }
+
+    public static void setPreviousElementName(String inPreviousElementName) {
+        previousElementName = inPreviousElementName;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnPreviousElement;
     private javax.swing.JButton btnSelect;
     private javax.swing.JComboBox cmbElementType;

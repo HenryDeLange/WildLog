@@ -33,6 +33,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
@@ -750,6 +751,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     if (visit == null) {
                         visit = new Visit(0, txtVisitName.getText());
                     }
+                    visit.setLocationID(selectedLocation.getID());
+                    visit.setCachedLocationName(app.getDBI().findLocation(visit.getLocationID(), null, Location.class).getName());
+                    visit.setStartDate(dtpStartDate.getDate());
+                    visit.setEndDate(dtpEndDate.getDate());
+                    visit.setType((VisitType) cmbVisitType.getSelectedItem());
                     // Make sure all sightings have a creature set
                     final DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
@@ -764,6 +770,23 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             });
                             WLOptionPane.showMessageDialog(app.getMainFrame(),
                                     "Please assign a Creature to each of the Observations.",
+                                    "Can't Save", JOptionPane.ERROR_MESSAGE);
+                            return null;
+                        }
+                    }
+                    // Make sure the certainty is set
+                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
+                        if (sightingWrapper.getCertainty() == null || sightingWrapper.getCertainty().equals(Certainty.NONE)) {
+                            final int finalRowCount = rowCount;
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
+                                }
+                            });
+                            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "Please assign a Certainty to each of the Observations.",
                                     "Can't Save", JOptionPane.ERROR_MESSAGE);
                             return null;
                         }
@@ -795,8 +818,26 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     this.setTaskProgress(0);
                     this.setMessage("Saving the Bulk Import: Starting...");
                     closeTab();
+                    // Save the Visit (before saving the sightings, because the Visit's ID is needed)
+                    if (existingVisit == null || existingVisit.getID() == 0) {
+                        app.getDBI().createVisit(visit);
+                    }
+                    else {
+                        app.getDBI().updateVisit(visit, existingVisit.getName());
+                    }
+                    // Save the images associated with the Visit
+                    File[] visitFiles = new File[lstVisitFiles.size()];
+                    for (int t = 0; t < lstVisitFiles.size(); t++) {
+                        visitFiles[t] = lstVisitFiles.get(t).toFile();
+                    }
+                    UtilsFileProcessing.performFileUpload(visit,
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()),
+                            visitFiles,
+                            null, 
+                            app, false, null, true, false);
+                    this.setTaskProgress(1);
+                    this.setMessage("Saving the Bulk Import: Saving the Period... " + this.getProgress() + "%");
                     // Processs the sightings
-                    final long locationHandle = selectedLocation.getID();
                     final Visit visitHandle = visit;
                     final Object saveSightingLock = new Object();
                     String executorServiceName = "WL_BulkImport(Save)";
@@ -810,8 +851,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             public void run() {
                                 BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
                                 // Continue processing the Sighting
-                                sightingWrapper.setLocationID(locationHandle);
+                                sightingWrapper.setLocationID(visitHandle.getLocationID());
+                                sightingWrapper.setCachedLocationName(visitHandle.getCachedLocationName());
                                 sightingWrapper.setVisitID(visitHandle.getID());
+                                sightingWrapper.setCachedVisitName(visitHandle.getName());
                                 // If the sighting's Date and GPS point is set then try to calculate Sun and Moon
                                 if (sightingWrapper.getDate() != null && sightingWrapper.getTimeAccuracy() != null && sightingWrapper.getTimeAccuracy().isUsableTime()) {
                                     if (sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
@@ -906,30 +949,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     }
                     this.setTaskProgress(99);
                     this.setMessage("Saving the Bulk Import: Saving the Period... " + this.getProgress() + "%");
-                    // Process the Visit (only after saving all of the sightings, otherwise the user can edit/delete it while the bulk import is busy)
-                    visit.setLocationID(selectedLocation.getID());
-                    visit.setStartDate(dtpStartDate.getDate());
-                    visit.setEndDate(dtpEndDate.getDate());
-                    visit.setType((VisitType)cmbVisitType.getSelectedItem());
-                    if (existingVisit == null || existingVisit.getID() == 0) {
-                        app.getDBI().createVisit(visit);
-                    }
-                    else {
-                        app.getDBI().updateVisit(visit, existingVisit.getName());
-                    }
-                    // Save the images associated with the Visit
-                    File[] visitFiles = new File[lstVisitFiles.size()];
-                    for (int t = 0; t < lstVisitFiles.size(); t++) {
-                        visitFiles[t] = lstVisitFiles.get(t).toFile();
-                    }
-                    UtilsFileProcessing.performFileUpload(visit,
-                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()),
-                            visitFiles,
-                            null, 
-                            app, false, null, true, false);
                     // Saving is done, now open the visits's tab
-                    this.setMessage("Saving the Bulk Import: Finished");
-                    this.setTaskProgress(100);
                     if (existingVisit == null || existingVisit.getID() == 0) {
                         UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, selectedLocation);
                     }
@@ -938,6 +958,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             panelToRefresh.doTheRefresh(visit);
                         }
                     }
+                    this.setMessage("Saving the Bulk Import: Finished");
+                    this.setTaskProgress(100);
                 }
                 else {
                     WLOptionPane.showMessageDialog(app.getMainFrame(),
@@ -962,15 +984,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 Element element = app.getDBI().findElement(sightingWrapper.getElementID(), null, Element.class);
                 if (element != null) {
                     JLabel tempLabel = new JLabel();
-                    UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+                    UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
                     sightingWrapper.setIcon(tempLabel.getIcon());
+                    sightingWrapper.setCachedElementName(element.getPrimaryName());
                 }
                 else {
                     if (sightingWrapper.getElementID() == ElementSelectionDialog.getPreviousElementID()) {
                         ElementSelectionDialog.setPreviousElementID(0);
                     }
                     sightingWrapper.setElementID(0);
-                    sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
+                    sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
+                    sightingWrapper.setCachedElementName("");
                 }
                 ((DefaultTableModel) tblBulkImport.getModel()).fireTableDataChanged();
             }

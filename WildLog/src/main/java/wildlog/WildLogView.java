@@ -530,14 +530,14 @@ public final class WildLogView extends WildLogMainView {
         });
 
         lblWorkspaceName.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblWorkspaceName.setForeground(new java.awt.Color(147, 169, 121));
+        lblWorkspaceName.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceName.setText("...workspace...");
-        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active Workspace", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 10), new java.awt.Color(107, 133, 90))); // NOI18N
+        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active Workspace", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceName.setName("lblWorkspaceName"); // NOI18N
 
         lblWorkspacePath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblWorkspacePath.setForeground(new java.awt.Color(66, 78, 52));
+        lblWorkspacePath.setForeground(new java.awt.Color(118, 140, 92));
         lblWorkspacePath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblWorkspacePath.setText(WildLogPaths.getFullWorkspacePrefix().toString());
         lblWorkspacePath.setName("lblWorkspacePath"); // NOI18N
@@ -560,19 +560,19 @@ public final class WildLogView extends WildLogMainView {
         });
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(66, 78, 52));
+        jLabel21.setForeground(new java.awt.Color(118, 140, 92));
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel21.setText("<html><u>Active Workspace Folder:</u></html>");
         jLabel21.setName("jLabel21"); // NOI18N
 
         jLabel23.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(66, 78, 52));
+        jLabel23.setForeground(new java.awt.Color(118, 140, 92));
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel23.setText("<html><u>Active Settings Folder:</u></html>");
         jLabel23.setName("jLabel23"); // NOI18N
 
         lblSettingsPath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblSettingsPath.setForeground(new java.awt.Color(66, 78, 52));
+        lblSettingsPath.setForeground(new java.awt.Color(118, 140, 92));
         lblSettingsPath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString());
         lblSettingsPath.setName("lblSettingsPath"); // NOI18N
@@ -584,10 +584,10 @@ public final class WildLogView extends WildLogMainView {
         lblEdition.setName("lblEdition"); // NOI18N
 
         lblWorkspaceUser.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        lblWorkspaceUser.setForeground(new java.awt.Color(147, 169, 121));
+        lblWorkspaceUser.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceUser.setText(WildLogApp.WILDLOG_USER_NAME);
-        lblWorkspaceUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active User", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 10), new java.awt.Color(107, 133, 90))); // NOI18N
+        lblWorkspaceUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active User", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceUser.setName("lblWorkspaceUser"); // NOI18N
 
         jSeparator26.setBackground(new java.awt.Color(57, 68, 43));
@@ -2210,7 +2210,7 @@ public final class WildLogView extends WildLogMainView {
                                     }
                                 }
                                 if (!shouldBePath.equals(currentPath) || renameBasedOnSighting) {
-                                    finalHandleFeedback.println("PROBLEM:   Incorrect or outdated file path   : " + inWildLogFile.getAbsolutePath());
+                                    finalHandleFeedback.println("PROBLEM:     Incorrect or outdated file path   : " + inWildLogFile.getAbsolutePath());
                                     finalHandleFeedback.println("  +RESOLVED: Moved the file to the correct path: " + shouldBePath.resolve(fileName));
                                     // "Re-upload" the file to the correct location
                                     UtilsFileProcessing.performFileUpload(
@@ -2262,7 +2262,7 @@ public final class WildLogView extends WildLogMainView {
                                             WildLogFile wildLogFile = new WildLogFile();
                                             wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile).toString());
                                             if (app.getDBI().findWildLogFile(wildLogFile.getDBFilePath(), null, null, WildLogFile.class) == null) {
-                                                finalHandleFeedback.println("PROBLEM:   File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
+                                                finalHandleFeedback.println("PROBLEM:     File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
                                                 finalHandleFeedback.println("  +RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
                                                 // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
                                                 Path destination = WildLogPaths.WILDLOG_LOST_FILES.getAbsoluteFullPath().resolve(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile));
@@ -2279,7 +2279,7 @@ public final class WildLogView extends WildLogMainView {
                                             counter.counter++;
                                         }
                                         setProgress(baseProgress + (int)(counter.counter/(double)inFileProcessCounter*inTotalToIncrease));
-                                        setMessage("Cleanup Step 2: Validate that the Workspace files are in the database... " + getProgress() + "%");
+                                        setMessage("Cleanup Step 3: Validate that the Workspace files are in the database... " + getProgress() + "%");
                                         return FileVisitResult.CONTINUE;
                                     }
                                 });
@@ -2290,295 +2290,58 @@ public final class WildLogView extends WildLogMainView {
                         app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS_CHECK_AND_CLEAN.getAbsoluteFullPath()
                                 .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now())));
                         setProgress(1);
-                        // ---------------------1---------------------
-                        // First check database files
-                        // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
-                        setMessage("Cleanup Step 1: Validate database references to the files in the Workspace... " + getProgress() + "%");
                         finalHandleFeedback.println("** Starting Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("1) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
-                        List<WildLogFile> allFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
-                        int filesWithoutID = 0;
-                        int filesWithoutPath = 0;
-                        int filesNotOnDisk = 0;
-                        int filesWithMissingData = 0;
-                        int filesWithBadType = 0;
-                        int filesWithBadID = 0;
-                        CleanupCounter filesMoved = new CleanupCounter();
-                        int fileProcessCounter = 0;
-                        int countImages = 0;
-                        int countMovies = 0;
-                        int countOther = 0;
-                        for (WildLogFile wildLogFile : allFiles) {
-                            // Check the WildLogFile's content
-                            if (wildLogFile.getId() == null) {
-                                finalHandleFeedback.println("PROBLEM:   File record without an ID. FilePath: " + wildLogFile.getDBFilePath());
-                                finalHandleFeedback.println("  +RESOLVED: Tried to delete the database file record and file on disk.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
-                                filesWithoutID++;
-                                continue;
-                            }
-                            if (wildLogFile.getDBFilePath() == null) {
-                                finalHandleFeedback.println("PROBLEM:   File path missing from database record. FileID: " + wildLogFile.getId());
-                                finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
-                                filesWithoutPath++;
-                                continue;
-                            }
-                            if (!Files.exists(wildLogFile.getAbsolutePath())) {
-                                finalHandleFeedback.println("PROBLEM:   File record in the database can't be found on disk. FilePath: " + wildLogFile.getDBFilePath());
-                                finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
-                                filesNotOnDisk++;
-                                continue;
-                            }
-                            if (wildLogFile.getFilename() == null || wildLogFile.getFilename().isEmpty() || wildLogFile.getUploadDate() == null) {
-                                finalHandleFeedback.println("WARNING:    Database file record missing data. FilePath: " + wildLogFile.getAbsolutePath()
-                                        + ", Filename: " + wildLogFile.getFilename()
-                                        + ", UploadDate: " + wildLogFile.getUploadDate());
-                                finalHandleFeedback.println("  -UNRESOLVED: No action taken...");
-                                filesWithMissingData++;
-                            }
-                            if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
-                                finalHandleFeedback.println("PROBLEM:   Unknown FileType of database file record. FilePath: " + wildLogFile.getDBFilePath()
-                                        + ", FileType: " + wildLogFile.getFileType());
-                                finalHandleFeedback.println("  +RESOLVED: Changed FileType to " + WildLogFileType.OTHER + ".");
-                                wildLogFile.setFileType(WildLogFileType.OTHER);
-                                app.getDBI().updateWildLogFile(wildLogFile);
-                                filesWithBadType++;
-                            }
-                            // Check the WildLogFile's linkage
-                            if (wildLogFile.getId().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
-                                // Make sure it is linked
-                                final Element temp = app.getDBI().findElement(
-                                        Long.parseLong(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())), null, Element.class);
-                                if (temp == null) {
-                                    finalHandleFeedback.println("PROBLEM:   Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getId() + ", CreatureName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
-                                    filesWithBadID++;
-                                    continue;
-                                }
-                                // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(temp, 
-                                        wildLogFile,
-                                        Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()).normalize(),
-                                        filesMoved);
-                            }
-                            else 
-                            if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
-                                // Make sure it is linked
-                                final Visit temp = app.getDBI().findVisit(
-                                        Long.parseLong(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())), null, true, Visit.class);
-                                if (temp == null) {
-                                    finalHandleFeedback.println("PROBLEM:   Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getId() + ", PeriodName Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file databse record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
-                                    filesWithBadID++;
-                                    continue;
-                                }
-                                // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(temp, 
-                                        wildLogFile,
-                                        Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getCachedLocationName(), temp.getName()).normalize(),
-                                        filesMoved);
-                            }
-                            else 
-                            if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
-                                // Make sure it is linked
-                                final Location temp = app.getDBI().findLocation(
-                                        Long.parseLong(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())), null, Location.class);
-                                if (temp == null) {
-                                    finalHandleFeedback.println("PROBLEM:   Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getId() + ", PlaceName Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
-                                    filesWithBadID++;
-                                    continue;
-                                }
-                                // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(temp, 
-                                        wildLogFile,
-                                        Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()).normalize(),
-                                        filesMoved);
-                            }
-                            else 
-                            if (wildLogFile.getId().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
-                                // Make sure it is linked
-                                Sighting temp = null;
-                                try {
-                                    temp = app.getDBI().findSighting(
-                                            Long.parseLong(wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), true, Sighting.class);
-                                }
-                                catch (NumberFormatException ex) {
-                                    finalHandleFeedback.println("PROBLEM:     Can't get linked Observation's ID.");
-                                    finalHandleFeedback.println("  -UNRESOLVED: Try to continue to delete the file.");
-                                }
-                                if (temp == null) {
-                                    finalHandleFeedback.println("PROBLEM:   Could not find linked Observation for this file. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getId() + ", ObservationID Used: " + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
-                                    filesWithBadID++;
-                                    continue;
-                                }
-                                // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(temp, 
-                                        wildLogFile,
-                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()).normalize(),
-                                        filesMoved);
-                            }
-                            else {
-                                finalHandleFeedback.println("PROBLEM:   File ID is not correctly formatted.");
-                                finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
-                                filesWithBadID++;
-                            }
-                            fileProcessCounter++;
-                            setProgress(1 + (int)(fileProcessCounter/(double)allFiles.size()*19));
-                            setMessage("Cleanup Step 1: Validate database references to the files in the Workspace... " + getProgress() + "%");
-                            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                                countImages++;
-                            }
-                            else
-                            if (WildLogFileType.MOVIE.equals(wildLogFile.getFileType())) {
-                                countMovies++;
-                            }
-                            else
-                            if (WildLogFileType.OTHER.equals(wildLogFile.getFileType())) {
-                                countOther++;
-                            }
-                        }
-// TODO: If a file wasn't found then try to use the existing name and FileDate and FileSize to guess the link (or is it better just to move the files to the lost folder???)
-                        setProgress(20);
-
-                        // ---------------------2---------------------
-                        setMessage("Cleanup Step 2: Validate that the Workspace files are in the database... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("2) Make sure the files in the Workspace are present in the database.");
-                        // Secondly check the files on disk
-                        CleanupCounter filesNotInDB = new CleanupCounter();
-                        try {
-                            // Kyk of al die files op die hardeskyf in die database bestaan
-                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_IMAGES, filesNotInDB, countImages, (int)(countImages/(double)fileProcessCounter*20));
-                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_MOVIES, filesNotInDB, countMovies, (int)(countMovies/(double)fileProcessCounter*20));
-                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER, filesNotInDB, countOther, (int)(countOther/(double)fileProcessCounter*20));
-                        }
-                        catch (IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, "Could not check all files on disk.");
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            finalHandleFeedback.println("PROBLEM:     Could not check all files on disk.");
-                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                        }
-                        setProgress(40);
-
-                        // ---------------------3---------------------
-                        // By this time the file link should be "trusted" enough to use it to update inconsistent FileDate and FileSize values (not just empty ones)
-                        int filesWithIncorrectDate = 0;
-                        int filesWithIncorrectSize = 0;
-                        setMessage("Cleanup Step 3: Check the file size and dates... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("3) Compare the size and modified date of the files on disk to the values stored in the database.");
-                        allFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
-                        fileProcessCounter = 0;
-                        for (WildLogFile wildLogFile : allFiles) {
-                            LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
-                            long actualFileSize = Files.size(wildLogFile.getAbsolutePath());
-                            if (actualFileDate != null) {
-                                if (wildLogFile.getFileDate() == null || !actualFileDate.isEqual(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()))) {
-                                    finalHandleFeedback.println("PROBLEM:   The Modified Date of the file on disk is not the same as the value stored in the database. "
-                                            + "FilePath: " + wildLogFile.getAbsolutePath());
-                                    String oldDate;
-                                    if (wildLogFile.getFileDate() == null) {
-                                        oldDate = "null";
-                                    }
-                                    else {
-                                        oldDate = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()));
-                                    }
-                                    finalHandleFeedback.println("  +RESOLVED: Updated the database Modified Date value of the file record. "
-                                            + "Changed " + oldDate
-                                            + " to " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(actualFileDate));
-                                    wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
-                                    app.getDBI().updateWildLogFile(wildLogFile);
-                                    filesWithIncorrectDate++;
-                                }
-                            }
-                            if (actualFileSize > 0) {
-                                if (actualFileSize != wildLogFile.getFileSize()) {
-                                    finalHandleFeedback.println("PROBLEM:   The File Size of the file on disk is not the same as the value stored in the database. "
-                                            + "FilePath: " + wildLogFile.getAbsolutePath());
-                                    finalHandleFeedback.println("  +RESOLVED: Updated the database File Size value of the file record. "
-                                            + "Changed " + wildLogFile.getFileSize() + " to " + actualFileSize);
-                                    wildLogFile.setFileSize(actualFileSize);
-                                    app.getDBI().updateWildLogFile(wildLogFile);
-                                    filesWithIncorrectSize++;
-                                }
-                            }
-                            setProgress(40 + (int)(fileProcessCounter++/(double)allFiles.size()*12));
-                            setMessage("Cleanup Step 3: Check the file size and dates... " + getProgress() + "%");
-                        }
-                        setProgress(52);
                         
-                        // ---------------------4---------------------
-                        // As alles klaar is delete alle lee en temporary folders
-                        setMessage("Cleanup Step 4: Delete empty folders in WildLog\\Files\\... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("4) Delete all empty folders in the Workspace's Images, Movies and Other files folders.");
-                        try {
-                            UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(WildLogPaths.WILDLOG_FILES.getAbsoluteFullPath().toFile());
-                        }
-                        catch (final IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete all empty folders.");
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            finalHandleFeedback.println("PROBLEM:     Could not delete all empty folders.");
-                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                        }
-                        setProgress(52);
-
-                        // ---------------------5---------------------
-                        // Delete alle temporary/onnodige files en folders
-                        setMessage("Cleanup Step 5: Delete exports and thumbnails... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("5) Delete all exports and thumbnails (since these files can be recreated from within WildLog).");
-                        try {
-                            UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT.getAbsoluteFullPath().toFile());
-                        }
-                        catch (final IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete export folders.");
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            finalHandleFeedback.println("PROBLEM:     Could not delete export folders.");
-                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                        }
-                        setProgress(55);
-                        setMessage("Cleanup Step 5: Delete exports and thumbnails... " + getProgress() + "%");
-                        try {
-                            UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
-                        }
-                        catch (final IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete thumbnail folders.");
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            finalHandleFeedback.println("PROBLEM:     Could not delete thumbnail folders.");
-                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                        }
-                        setProgress(65);
-
-                        // ---------------------6---------------------
+                        // ---------------------1---------------------
                         // Check the rest of the data for inconsistencies (all Locations, Visits, Creatures and Observations link correctly)
-                        setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
+                        setMessage("Cleanup Step 1: Check links between records in the database... " + getProgress() + "%");
                         finalHandleFeedback.println("");
-                        finalHandleFeedback.println("6) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
+                        finalHandleFeedback.println("1) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
+                        int badDataLinks = 0;
+                        // Check Elements
+                        List<Element> allElements = app.getDBI().listElements(null, null, null, Element.class);
+                        for (Element element : allElements) {
+                            // Validate the ID is larger than 0
+                            if (element.getID() <= 0) {
+                                badDataLinks++;
+                                finalHandleFeedback.println("PROBLEM:     The Creature had an incorrect ID. "
+                                        + "Creature: " + element.getPrimaryName());
+                                finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
+                                element.setID(app.getDBI().generateID());
+                                app.getDBI().updateElement(element, element.getPrimaryName());
+                            }
+                        }
+                        // Check Locations
+                        List<Location> allLocations = app.getDBI().listLocations(null, Location.class);
+                        for (Location location : allLocations) {
+                            // Validate the ID is larger than 0
+                            if (location.getID() <= 0) {
+                                badDataLinks++;
+                                finalHandleFeedback.println("PROBLEM:     The Place had an incorrect ID. "
+                                        + "Place: " + location.getName());
+                                finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
+                                location.setID(app.getDBI().generateID());
+                                app.getDBI().updateLocation(location, location.getName());
+                            }
+                        }
                         // Check Visits
                         List<Visit> allVisits = app.getDBI().listVisits(null, 0, null, true, Visit.class);
-                        int badDataLinks = 0;
                         int countVisits = 0;
                         for (Visit visit : allVisits) {
+                            // Validate the ID is larger than 0
+                            if (visit.getID() <= 0) {
+                                badDataLinks++;
+                                finalHandleFeedback.println("PROBLEM:     The Period had an incorrect ID. "
+                                        + "Period: " + visit.getName());
+                                finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
+                                visit.setID(app.getDBI().generateID());
+                                app.getDBI().updateVisit(visit, visit.getName());
+                            }
                             // Validate the Visit to Location link
                             Location temp = app.getDBI().findLocation(visit.getLocationID(), null, Location.class);
                             if (temp == null) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:   Could not find link between Period and Place. "
+                                finalHandleFeedback.println("PROBLEM:     Could not find link between Period and Place. "
                                         + "Period: " + visit.getName() + ", Place: " + visit.getCachedLocationName());
                                 finalHandleFeedback.println("  +RESOLVED: Moved Period to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
@@ -2591,8 +2354,8 @@ public final class WildLogView extends WildLogMainView {
                                 app.getDBI().updateVisit(visit, visit.getName());
                             }
                             countVisits++;
-                            setProgress(65 + (int)(countVisits/(double)allVisits.size()*3));
-                            setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
+                            setProgress(1 + (int)(countVisits/(double)allVisits.size()*3));
+                            setMessage("Cleanup Step 1: Check links between records in the database... " + getProgress() + "%");
                         }
                         // Check Sightings
                         List<Sighting> allSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
@@ -2602,7 +2365,7 @@ public final class WildLogView extends WildLogMainView {
                             Location tempLocation = app.getDBI().findLocation(sighting.getLocationID(), null, Location.class);
                             if (tempLocation == null) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Place. "
+                                finalHandleFeedback.println("PROBLEM:     Could not find link between Observation and Place. "
                                         + "Observation: " + sighting.getID() + ", Place: " + sighting.getCachedLocationName());
                                 finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
@@ -2617,7 +2380,7 @@ public final class WildLogView extends WildLogMainView {
                             Element tempElement = app.getDBI().findElement(sighting.getElementID(), null, Element.class);
                             if (tempElement == null) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Creature. "
+                                finalHandleFeedback.println("PROBLEM:     Could not find link between Observation and Creature. "
                                         + "Observation: " + sighting.getID()+ ", Creature: " + sighting.getCachedElementName());
                                 finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Creature called 'WildLog_lost_and_found'.");
                                 Element newElement = app.getDBI().findElement(0, "WildLog_lost_and_found", Element.class);
@@ -2632,7 +2395,7 @@ public final class WildLogView extends WildLogMainView {
                             Visit tempVisit = app.getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
                             if (tempVisit == null) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:   Could not find link between Observation and Period. "
+                                finalHandleFeedback.println("PROBLEM:     Could not find link between Observation and Period. "
                                         + "Observation: " + sighting.getID() + ", Period: " + sighting.getCachedVisitName());
                                 finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Period called 'WildLog_lost_and_found'.");
                                 // Location
@@ -2656,7 +2419,7 @@ public final class WildLogView extends WildLogMainView {
                             Visit checkSightingVisit = app.getDBI().findVisit(sighting.getVisitID(), null, true, Visit.class);
                             if (checkSightingVisit.getLocationID() != sighting.getLocationID()) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:   The Observation and Period references different Places. "
+                                finalHandleFeedback.println("PROBLEM:     The Observation and Period references different Places. "
                                         + "Observation: " + sighting.getCachedLocationName() + ", Period: " + checkSightingVisit.getCachedLocationName());
                                 finalHandleFeedback.println("  +RESOLVED: Moved Observation and Period to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
@@ -2672,11 +2435,284 @@ public final class WildLogView extends WildLogMainView {
                                 app.getDBI().updateVisit(checkSightingVisit, checkSightingVisit.getName());
                             }
                             countSightings++;
-                            setProgress(68 + (int)(countSightings/(double)allSightings.size()*4));
-                            setMessage("Cleanup Step 6: Check links between records in the database... " + getProgress() + "%");
+                            setProgress(4 + (int)(countSightings/(double)allSightings.size()*4));
+                            setMessage("Cleanup Step 1: Check links between records in the database... " + getProgress() + "%");
+                        }
+                        setProgress(8);
+                        
+                        // ---------------------2---------------------
+                        // First check database files
+                        // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
+                        setMessage("Cleanup Step 2: Validate database references to the files in the Workspace... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("2) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
+                        List<WildLogFile> allFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
+                        int filesWithoutID = 0;
+                        int filesWithoutPath = 0;
+                        int filesNotOnDisk = 0;
+                        int filesWithMissingData = 0;
+                        int filesWithBadType = 0;
+                        int filesWithBadID = 0;
+                        CleanupCounter filesMoved = new CleanupCounter();
+                        int fileProcessCounter = 0;
+                        int countImages = 0;
+                        int countMovies = 0;
+                        int countOther = 0;
+                        for (WildLogFile wildLogFile : allFiles) {
+                            // Check the WildLogFile's content
+                            if (wildLogFile.getId() == null) {
+                                finalHandleFeedback.println("PROBLEM:     File record without an ID. FilePath: " + wildLogFile.getDBFilePath());
+                                finalHandleFeedback.println("  +RESOLVED: Tried to delete the database file record and file on disk.");
+                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                filesWithoutID++;
+                                continue;
+                            }
+                            if (wildLogFile.getDBFilePath() == null) {
+                                finalHandleFeedback.println("PROBLEM:     File path missing from database record. FileID: " + wildLogFile.getId());
+                                finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
+                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                filesWithoutPath++;
+                                continue;
+                            }
+                            if (!Files.exists(wildLogFile.getAbsolutePath())) {
+                                finalHandleFeedback.println("PROBLEM:     File record in the database can't be found on disk. FilePath: " + wildLogFile.getDBFilePath());
+                                finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
+                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                filesNotOnDisk++;
+                                continue;
+                            }
+                            if (wildLogFile.getFilename() == null || wildLogFile.getFilename().isEmpty() || wildLogFile.getUploadDate() == null) {
+                                finalHandleFeedback.println("WARNING:    Database file record missing data. FilePath: " + wildLogFile.getAbsolutePath()
+                                        + ", Filename: " + wildLogFile.getFilename()
+                                        + ", UploadDate: " + wildLogFile.getUploadDate());
+                                finalHandleFeedback.println("  -UNRESOLVED: No action taken...");
+                                filesWithMissingData++;
+                            }
+                            if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
+                                finalHandleFeedback.println("PROBLEM:     Unknown FileType of database file record. FilePath: " + wildLogFile.getDBFilePath()
+                                        + ", FileType: " + wildLogFile.getFileType());
+                                finalHandleFeedback.println("  +RESOLVED: Changed FileType to " + WildLogFileType.OTHER + ".");
+                                wildLogFile.setFileType(WildLogFileType.OTHER);
+                                app.getDBI().updateWildLogFile(wildLogFile);
+                                filesWithBadType++;
+                            }
+                            // Check the WildLogFile's linkage
+                            if (wildLogFile.getId().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
+                                // Make sure it is linked
+                                final Element temp = app.getDBI().findElement(
+                                        Long.parseLong(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())), null, Element.class);
+                                if (temp == null) {
+                                    finalHandleFeedback.println("PROBLEM:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
+                                            + ", ID: " + wildLogFile.getId() + ", CreatureName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
+                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                    filesWithBadID++;
+                                    continue;
+                                }
+                                // Make sure the file path is correct
+                                cleanupHelper.moveFilesToCorrectFolders(temp, 
+                                        wildLogFile,
+                                        Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()).normalize(),
+                                        filesMoved);
+                            }
+                            else 
+                            if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
+                                // Make sure it is linked
+                                final Visit temp = app.getDBI().findVisit(
+                                        Long.parseLong(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())), null, true, Visit.class);
+                                if (temp == null) {
+                                    finalHandleFeedback.println("PROBLEM:     Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
+                                            + ", ID: " + wildLogFile.getId() + ", PeriodName Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
+                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file databse record and file from disk.");
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                    filesWithBadID++;
+                                    continue;
+                                }
+                                // Make sure the file path is correct
+                                cleanupHelper.moveFilesToCorrectFolders(temp, 
+                                        wildLogFile,
+                                        Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getCachedLocationName(), temp.getName()).normalize(),
+                                        filesMoved);
+                            }
+                            else 
+                            if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
+                                // Make sure it is linked
+                                final Location temp = app.getDBI().findLocation(
+                                        Long.parseLong(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())), null, Location.class);
+                                if (temp == null) {
+                                    finalHandleFeedback.println("PROBLEM:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
+                                            + ", ID: " + wildLogFile.getId() + ", PlaceName Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
+                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                    filesWithBadID++;
+                                    continue;
+                                }
+                                // Make sure the file path is correct
+                                cleanupHelper.moveFilesToCorrectFolders(temp, 
+                                        wildLogFile,
+                                        Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()).normalize(),
+                                        filesMoved);
+                            }
+                            else 
+                            if (wildLogFile.getId().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
+                                // Make sure it is linked
+                                Sighting temp = null;
+                                try {
+                                    temp = app.getDBI().findSighting(
+                                            Long.parseLong(wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), true, Sighting.class);
+                                }
+                                catch (NumberFormatException ex) {
+                                    finalHandleFeedback.println("PROBLEM:       Can't get linked Observation's ID.");
+                                    finalHandleFeedback.println("  -UNRESOLVED: Try to continue to delete the file.");
+                                }
+                                if (temp == null) {
+                                    finalHandleFeedback.println("PROBLEM:     Could not find linked Observation for this file. FilePath: " + wildLogFile.getDBFilePath()
+                                            + ", ID: " + wildLogFile.getId() + ", ObservationID Used: " + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
+                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                    filesWithBadID++;
+                                    continue;
+                                }
+                                // Make sure the file path is correct
+                                cleanupHelper.moveFilesToCorrectFolders(temp, 
+                                        wildLogFile,
+                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()).normalize(),
+                                        filesMoved);
+                            }
+                            else {
+                                finalHandleFeedback.println("PROBLEM:     File ID is not correctly formatted.");
+                                finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
+                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                filesWithBadID++;
+                            }
+                            fileProcessCounter++;
+                            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                                countImages++;
+                            }
+                            else
+                            if (WildLogFileType.MOVIE.equals(wildLogFile.getFileType())) {
+                                countMovies++;
+                            }
+                            else
+                            if (WildLogFileType.OTHER.equals(wildLogFile.getFileType())) {
+                                countOther++;
+                            }
+                            setProgress(8 + (int)(fileProcessCounter/(double)allFiles.size()*19));
+                            setMessage("Cleanup Step 2: Validate database references to the files in the Workspace... " + getProgress() + "%");
+                        }
+// TODO: If a file wasn't found then try to use the existing name and FileDate and FileSize to guess the link (or is it better just to move the files to the lost folder???)
+                        setProgress(27);
+
+                        // ---------------------3---------------------
+                        setMessage("Cleanup Step 3: Validate that the Workspace files are in the database... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("3) Make sure the files in the Workspace are present in the database.");
+                        // Secondly check the files on disk
+                        CleanupCounter filesNotInDB = new CleanupCounter();
+                        try {
+                            // Kyk of al die files op die hardeskyf in die database bestaan
+                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_IMAGES, filesNotInDB, countImages, (int)(countImages/(double)fileProcessCounter*20));
+                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_MOVIES, filesNotInDB, countMovies, (int)(countMovies/(double)fileProcessCounter*20));
+                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER, filesNotInDB, countOther, (int)(countOther/(double)fileProcessCounter*20));
+                        }
+                        catch (IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, "Could not check all files on disk.");
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            finalHandleFeedback.println("PROBLEM:       Could not check all files on disk.");
+                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
+                        }
+                        setProgress(47);
+
+                        // ---------------------4---------------------
+                        // By this time the file link should be "trusted" enough to use it to update inconsistent FileDate and FileSize values (not just empty ones)
+                        int filesWithIncorrectDate = 0;
+                        int filesWithIncorrectSize = 0;
+                        setMessage("Cleanup Step 4: Check the file size and dates... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("4) Compare the size and modified date of the files on disk to the values stored in the database.");
+                        allFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
+                        fileProcessCounter = 0;
+                        for (WildLogFile wildLogFile : allFiles) {
+                            LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
+                            long actualFileSize = Files.size(wildLogFile.getAbsolutePath());
+                            if (actualFileDate != null) {
+                                if (wildLogFile.getFileDate() == null || !actualFileDate.isEqual(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()))) {
+                                    finalHandleFeedback.println("PROBLEM:     The Modified Date of the file on disk is not the same as the value stored in the database. "
+                                            + "FilePath: " + wildLogFile.getAbsolutePath());
+                                    String oldDate;
+                                    if (wildLogFile.getFileDate() == null) {
+                                        oldDate = "null";
+                                    }
+                                    else {
+                                        oldDate = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()));
+                                    }
+                                    finalHandleFeedback.println("  +RESOLVED: Updated the database Modified Date value of the file record. "
+                                            + "Changed " + oldDate
+                                            + " to " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(actualFileDate));
+                                    wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
+                                    app.getDBI().updateWildLogFile(wildLogFile);
+                                    filesWithIncorrectDate++;
+                                }
+                            }
+                            if (actualFileSize > 0) {
+                                if (actualFileSize != wildLogFile.getFileSize()) {
+                                    finalHandleFeedback.println("PROBLEM:     The File Size of the file on disk is not the same as the value stored in the database. "
+                                            + "FilePath: " + wildLogFile.getAbsolutePath());
+                                    finalHandleFeedback.println("  +RESOLVED: Updated the database File Size value of the file record. "
+                                            + "Changed " + wildLogFile.getFileSize() + " to " + actualFileSize);
+                                    wildLogFile.setFileSize(actualFileSize);
+                                    app.getDBI().updateWildLogFile(wildLogFile);
+                                    filesWithIncorrectSize++;
+                                }
+                            }
+                            setProgress(47 + (int)(fileProcessCounter++/(double)allFiles.size()*12));
+                            setMessage("Cleanup Step 4: Check the file size and dates... " + getProgress() + "%");
+                        }
+                        setProgress(69);
+                        
+                        // ---------------------4---------------------
+                        // As alles klaar is delete alle lee en temporary folders
+                        setMessage("Cleanup Step 5: Delete empty folders in WildLog\\Files\\... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("5) Delete all empty folders in the Workspace's Images, Movies and Other files folders.");
+                        try {
+                            UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(WildLogPaths.WILDLOG_FILES.getAbsoluteFullPath().toFile());
+                        }
+                        catch (final IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete all empty folders.");
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            finalHandleFeedback.println("PROBLEM:       Could not delete all empty folders.");
+                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
+                        }
+                        setProgress(71);
+
+                        // ---------------------6---------------------
+                        // Delete alle temporary/onnodige files en folders
+                        setMessage("Cleanup Step 6: Delete exports and thumbnails... " + getProgress() + "%");
+                        finalHandleFeedback.println("");
+                        finalHandleFeedback.println("6) Delete all exports and thumbnails (since these files can be recreated from within WildLog).");
+                        try {
+                            UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT.getAbsoluteFullPath().toFile());
+                        }
+                        catch (final IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete export folders.");
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            finalHandleFeedback.println("PROBLEM:       Could not delete export folders.");
+                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                         }
                         setProgress(72);
-                        
+                        setMessage("Cleanup Step 6: Delete exports and thumbnails... " + getProgress() + "%");
+                        try {
+                            UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
+                        }
+                        catch (final IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete thumbnail folders.");
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            finalHandleFeedback.println("PROBLEM:       Could not delete thumbnail folders.");
+                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
+                        }
+                        setProgress(79);
+
                         // ---------------------7---------------------
                         // Check GPS Accuracy
                         setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
@@ -2693,7 +2729,7 @@ public final class WildLogView extends WildLogMainView {
                                 sighting.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
                                 app.getDBI().updateSighting(sighting);
                                 badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:   GPS information found without GPS Accuracy for Observation (" + sighting.getID() + ").");
+                                finalHandleFeedback.println("PROBLEM:     GPS information found without GPS Accuracy for Observation (" + sighting.getID() + ").");
                                 finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
                             }
                             else {
@@ -2704,7 +2740,7 @@ public final class WildLogView extends WildLogMainView {
                                     sighting.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
                                     app.getDBI().updateSighting(sighting);
                                     badGPSAccuracy++;
-                                    finalHandleFeedback.println("PROBLEM:   GPS Accuracy information found without GPS location for Observation (" + sighting.getID() + ").");
+                                    finalHandleFeedback.println("PROBLEM:     GPS Accuracy information found without GPS location for Observation (" + sighting.getID() + ").");
                                     finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a value of NONE.");
                                 }
                             }
@@ -2713,14 +2749,14 @@ public final class WildLogView extends WildLogMainView {
                                 sighting.setGPSAccuracyValue(sighting.getGPSAccuracy().getMaxMeters());
                                 app.getDBI().updateSighting(sighting);
                                 badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:   GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Observation (" + sighting.getID() + ").");
+                                finalHandleFeedback.println("PROBLEM:     GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Observation (" + sighting.getID() + ").");
                                 finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                             }
                             countGPSAccuracy++;
-                            setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
+                            setProgress(79 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
                             setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
                         }
-                        List<Location> allLocations = app.getDBI().listLocations(null, Location.class);
+                        allLocations = app.getDBI().listLocations(null, Location.class);
                         countGPSAccuracy = 0;
                         for (Location location : allLocations) {
                             if ((location.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
@@ -2730,7 +2766,7 @@ public final class WildLogView extends WildLogMainView {
                                 location.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
                                 app.getDBI().updateLocation(location, location.getName());
                                 badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:   GPS information found without GPS Accuracy for Place (" + location.getName() + ").");
+                                finalHandleFeedback.println("PROBLEM:     GPS information found without GPS Accuracy for Place (" + location.getName() + ").");
                                 finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
                             }
                             else {
@@ -2741,7 +2777,7 @@ public final class WildLogView extends WildLogMainView {
                                     location.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
                                     app.getDBI().updateLocation(location, location.getName());
                                     badGPSAccuracy++;
-                                    finalHandleFeedback.println("PROBLEM:   GPS Accuracy information found without GPS location for Place (" + location.getName() + ").");
+                                    finalHandleFeedback.println("PROBLEM:     GPS Accuracy information found without GPS location for Place (" + location.getName() + ").");
                                     finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a value of NONE.");
                                 }
                             }
@@ -2750,14 +2786,14 @@ public final class WildLogView extends WildLogMainView {
                                 location.setGPSAccuracyValue(location.getGPSAccuracy().getMaxMeters());
                                 app.getDBI().updateLocation(location, location.getName());
                                 badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:   GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Place (" + location.getName() + ").");
+                                finalHandleFeedback.println("PROBLEM:     GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Place (" + location.getName() + ").");
                                 finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                             }
                             countGPSAccuracy++;
-                            setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
+                            setProgress(81 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
                             setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
                         }
-                        setProgress(76);
+                        setProgress(83);
                         
                         // ---------------------8---------------------
                         // Checks Visit dates
@@ -2801,7 +2837,7 @@ public final class WildLogView extends WildLogMainView {
                                 badVisitDates++;
                             }
                             linkCount++;
-                            setProgress(76 + (int)(linkCount/(double)allSightings.size()*2));
+                            setProgress(83 + (int)(linkCount/(double)allSightings.size()*2));
                             setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + getProgress() + "%");
                         }
                         
@@ -2847,7 +2883,7 @@ public final class WildLogView extends WildLogMainView {
                                         wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
                                         // Not going to bother with synchornization here, since it's just the progress bar
                                         countThumbnails.counter++;
-                                        setProgress(78 + (int)(countThumbnails.counter/(double)listFiles.size()*21));
+                                        setProgress(85 + (int)(countThumbnails.counter/(double)listFiles.size()*14));
                                         setMessage("Cleanup Step 9: (Optional) Recreating essential default thumbnails... " + getProgress() + "%");
                                     }
                                 });
@@ -2860,7 +2896,7 @@ public final class WildLogView extends WildLogMainView {
                             // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
                             executorService.shutdown();
                             if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
-                                finalHandleFeedback.println("PROBLEM:     Processing the thumbnails took too long.");
+                                finalHandleFeedback.println("PROBLEM:       Processing the thumbnails took too long.");
                                 finalHandleFeedback.println("  -UNRESOLVED: Thumbnails can be created on demand by the application.");
                             }
                             setProgress(99);
@@ -2903,7 +2939,7 @@ public final class WildLogView extends WildLogMainView {
                                         wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
                                         // Not going to bother with synchornization here, since it's just the progress bar
                                         countThumbnails.counter++;
-                                        setProgress(78 + (int)(countThumbnails.counter/(double)listFiles.size()*21));
+                                        setProgress(85 + (int)(countThumbnails.counter/(double)listFiles.size()*14));
                                         setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... " + getProgress() + "%");
                                     }
                                 });
@@ -2916,7 +2952,7 @@ public final class WildLogView extends WildLogMainView {
                             // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
                             executorService.shutdown();
                             if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
-                                finalHandleFeedback.println("PROBLEM:     Processing the thumbnails took too long.");
+                                finalHandleFeedback.println("PROBLEM:       Processing the thumbnails took too long.");
                                 finalHandleFeedback.println("  -UNRESOLVED: Thumbnails can be created on demand by the application.");
                             }
                             setProgress(99);
@@ -2993,7 +3029,7 @@ public final class WildLogView extends WildLogMainView {
                         WildLogApp.LOGGER.log(Level.ERROR, "An exception occured while cleaning the Workspace!!");
                         WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         if (feedback != null) {
-                            feedback.println("PROBLEM:     An exception occured while cleaning the Workspace!!");
+                            feedback.println("PROBLEM:       An exception occured while cleaning the Workspace!!");
                             feedback.println("  -UNRESOLVED: Unexpected error... " + ex.getMessage());
                         }
                     }

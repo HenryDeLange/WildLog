@@ -859,6 +859,9 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             }
+            else {
+                return null;
+            }
             results = state.executeQuery();
             if (results.next()) {
                 tempElement = inReturnType.newInstance();
@@ -915,6 +918,9 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inName));
+            }
+            else {
+                return null;
             }
             results = state.executeQuery();
             if (results.next()) {
@@ -981,6 +987,9 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE VISITS.NAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inName));
+            }
+            else {
+                return null;
             }
             results = state.executeQuery();
             if (results.next()) {
