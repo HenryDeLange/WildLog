@@ -30,7 +30,7 @@ public class LocationSelectionDialog extends JDialog {
     private String selectedLocationName;
 
 
-    public LocationSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedLocation) {
+    public LocationSelectionDialog(JFrame inParent, WildLogApp inApp, final long inSelectedLocationID) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[LocationSelectionDialog]");
         app = inApp;
@@ -57,18 +57,11 @@ public class LocationSelectionDialog extends JDialog {
         UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, null);
         // Load selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
-        final int columnToUse;
-        if (app.getWildLogOptions().isUseThumbnailTables()) {
-            columnToUse = 1;
-        }
-        else {
-            columnToUse = 0;
-        }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 for (int t = 0; t < tblLocation.getRowCount(); t++) {
-                    if (tblLocation.getValueAt(t, columnToUse).equals(inSelectedLocation)) {
+                    if ((long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(t), 2) == inSelectedLocationID) {
                         tblLocation.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblLocation.getRowCount()) - 1) {
@@ -80,7 +73,7 @@ public class LocationSelectionDialog extends JDialog {
                 }
             }
         });
-        UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + inSelectedLocation, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+        UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + inSelectedLocationID, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
     }
 
     /** This method is called from within the constructor to
@@ -193,14 +186,14 @@ public class LocationSelectionDialog extends JDialog {
     private void lblImageLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageLocationMouseReleased
         if (!tblLocation.getSelectionModel().isSelectionEmpty()) {
             UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX 
-                    + tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 3), 0, app);
+                    + tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2), 0, app);
         }
     }//GEN-LAST:event_lblImageLocationMouseReleased
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         if (tblLocation.getSelectedRowCount() == 1) {
             selectionMade = true;
-            selectedLocationID = (Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 3);
+            selectedLocationID = (long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2);
             selectedLocationName = (String) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1);
             tblLocation.setBorder(null);
             setVisible(false);
@@ -217,7 +210,7 @@ public class LocationSelectionDialog extends JDialog {
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (!tblLocation.getSelectionModel().isSelectionEmpty()) {
-            String selectedID = tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 3).toString();
+            String selectedID = tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2).toString();
             // Change the image
             UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedID, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
         }

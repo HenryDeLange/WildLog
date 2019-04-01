@@ -288,7 +288,7 @@
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 8, 2, 8]"/>
+                  <Insets value="[2, 2, 2, 2]"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="btnDeleteImage" noResource="true"/>
               </Properties>
@@ -335,7 +335,7 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code=" !bulkEditMode" type="code"/>
+                  <Connection code=" !bulkEditMode &amp;&amp; !bulkUploadMode" type="code"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="btnPreviousImage" noResource="true"/>
@@ -357,7 +357,7 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code=" !bulkEditMode" type="code"/>
+                  <Connection code=" !bulkEditMode &amp;&amp; !bulkUploadMode" type="code"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="btnNextImage" noResource="true"/>

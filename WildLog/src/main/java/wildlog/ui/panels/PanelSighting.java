@@ -552,7 +552,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnDeleteImage.setFocusPainted(false);
-        btnDeleteImage.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnDeleteImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -579,7 +579,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnPreviousImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImage.setToolTipText("Load previous file.");
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPreviousImage.setEnabled( !bulkEditMode);
+        btnPreviousImage.setEnabled( !bulkEditMode && !bulkUploadMode);
         btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
@@ -592,7 +592,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnNextImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImage.setToolTipText("Load next file.");
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNextImage.setEnabled( !bulkEditMode);
+        btnNextImage.setEnabled( !bulkEditMode && !bulkUploadMode);
         btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
@@ -1632,12 +1632,15 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // Set Location, Element and Visit
         if (locationWL != null) {
             sighting.setLocationID(locationWL.getID());
+            sighting.setCachedLocationName(locationWL.getName());
         }
         if (element != null) {
             sighting.setElementID(element.getID());
+            sighting.setCachedElementName(element.getPrimaryName());
         }
         if (visit != null) {
             sighting.setVisitID(visit.getID());
+            sighting.setCachedVisitName(visit.getName());
         }
         // Set variables
         setupSightingDateFromUIFields();
@@ -1676,6 +1679,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // NOTE: The GPS info is already set on the Sighting object by the GPS popup component
         // SAVE (Only save to DB if not in bulk upload mode)
         if (!bulkUploadMode && !bulkEditMode) {
+            // Sanity check that the IDs are correct
+            if (sighting.getElementID() <= 0 || sighting.getLocationID() <= 0 || sighting.getVisitID() <= 0) {
+                WLOptionPane.showMessageDialog(this,
+                        "The Observation could not be saved due to problematic data.", 
+                        "Not Saved!", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            // Perform the database actions
             boolean result;
             if (sighting.getID() == 0) {
                 result = app.getDBI().createSighting(sighting, false);
@@ -1794,13 +1805,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             else {
                 sclElement.setBorder(new LineBorder(green, 1));
             }
-            if (locationWL == null) {
+            if (locationWL == null && !bulkUploadMode) {
                 sclLocation.setBorder(new LineBorder(Color.RED, 2));
             }
             else {
                 sclLocation.setBorder(new LineBorder(green, 1));
             }
-            if (visit == null) {
+            if (visit == null && !bulkUploadMode) {
                 sclVisit.setBorder(new LineBorder(Color.RED, 2));
             }
             else {
@@ -1814,7 +1825,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         }
         // Perform the save action
-        if (locationWL != null && element != null && visit != null && dtpSightingDate.getDate() != null || bulkEditMode) {
+        if (element != null && (visit != null || bulkUploadMode) && (locationWL != null || bulkUploadMode) && dtpSightingDate.getDate() != null || bulkEditMode) {
             if (saveSighting()) {
                 if (app.getWildLogOptions().isEnableSounds()) {
                     Toolkit.getDefaultToolkit().beep();

@@ -258,7 +258,7 @@ public class InfoBox extends JPanel {
                 spnNumberStateChanged(evt);
             }
         });
-        add(spnNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 165, 70, 20));
+        add(spnNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 213, 70, 22));
 
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
         cmbSex.setSelectedItem(Sex.NONE);
@@ -271,12 +271,12 @@ public class InfoBox extends JPanel {
                 cmbSexActionPerformed(evt);
             }
         });
-        add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 187, 70, 20));
+        add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 188, 70, 22));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("No.");
         jLabel5.setName("jLabel5"); // NOI18N
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, -1, -1));
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 213, -1, 22));
 
         jSeparator5.setName("jSeparator5"); // NOI18N
         add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 72, 230, 2));
@@ -284,7 +284,7 @@ public class InfoBox extends JPanel {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("Sex");
         jLabel6.setName("jLabel6"); // NOI18N
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, -1, -1));
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 188, -1, 22));
 
         cmbCertainty.setModel(new DefaultComboBoxModel(Certainty.values()));
         cmbCertainty.setToolTipText("Observation certainty.");
@@ -296,7 +296,7 @@ public class InfoBox extends JPanel {
                 cmbCertaintyActionPerformed(evt);
             }
         });
-        add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 209, 95, 20));
+        add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 166, 100, 20));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed

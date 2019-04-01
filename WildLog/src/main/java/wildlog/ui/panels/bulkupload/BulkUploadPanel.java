@@ -8,6 +8,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +68,7 @@ import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
@@ -120,8 +122,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             }
         });
         // Load the location detials
-        lblLocation.setText(selectedLocation.getName());
-        UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        if (selectedLocation != null) {
+            lblLocation.setText(selectedLocation.getName());
+            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        }
+        else {
+            lblLocation.setText("");
+            UtilsImageProcessing.setupFoto("", 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        }
         // If this bulk import was called from the Visit then set the name and disable the fields
         if (existingVisit != null && existingVisit.getID() > 0) {
             // Location fields
@@ -138,6 +146,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
         // Setup the tab's content
         setupTab(inProgressbarTask);
+        // Setup the initial visit name
+        setupVisitName();
         // Setup clipboard
         UtilsUI.attachClipboardPopup(txtVisitName);
         // Setup info for tab headers
@@ -212,6 +222,42 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
         else {
             showAsTab = false;
+        }
+    }
+    
+    private void setupVisitName() {
+        if (existingVisit == null || existingVisit.getID() <= 0) {
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN || 
+                    WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                String locationName;
+                if (selectedLocation != null && selectedLocation.getName() != null && !selectedLocation.getName().isEmpty()) {
+                    locationName = selectedLocation.getName();
+                }
+                else {
+                    locationName = "UnkownPlace";
+                }
+                LocalDate startDate;
+                if (dtpStartDate.getDate() != null) {
+                    startDate = UtilsTime.getLocalDateFromDate(dtpStartDate.getDate());
+                }
+                else {
+                    startDate = LocalDate.now();
+                }
+                LocalDate endDate;
+                if (dtpEndDate.getDate() != null) {
+                    endDate = UtilsTime.getLocalDateFromDate(dtpEndDate.getDate());
+                }
+                else {
+                    endDate = LocalDate.now();
+                }
+                txtVisitName.setText(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(startDate) + "-" + UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(endDate)
+                        + "_" + locationName);
+            }
+            else {
+                if (txtVisitName.getText() == null || txtVisitName.getText().isEmpty()) {
+                    txtVisitName.setText("Bulk Import - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(LocalDateTime.now()));
+                }
+            }
         }
     }
 
@@ -308,6 +354,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
+        dtpEndDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dtpEndDatePropertyChange(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Start Date:");
@@ -319,11 +370,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         cmbVisitType.setName("cmbVisitType"); // NOI18N
 
         txtVisitName.setBackground(new java.awt.Color(204, 255, 204));
-        txtVisitName.setText("Bulk Import - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(LocalDateTime.now()));
         txtVisitName.setName("txtVisitName"); // NOI18N
 
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
+        dtpStartDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dtpStartDatePropertyChange(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Type:");
@@ -740,7 +795,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 this.setMessage("Saving the Bulk Import: Validating...");
                 // Make sure the location is OK
                 if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
-                    // Make sure the visit is OK
+                    // Validate the visit is OK
                     Visit visit = app.getDBI().findVisit(0, txtVisitName.getText(), false, Visit.class);
                     if ((existingVisit == null || existingVisit.getID() == 0) && visit != null) {
                         WLOptionPane.showMessageDialog(app.getMainFrame(),
@@ -756,7 +811,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     visit.setStartDate(dtpStartDate.getDate());
                     visit.setEndDate(dtpEndDate.getDate());
                     visit.setType((VisitType) cmbVisitType.getSelectedItem());
-                    // Make sure all sightings have a creature set
+                    // Validate all sightings have a creature set
                     final DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
                         BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
@@ -774,7 +829,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             return null;
                         }
                     }
-                    // Make sure the certainty is set
+                    // Validate the certainty is set
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
                         BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
                         if (sightingWrapper.getCertainty() == null || sightingWrapper.getCertainty().equals(Certainty.NONE)) {
@@ -791,7 +846,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             return null;
                         }
                     }
-                    // Show warning if any sighting doesn't have a GPS coordinate
+                    // Validate (warning) if any sighting doesn't have a GPS coordinate
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
                         BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
                         if (sightingWrapper.getLatitude() == null || Latitudes.NONE.equals(sightingWrapper.getLatitude())
@@ -799,6 +854,44 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                                     "There are Observations without GPS Coordinates. Are you sure you want to save?",
                                     "Missing GPS Coordinates", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                            if (result == JOptionPane.YES_OPTION) {
+                                break;
+                            }
+                            else {
+                                final int finalRowCount = rowCount;
+                                SwingUtilities.invokeLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
+                                    }
+                                });
+                                return null;
+                            }
+                        }
+                    }
+                    // Validate (warning) all Sightings fall inside the Visit's dates
+                    LocalDate startDate;
+                    if (visit.getStartDate() != null) {
+                        startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
+                    }
+                    else {
+                        startDate = null;
+                    }
+                    LocalDate endDate;
+                    if (visit.getEndDate() != null) {
+                        endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
+                    }
+                    else {
+                        endDate = null;
+                    }
+                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
+                        LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sightingWrapper.getDate());
+                        if ((startDate != null && sightingDate.isBefore(startDate))
+                                || (endDate != null && sightingDate.isAfter(endDate))) {
+                            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                    "There are Observations that fall outside of the specified date range of the Perios. Are you sure you want to save?",
+                                    "Invalid Period Date Range", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                             if (result == JOptionPane.YES_OPTION) {
                                 break;
                             }
@@ -974,8 +1067,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // Reload the location (espesially the image) as it might have changed
-        lblLocation.setText(selectedLocation.getName());
-        UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        if (selectedLocation != null) {
+            lblLocation.setText(selectedLocation.getName());
+            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        }
+        else {
+            lblLocation.setText("");
+            UtilsImageProcessing.setupFoto("", 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+        }
         // Re-check all species images already assigned since some might have changed
         DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
         for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
@@ -1004,7 +1103,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void btnGPSForAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSForAllActionPerformed
         Sighting tempSighting = new Sighting();
-        tempSighting.setLocationID(selectedLocation.getID());
+        if (selectedLocation != null) {
+            tempSighting.setLocationID(selectedLocation.getID());
+        }
         GPSDialog dialog = new GPSDialog(app, app.getMainFrame(), tempSighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
@@ -1025,12 +1126,20 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnGPSForAllActionPerformed
 
     private void btnSelectLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectLocationActionPerformed
-        LocationSelectionDialog dialog = new LocationSelectionDialog(app.getMainFrame(), app, lblLocation.getText());
+        long locationID;
+        if (selectedLocation != null) {
+            locationID = selectedLocation.getID();
+        }
+        else {
+            locationID = 0;
+        }
+        LocationSelectionDialog dialog = new LocationSelectionDialog(app.getMainFrame(), app, locationID);
         dialog.setVisible(true);
         if (dialog.isSelectionMade() && dialog.getSelectedLocationID() > 0) {
             selectedLocation = app.getDBI().findLocation(dialog.getSelectedLocationID(), null, Location.class);
             lblLocation.setText(selectedLocation.getName());
             UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+            setupVisitName();
         }
     }//GEN-LAST:event_btnSelectLocationActionPerformed
 
@@ -1050,6 +1159,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         ZoomDialog dialog = new ZoomDialog(WildLogApp.getApplication().getMainFrame(), lstVisitFiles, 0);
         dialog.setVisible(true);
     }//GEN-LAST:event_lblVisitFilesMouseReleased
+
+    private void dtpStartDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dtpStartDatePropertyChange
+        setupVisitName();
+    }//GEN-LAST:event_dtpStartDatePropertyChange
+
+    private void dtpEndDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dtpEndDatePropertyChange
+        setupVisitName();
+    }//GEN-LAST:event_dtpEndDatePropertyChange
 
     public boolean isShowAsTab() {
         return showAsTab;
