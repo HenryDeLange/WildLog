@@ -8,6 +8,7 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -158,6 +159,10 @@ public class CropDialog extends JDialog {
                 g.setColor(Color.RED);
                 g.drawRect(Math.min(beginX, dragX), Math.min(beginY, dragY), 
                         Math.abs(beginX - dragX), Math.abs(beginY - dragY));
+                int boxWidth = Math.abs(beginX - dragX);
+                int boxHeight = Math.abs(beginY - dragY);
+                g.setFont(g.getFont().deriveFont(Font.BOLD, 15));
+                ((Graphics) g).drawString(boxWidth + ":" + boxHeight, Math.min(beginX, dragX) + 3, Math.min(beginY, dragY) - 3);
             }
             else 
             if (cropped) {

@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,6 +50,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -126,7 +128,6 @@ import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
-import wildlog.ui.utils.WildLogMainView;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsConcurency;
@@ -142,7 +143,7 @@ import wildlog.xml.utils.UtilsXML;
 /**
  * The application's main frame.
  */
-public final class WildLogView extends WildLogMainView {
+public final class WildLogView extends JFrame {
     private final int STATIC_TAB_COUNT = 5;
     private final WildLogApp app = WildLogApp.getApplication();
     private final Timer messageTimer;
@@ -155,6 +156,8 @@ public final class WildLogView extends WildLogMainView {
     public WildLogView() {
         // Call the generated code to build the GUI
         initComponents();
+        // Maximise the window
+        setExtendedState(Frame.MAXIMIZED_BOTH);
         // status bar initialization - message timeout, idle icon and busy animation, etc
         int messageTimeout = 10000;
         messageTimer = new Timer(messageTimeout, new ActionListener() {
@@ -229,6 +232,16 @@ public final class WildLogView extends WildLogMainView {
             mnuWorkspaceUsers.setEnabled(false);
             mnuWorkspaceUsers.setVisible(false);
             sptWorkspaceUsers.setVisible(false);
+        }
+        else 
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+            tabHome.setBackground(new Color(9, 32, 77));
+            lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-250px.png")));
+        }
+        else
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            tabHome.setBackground(new Color(83, 44, 9));
+            lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-250px.png")));
         }
     }
 
@@ -316,7 +329,7 @@ public final class WildLogView extends WildLogMainView {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         lblBlog = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblFooterLogo = new javax.swing.JLabel();
         lblLocations = new javax.swing.JLabel();
         lblVisits = new javax.swing.JLabel();
         lblSightings = new javax.swing.JLabel();
@@ -493,8 +506,8 @@ public final class WildLogView extends WildLogMainView {
             }
         });
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Feature 1.png"))); // NOI18N
-        jLabel3.setName("jLabel3"); // NOI18N
+        lblFooterLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Feature 1.png"))); // NOI18N
+        lblFooterLogo.setName("lblFooterLogo"); // NOI18N
 
         lblLocations.setForeground(new java.awt.Color(183, 195, 166));
         lblLocations.setText("Places:");
@@ -533,11 +546,11 @@ public final class WildLogView extends WildLogMainView {
         lblWorkspaceName.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceName.setText("...workspace...");
-        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active Workspace", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
+        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Active Workspace", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceName.setName("lblWorkspaceName"); // NOI18N
 
         lblWorkspacePath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblWorkspacePath.setForeground(new java.awt.Color(118, 140, 92));
+        lblWorkspacePath.setForeground(new java.awt.Color(163, 179, 144));
         lblWorkspacePath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblWorkspacePath.setText(WildLogPaths.getFullWorkspacePrefix().toString());
         lblWorkspacePath.setName("lblWorkspacePath"); // NOI18N
@@ -560,19 +573,19 @@ public final class WildLogView extends WildLogMainView {
         });
 
         jLabel21.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(118, 140, 92));
+        jLabel21.setForeground(new java.awt.Color(163, 179, 144));
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel21.setText("<html><u>Active Workspace Folder:</u></html>");
         jLabel21.setName("jLabel21"); // NOI18N
 
         jLabel23.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(118, 140, 92));
+        jLabel23.setForeground(new java.awt.Color(163, 179, 144));
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel23.setText("<html><u>Active Settings Folder:</u></html>");
         jLabel23.setName("jLabel23"); // NOI18N
 
         lblSettingsPath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblSettingsPath.setForeground(new java.awt.Color(118, 140, 92));
+        lblSettingsPath.setForeground(new java.awt.Color(163, 179, 144));
         lblSettingsPath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString());
         lblSettingsPath.setName("lblSettingsPath"); // NOI18N
@@ -587,7 +600,7 @@ public final class WildLogView extends WildLogMainView {
         lblWorkspaceUser.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceUser.setText(WildLogApp.WILDLOG_USER_NAME);
-        lblWorkspaceUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(50, 63, 32)), "Active User", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
+        lblWorkspaceUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Active User", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceUser.setName("lblWorkspaceUser"); // NOI18N
 
         jSeparator26.setBackground(new java.awt.Color(57, 68, 43));
@@ -609,7 +622,7 @@ public final class WildLogView extends WildLogMainView {
                             .addComponent(jLabel23))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(50, 50, 50)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lblFooterLogo))
             .addGroup(tabHomeLayout.createSequentialGroup()
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabHomeLayout.createSequentialGroup()
@@ -685,7 +698,7 @@ public final class WildLogView extends WildLogMainView {
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabHomeLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblFooterLogo))
                     .addGroup(tabHomeLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addComponent(lblWorkspaceUser, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4347,7 +4360,6 @@ public final class WildLogView extends WildLogMainView {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
@@ -4379,6 +4391,7 @@ public final class WildLogView extends WildLogMainView {
     private javax.swing.JLabel lblCreatures;
     private javax.swing.JLabel lblEdition;
     private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblFooterLogo;
     private javax.swing.JLabel lblLocations;
     private javax.swing.JLabel lblMyWild;
     private javax.swing.JLabel lblSettingsPath;

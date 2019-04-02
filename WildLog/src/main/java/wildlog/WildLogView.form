@@ -1111,7 +1111,7 @@
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
-                          <Component id="jLabel3" min="-2" pref="149" max="-2" attributes="0"/>
+                          <Component id="lblFooterLogo" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -1208,7 +1208,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace pref="162" max="32767" attributes="0"/>
-                                  <Component id="jLabel3" min="-2" pref="228" max="-2" attributes="0"/>
+                                  <Component id="lblFooterLogo" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -1293,12 +1293,12 @@
                     <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblBlogMousePressed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JLabel" name="jLabel3">
+                <Component class="javax.swing.JLabel" name="lblFooterLogo">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/WildLog Feature 1.png"/>
                     </Property>
-                    <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="lblFooterLogo" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblLocations">
@@ -1383,7 +1383,7 @@
                         <TitledBorder justification="2" title="Active Workspace">
                           <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder>
-                              <Color PropertyName="color" blue="20" green="3f" red="32" type="rgb"/>
+                              <Color PropertyName="color" blue="d2" green="e5" red="dd" type="rgb"/>
                             </LineBorder>
                           </Border>
                           <Color PropertyName="color" blue="c0" green="d9" red="ca" type="rgb"/>
@@ -1399,7 +1399,7 @@
                       <Font name="Arial" size="11" style="0"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="5c" green="8c" red="76" type="rgb"/>
+                      <Color blue="90" green="b3" red="a3" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1445,7 +1445,7 @@
                       <Font name="Arial" size="11" style="0"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="5c" green="8c" red="76" type="rgb"/>
+                      <Color blue="90" green="b3" red="a3" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1460,7 +1460,7 @@
                       <Font name="Arial" size="11" style="0"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="5c" green="8c" red="76" type="rgb"/>
+                      <Color blue="90" green="b3" red="a3" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1475,7 +1475,7 @@
                       <Font name="Arial" size="11" style="0"/>
                     </Property>
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="5c" green="8c" red="76" type="rgb"/>
+                      <Color blue="90" green="b3" red="a3" type="rgb"/>
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1516,7 +1516,7 @@
                         <TitledBorder justification="2" title="Active User">
                           <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                             <LineBorder>
-                              <Color PropertyName="color" blue="20" green="3f" red="32" type="rgb"/>
+                              <Color PropertyName="color" blue="d2" green="e5" red="dd" type="rgb"/>
                             </LineBorder>
                           </Border>
                           <Color PropertyName="color" blue="c0" green="d9" red="ca" type="rgb"/>

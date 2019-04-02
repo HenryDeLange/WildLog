@@ -65,7 +65,6 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
-import wildlog.ui.utils.WildLogMainView;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.LoggingPrintStream;
 import wildlog.utils.NamedThreadFactory;
@@ -88,8 +87,7 @@ public class WildLogApp extends Application {
     private static String iNaturalistToken;
     private static boolean useNimbusLF = false;
     private static boolean useH2AutoServer = true;
-    private static Class viewClass = WildLogView.class;
-    private WildLogMainView view;
+    private WildLogView view;
     private WildLogOptions wildLogOptions;
     private int threadCount;
     /** 
@@ -355,18 +353,9 @@ public class WildLogApp extends Application {
                 return;
             }
         }
-        try {
-            // Show the main frame
-            view = (WildLogMainView) viewClass.newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException ex) {
-            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            WLOptionPane.showMessageDialog(null,
-                    "The main view could not be created during startup...",
-                    "Startup Error!", 
-                    JOptionPane.ERROR_MESSAGE);
-            exit();
-        }
+        // Show the main frame
+        view = new WildLogView();
+        // Setup the exit listener
         view.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -644,7 +633,7 @@ public class WildLogApp extends Application {
         return ACTIVEWILDLOG_CODE_FOLDER;
     }
 
-    public WildLogMainView getMainFrame() {
+    public WildLogView getMainFrame() {
         return view;
     }
     
@@ -709,10 +698,6 @@ public class WildLogApp extends Application {
 
     public static void setINaturalistToken(String inINaturalistToken) {
         iNaturalistToken = inINaturalistToken;
-    }
-
-    public static void setViewClass(Class inViewClass) {
-        viewClass = inViewClass;
     }
 
 }

@@ -851,10 +851,15 @@ public class ExportDialog extends JDialog {
                         }
                         setProgress(100);
                         setMessage("Done Exporting Files for '" + tempSighting.getDisplayName() + "'");
+                        if (lstSightings.size() == 1) {
+                            UtilsFileProcessing.openFile(destination);
+                        }
                     }
                     setProgress(100);
                     setMessage("Done Exporting Files for Observations");
-                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath());
+                    if (lstSightings.size() > 1) {
+                        UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX));
+                    }
                     return null;
                 }
             });
