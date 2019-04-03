@@ -94,7 +94,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 
         btnExportImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Image.png"))); // NOI18N
         btnExportImage.setText("Export as an Image (Recommended)");
-        btnExportImage.setToolTipText("Create a PNG image file of the active report or map. This is the recommened way to export a report or map.");
+        btnExportImage.setToolTipText("Create a PNG image file of the active report or map. This is the recommened way to export a chart or map.");
         btnExportImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportImage.setFocusPainted(false);
         btnExportImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -113,7 +113,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 
         btnExportCSVInputData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         btnExportCSVInputData.setText("Exportthe Input Data as a Spreadsheet");
-        btnExportCSVInputData.setToolTipText("Create a CSV file of all relevant Observations used by this report or map. Can be opened in Excel, etc.");
+        btnExportCSVInputData.setToolTipText("Create a CSV file of all relevant Observations used by this chart or map. Can be opened in Excel, etc.");
         btnExportCSVInputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVInputData.setFocusPainted(false);
         btnExportCSVInputData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -132,7 +132,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 
         btnExportCSVOutputData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         btnExportCSVOutputData.setText("Export the Output Data as a Spreadsheet");
-        btnExportCSVOutputData.setToolTipText("Create a CSV file of the final processed data used by this report or map. Can be opened in Excel, etc.");
+        btnExportCSVOutputData.setToolTipText("Create a CSV file of the final processed data used by this chart or map. Can be opened in Excel, etc.");
         btnExportCSVOutputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVOutputData.setFocusPainted(false);
         btnExportCSVOutputData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -151,7 +151,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 
         btnExportPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF.png"))); // NOI18N
         btnExportPDF.setText("Export as a PDF");
-        btnExportPDF.setToolTipText("Create a PDF file of the active report or map.");
+        btnExportPDF.setToolTipText("Create a PDF file of the active chart or map.");
         btnExportPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportPDF.setFocusPainted(false);
         btnExportPDF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -170,7 +170,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 
         btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         btnExportHTML.setText("Export as an Offline Webpage");
-        btnExportHTML.setToolTipText("Create a basic HTML web page that can be viewed offline to show theObservations used by the active report or map.");
+        btnExportHTML.setToolTipText("Create a basic HTML web page that can be viewed offline to show theObservations used by the active chart or map.");
         btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportHTML.setFocusPainted(false);
         btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -207,8 +207,8 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().add(btnExportKML);
 
         btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
-        btnPrint.setText("Print the Report");
-        btnPrint.setToolTipText("Try to print the report or map using your default installed printer.");
+        btnPrint.setText("Print the Chart");
+        btnPrint.setToolTipText("Try to print the chart or map using your default installed printer.");
         btnPrint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPrint.setFocusPainted(false);
         btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -233,7 +233,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 setProgress(0);
-                setMessage("Exporting Report CSV Input for '" + name + "'");
+                setMessage("Exporting CSV Input for '" + name + "'");
                 Path root;
                 if (ExportType.REPORTS.equals(type)) {
                     root = WildLogPaths.WILDLOG_EXPORT_REPORTS_CSV.getAbsoluteFullPath();
@@ -246,7 +246,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 WildLogApp.getApplication().getDBI().doExportCSV(filePath, false, null, null, null, null, lstSightings);
                 UtilsFileProcessing.openFile(filePath);
                 setProgress(100);
-                setMessage("Done Exporting Report CSV Input for '" + name + "'");
+                setMessage("Done Exporting CSV Input for '" + name + "'");
                 return null;
             }
         });
@@ -260,7 +260,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
-                    setMessage("Exporting Report Image for '" + name + "'");
+                    setMessage("Exporting Image for '" + name + "'");
                     Path root;
                     if (ExportType.REPORTS.equals(type)) {
                         root = WildLogPaths.WILDLOG_EXPORT_REPORTS_PNG.getAbsoluteFullPath();
@@ -273,7 +273,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                     ImageIO.write(bufferedImage, "png", filePath.toFile());
                     UtilsFileProcessing.openFile(filePath);
                     setProgress(100);
-                    setMessage("Done Exporting Report Image for '" + name + "'");
+                    setMessage("Done Exporting Image for '" + name + "'");
                     return null;
                 }
             });
@@ -288,7 +288,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
-                    setMessage("Exporting Report PDF for '" + name + "'");
+                    setMessage("Exporting PDF for '" + name + "'");
                     PDDocument doc = null;
                     Path root;
                     if (ExportType.REPORTS.equals(type)) {
@@ -326,7 +326,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                     }
                     UtilsFileProcessing.openFile(pdfPath);
                     setProgress(100);
-                    setMessage("Done Exporting Report PDF for '" + name + "'");
+                    setMessage("Done Exporting PDF for '" + name + "'");
                     return null;
                 }
             });
@@ -362,7 +362,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
         WLOptionPane.showMessageDialog(this, 
                 "For best results: "
-                        + "\n1) Resize the window containing the report to be as small as possible before printing. "
+                        + "\n1) Resize the window containing the chart or map to be as small as possible before printing. "
                         + "\n2) Use landscape orientation. "
                         + "\n3) Use as small a print margin as possible (10mm / 1cm should be fine).", 
                 "Print Tip", JOptionPane.INFORMATION_MESSAGE);
@@ -392,7 +392,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 setProgress(0);
-                setMessage("Exporting Report HTML for '" + name + "'");
+                setMessage("Exporting HTML for '" + name + "'");
                 // Create the image
                 Path rootImage;
                 if (ExportType.REPORTS.equals(type)) {
@@ -444,7 +444,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 // Open the file
                 UtilsFileProcessing.openFile(filePath);
                 setProgress(100);
-                setMessage("Done Exporting Report HTML for '" + name + "'");
+                setMessage("Done Exporting HTML for '" + name + "'");
                 return null;
             }
         });
@@ -472,7 +472,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
-                    setMessage("Exporting Report CSV Output for '" + name + "'");
+                    setMessage("Exporting CSV Output for '" + name + "'");
                     // Create the CSV content
                     Path rootPath;
                     if (ExportType.REPORTS.equals(type)) {
@@ -505,13 +505,13 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                         }
                         csvString.append(System.lineSeparator());
                         setProgress((int) ((((double) i) / ((double) lstOutputData.size())) * 100.0));
-                        setMessage("Done Exporting Report CSV Output for '" + name + "'");
+                        setMessage("Done Exporting CSV Output for '" + name + "'");
                     }
                     UtilsFileProcessing.createFileFromBytes(csvString.toString().getBytes(), filePath);
                     // Open the file
                     UtilsFileProcessing.openFile(filePath);
                     setProgress(100);
-                    setMessage("Done Exporting Report CSV Output for '" + name + "'");
+                    setMessage("Done Exporting CSV Output for '" + name + "'");
                     return null;
                 }
             });

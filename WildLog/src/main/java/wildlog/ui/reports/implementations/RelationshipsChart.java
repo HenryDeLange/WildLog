@@ -50,7 +50,7 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
     
     
     public RelationshipsChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Relationship Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Relationship Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(8);
         ToggleButton btnPieChartElementTypes = new ToggleButton("Creature Associations");
         btnPieChartElementTypes.setToggleGroup(BUTTON_GROUP);

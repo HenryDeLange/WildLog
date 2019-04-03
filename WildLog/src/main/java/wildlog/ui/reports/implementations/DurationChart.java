@@ -41,7 +41,7 @@ public class DurationChart extends AbstractReport<Sighting> {
 
     
     public DurationChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Duration Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Duration Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Timeline for all
         ToggleButton btnLineChart = new ToggleButton("Duration for All Observations");

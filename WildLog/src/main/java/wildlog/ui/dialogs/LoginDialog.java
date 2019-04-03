@@ -108,7 +108,7 @@ public class LoginDialog extends JDialog {
             }
         });
 
-        btnLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.setToolTipText("Log into the Workspace.");
         btnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -120,7 +120,7 @@ public class LoginDialog extends JDialog {
         });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel5.setText("<html>Contact the Owner of the Workspace or WildLog Support if you experience problems accessing the Workspsace.</html>");
+        jLabel5.setText("<html>Contact the Owner of the Workspace or WildLog Support if you experience problems accessing this Workspsace.</html>");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Workspace:");

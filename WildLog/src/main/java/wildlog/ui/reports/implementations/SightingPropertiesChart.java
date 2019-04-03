@@ -42,7 +42,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     
     
     public SightingPropertiesChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Observation Properties Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Observation Properties Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(2);
         // Hidden ToggleButton to use (used to unselect the other toggle buttons)
         ToggleButton btnHidden = new ToggleButton();

@@ -1359,7 +1359,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 });
                 popup.add(mnuMap);
                 // Report
-                JMenuItem mnuReport = new JMenuItem("Report", new ImageIcon(app.getClass().getResource("resources/icons/Report_Small.png")));
+                JMenuItem mnuReport = new JMenuItem("Charts", new ImageIcon(app.getClass().getResource("resources/icons/Report_Small.png")));
                 mnuReport.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -1367,7 +1367,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempLocation.getName(), 
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + tempLocation.getName(), 
                                         app.getDBI().listSightings(0, tempLocation.getID(), 0, true, Sighting.class));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
@@ -1375,7 +1375,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempElement.getPrimaryName(), 
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + tempElement.getPrimaryName(), 
                                         app.getDBI().listSightings(tempElement.getID(), 0, 0, true, Sighting.class));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
@@ -1383,7 +1383,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempVisit.getName(), 
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + tempVisit.getName(), 
                                         app.getDBI().listSightings(0, 0, tempVisit.getID(), true, Sighting.class));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
@@ -1391,7 +1391,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
                             Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
-                            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
+                            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
                                     + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
                                     app.getDBI().searchSightings(null, dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class));
                             dialog.setVisible(true);
@@ -1400,7 +1400,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (somethingToReportOn == false) {
                             WLOptionPane.showConfirmDialog(app.getMainFrame(),
                                     "Please select a Place, Period or Creature in the tree to the left, or specifiy a valid date range.",
-                                    "No Report Available", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                    "No Chart Available", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                         }
                     }
                 });

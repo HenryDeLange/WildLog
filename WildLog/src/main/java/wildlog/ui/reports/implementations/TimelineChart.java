@@ -42,7 +42,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
 
     
     public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Timeline Reports (Time Interval)", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Timeline Charts (Time Interval)", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Timeline for all
         ToggleButton btnLineChart = new ToggleButton("Timeline for All Observations");

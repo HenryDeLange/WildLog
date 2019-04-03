@@ -35,7 +35,7 @@ public class LocationChart extends AbstractReport<Sighting> {
 
     
     public LocationChart(List<Sighting> inLstData,JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Place Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Place Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(3);
         // Pie charts
         ToggleButton btnPieChartSightings = new ToggleButton("Observations per Place (Pie)");

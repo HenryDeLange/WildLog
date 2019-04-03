@@ -39,7 +39,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
     
     
     public ElementsChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Creature Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Creature Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(4);
         // Pie charts
         ToggleButton btnPieChartElementTypes = new ToggleButton("Creatures per Type");

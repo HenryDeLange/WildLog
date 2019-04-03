@@ -55,7 +55,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     
     
     public MoonphaseChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Moon Phase Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Moon Phase Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(9);
         // Charts
         ToggleButton btnPieChart = new ToggleButton("All Observations Together (Pie)");

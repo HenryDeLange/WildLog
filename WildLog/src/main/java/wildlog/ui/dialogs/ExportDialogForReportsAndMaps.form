@@ -38,7 +38,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/Image.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as an Image (Recommended)"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a PNG image file of the active report or map. This is the recommened way to export a report or map."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PNG image file of the active report or map. This is the recommened way to export a chart or map."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -69,7 +69,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Exportthe Input Data as a Spreadsheet"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a CSV file of all relevant Observations used by this report or map. Can be opened in Excel, etc."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a CSV file of all relevant Observations used by this chart or map. Can be opened in Excel, etc."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -100,7 +100,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export the Output Data as a Spreadsheet"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a CSV file of the final processed data used by this report or map. Can be opened in Excel, etc."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a CSV file of the final processed data used by this chart or map. Can be opened in Excel, etc."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -131,7 +131,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/PDF.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as a PDF"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a PDF file of the active report or map."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a PDF file of the active chart or map."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -162,7 +162,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/HTML Icon.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as an Offline Webpage"/>
-        <Property name="toolTipText" type="java.lang.String" value="Create a basic HTML web page that can be viewed offline to show theObservations used by the active report or map."/>
+        <Property name="toolTipText" type="java.lang.String" value="Create a basic HTML web page that can be viewed offline to show theObservations used by the active chart or map."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -223,8 +223,8 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Print the Report"/>
-        <Property name="toolTipText" type="java.lang.String" value="Try to print the report or map using your default installed printer."/>
+        <Property name="text" type="java.lang.String" value="Print the Chart"/>
+        <Property name="toolTipText" type="java.lang.String" value="Try to print the chart or map using your default installed printer."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

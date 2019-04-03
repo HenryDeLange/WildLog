@@ -89,11 +89,11 @@ public class MapsBaseDialog extends JFrame {
         jfxMapPanel.setBackground(pnlMapArea.getBackground());
         pnlMapArea.add(jfxMapPanel, BorderLayout.CENTER);
         jfxMapListPanel = new JFXPanel();
-        // Add the report types and sub reports to the accordian
+        // Add the map types and sub maps to the accordian
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                setupReportList();
+                setupMapList();
             }
         });
         // Dispose the map when the window closes
@@ -111,8 +111,8 @@ public class MapsBaseDialog extends JFrame {
         UtilsFileProcessing.copyMapLayersWithPopup();
     }
     
-    private void setupReportList() {
-        // Setup the report buttons
+    private void setupMapList() {
+        // Setup the map buttons
         pnlMaps.add(jfxMapListPanel, BorderLayout.CENTER);
         AnchorPane anchorPaneForButtons = new AnchorPane();
         Scene sceneMapList = new Scene(anchorPaneForButtons);
@@ -125,7 +125,7 @@ public class MapsBaseDialog extends JFrame {
         AnchorPane.setLeftAnchor(scrollPaneForButtons, 0.0);
         AnchorPane.setRightAnchor(scrollPaneForButtons, 0.0);
         anchorPaneForButtons.getChildren().add(scrollPaneForButtons);
-        // Setup the report panel (om een of ander rede mot die een tweede wees)
+        // Setup the map panel (om een of ander rede mot die een tweede wees)
         VBox vbox = new VBox();
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
         Label lblInfo = new Label("Please select the map you would like to view from the list on the left.\n\n"
@@ -147,7 +147,7 @@ public class MapsBaseDialog extends JFrame {
         jfxMapPanel.setScene(sceneCharts);
         // Add default map description
         lblMapDescription.setText("Additional information for the selected map will be shown in this area.");
-        // Setup the default reports
+        // Setup the default maps
         List<AbstractMap<Sighting>> lstMaps = new ArrayList<>(10);
         lstMaps.add(new PointMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, this));
@@ -159,7 +159,7 @@ public class MapsBaseDialog extends JFrame {
         lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, this));
-        // Add the reports
+        // Add the maps
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(10);
             vBox.setFillWidth(true);
@@ -695,9 +695,9 @@ public class MapsBaseDialog extends JFrame {
     private void doFiltering(final List<Sighting> lstOriginalData, List<Sighting> lstFilteredData, 
             List<Long> lstFilteredElements, List<Long> lstFilteredLocations, List<Long> lstFilteredVisits,
             FilterProperties filterProperties, JLabel lblFilteredRecords, AbstractMap activeMap) {
-        // NOTE: Don't create a new ArrayList (clear existing instead), because the reports are holding on to the reference 
+        // NOTE: Don't create a new ArrayList (clear existing instead), because the maps are holding on to the reference 
         //       and will be stuck with an old list otherwise. Easiest to just keep the reference constant than to try and 
-        //       update the all reports everytime (the active report already gets updated explicitly).
+        //       update the all maps everytime (the active map already gets updated explicitly).
         lstFilteredData.clear();
         // All filters need to be taken into account all the time, even if only one was changed the results must still fullfill the other filters...
         for (Sighting sighting : lstOriginalData) {

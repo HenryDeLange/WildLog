@@ -1125,7 +1125,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + locationWL.getName(), 
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + locationWL.getName(), 
                     app.getDBI().listSightings(0, locationWL.getID(), 0, true, Sighting.class));
             dialog.setVisible(true);
         }

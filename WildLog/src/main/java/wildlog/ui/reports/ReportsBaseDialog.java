@@ -67,6 +67,7 @@ import wildlog.ui.reports.implementations.TimelineChart;
 import wildlog.ui.reports.implementations.VisitChart;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ComboBoxToShowReports;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class ReportsBaseDialog extends JFrame {
@@ -126,14 +127,14 @@ public class ReportsBaseDialog extends JFrame {
         VBox vbox = new VBox();
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
         Label lblInfo = new Label("Please select the report you would like to view from the list on the left.\n\n"
-                + "A description of the active report is provided at the bottom of the window.\n\n"
-                + "You can filter the number of Observations that are used in the report by using the buttons in the Report Data Filters section.\n\n"
-                + "Reports can be exported using the Export Report button.\n\n"
-                + "You can click on the report to view the data values at the selected point.\n\n"
-                + "It is recommended, whenever possible, to define accurate start and end dates for all Periods. These dates are used by some reports.\n\n"
+                + "A description of the active chart is provided at the bottom of the window.\n\n"
+                + "You can filter the number of Observations that are used in the chart by using the buttons in the Chart Data Filters section.\n\n"
+                + "Charts can be exported using the Export Chart button.\n\n"
+                + "You can click on the chart to view the data values at the selected point.\n\n"
+                + "It is recommended, whenever possible, to define accurate start and end dates for all Periods. These dates are used by some charts.\n\n"
                 + "Warning: \n"
-                + "Some reports may display incorrectly when there is too much data to represent visually on the chart.\n"
-                + "Using very large datasets with some reports can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.");
+                + "Some charts may be slow or display incorrectly when there is too much data to represent visually on the chart.\n"
+                + "Using very large datasets with some charts can make the application become unresponsive for a while, try to reduce the amount of data displayed at a time.");
         lblInfo.setPadding(new Insets(20));
         lblInfo.setFont(new Font(18));
         lblInfo.setWrapText(true);
@@ -205,10 +206,18 @@ public class ReportsBaseDialog extends JFrame {
     
     public void applyWatermark() {
         StackPane stackPane = new StackPane();
-        stackPane.setStyle("-fx-padding: 5;");
+        stackPane.setStyle("-fx-padding: 3;");
         stackPane.setBackground(Background.EMPTY);
         stackPane.getChildren().add(jfxReportChartPanel.getScene().getRoot());
-        ImageView watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/icons/WildLog Report Icon.gif")));
+        ImageView watermark;
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/wei/WEI-square-50px.png")));
+        }
+        else {
+            watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/icons/WildLog Report Icon.gif")));
+        }
+        watermark.setOpacity(0.7);
         stackPane.getChildren().add(watermark);
         StackPane.setAlignment(watermark, Pos.TOP_LEFT);
         jfxReportChartPanel.getScene().setRoot(stackPane);
@@ -256,11 +265,11 @@ public class ReportsBaseDialog extends JFrame {
         pnlReportsAndFilters.setPreferredSize(new java.awt.Dimension(265, 500));
 
         pnlReports.setBackground(new java.awt.Color(179, 198, 172));
-        pnlReports.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlReports.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlReports.setLayout(new java.awt.BorderLayout());
 
         pnlOptions.setBackground(new java.awt.Color(179, 198, 172));
-        pnlOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jLabel1.setText("Creature Name:");
 
@@ -294,12 +303,12 @@ public class ReportsBaseDialog extends JFrame {
         );
 
         pnlExport.setBackground(new java.awt.Color(179, 198, 172));
-        pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         bntExport.setBackground(new java.awt.Color(179, 198, 172));
         bntExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        bntExport.setText("Export Report");
-        bntExport.setToolTipText("Export the active report to one of many export formats.");
+        bntExport.setText("Export Chart");
+        bntExport.setToolTipText("Export the active chart to one of many export formats.");
         bntExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bntExport.setFocusPainted(false);
         bntExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -328,7 +337,7 @@ public class ReportsBaseDialog extends JFrame {
         );
 
         pnlFilters.setBackground(new java.awt.Color(179, 198, 172));
-        pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Data Filters", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart Data Filters", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         btnFilterProperties.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/FilterSightings.png"))); // NOI18N
@@ -505,7 +514,7 @@ public class ReportsBaseDialog extends JFrame {
         jPanel5.setLayout(new java.awt.BorderLayout(0, 2));
 
         pnlChartDescription.setBackground(new java.awt.Color(213, 230, 205));
-        pnlChartDescription.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Description", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlChartDescription.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart Description", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         lblReportDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 

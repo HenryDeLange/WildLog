@@ -34,7 +34,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
     private ChartType chartType = ChartType.PIE_CHART;
     
     public TimeOfDayChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Time of Day Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Time of Day Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(3);
         // Bar charts
         ToggleButton btnBarChart = new ToggleButton("Observation Time of Day (Bar)");

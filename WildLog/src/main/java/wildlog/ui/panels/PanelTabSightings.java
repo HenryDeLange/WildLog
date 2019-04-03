@@ -298,7 +298,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
         btnViewMap.setBackground(new java.awt.Color(235, 233, 221));
         btnViewMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
-        btnViewMap.setText("View Map");
+        btnViewMap.setText("Maps");
         btnViewMap.setToolTipText("Show available maps for these Observations.");
         btnViewMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewMap.setFocusPainted(false);
@@ -312,7 +312,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
         btnViewExport.setBackground(new java.awt.Color(235, 233, 221));
         btnViewExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        btnViewExport.setText("View Exports");
+        btnViewExport.setText("Export");
         btnViewExport.setToolTipText("Show available exports for these Observations.");
         btnViewExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewExport.setFocusPainted(false);
@@ -326,8 +326,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
         btnViewReport.setBackground(new java.awt.Color(235, 233, 221));
         btnViewReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
-        btnViewReport.setText("View Reports");
-        btnViewReport.setToolTipText("Show available reports for these Observations.");
+        btnViewReport.setText("Charts");
+        btnViewReport.setToolTipText("Show available charts for these Observations.");
         btnViewReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewReport.setFocusPainted(false);
         btnViewReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -829,7 +829,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void btnViewReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewReportActionPerformed
         List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
         if (!lstSightingsToUse.isEmpty()) {
-            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - Observations", lstSightingsToUse);
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - Observations", lstSightingsToUse);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnViewReportActionPerformed

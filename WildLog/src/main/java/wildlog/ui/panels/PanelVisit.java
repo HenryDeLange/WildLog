@@ -1376,7 +1376,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + visit.getName(), 
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + visit.getName(), 
                     app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class));
             dialog.setVisible(true);
         }
@@ -1401,7 +1401,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 // Waarsku as die daar nie minstens 'n begin datum is nie
                 if (evt != null && visit.getStartDate() == null) {
                     int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
-                            "<html>No Start Date was provided. The Start Date is used by a number of reports and maps."
+                            "<html>No Start Date was provided. The Start Date is used by a number of charts and maps."
                                     + "<br />Continue to save this Period without a Start Date?</html>", 
                             "Warning: Save empty Start Date?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                     if (result != JOptionPane.YES_OPTION) {

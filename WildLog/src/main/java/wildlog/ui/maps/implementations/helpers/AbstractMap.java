@@ -25,6 +25,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.maps.MapsBaseDialog;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public abstract class AbstractMap<T extends DataObjectWithGPS> {
@@ -44,7 +45,7 @@ public abstract class AbstractMap<T extends DataObjectWithGPS> {
         });
     }
     private final String mapCategoryTitle;
-    private String activeSubCategoryTitle = "Default Report";
+    private String activeSubCategoryTitle = "Default Map";
     protected final MapsBaseDialog mapsBaseDialog;
     protected List<T> lstData;
     protected List<Node> lstCustomButtons;
@@ -86,10 +87,18 @@ public abstract class AbstractMap<T extends DataObjectWithGPS> {
     
     protected void applyWatermark() {
         StackPane stackPane = new StackPane();
-        stackPane.setStyle("-fx-padding: 5;");
+        stackPane.setStyle("-fx-padding: 3;");
         stackPane.setBackground(Background.EMPTY);
         stackPane.getChildren().add(mapsBaseDialog.getJFXMapPanel().getScene().getRoot());
-        ImageView watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/icons/WildLog Map Icon.gif")));
+        ImageView watermark;
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/wei/WEI-square-50px.png")));
+        }
+        else {
+            watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/icons/WildLog Map Icon.gif")));
+        }
+        watermark.setOpacity(0.7);
         stackPane.getChildren().add(watermark);
         StackPane.setAlignment(watermark, Pos.TOP_LEFT);
         mapsBaseDialog.getJFXMapPanel().getScene().setRoot(stackPane);

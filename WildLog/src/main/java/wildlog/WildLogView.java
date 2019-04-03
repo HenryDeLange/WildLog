@@ -107,6 +107,7 @@ import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.SystemMonitorDialog;
 import wildlog.ui.dialogs.UserManagementDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
+import wildlog.ui.dialogs.WildLogWEIAboutBox;
 import wildlog.ui.dialogs.WildNoteAboutBox;
 import wildlog.ui.dialogs.WorkspaceExportDialog;
 import wildlog.ui.dialogs.WorkspaceImportDialog;
@@ -237,11 +238,15 @@ public final class WildLogView extends JFrame {
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
             tabHome.setBackground(new Color(9, 32, 77));
             lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-250px.png")));
+            lblBlog.setText("http://wei.org.za ");
+            setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
         }
         else
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             tabHome.setBackground(new Color(83, 44, 9));
             lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-250px.png")));
+            lblBlog.setText("http://wei.org.za ");
+            setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
         }
     }
 
@@ -449,6 +454,7 @@ public final class WildLogView extends JFrame {
         jSeparator17 = new javax.swing.JPopupMenu.Separator();
         mnuCheckUpdates = new javax.swing.JMenuItem();
         javax.swing.JMenuItem mnuAboutWildLog = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem mnuAboutWEI = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(app.getWildLogOptions().getWorkspaceName() + " -- WildLog v" + WildLogApp.WILDLOG_VERSION);
@@ -641,7 +647,7 @@ public final class WildLogView extends JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblBlog)
+                            .addComponent(lblBlog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblMyWild, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(tabHomeLayout.createSequentialGroup()
@@ -1604,6 +1610,17 @@ public final class WildLogView extends JFrame {
             }
         });
         helpMenu.add(mnuAboutWildLog);
+
+        mnuAboutWEI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/wei/WEI-square-20px.png"))); // NOI18N
+        mnuAboutWEI.setText("About WEI");
+        mnuAboutWEI.setToolTipText("Display information about WEI.");
+        mnuAboutWEI.setName("mnuAboutWEI"); // NOI18N
+        mnuAboutWEI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAboutWEIActionPerformed(evt);
+            }
+        });
+        helpMenu.add(mnuAboutWEI);
 
         menuBar.add(helpMenu);
 
@@ -2828,7 +2845,7 @@ public final class WildLogView extends JFrame {
                             if (processedVisits.add(visit.getID())) {
                                 if (visit.getStartDate() == null) {
                                     finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") does not have a Start Date.");
-                                    finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Reports and Maps.");
+                                    finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Charts and Maps.");
                                     badVisitDates++;
                                 }
                                 if (visit.getStartDate() == null && visit.getEndDate() != null) {
@@ -4305,6 +4322,11 @@ public final class WildLogView extends JFrame {
         UserManagementDialog dialog = new UserManagementDialog(this);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuWorkspaceUsersActionPerformed
+
+    private void mnuAboutWEIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutWEIActionPerformed
+        JDialog aboutBox = new WildLogWEIAboutBox(app);
+        aboutBox.setVisible(true);
+    }//GEN-LAST:event_mnuAboutWEIActionPerformed
 
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);

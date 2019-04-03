@@ -997,6 +997,23 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuAboutWEI">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/wei/WEI-square-20px.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="About WEI"/>
+                <Property name="toolTipText" type="java.lang.String" value="Display information about WEI."/>
+                <Property name="name" type="java.lang.String" value="mnuAboutWEI" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutWEIActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+              </AuxValues>
+            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>
@@ -1136,7 +1153,7 @@
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="lblBlog" max="-2" attributes="0"/>
+                                      <Component id="lblBlog" max="32767" attributes="0"/>
                                       <Component id="lblMyWild" alignment="1" min="-2" max="-2" attributes="0"/>
                                       <Component id="lblEmail" alignment="1" min="-2" max="-2" attributes="0"/>
                                   </Group>

@@ -46,7 +46,7 @@ public class VisitChart extends AbstractReport<Sighting> {
 // TODO: Klompie van hierdie charts sal beter werk as line (area) charts
     
     public VisitChart(List<Sighting> inLstData,JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Period Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Period Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(9);
         // Pie charts
         ToggleButton btnPieChartSightingCount = new ToggleButton("Observations per Period (Pie)");

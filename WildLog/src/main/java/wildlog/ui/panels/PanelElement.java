@@ -1288,7 +1288,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + element.getPrimaryName(), 
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + element.getPrimaryName(), 
                     app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class));
             dialog.setVisible(true);
         }

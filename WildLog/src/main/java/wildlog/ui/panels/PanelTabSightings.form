@@ -409,7 +409,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="View Map"/>
+            <Property name="text" type="java.lang.String" value="Maps"/>
             <Property name="toolTipText" type="java.lang.String" value="Show available maps for these Observations."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
@@ -432,7 +432,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Export.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="View Exports"/>
+            <Property name="text" type="java.lang.String" value="Export"/>
             <Property name="toolTipText" type="java.lang.String" value="Show available exports for these Observations."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
@@ -455,8 +455,8 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Report_Small.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="View Reports"/>
-            <Property name="toolTipText" type="java.lang.String" value="Show available reports for these Observations."/>
+            <Property name="text" type="java.lang.String" value="Charts"/>
+            <Property name="toolTipText" type="java.lang.String" value="Show available charts for these Observations."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>

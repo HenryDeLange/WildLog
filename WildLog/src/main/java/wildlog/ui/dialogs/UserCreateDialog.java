@@ -85,22 +85,30 @@ public class UserCreateDialog extends JDialog {
         setModal(true);
         setResizable(false);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Username:");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("New Password:");
 
+        lblWorkspaceName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblWorkspaceName.setText("<workspace name>");
 
+        cmbUserType.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         cmbUserType.setModel(new DefaultComboBoxModel(WildLogUserTypes.values()));
         cmbUserType.setSelectedItem(WildLogUserTypes.VOLUNTEER);
         cmbUserType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbUserType.setFocusable(false);
 
-        btnCreateUser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtUsername.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        txtPassword.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        txtPasswordConfirm.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        btnCreateUser.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnCreateUser.setText("Create User");
-        btnCreateUser.setToolTipText("Log into the Workspace.");
+        btnCreateUser.setToolTipText("Create the Workspace User.");
         btnCreateUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCreateUser.setFocusPainted(false);
         btnCreateUser.addActionListener(new java.awt.event.ActionListener() {
@@ -109,16 +117,16 @@ public class UserCreateDialog extends JDialog {
             }
         });
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Workspace:");
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setText("Confirm Password:");
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setText("User Type:");
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Create Workspace User");
 
@@ -138,10 +146,10 @@ public class UserCreateDialog extends JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblWorkspaceName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

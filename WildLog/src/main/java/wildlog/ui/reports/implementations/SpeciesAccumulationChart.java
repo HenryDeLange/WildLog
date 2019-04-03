@@ -54,7 +54,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
 
     
     public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Accumulation Rate Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Accumulation Rate Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(9);
         // Line charts
         ToggleButton btnCreatureAccumulationLineChart = new ToggleButton("Creature Accumulation");

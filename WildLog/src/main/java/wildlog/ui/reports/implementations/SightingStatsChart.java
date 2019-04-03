@@ -51,7 +51,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
       
     
     public SightingStatsChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Observation Statistics Reports", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Observation Statistics Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(6);
         // Bar charts
         ToggleButton btnSightingsPerDayBarChart = new ToggleButton("Observations per Day-Cycle");
