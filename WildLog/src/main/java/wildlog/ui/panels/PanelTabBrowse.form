@@ -470,8 +470,8 @@
           </Properties>
           <Events>
             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="treBrowsePhotoMouseReleased"/>
-            <EventHandler event="treeWillExpand" listener="javax.swing.event.TreeWillExpandListener" parameters="javax.swing.event.TreeExpansionEvent" handler="treBrowsePhotoTreeWillExpand"/>
             <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="treBrowsePhotoValueChanged"/>
+            <EventHandler event="treeWillExpand" listener="javax.swing.event.TreeWillExpandListener" parameters="javax.swing.event.TreeExpansionEvent" handler="treBrowsePhotoTreeWillExpand"/>
           </Events>
         </Component>
       </SubComponents>

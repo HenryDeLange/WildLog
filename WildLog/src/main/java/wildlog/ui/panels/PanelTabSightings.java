@@ -27,6 +27,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.FilterDataListDialog;
@@ -42,6 +43,7 @@ import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDataChanges {
@@ -69,25 +71,19 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
         // Add listner to auto resize columns.
         UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);
-        // "Hack" to make the buttons clickable when the mouse scrolles over the cell
-//        final JTable tableHandle = tblSightings;
-//        tblSightings.addMouseMotionListener(new MouseAdapter() {
-//            @Override
-//            public void mouseMoved(MouseEvent inEvent) {
-//                int row = tableHandle.rowAtPoint(inEvent.getPoint());
-//                int col = tableHandle.columnAtPoint(inEvent.getPoint());
-//                if (row != tableHandle.getEditingRow() || col != tableHandle.getEditingColumn()) {
-//                    try {
-//                        if (row >= 0 && row < tableHandle.getModel().getRowCount() && col >= 0 && col < tableHandle.getModel().getColumnCount()) {
-//                            tableHandle.editCellAt(row, col);
-//                        }
-//                    }
-//                    catch (Exception ex) {
-//                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-//                    }
-//                }
-//            }
-//        });
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            btnBulkEditSighting.setEnabled(false);
+            btnBulkEditSighting.setVisible(false);
+            btnExport.setEnabled(false);
+            btnExport.setVisible(false);
+            if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
+                pnlFeatures.setEnabled(false);
+                pnlFeatures.setVisible(false);
+                btnDeleteSighting.setEnabled(false);
+                btnDeleteSighting.setVisible(false);
+            }
+        }
     }
 
     /**
@@ -111,9 +107,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoElement = new javax.swing.JButton();
         btnGoBrowse = new javax.swing.JButton();
         pnlFeatures = new javax.swing.JPanel();
-        btnViewMap = new javax.swing.JButton();
-        btnViewExport = new javax.swing.JButton();
-        btnViewReport = new javax.swing.JButton();
+        btnMap = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
         pnlFilters = new javax.swing.JPanel();
         btnFilterLocation = new javax.swing.JButton();
         btnFilterVisit = new javax.swing.JButton();
@@ -240,7 +236,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
         btnGoElement.setBackground(new java.awt.Color(235, 233, 221));
         btnGoElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
-        btnGoElement.setText("View Creatures");
+        btnGoElement.setText("View Creature");
         btnGoElement.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoElement.setFocusPainted(false);
@@ -296,45 +292,45 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         pnlFeatures.setBackground(new java.awt.Color(235, 233, 221));
         pnlFeatures.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Features", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(51, 51, 51))); // NOI18N
 
-        btnViewMap.setBackground(new java.awt.Color(235, 233, 221));
-        btnViewMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
-        btnViewMap.setText("Maps");
-        btnViewMap.setToolTipText("Show available maps for these Observations.");
-        btnViewMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewMap.setFocusPainted(false);
-        btnViewMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewMap.addActionListener(new java.awt.event.ActionListener() {
+        btnMap.setBackground(new java.awt.Color(235, 233, 221));
+        btnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnMap.setText("Maps");
+        btnMap.setToolTipText("Show available maps for these Observations.");
+        btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMap.setFocusPainted(false);
+        btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewMapActionPerformed(evt);
+                btnMapActionPerformed(evt);
             }
         });
 
-        btnViewExport.setBackground(new java.awt.Color(235, 233, 221));
-        btnViewExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        btnViewExport.setText("Export");
-        btnViewExport.setToolTipText("Show available exports for these Observations.");
-        btnViewExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewExport.setFocusPainted(false);
-        btnViewExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewExport.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewExport.addActionListener(new java.awt.event.ActionListener() {
+        btnExport.setBackground(new java.awt.Color(235, 233, 221));
+        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        btnExport.setText("Export");
+        btnExport.setToolTipText("Show available exports for these Observations.");
+        btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExport.setFocusPainted(false);
+        btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExport.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewExportActionPerformed(evt);
+                btnExportActionPerformed(evt);
             }
         });
 
-        btnViewReport.setBackground(new java.awt.Color(235, 233, 221));
-        btnViewReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
-        btnViewReport.setText("Charts");
-        btnViewReport.setToolTipText("Show available charts for these Observations.");
-        btnViewReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewReport.setFocusPainted(false);
-        btnViewReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewReport.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewReport.addActionListener(new java.awt.event.ActionListener() {
+        btnReport.setBackground(new java.awt.Color(235, 233, 221));
+        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
+        btnReport.setText("Charts");
+        btnReport.setToolTipText("Show available charts for these Observations.");
+        btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReport.setFocusPainted(false);
+        btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnReport.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewReportActionPerformed(evt);
+                btnReportActionPerformed(evt);
             }
         });
 
@@ -345,20 +341,20 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             .addGroup(pnlFeaturesLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(pnlFeaturesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnViewExport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnViewReport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                    .addComponent(btnViewMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnExport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnReport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                    .addComponent(btnMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         pnlFeaturesLayout.setVerticalGroup(
             pnlFeaturesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFeaturesLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addComponent(btnViewMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnViewReport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnViewExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
         );
 
@@ -684,6 +680,19 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            if (WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER) {
+                if (tblSightings.getSelectedRowCount() > 1) {
+                    WLOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Only one Observation can be deleted at a time. Please select one row in the table and try again.",
+                        "Select One Observation", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+            else {
+                return;
+            }
+        }
         if (tblSightings.getSelectedRowCount() > 0) {
            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                    "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
@@ -818,29 +827,29 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
-    private void btnViewMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMapActionPerformed
+    private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
         if (!lstSightingsToUse.isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - Observations", lstSightingsToUse, 0);
             dialog.setVisible(true);
         }
-    }//GEN-LAST:event_btnViewMapActionPerformed
+    }//GEN-LAST:event_btnMapActionPerformed
 
-    private void btnViewReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewReportActionPerformed
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
         if (!lstSightingsToUse.isEmpty()) {
             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - Observations", lstSightingsToUse);
             dialog.setVisible(true);
         }
-    }//GEN-LAST:event_btnViewReportActionPerformed
+    }//GEN-LAST:event_btnReportActionPerformed
 
-    private void btnViewExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewExportActionPerformed
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
         List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
         if (!lstSightingsToUse.isEmpty()) {
             ExportDialog dialog = new ExportDialog(app, null, null, null, null, lstSightingsToUse);
             dialog.setVisible(true);
         }
-    }//GEN-LAST:event_btnViewExportActionPerformed
+    }//GEN-LAST:event_btnExportActionPerformed
 
     private void btnResetFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetFiltersActionPerformed
         setupDefaultFilters();
@@ -1038,6 +1047,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnBulkEditSighting;
     private javax.swing.JButton btnDeleteSighting;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnFilterElements;
     private javax.swing.JButton btnFilterLocation;
     private javax.swing.JButton btnFilterMap;
@@ -1048,12 +1058,11 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnGoSighting;
     private javax.swing.JButton btnGoVisit;
+    private javax.swing.JButton btnMap;
     private javax.swing.JButton btnNextFile;
     private javax.swing.JButton btnPrevFile;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnResetFilters;
-    private javax.swing.JButton btnViewExport;
-    private javax.swing.JButton btnViewMap;
-    private javax.swing.JButton btnViewReport;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFilterDetails;

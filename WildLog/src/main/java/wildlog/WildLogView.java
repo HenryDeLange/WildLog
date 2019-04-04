@@ -232,7 +232,9 @@ public final class WildLogView extends JFrame {
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG) {
             mnuWorkspaceUsers.setEnabled(false);
             mnuWorkspaceUsers.setVisible(false);
-            sptWorkspaceUsers.setVisible(false);
+            sprWorkspaceUsers.setVisible(false);
+            mnuAboutWEI.setEnabled(false);
+            mnuAboutWEI.setVisible(false);
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
@@ -247,6 +249,52 @@ public final class WildLogView extends JFrame {
             lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-250px.png")));
             lblBlog.setText("http://wei.org.za ");
             setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
+        }
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            sprWorkspace1.setVisible(false);
+            sprWorkspace2.setVisible(false);
+            mnuCleanWorkspace.setEnabled(false);
+            mnuCleanWorkspace.setVisible(false);
+            mnuChangeWorkspaceName.setEnabled(false);
+            mnuChangeWorkspaceName.setVisible(false);
+            sprWorkspaceUsers.setVisible(false);
+            mnuWorkspaceUsers.setEnabled(false);
+            mnuWorkspaceUsers.setVisible(false);
+            settingsMenu.setEnabled(false);
+            settingsMenu.setVisible(false);
+            sprExtra.setVisible(false);
+            externalMenu.setEnabled(false);
+            externalMenu.setVisible(false);
+            advancedMenu.setEnabled(false);
+            advancedMenu.setVisible(false);
+            exportMenu.setEnabled(false);
+            exportMenu.setVisible(false);
+            sprImport1.setVisible(false);
+            sprImport2.setVisible(false);
+            sprImport3.setVisible(false);
+            sprImport4.setVisible(false);
+            sprImport5.setVisible(false);
+            mnuImportCSV.setEnabled(false);
+            mnuImportCSV.setVisible(false);
+            mnuImportCSVBasic.setEnabled(false);
+            mnuImportCSVBasic.setVisible(false);
+            mnuImportINaturalist.setEnabled(false);
+            mnuImportINaturalist.setVisible(false);
+            mnuImportWildNote.setEnabled(false);
+            mnuImportWildNote.setVisible(false);
+            mnuImportWorkspace.setEnabled(false);
+            mnuImportWorkspace.setVisible(false);
+            mnuImportIUCNList.setEnabled(false);
+            mnuImportIUCNList.setVisible(false);
+            sprBackup.setVisible(false);
+            mnuBackupRestore.setEnabled(false);
+            mnuBackupRestore.setVisible(false);
+            mnuBackupWorkspace.setEnabled(false);
+            mnuBackupWorkspace.setVisible(false);
+            sprHelp.setVisible(false);
+            mnuAboutWildNote.setEnabled(false);
+            mnuAboutWildNote.setVisible(false);
         }
     }
 
@@ -363,20 +411,20 @@ public final class WildLogView extends JFrame {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
-        mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
-        mnuCreateWorkspaceMenuItem = new javax.swing.JMenuItem();
-        jSeparator14 = new javax.swing.JPopupMenu.Separator();
+        mnuChangeWorkspace = new javax.swing.JMenuItem();
+        mnuCreateWorkspace = new javax.swing.JMenuItem();
+        sprWorkspace1 = new javax.swing.JPopupMenu.Separator();
         mnuChangeWorkspaceName = new javax.swing.JMenuItem();
-        sptWorkspaceUsers = new javax.swing.JPopupMenu.Separator();
+        sprWorkspaceUsers = new javax.swing.JPopupMenu.Separator();
         mnuWorkspaceUsers = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        sprWorkspace2 = new javax.swing.JPopupMenu.Separator();
         mnuCleanWorkspace = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem mnuExitApp = new javax.swing.JMenuItem();
         backupMenu = new javax.swing.JMenu();
         mnuBackupDatabase = new javax.swing.JMenuItem();
         mnuBackupRestore = new javax.swing.JMenuItem();
-        jSeparator22 = new javax.swing.JPopupMenu.Separator();
+        sprBackup = new javax.swing.JPopupMenu.Separator();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         mnuExportExcelBasic = new javax.swing.JMenuItem();
@@ -397,15 +445,15 @@ public final class WildLogView extends JFrame {
         importMenu = new javax.swing.JMenu();
         mnuImportCSVBasic = new javax.swing.JMenuItem();
         mnuImportCSV = new javax.swing.JMenuItem();
-        jSeparator13 = new javax.swing.JPopupMenu.Separator();
-        btnImportIUCNList = new javax.swing.JMenuItem();
-        jSeparator25 = new javax.swing.JPopupMenu.Separator();
+        sprImport1 = new javax.swing.JPopupMenu.Separator();
+        mnuImportIUCNList = new javax.swing.JMenuItem();
+        sprImport2 = new javax.swing.JPopupMenu.Separator();
         mnuImportINaturalist = new javax.swing.JMenuItem();
-        jSeparator12 = new javax.swing.JPopupMenu.Separator();
+        sprImport3 = new javax.swing.JPopupMenu.Separator();
         mnuImportWildNote = new javax.swing.JMenuItem();
-        jSeparator11 = new javax.swing.JPopupMenu.Separator();
+        sprImport4 = new javax.swing.JPopupMenu.Separator();
         mnuImportWorkspace = new javax.swing.JMenuItem();
-        jSeparator7 = new javax.swing.JPopupMenu.Separator();
+        sprImport5 = new javax.swing.JPopupMenu.Separator();
         mnuBulkImport = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
         mnuSwitchElementNames = new javax.swing.JMenuItem();
@@ -429,7 +477,7 @@ public final class WildLogView extends JFrame {
         mnuCreateGIF = new javax.swing.JMenuItem();
         mnuSunAndMoon = new javax.swing.JMenuItem();
         mnuSystemMonitor = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        sprExtra = new javax.swing.JPopupMenu.Separator();
         externalMenu = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
@@ -449,12 +497,12 @@ public final class WildLogView extends JFrame {
         chkMnuUseBundledMediaViewers = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         mnuAboutWildNote = new javax.swing.JMenuItem();
-        jSeparator16 = new javax.swing.JPopupMenu.Separator();
+        sprHelp = new javax.swing.JPopupMenu.Separator();
         mnuUserGuide = new javax.swing.JMenuItem();
         jSeparator17 = new javax.swing.JPopupMenu.Separator();
         mnuCheckUpdates = new javax.swing.JMenuItem();
-        javax.swing.JMenuItem mnuAboutWildLog = new javax.swing.JMenuItem();
-        javax.swing.JMenuItem mnuAboutWEI = new javax.swing.JMenuItem();
+        mnuAboutWildLog = new javax.swing.JMenuItem();
+        mnuAboutWEI = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(app.getWildLogOptions().getWorkspaceName() + " -- WildLog v" + WildLogApp.WILDLOG_VERSION);
@@ -809,30 +857,30 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setText("Workspace");
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
-        mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuChangeWorkspaceMenuItem.setText("Switch Active Workspace");
-        mnuChangeWorkspaceMenuItem.setToolTipText("Select another Workspace to use.");
-        mnuChangeWorkspaceMenuItem.setName("mnuChangeWorkspaceMenuItem"); // NOI18N
-        mnuChangeWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        mnuChangeWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuChangeWorkspace.setText("Switch Active Workspace");
+        mnuChangeWorkspace.setToolTipText("Select another Workspace to use.");
+        mnuChangeWorkspace.setName("mnuChangeWorkspace"); // NOI18N
+        mnuChangeWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuChangeWorkspaceMenuItemActionPerformed(evt);
+                mnuChangeWorkspaceActionPerformed(evt);
             }
         });
-        workspaceMenu.add(mnuChangeWorkspaceMenuItem);
+        workspaceMenu.add(mnuChangeWorkspace);
 
-        mnuCreateWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuCreateWorkspaceMenuItem.setText("Create New Workspace");
-        mnuCreateWorkspaceMenuItem.setToolTipText("Select a folder where a new Workspace will be created.");
-        mnuCreateWorkspaceMenuItem.setName("mnuCreateWorkspaceMenuItem"); // NOI18N
-        mnuCreateWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        mnuCreateWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuCreateWorkspace.setText("Create New Workspace");
+        mnuCreateWorkspace.setToolTipText("Select a folder where a new Workspace will be created.");
+        mnuCreateWorkspace.setName("mnuCreateWorkspace"); // NOI18N
+        mnuCreateWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuCreateWorkspaceMenuItemActionPerformed(evt);
+                mnuCreateWorkspaceActionPerformed(evt);
             }
         });
-        workspaceMenu.add(mnuCreateWorkspaceMenuItem);
+        workspaceMenu.add(mnuCreateWorkspace);
 
-        jSeparator14.setName("jSeparator14"); // NOI18N
-        workspaceMenu.add(jSeparator14);
+        sprWorkspace1.setName("sprWorkspace1"); // NOI18N
+        workspaceMenu.add(sprWorkspace1);
 
         mnuChangeWorkspaceName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuChangeWorkspaceName.setText("Rename Active Workspace");
@@ -845,8 +893,8 @@ public final class WildLogView extends JFrame {
         });
         workspaceMenu.add(mnuChangeWorkspaceName);
 
-        sptWorkspaceUsers.setName("sptWorkspaceUsers"); // NOI18N
-        workspaceMenu.add(sptWorkspaceUsers);
+        sprWorkspaceUsers.setName("sprWorkspaceUsers"); // NOI18N
+        workspaceMenu.add(sprWorkspaceUsers);
 
         mnuWorkspaceUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuWorkspaceUsers.setText("Manage Workspace Users");
@@ -859,8 +907,8 @@ public final class WildLogView extends JFrame {
         });
         workspaceMenu.add(mnuWorkspaceUsers);
 
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        workspaceMenu.add(jSeparator1);
+        sprWorkspace2.setName("sprWorkspace2"); // NOI18N
+        workspaceMenu.add(sprWorkspace2);
 
         mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuCleanWorkspace.setText("Check and Clean the Workspace");
@@ -925,8 +973,8 @@ public final class WildLogView extends JFrame {
         });
         backupMenu.add(mnuBackupRestore);
 
-        jSeparator22.setName("jSeparator22"); // NOI18N
-        backupMenu.add(jSeparator22);
+        sprBackup.setName("sprBackup"); // NOI18N
+        backupMenu.add(sprBackup);
 
         mnuBackupWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuBackupWorkspace.setText("Backup Workspace");
@@ -1105,22 +1153,22 @@ public final class WildLogView extends JFrame {
         });
         importMenu.add(mnuImportCSV);
 
-        jSeparator13.setName("jSeparator13"); // NOI18N
-        importMenu.add(jSeparator13);
+        sprImport1.setName("sprImport1"); // NOI18N
+        importMenu.add(sprImport1);
 
-        btnImportIUCNList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/IUCN.gif"))); // NOI18N
-        btnImportIUCNList.setText("Import IUCN Species List");
-        btnImportIUCNList.setToolTipText("Import species names from a CSV file exported from the IUCN Red List site.");
-        btnImportIUCNList.setName("btnImportIUCNList"); // NOI18N
-        btnImportIUCNList.addActionListener(new java.awt.event.ActionListener() {
+        mnuImportIUCNList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/IUCN.gif"))); // NOI18N
+        mnuImportIUCNList.setText("Import IUCN Species List");
+        mnuImportIUCNList.setToolTipText("Import species names from a CSV file exported from the IUCN Red List site.");
+        mnuImportIUCNList.setName("mnuImportIUCNList"); // NOI18N
+        mnuImportIUCNList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnImportIUCNListActionPerformed(evt);
+                mnuImportIUCNListActionPerformed(evt);
             }
         });
-        importMenu.add(btnImportIUCNList);
+        importMenu.add(mnuImportIUCNList);
 
-        jSeparator25.setName("jSeparator25"); // NOI18N
-        importMenu.add(jSeparator25);
+        sprImport2.setName("sprImport2"); // NOI18N
+        importMenu.add(sprImport2);
 
         mnuImportINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
         mnuImportINaturalist.setText("Import iNaturalist Observations");
@@ -1133,8 +1181,8 @@ public final class WildLogView extends JFrame {
         });
         importMenu.add(mnuImportINaturalist);
 
-        jSeparator12.setName("jSeparator12"); // NOI18N
-        importMenu.add(jSeparator12);
+        sprImport3.setName("sprImport3"); // NOI18N
+        importMenu.add(sprImport3);
 
         mnuImportWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
         mnuImportWildNote.setText("Import WildNote Sync File");
@@ -1147,8 +1195,8 @@ public final class WildLogView extends JFrame {
         });
         importMenu.add(mnuImportWildNote);
 
-        jSeparator11.setName("jSeparator11"); // NOI18N
-        importMenu.add(jSeparator11);
+        sprImport4.setName("sprImport4"); // NOI18N
+        importMenu.add(sprImport4);
 
         mnuImportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuImportWorkspace.setText("Import from Another Workspace");
@@ -1161,8 +1209,8 @@ public final class WildLogView extends JFrame {
         });
         importMenu.add(mnuImportWorkspace);
 
-        jSeparator7.setName("jSeparator7"); // NOI18N
-        importMenu.add(jSeparator7);
+        sprImport5.setName("sprImport5"); // NOI18N
+        importMenu.add(sprImport5);
 
         mnuBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
         mnuBulkImport.setText("Open a New Bulk Import Tab");
@@ -1382,8 +1430,8 @@ public final class WildLogView extends JFrame {
         });
         extraMenu.add(mnuSystemMonitor);
 
-        jSeparator3.setName("jSeparator3"); // NOI18N
-        extraMenu.add(jSeparator3);
+        sprExtra.setName("sprExtra"); // NOI18N
+        extraMenu.add(sprExtra);
 
         externalMenu.setText("External Tools");
         externalMenu.setToolTipText("Easy access to some useful external (third party) tools bundled with this application.");
@@ -1572,8 +1620,8 @@ public final class WildLogView extends JFrame {
         });
         helpMenu.add(mnuAboutWildNote);
 
-        jSeparator16.setName("jSeparator16"); // NOI18N
-        helpMenu.add(jSeparator16);
+        sprHelp.setName("sprHelp"); // NOI18N
+        helpMenu.add(sprHelp);
 
         mnuUserGuide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuUserGuide.setText("User Guide (PDF)");
@@ -2092,7 +2140,7 @@ public final class WildLogView extends JFrame {
         aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutWildLogActionPerformed
 
-    private void mnuChangeWorkspaceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceMenuItemActionPerformed
+    private void mnuChangeWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceActionPerformed
         if (WildLogApp.configureWildLogHomeBasedOnFileBrowser(app.getMainFrame(), false)) {
             // Write first
             BufferedWriter writer = null;
@@ -2124,7 +2172,7 @@ public final class WildLogView extends JFrame {
 //            this.setVisible(false);
             app.quit(evt);
         }
-    }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
+    }//GEN-LAST:event_mnuChangeWorkspaceActionPerformed
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[CleanWorkspace]");
@@ -3529,7 +3577,7 @@ public final class WildLogView extends JFrame {
         aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutWildNoteActionPerformed
 
-    private void mnuCreateWorkspaceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateWorkspaceMenuItemActionPerformed
+    private void mnuCreateWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateWorkspaceActionPerformed
         if (WildLogApp.configureWildLogHomeBasedOnFileBrowser(app.getMainFrame(), false)) {
             // Write first
             BufferedWriter writer = null;
@@ -3559,9 +3607,9 @@ public final class WildLogView extends JFrame {
 //            this.setVisible(false);
             app.quit(evt);
         }
-    }//GEN-LAST:event_mnuCreateWorkspaceMenuItemActionPerformed
+    }//GEN-LAST:event_mnuCreateWorkspaceActionPerformed
 
-    private void btnImportIUCNListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportIUCNListActionPerformed
+    private void mnuImportIUCNListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportIUCNListActionPerformed
         int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                 "<html>This will <u>replace</u> the names and threat status for the Creatures in this Workspace."
                         + "<br>Creatures are treated as <u>the same when their scientific name match</u>. "
@@ -3638,7 +3686,7 @@ public final class WildLogView extends JFrame {
                 }
             }
         }
-    }//GEN-LAST:event_btnImportIUCNListActionPerformed
+    }//GEN-LAST:event_mnuImportIUCNListActionPerformed
 
     private void chkMnuUseScienteficNameItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseScienteficNameItemStateChanged
         WildLogOptions options = app.getWildLogOptions();
@@ -4365,7 +4413,6 @@ public final class WildLogView extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenu backupMenu;
-    private javax.swing.JMenuItem btnImportIUCNList;
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
     private javax.swing.JCheckBoxMenuItem chkMnuIncludeCountInSightingPath;
@@ -4383,30 +4430,20 @@ public final class WildLogView extends JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
-    private javax.swing.JPopupMenu.Separator jSeparator11;
-    private javax.swing.JPopupMenu.Separator jSeparator12;
-    private javax.swing.JPopupMenu.Separator jSeparator13;
-    private javax.swing.JPopupMenu.Separator jSeparator14;
     private javax.swing.JPopupMenu.Separator jSeparator15;
-    private javax.swing.JPopupMenu.Separator jSeparator16;
     private javax.swing.JPopupMenu.Separator jSeparator17;
     private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator19;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;
     private javax.swing.JPopupMenu.Separator jSeparator21;
-    private javax.swing.JPopupMenu.Separator jSeparator22;
     private javax.swing.JPopupMenu.Separator jSeparator23;
     private javax.swing.JPopupMenu.Separator jSeparator24;
-    private javax.swing.JPopupMenu.Separator jSeparator25;
     private javax.swing.JSeparator jSeparator26;
-    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JLabel lblBlog;
@@ -4425,6 +4462,8 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenu mappingMenu;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem mnuAboutWEI;
+    private javax.swing.JMenuItem mnuAboutWildLog;
     private javax.swing.JMenuItem mnuAboutWildNote;
     private javax.swing.JMenuItem mnuBackupDatabase;
     private javax.swing.JMenuItem mnuBackupRestore;
@@ -4432,14 +4471,14 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuBulkImport;
     private javax.swing.JMenuItem mnuCalcDuration;
     private javax.swing.JMenuItem mnuCalcSunMoon;
-    private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
+    private javax.swing.JMenuItem mnuChangeWorkspace;
     private javax.swing.JMenuItem mnuChangeWorkspaceName;
     private javax.swing.JMenuItem mnuCheckUpdates;
     private javax.swing.JMenuItem mnuCleanWorkspace;
     private javax.swing.JMenuItem mnuConvertCoordinates;
     private javax.swing.JMenuItem mnuCreateGIF;
     private javax.swing.JMenuItem mnuCreateSlideshow;
-    private javax.swing.JMenuItem mnuCreateWorkspaceMenuItem;
+    private javax.swing.JMenuItem mnuCreateWorkspace;
     private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem mnuExifMenuItem;
     private javax.swing.JMenuItem mnuExportCSV;
@@ -4455,6 +4494,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuImportCSV;
     private javax.swing.JMenuItem mnuImportCSVBasic;
     private javax.swing.JMenuItem mnuImportINaturalist;
+    private javax.swing.JMenuItem mnuImportIUCNList;
     private javax.swing.JMenuItem mnuImportWildNote;
     private javax.swing.JMenuItem mnuImportWorkspace;
     private javax.swing.JMenuItem mnuMapStartMenuItem;
@@ -4475,7 +4515,17 @@ public final class WildLogView extends JFrame {
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu slideshowMenu;
-    private javax.swing.JPopupMenu.Separator sptWorkspaceUsers;
+    private javax.swing.JPopupMenu.Separator sprBackup;
+    private javax.swing.JPopupMenu.Separator sprExtra;
+    private javax.swing.JPopupMenu.Separator sprHelp;
+    private javax.swing.JPopupMenu.Separator sprImport1;
+    private javax.swing.JPopupMenu.Separator sprImport2;
+    private javax.swing.JPopupMenu.Separator sprImport3;
+    private javax.swing.JPopupMenu.Separator sprImport4;
+    private javax.swing.JPopupMenu.Separator sprImport5;
+    private javax.swing.JPopupMenu.Separator sprWorkspace1;
+    private javax.swing.JPopupMenu.Separator sprWorkspace2;
+    private javax.swing.JPopupMenu.Separator sprWorkspaceUsers;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;

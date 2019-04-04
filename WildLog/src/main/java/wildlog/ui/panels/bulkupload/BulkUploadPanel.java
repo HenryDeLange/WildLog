@@ -84,6 +84,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private List<Path> lstImportPaths = null;
     private boolean showAsTab = false;
 
+    
+// TODO: Add a button that does the "adjust date and time" popup for all observations
+    
 
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, Location inLocation, Visit inExistingVisit, 
             List<Path> inlstImportPaths, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {

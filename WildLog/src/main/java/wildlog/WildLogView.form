@@ -29,35 +29,35 @@
                 <Property name="name" type="java.lang.String" value="workspaceMenu" noResource="true"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuChangeWorkspaceMenuItem">
+                <MenuItem class="javax.swing.JMenuItem" name="mnuChangeWorkspace">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Switch Active Workspace"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select another Workspace to use."/>
-                    <Property name="name" type="java.lang.String" value="mnuChangeWorkspaceMenuItem" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="mnuChangeWorkspace" noResource="true"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuChangeWorkspaceMenuItemActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuChangeWorkspaceActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuCreateWorkspaceMenuItem">
+                <MenuItem class="javax.swing.JMenuItem" name="mnuCreateWorkspace">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Create New Workspace"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select a folder where a new Workspace will be created."/>
-                    <Property name="name" type="java.lang.String" value="mnuCreateWorkspaceMenuItem" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="mnuCreateWorkspace" noResource="true"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateWorkspaceMenuItemActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateWorkspaceActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator14">
+                <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprWorkspace1">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="jSeparator14" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="sprWorkspace1" noResource="true"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuChangeWorkspaceName">
@@ -73,9 +73,9 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuChangeWorkspaceNameActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JPopupMenu$Separator" name="sptWorkspaceUsers">
+                <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprWorkspaceUsers">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="sptWorkspaceUsers" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="sprWorkspaceUsers" noResource="true"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuWorkspaceUsers">
@@ -91,9 +91,9 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuWorkspaceUsersActionPerformed"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
+                <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprWorkspace2">
                   <Properties>
-                    <Property name="name" type="java.lang.String" value="jSeparator1" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="sprWorkspace2" noResource="true"/>
                   </Properties>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuCleanWorkspace">
@@ -170,9 +170,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupRestoreActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator22">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprBackup">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator22" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprBackup" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuBackupWorkspace">
@@ -382,27 +382,27 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportCSVActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator13">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprImport1">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator13" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprImport1" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="btnImportIUCNList">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuImportIUCNList">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/IUCN.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import IUCN Species List"/>
                 <Property name="toolTipText" type="java.lang.String" value="Import species names from a CSV file exported from the IUCN Red List site."/>
-                <Property name="name" type="java.lang.String" value="btnImportIUCNList" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="mnuImportIUCNList" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImportIUCNListActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportIUCNListActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator25">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprImport2">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator25" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprImport2" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportINaturalist">
@@ -418,9 +418,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportINaturalistActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator12">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprImport3">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator12" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprImport3" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportWildNote">
@@ -436,9 +436,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportWildNoteActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator11">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprImport4">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator11" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprImport4" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportWorkspace">
@@ -454,9 +454,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportWorkspaceActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprImport5">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator7" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprImport5" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuBulkImport">
@@ -713,9 +713,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSystemMonitorActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprExtra">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator3" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprExtra" noResource="true"/>
               </Properties>
             </MenuItem>
             <Menu class="javax.swing.JMenu" name="externalMenu">
@@ -944,9 +944,9 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutWildNoteActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator16">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprHelp">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator16" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprHelp" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuUserGuide">
@@ -992,10 +992,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutWildLogActionPerformed"/>
               </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-              </AuxValues>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuAboutWEI">
               <Properties>
@@ -1009,10 +1005,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutWEIActionPerformed"/>
               </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-              </AuxValues>
             </MenuItem>
           </SubComponents>
         </Menu>

@@ -314,7 +314,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Element.gif"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="View Creatures"/>
+            <Property name="text" type="java.lang.String" value="View Creature"/>
             <Property name="toolTipText" type="java.lang.String" value="Open a tab for the selected Creature."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
@@ -378,9 +378,9 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
-                      <Component id="btnViewExport" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnViewReport" alignment="0" pref="120" max="32767" attributes="0"/>
-                      <Component id="btnViewMap" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnExport" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnReport" alignment="0" pref="120" max="32767" attributes="0"/>
+                      <Component id="btnMap" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
               </Group>
@@ -390,18 +390,18 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                  <Component id="btnViewMap" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="btnMap" min="-2" pref="30" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnViewReport" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="btnReport" min="-2" pref="30" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnViewExport" min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="btnExport" min="-2" pref="30" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="btnViewMap">
+        <Component class="javax.swing.JButton" name="btnMap">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="dd" green="e9" red="eb" type="rgb"/>
@@ -421,10 +421,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewMapActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMapActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnViewExport">
+        <Component class="javax.swing.JButton" name="btnExport">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="dd" green="e9" red="eb" type="rgb"/>
@@ -444,10 +444,10 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewExportActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExportActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnViewReport">
+        <Component class="javax.swing.JButton" name="btnReport">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="dd" green="e9" red="eb" type="rgb"/>
@@ -467,7 +467,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewReportActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
