@@ -78,7 +78,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     public static String WILDLOG_VERSION = "6.0.0.beta";
-    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG_WEI_ADMIN;
+    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
     public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
     public static Logger LOGGER;
@@ -330,7 +330,7 @@ public class WildLogApp extends Application {
         }
         // Perform login (optional)
         if (dbi.countUsers() > 0) {
-            LoginDialog dialog = new LoginDialog(null);
+            LoginDialog dialog = new LoginDialog();
             dialog.setVisible(true);
             // Exit if login was incorrect
             if (!dialog.isLoginSuccess()) {
@@ -344,7 +344,8 @@ public class WildLogApp extends Application {
             }
             WildLogApp.LOGGER.log(Level.INFO, "Successful login attempt...");
             // Exit if the user type is not allowed to access this application type
-            if (WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER && WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            if ((WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER || WILDLOG_USER_TYPE == WildLogUserTypes.STUDENT)
+                    && WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
                 WLOptionPane.showMessageDialog(null,
                         "This user can only use the Volunteer application.",
                         "Incorrect Application Type!", 

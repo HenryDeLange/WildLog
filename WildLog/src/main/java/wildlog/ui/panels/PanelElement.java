@@ -28,6 +28,7 @@ import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.IUCNInformationDialog;
@@ -43,6 +44,7 @@ import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {
@@ -66,7 +68,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             btnBrowse.setEnabled(false);
             btnDeleteImage.setEnabled(false);
             btnGoLocation.setEnabled(false);
-            btnHTML.setEnabled(false);
+            btnExport.setEnabled(false);
             btnMap.setEnabled(false);
             btnNextImage.setEnabled(false);
             btnPreviousImage.setEnabled(false);
@@ -133,6 +135,19 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtDiagnosticDescription.setCaretPosition(0);
         txtDistribution.setCaretPosition(0);
         txtNutrition.setCaretPosition(0);
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            btnExport.setEnabled(false);
+            btnExport.setVisible(false);
+            btnSlideshow.setEnabled(false);
+            btnSlideshow.setVisible(false);
+            if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
+                btnDeleteImage.setEnabled(false);
+                btnDeleteImage.setVisible(false);
+                btnReport.setEnabled(false);
+                btnReport.setVisible(false);
+            }
+        }
     }
 
     private void uploadFiles(List<File> inFiles) {
@@ -228,7 +243,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnReport = new javax.swing.JButton();
         btnMap = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
-        btnHTML = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         pnlNames = new javax.swing.JPanel();
         txtScienceName = new javax.swing.JTextField();
         txtReferenceID = new javax.swing.JTextField();
@@ -526,18 +541,18 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         });
 
-        btnHTML.setBackground(new java.awt.Color(227, 240, 227));
-        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        btnHTML.setText("Export");
-        btnHTML.setToolTipText("Show available exports for this Creature.");
-        btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnHTML.setFocusPainted(false);
-        btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnHTML.setName("btnHTML"); // NOI18N
-        btnHTML.addActionListener(new java.awt.event.ActionListener() {
+        btnExport.setBackground(new java.awt.Color(227, 240, 227));
+        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        btnExport.setText("Export");
+        btnExport.setToolTipText("Show available exports for this Creature.");
+        btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExport.setFocusPainted(false);
+        btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExport.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExport.setName("btnExport"); // NOI18N
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHTMLActionPerformed(evt);
+                btnExportActionPerformed(evt);
             }
         });
 
@@ -551,7 +566,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -577,7 +592,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addGap(5, 5, 5)
                 .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1279,12 +1294,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
     }//GEN-LAST:event_tblLocationMouseClicked
 
-    private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
             ExportDialog dialog = new ExportDialog(app, null, element, null, null, null);
             dialog.setVisible(true);
         }
-    }//GEN-LAST:event_btnHTMLActionPerformed
+    }//GEN-LAST:event_btnExportActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
@@ -1353,8 +1368,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnCheckIUCNOtherName;
     private javax.swing.JButton btnDeleteImage;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnGoLocation;
-    private javax.swing.JButton btnHTML;
     private javax.swing.JButton btnINaturalist;
     private javax.swing.JButton btnMap;
     private javax.swing.JButton btnNextImage;

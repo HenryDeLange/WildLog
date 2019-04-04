@@ -37,6 +37,7 @@ import wildlog.ui.reports.implementations.helpers.ReportCountWrapper;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.utils.UtilsTime;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class VisitChart extends AbstractReport<Sighting> {
@@ -115,45 +116,49 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChartDurationCombined);
-        ToggleButton btnBarChartAbundance = new ToggleButton("Abundance of Observations");
-        btnBarChartAbundance.setToggleGroup(BUTTON_GROUP);
-        btnBarChartAbundance.setCursor(Cursor.HAND);
-        btnBarChartAbundance.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                chartType = ChartType.BAR_CHART_ABUNDANCE;
-                setupChartDescriptionLabel("<html>This chart can be used as a simplified Observation Abundance report. "
-                                        + "<br/>It shows the number of Observations devided by the number of active days for each Period (based on the start and end dates)."
-                                        + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
-            }
-        });
-        lstCustomButtons.add(btnBarChartAbundance);
-        ToggleButton btnBarChartElementAbundance = new ToggleButton("Abundance of Creatures");
-        btnBarChartElementAbundance.setToggleGroup(BUTTON_GROUP);
-        btnBarChartElementAbundance.setCursor(Cursor.HAND);
-        btnBarChartElementAbundance.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                chartType = ChartType.BAR_CHART_ELEMENT_ABUNDANCE;
-                setupChartDescriptionLabel("<html>This chart can be used as a simplified Creature Abundance report. "
-                                        + "<br/>It shows the number of Observations devided by the number of active days for each Period (based on the start and end dates), per Creature."
-                                        + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
-            }
-        });
-        lstCustomButtons.add(btnBarChartElementAbundance);
-        ToggleButton btnBarChartRichness = new ToggleButton("Richness of Creatures");
-        btnBarChartRichness.setToggleGroup(BUTTON_GROUP);
-        btnBarChartRichness.setCursor(Cursor.HAND);
-        btnBarChartRichness.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                chartType = ChartType.BAR_CHART_RICHNESS;
-                setupChartDescriptionLabel("<html>This chart can be used as a simplified Creature Richness report. "
-                                        + "<br/>It shows the number of Creatures devided by the number of active days for each Period (based on the start and end dates)."
-                                        + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
-            }
-        });
-        lstCustomButtons.add(btnBarChartRichness);
+        
+// TODO: Skuif hierdie uit na sy eie kategorie
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            ToggleButton btnBarChartAbundance = new ToggleButton("Abundance of Observations");
+            btnBarChartAbundance.setToggleGroup(BUTTON_GROUP);
+            btnBarChartAbundance.setCursor(Cursor.HAND);
+            btnBarChartAbundance.setOnAction(new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    chartType = ChartType.BAR_CHART_ABUNDANCE;
+                    setupChartDescriptionLabel("<html>This chart can be used as a simplified Observation Abundance report. "
+                                            + "<br/>It shows the number of Observations devided by the number of active days for each Period (based on the start and end dates)."
+                                            + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
+                }
+            });
+            lstCustomButtons.add(btnBarChartAbundance);
+            ToggleButton btnBarChartElementAbundance = new ToggleButton("Abundance of Creatures");
+            btnBarChartElementAbundance.setToggleGroup(BUTTON_GROUP);
+            btnBarChartElementAbundance.setCursor(Cursor.HAND);
+            btnBarChartElementAbundance.setOnAction(new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    chartType = ChartType.BAR_CHART_ELEMENT_ABUNDANCE;
+                    setupChartDescriptionLabel("<html>This chart can be used as a simplified Creature Abundance report. "
+                                            + "<br/>It shows the number of Observations devided by the number of active days for each Period (based on the start and end dates), per Creature."
+                                            + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
+                }
+            });
+            lstCustomButtons.add(btnBarChartElementAbundance);
+            ToggleButton btnBarChartRichness = new ToggleButton("Richness of Creatures");
+            btnBarChartRichness.setToggleGroup(BUTTON_GROUP);
+            btnBarChartRichness.setCursor(Cursor.HAND);
+            btnBarChartRichness.setOnAction(new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    chartType = ChartType.BAR_CHART_RICHNESS;
+                    setupChartDescriptionLabel("<html>This chart can be used as a simplified Creature Richness report. "
+                                            + "<br/>It shows the number of Creatures devided by the number of active days for each Period (based on the start and end dates)."
+                                            + "<br/><b>Note:</b> This chart works best when comparing Periods with similar durations.</html>");
+                }
+            });
+            lstCustomButtons.add(btnBarChartRichness);
+        }
     }
 
     @Override

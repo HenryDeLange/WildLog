@@ -12,6 +12,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.WLOptionPane;
@@ -19,6 +20,7 @@ import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class PanelTabLocations extends JPanel {
@@ -37,6 +39,15 @@ public class PanelTabLocations extends JPanel {
         UtilsTableGenerator.setupColumnResizingListener(tblLocation, 1);
         UtilsTableGenerator.setupColumnResizingListener(tblElement, 1);
         UtilsTableGenerator.setupColumnResizingListener(tblVisit, 1);
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            btnDeleteLocation.setEnabled(false);
+            btnDeleteLocation.setVisible(false);
+            if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
+                btnAddLocation.setEnabled(false);
+                btnAddLocation.setVisible(false);
+            }
+        }
     }
 
     /**
@@ -379,6 +390,10 @@ public class PanelTabLocations extends JPanel {
     }//GEN-LAST:event_btnAddLocationActionPerformed
 
     private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            return;
+        }
         if (tblLocation.getSelectedRowCount() > 0) {
             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                     "Are you sure you want to delete the Place(s)? This will delete all Periods, Observations and files linked to this Place(s) as well.",

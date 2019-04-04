@@ -18,6 +18,7 @@ import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class PanelTabElements extends javax.swing.JPanel {
@@ -38,6 +39,11 @@ public class PanelTabElements extends javax.swing.JPanel {
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtSearch);
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            btnDeleteElement.setEnabled(false);
+            btnDeleteElement.setVisible(false);
+        }
     }
 
     /**
@@ -376,6 +382,10 @@ public class PanelTabElements extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddElementActionPerformed
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            return;
+        }
         if (tblElement.getSelectedRowCount() > 0) {
             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                         "Are you sure you want to delete the Creature(s)?  This will delete all Observations and files linked to this Creature as well.",

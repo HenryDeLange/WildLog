@@ -52,6 +52,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -66,6 +67,7 @@ import wildlog.ui.utils.UtilsUI;
 import static wildlog.ui.utils.UtilsUI.doClipboardCopy;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogFileExtentions;
 
 
@@ -309,6 +311,26 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 txtSearch.requestFocus();
             }
         });
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            btnINaturalist.setEnabled(false);
+            btnINaturalist.setVisible(false);
+            if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
+                // Volunteers aren't allowed to change the location or visit once it has been set
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (tblLocation.getSelectedRowCount() > 0) {
+                            tblLocation.setEnabled(false);
+                            txtSearchLocation.setEnabled(false);
+                        }
+                        if (tblVisit.getSelectedRowCount() > 0) {
+                            tblVisit.setEnabled(false);
+                        }
+                    }
+                });
+            }
+        }
     }
 
     private void uploadFiles(List<File> inFiles) {

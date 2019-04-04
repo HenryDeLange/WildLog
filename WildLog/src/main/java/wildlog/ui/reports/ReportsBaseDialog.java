@@ -107,6 +107,13 @@ public class ReportsBaseDialog extends JFrame {
                 setupReportList();
             }
         });
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            pnlExport.setEnabled(false);
+            pnlExport.setVisible(false);
+            btnExport.setEnabled(false);
+            btnExport.setVisible(false);
+        }
     }
     
     private void setupReportList() {
@@ -149,15 +156,17 @@ public class ReportsBaseDialog extends JFrame {
         reports.add(new VisitChart(lstFilteredData, lblReportDescription, this));
         reports.add(new SightingPropertiesChart(lstFilteredData, lblReportDescription, this));
         reports.add(new DayAndNightChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new DurationChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new TimelineChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new EventTimelineChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new RelationshipsChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription, this));
-        reports.add(new TextReports(lstFilteredData, lblReportDescription, this));
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new DurationChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new TimelineChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new EventTimelineChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new RelationshipsChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new TextReports(lstFilteredData, lblReportDescription, this));
+        }
         // Add the reports
         for (final AbstractReport<Sighting> report : reports) {
             VBox vBox = new VBox(5);
@@ -237,7 +246,7 @@ public class ReportsBaseDialog extends JFrame {
         jLabel1 = new javax.swing.JLabel();
         cmdElementNameOption = new javax.swing.JComboBox<>();
         pnlExport = new javax.swing.JPanel();
-        bntExport = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         pnlFilters = new javax.swing.JPanel();
         btnFilterProperties = new javax.swing.JButton();
         btnFilterElement = new javax.swing.JButton();
@@ -305,17 +314,17 @@ public class ReportsBaseDialog extends JFrame {
         pnlExport.setBackground(new java.awt.Color(179, 198, 172));
         pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        bntExport.setBackground(new java.awt.Color(179, 198, 172));
-        bntExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        bntExport.setText("Export Chart");
-        bntExport.setToolTipText("Export the active chart to one of many export formats.");
-        bntExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        bntExport.setFocusPainted(false);
-        bntExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        bntExport.setIconTextGap(10);
-        bntExport.addActionListener(new java.awt.event.ActionListener() {
+        btnExport.setBackground(new java.awt.Color(179, 198, 172));
+        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        btnExport.setText("Export Chart");
+        btnExport.setToolTipText("Export the active chart to one of many export formats.");
+        btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExport.setFocusPainted(false);
+        btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExport.setIconTextGap(10);
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntExportActionPerformed(evt);
+                btnExportActionPerformed(evt);
             }
         });
 
@@ -325,14 +334,14 @@ public class ReportsBaseDialog extends JFrame {
             pnlExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlExportLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(bntExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         pnlExportLayout.setVerticalGroup(
             pnlExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlExportLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(bntExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
 
@@ -556,7 +565,7 @@ public class ReportsBaseDialog extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bntExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExportActionPerformed
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
         if (activeReport != null) {
             // The snapshot needs to be loaded from a JavaFX thread
             final JFrame parent = this;
@@ -584,7 +593,7 @@ public class ReportsBaseDialog extends JFrame {
                 }
             });
         }
-    }//GEN-LAST:event_bntExportActionPerformed
+    }//GEN-LAST:event_btnExportActionPerformed
 
     private List<Object[]> getFinalChartData(Chart inChart) {
         List<Object[]> lstFinalData = new ArrayList();
@@ -765,7 +774,7 @@ public class ReportsBaseDialog extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bntExport;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnFilterElement;
     private javax.swing.JButton btnFilterLocation;
     private javax.swing.JButton btnFilterProperties;

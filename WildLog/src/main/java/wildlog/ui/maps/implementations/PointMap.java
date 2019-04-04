@@ -30,6 +30,7 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.ui.maps.implementations.helpers.UtilsMaps;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogPaths;
 
 
@@ -68,19 +69,21 @@ public class PointMap extends AbstractMap<Sighting> {
         lstCustomButtons.add(btnPointMapBing);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
-        Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
-        btnOpenInBrowser.setCursor(Cursor.HAND);
-        btnOpenInBrowser.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                if (displayedTemplate != null && !displayedTemplate.isEmpty()) {
-                    Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_TEMPORARY.getAbsoluteFullPath().resolve("TempMap_" + System.currentTimeMillis() + ".html");
-                    UtilsFileProcessing.createFileFromBytes(displayedTemplate.getBytes(), toFile);
-                    UtilsFileProcessing.openFile(toFile);
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
+            btnOpenInBrowser.setCursor(Cursor.HAND);
+            btnOpenInBrowser.setOnAction(new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    if (displayedTemplate != null && !displayedTemplate.isEmpty()) {
+                        Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_TEMPORARY.getAbsoluteFullPath().resolve("TempMap_" + System.currentTimeMillis() + ".html");
+                        UtilsFileProcessing.createFileFromBytes(displayedTemplate.getBytes(), toFile);
+                        UtilsFileProcessing.openFile(toFile);
+                    }
                 }
-            }
-        });
-        lstCustomButtons.add(btnOpenInBrowser);
+            });
+            lstCustomButtons.add(btnOpenInBrowser);
+        }
         // Include sighting details (performance)
         CheckBox chkShowDetails = new CheckBox("Include Observation Details");
         chkShowDetails.setCursor(Cursor.HAND);

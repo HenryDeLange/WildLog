@@ -24,6 +24,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.AdvancedDialog;
 import wildlog.ui.dialogs.ExportDialog;
@@ -43,6 +44,7 @@ import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {
@@ -76,7 +78,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnDeleteSighting.setEnabled(false);
             btnEditSighting.setEnabled(false);
             btnGoElement.setEnabled(false);
-            btnHTML.setEnabled(false);
+            btnExport.setEnabled(false);
             btnMapSighting.setEnabled(false);
             btnNextImage.setEnabled(false);
             btnNextImageSighting.setEnabled(false);
@@ -159,6 +161,23 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpEndDate.getComponent(1).setBackground(visitIncludes.getBackground());
         // Scroll to the top of the text areas
         txtDescription.setCaretPosition(0);
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            btnExport.setEnabled(false);
+            btnExport.setVisible(false);
+            if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
+                btnDeleteSighting.setEnabled(false);
+                btnDeleteSighting.setVisible(false);
+                btnDeleteImage.setEnabled(false);
+                btnDeleteImage.setVisible(false);
+                btnReport.setEnabled(false);
+                btnReport.setVisible(false);
+                btnSlideshow.setEnabled(false);
+                btnSlideshow.setVisible(false);
+                btnAdvanced.setEnabled(false);
+                btnAdvanced.setVisible(false);
+            }
+        }
     }
 
     private void uploadFiles(List<File> inFiles) {
@@ -313,7 +332,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnGoLocation = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
         btnMapSighting = new javax.swing.JButton();
-        btnHTML = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         btnAdvanced = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
         btnSlideshow = new javax.swing.JButton();
@@ -585,18 +604,18 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
-        btnHTML.setBackground(new java.awt.Color(230, 228, 240));
-        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        btnHTML.setText("Export");
-        btnHTML.setToolTipText("Show available exports for this Period.");
-        btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnHTML.setFocusPainted(false);
-        btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnHTML.setName("btnHTML"); // NOI18N
-        btnHTML.addActionListener(new java.awt.event.ActionListener() {
+        btnExport.setBackground(new java.awt.Color(230, 228, 240));
+        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        btnExport.setText("Export");
+        btnExport.setToolTipText("Show available exports for this Period.");
+        btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExport.setFocusPainted(false);
+        btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExport.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExport.setName("btnExport"); // NOI18N
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHTMLActionPerformed(evt);
+                btnExportActionPerformed(evt);
             }
         });
 
@@ -673,7 +692,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(btnSlideshow, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
                         .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -702,7 +721,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGap(3, 3, 3)
                         .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
-                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
                         .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
@@ -1179,7 +1198,12 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
-       if (tblSightings.getSelectedRowCount() > 0) {
+       // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
+            return;
+        }
+        if (tblSightings.getSelectedRowCount() > 0) {
            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                    "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
                    "Delete Observations(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -1336,7 +1360,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
     }//GEN-LAST:event_tblSightingsMouseClicked
 
-    private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
             List<Sighting> lstSightings = null;
             if (tblSightings.getSelectedRowCount() > 0) {
@@ -1349,7 +1373,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             ExportDialog dialog = new ExportDialog(app, null, null, visit, null, lstSightings);
             dialog.setVisible(true);
         }
-    }//GEN-LAST:event_btnHTMLActionPerformed
+    }//GEN-LAST:event_btnExportActionPerformed
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
@@ -1523,9 +1547,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteSighting;
     private javax.swing.JButton btnEditSighting;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnGoElement;
     private javax.swing.JButton btnGoLocation;
-    private javax.swing.JButton btnHTML;
     private javax.swing.JButton btnMapSighting;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnNextImageSighting;

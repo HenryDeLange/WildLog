@@ -25,6 +25,7 @@ import wildlog.ui.panels.PanelVisit;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogPaths;
 
 
@@ -50,6 +51,13 @@ public class AdvancedDialog extends JDialog {
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            btnMergeSightings.setEnabled(false);
+            btnMergeSightings.setVisible(false);
+            btnMoveVisit.setEnabled(false);
+            btnMoveVisit.setVisible(false);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -61,10 +69,10 @@ public class AdvancedDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnCorrectTime = new javax.swing.JButton();
         btnSetAllGPS = new javax.swing.JButton();
         btnSetSunAndMoon = new javax.swing.JButton();
         btnSetDuration = new javax.swing.JButton();
-        btnCorrectTime = new javax.swing.JButton();
         btnMergeSightings = new javax.swing.JButton();
         btnMoveVisit = new javax.swing.JButton();
         btnDuplicateSightings = new javax.swing.JButton();
@@ -78,18 +86,37 @@ public class AdvancedDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
+        btnCorrectTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/AdjustTime.png"))); // NOI18N
+        btnCorrectTime.setText("Adjust the Date and Time for all Observations");
+        btnCorrectTime.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
+        btnCorrectTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCorrectTime.setFocusPainted(false);
+        btnCorrectTime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCorrectTime.setIconTextGap(8);
+        btnCorrectTime.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnCorrectTime.setMaximumSize(new java.awt.Dimension(450, 35));
+        btnCorrectTime.setMinimumSize(new java.awt.Dimension(450, 35));
+        btnCorrectTime.setName("btnCorrectTime"); // NOI18N
+        btnCorrectTime.setPreferredSize(new java.awt.Dimension(450, 35));
+        btnCorrectTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCorrectTimeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCorrectTime);
+
         btnSetAllGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnSetAllGPS.setText("Set one GPS for all Observations (also recalculates Sun and Moon)");
+        btnSetAllGPS.setText("Set one GPS Point for all Observations (also recalculates Sun and Moon)");
         btnSetAllGPS.setToolTipText("All Observations for this Period will be assigned the specified GPS value. This will also update the Sun and Moon Phase.");
         btnSetAllGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetAllGPS.setFocusPainted(false);
         btnSetAllGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetAllGPS.setIconTextGap(6);
         btnSetAllGPS.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnSetAllGPS.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnSetAllGPS.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnSetAllGPS.setMaximumSize(new java.awt.Dimension(450, 35));
+        btnSetAllGPS.setMinimumSize(new java.awt.Dimension(450, 35));
         btnSetAllGPS.setName("btnSetAllGPS"); // NOI18N
-        btnSetAllGPS.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnSetAllGPS.setPreferredSize(new java.awt.Dimension(450, 35));
         btnSetAllGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetAllGPSActionPerformed(evt);
@@ -105,10 +132,10 @@ public class AdvancedDialog extends JDialog {
         btnSetSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetSunAndMoon.setIconTextGap(6);
         btnSetSunAndMoon.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnSetSunAndMoon.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnSetSunAndMoon.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnSetSunAndMoon.setMaximumSize(new java.awt.Dimension(450, 35));
+        btnSetSunAndMoon.setMinimumSize(new java.awt.Dimension(450, 35));
         btnSetSunAndMoon.setName("btnSetSunAndMoon"); // NOI18N
-        btnSetSunAndMoon.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnSetSunAndMoon.setPreferredSize(new java.awt.Dimension(450, 35));
         btnSetSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetSunAndMoonActionPerformed(evt);
@@ -124,35 +151,16 @@ public class AdvancedDialog extends JDialog {
         btnSetDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetDuration.setIconTextGap(8);
         btnSetDuration.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnSetDuration.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnSetDuration.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnSetDuration.setMaximumSize(new java.awt.Dimension(450, 35));
+        btnSetDuration.setMinimumSize(new java.awt.Dimension(450, 35));
         btnSetDuration.setName("btnSetDuration"); // NOI18N
-        btnSetDuration.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnSetDuration.setPreferredSize(new java.awt.Dimension(450, 35));
         btnSetDuration.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetDurationActionPerformed(evt);
             }
         });
         getContentPane().add(btnSetDuration);
-
-        btnCorrectTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/AdjustTime.png"))); // NOI18N
-        btnCorrectTime.setText("Adjust the Date and Time for all Observations");
-        btnCorrectTime.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
-        btnCorrectTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCorrectTime.setFocusPainted(false);
-        btnCorrectTime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCorrectTime.setIconTextGap(8);
-        btnCorrectTime.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnCorrectTime.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnCorrectTime.setMinimumSize(new java.awt.Dimension(375, 35));
-        btnCorrectTime.setName("btnCorrectTime"); // NOI18N
-        btnCorrectTime.setPreferredSize(new java.awt.Dimension(375, 35));
-        btnCorrectTime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCorrectTimeActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnCorrectTime);
 
         btnMergeSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
         btnMergeSightings.setText("Move Files from one Observation to another Observation");
@@ -162,10 +170,10 @@ public class AdvancedDialog extends JDialog {
         btnMergeSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMergeSightings.setIconTextGap(8);
         btnMergeSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnMergeSightings.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnMergeSightings.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnMergeSightings.setMaximumSize(new java.awt.Dimension(450, 35));
+        btnMergeSightings.setMinimumSize(new java.awt.Dimension(450, 35));
         btnMergeSightings.setName("btnMergeSightings"); // NOI18N
-        btnMergeSightings.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnMergeSightings.setPreferredSize(new java.awt.Dimension(450, 35));
         btnMergeSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMergeSightingsActionPerformed(evt);
@@ -181,10 +189,10 @@ public class AdvancedDialog extends JDialog {
         btnMoveVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMoveVisit.setIconTextGap(6);
         btnMoveVisit.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnMoveVisit.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnMoveVisit.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnMoveVisit.setMaximumSize(new java.awt.Dimension(450, 35));
+        btnMoveVisit.setMinimumSize(new java.awt.Dimension(450, 35));
         btnMoveVisit.setName("btnMoveVisit"); // NOI18N
-        btnMoveVisit.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnMoveVisit.setPreferredSize(new java.awt.Dimension(450, 35));
         btnMoveVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMoveVisitActionPerformed(evt);
@@ -200,10 +208,10 @@ public class AdvancedDialog extends JDialog {
         btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDuplicateSightings.setIconTextGap(8);
         btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(450, 35));
+        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(450, 35));
         btnDuplicateSightings.setName("btnDuplicateSightings"); // NOI18N
-        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(450, 35));
         btnDuplicateSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDuplicateSightingsActionPerformed(evt);
@@ -219,10 +227,10 @@ public class AdvancedDialog extends JDialog {
         btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnChecklist.setIconTextGap(8);
         btnChecklist.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnChecklist.setMaximumSize(new java.awt.Dimension(375, 35));
-        btnChecklist.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnChecklist.setMaximumSize(new java.awt.Dimension(450, 35));
+        btnChecklist.setMinimumSize(new java.awt.Dimension(450, 35));
         btnChecklist.setName("btnChecklist"); // NOI18N
-        btnChecklist.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnChecklist.setPreferredSize(new java.awt.Dimension(450, 35));
         btnChecklist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChecklistActionPerformed(evt);

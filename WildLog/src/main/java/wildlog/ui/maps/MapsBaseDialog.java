@@ -39,6 +39,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
+import wildlog.data.enums.WildLogUserTypes;
 import wildlog.ui.dialogs.ExportDialogForReportsAndMaps;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
@@ -56,6 +57,7 @@ import wildlog.ui.maps.implementations.WebDistributionMap;
 import wildlog.ui.maps.implementations.helpers.AbstractGeoToolsMap;
 import wildlog.ui.maps.implementations.helpers.AbstractMap;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class MapsBaseDialog extends JFrame {
@@ -109,6 +111,13 @@ public class MapsBaseDialog extends JFrame {
         // Copy the bundled maps to the WorkSpace
         // Note: Dit mag lank vat die eerste keer, maar dis hopelik steeds beter om dit hier te doen en te wag (vs. multihtreaded as die program begin)
         UtilsFileProcessing.copyMapLayersWithPopup();
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            pnlExport.setEnabled(false);
+            pnlExport.setVisible(false);
+            btnExport.setEnabled(false);
+            btnExport.setVisible(false);
+        }
     }
     
     private void setupMapList() {
@@ -151,14 +160,21 @@ public class MapsBaseDialog extends JFrame {
         List<AbstractMap<Sighting>> lstMaps = new ArrayList<>(10);
         lstMaps.add(new PointMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new DistributionMap(lstFilteredData, elementID, lblMapDescription, this));
-        lstMaps.add(new WebDistributionMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new BiomeMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, this));
-        lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, this));
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription, this));
+            lstMaps.add(new DistributionMap(lstFilteredData, elementID, lblMapDescription, this));
+            lstMaps.add(new WebDistributionMap(lstFilteredData, lblMapDescription, this));
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER)) {
+            lstMaps.add(new BiomeMap(lstFilteredData, lblMapDescription, this));
+            lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, this));
+            lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));
+            lstMaps.add(new OtherMap(lstFilteredData, lblMapDescription, this));
+            lstMaps.add(new CustomLayersMap(lstFilteredData, lblMapDescription, this));
+        }
         // Add the maps
         for (final AbstractMap<Sighting> map : lstMaps) {
             VBox vBox = new VBox(10);
@@ -211,7 +227,7 @@ public class MapsBaseDialog extends JFrame {
         btnZoomOut = new javax.swing.JButton();
         btnIdentify = new javax.swing.JButton();
         pnlExport = new javax.swing.JPanel();
-        bntExport = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         pnlFilters = new javax.swing.JPanel();
         btnFilterProperties = new javax.swing.JButton();
         btnFilterElement = new javax.swing.JButton();
@@ -320,17 +336,17 @@ public class MapsBaseDialog extends JFrame {
         pnlExport.setBackground(new java.awt.Color(172, 198, 183));
         pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Map Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        bntExport.setBackground(new java.awt.Color(179, 198, 172));
-        bntExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        bntExport.setText("Export Map");
-        bntExport.setToolTipText("Export the shown map.");
-        bntExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        bntExport.setFocusPainted(false);
-        bntExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        bntExport.setIconTextGap(10);
-        bntExport.addActionListener(new java.awt.event.ActionListener() {
+        btnExport.setBackground(new java.awt.Color(179, 198, 172));
+        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        btnExport.setText("Export Map");
+        btnExport.setToolTipText("Export the shown map.");
+        btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExport.setFocusPainted(false);
+        btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExport.setIconTextGap(10);
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bntExportActionPerformed(evt);
+                btnExportActionPerformed(evt);
             }
         });
 
@@ -340,14 +356,14 @@ public class MapsBaseDialog extends JFrame {
             pnlExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlExportLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(bntExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         pnlExportLayout.setVerticalGroup(
             pnlExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlExportLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(bntExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
 
@@ -571,7 +587,7 @@ public class MapsBaseDialog extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void bntExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExportActionPerformed
+    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
         if (activeMap != null) {
             // The snapshot needs to be loaded from a JavaFX thread
             final JFrame parent = this;
@@ -599,7 +615,7 @@ public class MapsBaseDialog extends JFrame {
                 }
             });
         }
-    }//GEN-LAST:event_bntExportActionPerformed
+    }//GEN-LAST:event_btnExportActionPerformed
     
     private void btnFilterElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementActionPerformed
         FilterDataListDialog<Element> dialog = new FilterDataListDialog<Element>(this, lstOriginalData, lstFilteredElements, Element.class);
@@ -766,7 +782,7 @@ public class MapsBaseDialog extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bntExport;
+    private javax.swing.JButton btnExport;
     private javax.swing.JButton btnFilterElement;
     private javax.swing.JButton btnFilterLocation;
     private javax.swing.JButton btnFilterProperties;

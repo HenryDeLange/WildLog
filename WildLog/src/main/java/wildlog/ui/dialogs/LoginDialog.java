@@ -1,22 +1,31 @@
 package wildlog.ui.dialogs;
 
+import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.encryption.PasswordEncryptor;
+import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.WildLogApplicationTypes;
+import wildlog.utils.WildLogPaths;
 
 
 public class LoginDialog extends JDialog {
     private final WildLogApp app = WildLogApp.getApplication();
     private boolean loginSuccess = false;
 
-    public LoginDialog(JFrame inParent) {
-        super(inParent, true);
+    public LoginDialog() {
+        super(new TaskbarFrame("WildLog Login", new ImageIcon(
+                WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage()));
         WildLogApp.LOGGER.log(Level.INFO, "[LoginDialog]");
         initComponents();
         lblWorkspaceName.setText(WildLogApp.getApplication().getWildLogOptions().getWorkspaceName());
@@ -28,8 +37,11 @@ public class LoginDialog extends JDialog {
                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             lblBannerLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-horizontal-400px.png")));
         }
+        txtUsername.requestFocus();
         pack();
         setLocationRelativeTo(null);
+        UtilsDialog.addModalBackgroundPanel(this, null);
+        UtilsDialog.addEscapeKeyListener(this);
     }
 
     /**
@@ -48,12 +60,13 @@ public class LoginDialog extends JDialog {
         lblWorkspaceName = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
+        btnSwitchWorkspace = new javax.swing.JButton();
         btnLogin = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Workspace Login");
+        setTitle("WildLog Login");
         setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
         setModal(true);
         setResizable(false);
@@ -67,7 +80,7 @@ public class LoginDialog extends JDialog {
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblTitle.setText("Workspace Login");
+        lblTitle.setText("WildLog Workspace Login");
         lblTitle.setOpaque(true);
 
         javax.swing.GroupLayout pnlHeaderLayout = new javax.swing.GroupLayout(pnlHeader);
@@ -77,7 +90,7 @@ public class LoginDialog extends JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlHeaderLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addGroup(pnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                    .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
                     .addComponent(lblBannerLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         pnlHeaderLayout.setVerticalGroup(
@@ -108,6 +121,17 @@ public class LoginDialog extends JDialog {
             }
         });
 
+        btnSwitchWorkspace.setText("Switch");
+        btnSwitchWorkspace.setToolTipText("Switch to a different WildLog Workspace.");
+        btnSwitchWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSwitchWorkspace.setFocusPainted(false);
+        btnSwitchWorkspace.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSwitchWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSwitchWorkspaceActionPerformed(evt);
+            }
+        });
+
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.setToolTipText("Log into the Workspace.");
@@ -135,7 +159,9 @@ public class LoginDialog extends JDialog {
                     .addGroup(pnlBodyLayout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblWorkspaceName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSwitchWorkspace))
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(pnlBodyLayout.createSequentialGroup()
                         .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,28 +171,29 @@ public class LoginDialog extends JDialog {
                         .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtPassword)
                             .addComponent(txtUsername)))
-                    .addComponent(btnLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE))
+                    .addComponent(btnLogin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(15, 15, 15))
         );
         pnlBodyLayout.setVerticalGroup(
             pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlBodyLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addContainerGap()
                 .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(lblWorkspaceName))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSwitchWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
-                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
                 .addGap(15, 15, 15))
         );
 
@@ -197,12 +224,53 @@ public class LoginDialog extends JDialog {
         }
     }//GEN-LAST:event_txtPasswordKeyPressed
 
+    private void btnSwitchWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchWorkspaceActionPerformed
+        if (WildLogApp.configureWildLogHomeBasedOnFileBrowser(null, false)) {
+            // Write first
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().resolve("wildloghome").toFile()));
+                writer.write(WildLogPaths.getFullWorkspacePrefix().toString());
+                writer.flush();
+            }
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            finally {
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                }
+            }
+            // Shutdown
+            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                    "The WildLog Workspace has been changed to: " + System.lineSeparator() 
+                    + WildLogPaths.getFullWorkspacePrefix().toString() + System.lineSeparator()
+                    + "Please restart the application.",
+                    "Workspace Changed!", JOptionPane.INFORMATION_MESSAGE);
+            app.quit(evt);
+        }
+    }//GEN-LAST:event_btnSwitchWorkspaceActionPerformed
+
     public boolean isLoginSuccess() {
         return loginSuccess;
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (!visible) {
+            ((TaskbarFrame) getParent()).dispose();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnSwitchWorkspace;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -215,4 +283,15 @@ public class LoginDialog extends JDialog {
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
+}
+
+class TaskbarFrame extends JFrame {
+    TaskbarFrame(String inTitle, Image inIcon) {
+        super(inTitle);
+        setUndecorated(true);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        setIconImage(inIcon);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    }
 }

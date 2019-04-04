@@ -398,7 +398,7 @@
                           <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                               <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                                   <Component id="btnSlideshow" min="-2" pref="110" max="-2" attributes="0"/>
-                                  <Component id="btnHTML" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnExport" min="-2" pref="110" max="-2" attributes="0"/>
                               </Group>
                               <Component id="btnAddSighting" min="-2" pref="110" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="0" attributes="0">
@@ -431,7 +431,7 @@
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="btnSlideshow" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="btnHTML" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="btnExport" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -577,7 +577,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBrowseActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnHTML">
+            <Component class="javax.swing.JButton" name="btnExport">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="e3" green="f0" red="e3" type="rgb"/>
@@ -595,10 +595,10 @@
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 8, 2, 8]"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="btnHTML" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="btnExport" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHTMLActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExportActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

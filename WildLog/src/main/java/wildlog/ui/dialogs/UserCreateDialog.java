@@ -200,9 +200,9 @@ public class UserCreateDialog extends JDialog {
                     "Invalid Username", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (txtPassword.getPassword() == null || txtPassword.getPassword().length < 8) {
+        if (txtPassword.getPassword() == null || txtPassword.getPassword().length < 4) {
             WLOptionPane.showMessageDialog(this,
-                    "Please specify a password that is at least 8 characters in length.",
+                    "Please specify a password that is at least 4 characters in length.",
                     "Invalid Password", JOptionPane.WARNING_MESSAGE);
             return;
         }

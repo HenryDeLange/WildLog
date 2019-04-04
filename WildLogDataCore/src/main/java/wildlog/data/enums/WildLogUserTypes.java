@@ -5,6 +5,7 @@ public enum WildLogUserTypes {
     WILDLOG_MASTER("Master"),
     OWNER("Owner"),
     ADMIN("Admin"),
+    STUDENT("Student"),
     VOLUNTEER("Volunteer"),
     NONE("");
 
