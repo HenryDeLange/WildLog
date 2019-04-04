@@ -519,7 +519,7 @@ public class INatSightingDialog extends JDialog {
         });
 
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UpdateGPS.png"))); // NOI18N
-        btnUploadImage.setText("Upload Original Image");
+        btnUploadImage.setText("Upload Original");
         btnUploadImage.setToolTipText("Upload this image to iNaturalist.");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setFocusPainted(false);
@@ -559,7 +559,7 @@ public class INatSightingDialog extends JDialog {
         });
 
         btnUploadCroppedImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UpdateGPS.png"))); // NOI18N
-        btnUploadCroppedImage.setText("Upload Cropped Image");
+        btnUploadCroppedImage.setText("Upload Cropped");
         btnUploadCroppedImage.setToolTipText("Opens a popup to select a crop of this image which will then be uploaded to iNaturalist.");
         btnUploadCroppedImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadCroppedImage.setFocusPainted(false);

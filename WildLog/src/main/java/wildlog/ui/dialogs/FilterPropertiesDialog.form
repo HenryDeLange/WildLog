@@ -55,7 +55,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnTemplates" min="-2" pref="85" max="-2" attributes="0"/>
+                      <Component id="btnTemplates" min="-2" pref="95" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="btnSelectAll" min="-2" pref="85" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -69,8 +69,8 @@
                           <Group type="102" attributes="0">
                               <Component id="jPanel7" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jPanel2" max="32767" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jPanel3" max="32767" attributes="0"/>
                       </Group>
@@ -519,7 +519,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane12" pref="137" max="32767" attributes="0"/>
+                      <Component id="jScrollPane12" pref="0" max="32767" attributes="0"/>
                       <Component id="jScrollPane11" pref="0" max="32767" attributes="0"/>
                       <Component id="jScrollPane10" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -1522,7 +1522,7 @@
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[2, 4, 2, 4]"/>
+          <Insets value="[2, 2, 2, 2]"/>
         </Property>
       </Properties>
       <Events>

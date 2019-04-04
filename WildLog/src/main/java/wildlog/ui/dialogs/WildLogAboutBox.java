@@ -16,6 +16,7 @@ public class WildLogAboutBox extends JDialog {
         UtilsDialog.setDialogToCenter(inApp.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(inApp.getMainFrame(), this);
+        pack();
     }
 
     /** This method is called from within the constructor to
@@ -128,8 +129,8 @@ public class WildLogAboutBox extends JDialog {
                 .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
-                    .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
+                    .addComponent(lblDescription)
+                    .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()

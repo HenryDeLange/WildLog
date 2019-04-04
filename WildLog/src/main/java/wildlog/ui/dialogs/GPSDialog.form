@@ -52,13 +52,13 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="tglDecimalDegrees" pref="179" max="32767" attributes="0"/>
+                              <Component id="tglDecimalDegrees" pref="185" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="tglDegMinSec" pref="180" max="32767" attributes="0"/>
+                              <Component id="tglDegMinSec" pref="186" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jPanel1" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="btnUsePrevious" alignment="1" max="32767" attributes="0"/>
                           <Component id="btnSave" alignment="1" max="32767" attributes="0"/>
@@ -445,13 +445,13 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="tglNorth" min="-2" pref="60" max="-2" attributes="0"/>
+                                          <Component id="tglNorth" min="-2" pref="65" max="-2" attributes="0"/>
                                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                          <Component id="tglEast" min="-2" pref="60" max="-2" attributes="0"/>
+                                          <Component id="tglEast" min="-2" pref="65" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="tglSouth" min="-2" pref="60" max="-2" attributes="0"/>
-                                          <Component id="tglWest" min="-2" pref="60" max="-2" attributes="0"/>
+                                          <Component id="tglSouth" min="-2" max="-2" attributes="0"/>
+                                          <Component id="tglWest" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Component id="spnAccuracy" min="-2" pref="120" max="-2" attributes="0"/>
@@ -464,7 +464,7 @@
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                       <Component id="spnLatMin" min="-2" pref="50" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                      <Component id="spnLatSec" pref="115" max="32767" attributes="0"/>
+                                      <Component id="spnLatSec" pref="120" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="spnLatDecimal" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">

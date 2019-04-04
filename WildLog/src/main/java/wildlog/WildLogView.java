@@ -252,6 +252,10 @@ public final class WildLogView extends JFrame {
         }
         // Enforce user access
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            btnStashFiles.setEnabled(true);
+            btnStashFiles.setVisible(true);
+            btnBulkImport.setEnabled(true);
+            btnBulkImport.setVisible(true);
             sprWorkspace1.setVisible(false);
             sprWorkspace2.setVisible(false);
             mnuCleanWorkspace.setEnabled(false);
@@ -295,6 +299,12 @@ public final class WildLogView extends JFrame {
             sprHelp.setVisible(false);
             mnuAboutWildNote.setEnabled(false);
             mnuAboutWildNote.setVisible(false);
+        }
+        else {
+            btnStashFiles.setEnabled(false);
+            btnStashFiles.setVisible(false);
+            btnBulkImport.setEnabled(false);
+            btnBulkImport.setVisible(false);
         }
     }
 
@@ -399,6 +409,8 @@ public final class WildLogView extends JFrame {
         lblEdition = new javax.swing.JLabel();
         lblWorkspaceUser = new javax.swing.JLabel();
         jSeparator26 = new javax.swing.JSeparator();
+        btnStashFiles = new javax.swing.JButton();
+        btnBulkImport = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         tabElement = new javax.swing.JPanel();
         tabSightings = new javax.swing.JPanel();
@@ -661,6 +673,32 @@ public final class WildLogView extends JFrame {
         jSeparator26.setForeground(new java.awt.Color(105, 123, 79));
         jSeparator26.setName("jSeparator26"); // NOI18N
 
+        btnStashFiles.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnStashFiles.setText("Stash Files");
+        btnStashFiles.setToolTipText("Stash files in the WildLog Workspace for later processing.");
+        btnStashFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnStashFiles.setEnabled(false);
+        btnStashFiles.setFocusPainted(false);
+        btnStashFiles.setName("btnStashFiles"); // NOI18N
+        btnStashFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStashFilesActionPerformed(evt);
+            }
+        });
+
+        btnBulkImport.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnBulkImport.setText("Bulk Import Files");
+        btnBulkImport.setToolTipText("Import multiple files at once using the Bulk Import feature.");
+        btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBulkImport.setEnabled(false);
+        btnBulkImport.setFocusPainted(false);
+        btnBulkImport.setName("btnBulkImport"); // NOI18N
+        btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBulkImportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
         tabHome.setLayout(tabHomeLayout);
         tabHomeLayout.setHorizontalGroup(
@@ -713,12 +751,13 @@ public final class WildLogView extends JFrame {
                                 .addGroup(tabHomeLayout.createSequentialGroup()
                                     .addGap(58, 58, 58)
                                     .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jSeparator26, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblWorkspaceUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblWorkspaceName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
-                                .addComponent(lblEdition, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jSeparator26, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                                .addComponent(lblWorkspaceUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblWorkspaceName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                                .addComponent(lblEdition, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                                .addComponent(btnStashFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -762,6 +801,10 @@ public final class WildLogView extends JFrame {
                         .addComponent(jSeparator26, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(lblEdition)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnStashFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -4376,6 +4419,14 @@ public final class WildLogView extends JFrame {
         aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutWEIActionPerformed
 
+    private void btnStashFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStashFilesActionPerformed
+// TODO
+    }//GEN-LAST:event_btnStashFilesActionPerformed
+
+    private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
+// TODO
+    }//GEN-LAST:event_btnBulkImportActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4413,6 +4464,8 @@ public final class WildLogView extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenu backupMenu;
+    private javax.swing.JButton btnBulkImport;
+    private javax.swing.JButton btnStashFiles;
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
     private javax.swing.JCheckBoxMenuItem chkMnuIncludeCountInSightingPath;

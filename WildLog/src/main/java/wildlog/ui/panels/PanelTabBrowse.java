@@ -284,7 +284,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnViewImage.setBackground(new java.awt.Color(204, 213, 186));
-        btnViewImage.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnViewImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnViewImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File_Small.png"))); // NOI18N
         btnViewImage.setText("Open");
         btnViewImage.setToolTipText("Ask the opperating system to open the original file (outside of WildLog).");
@@ -374,16 +374,16 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 treBrowsePhotoMouseReleased(evt);
             }
         });
+        treBrowsePhoto.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                treBrowsePhotoValueChanged(evt);
+            }
+        });
         treBrowsePhoto.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
             public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
             }
             public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
                 treBrowsePhotoTreeWillExpand(evt);
-            }
-        });
-        treBrowsePhoto.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
-            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
-                treBrowsePhotoValueChanged(evt);
             }
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
@@ -431,7 +431,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnViewEXIF.setBackground(new java.awt.Color(204, 213, 186));
-        btnViewEXIF.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
         btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
         btnViewEXIF.setText("EXIF");
         btnViewEXIF.setToolTipText("View the EXIF metadata for the image.");
@@ -448,7 +447,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnCopyImage.setBackground(new java.awt.Color(204, 213, 186));
-        btnCopyImage.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnCopyImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnCopyImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File_Small.png"))); // NOI18N
         btnCopyImage.setText("Copy");
         btnCopyImage.setToolTipText("Copy the original file to the opperating system's clipboard (can be pasted outside of WildLog).");
@@ -464,7 +463,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnAddFile.setBackground(new java.awt.Color(204, 213, 186));
-        btnAddFile.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnAddFile.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnAddFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAddFile.setText("Add");
         btnAddFile.setToolTipText("Upload a new file.");
@@ -480,7 +479,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnDeleteFile.setBackground(new java.awt.Color(204, 213, 186));
-        btnDeleteFile.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        btnDeleteFile.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnDeleteFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnDeleteFile.setText("Delete");
         btnDeleteFile.setToolTipText("Delete the current file.");
@@ -514,7 +513,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnZoomOut.setBackground(new java.awt.Color(204, 213, 186));
-        btnZoomOut.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
         btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ZoomOut.png"))); // NOI18N
         btnZoomOut.setText("Zoom");
         btnZoomOut.setToolTipText("Zoom the image out.");
@@ -543,7 +541,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnZoomIn.setBackground(new java.awt.Color(204, 213, 186));
-        btnZoomIn.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ZoomIn.png"))); // NOI18N
         btnZoomIn.setText("Zoom");
         btnZoomIn.setToolTipText("Zoom the image in.");
@@ -622,7 +619,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnRefreshBrowseTree, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -700,7 +697,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(4, 4, 4)
                                         .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(3, 3, 3)
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)

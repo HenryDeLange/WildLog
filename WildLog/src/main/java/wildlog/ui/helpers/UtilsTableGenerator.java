@@ -688,8 +688,8 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(1).setMinWidth(100);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
                         inTable.getColumnModel().getColumn(2).setMinWidth(100);
-                        inTable.getColumnModel().getColumn(2).setPreferredWidth(110);
-                        inTable.getColumnModel().getColumn(2).setMaxWidth(115);
+                        inTable.getColumnModel().getColumn(2).setPreferredWidth(125);
+                        inTable.getColumnModel().getColumn(2).setMaxWidth(135);
                         inTable.getColumnModel().getColumn(3).setMinWidth(50);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(60);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(105);
@@ -701,7 +701,7 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(5).setMaxWidth(80);
                         inTable.getColumnModel().getColumn(6).setMinWidth(25);
                         inTable.getColumnModel().getColumn(6).setPreferredWidth(35);
-                        inTable.getColumnModel().getColumn(6).setMaxWidth(125);
+                        inTable.getColumnModel().getColumn(6).setMaxWidth(145);
                         inTable.getColumnModel().getColumn(7).setMinWidth(20);
                         inTable.getColumnModel().getColumn(7).setPreferredWidth(30);
                         inTable.getColumnModel().getColumn(7).setMaxWidth(35);

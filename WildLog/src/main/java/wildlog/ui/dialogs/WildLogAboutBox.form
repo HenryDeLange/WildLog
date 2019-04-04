@@ -32,8 +32,8 @@
               <Component id="imageLabel" min="-2" pref="132" max="-2" attributes="1"/>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblDescription" alignment="0" pref="673" max="32767" attributes="0"/>
-                  <Component id="lblTitle" alignment="0" pref="673" max="32767" attributes="0"/>
+                  <Component id="lblDescription" alignment="0" max="32767" attributes="0"/>
+                  <Component id="lblTitle" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">

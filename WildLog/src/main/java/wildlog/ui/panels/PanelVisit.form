@@ -96,7 +96,7 @@
                   <Component id="pnlFiles" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Component id="pnlSelectedFiles" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="17" max="32767" attributes="0"/>
+                  <EmptySpace pref="20" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -167,21 +167,21 @@
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                              <Component id="btnSetMainImage" min="-2" pref="90" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="btnSetMainImage" min="-2" pref="92" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="lblNumberOfImages" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="lblNumberOfImages" min="-2" pref="46" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="btnDeleteImage" min="-2" pref="90" max="-2" attributes="0"/>
+                              <Component id="btnDeleteImage" min="-2" pref="92" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="btnPreviousImage" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="btnPreviousImage" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="260" max="-2" attributes="0"/>
-                              <Component id="btnNextImage" min="-2" pref="40" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="265" max="-2" attributes="0"/>
+                              <Component id="btnNextImage" min="-2" pref="35" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                              <Component id="btnUploadImage" min="-2" pref="220" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="btnUploadImage" min="-2" pref="230" max="-2" attributes="0"/>
                           </Group>
                           <Component id="lblImage" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -195,28 +195,28 @@
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="326" pref="326" max="326" attributes="0"/>
-                              <Component id="btnSetMainImage" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="327" max="-2" attributes="0"/>
+                              <Component id="btnSetMainImage" min="-2" pref="23" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="330" pref="330" max="330" attributes="0"/>
-                              <Component id="lblNumberOfImages" min="-2" pref="20" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="327" max="-2" attributes="0"/>
+                              <Component id="lblNumberOfImages" min="-2" pref="23" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="326" pref="326" max="326" attributes="0"/>
-                              <Component id="btnDeleteImage" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="327" max="-2" attributes="0"/>
+                              <Component id="btnDeleteImage" min="-2" pref="23" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="300" pref="300" max="300" attributes="0"/>
                               <Component id="btnPreviousImage" min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="300" pref="300" max="300" attributes="0"/>
+                              <EmptySpace min="-2" pref="300" max="-2" attributes="0"/>
                               <Component id="btnNextImage" min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="300" pref="300" max="300" attributes="0"/>
-                              <Component id="btnUploadImage" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="300" max="-2" attributes="0"/>
+                              <Component id="btnUploadImage" min="-2" pref="25" max="-2" attributes="0"/>
                           </Group>
                           <Component id="lblImage" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -243,6 +243,7 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
               </Properties>
               <Events>
@@ -324,6 +325,7 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 2, 2, 2]"/>
                 </Property>
@@ -347,6 +349,7 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 1, 2, 1]"/>
                 </Property>
@@ -389,28 +392,11 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="btnMapSighting" alignment="0" pref="110" max="32767" attributes="0"/>
-                              <Component id="btnReport" alignment="0" pref="110" max="32767" attributes="1"/>
-                              <Component id="btnSlideshow" alignment="0" pref="110" max="32767" attributes="1"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="btnExport" min="-2" pref="110" max="-2" attributes="1"/>
-                                  <Component id="btnGoLocation" min="-2" pref="110" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="btnBulkImport" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="btnAdvanced" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="btnUpdate" max="32767" attributes="0"/>
-                                  <Component id="btnBrowse" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <Component id="pnlButtonsLeft" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pnlButtonRight" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -418,245 +404,318 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="btnUpdate" min="-2" pref="60" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                              <Component id="btnBulkImport" min="-2" pref="35" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                              <Component id="btnAdvanced" min="-2" pref="33" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                              <Component id="btnBrowse" min="-2" pref="35" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnMapSighting" min="-2" pref="33" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="btnReport" min="-2" pref="33" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="btnSlideshow" min="-2" pref="33" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="btnExport" min="-2" pref="33" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Component id="btnGoLocation" min="-2" pref="35" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="pnlButtonRight" min="-2" max="-2" attributes="0"/>
+                          <Component id="pnlButtonsLeft" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="btnUpdate">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="cc" red="0" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Update.png"/>
-                </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Save and update the Period."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="name" type="java.lang.String" value="btnUpdate" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnGoLocation">
+            <Container class="javax.swing.JPanel" name="pnlButtonRight">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f0" green="e4" red="e6" type="rgb"/>
                 </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Location.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="View Place"/>
-                <Property name="toolTipText" type="java.lang.String" value="Open the tab of the the Place linked to this Period."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="iconTextGap" type="int" value="5"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 10, 2, 4]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnGoLocation" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="pnlButtonRight" noResource="true"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGoLocationActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnReport">
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnBrowse" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="btnUpdate" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="btnBulkImport" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="btnGoLocation" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="71" pref="71" max="-2" attributes="0"/>
+                                  <Component id="btnBrowse" min="-2" pref="33" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="btnUpdate" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                          <Component id="btnBulkImport" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                          <Component id="btnGoLocation" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JButton" name="btnBrowse">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Browse.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Browse"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Open the Browse tab and automatically select this Period in the tree."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 8, 2, 8]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnBrowse" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBrowseActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnGoLocation">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Location.gif"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="View Place"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Open the tab of the the Place linked to this Period."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="iconTextGap" type="int" value="5"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 10, 2, 4]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnGoLocation" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGoLocationActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnBulkImport">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Bulk Import.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Bulk Import&lt;/u&gt;&lt;/html&gt;"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Open a Bulk Import tab for this Period. You can drag-and-drop a folder on the button to quickly start the Bulk Import process."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 8, 2, 8]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnBulkImport" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBulkImportActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnUpdate">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="0" green="cc" red="0" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Update.png"/>
+                    </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Save and update the Period."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="name" type="java.lang.String" value="btnUpdate" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JPanel" name="pnlButtonsLeft">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f0" green="e4" red="e6" type="rgb"/>
                 </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Report_Small.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Charts"/>
-                <Property name="toolTipText" type="java.lang.String" value="View charts for this Period."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 8, 2, 4]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="pnlButtonsLeft" noResource="true"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnMapSighting">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="f0" green="e4" red="e6" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Maps"/>
-                <Property name="toolTipText" type="java.lang.String" value="Show maps for this Period."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 8, 2, 8]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnMapSighting" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMapSightingActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnExport">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="f0" green="e4" red="e6" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Export.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Export"/>
-                <Property name="toolTipText" type="java.lang.String" value="Show available exports for this Period."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 8, 2, 8]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnExport" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExportActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnAdvanced">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="f0" green="e4" red="e6" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Advanced"/>
-                <Property name="toolTipText" type="java.lang.String" value="View available advanced features."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 8, 2, 8]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnAdvanced" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdvancedActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnBulkImport">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="f0" green="e4" red="e6" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Bulk Import.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Bulk Import&lt;/u&gt;&lt;/html&gt;"/>
-                <Property name="toolTipText" type="java.lang.String" value="Open a Bulk Import tab for this Period. You can drag-and-drop a folder on the button to quickly start the Bulk Import process."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 8, 2, 8]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnBulkImport" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBulkImportActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnSlideshow">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="f0" green="e4" red="e6" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Slideshow_Small.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Slideshows"/>
-                <Property name="toolTipText" type="java.lang.String" value="View slideshow videos of linked images for this Period."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 8, 2, 8]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnSlideshow" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnBrowse">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="f0" green="e4" red="e6" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Browse.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Browse"/>
-                <Property name="toolTipText" type="java.lang.String" value="Open the Browse tab and automatically select this Period in the tree."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 8, 2, 8]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnBrowse" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBrowseActionPerformed"/>
-              </Events>
-            </Component>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnMapSighting" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="btnReport" alignment="0" min="-2" pref="110" max="-2" attributes="1"/>
+                              <Component id="btnSlideshow" alignment="0" min="-2" pref="110" max="-2" attributes="1"/>
+                              <Component id="btnAdvanced" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="btnExport" alignment="0" min="-2" pref="110" max="-2" attributes="1"/>
+                          </Group>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                          <Component id="btnMapSighting" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                          <Component id="btnReport" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                          <Component id="btnSlideshow" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                          <Component id="btnExport" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                          <Component id="btnAdvanced" min="-2" pref="33" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JButton" name="btnSlideshow">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Slideshow_Small.gif"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Slideshows"/>
+                    <Property name="toolTipText" type="java.lang.String" value="View slideshow videos of linked images for this Period."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 8, 2, 8]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnSlideshow" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnReport">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Report_Small.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Charts"/>
+                    <Property name="toolTipText" type="java.lang.String" value="View charts for this Period."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 8, 2, 4]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnAdvanced">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Advanced"/>
+                    <Property name="toolTipText" type="java.lang.String" value="View available advanced features."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 8, 2, 8]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnAdvanced" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAdvancedActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnMapSighting">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Maps"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Show maps for this Period."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 8, 2, 8]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnMapSighting" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMapSightingActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnExport">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Export.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Export"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Show available exports for this Period."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 8, 2, 8]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnExport" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExportActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pnlInfo">
@@ -671,7 +730,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel53" min="-2" max="-2" attributes="0"/>
@@ -892,7 +951,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="105" max="-2" attributes="0"/>
@@ -907,7 +966,7 @@
                                   <Component id="btnDeleteSighting" min="-2" pref="100" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" pref="575" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" pref="580" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -934,7 +993,7 @@
                               <EmptySpace min="20" pref="20" max="20" attributes="0"/>
                               <Component id="btnDeleteSighting" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane1" pref="341" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="346" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
@@ -1121,7 +1180,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
-                <Property name="text" type="java.lang.String" value="The Observation&apos;s linked Files:"/>
+                <Property name="text" type="java.lang.String" value="Observation Files:"/>
                 <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
               </Properties>
             </Component>
@@ -1231,7 +1290,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Creature observed:"/>
+                <Property name="text" type="java.lang.String" value="Creature:"/>
                 <Property name="name" type="java.lang.String" value="jLabel7" noResource="true"/>
               </Properties>
             </Component>

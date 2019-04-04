@@ -44,8 +44,6 @@ public class AdvancedDialog extends JDialog {
         panelVisit = inPanelVisit;
         // Auto generated code
         initComponents();
-        // Pack
-        pack();
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
@@ -58,6 +56,8 @@ public class AdvancedDialog extends JDialog {
             btnMoveVisit.setEnabled(false);
             btnMoveVisit.setVisible(false);
         }
+        // Pack
+        pack();
     }
 
     /** This method is called from within the constructor to

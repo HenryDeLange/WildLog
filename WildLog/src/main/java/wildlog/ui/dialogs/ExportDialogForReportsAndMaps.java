@@ -100,10 +100,10 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportImage.setIconTextGap(10);
         btnExportImage.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportImage.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportImage.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportImage.setMaximumSize(new java.awt.Dimension(280, 35));
+        btnExportImage.setMinimumSize(new java.awt.Dimension(280, 35));
         btnExportImage.setName("btnExportImage"); // NOI18N
-        btnExportImage.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportImage.setPreferredSize(new java.awt.Dimension(280, 35));
         btnExportImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportImageActionPerformed(evt);
@@ -112,17 +112,17 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().add(btnExportImage);
 
         btnExportCSVInputData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSVInputData.setText("Exportthe Input Data as a Spreadsheet");
+        btnExportCSVInputData.setText("Export Input Data as a Spreadsheet");
         btnExportCSVInputData.setToolTipText("Create a CSV file of all relevant Observations used by this chart or map. Can be opened in Excel, etc.");
         btnExportCSVInputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVInputData.setFocusPainted(false);
         btnExportCSVInputData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportCSVInputData.setIconTextGap(10);
         btnExportCSVInputData.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportCSVInputData.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportCSVInputData.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportCSVInputData.setMaximumSize(new java.awt.Dimension(280, 35));
+        btnExportCSVInputData.setMinimumSize(new java.awt.Dimension(280, 35));
         btnExportCSVInputData.setName("btnExportCSVInputData"); // NOI18N
-        btnExportCSVInputData.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportCSVInputData.setPreferredSize(new java.awt.Dimension(280, 35));
         btnExportCSVInputData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportCSVInputDataActionPerformed(evt);
@@ -131,17 +131,17 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         getContentPane().add(btnExportCSVInputData);
 
         btnExportCSVOutputData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        btnExportCSVOutputData.setText("Export the Output Data as a Spreadsheet");
+        btnExportCSVOutputData.setText("Export Output Data as a Spreadsheet");
         btnExportCSVOutputData.setToolTipText("Create a CSV file of the final processed data used by this chart or map. Can be opened in Excel, etc.");
         btnExportCSVOutputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVOutputData.setFocusPainted(false);
         btnExportCSVOutputData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportCSVOutputData.setIconTextGap(10);
         btnExportCSVOutputData.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportCSVOutputData.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportCSVOutputData.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportCSVOutputData.setMaximumSize(new java.awt.Dimension(280, 35));
+        btnExportCSVOutputData.setMinimumSize(new java.awt.Dimension(280, 35));
         btnExportCSVOutputData.setName("btnExportCSVOutputData"); // NOI18N
-        btnExportCSVOutputData.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportCSVOutputData.setPreferredSize(new java.awt.Dimension(280, 35));
         btnExportCSVOutputData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportCSVOutputDataActionPerformed(evt);
@@ -157,10 +157,10 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportPDF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportPDF.setIconTextGap(10);
         btnExportPDF.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportPDF.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportPDF.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportPDF.setMaximumSize(new java.awt.Dimension(280, 35));
+        btnExportPDF.setMinimumSize(new java.awt.Dimension(280, 35));
         btnExportPDF.setName("btnExportPDF"); // NOI18N
-        btnExportPDF.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportPDF.setPreferredSize(new java.awt.Dimension(280, 35));
         btnExportPDF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportPDFActionPerformed(evt);
@@ -176,10 +176,10 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTML.setIconTextGap(10);
         btnExportHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportHTML.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportHTML.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.setMaximumSize(new java.awt.Dimension(280, 35));
+        btnExportHTML.setMinimumSize(new java.awt.Dimension(280, 35));
         btnExportHTML.setName("btnExportHTML"); // NOI18N
-        btnExportHTML.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.setPreferredSize(new java.awt.Dimension(280, 35));
         btnExportHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportHTMLActionPerformed(evt);
@@ -195,10 +195,10 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportKML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportKML.setIconTextGap(11);
         btnExportKML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportKML.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnExportKML.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportKML.setMaximumSize(new java.awt.Dimension(280, 35));
+        btnExportKML.setMinimumSize(new java.awt.Dimension(280, 35));
         btnExportKML.setName("btnExportKML"); // NOI18N
-        btnExportKML.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportKML.setPreferredSize(new java.awt.Dimension(280, 35));
         btnExportKML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportKMLActionPerformed(evt);
@@ -214,10 +214,10 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPrint.setIconTextGap(10);
         btnPrint.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnPrint.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnPrint.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnPrint.setMaximumSize(new java.awt.Dimension(280, 35));
+        btnPrint.setMinimumSize(new java.awt.Dimension(280, 35));
         btnPrint.setName("btnPrint"); // NOI18N
-        btnPrint.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnPrint.setPreferredSize(new java.awt.Dimension(280, 35));
         btnPrint.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPrintActionPerformed(evt);

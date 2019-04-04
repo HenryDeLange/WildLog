@@ -69,14 +69,15 @@
                           <Component id="lblNumberOfSightings" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <Component id="pnlVisit" alignment="0" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="pnlInfo" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
                           <Component id="pnlButtons" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jSeparator1" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="pnlFiles" max="32767" attributes="0"/>
                       <Component id="pnlTables" max="32767" attributes="0"/>
@@ -102,14 +103,12 @@
                           </Group>
                           <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           <Component id="jSeparator1" min="-2" pref="1" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="pnlButtons" min="-2" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                                  <Component id="pnlButtons" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                                  <Component id="pnlInfo" min="-2" max="-2" attributes="0"/>
+                                  <Component id="pnlInfo" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -153,7 +152,7 @@
         <Component class="javax.swing.JLabel" name="lblNumberOfSightings">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Tahoma" size="10" style="0"/>
+              <Font name="Tahoma" size="12" style="0"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="name" type="java.lang.String" value="lblNumberOfSightings" noResource="true"/>
@@ -175,18 +174,18 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblImage" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnPreviousImage" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="btnPreviousImage" min="-2" pref="35" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="btnUploadImage" min="-2" pref="220" max="-2" attributes="0"/>
+                                  <Component id="btnUploadImage" min="-2" pref="230" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="btnSetMainImage" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="btnSetMainImage" min="-2" pref="92" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                      <Component id="lblNumberOfImages" min="-2" pref="40" max="-2" attributes="0"/>
+                                      <Component id="lblNumberOfImages" min="-2" pref="46" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                      <Component id="btnDeleteImage" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="btnDeleteImage" min="-2" pref="92" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="btnNextImage" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="btnNextImage" min="-2" pref="35" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -201,15 +200,15 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnPreviousImage" min="-2" pref="50" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnUploadImage" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="3" pref="3" max="3" attributes="0"/>
+                              <Component id="btnUploadImage" min="-2" pref="25" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="btnSetMainImage" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnSetMainImage" min="-2" pref="23" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                                      <Component id="lblNumberOfImages" min="-2" pref="20" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                      <Component id="lblNumberOfImages" min="-2" pref="23" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="btnDeleteImage" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnDeleteImage" min="-2" pref="23" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="btnNextImage" min="-2" pref="50" max="-2" attributes="0"/>
@@ -234,6 +233,7 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 1, 2, 1]"/>
                 </Property>
@@ -269,6 +269,7 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
               </Properties>
               <Events>
@@ -357,6 +358,7 @@
                   <Color id="Hand Cursor"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 2, 2, 2]"/>
                 </Property>
@@ -380,50 +382,48 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel48" min="-2" pref="71" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jLabel48" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Component id="txtName" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Component id="jLabel36" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                                      <Component id="jLabel36" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Component id="jScrollPane10" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="jLabel40" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                                      <Component id="jLabel40" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Component id="jScrollPane13" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel10" min="-2" pref="47" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="jLabel10" min="-2" pref="100" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="txtLongitude" alignment="0" min="-2" pref="135" max="-2" attributes="0"/>
-                                  <Component id="txtLatitude" alignment="0" min="-2" pref="135" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
-                                      <Component id="btnGPS" min="-2" max="-2" attributes="0"/>
-                                  </Group>
+                                  <Component id="txtLongitude" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
+                                  <Component id="txtLatitude" alignment="0" min="-2" pref="130" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Component id="btnGPS" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel42" max="32767" attributes="0"/>
                                   <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="cmbGameRating" pref="133" max="32767" attributes="0"/>
+                                  <Component id="cmbGameRating" pref="100" max="32767" attributes="0"/>
                                   <Component id="cmbRating" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -432,7 +432,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="txtName" max="32767" attributes="0"/>
                           <Component id="jLabel48" min="-2" pref="20" max="-2" attributes="0"/>
@@ -441,41 +441,50 @@
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel10" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
-                                  <Component id="txtLatitude" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnGPS" alignment="0" min="-2" pref="40" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                                       <Component id="txtLongitude" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                      <Component id="jLabel10" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtLatitude" alignment="0" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="cmbRating" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
-                                      <Component id="jLabel41" min="-2" pref="17" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="cmbRating" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                                              <Component id="jLabel41" min="-2" pref="17" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="jLabel42" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="cmbGameRating" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel42" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="cmbGameRating" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                                      <Component id="btnGPS" min="-2" pref="40" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="jScrollPane10" min="-2" pref="104" max="-2" attributes="0"/>
+                              <Component id="jScrollPane10" max="32767" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel40" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane13" min="-2" pref="155" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane13" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Component id="jLabel36" min="-2" max="-2" attributes="0"/>
@@ -673,21 +682,30 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <Component id="btnSunAndMoon" min="-2" pref="110" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                  </Group>
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnExport" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnSlideshow" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnReport" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnMap" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnBulkImport" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnUpdate" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="btnExport" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnSlideshow" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnReport" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnMap" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnBulkImport" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnUpdate" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="btnSunAndMoon" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                          <Component id="btnBrowse" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="btnBrowse" min="-2" pref="110" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -697,19 +715,19 @@
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="btnUpdate" min="-2" pref="60" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <Component id="btnBrowse" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="btnBulkImport" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="btnSunAndMoon" min="-2" pref="35" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="btnMap" min="-2" pref="35" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnReport" min="-2" pref="35" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnSlideshow" min="-2" pref="35" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnExport" min="-2" pref="35" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="btnBrowse" min="-2" pref="35" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnSunAndMoon" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -868,7 +886,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/SunAndMoon_big.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Sun and Moon"/>
+                <Property name="text" type="java.lang.String" value="Sun / Moon"/>
                 <Property name="toolTipText" type="java.lang.String" value="Show the Sun and Moon information for this Place."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -917,7 +935,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="btnGoVisit" min="-2" pref="90" max="-2" attributes="0"/>
@@ -932,7 +950,7 @@
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="lblNumberOfVisits" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane12" max="32767" attributes="0"/>
+                          <Component id="jScrollPane12" pref="590" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
@@ -948,7 +966,7 @@
                           <Component id="jLabel45" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
                           <Component id="lblNumberOfVisits" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="btnGoVisit" min="-2" pref="60" max="-2" attributes="0"/>
@@ -957,7 +975,7 @@
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                               <Component id="btnDeleteVisit" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jScrollPane12" pref="153" max="32767" attributes="0"/>
+                          <Component id="jScrollPane12" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
@@ -1096,24 +1114,22 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="jSeparator2" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jScrollPane11" alignment="1" pref="0" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                                      <Component id="jLabel44" min="-2" pref="250" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="rdbLocation" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                      <Component id="rdbVisit" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                                      <Component id="lblNumberOfElements" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="btnGoElement" min="-2" pref="130" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <Component id="jLabel44" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              <Component id="lblNumberOfElements" min="-2" pref="30" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                              <Component id="rdbLocation" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                              <Component id="rdbVisit" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnGoElement" min="-2" pref="90" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jScrollPane11" min="-2" pref="300" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -1126,13 +1142,15 @@
                       <Component id="jSeparator2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Component id="jLabel44" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                      <Component id="jScrollPane11" pref="174" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="jScrollPane11" pref="0" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnGoElement" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="lblNumberOfElements" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnGoElement" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="lblNumberOfElements" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="rdbLocation" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                               <Component id="rdbVisit" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
@@ -1234,7 +1252,7 @@
             <Component class="javax.swing.JLabel" name="lblNumberOfElements">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="10" style="0"/>
+                  <Font name="Tahoma" size="12" style="0"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
