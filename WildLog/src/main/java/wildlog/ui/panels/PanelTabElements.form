@@ -341,7 +341,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="List of Places where the selected Creature has been observed:"/>
+            <Property name="text" type="java.lang.String" value="Places:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="btnGoLocation">

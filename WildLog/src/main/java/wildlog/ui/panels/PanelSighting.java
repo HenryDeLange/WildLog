@@ -2305,6 +2305,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         else {
             lblNumberOfImages.setText("0 of 0");
         }
+        lblNumberOfImages.setToolTipText(lblNumberOfImages.getText());
     }
 
     private void setupSightingDateFromUIFields() {

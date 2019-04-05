@@ -154,6 +154,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             btnDeleteVisit.setEnabled(false);
             btnDeleteVisit.setVisible(false);
+            pnlSubButtons2.setVisible(false);
             btnExport.setEnabled(false);
             btnExport.setVisible(false);
             btnSlideshow.setEnabled(false);
@@ -163,6 +164,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnDeleteImage.setVisible(false);
                 btnGPS.setEnabled(false);
                 btnGPS.setVisible(false);
+                pnlSubButtons1.setVisible(false);
                 btnReport.setEnabled(false);
                 btnReport.setVisible(false);
             }
@@ -271,11 +273,13 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnMap = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
-        btnExport = new javax.swing.JButton();
-        btnSlideshow = new javax.swing.JButton();
-        btnReport = new javax.swing.JButton();
         btnSunAndMoon = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
+        pnlSubButtons1 = new javax.swing.JPanel();
+        btnReport = new javax.swing.JButton();
+        pnlSubButtons2 = new javax.swing.JPanel();
+        btnSlideshow = new javax.swing.JButton();
+        btnExport = new javax.swing.JButton();
         pnlVisit = new javax.swing.JPanel();
         jSeparator7 = new javax.swing.JSeparator();
         btnDeleteVisit = new javax.swing.JButton();
@@ -451,9 +455,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addGap(2, 2, 2)
                         .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlFilesLayout.createSequentialGroup()
-                                .addGap(0, 0, 0)
-                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
@@ -579,7 +581,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cmbGameRating, 0, 100, Short.MAX_VALUE)
                             .addComponent(cmbRating, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(43, Short.MAX_VALUE))))
         );
         pnlInfoLayout.setVerticalGroup(
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -617,19 +619,20 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGap(11, 11, 11)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addComponent(jScrollPane10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel40)
-                            .addComponent(jScrollPane13))
-                        .addGap(5, 5, 5))
-                    .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addComponent(jLabel36)
-                        .addGap(97, 97, 97))))
+                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel36))
+                .addGap(10, 10, 10))
         );
 
         pnlButtons.setBackground(new java.awt.Color(233, 239, 244));
+        pnlButtons.setMaximumSize(new java.awt.Dimension(120, 345));
+        pnlButtons.setMinimumSize(new java.awt.Dimension(120, 345));
         pnlButtons.setName("pnlButtons"); // NOI18N
+        pnlButtons.setPreferredSize(new java.awt.Dimension(120, 345));
 
         btnMap.setBackground(new java.awt.Color(233, 239, 244));
         btnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
@@ -676,51 +679,6 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
-        btnExport.setBackground(new java.awt.Color(233, 239, 244));
-        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        btnExport.setText("Export");
-        btnExport.setToolTipText("Show available exports for this Place.");
-        btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExport.setFocusPainted(false);
-        btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnExport.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnExport.setName("btnExport"); // NOI18N
-        btnExport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportActionPerformed(evt);
-            }
-        });
-
-        btnSlideshow.setBackground(new java.awt.Color(233, 239, 244));
-        btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
-        btnSlideshow.setText("Slideshows");
-        btnSlideshow.setToolTipText("View slideshow videos of linked images for this Place.");
-        btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshow.setFocusPainted(false);
-        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 8));
-        btnSlideshow.setName("btnSlideshow"); // NOI18N
-        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSlideshowActionPerformed(evt);
-            }
-        });
-
-        btnReport.setBackground(new java.awt.Color(233, 239, 244));
-        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
-        btnReport.setText("Charts");
-        btnReport.setToolTipText("View charts for this Place.");
-        btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnReport.setFocusPainted(false);
-        btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnReport.setMargin(new java.awt.Insets(2, 6, 2, 4));
-        btnReport.setName("btnReport"); // NOI18N
-        btnReport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReportActionPerformed(evt);
-            }
-        });
-
         btnSunAndMoon.setBackground(new java.awt.Color(233, 239, 244));
         btnSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
         btnSunAndMoon.setText("Sun / Moon");
@@ -748,29 +706,116 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
+        pnlSubButtons1.setBackground(new java.awt.Color(233, 239, 244));
+        pnlSubButtons1.setName("pnlSubButtons1"); // NOI18N
+
+        btnReport.setBackground(new java.awt.Color(233, 239, 244));
+        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.png"))); // NOI18N
+        btnReport.setText("Charts");
+        btnReport.setToolTipText("View charts for this Place.");
+        btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReport.setFocusPainted(false);
+        btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnReport.setMargin(new java.awt.Insets(2, 6, 2, 4));
+        btnReport.setName("btnReport"); // NOI18N
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlSubButtons1Layout = new javax.swing.GroupLayout(pnlSubButtons1);
+        pnlSubButtons1.setLayout(pnlSubButtons1Layout);
+        pnlSubButtons1Layout.setHorizontalGroup(
+            pnlSubButtons1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSubButtons1Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        pnlSubButtons1Layout.setVerticalGroup(
+            pnlSubButtons1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSubButtons1Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
+
+        pnlSubButtons2.setBackground(new java.awt.Color(233, 239, 244));
+        pnlSubButtons2.setMaximumSize(new java.awt.Dimension(110, 85));
+        pnlSubButtons2.setName("pnlSubButtons2"); // NOI18N
+        pnlSubButtons2.setPreferredSize(new java.awt.Dimension(110, 80));
+
+        btnSlideshow.setBackground(new java.awt.Color(233, 239, 244));
+        btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
+        btnSlideshow.setText("Slideshows");
+        btnSlideshow.setToolTipText("View slideshow videos of linked images for this Place.");
+        btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSlideshow.setFocusPainted(false);
+        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 8));
+        btnSlideshow.setName("btnSlideshow"); // NOI18N
+        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlideshowActionPerformed(evt);
+            }
+        });
+
+        btnExport.setBackground(new java.awt.Color(233, 239, 244));
+        btnExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        btnExport.setText("Export");
+        btnExport.setToolTipText("Show available exports for this Place.");
+        btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExport.setFocusPainted(false);
+        btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExport.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnExport.setName("btnExport"); // NOI18N
+        btnExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlSubButtons2Layout = new javax.swing.GroupLayout(pnlSubButtons2);
+        pnlSubButtons2.setLayout(pnlSubButtons2Layout);
+        pnlSubButtons2Layout.setHorizontalGroup(
+            pnlSubButtons2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSubButtons2Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(pnlSubButtons2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
+        );
+        pnlSubButtons2Layout.setVerticalGroup(
+            pnlSubButtons2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSubButtons2Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5))
+        );
+
         javax.swing.GroupLayout pnlButtonsLayout = new javax.swing.GroupLayout(pnlButtons);
         pnlButtons.setLayout(pnlButtonsLayout);
         pnlButtonsLayout.setHorizontalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlButtonsLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
             .addGroup(pnlButtonsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlSubButtons2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
                         .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(5, 5, 5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlButtonsLayout.createSequentialGroup()
-                        .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5))))
+                            .addComponent(btnSunAndMoon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnMap, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                                .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                                .addComponent(btnBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                                .addComponent(pnlSubButtons1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         pnlButtonsLayout.setVerticalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -783,15 +828,13 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(pnlSubButtons1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(pnlSubButtons2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pnlVisit.setBackground(new java.awt.Color(233, 239, 244));
@@ -859,7 +902,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
-        jLabel45.setText("List of Periods at this Place:");
+        jLabel45.setText("Periods:");
         jLabel45.setName("jLabel45"); // NOI18N
 
         lblNumberOfVisits.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -871,28 +914,30 @@ public class PanelLocation extends PanelCanSetupHeader {
         pnlVisit.setLayout(pnlVisitLayout);
         pnlVisitLayout.setHorizontalGroup(
             pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlVisitLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlVisitLayout.createSequentialGroup()
                 .addGroup(pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator7, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlVisitLayout.createSequentialGroup()
-                        .addComponent(jLabel45)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE))
+                        .addGap(5, 5, 5)
+                        .addGroup(pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlVisitLayout.createSequentialGroup()
+                                .addComponent(jLabel45)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE))))
                 .addGap(5, 5, 5))
-            .addComponent(jSeparator7)
         );
         pnlVisitLayout.setVerticalGroup(
             pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlVisitLayout.createSequentialGroup()
-                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
+                .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
                 .addGroup(pnlVisitLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -904,7 +949,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
                         .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
 
@@ -933,7 +978,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
-        jLabel44.setText("List of all Creatures seen:");
+        jLabel44.setText("Creatures:");
         jLabel44.setName("jLabel44"); // NOI18N
 
         btnGoElement.setBackground(new java.awt.Color(233, 239, 244));
@@ -970,21 +1015,13 @@ public class PanelLocation extends PanelCanSetupHeader {
         lblNumberOfElements.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
 
-        jSeparator2.setForeground(new java.awt.Color(102, 102, 102));
-        jSeparator2.setName("jSeparator2"); // NOI18N
-
         javax.swing.GroupLayout pnlTablesLayout = new javax.swing.GroupLayout(pnlTables);
         pnlTables.setLayout(pnlTablesLayout);
         pnlTablesLayout.setHorizontalGroup(
             pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTablesLayout.createSequentialGroup()
+            .addGroup(pnlTablesLayout.createSequentialGroup()
                 .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator2)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlTablesLayout.createSequentialGroup()
-                        .addComponent(jLabel44)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlTablesLayout.createSequentialGroup()
-                        .addGap(0, 0, 0)
+                    .addGroup(pnlTablesLayout.createSequentialGroup()
                         .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(rdbLocation)
@@ -992,29 +1029,30 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addComponent(rdbVisit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlTablesLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel44)
                         .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, 0))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
         pnlTablesLayout.setVerticalGroup(
             pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlTablesLayout.createSequentialGroup()
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
+                .addGap(0, 0, 0)
                 .addComponent(jLabel44)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addGap(3, 3, 3)
                 .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnGoElement, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblNumberOfElements, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(rdbLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(rdbVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0))
         );
+
+        jSeparator2.setForeground(new java.awt.Color(102, 102, 102));
+        jSeparator2.setName("jSeparator2"); // NOI18N
 
         javax.swing.GroupLayout locationIncludesLayout = new javax.swing.GroupLayout(locationIncludes);
         locationIncludes.setLayout(locationIncludesLayout);
@@ -1032,13 +1070,17 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(0, 0, 0)
-                        .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0))
+                        .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator1))
-                .addGap(5, 5, 5)
-                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlTables, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(pnlFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator2)))
+                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlTables, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
         );
         locationIncludesLayout.setVerticalGroup(
@@ -1048,6 +1090,8 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(pnlFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
                         .addComponent(pnlTables, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1058,13 +1102,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(1, 1, 1)))
+                            .addComponent(pnlInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, 0)
+                        .addComponent(pnlVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
 
@@ -1427,6 +1468,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         else {
             lblNumberOfImages.setText("0 of 0");
         }
+        lblNumberOfImages.setToolTipText(lblNumberOfImages.getText());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1477,6 +1519,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlFiles;
     private javax.swing.JPanel pnlInfo;
+    private javax.swing.JPanel pnlSubButtons1;
+    private javax.swing.JPanel pnlSubButtons2;
     private javax.swing.JPanel pnlTables;
     private javax.swing.JPanel pnlVisit;
     private javax.swing.JRadioButton rdbLocation;

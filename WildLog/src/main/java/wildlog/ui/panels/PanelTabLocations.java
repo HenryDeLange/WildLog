@@ -157,7 +157,7 @@ public class PanelTabLocations extends JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, new java.awt.Color(200, 220, 223), new java.awt.Color(168, 179, 182)));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("List of Periods at the selected Place:");
+        jLabel2.setText("Periods:");
 
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
@@ -210,7 +210,7 @@ public class PanelTabLocations extends JPanel {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("List of Creatures observed at the selected Place:");
+        jLabel1.setText("Creatures:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

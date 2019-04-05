@@ -211,7 +211,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         pnlLocationTable.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED, new java.awt.Color(219, 228, 210), new java.awt.Color(188, 200, 181)));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText("List of Places where the selected Creature has been observed:");
+        jLabel6.setText("Places:");
 
         btnGoLocation.setBackground(new java.awt.Color(206, 219, 206));
         btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
@@ -308,7 +308,7 @@ public class PanelTabElements extends javax.swing.JPanel {
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlLocationTable, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                            .addComponent(pnlLocationTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(5, 5, 5))))
         );
     }// </editor-fold>//GEN-END:initComponents

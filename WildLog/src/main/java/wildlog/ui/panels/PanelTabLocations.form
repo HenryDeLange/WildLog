@@ -255,7 +255,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="List of Periods at the selected Place:"/>
+            <Property name="text" type="java.lang.String" value="Periods:"/>
           </Properties>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane3">
@@ -341,7 +341,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="11" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="List of Creatures observed at the selected Place:"/>
+            <Property name="text" type="java.lang.String" value="Creatures:"/>
           </Properties>
         </Component>
       </SubComponents>
