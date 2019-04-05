@@ -68,7 +68,9 @@ public class InfoBox extends JPanel {
         }
         lblElementName.setText(sightingWrapper.getCachedElementName());
         lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
+        lblLatitude.setToolTipText(lblLatitude.getText());
         lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
+        lblLongitude.setToolTipText(lblLongitude.getText());
         lblImage.setIcon(sightingWrapper.getIcon());
         cmbSex.setSelectedItem(sightingWrapper.getSex());
         cmbCertainty.setSelectedItem(sightingWrapper.getCertainty());
@@ -108,6 +110,7 @@ public class InfoBox extends JPanel {
         jSeparator5 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
         cmbCertainty = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
 
         jSeparator3.setName("jSeparator3"); // NOI18N
 
@@ -138,7 +141,7 @@ public class InfoBox extends JPanel {
 
         lblDate.setText("01 Jan 2012");
         lblDate.setName("lblDate"); // NOI18N
-        add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 30, 70, -1));
+        add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 30, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Time:");
@@ -147,7 +150,7 @@ public class InfoBox extends JPanel {
 
         lblTime.setText("11:11 pm");
         lblTime.setName("lblTime"); // NOI18N
-        add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, 50, -1));
+        add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 30, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Lat:");
@@ -258,7 +261,7 @@ public class InfoBox extends JPanel {
                 spnNumberStateChanged(evt);
             }
         });
-        add(spnNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 213, 70, 22));
+        add(spnNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(166, 213, 68, 22));
 
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
         cmbSex.setSelectedItem(Sex.NONE);
@@ -271,20 +274,22 @@ public class InfoBox extends JPanel {
                 cmbSexActionPerformed(evt);
             }
         });
-        add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(164, 188, 70, 22));
+        add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(166, 188, 68, 22));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel5.setText("No.");
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jLabel5.setText("Num");
+        jLabel5.setToolTipText("Number of individuals.");
         jLabel5.setName("jLabel5"); // NOI18N
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 213, -1, 22));
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 213, -1, 22));
 
         jSeparator5.setName("jSeparator5"); // NOI18N
         add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 72, 230, 2));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel6.setText("Sex");
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jLabel6.setText("Gen");
+        jLabel6.setToolTipText("Gender of the Creature.");
         jLabel6.setName("jLabel6"); // NOI18N
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 188, -1, 22));
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 188, -1, 22));
 
         cmbCertainty.setModel(new DefaultComboBoxModel(Certainty.values()));
         cmbCertainty.setToolTipText("Observation certainty.");
@@ -296,7 +301,14 @@ public class InfoBox extends JPanel {
                 cmbCertaintyActionPerformed(evt);
             }
         });
-        add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 166, 100, 20));
+        add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(166, 166, 68, 20));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("%");
+        jLabel7.setToolTipText("Observation Certainty.");
+        jLabel7.setName("jLabel7"); // NOI18N
+        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 166, 20, 20));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -340,7 +352,9 @@ public class InfoBox extends JPanel {
         if (dialog.isSelectionMade()) {
             table.getCellEditor().stopCellEditing();
             lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
+            lblLatitude.setToolTipText(lblLatitude.getText());
             lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
+            lblLongitude.setToolTipText(lblLongitude.getText());
         }
     }//GEN-LAST:event_btnGPSActionPerformed
 
@@ -375,7 +389,9 @@ public class InfoBox extends JPanel {
             temp.setGPSAccuracyValue(GPSDialog.getPrevAccuracyValue());
             UtilsGPS.copyGpsBetweenDOs(sightingWrapper, temp);
             lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
+            lblLatitude.setToolTipText(lblLatitude.getText());
             lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
+            lblLongitude.setToolTipText(lblLongitude.getText());
         }
         else
         if (SwingUtilities.isMiddleMouseButton(evt)) {
@@ -387,7 +403,9 @@ public class InfoBox extends JPanel {
                     table.getCellEditor().stopCellEditing();
                     UtilsGPS.copyGpsBetweenDOs(sightingWrapper, temp);
                     lblLatitude.setText(UtilsGPS.getLatitudeString(sightingWrapper));
+                    lblLatitude.setToolTipText(lblLatitude.getText());
                     lblLongitude.setText(UtilsGPS.getLongitudeString(sightingWrapper));
+                    lblLongitude.setToolTipText(lblLongitude.getText());
                 }
             }
         }
@@ -428,6 +446,7 @@ public class InfoBox extends JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;

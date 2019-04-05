@@ -194,18 +194,18 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblImage" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnPreviousImage" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="btnPreviousImage" min="-2" pref="35" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="btnUploadImage" min="-2" pref="220" max="-2" attributes="0"/>
+                                  <Component id="btnUploadImage" min="-2" pref="230" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="btnSetMainImage" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="btnSetMainImage" min="-2" pref="92" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                      <Component id="lblNumberOfImages" min="-2" pref="40" max="-2" attributes="0"/>
+                                      <Component id="lblNumberOfImages" min="-2" pref="46" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                      <Component id="btnDeleteImage" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="btnDeleteImage" min="-2" pref="92" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="btnNextImage" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="btnNextImage" min="-2" pref="35" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -225,11 +225,11 @@
                               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="lblNumberOfImages" min="-2" pref="20" max="-2" attributes="0"/>
+                                      <Component id="lblNumberOfImages" min="-2" pref="23" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="btnSetMainImage" max="32767" attributes="0"/>
-                                  <Component id="btnDeleteImage" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="btnSetMainImage" min="-2" pref="23" max="-2" attributes="0"/>
+                                  <Component id="btnDeleteImage" alignment="0" min="-2" pref="23" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="btnNextImage" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
@@ -287,6 +287,7 @@
                   <Connection code="!disableEditing &amp;&amp; !bulkUploadMode &amp;&amp; !bulkEditMode" type="code"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 2, 2, 2]"/>
                 </Property>
@@ -313,6 +314,7 @@
                   <Connection code="!disableEditing &amp;&amp; !bulkUploadMode &amp;&amp; !bulkEditMode" type="code"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 1, 2, 1]"/>
                 </Property>
@@ -386,6 +388,7 @@
                   <Connection code="!disableEditing &amp;&amp; !bulkUploadMode &amp;&amp; !bulkEditMode" type="code"/>
                 </Property>
                 <Property name="focusPainted" type="boolean" value="false"/>
+                <Property name="iconTextGap" type="int" value="2"/>
                 <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
               </Properties>
               <Events>

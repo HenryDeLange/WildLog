@@ -119,12 +119,13 @@ public final class UtilsGPS {
 
     public static String getLatitudeString(DataObjectWithGPS inDataObjectWithGPS) {
         if (inDataObjectWithGPS.getLatitude() != null && !Latitudes.NONE.equals(inDataObjectWithGPS.getLatitude())) {
-            return inDataObjectWithGPS.getLatitude().getKey() + " " + DECIMAL_FORMAT.get().format(
-                    getDecimalDegree(
-                        Latitudes.NONE,
-                        inDataObjectWithGPS.getLatDegrees(),
-                        inDataObjectWithGPS.getLatMinutes(),
-                        inDataObjectWithGPS.getLatSeconds()));
+            return inDataObjectWithGPS.getLatitude().getKey() + " " + inDataObjectWithGPS.getLatitude().getSign()
+                    + DECIMAL_FORMAT.get().format(
+                            getDecimalDegree(
+                                    Latitudes.NONE,
+                                    inDataObjectWithGPS.getLatDegrees(),
+                                    inDataObjectWithGPS.getLatMinutes(),
+                                    inDataObjectWithGPS.getLatSeconds()));
         }
         else {
             return NO_GPS_POINT;
@@ -133,12 +134,13 @@ public final class UtilsGPS {
 
     public static String getLongitudeString(DataObjectWithGPS inDataObjectWithGPS) {
         if (inDataObjectWithGPS.getLongitude() != null && !Longitudes.NONE.equals(inDataObjectWithGPS.getLongitude())) {
-            return inDataObjectWithGPS.getLongitude().getKey() + " " + DECIMAL_FORMAT.get().format(
-                    getDecimalDegree(
-                        Longitudes.NONE,
-                        inDataObjectWithGPS.getLonDegrees(),
-                        inDataObjectWithGPS.getLonMinutes(),
-                        inDataObjectWithGPS.getLonSeconds()));
+            return inDataObjectWithGPS.getLongitude().getKey() + " " + inDataObjectWithGPS.getLongitude().getSign()
+                    + DECIMAL_FORMAT.get().format(
+                            getDecimalDegree(
+                                    Longitudes.NONE,
+                                    inDataObjectWithGPS.getLonDegrees(),
+                                    inDataObjectWithGPS.getLonMinutes(),
+                                    inDataObjectWithGPS.getLonSeconds()));
         }
         else {
             return NO_GPS_POINT;
