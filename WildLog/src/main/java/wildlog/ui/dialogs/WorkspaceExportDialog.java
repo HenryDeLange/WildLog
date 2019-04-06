@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -118,12 +119,23 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         chkDefaultDestinationFolder = new javax.swing.JCheckBox();
         rdbExportDefaultImagesOnly = new javax.swing.JRadioButton();
+        jSeparator3 = new javax.swing.JSeparator();
+        jSeparator4 = new javax.swing.JSeparator();
+        spnTumbnailSize = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
+        dtpStartDate = new org.jdesktop.swingx.JXDatePicker();
+        dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        chkDefaultDestinationFolder1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Export To A New Workspace");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Small.gif")).getImage());
-        setMaximumSize(new java.awt.Dimension(720, 650));
-        setMinimumSize(new java.awt.Dimension(720, 650));
+        setMinimumSize(new java.awt.Dimension(950, 640));
         setModal(true);
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
@@ -243,9 +255,9 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jLabel3.setText("<html><i>The records marked with the WildLog (W) icon will be exported. Hold down the Ctrl key to select only the record, without it's sub-records.</i></html>");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("Data:");
+        jLabel4.setText("Obscuring:");
 
-        chkOnlyFirstSighting.setText("One Observation of Creature per Period");
+        chkOnlyFirstSighting.setText("Only one Observation of a Creature per Period");
         chkOnlyFirstSighting.setToolTipText("Export only the first Observation of each Creature per Period.");
         chkOnlyFirstSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkOnlyFirstSighting.setFocusPainted(false);
@@ -268,7 +280,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         chkDefaultDestinationFolder.setFocusPainted(false);
 
         grpFiles.add(rdbExportDefaultImagesOnly);
-        rdbExportDefaultImagesOnly.setText("Default Files Only");
+        rdbExportDefaultImagesOnly.setText("First Files Only");
         rdbExportDefaultImagesOnly.setToolTipText("Include only the default (first) file in the new Workspace.");
         rdbExportDefaultImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportDefaultImagesOnly.setFocusPainted(false);
@@ -278,6 +290,30 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             }
         });
 
+        spnTumbnailSize.setModel(new javax.swing.SpinnerNumberModel(50, 50, 5120, 50));
+        spnTumbnailSize.setEnabled(false);
+
+        jLabel7.setText("px");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel8.setText("Date:");
+
+        dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
+
+        dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
+
+        jLabel9.setText("To");
+
+        jLabel10.setText("From");
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel11.setText("Archive:");
+
+        chkDefaultDestinationFolder1.setText("ZIP Workspace");
+        chkDefaultDestinationFolder1.setToolTipText("If selected the exported Workspace will be compressed into one ZIP archive.");
+        chkDefaultDestinationFolder1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkDefaultDestinationFolder1.setFocusPainted(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -286,57 +322,81 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jSeparator5)
+                        .addGap(134, 134, 134))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel10)
+                        .addGap(5, 5, 5)
+                        .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel9)
+                        .addGap(5, 5, 5)
+                        .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addGap(5, 5, 5)
-                                        .addComponent(rdbExportAllFiles)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(rdbExportImagesOnly)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(rdbExportDefaultImagesOnly)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(rdbExportNoFiles)
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(2, 2, 2)
-                                        .addComponent(rdbExportOriginalImages)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(rdbExportThumbnails))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(5, 5, 5)
-                                        .addComponent(rdbOrderByLocation)
-                                        .addGap(0, 0, 0)
-                                        .addComponent(rdbOrderByElement))
+                                    .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 824, Short.MAX_VALUE)
+                                    .addComponent(jSeparator2)
+                                    .addComponent(jSeparator4)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(10, 10, 10)
                                         .addComponent(chkReduceGPS)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(5, 5, 5)
                                         .addComponent(chkRemoveDescriptions)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(5, 5, 5)
                                         .addComponent(chkRemoveTime)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(5, 5, 5)
                                         .addComponent(chkOnlyFirstSighting))
-                                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(rdbOrderByLocation)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(rdbOrderByElement))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(rdbExportAllFiles)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(rdbExportImagesOnly)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(rdbExportDefaultImagesOnly)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(rdbExportNoFiles)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(rdbExportOriginalImages)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(rdbExportThumbnails)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(spnTumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(3, 3, 3)
+                                        .addComponent(jLabel7))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGap(10, 10, 10)
                                         .addComponent(chkIncludeWildLogApp)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(15, 15, 15)
                                         .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(chkDefaultDestinationFolder)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(chkDefaultDestinationFolder)
+                                        .addGap(15, 15, 15)
+                                        .addComponent(jLabel11)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(chkDefaultDestinationFolder1)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(5, 5, 5))))
+                        .addGap(5, 5, 5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,33 +413,53 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                 .addComponent(rdbExportImagesOnly)
                                 .addComponent(rdbExportNoFiles)
                                 .addComponent(rdbExportThumbnails)
-                                .addComponent(rdbExportDefaultImagesOnly))
+                                .addComponent(rdbExportDefaultImagesOnly)
+                                .addComponent(spnTumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7))
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(3, 3, 3)
+                        .addGap(5, 5, 5)
+                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(chkRemoveDescriptions)
                             .addComponent(chkRemoveTime)
                             .addComponent(chkReduceGPS)
                             .addComponent(chkOnlyFirstSighting)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(3, 3, 3)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(chkIncludeWildLogApp)
-                            .addComponent(jLabel6)
-                            .addComponent(chkDefaultDestinationFolder))
-                        .addGap(4, 4, 4)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rdbOrderByLocation)
-                            .addComponent(rdbOrderByElement))))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(5, 5, 5)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9)))
+                .addGap(5, 5, 5)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(chkIncludeWildLogApp)
+                    .addComponent(jLabel6)
+                    .addComponent(chkDefaultDestinationFolder)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel11)
+                        .addComponent(chkDefaultDestinationFolder1)))
+                .addGap(5, 5, 5)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdbOrderByLocation)
+                    .addComponent(rdbOrderByElement))
                 .addGap(2, 2, 2)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .addGap(5, 5, 5))
         );
 
         pack();
@@ -400,8 +480,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     destination = null;
                 }
             }
-// TODO: Toets dalk eendag dat die persoon nie 'n reeds bestaande Workspace probeer overwrite nie... (Toets dat die WildLog folder nog nie bestaan nie)
-            if (destination != null) {
+            if (destination != null && Files.isDirectory(destination) && Files.isWritable(destination) && destination.toFile().list().length == 0) {
                 app.getMainFrame().getTabbedPane().setSelectedIndex(0);
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
@@ -487,6 +566,12 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         return null;
                     }
                 });
+            }
+            else {
+                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                        "<html>Could not export the Workspace to the destination folder. "
+                                + "<br />Please make sure to select an empty folder for the exported Workspace to be written to.</html>",
+                        "Could not Export the Workspace", JOptionPane.WARNING_MESSAGE);
             }
         }
         catch (Exception ex) {
@@ -884,23 +969,34 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
     private javax.swing.JCheckBox chkDefaultDestinationFolder;
+    private javax.swing.JCheckBox chkDefaultDestinationFolder1;
     private javax.swing.JCheckBox chkIncludeWildLogApp;
     private javax.swing.JCheckBox chkOnlyFirstSighting;
     private javax.swing.JCheckBox chkReduceGPS;
     private javax.swing.JCheckBox chkRemoveDescriptions;
     private javax.swing.JCheckBox chkRemoveTime;
+    private org.jdesktop.swingx.JXDatePicker dtpEndDate;
+    private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private javax.swing.ButtonGroup grpFiles;
     private javax.swing.ButtonGroup grpImages;
     private javax.swing.ButtonGroup grpTreeOrder;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JRadioButton rdbExportAllFiles;
     private javax.swing.JRadioButton rdbExportDefaultImagesOnly;
     private javax.swing.JRadioButton rdbExportImagesOnly;
@@ -909,6 +1005,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     private javax.swing.JRadioButton rdbExportThumbnails;
     private javax.swing.JRadioButton rdbOrderByElement;
     private javax.swing.JRadioButton rdbOrderByLocation;
+    private javax.swing.JSpinner spnTumbnailSize;
     private javax.swing.JTree treWorkspace;
     // End of variables declaration//GEN-END:variables
 }

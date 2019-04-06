@@ -1200,7 +1200,7 @@ public final class WildLogView extends JFrame {
         importMenu.add(sprImport1);
 
         mnuImportIUCNList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/IUCN.gif"))); // NOI18N
-        mnuImportIUCNList.setText("Import IUCN Species List");
+        mnuImportIUCNList.setText("Import IUCN Species List (old format)");
         mnuImportIUCNList.setToolTipText("Import species names from a CSV file exported from the IUCN Red List site.");
         mnuImportIUCNList.setName("mnuImportIUCNList"); // NOI18N
         mnuImportIUCNList.addActionListener(new java.awt.event.ActionListener() {

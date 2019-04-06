@@ -392,7 +392,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/IUCN.gif"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Import IUCN Species List"/>
+                <Property name="text" type="java.lang.String" value="Import IUCN Species List (old format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Import species names from a CSV file exported from the IUCN Red List site."/>
                 <Property name="name" type="java.lang.String" value="mnuImportIUCNList" noResource="true"/>
               </Properties>
