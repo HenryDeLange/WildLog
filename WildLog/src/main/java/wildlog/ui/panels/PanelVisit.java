@@ -1475,7 +1475,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 // Save the visit
                 boolean result;
                 if (oldName == null || oldName.isEmpty()) {
-                    result = app.getDBI().createVisit(visit);
+                    result = app.getDBI().createVisit(visit, false);
                 }
                 else {
                     result = app.getDBI().updateVisit(visit, oldName);

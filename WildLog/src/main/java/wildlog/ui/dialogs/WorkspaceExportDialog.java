@@ -11,6 +11,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -51,6 +53,7 @@ import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.renderers.WorkspaceTreeCellRenderer;
 import wildlog.ui.helpers.renderers.WorkspaceTreeDataWrapper;
+import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
@@ -121,7 +124,6 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         rdbExportDefaultImagesOnly = new javax.swing.JRadioButton();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
-        spnTumbnailSize = new javax.swing.JSpinner();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
@@ -130,7 +132,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        chkDefaultDestinationFolder1 = new javax.swing.JCheckBox();
+        chkCreateZIP = new javax.swing.JCheckBox();
+        cmbThumbnailSize = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Export To A New Workspace");
@@ -204,12 +207,22 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         rdbExportOriginalImages.setToolTipText("The new Workspace will contain a copy of all the linked files.");
         rdbExportOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportOriginalImages.setFocusPainted(false);
+        rdbExportOriginalImages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbExportOriginalImagesActionPerformed(evt);
+            }
+        });
 
         grpImages.add(rdbExportThumbnails);
         rdbExportThumbnails.setText("Thumbnail Images");
         rdbExportThumbnails.setToolTipText("The images in the new Workspace will be reduced in size, the originals images will not be exported.");
         rdbExportThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportThumbnails.setFocusPainted(false);
+        rdbExportThumbnails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbExportThumbnailsActionPerformed(evt);
+            }
+        });
 
         chkReduceGPS.setText("Reduce GPS Accuracy");
         chkReduceGPS.setToolTipText("If selected all GPS points accuracy will be reduced to degrees and minutes, no seconds.");
@@ -290,13 +303,10 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             }
         });
 
-        spnTumbnailSize.setModel(new javax.swing.SpinnerNumberModel(50, 50, 5120, 50));
-        spnTumbnailSize.setEnabled(false);
-
         jLabel7.setText("px");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel8.setText("Date:");
+        jLabel8.setText("Observation Date:");
 
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
@@ -309,10 +319,17 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setText("Archive:");
 
-        chkDefaultDestinationFolder1.setText("ZIP Workspace");
-        chkDefaultDestinationFolder1.setToolTipText("If selected the exported Workspace will be compressed into one ZIP archive.");
-        chkDefaultDestinationFolder1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkDefaultDestinationFolder1.setFocusPainted(false);
+        chkCreateZIP.setText("ZIP Workspace");
+        chkCreateZIP.setToolTipText("If selected the exported Workspace will be compressed into one ZIP archive.");
+        chkCreateZIP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkCreateZIP.setFocusPainted(false);
+
+        cmbThumbnailSize.setMaximumRowCount(15);
+        cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
+        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_LARGE);
+        cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmbThumbnailSize.setEnabled(false);
+        cmbThumbnailSize.setFocusable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -376,8 +393,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                         .addGap(5, 5, 5)
                                         .addComponent(rdbExportThumbnails)
                                         .addGap(5, 5, 5)
-                                        .addComponent(spnTumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(3, 3, 3)
+                                        .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
                                         .addComponent(jLabel7))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel5)
@@ -390,7 +407,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                         .addGap(15, 15, 15)
                                         .addComponent(jLabel11)
                                         .addGap(10, 10, 10)
-                                        .addComponent(chkDefaultDestinationFolder1)))
+                                        .addComponent(chkCreateZIP)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(5, 5, 5))
@@ -414,8 +431,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                 .addComponent(rdbExportNoFiles)
                                 .addComponent(rdbExportThumbnails)
                                 .addComponent(rdbExportDefaultImagesOnly)
-                                .addComponent(spnTumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel7))
+                                .addComponent(jLabel7)
+                                .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(5, 5, 5)
                         .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -440,14 +457,15 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 .addGap(5, 5, 5)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(chkIncludeWildLogApp)
-                    .addComponent(jLabel6)
-                    .addComponent(chkDefaultDestinationFolder)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel11)
-                        .addComponent(chkDefaultDestinationFolder1)))
+                        .addComponent(chkCreateZIP))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(chkIncludeWildLogApp)
+                        .addComponent(jLabel6)
+                        .addComponent(chkDefaultDestinationFolder)))
                 .addGap(5, 5, 5)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -466,10 +484,21 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
+        if (chkCreateZIP.isSelected()) {
+            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>The automatic creation of a very large ZIP Archive might fail. "
+                        + "<br>If this happens you can still manually ZIP the Workspace after the export has completed. "
+                        + "<br><b>Do you want to continue with creating the ZIP Archive?</b></html>",
+                "ZIP Warning!", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (result != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
         try {
             final Path destination;
             if (chkDefaultDestinationFolder.isSelected() && defaultDestination != null) {
                 destination = defaultDestination;
+                Files.createDirectories(destination);
             }
             else {
                 File file = showFileChooser();
@@ -491,63 +520,78 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         setVisible(false);
                         WildLogDBI newDBI = null;
                         try {
-                            Path destinationWorkspace = destination.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
-                            Files.createDirectories(destinationWorkspace);
-                            Files.write(destinationWorkspace.resolve(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getRelativePath()).toAbsolutePath(), 
-                                    WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
-                            newDBI = new WildLogDBI_h2((destinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(
-                                    WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath().toString(), false, false);
-                            int totalNodes = getNumberOfNodes(treWorkspace.getModel());
-                            setProgress(2);
-                            setMessage("Workspace Export: " + getProgress() + "%");
-                            // Save settings to the new workspace
-                            WildLogOptions options = app.getDBI().findWildLogOptions(WildLogOptions.class);
-                            options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
-                            options.setWorkspaceID(app.getDBI().generateID());
-                            newDBI.updateWildLogOptions(options);
-                            setProgress(3);
-                            setMessage("Workspace Export: " + getProgress() + "%");
-                            // Save the selected nodes
-                            Set<String> uniqueElementsPerVisit = null;
-                            if (chkOnlyFirstSighting.isSelected()) {
-                                uniqueElementsPerVisit = new HashSet<>();
-                            }
-                            saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), totalNodes, this, new ProgressCounter(), uniqueElementsPerVisit);
-                            setProgress(98);
-                            setMessage("Workspace Export: " + getProgress() + "%");
-                            // Export the WildLog application
-                            if (chkIncludeWildLogApp.isSelected()) {
-                                Path fullApplicationFolder = WildLogApp.getACTIVEWILDLOG_CODE_FOLDER().getParent();
-                                Path desitnationFolder = destinationWorkspace.resolve(WildLogPaths.WILDLOG_BUNDLED_APPLICATION.getRelativePath());
-                                // Copy the application files
-                                Files.walkFileTree(fullApplicationFolder, new SimpleFileVisitor<Path>() {
-                                    @Override
-                                    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-                                        Files.createDirectories(desitnationFolder.resolve(fullApplicationFolder.relativize(dir)));
-                                        return FileVisitResult.CONTINUE;
-                                    }
-                                    @Override
-                                    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-                                        Files.copy(file, desitnationFolder.resolve(fullApplicationFolder.relativize(file)));
-                                        return FileVisitResult.CONTINUE;
-                                    }
-                                });
-                                setProgress(99);
+                            int totalSelectedNodes = getNumberOfSelectedNodes(treWorkspace.getModel(), (DefaultMutableTreeNode) treWorkspace.getModel().getRoot());
+                            if (totalSelectedNodes > 0) {
+                                Path destinationWorkspace = destination.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
+                                Files.createDirectories(destinationWorkspace);
+                                Files.write(destinationWorkspace.resolve(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getRelativePath()).toAbsolutePath(), 
+                                        WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
+                                newDBI = new WildLogDBI_h2((destinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(
+                                        WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath().toString(), false, false);
+                                setProgress(2);
                                 setMessage("Workspace Export: " + getProgress() + "%");
-                                // Change the properties and settings files/folders to point to the exported workspace
-                                // NOTE: Vir die paths om reg te werk moet die app gestart word vanuit dieselfde folder as die hoof JAR file.
-                                //       Dit gaan te confusing en tricky raak om die EXE files in 'n ander folder te sit.
-                                Path settingsFile = desitnationFolder.resolve("WildLogSettings").resolve("wildloghome");
-                                Path propertiesFile = desitnationFolder.resolve("application").resolve("wildlog.properties");
-                                byte[] fileBytes = Files.readAllBytes(propertiesFile);
-                                String propertiesText = new String(fileBytes, Charset.defaultCharset());
-                                int index = propertiesText.indexOf("settingsFolderLocation=") + "settingsFolderLocation=".length();
-                                propertiesText = propertiesText.substring(0, index) + propertiesFile.getParent().relativize(settingsFile.getParent()).toString().replace('\\', '/');
-                                UtilsFileProcessing.createFileFromBytes(propertiesText.getBytes(), propertiesFile);
-                                UtilsFileProcessing.createFileFromBytes("../../".getBytes(), settingsFile);
+                                // Save settings to the new workspace
+                                WildLogOptions options = app.getDBI().findWildLogOptions(WildLogOptions.class);
+                                options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
+                                options.setWorkspaceID(app.getDBI().generateID());
+                                newDBI.updateWildLogOptions(options);
+                                setProgress(3);
+                                setMessage("Workspace Export: " + getProgress() + "%");
+                                // Save the selected nodes
+                                Set<String> uniqueElementsPerVisit = null;
+                                if (chkOnlyFirstSighting.isSelected()) {
+                                    uniqueElementsPerVisit = new HashSet<>();
+                                }
+                                saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), 
+                                        totalSelectedNodes, this, new ProgressCounter(), uniqueElementsPerVisit, 
+                                        UtilsTime.getLocalDateFromDate(dtpStartDate.getDate()), UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()));
+                                newDBI.close();
+                                setProgress(95);
+                                setMessage("Workspace Export: " + getProgress() + "%");
+                                // Export the WildLog application
+                                if (chkIncludeWildLogApp.isSelected()) {
+                                    setMessage("Workspace Export - Copying the application: " + getProgress() + "%");
+                                    Path fullApplicationFolder = WildLogApp.getACTIVEWILDLOG_CODE_FOLDER().getParent();
+                                    Path desitnationFolder = destinationWorkspace.resolve(WildLogPaths.WILDLOG_BUNDLED_APPLICATION.getRelativePath());
+                                    // Copy the application files
+                                    Files.walkFileTree(fullApplicationFolder, new SimpleFileVisitor<Path>() {
+                                        @Override
+                                        public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+                                            Files.createDirectories(desitnationFolder.resolve(fullApplicationFolder.relativize(dir)));
+                                            return FileVisitResult.CONTINUE;
+                                        }
+                                        @Override
+                                        public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+                                            Files.copy(file, desitnationFolder.resolve(fullApplicationFolder.relativize(file)));
+                                            return FileVisitResult.CONTINUE;
+                                        }
+                                    });
+                                    setProgress(96);
+                                    setMessage("Workspace Export - Copying the settings: " + getProgress() + "%");
+                                    // Change the properties and settings files/folders to point to the exported workspace
+                                    // NOTE: Vir die paths om reg te werk moet die app gestart word vanuit dieselfde folder as die hoof JAR file.
+                                    //       Dit gaan te confusing en tricky raak om die EXE files in 'n ander folder te sit.
+                                    Path settingsFile = desitnationFolder.resolve("WildLogSettings").resolve("wildloghome");
+                                    Path propertiesFile = desitnationFolder.resolve("application").resolve("wildlog.properties");
+                                    byte[] fileBytes = Files.readAllBytes(propertiesFile);
+                                    String propertiesText = new String(fileBytes, Charset.defaultCharset());
+                                    int index = propertiesText.indexOf("settingsFolderLocation=") + "settingsFolderLocation=".length();
+                                    propertiesText = propertiesText.substring(0, index) + propertiesFile.getParent().relativize(settingsFile.getParent()).toString().replace('\\', '/');
+                                    UtilsFileProcessing.createFileFromBytes(propertiesText.getBytes(), propertiesFile);
+                                    UtilsFileProcessing.createFileFromBytes("../../".getBytes(), settingsFile);
+                                    setProgress(97);
+                                    setMessage("Workspace Export: " + getProgress() + "%");
+                                }
+                                // Zip the workspace
+                                if (chkCreateZIP.isSelected()) {
+                                    setMessage("Workspace Export - Creating the ZIP: " + getProgress() + "%");
+                                    UtilsCompression.zipFolder(destination.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath() + ".zip"), destination);
+                                    setProgress(99);
+                                    setMessage("Workspace Export: " + getProgress() + "%");
+                                }
+                                setProgress(100);
+                                setMessage("Workspace Export: " + getProgress() + "%");
                             }
-                            setProgress(100);
-                            setMessage("Workspace Export: " + getProgress() + "%");
                         }
                         catch (Exception ex) {
                             throw ex;
@@ -570,7 +614,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             else {
                 WLOptionPane.showMessageDialog(app.getMainFrame(),
                         "<html>Could not export the Workspace to the destination folder. "
-                                + "<br />Please make sure to select an empty folder for the exported Workspace to be written to.</html>",
+                                + "<br>Please make sure to select an empty folder for the exported Workspace to be written to.</html>",
                         "Could not Export the Workspace", JOptionPane.WARNING_MESSAGE);
             }
         }
@@ -586,15 +630,17 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         public int counter = 0;
     }
 
-    private int getNumberOfNodes(TreeModel inModel) {
-        return getNumberOfNodes(inModel, inModel.getRoot());
-    }
-
-    private int getNumberOfNodes(TreeModel inModel, Object inNode) {
-        int count = 1;
+    private int getNumberOfSelectedNodes(TreeModel inModel, DefaultMutableTreeNode inNode) {
+        int count = 0;
+        if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
+            WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
+            if (dataWrapper.isSelected()) {
+                count = 1;
+            }
+        }
         int numberOfChildren = inModel.getChildCount(inNode);
         for (int i = 0; i < numberOfChildren; i++) {
-            count += getNumberOfNodes(inModel, inModel.getChild(inNode, i));
+            count += getNumberOfSelectedNodes(inModel, (DefaultMutableTreeNode) inModel.getChild(inNode, i));
         }
         return count;
     }
@@ -620,7 +666,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     }
 
     private void saveChildren(WildLogDBI inNewDBI, Path inDestinationWorkspace, DefaultMutableTreeNode inNode, int inTotalNodes, 
-            ProgressbarTask inProgressbarTask, ProgressCounter inCounter, Set<String> inUniqueElementsPerVisit) {
+            ProgressbarTask inProgressbarTask, ProgressCounter inCounter, Set<String> inUniqueElementsPerVisit, 
+            LocalDate inStartDate, LocalDate inEndDate) {
         if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
@@ -636,7 +683,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         location.setDescription("");
                     }
                     if (inNewDBI.findLocation(location.getID(), null, Location.class) == null) {
-                        inNewDBI.createLocation(location);
+                        inNewDBI.createLocation(location, true);
                         saveFiles(inNewDBI, inDestinationWorkspace, location);
                     }
                 }
@@ -647,7 +694,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         visit.setDescription("");
                     }
                     if (inNewDBI.findVisit(visit.getID(), null, true, Visit.class) == null) {
-                        inNewDBI.createVisit(visit);
+                        inNewDBI.createVisit(visit, true);
                         saveFiles(inNewDBI, inDestinationWorkspace, visit);
                     }
                 }
@@ -655,7 +702,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 if (dataWrapper.getDataObject() instanceof Element) {
                     Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getID(), null, Element.class);
                     if (inNewDBI.findElement(element.getID(), null, Element.class) == null) {
-                        inNewDBI.createElement(element);
+                        inNewDBI.createElement(element, true);
                         saveFiles(inNewDBI, inDestinationWorkspace, element);
                     }
                 }
@@ -663,11 +710,24 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 if (dataWrapper.getDataObject() instanceof SightingWrapper) {
                     Sighting sighting = app.getDBI().findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getID(), true, Sighting.class);
                     boolean doExport = true;
+                    // Check whether to limit to only first element per visit
                     if (chkOnlyFirstSighting.isSelected()) {
                         if (!inUniqueElementsPerVisit.add(sighting.getVisitID()+ "-" + sighting.getElementID())) {
                             doExport = false;
                         }
                     }
+                    // Check dates
+                    if (doExport && inStartDate != null) {
+                        if (UtilsTime.getLocalDateFromDate(sighting.getDate()).isBefore(inStartDate)) {
+                            doExport = false;
+                        }
+                    }
+                    if (doExport && inEndDate != null) {
+                        if (UtilsTime.getLocalDateFromDate(sighting.getDate()).isAfter(inEndDate)) {
+                            doExport = false;
+                        }
+                    }
+                    // Continue to do the export if the validation (above) passed
                     if (doExport) {
                         if (chkReduceGPS.isSelected()) {
                             sighting.setLatSeconds(0.0);
@@ -699,14 +759,14 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         }
                     }
                 }
+                inCounter.counter++;
             }
-            inProgressbarTask.setTaskProgress(3 + (int)((inCounter.counter/(double)inTotalNodes)*95.0));
+            inProgressbarTask.setTaskProgress(3 + (int)(((double)inCounter.counter/(double)inTotalNodes)*92.0));
             inProgressbarTask.setMessage("Workspace Export: " + inProgressbarTask.getProgress() + "%");
-            inCounter.counter++;
         }
         for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
-            saveChildren(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter, inUniqueElementsPerVisit);
+            saveChildren(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter, inUniqueElementsPerVisit, inStartDate, inEndDate);
         }
     }
 
@@ -722,7 +782,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     Path source;
                     Path destination;
                     if (rdbExportThumbnails.isSelected() && WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                        source = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE);
+                        source = wildLogFile.getAbsoluteThumbnailPath((WildLogThumbnailSizes) cmbThumbnailSize.getSelectedItem());
                         destination = inDestinationWorkspace.resolve(wildLogFile.getRelativePath().getParent().resolve(source.getFileName()));
                     }
                     else {
@@ -818,6 +878,18 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
            rdbExportThumbnails.setEnabled(true);
        }
     }//GEN-LAST:event_rdbExportDefaultImagesOnlyActionPerformed
+
+    private void rdbExportThumbnailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbExportThumbnailsActionPerformed
+        if (rdbExportThumbnails.isSelected()) {
+            cmbThumbnailSize.setEnabled(true);
+        }
+    }//GEN-LAST:event_rdbExportThumbnailsActionPerformed
+
+    private void rdbExportOriginalImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbExportOriginalImagesActionPerformed
+        if (rdbExportOriginalImages.isSelected()) {
+            cmbThumbnailSize.setEnabled(false);
+        }
+    }//GEN-LAST:event_rdbExportOriginalImagesActionPerformed
 
     private void loadLocationTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
@@ -968,13 +1040,14 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
+    private javax.swing.JCheckBox chkCreateZIP;
     private javax.swing.JCheckBox chkDefaultDestinationFolder;
-    private javax.swing.JCheckBox chkDefaultDestinationFolder1;
     private javax.swing.JCheckBox chkIncludeWildLogApp;
     private javax.swing.JCheckBox chkOnlyFirstSighting;
     private javax.swing.JCheckBox chkReduceGPS;
     private javax.swing.JCheckBox chkRemoveDescriptions;
     private javax.swing.JCheckBox chkRemoveTime;
+    private javax.swing.JComboBox<WildLogThumbnailSizes> cmbThumbnailSize;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private javax.swing.ButtonGroup grpFiles;
@@ -1005,7 +1078,6 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     private javax.swing.JRadioButton rdbExportThumbnails;
     private javax.swing.JRadioButton rdbOrderByElement;
     private javax.swing.JRadioButton rdbOrderByLocation;
-    private javax.swing.JSpinner spnTumbnailSize;
     private javax.swing.JTree treWorkspace;
     // End of variables declaration//GEN-END:variables
 }

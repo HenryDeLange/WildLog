@@ -48,19 +48,19 @@ public final class UtilsCompression {
 
     private static List<String> generateFileList(Path inFile, List<String> inFileList, Path inFileRoot) {
         // Traverse a directory and get all (only) files
-	if (Files.isRegularFile(inFile)) {
-            // Get a relative path for using in the zip by removing the first part of the path
-            inFileList.add(inFile.toAbsolutePath().toString().substring(
-                    inFileRoot.toAbsolutePath().toString().length() + 1, 
-                    inFile.toAbsolutePath().toString().length()));
-	}
+        if (Files.isRegularFile(inFile)) {
+                // Get a relative path for using in the zip by removing the first part of the path
+                inFileList.add(inFile.toAbsolutePath().toString().substring(
+                        inFileRoot.toAbsolutePath().toString().length() + 1, 
+                        inFile.toAbsolutePath().toString().length()));
+        }
         else
-	if (Files.isDirectory(inFile)) {
-            String[] subFile = inFile.toFile().list();
-            for (String subFilename : subFile) {
-                generateFileList(inFile.resolve(subFilename), inFileList, inFileRoot);
-            }
-	}
+        if (Files.isDirectory(inFile)) {
+                String[] subFile = inFile.toFile().list();
+                for (String subFilename : subFile) {
+                    generateFileList(inFile.resolve(subFilename), inFileList, inFileRoot);
+                }
+        }
         return inFileList;
     }
     

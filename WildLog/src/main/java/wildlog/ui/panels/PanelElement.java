@@ -1066,7 +1066,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 // Save the element
                 boolean result;
                 if (oldName == null || oldName.isEmpty()) {
-                    result = app.getDBI().createElement(element);
+                    result = app.getDBI().createElement(element, false);
                 }
                 else {
                     result = app.getDBI().updateElement(element, oldName);

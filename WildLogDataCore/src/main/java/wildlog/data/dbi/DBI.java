@@ -50,9 +50,9 @@ public interface DBI {
     public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType);
     public <T extends WildLogUser> List<T> listUsers(WildLogUserTypes inType, Class<T> inReturnType);
 
-    public <T extends ElementCore> boolean createElement(T inElement);
-    public <T extends LocationCore> boolean createLocation(T inLocation);
-    public <T extends VisitCore> boolean createVisit(T inVisit);
+    public <T extends ElementCore> boolean createElement(T inElement, boolean inNewButKeepID);
+    public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButKeepID);
+    public <T extends VisitCore> boolean createVisit(T inVisit, boolean inNewButKeepID);
     public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButKeepID);
     public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile);
     public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions);

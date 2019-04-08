@@ -87,6 +87,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     
 // TODO: Add a button that does the "adjust date and time" popup for all observations
     
+// TODO: Om ding vinniger te maak kan ek 'n HashMap hou van elke file se metadata (exif) wanneer ek dit die eerste keer lees, dan later as ek safe kan dit die cache gebruik in plaas van weer die files lees
+    
 
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, Location inLocation, Visit inExistingVisit, 
             List<Path> inlstImportPaths, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
@@ -914,7 +916,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     closeTab();
                     // Save the Visit (before saving the sightings, because the Visit's ID is needed)
                     if (existingVisit == null || existingVisit.getID() == 0) {
-                        app.getDBI().createVisit(visit);
+                        app.getDBI().createVisit(visit, false);
                     }
                     else {
                         app.getDBI().updateVisit(visit, existingVisit.getName());

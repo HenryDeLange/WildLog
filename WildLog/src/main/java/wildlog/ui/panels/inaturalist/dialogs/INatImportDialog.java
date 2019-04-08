@@ -332,12 +332,12 @@ public class INatImportDialog extends JDialog {
                     setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
                     String locationName = "iNaturalist Observations";
                     if (app.getDBI().countLocations(locationName) == 0) {
-                        app.getDBI().createLocation(new Location(0, locationName));
+                        app.getDBI().createLocation(new Location(0, locationName), false);
                     }
                     Location iNatLocation = app.getDBI().findLocation(0, locationName, Location.class);
                     String visitName = "iNaturalist Import " + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now());
                     if (app.getDBI().countVisits(visitName, iNatLocation.getID()) == 0) {
-                        app.getDBI().createVisit(new Visit(0, visitName, iNatLocation.getID()));
+                        app.getDBI().createVisit(new Visit(0, visitName, iNatLocation.getID()), false);
                     }
                     Visit iNatVisit = app.getDBI().findVisit(0, visitName, false, Visit.class);
                     int added = 0;
@@ -538,7 +538,7 @@ public class INatImportDialog extends JDialog {
                     if (app.getDBI().countElements(scientificName, null) == 0) {
                         Element element = new Element(0, scientificName);
                         element.setScientificName(scientificName);
-                        app.getDBI().createElement(element);
+                        app.getDBI().createElement(element, false);
                     }
                     Element element = app.getDBI().findElement(0, scientificName, Element.class);
                     sighting.setElementID(element.getID());

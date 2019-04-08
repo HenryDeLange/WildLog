@@ -1352,7 +1352,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 // Save the location
                 boolean result;
                 if (oldName == null || oldName.isEmpty()) {
-                    result = app.getDBI().createLocation(locationWL);
+                    result = app.getDBI().createLocation(locationWL, false);
                 }
                 else {
                     result = app.getDBI().updateLocation(locationWL, oldName);

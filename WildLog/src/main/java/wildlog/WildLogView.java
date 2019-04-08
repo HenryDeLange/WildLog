@@ -2468,7 +2468,7 @@ public final class WildLogView extends JFrame {
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location(0, "WildLog_lost_and_found");
-                                    app.getDBI().createLocation(newLocation);
+                                    app.getDBI().createLocation(newLocation, false);
                                 }
                                 visit.setLocationID(newLocation.getID());
                                 // Still an issue with sightings not going to point to the correct place... (handled in the code below)
@@ -2492,7 +2492,7 @@ public final class WildLogView extends JFrame {
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location(0, "WildLog_lost_and_found");
-                                    app.getDBI().createLocation(newLocation);
+                                    app.getDBI().createLocation(newLocation, false);
                                 }
                                 sighting.setLocationID(newLocation.getID());
                                 app.getDBI().updateSighting(sighting);
@@ -2507,7 +2507,7 @@ public final class WildLogView extends JFrame {
                                 Element newElement = app.getDBI().findElement(0, "WildLog_lost_and_found", Element.class);
                                 if (newElement == null) {
                                     newElement = new Element(0, "WildLog_lost_and_found");
-                                    app.getDBI().createElement(newElement);
+                                    app.getDBI().createElement(newElement, false);
                                 }
                                 sighting.setElementID(newElement.getID());
                                 app.getDBI().updateSighting(sighting);
@@ -2523,7 +2523,7 @@ public final class WildLogView extends JFrame {
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location(0, "WildLog_lost_and_found");
-                                    app.getDBI().createLocation(newLocation);
+                                    app.getDBI().createLocation(newLocation, false);
                                 }
                                 sighting.setLocationID(newLocation.getID());
                                 // Visit
@@ -2531,7 +2531,7 @@ public final class WildLogView extends JFrame {
                                 if (newVisit == null) {
                                     newVisit = new Visit(0, "WildLog_lost_and_found");
                                     newVisit.setLocationID(newLocation.getID());
-                                    app.getDBI().createVisit(newVisit);
+                                    app.getDBI().createVisit(newVisit, false);
                                 }
                                 sighting.setVisitID(newVisit.getID());
                                 app.getDBI().updateSighting(sighting);
@@ -2546,7 +2546,7 @@ public final class WildLogView extends JFrame {
                                 Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
                                 if (newLocation == null) {
                                     newLocation = new Location(0, "WildLog_lost_and_found");
-                                    app.getDBI().createLocation(newLocation);
+                                    app.getDBI().createLocation(newLocation, false);
                                 }
                                 // Update sighting
                                 sighting.setLocationID(newLocation.getID());
@@ -3299,7 +3299,7 @@ public final class WildLogView extends JFrame {
                     int counter = 0;
                     for (Element element : listElements) {
                         // Save the element to the new DB
-                        syncDBI.createElement(element);
+                        syncDBI.createElement(element, true);
                         // Copy the files
                         WildLogFile wildLogFile = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), null, WildLogFile.class);
                         if (wildLogFile != null) {
@@ -3513,7 +3513,7 @@ public final class WildLogView extends JFrame {
                         Location wildNoteLocation = app.getDBI().findLocation(0, WildLogConstants.WILDNOTE_LOCATION_NAME, Location.class);
                         if (wildNoteLocation == null) {
                             wildNoteLocation = new Location(0, WildLogConstants.WILDNOTE_LOCATION_NAME);
-                            app.getDBI().createLocation(wildNoteLocation);
+                            app.getDBI().createLocation(wildNoteLocation, false);
                         }
                         setTaskProgress(13);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
@@ -3523,7 +3523,7 @@ public final class WildLogView extends JFrame {
                         while (app.getDBI().countVisits(tempVisit.getName(), 0) > 0) {
                             tempVisit = new Visit(0, tempVisit.getName() + "_wl", tempVisit.getLocationID());
                         }
-                        app.getDBI().createVisit(tempVisit);
+                        app.getDBI().createVisit(tempVisit, false);
                         setTaskProgress(15);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Elements
@@ -3531,7 +3531,7 @@ public final class WildLogView extends JFrame {
                         for (int t = 0; t < listElements.size(); t++) {
                             Element element = listElements.get(t);
                             if (app.getDBI().findElement(element.getID(), null, Element.class) == null) {
-                                app.getDBI().createElement(element);
+                                app.getDBI().createElement(element, true);
                             }
                             setTaskProgress(15 + (int)(t/(double)listElements.size()*10));
                             setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");

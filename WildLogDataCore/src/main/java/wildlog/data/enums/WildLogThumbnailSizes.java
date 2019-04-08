@@ -19,10 +19,12 @@ public enum WildLogThumbnailSizes {
     SYNC_EXPORT(256),
     /** 300px - For Photos (Large Display) */
     NORMAL(300),
-    /** 500px - Not Used Currently */
-    LARGE(500),
+    /** 512px - Not Used Currently */
+    LARGE(512),
     /** 700px - For Photos (Browse, Export) */
     VERY_LARGE(700),
+    /** 1024px - For Photos (Export) */
+    EXTRA_LARGE(1024),
     /** 2048px - For Photos (Max size to be uploaded to iNaturalist) */
     INAT_LIMIT(2048);
 
@@ -34,6 +36,11 @@ public enum WildLogThumbnailSizes {
 
     public int getSize() {
         return size;
+    }
+
+    @Override
+    public String toString() {
+        return size + "px";
     }
 
 }

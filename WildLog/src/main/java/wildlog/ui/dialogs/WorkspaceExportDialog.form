@@ -101,8 +101,8 @@
                                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                       <Component id="rdbExportThumbnails" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                      <Component id="spnTumbnailSize" min="-2" pref="65" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                                      <Component id="cmbThumbnailSize" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                       <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
@@ -116,7 +116,7 @@
                                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                      <Component id="chkDefaultDestinationFolder1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="chkCreateZIP" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -149,8 +149,8 @@
                               <Component id="rdbExportNoFiles" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="rdbExportThumbnails" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="rdbExportDefaultImagesOnly" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="spnTumbnailSize" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cmbThumbnailSize" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jSeparator1" min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
@@ -183,14 +183,16 @@
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Component id="jSeparator3" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="chkIncludeWildLogApp" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="chkDefaultDestinationFolder" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                       <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkDefaultDestinationFolder1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="chkCreateZIP" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="chkIncludeWildLogApp" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="chkDefaultDestinationFolder" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -322,6 +324,9 @@
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbExportOriginalImagesActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rdbExportThumbnails">
       <Properties>
@@ -335,6 +340,9 @@
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbExportThumbnailsActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JCheckBox" name="chkReduceGPS">
       <Properties>
@@ -489,14 +497,6 @@
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator4">
     </Component>
-    <Component class="javax.swing.JSpinner" name="spnTumbnailSize">
-      <Properties>
-        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-          <SpinnerModel initial="50" maximum="5120" minimum="50" numberType="java.lang.Integer" stepSize="50" type="number"/>
-        </Property>
-        <Property name="enabled" type="boolean" value="false"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
         <Property name="text" type="java.lang.String" value="px"/>
@@ -507,7 +507,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Date:"/>
+        <Property name="text" type="java.lang.String" value="Observation Date:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator5">
@@ -544,7 +544,7 @@
         <Property name="text" type="java.lang.String" value="Archive:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="chkDefaultDestinationFolder1">
+    <Component class="javax.swing.JCheckBox" name="chkCreateZIP">
       <Properties>
         <Property name="text" type="java.lang.String" value="ZIP Workspace"/>
         <Property name="toolTipText" type="java.lang.String" value="If selected the exported Workspace will be compressed into one ZIP archive."/>
@@ -553,6 +553,25 @@
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cmbThumbnailSize">
+      <Properties>
+        <Property name="maximumRowCount" type="int" value="15"/>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new DefaultComboBoxModel(WildLogThumbnailSizes.values())" type="code"/>
+        </Property>
+        <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="WildLogThumbnailSizes.VERY_LARGE" type="code"/>
+        </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="enabled" type="boolean" value="false"/>
+        <Property name="focusable" type="boolean" value="false"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;WildLogThumbnailSizes&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

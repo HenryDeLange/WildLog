@@ -496,7 +496,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
-                    createElement(new ElementCore(0, "Unknown Creature"));
+                    createElement(new ElementCore(0, "Unknown Creature"), false);
                 }
                 closeStatement(state);
             }
@@ -508,7 +508,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
-                    createLocation(new LocationCore(0, "Some Place"));
+                    createLocation(new LocationCore(0, "Some Place"), false);
                 }
                 closeStatement(state);
             }
@@ -521,7 +521,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONID)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
-                    createVisit(new VisitCore(0, "Casual Observations", findLocation(0, "Some Place", LocationCore.class).getID()));
+                    createVisit(new VisitCore(0, "Casual Observations", findLocation(0, "Some Place", LocationCore.class).getID()), false);
                 }
                 closeStatement(state);
             }
@@ -1675,7 +1675,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> boolean createElement(T inElement) {
+    public <T extends ElementCore> boolean createElement(T inElement, boolean inNewButKeepID) {
         PreparedStatement state = null;
         PreparedStatement tempState = null;
         ResultSet results = null;
@@ -1687,7 +1687,9 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Get the new ID
             tempState = conn.prepareStatement("SELECT COUNT(ID) FROM ELEMENTS WHERE ID = ?");
-            inElement.setID(generateID());
+            if (!inNewButKeepID) {
+                inElement.setID(generateID());
+            }
             tempState.setLong(1, inElement.getID());
             // Make sure it is unique (should almost always be, but let's be safe...)
             results = tempState.executeQuery();
@@ -1762,7 +1764,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends LocationCore> boolean createLocation(T inLocation) {
+    public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButKeepID) {
         PreparedStatement state = null;
         PreparedStatement tempState = null;
         ResultSet results = null;
@@ -1774,7 +1776,9 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Get the new ID
             tempState = conn.prepareStatement("SELECT COUNT(ID) FROM LOCATIONS WHERE ID = ?");
-            inLocation.setID(generateID());
+            if (!inNewButKeepID) {
+                inLocation.setID(generateID());
+            }
             tempState.setLong(1, inLocation.getID());
             // Make sure it is unique (should almost always be, but let's be safe...)
             results = tempState.executeQuery();
@@ -1852,7 +1856,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends VisitCore> boolean createVisit(T inVisit) {
+    public <T extends VisitCore> boolean createVisit(T inVisit, boolean inNewButKeepID) {
         PreparedStatement state = null;
         PreparedStatement tempState = null;
         ResultSet results = null;
@@ -1864,7 +1868,9 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Get the new ID
             tempState = conn.prepareStatement("SELECT COUNT(ID) FROM VISITS WHERE ID = ?");
-            inVisit.setID(generateID());
+            if (!inNewButKeepID) {
+                inVisit.setID(generateID());
+            }
             tempState.setLong(1, inVisit.getID());
             // Make sure it is unique (should almost always be, but let's be safe...)
             results = tempState.executeQuery();

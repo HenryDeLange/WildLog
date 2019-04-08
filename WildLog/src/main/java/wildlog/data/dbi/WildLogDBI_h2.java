@@ -712,7 +712,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         }
                         else
                         if (!isExisting && inAddNewElements) {
-                            success = success && createElement(elementToSave);
+                            success = success && createElement(elementToSave, false);
                         }
                     }
                     counter++;
