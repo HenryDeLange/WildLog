@@ -24,8 +24,10 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
@@ -60,7 +62,7 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
-public class WorkspaceExportDialog extends javax.swing.JDialog {
+public class WorkspaceExportDialog extends JDialog {
     private final WildLogApp app;
     private final Path defaultDestination;
     private final List<Sighting> lstSightings;
@@ -82,8 +84,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
-        UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
         // Setup the glasspane on this dialog as well for the JOptionPane's
+        UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
     }
 
@@ -340,7 +342,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jSeparator5)
-                        .addGap(134, 134, 134))
+                        .addGap(121, 121, 121))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addGap(10, 10, 10)
@@ -357,7 +359,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             .addComponent(jScrollPane1)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 824, Short.MAX_VALUE)
+                                    .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 825, Short.MAX_VALUE)
                                     .addComponent(jSeparator2)
                                     .addComponent(jSeparator4)
                                     .addGroup(layout.createSequentialGroup()
@@ -408,7 +410,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                         .addComponent(jLabel11)
                                         .addGap(10, 10, 10)
                                         .addComponent(chkCreateZIP)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(5, 5, 5)
                                 .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(5, 5, 5))
                     .addGroup(layout.createSequentialGroup()
@@ -473,10 +475,10 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rdbOrderByLocation)
                     .addComponent(rdbOrderByElement))
-                .addGap(2, 2, 2)
+                .addGap(5, 5, 5)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 
@@ -485,7 +487,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (chkCreateZIP.isSelected()) {
-            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+            int result = WLOptionPane.showConfirmDialog(this,
                 "<html>The automatic creation of a very large ZIP Archive might fail. "
                         + "<br>If this happens you can still manually ZIP the Workspace after the export has completed. "
                         + "<br><b>Do you want to continue with creating the ZIP Archive?</b></html>",
@@ -542,7 +544,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                 if (chkOnlyFirstSighting.isSelected()) {
                                     uniqueElementsPerVisit = new HashSet<>();
                                 }
-                                saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), 
+                                saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode) treWorkspace.getModel().getRoot(), 
                                         totalSelectedNodes, this, new ProgressCounter(), uniqueElementsPerVisit, 
                                         UtilsTime.getLocalDateFromDate(dtpStartDate.getDate()), UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()));
                                 newDBI.close();
@@ -612,10 +614,15 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 });
             }
             else {
-                WLOptionPane.showMessageDialog(app.getMainFrame(),
-                        "<html>Could not export the Workspace to the destination folder. "
-                                + "<br>Please make sure to select an empty folder for the exported Workspace to be written to.</html>",
-                        "Could not Export the Workspace", JOptionPane.WARNING_MESSAGE);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        WLOptionPane.showMessageDialog(WorkspaceExportDialog.this,
+                                "<html>Could not export the Workspace to the destination folder. "
+                                        + "<br>Please make sure to select an empty folder for the exported Workspace to be written to.</html>",
+                                "Could not Export the Workspace", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
             }
         }
         catch (Exception ex) {

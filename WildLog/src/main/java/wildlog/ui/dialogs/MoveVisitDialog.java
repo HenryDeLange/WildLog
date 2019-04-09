@@ -170,13 +170,13 @@ public class MoveVisitDialog extends JDialog {
             // Update the Visit
             for (Visit tempVisit : (List<Visit>) lstVisit.getSelectedValuesList()) {
                 tempVisit.setLocationID(tempLocation.getID());
-                app.getDBI().updateVisit(tempVisit, tempVisit.getName());
+                app.getDBI().updateVisit(tempVisit, tempVisit.getName(), false);
                 // Update the sightings
                 List<Sighting> sightings = app.getDBI().listSightings(0, 0, tempVisit.getID(), false, Sighting.class);
                 for (Sighting tempSighting : sightings) {
                     tempSighting.setLocationID(tempLocation.getID());
                     tempSighting.setVisitID(tempVisit.getID());
-                    app.getDBI().updateSighting(tempSighting);
+                    app.getDBI().updateSighting(tempSighting, false);
                 }
             }
             setVisible(false);

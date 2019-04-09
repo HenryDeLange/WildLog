@@ -50,20 +50,20 @@ public interface DBI {
     public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType);
     public <T extends WildLogUser> List<T> listUsers(WildLogUserTypes inType, Class<T> inReturnType);
 
-    public <T extends ElementCore> boolean createElement(T inElement, boolean inNewButKeepID);
-    public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButKeepID);
-    public <T extends VisitCore> boolean createVisit(T inVisit, boolean inNewButKeepID);
-    public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButKeepID);
+    public <T extends ElementCore> boolean createElement(T inElement, boolean inNewButUseOldAuditAndID);
+    public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButUseOldAuditAndID);
+    public <T extends VisitCore> boolean createVisit(T inVisit, boolean inNewButUseOldAuditAndID);
+    public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButUseOldAuditAndID);
     public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile);
     public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean createAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData);
     public <T extends WildLogUser> boolean createUser(T inWildLogUser);
     
-    public <T extends ElementCore> boolean updateElement(T inElement, String inOldName);
-    public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName);
-    public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName);
-    public <T extends SightingCore> boolean updateSighting(T inSighting);
+    public <T extends ElementCore> boolean updateElement(T inElement, String inOldName, boolean inUseOldAudit);
+    public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName, boolean inUseOldAudit);
+    public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName, boolean inUseOldAudit);
+    public <T extends SightingCore> boolean updateSighting(T inSighting, boolean inUseOldAudit);
     public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile);
     public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean updateAdhocData(T inAdhocData);

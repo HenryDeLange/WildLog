@@ -225,7 +225,7 @@ public class MergeVisitDialog extends JDialog {
                 for (Sighting sighting : sightings) {
                     sighting.setLocationID(((Location) lstToLocation.getSelectedValue()).getID());
                     sighting.setVisitID(((Visit) lstToVisit.getSelectedValue()).getID());
-                    app.getDBI().updateSighting(sighting);
+                    app.getDBI().updateSighting(sighting, false);
                 }
                 // Update the files
                 if (chkMergeVisitFiles.isSelected()) {

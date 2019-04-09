@@ -1,21 +1,37 @@
 package wildlog.ui.dialogs;
 
 import java.awt.Cursor;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.WildLogFileType;
@@ -35,6 +51,14 @@ public class WorkspaceImportDialog extends JDialog {
     private WildLogApp app;
     private Path importWorkspace;
     private WildLogDBI importDBI = null;
+    private int importLocationTotal = 0;
+    private int importVisitTotal = 0;
+    private int importElementTotal = 0;
+    private int importSightingTotal = 0;
+    private int importLocationConflicts = 0;
+    private int importVisitConflicts = 0;
+    private int importElementConflicts = 0;
+    private int importSightingConflicts = 0;
 
 
     public WorkspaceImportDialog(WildLogApp inApp, Path inImportPath) {
@@ -59,8 +83,8 @@ public class WorkspaceImportDialog extends JDialog {
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
-        UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
         // Setup the glasspane on this dialog as well for the JOptionPane's
+        UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
     }
 
@@ -88,19 +112,20 @@ public class WorkspaceImportDialog extends JDialog {
         jLabel1 = new javax.swing.JLabel();
         rdbOrderByLocation = new javax.swing.JRadioButton();
         rdbOrderByElement = new javax.swing.JRadioButton();
-        rdbOrderByDate = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtPrefix = new javax.swing.JTextField();
-        rdbKeepWorkspace = new javax.swing.JRadioButton();
-        rdbKeepImport = new javax.swing.JRadioButton();
+        rdbConflictAutoResolve = new javax.swing.JRadioButton();
+        rdbConflictAsk = new javax.swing.JRadioButton();
         jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        btnCheckConflicts = new javax.swing.JButton();
+        cmbThumbnailSize = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import From An External Workspace");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Small.gif")).getImage());
-        setMinimumSize(new java.awt.Dimension(720, 650));
+        setMinimumSize(new java.awt.Dimension(850, 700));
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosed(java.awt.event.WindowEvent evt) {
@@ -134,7 +159,7 @@ public class WorkspaceImportDialog extends JDialog {
 
         grpFiles.add(rdbImportAllFiles);
         rdbImportAllFiles.setSelected(true);
-        rdbImportAllFiles.setText("Import All Files");
+        rdbImportAllFiles.setText("All Files");
         rdbImportAllFiles.setToolTipText("Import all files into the current Workspace.");
         rdbImportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbImportAllFiles.setFocusPainted(false);
@@ -145,7 +170,7 @@ public class WorkspaceImportDialog extends JDialog {
         });
 
         grpFiles.add(rdbImportImagesOnly);
-        rdbImportImagesOnly.setText("Import Images Only");
+        rdbImportImagesOnly.setText("Images Only");
         rdbImportImagesOnly.setToolTipText("Import only image files into the current Workspace.");
         rdbImportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbImportImagesOnly.setFocusPainted(false);
@@ -156,7 +181,7 @@ public class WorkspaceImportDialog extends JDialog {
         });
 
         grpFiles.add(rdbImportNoFiles);
-        rdbImportNoFiles.setText("Import No Files");
+        rdbImportNoFiles.setText("No Files");
         rdbImportNoFiles.setToolTipText("Don't import any files into the current Workspace.");
         rdbImportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbImportNoFiles.setFocusPainted(false);
@@ -207,35 +232,43 @@ public class WorkspaceImportDialog extends JDialog {
             }
         });
 
-        grpTreeOrder.add(rdbOrderByDate);
-        rdbOrderByDate.setText("Order by Date");
-        rdbOrderByDate.setToolTipText("Order the tree nodes by Year Month Day and then Time.");
-        rdbOrderByDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbOrderByDate.setEnabled(false);
-        rdbOrderByDate.setFocusPainted(false);
-
         jLabel3.setText("<html><i>The records marked with the WildLog (W) icon will be imported. Hold down the Ctrl key to select only the record, without it's sub-records.</i></html>");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("Prefix:");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Conflicts:");
 
-        txtPrefix.setToolTipText("The imported records' names will be prefixed by the provided text to help prevent any conflicts.");
+        grpConflicts.add(rdbConflictAutoResolve);
+        rdbConflictAutoResolve.setSelected(true);
+        rdbConflictAutoResolve.setText("Automatically use the most recently edited record");
+        rdbConflictAutoResolve.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the most recently edited record will automatically be used in the active Workspace.</html>");
+        rdbConflictAutoResolve.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbConflictAutoResolve.setFocusPainted(false);
 
-        grpConflicts.add(rdbKeepWorkspace);
-        rdbKeepWorkspace.setSelected(true);
-        rdbKeepWorkspace.setText("Keep Active Workspace's Copy");
-        rdbKeepWorkspace.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same names, <br>then the active Workspace's records will be kept and the imported Workspaces' record will be ignored.</html>");
-        rdbKeepWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbKeepWorkspace.setFocusPainted(false);
+        grpConflicts.add(rdbConflictAsk);
+        rdbConflictAsk.setText("Ask what to do for each conflict");
+        rdbConflictAsk.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the user will be asked which record to use in the active Workspace.</html>");
+        rdbConflictAsk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbConflictAsk.setFocusPainted(false);
 
-        grpConflicts.add(rdbKeepImport);
-        rdbKeepImport.setText("Keep Imported Copy");
-        rdbKeepImport.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same names, <br>then the imported Workspace's records will be kept and the active Workspaces' record will be overwritten.</html>");
-        rdbKeepImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbKeepImport.setFocusPainted(false);
+        btnCheckConflicts.setText("<html>Check for Conflicts</html>");
+        btnCheckConflicts.setToolTipText("Checks how many conflicts there will be when importing using the selected records.");
+        btnCheckConflicts.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCheckConflicts.setFocusPainted(false);
+        btnCheckConflicts.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnCheckConflicts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckConflictsActionPerformed(evt);
+            }
+        });
+
+        cmbThumbnailSize.setMaximumRowCount(15);
+        cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
+        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_LARGE);
+        cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmbThumbnailSize.setEnabled(false);
+        cmbThumbnailSize.setFocusable(false);
+
+        jLabel7.setText("px");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -244,61 +277,62 @@ public class WorkspaceImportDialog extends JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                    .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(10, 10, 10)
+                                .addComponent(rdbImportAllFiles)
+                                .addGap(5, 5, 5)
+                                .addComponent(rdbImportImagesOnly)
+                                .addGap(5, 5, 5)
+                                .addComponent(rdbImportNoFiles)
+                                .addGap(10, 10, 10)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(rdbImportOriginalImages)
+                                .addGap(5, 5, 5)
+                                .addComponent(rdbImportThumbnails)
+                                .addGap(5, 5, 5)
+                                .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel7)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(rdbImportAllFiles)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(rdbImportImagesOnly)
-                                        .addGap(0, 0, 0)
-                                        .addComponent(rdbImportNoFiles)
-                                        .addGap(2, 2, 2)
-                                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(2, 2, 2)
-                                        .addComponent(rdbImportOriginalImages)
-                                        .addGap(0, 0, 0)
-                                        .addComponent(rdbImportThumbnails)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel4)
-                                                .addGap(5, 5, 5)
-                                                .addComponent(txtPrefix, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(jLabel5)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(rdbKeepWorkspace)
-                                                .addGap(0, 0, 0)
-                                                .addComponent(rdbKeepImport)))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(5, 5, 5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel5)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(rdbConflictAutoResolve)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(rdbConflictAsk))
+                                    .addComponent(jSeparator2))
+                                .addGap(5, 5, 5))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jSeparator3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(rdbOrderByLocation)
-                                .addGap(0, 0, 0)
-                                .addComponent(rdbOrderByElement)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rdbOrderByDate)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(1, 1, 1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(rdbOrderByLocation)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(rdbOrderByElement)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCheckConflicts, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -309,27 +343,32 @@ public class WorkspaceImportDialog extends JDialog {
                                     .addComponent(rdbImportThumbnails)
                                     .addComponent(rdbImportImagesOnly)
                                     .addComponent(rdbImportAllFiles)
-                                    .addComponent(rdbImportNoFiles))))
-                        .addGap(3, 3, 3)
+                                    .addComponent(rdbImportNoFiles)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel7)
+                                        .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(5, 5, 5)
+                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rdbKeepWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rdbKeepImport, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtPrefix, javax.swing.GroupLayout.Alignment.LEADING)))
-                        .addGap(4, 4, 4)
+                            .addComponent(rdbConflictAutoResolve, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rdbConflictAsk, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
+                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(rdbOrderByLocation)
-                            .addComponent(rdbOrderByElement)
-                            .addComponent(rdbOrderByDate))))
+                            .addComponent(rdbOrderByElement))
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(btnCheckConflicts, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(2, 2, 2)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 
@@ -337,16 +376,6 @@ public class WorkspaceImportDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-// TODO: Improve error handeling and feedback
-        if (txtPrefix.getText() == null || txtPrefix.getText().isEmpty()) {
-            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                    "<html>It is recommended to provide a unique prefix for the imported data, to help prevent conflicts."
-                            + "<br/>Are you sure you want to continue?</html>",
-                    "WARNING: Importing Without Prefix", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
-            if (result != JOptionPane.YES_OPTION) {
-                return;
-            }
-        }
         try {
             if (importWorkspace != null) {
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
@@ -357,12 +386,67 @@ public class WorkspaceImportDialog extends JDialog {
                         setMessage("Starting the Workspace Import");
                         setVisible(false);
                         try {
-                            int totalNodes = getNumberOfNodes(treWorkspace.getModel());
-                            setProgress(2);
-                            setMessage("Workspace Import: " + getProgress() + "%");
-                            saveChildren((DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), totalNodes, this, new ProgressCounter());
-                            setProgress(100);
-                            setMessage("Workspace Import: " + getProgress() + "%");
+                            int totalSelectedNodes = getNumberOfSelectedNodes(treWorkspace.getModel(), (DefaultMutableTreeNode) treWorkspace.getModel().getRoot());
+                            if (totalSelectedNodes > 0) {
+                                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+                                PrintWriter feedback = null;
+                                try {
+                                    feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                                    feedback.println("---------------------------------------------");
+                                    feedback.println("---------- Workspace Import Report ----------");
+                                    feedback.println("---------------------------------------------");
+                                    feedback.println("");
+                                    setProgress(2);
+                                    setMessage("Workspace Import: " + getProgress() + "%");
+                                    // Only process Elements, Locations and Visits once (can be multiple times in the tree)
+                                    Set<String> processedData = new HashSet<>();
+                                    // Start processing
+                                    saveChildren((DefaultMutableTreeNode) treWorkspace.getModel().getRoot(), totalSelectedNodes, this, new ProgressCounter(), processedData, feedback);
+                                    // Write summary
+                                    int importTotal = importLocationTotal + importVisitTotal + importElementTotal + importSightingTotal;
+                                    int importConflicts = importLocationConflicts + importVisitConflicts + importElementConflicts + importSightingConflicts;
+                                    WildLogApp.LOGGER.log(Level.INFO, "Imported {} records successfully, of which {} were conflicts.", importTotal, importConflicts);
+                                    feedback.println("");
+                                    feedback.println("---------- SUMMARY ----------");
+                                    feedback.println("TOTAL IMPORTED RECORDS      : " + importTotal);
+                                    feedback.println("TOTAL CONFLICTS             : " + importConflicts);
+                                    feedback.println("");
+                                    feedback.println("Places imported             : " + importLocationTotal);
+                                    feedback.println("Places with conflicts       : " + importLocationConflicts);
+                                    feedback.println("Periods imported            : " + importVisitTotal);
+                                    feedback.println("Periods with conflicts      : " + importVisitConflicts);
+                                    feedback.println("Creatures imported          : " + importElementTotal);
+                                    feedback.println("Creatures with conflicts    : " + importElementConflicts);
+                                    feedback.println("Observations imported       : " + importSightingTotal);
+                                    feedback.println("Observations with conflicts : " + importSightingConflicts);
+                                    setProgress(100);
+                                    setMessage("Workspace Import: " + getProgress() + "%");
+                                }
+                                catch (Exception ex) {
+                                    if (feedback != null) {
+                                        feedback.println("");
+                                        feedback.println("------------------------------");
+                                        feedback.println("----------- ERROR ------------");
+                                        feedback.println(ex.toString());
+                                        feedback.println("------------------------------");
+                                        feedback.println("");
+                                    }
+                                    throw ex;
+                                }
+                                finally {
+                                    if (feedback != null) {
+                                        feedback.println("");
+                                        feedback.println("------------------------------");
+                                        feedback.println("---------- FINISHED ----------");
+                                        feedback.println("------------------------------");
+                                        feedback.println("");
+                                        feedback.flush();
+                                        feedback.close();
+                                        // Open the summary document
+                                        UtilsFileProcessing.openFile(feedbackFile);
+                                    }
+                                }
+                            }
                         }
                         catch (Exception ex) {
                             throw ex;
@@ -395,125 +479,233 @@ public class WorkspaceImportDialog extends JDialog {
         public int counter = 0;
     }
 
-    private int getNumberOfNodes(TreeModel model) {
-        return getNumberOfNodes(model, model.getRoot());
-    }
-
-    private int getNumberOfNodes(TreeModel model, Object node) {
-        int count = 1;
-        int nChildren = model.getChildCount(node);
-        for (int i = 0; i < nChildren; i++) {
-            count += getNumberOfNodes(model, model.getChild(node, i));
+    private int getNumberOfSelectedNodes(TreeModel inModel, DefaultMutableTreeNode inNode) {
+        int count = 0;
+        if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
+            WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
+            if (dataWrapper.isSelected()) {
+                count = 1;
+            }
+        }
+        int numberOfChildren = inModel.getChildCount(inNode);
+        for (int i = 0; i < numberOfChildren; i++) {
+            count += getNumberOfSelectedNodes(inModel, (DefaultMutableTreeNode) inModel.getChild(inNode, i));
         }
         return count;
     }
 
-    private void saveChildren(DefaultMutableTreeNode inNode, int inTotalNodes, ProgressbarTask inProgressbarTask, ProgressCounter inCounter) {
-//        if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
-//            WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
-//            if (dataWrapper.isSelected()) {
-//                if (dataWrapper.getDataObject()instanceof Location) {
-//                    Location importLocation = importDBI.findLocation(((Location) dataWrapper.getDataObject()).getName(), Location.class);
-//                    String originalWildLogFileID = importLocation.getWildLogFileID();
-//                    importLocation.setName(txtPrefix.getText() + importLocation.getName());
-//                    Location workspaceLocation = app.getDBI().findLocation(importLocation.getName(), Location.class);
-//                    if (workspaceLocation == null) {
-//                        // New
-//                        app.getDBI().createLocation(importLocation);
-//                    }
-//                    else {
-//                        // Update, only if the option was selected to overwrite the active workspace's entry
-//                        if (rdbKeepImport.isSelected()) {
-//                            app.getDBI().updateLocation(importLocation, importLocation.getName());
-//                        }
-//                        // If the records matching the prefix already exists, then update FileID
-//                        // (Because the same entry can be in the tree more than once.)
-//                        originalWildLogFileID = importLocation.getWildLogFileID();
-//                    }
+    private void saveChildren(DefaultMutableTreeNode inNode, int inTotalNodes, ProgressbarTask inProgressbarTask, ProgressCounter inCounter, 
+            Set<String> inProcessedData, PrintWriter inFeedback) {
+        
+// TODO: Import files
+        
+        if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
+            WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
+            if (dataWrapper.isSelected()) {
+                if (dataWrapper.getDataObject() instanceof Location) {
+                    Location importLocation = importDBI.findLocation(((Location) dataWrapper.getDataObject()).getID(), null, Location.class);
+                    Location workspaceLocation = app.getDBI().findLocation(importLocation.getID(), null, Location.class);
+                    if (workspaceLocation == null) {
+                        // New
+                        app.getDBI().createLocation(importLocation, true);
+                        importLocationTotal++;
+                        inFeedback.println("Imported Place: " + importLocation.getID() + " [" + importLocation.getDisplayName() + "]");
+                    }
+                    else {
+                        // Update
+                        if (!inProcessedData.contains("L" + importLocation.getID()) && !importLocation.hasTheSameContent(workspaceLocation)) {
+                            if (rdbConflictAutoResolve.isSelected()) {
+                                if (importLocation.getAuditTime() > workspaceLocation.getAuditTime()) {
+                                    app.getDBI().updateLocation(importLocation, importLocation.getName(), true);
+                                    importLocationTotal++;
+                                    importLocationConflicts++;
+                                    inFeedback.println("Auto Updated Place: " + importLocation.getID() + " [" + importLocation.getDisplayName() + "]");
+                                }
+                            }
+                            else {
+                                WorkspaceImportConflictDialog dialog = new WorkspaceImportConflictDialog(importLocation, workspaceLocation);
+                                dialog.setVisible(true);
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.IMPORT) {
+                                    app.getDBI().updateLocation(importLocation, importLocation.getName(), true);
+                                    importLocationTotal++;
+                                    importLocationConflicts++;
+                                    inFeedback.println("Manual Updated Place: " + importLocation.getID() + " [" + importLocation.getDisplayName() + "]");
+                                }
+                                else
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
+                                    importLocationConflicts++;
+                                    inFeedback.println("Skipped Place: " + workspaceLocation.getID() + " [" + workspaceLocation.getDisplayName() + "]");
+                                }
+                                else {
+                                    // Left unresolved, so we fall back to choosing the most recent record
+                                    if (importLocation.getAuditTime() > workspaceLocation.getAuditTime()) {
+                                        app.getDBI().updateLocation(importLocation, importLocation.getName(), true);
+                                        importLocationTotal++;
+                                        importLocationConflicts++;
+                                        inFeedback.println("Auto Updated Place: " + importLocation.getID() + " [" + importLocation.getDisplayName() + "]");
+                                    }
+                                }
+                            }
+                        }
+                    }
 //                    saveFiles(originalWildLogFileID, importLocation.getWildLogFileID());
-//                }
-//                else
-//                if (dataWrapper.getDataObject() instanceof Visit) {
-//                    Visit importVisit = importDBI.findVisit(((Visit) dataWrapper.getDataObject()).getName(), Visit.class);
-//                    String originalWildLogFileID = importVisit.getWildLogFileID();
-//                    importVisit.setName(txtPrefix.getText() + importVisit.getName());
-//                    importVisit.setLocationName(txtPrefix.getText() + importVisit.getLocationName());
-//                    Visit workspaceVisit = app.getDBI().findVisit(importVisit.getName(), Visit.class);
-//                    if (workspaceVisit == null) {
-//                        // New
-//                        app.getDBI().createVisit(importVisit);
-//                    }
-//                    else {
-//                        // Update, only if the option was selected to overwrite the active workspace's entry
-//                        if (rdbKeepImport.isSelected()) {
-//                            app.getDBI().updateVisit(importVisit, importVisit.getName());
-//                        }
-//                        // If the records matching the prefix already exists, then update FileID
-//                        // (Because the same entry can be in the tree more than once.)
-//                        originalWildLogFileID = importVisit.getWildLogFileID();
-//                    }
+                }
+                else
+                if (dataWrapper.getDataObject() instanceof Visit) {
+                    Visit importVisit = importDBI.findVisit(((Visit) dataWrapper.getDataObject()).getID(), null, true, Visit.class);
+                    Visit workspaceVisit = app.getDBI().findVisit(importVisit.getID(), null, true, Visit.class);
+                    if (workspaceVisit == null) {
+                        // New
+                        app.getDBI().createVisit(importVisit, true);
+                        importVisitTotal++;
+                        inFeedback.println("Imported Period: " + importVisit.getID() + " [" + importVisit.getDisplayName() + "]");
+                    }
+                    else {
+                        // Update
+                        if (!inProcessedData.contains("V" + importVisit.getID()) && !importVisit.hasTheSameContent(workspaceVisit)) {
+                            if (rdbConflictAutoResolve.isSelected()) {
+                                if (importVisit.getAuditTime() > workspaceVisit.getAuditTime()) {
+                                    app.getDBI().updateVisit(importVisit, importVisit.getName(), true);
+                                    importVisitTotal++;
+                                    importVisitConflicts++;
+                                    inFeedback.println("Auto Updated Period: " + importVisit.getID() + " [" + importVisit.getDisplayName() + "]");
+                                }
+                            }
+                            else {
+                                WorkspaceImportConflictDialog dialog = new WorkspaceImportConflictDialog(importVisit, workspaceVisit);
+                                dialog.setVisible(true);
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.IMPORT) {
+                                    app.getDBI().updateVisit(importVisit, importVisit.getName(), true);
+                                    importVisitTotal++;
+                                    importVisitConflicts++;
+                                    inFeedback.println("Manual Updated Period: " + importVisit.getID() + " [" + importVisit.getDisplayName() + "]");
+                                }
+                                else
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
+                                    importVisitConflicts++;
+                                    inFeedback.println("Skipped Period: " + workspaceVisit.getID() + " [" + workspaceVisit.getDisplayName() + "]");
+                                }
+                                else {
+                                    // Left unresolved, so we fall back to choosing the most recent record
+                                    if (importVisit.getAuditTime() > workspaceVisit.getAuditTime()) {
+                                        app.getDBI().updateVisit(importVisit, importVisit.getName(), true);
+                                        importVisitTotal++;
+                                        importVisitConflicts++;
+                                        inFeedback.println("Auto Updated Period: " + importVisit.getID() + " [" + importVisit.getDisplayName() + "]");
+                                    }
+                                }
+                            }
+                        }
+                    }
 //                    saveFiles(originalWildLogFileID, importVisit.getWildLogFileID());
-//                }
-//                else
-//                if (dataWrapper.getDataObject() instanceof Element) {
-//                    Element importElement = importDBI.findElement(((Element) dataWrapper.getDataObject()).getPrimaryName(), Element.class);
-//                    String originalWildLogFileID = importElement.getWildLogFileID();
-//                    importElement.setPrimaryName(txtPrefix.getText() + importElement.getPrimaryName());
-//                    Element workspaceElement = app.getDBI().findElement(importElement.getPrimaryName(), Element.class);
-//                    if (workspaceElement == null) {
-//                        // New
-//                        app.getDBI().createElement(importElement);
-//                    }
-//                    else {
-//                        // Update, only if the option was selected to overwrite the active workspace's entry
-//                        if (rdbKeepImport.isSelected()) {
-//                            app.getDBI().updateElement(importElement, importElement.getPrimaryName());
-//                        }
-//                        // If the records matching the prefix already exists, then update FileID
-//                        // (Because the same entry can be in the tree more than once.)
-//                        originalWildLogFileID = importElement.getWildLogFileID();
-//                    }
+                }
+                else
+                if (dataWrapper.getDataObject() instanceof Element) {
+                    Element importElement = importDBI.findElement(((Element) dataWrapper.getDataObject()).getID(), null, Element.class);
+                    Element workspaceElement = app.getDBI().findElement(importElement.getID(), null, Element.class);
+                    if (workspaceElement == null) {
+                        // New
+                        app.getDBI().createElement(importElement, true);
+                        importElementTotal++;
+                        inFeedback.println("Imported Creature: " + importElement.getID() + " [" + importElement.getDisplayName() + "]");
+                    }
+                    else {
+                        // Update
+                        if (!inProcessedData.contains("E" + importElement.getID()) && !importElement.hasTheSameContent(workspaceElement)) {
+                            if (rdbConflictAutoResolve.isSelected()) {
+                                if (importElement.getAuditTime() > workspaceElement.getAuditTime()) {
+                                    app.getDBI().updateElement(importElement, importElement.getPrimaryName(), true);
+                                    importElementTotal++;
+                                    importElementConflicts++;
+                                    inFeedback.println("Auto Updated Creature: " + importElement.getID() + " [" + importElement.getDisplayName() + "]");
+                                }
+                            }
+                            else {
+                                WorkspaceImportConflictDialog dialog = new WorkspaceImportConflictDialog(importElement, workspaceElement);
+                                dialog.setVisible(true);
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.IMPORT) {
+                                    app.getDBI().updateElement(importElement, importElement.getPrimaryName(), true);
+                                    importElementTotal++;
+                                    importElementConflicts++;
+                                    inFeedback.println("Manual Updated Creature: " + importElement.getID() + " [" + importElement.getDisplayName() + "]");
+                                }
+                                else
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
+                                    importElementConflicts++;
+                                    inFeedback.println("Skipped Creature: " + workspaceElement.getID() + " [" + workspaceElement.getDisplayName() + "]");
+                                }
+                                else {
+                                    // Left unresolved, so we fall back to choosing the most recent record
+                                    if (importElement.getAuditTime() > workspaceElement.getAuditTime()) {
+                                        app.getDBI().updateElement(importElement, importElement.getPrimaryName(), true);
+                                        importElementTotal++;
+                                        importElementConflicts++;
+                                        inFeedback.println("Auto Updated Creature: " + importElement.getID() + " [" + importElement.getDisplayName() + "]");
+                                    }
+                                }
+                            }
+                        }
+                    }
 //                    saveFiles(originalWildLogFileID, importElement.getWildLogFileID());
-//                }
-//                else
-//                if (dataWrapper.getDataObject() instanceof SightingWrapper) {
-//                    Sighting importSighting = importDBI.findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getSightingCounter(), Sighting.class);
-//                    String originalWildLogFileID = importSighting.getWildLogFileID();
-//                    importSighting.setLocationName(txtPrefix.getText() + importSighting.getLocationName());
-//                    importSighting.setVisitName(txtPrefix.getText() + importSighting.getVisitName());
-//                    importSighting.setElementName(txtPrefix.getText() + importSighting.getElementName());
-//                    Sighting workpaceSighting = app.getDBI().findSighting(importSighting.getSightingCounter(), Sighting.class);
-//                    if (workpaceSighting == null) {
-//                        // New
-//                        // Note: The sighting ID needs to be the same in the new workspace for the linked images to work...
-//                        app.getDBI().createSighting(importSighting, true);
-//                    }
-//                    else {
-//                        // Update, only if the option was selected to overwrite the active workspace's entry
-//                        if (rdbKeepImport.isSelected()) {
-//                            app.getDBI().updateSighting(importSighting);
-//                        }
-//                        else {
-//                            // Make a new copy of the sighting with a new unique ID.
-//                            // (Only when a prefix was given, else assume that it is the same sighting.)
-//                            if (txtPrefix.getText() != null && !txtPrefix.getText().isEmpty()) {
-//                                importSighting.setSightingCounter(0);
-//                                app.getDBI().createSighting(importSighting, false);
-//                            }
-//                            // No need to worry about the sighting being in the tree more than once...
-//                        }
-//                    }
+                }
+                else
+                if (dataWrapper.getDataObject() instanceof SightingWrapper) {
+                    Sighting importSighting = importDBI.findSighting((((SightingWrapper) dataWrapper.getDataObject()).getSighting()).getID(), true, Sighting.class);
+                    Sighting workpaceSighting = app.getDBI().findSighting(importSighting.getID(), true, Sighting.class);
+                    if (workpaceSighting == null) {
+                        // New
+                        app.getDBI().createSighting(importSighting, true);
+                        importSightingTotal++;
+                        inFeedback.println("Imported Observation: " + importSighting.getID() + " [" + importSighting.getDisplayName() + "]");
+                    }
+                    else {
+                        // Update
+                        if (!importSighting.hasTheSameContent(workpaceSighting)) {
+                            if (rdbConflictAutoResolve.isSelected()) {
+                                if (importSighting.getAuditTime() > workpaceSighting.getAuditTime()) {
+                                    app.getDBI().updateSighting(importSighting, true);
+                                    importSightingTotal++;
+                                    importSightingConflicts++;
+                                    inFeedback.println("Auto Updated Observation: " + importSighting.getID() + " [" + importSighting.getDisplayName() + "]");
+                                }
+                            }
+                            else {
+                                WorkspaceImportConflictDialog dialog = new WorkspaceImportConflictDialog(importSighting, workpaceSighting);
+                                dialog.setVisible(true);
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.IMPORT) {
+                                    app.getDBI().updateSighting(importSighting, true);
+                                    importSightingTotal++;
+                                    importSightingConflicts++;
+                                    inFeedback.println("Manual Updated Observation: " + importSighting.getID() + " [" + importSighting.getDisplayName() + "]");
+                                }
+                                else
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
+                                    importSightingConflicts++;
+                                    inFeedback.println("Skipped Observation: " + workpaceSighting.getID() + " [" + workpaceSighting.getDisplayName() + "]");
+                                }
+                                else {
+                                    // Left unresolved, so we fall back to choosing the most recent record
+                                    if (importSighting.getAuditTime() > workpaceSighting.getAuditTime()) {
+                                        app.getDBI().updateSighting(importSighting, true);
+                                        importSightingTotal++;
+                                        importSightingConflicts++;
+                                        inFeedback.println("Auto Updated Observation: " + importSighting.getID() + " [" + importSighting.getDisplayName() + "]");
+                                    }
+                                }
+                            }
+                        }
+                    }
 //                    saveFiles(originalWildLogFileID, importSighting.getWildLogFileID());
-//                }
-//            }
-//            inProgressbarTask.setTaskProgress(2 + (int)(inCounter.counter/(double)inTotalNodes*97));
-//            inProgressbarTask.setMessage("Workspace Import: " + inProgressbarTask.getProgress() + "%");
-//            inCounter.counter++;
-//        }
-//        for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
-//            DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
-//            saveChildren(childNode, inTotalNodes, inProgressbarTask, inCounter);
-//        }
+                }
+                inCounter.counter++;
+            }
+            inProgressbarTask.setTaskProgress(2 + (int)(inCounter.counter/(double)inTotalNodes*97));
+            inProgressbarTask.setMessage("Workspace Import: " + inProgressbarTask.getProgress() + "%");
+        }
+        for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
+            DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
+            saveChildren(childNode, inTotalNodes, inProgressbarTask, inCounter, inProcessedData, inFeedback);
+        }
     }
 
     private void saveFiles(String inExternalWildLogFileID, String inNewInternalWildLogFileID) {
@@ -549,7 +741,7 @@ public class WorkspaceImportDialog extends JDialog {
                 else {
                     // There is already a file in the current workspace in the same folder as the file to be imported.
                     // If the FileID's are the same and the paths are the same then overwrite it if the radio button was selected.
-                    if (rdbKeepImport.isSelected() && inExternalWildLogFileID.equalsIgnoreCase(inNewInternalWildLogFileID)) {
+                    if (rdbConflictAsk.isSelected() && inExternalWildLogFileID.equalsIgnoreCase(inNewInternalWildLogFileID)) {
                         UtilsFileProcessing.copyFile(
                                 importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath(),
                                 fileToImport.getAbsolutePath(), true, true);
@@ -685,101 +877,107 @@ public class WorkspaceImportDialog extends JDialog {
         }
     }//GEN-LAST:event_formWindowClosed
 
+    private void btnCheckConflictsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckConflictsActionPerformed
+        
+    }//GEN-LAST:event_btnCheckConflictsActionPerformed
+
     private void loadLocationTree() {
-//        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
-//        List<Location> locations = new ArrayList<Location>(importDBI.listLocations(null, Location.class));
-//        Map<String, DefaultMutableTreeNode> mapElements;
-//        Map<String, DefaultMutableTreeNode> mapVisits;
-//        Collections.sort(locations);
-//        for (Location location : locations) {
-//            mapElements = new HashMap<>(500);
-//            mapVisits = new HashMap<>(500);
-//            DefaultMutableTreeNode locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(location, false));
-//            root.add(locationNode);
-//            List<Sighting> sightings = importDBI.listSightings(0, null, location.getName(), null, false, Sighting.class);
-//            Collections.sort(sightings, new Comparator<Sighting>() {
-//                @Override
-//                public int compare(Sighting sighting1, Sighting sighting2) {
-//                    int result = sighting1.getVisitName().compareTo(sighting2.getVisitName());
-//                    if (result == 0) {
-//                        result = sighting1.getElementName().compareTo(sighting2.getElementName());
-//                        if (result == 0) {
-//                            result = sighting1.getDate().compareTo(sighting2.getDate());
-//                        }
-//                    }
-//                    return result;
-//                }
-//            });
-//            for (Sighting sighting : sightings) {
-//                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
-//                if (visitNode == null) {
-//                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
-//                    mapVisits.put(sighting.getVisitName(), visitNode);
-//                    // Clear die hashmap hier as 'n nuwe visit gelaai word (die sightings behoort volgens visit gesort te wees, so die visit sal nie weer verskyn nie.
-//                    mapElements.clear();
-//                }
-//                locationNode.add(visitNode);
-//                DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementName());
-//                if (elementNode == null) {
-//                    elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Element(sighting.getElementName()), false));
-//                    mapElements.put(sighting.getElementName(), elementNode);
-//                }
-//                visitNode.add(elementNode);
-//                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
-//                elementNode.add(sightingNode);
-//            }
-//        }
-//        treWorkspace.setModel(new DefaultTreeModel(root));
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
+        List<Location> locations = new ArrayList<Location>(importDBI.listLocations(null, Location.class));
+        Map<Long, DefaultMutableTreeNode> mapElements;
+        Map<Long, DefaultMutableTreeNode> mapVisits;
+        Collections.sort(locations);
+        for (Location location : locations) {
+            mapElements = new HashMap<>(500);
+            mapVisits = new HashMap<>(500);
+            DefaultMutableTreeNode locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(location, false));
+            root.add(locationNode);
+            List<Sighting> sightings = importDBI.listSightings(0, location.getID(), 0, true, Sighting.class);
+            Collections.sort(sightings, new Comparator<Sighting>() {
+                @Override
+                public int compare(Sighting sighting1, Sighting sighting2) {
+                    int result = Long.compare(sighting1.getVisitID(), sighting2.getVisitID());
+                    if (result == 0) {
+                        result = Long.compare(sighting1.getElementID(), sighting2.getElementID());
+                        if (result == 0) {
+                            result = sighting1.getDate().compareTo(sighting2.getDate());
+                        }
+                    }
+                    return result;
+                }
+            });
+            for (Sighting sighting : sightings) {
+                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitID());
+                if (visitNode == null) {
+                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(importDBI.findVisit(sighting.getVisitID(), null, true, Visit.class), false));
+                    mapVisits.put(sighting.getVisitID(), visitNode);
+                    // Clear die hashmap hier as 'n nuwe visit gelaai word (die sightings behoort volgens visit gesort te wees, so die visit sal nie weer verskyn nie.
+                    mapElements.clear();
+                }
+                locationNode.add(visitNode);
+                DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementID());
+                if (elementNode == null) {
+                    elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(importDBI.findElement(sighting.getElementID(), null, Element.class), false));
+                    mapElements.put(sighting.getElementID(), elementNode);
+                }
+                visitNode.add(elementNode);
+                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
+                elementNode.add(sightingNode);
+            }
+        }
+        treWorkspace.setModel(new DefaultTreeModel(root));
     }
 
     private void loadElementTree() {
-//        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
-//        List<Element> elements = new ArrayList<Element>(importDBI.listElements(null, null, null, Element.class));
-//        Map<String, DefaultMutableTreeNode> mapLocations;
-//        Map<String, DefaultMutableTreeNode> mapVisits;
-//        Collections.sort(elements);
-//        for (Element element : elements) {
-//            mapLocations = new HashMap<>(100);
-//            mapVisits = new HashMap<>(500);
-//            DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(element, false));
-//            root.add(elementNode);
-//            List<Sighting> sightings = importDBI.listSightings(0, element.getPrimaryName(), null, null, false, Sighting.class);
-//            Collections.sort(sightings, new Comparator<Sighting>() {
-//                @Override
-//                public int compare(Sighting sighting1, Sighting sighting2) {
-//                    int result = sighting1.getLocationName().compareTo(sighting2.getLocationName());
-//                    if (result == 0) {
-//                        result = sighting1.getVisitName().compareTo(sighting2.getVisitName());
-//                        if (result == 0) {
-//                            result = sighting1.getDate().compareTo(sighting2.getDate());
-//                        }
-//                    }
-//                    return result;
-//                }
-//            });
-//            for (Sighting sighting : sightings) {
-//                DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationName());
-//                if (locationNode == null) {
-//                    locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Location(sighting.getLocationName()), false));
-//                    mapLocations.put(sighting.getLocationName(), locationNode);
-//                }
-//                elementNode.add(locationNode);
-//                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
-//                if (visitNode == null) {
-//                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
-//                    mapVisits.put(sighting.getVisitName(), visitNode);
-//                }
-//                locationNode.add(visitNode);
-//                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
-//                visitNode.add(sightingNode);
-//            }
-//        }
-//        treWorkspace.setModel(new DefaultTreeModel(root));
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
+        List<Element> elements = new ArrayList<Element>(importDBI.listElements(null, null, null, Element.class));
+        Map<Long, DefaultMutableTreeNode> mapLocations;
+        Map<Long, DefaultMutableTreeNode> mapVisits;
+        Collections.sort(elements);
+        for (Element element : elements) {
+            mapLocations = new HashMap<>(100);
+            mapVisits = new HashMap<>(500);
+            DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(element, false));
+            root.add(elementNode);
+            List<Sighting> sightings = importDBI.listSightings(element.getID(), 0, 0, true, Sighting.class);
+            Collections.sort(sightings, new Comparator<Sighting>() {
+                @Override
+                public int compare(Sighting sighting1, Sighting sighting2) {
+                    int result = Long.compare(sighting1.getLocationID(), sighting2.getLocationID());
+                    if (result == 0) {
+                        result = Long.compare(sighting1.getVisitID(), sighting2.getVisitID());
+                        if (result == 0) {
+                            result = sighting1.getDate().compareTo(sighting2.getDate());
+                        }
+                    }
+                    return result;
+                }
+            });
+            for (Sighting sighting : sightings) {
+                DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationID());
+                if (locationNode == null) {
+                    locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(importDBI.findLocation(sighting.getLocationID(), null, Location.class), false));
+                    mapLocations.put(sighting.getLocationID(), locationNode);
+                }
+                elementNode.add(locationNode);
+                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitID());
+                if (visitNode == null) {
+                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(importDBI.findVisit(sighting.getVisitID(), null, true, Visit.class), false));
+                    mapVisits.put(sighting.getVisitID(), visitNode);
+                }
+                locationNode.add(visitNode);
+                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
+                visitNode.add(sightingNode);
+            }
+        }
+        treWorkspace.setModel(new DefaultTreeModel(root));
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCheckConflicts;
     private javax.swing.JButton btnConfirm;
+    private javax.swing.JComboBox<WildLogThumbnailSizes> cmbThumbnailSize;
     private javax.swing.ButtonGroup grpConflicts;
     private javax.swing.ButtonGroup grpFiles;
     private javax.swing.ButtonGroup grpImages;
@@ -787,22 +985,21 @@ public class WorkspaceImportDialog extends JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JRadioButton rdbConflictAsk;
+    private javax.swing.JRadioButton rdbConflictAutoResolve;
     private javax.swing.JRadioButton rdbImportAllFiles;
     private javax.swing.JRadioButton rdbImportImagesOnly;
     private javax.swing.JRadioButton rdbImportNoFiles;
     private javax.swing.JRadioButton rdbImportOriginalImages;
     private javax.swing.JRadioButton rdbImportThumbnails;
-    private javax.swing.JRadioButton rdbKeepImport;
-    private javax.swing.JRadioButton rdbKeepWorkspace;
-    private javax.swing.JRadioButton rdbOrderByDate;
     private javax.swing.JRadioButton rdbOrderByElement;
     private javax.swing.JRadioButton rdbOrderByLocation;
     private javax.swing.JTree treWorkspace;
-    private javax.swing.JTextField txtPrefix;
     // End of variables declaration//GEN-END:variables
 }

@@ -69,7 +69,6 @@ public final class UtilsDialog {
                 glassPane.setVisible(true);
             }
         });
-//        glassPane.setVisible(true);
         inPopupWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {

@@ -1478,7 +1478,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     result = app.getDBI().createVisit(visit, false);
                 }
                 else {
-                    result = app.getDBI().updateVisit(visit, oldName);
+                    result = app.getDBI().updateVisit(visit, oldName, false);
                 }
                 if (result == true) {
                     txtName.setBackground(new Color(204, 255, 204));

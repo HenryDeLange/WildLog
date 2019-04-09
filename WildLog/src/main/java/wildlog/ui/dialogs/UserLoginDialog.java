@@ -19,14 +19,14 @@ import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogPaths;
 
 
-public class LoginDialog extends JDialog {
+public class UserLoginDialog extends JDialog {
     private final WildLogApp app = WildLogApp.getApplication();
     private boolean loginSuccess = false;
 
-    public LoginDialog() {
+    public UserLoginDialog() {
         super(new TaskbarFrame("WildLog Login", new ImageIcon(
                 WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage()));
-        WildLogApp.LOGGER.log(Level.INFO, "[LoginDialog]");
+        WildLogApp.LOGGER.log(Level.INFO, "[UserLoginDialog]");
         initComponents();
         lblWorkspaceName.setText(WildLogApp.getApplication().getWildLogOptions().getWorkspaceName());
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG) {

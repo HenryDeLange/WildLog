@@ -218,23 +218,20 @@
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="lblImage" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnPreviousImage" min="-2" pref="50" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btnUploadImage" min="-2" pref="25" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="lblNumberOfImages" min="-2" pref="23" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
+                                  <Component id="lblNumberOfImages" min="-2" pref="23" max="-2" attributes="0"/>
                                   <Component id="btnSetMainImage" min="-2" pref="23" max="-2" attributes="0"/>
                                   <Component id="btnDeleteImage" alignment="0" min="-2" pref="23" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="btnNextImage" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace min="5" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

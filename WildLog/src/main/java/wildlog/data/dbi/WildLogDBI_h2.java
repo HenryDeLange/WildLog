@@ -708,7 +708,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         }
                         // Save the creature
                         if (isExisting && inUpdateExistingElements) {
-                            success = success && updateElement(elementToSave, oldName);
+                            success = success && updateElement(elementToSave, oldName, false);
                         }
                         else
                         if (!isExisting && inAddNewElements) {

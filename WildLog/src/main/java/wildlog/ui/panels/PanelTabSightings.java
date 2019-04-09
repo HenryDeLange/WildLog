@@ -966,7 +966,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 if (bulkSighting.getVisitID() > 0) {
                     sighting.setVisitID(bulkSighting.getVisitID());
                 }
-                app.getDBI().updateSighting(sighting);
+                app.getDBI().updateSighting(sighting, false);
             }
             doTheRefresh(this);
         }

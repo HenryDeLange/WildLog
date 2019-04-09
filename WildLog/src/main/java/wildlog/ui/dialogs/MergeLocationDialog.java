@@ -153,12 +153,12 @@ public class MergeLocationDialog extends JDialog {
             List<Visit> listVisits = app.getDBI().listVisits(null, tempFromLocation.getID(), null, false, Visit.class);
             for (Visit visit : listVisits) {
                 visit.setLocationID(tempToLocation.getID());
-                app.getDBI().updateVisit(visit, visit.getName());
+                app.getDBI().updateVisit(visit, visit.getName(), false);
             }
             List<Sighting> listSightings = app.getDBI().listSightings(0, tempFromLocation.getID(), 0, false, Sighting.class);
             for (Sighting sighting : listSightings) {
                 sighting.setLocationID(tempToLocation.getID());
-                app.getDBI().updateSighting(sighting);
+                app.getDBI().updateSighting(sighting, false);
             }
             app.getDBI().deleteLocation(tempToLocation.getID());
             setVisible(false);

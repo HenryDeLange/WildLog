@@ -439,8 +439,6 @@ public final class WildLogView extends JFrame {
         sprBackup = new javax.swing.JPopupMenu.Separator();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
-        mnuExportExcelBasic = new javax.swing.JMenuItem();
-        jSeparator23 = new javax.swing.JPopupMenu.Separator();
         mnuExportCSVBasic = new javax.swing.JMenuItem();
         mnuExportCSV = new javax.swing.JMenuItem();
         jSeparator18 = new javax.swing.JPopupMenu.Separator();
@@ -451,6 +449,8 @@ public final class WildLogView extends JFrame {
         jSeparator20 = new javax.swing.JPopupMenu.Separator();
         mnuExportKML = new javax.swing.JMenuItem();
         jSeparator10 = new javax.swing.JPopupMenu.Separator();
+        mnuExportExcelBasic = new javax.swing.JMenuItem();
+        jSeparator23 = new javax.swing.JPopupMenu.Separator();
         mnuExportWildNoteSync = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
         mnuExportWorkspace = new javax.swing.JMenuItem();
@@ -1043,20 +1043,6 @@ public final class WildLogView extends JFrame {
             }
         });
 
-        mnuExportExcelBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Excel.png"))); // NOI18N
-        mnuExportExcelBasic.setText("Export All to Excel (Basic format)");
-        mnuExportExcelBasic.setToolTipText("Export all data to Excel files using the Basic format.");
-        mnuExportExcelBasic.setName("mnuExportExcelBasic"); // NOI18N
-        mnuExportExcelBasic.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExportExcelBasicActionPerformed(evt);
-            }
-        });
-        exportMenu.add(mnuExportExcelBasic);
-
-        jSeparator23.setName("jSeparator23"); // NOI18N
-        exportMenu.add(jSeparator23);
-
         mnuExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         mnuExportCSVBasic.setText("Export All to CSV (Basic format)");
         mnuExportCSVBasic.setToolTipText("Export all data to CSV files using the Basic format. (Open in Excel, ArcGIS, etc.)");
@@ -1134,6 +1120,20 @@ public final class WildLogView extends JFrame {
 
         jSeparator10.setName("jSeparator10"); // NOI18N
         exportMenu.add(jSeparator10);
+
+        mnuExportExcelBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Excel.png"))); // NOI18N
+        mnuExportExcelBasic.setText("Export All to Excel (Basic format)");
+        mnuExportExcelBasic.setToolTipText("Export all data to Excel files using the Basic format.");
+        mnuExportExcelBasic.setName("mnuExportExcelBasic"); // NOI18N
+        mnuExportExcelBasic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportExcelBasicActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportExcelBasic);
+
+        jSeparator23.setName("jSeparator23"); // NOI18N
+        exportMenu.add(jSeparator23);
 
         mnuExportWildNoteSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
         mnuExportWildNoteSync.setText("Export WildNote Sync File");
@@ -1214,7 +1214,7 @@ public final class WildLogView extends JFrame {
         importMenu.add(sprImport2);
 
         mnuImportINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
-        mnuImportINaturalist.setText("Import iNaturalist Observations");
+        mnuImportINaturalist.setText("Import your iNaturalist Observations");
         mnuImportINaturalist.setToolTipText("Import observations from iNaturalist.");
         mnuImportINaturalist.setName("mnuImportINaturalist"); // NOI18N
         mnuImportINaturalist.addActionListener(new java.awt.event.ActionListener() {
@@ -1874,7 +1874,7 @@ public final class WildLogView extends JFrame {
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 UtilsTime.calculateSunAndMoon(sighting);
-                                app.getDBI().updateSighting(sighting);
+                                app.getDBI().updateSighting(sighting, false);
                                 setProgress(0 + (int)((t/(double)sightings.size())*100));
                                 setMessage("Sun and Moon Calculation: " + getProgress() + "%");
                             }
@@ -1904,7 +1904,7 @@ public final class WildLogView extends JFrame {
                                             sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
                                         }
                                     }
-                                    app.getDBI().updateSighting(sighting);
+                                    app.getDBI().updateSighting(sighting, false);
                                 }
                                 setProgress(0 + (int)((t/(double)sightings.size())*100));
                                 setMessage("Sun and Moon Calculation: " + getProgress() + "%");
@@ -2429,7 +2429,7 @@ public final class WildLogView extends JFrame {
                                         + "Creature: " + element.getPrimaryName());
                                 finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
                                 element.setID(app.getDBI().generateID());
-                                app.getDBI().updateElement(element, element.getPrimaryName());
+                                app.getDBI().updateElement(element, element.getPrimaryName(), false);
                             }
                         }
                         // Check Locations
@@ -2442,7 +2442,7 @@ public final class WildLogView extends JFrame {
                                         + "Place: " + location.getName());
                                 finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
                                 location.setID(app.getDBI().generateID());
-                                app.getDBI().updateLocation(location, location.getName());
+                                app.getDBI().updateLocation(location, location.getName(), false);
                             }
                         }
                         // Check Visits
@@ -2456,7 +2456,7 @@ public final class WildLogView extends JFrame {
                                         + "Period: " + visit.getName());
                                 finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
                                 visit.setID(app.getDBI().generateID());
-                                app.getDBI().updateVisit(visit, visit.getName());
+                                app.getDBI().updateVisit(visit, visit.getName(), false);
                             }
                             // Validate the Visit to Location link
                             Location temp = app.getDBI().findLocation(visit.getLocationID(), null, Location.class);
@@ -2472,7 +2472,7 @@ public final class WildLogView extends JFrame {
                                 }
                                 visit.setLocationID(newLocation.getID());
                                 // Still an issue with sightings not going to point to the correct place... (handled in the code below)
-                                app.getDBI().updateVisit(visit, visit.getName());
+                                app.getDBI().updateVisit(visit, visit.getName(), false);
                             }
                             countVisits++;
                             setProgress(1 + (int)(countVisits/(double)allVisits.size()*3));
@@ -2495,7 +2495,7 @@ public final class WildLogView extends JFrame {
                                     app.getDBI().createLocation(newLocation, false);
                                 }
                                 sighting.setLocationID(newLocation.getID());
-                                app.getDBI().updateSighting(sighting);
+                                app.getDBI().updateSighting(sighting, false);
                             }
                             // Validate the Sighting to Element link
                             Element tempElement = app.getDBI().findElement(sighting.getElementID(), null, Element.class);
@@ -2510,7 +2510,7 @@ public final class WildLogView extends JFrame {
                                     app.getDBI().createElement(newElement, false);
                                 }
                                 sighting.setElementID(newElement.getID());
-                                app.getDBI().updateSighting(sighting);
+                                app.getDBI().updateSighting(sighting, false);
                             }
                             // Validate the Sighting to Visit link
                             Visit tempVisit = app.getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
@@ -2534,7 +2534,7 @@ public final class WildLogView extends JFrame {
                                     app.getDBI().createVisit(newVisit, false);
                                 }
                                 sighting.setVisitID(newVisit.getID());
-                                app.getDBI().updateSighting(sighting);
+                                app.getDBI().updateSighting(sighting, false);
                             }
                             // Make sure the Sighting is using a legitimate Location-Visit pair
                             Visit checkSightingVisit = app.getDBI().findVisit(sighting.getVisitID(), null, true, Visit.class);
@@ -2550,10 +2550,10 @@ public final class WildLogView extends JFrame {
                                 }
                                 // Update sighting
                                 sighting.setLocationID(newLocation.getID());
-                                app.getDBI().updateSighting(sighting);
+                                app.getDBI().updateSighting(sighting, false);
                                 // Update visit
                                 checkSightingVisit.setLocationID(newLocation.getID());
-                                app.getDBI().updateVisit(checkSightingVisit, checkSightingVisit.getName());
+                                app.getDBI().updateVisit(checkSightingVisit, checkSightingVisit.getName(), false);
                             }
                             countSightings++;
                             setProgress(4 + (int)(countSightings/(double)allSightings.size()*4));
@@ -2848,7 +2848,7 @@ public final class WildLogView extends JFrame {
                                     && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
                                 sighting.setGPSAccuracy(GPSAccuracy.AVERAGE);
                                 sighting.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
-                                app.getDBI().updateSighting(sighting);
+                                app.getDBI().updateSighting(sighting, false);
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:     GPS information found without GPS Accuracy for Observation (" + sighting.getID() + ").");
                                 finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
@@ -2859,7 +2859,7 @@ public final class WildLogView extends JFrame {
                                         || sighting.getLongitude() == null || Longitudes.NONE.equals(sighting.getLongitude()))) {
                                     sighting.setGPSAccuracy(GPSAccuracy.NONE);
                                     sighting.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
-                                    app.getDBI().updateSighting(sighting);
+                                    app.getDBI().updateSighting(sighting, false);
                                     badGPSAccuracy++;
                                     finalHandleFeedback.println("PROBLEM:     GPS Accuracy information found without GPS location for Observation (" + sighting.getID() + ").");
                                     finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a value of NONE.");
@@ -2868,7 +2868,7 @@ public final class WildLogView extends JFrame {
                             if (sighting.getGPSAccuracy() != null && (sighting.getGPSAccuracyValue() < sighting.getGPSAccuracy().getMinMeters()
                                     || sighting.getGPSAccuracyValue() > sighting.getGPSAccuracy().getMaxMeters())) {
                                 sighting.setGPSAccuracyValue(sighting.getGPSAccuracy().getMaxMeters());
-                                app.getDBI().updateSighting(sighting);
+                                app.getDBI().updateSighting(sighting, false);
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:     GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Observation (" + sighting.getID() + ").");
                                 finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
@@ -2885,7 +2885,7 @@ public final class WildLogView extends JFrame {
                                     && location.getLongitude() != null && !Longitudes.NONE.equals(location.getLongitude())) {
                                 location.setGPSAccuracy(GPSAccuracy.AVERAGE);
                                 location.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
-                                app.getDBI().updateLocation(location, location.getName());
+                                app.getDBI().updateLocation(location, location.getName(), false);
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:     GPS information found without GPS Accuracy for Place (" + location.getName() + ").");
                                 finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
@@ -2896,7 +2896,7 @@ public final class WildLogView extends JFrame {
                                         || location.getLongitude() == null || Longitudes.NONE.equals(location.getLongitude()))) {
                                     location.setGPSAccuracy(GPSAccuracy.NONE);
                                     location.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
-                                    app.getDBI().updateLocation(location, location.getName());
+                                    app.getDBI().updateLocation(location, location.getName(), false);
                                     badGPSAccuracy++;
                                     finalHandleFeedback.println("PROBLEM:     GPS Accuracy information found without GPS location for Place (" + location.getName() + ").");
                                     finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a value of NONE.");
@@ -2905,7 +2905,7 @@ public final class WildLogView extends JFrame {
                             if (location.getGPSAccuracy() != null && (location.getGPSAccuracyValue() < location.getGPSAccuracy().getMinMeters()
                                     || location.getGPSAccuracyValue() > location.getGPSAccuracy().getMaxMeters())) {
                                 location.setGPSAccuracyValue(location.getGPSAccuracy().getMaxMeters());
-                                app.getDBI().updateLocation(location, location.getName());
+                                app.getDBI().updateLocation(location, location.getName(), false);
                                 badGPSAccuracy++;
                                 finalHandleFeedback.println("PROBLEM:     GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Place (" + location.getName() + ").");
                                 finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
@@ -3229,7 +3229,7 @@ public final class WildLogView extends JFrame {
                                     double seconds = difference - minutes*60.0;
                                     sighting.setDurationMinutes(minutes);
                                     sighting.setDurationSeconds((double)seconds);
-                                    app.getDBI().updateSighting(sighting);
+                                    app.getDBI().updateSighting(sighting, false);
                                 }
                                 setProgress(0 + (int)((t/(double)sightingList.size())*100));
                                 setMessage("Duration Calculation: " + getProgress() + "%");
@@ -3258,7 +3258,7 @@ public final class WildLogView extends JFrame {
                                         double seconds = difference - minutes*60.0;
                                         sighting.setDurationMinutes(minutes);
                                         sighting.setDurationSeconds((double)seconds);
-                                        app.getDBI().updateSighting(sighting);
+                                        app.getDBI().updateSighting(sighting, false);
                                     }
                                 }
                                 setProgress(0 + (int)((t/(double)sightingList.size())*100));
@@ -3397,8 +3397,8 @@ public final class WildLogView extends JFrame {
     private void mnuImportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportWorkspaceActionPerformed
         tabbedPanel.setSelectedIndex(0);
         int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                "<html>It is <b><u>very strongly</u></b> recommended that you <b><u>backup your Workspace</u></b> (WildLog folder) before continuing. <br>"
-                        + "Press OK when you are ready to start the import process.</html>",
+                "<html>It is <b><u>very strongly</u></b> recommended that you <b><u>backup your Workspace</u></b> (entire WildLog folder) before continuing. "
+                        + "<br>Press OK if you are ready to start the import process now.</html>",
                 "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             WLFileChooser fileChooser = new WLFileChooser();
@@ -3420,8 +3420,13 @@ public final class WildLogView extends JFrame {
                 // Make sure it's a valid workspace that was selected
                 if (Files.exists(selectedPath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))) {
                     // Open the import window
-                    WorkspaceImportDialog dialog = new WorkspaceImportDialog(app, selectedPath);
-                    dialog.setVisible(true);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            WorkspaceImportDialog dialog = new WorkspaceImportDialog(app, selectedPath);
+                            dialog.setVisible(true);
+                        }
+                    });
                 }
                 else {
                     WLOptionPane.showConfirmDialog(app.getMainFrame(),
@@ -3793,7 +3798,7 @@ public final class WildLogView extends JFrame {
                             element.setScientificName(oldName);
                         }
                     }
-                    app.getDBI().updateElement(element, oldName);
+                    app.getDBI().updateElement(element, oldName, false);
                 }
             }
         }

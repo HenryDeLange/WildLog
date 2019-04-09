@@ -1717,7 +1717,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 result = app.getDBI().createSighting(sighting, false);
             }
             else {
-                result = app.getDBI().updateSighting(sighting);
+                result = app.getDBI().updateSighting(sighting, false);
             }
             if (result == false) {
                 WLOptionPane.showMessageDialog(this,

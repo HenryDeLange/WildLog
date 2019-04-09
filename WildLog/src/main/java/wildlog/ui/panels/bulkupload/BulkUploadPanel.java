@@ -919,7 +919,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         app.getDBI().createVisit(visit, false);
                     }
                     else {
-                        app.getDBI().updateVisit(visit, existingVisit.getName());
+                        app.getDBI().updateVisit(visit, existingVisit.getName(), false);
                     }
                     // Save the images associated with the Visit
                     File[] visitFiles = new File[lstVisitFiles.size()];

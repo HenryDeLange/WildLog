@@ -1069,7 +1069,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     result = app.getDBI().createElement(element, false);
                 }
                 else {
-                    result = app.getDBI().updateElement(element, oldName);
+                    result = app.getDBI().updateElement(element, oldName, false);
                 }
                 if (result == true) {
                     txtPrimaryName.setBackground(new java.awt.Color(204, 255, 204));

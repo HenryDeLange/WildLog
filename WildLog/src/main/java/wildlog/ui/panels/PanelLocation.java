@@ -1355,7 +1355,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                     result = app.getDBI().createLocation(locationWL, false);
                 }
                 else {
-                    result = app.getDBI().updateLocation(locationWL, oldName);
+                    result = app.getDBI().updateLocation(locationWL, oldName, false);
                 }
                 if (result == true) {
                     txtName.setBackground(new java.awt.Color(204, 255, 204));

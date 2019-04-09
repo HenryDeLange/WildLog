@@ -60,7 +60,7 @@ import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.WildLogUserTypes;
-import wildlog.ui.dialogs.LoginDialog;
+import wildlog.ui.dialogs.UserLoginDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
@@ -330,7 +330,7 @@ public class WildLogApp extends Application {
         }
         // Perform login (optional)
         if (dbi.countUsers() > 0) {
-            LoginDialog dialog = new LoginDialog();
+            UserLoginDialog dialog = new UserLoginDialog();
             dialog.setVisible(true);
             // Exit if login was incorrect
             if (!dialog.isLoginSuccess()) {

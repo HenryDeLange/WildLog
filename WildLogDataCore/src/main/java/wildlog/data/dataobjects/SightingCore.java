@@ -16,6 +16,7 @@ import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
+import wildlog.data.utils.UtilsData;
 
 
 public class SightingCore extends DataObjectWithGPS implements DataObjectWithWildLogFile {
@@ -105,6 +106,48 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     @Override
     public long getIDField() {
         return id;
+    }
+    
+    public boolean hasTheSameContent(SightingCore inSighting) {
+        if (inSighting == null) {
+            return false;
+        }
+        return UtilsData.isTheSame(this, inSighting)
+                && UtilsData.isTheSame(getID(), inSighting.getID())
+                && UtilsData.isTheSame(getAge(), inSighting.getAge())
+                && UtilsData.isTheSame(getCertainty(), inSighting.getCertainty())
+                && UtilsData.isTheSame(getDate(), inSighting.getDate())
+                && UtilsData.isTheSame(getDetails(), inSighting.getDetails())
+                && UtilsData.isTheSame(getDurationMinutes(), inSighting.getDurationMinutes())
+                && UtilsData.isTheSame(getDurationSeconds(), inSighting.getDurationSeconds())
+                && UtilsData.isTheSame(getElementID(), inSighting.getElementID())
+                && UtilsData.isTheSame(getGPSAccuracy(), inSighting.getGPSAccuracy())
+                && UtilsData.isTheSame(getGPSAccuracyValue(), inSighting.getGPSAccuracyValue())
+                && UtilsData.isTheSame(getLatDegrees(), inSighting.getLatDegrees())
+                && UtilsData.isTheSame(getLatMinutes(), inSighting.getLatMinutes())
+                && UtilsData.isTheSame(getLatSeconds(), inSighting.getLatSeconds())
+                && UtilsData.isTheSame(getLatitude(), inSighting.getLatitude())
+                && UtilsData.isTheSame(getLifeStatus(), inSighting.getLifeStatus())
+                && UtilsData.isTheSame(getLocationID(), inSighting.getLocationID())
+                && UtilsData.isTheSame(getLonDegrees(), inSighting.getLonDegrees())
+                && UtilsData.isTheSame(getLonMinutes(), inSighting.getLonMinutes())
+                && UtilsData.isTheSame(getLonSeconds(), inSighting.getLonSeconds())
+                && UtilsData.isTheSame(getLongitude(), inSighting.getLongitude())
+                && UtilsData.isTheSame(getMoonPhase(), inSighting.getMoonPhase())
+                && UtilsData.isTheSame(getMoonlight(), inSighting.getMoonlight())
+                && UtilsData.isTheSame(getNumberOfElements(), inSighting.getNumberOfElements())
+                && UtilsData.isTheSame(getSex(), inSighting.getSex())
+                && UtilsData.isTheSame(getSightingEvidence(), inSighting.getSightingEvidence())
+                && UtilsData.isTheSame(getTag(), inSighting.getTag())
+                && UtilsData.isTheSame(getTemperature(), inSighting.getTemperature())
+                && UtilsData.isTheSame(getTimeAccuracy(), inSighting.getTimeAccuracy())
+                && UtilsData.isTheSame(getTimeOfDay(), inSighting.getTimeOfDay())
+                && UtilsData.isTheSame(getUnitsTemperature(), inSighting.getUnitsTemperature())
+                && UtilsData.isTheSame(getViewRating(), inSighting.getViewRating())
+                && UtilsData.isTheSame(getVisitID(), inSighting.getVisitID())
+                && UtilsData.isTheSame(getWeather(), inSighting.getWeather())
+                && UtilsData.isTheSame(getAuditTime(), inSighting.getAuditTime())
+                && UtilsData.isTheSame(getAuditUser(), inSighting.getAuditUser());
     }
     
     public <T extends SightingCore> T cloneShallow() {

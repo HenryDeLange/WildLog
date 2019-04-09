@@ -1675,7 +1675,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> boolean createElement(T inElement, boolean inNewButKeepID) {
+    public <T extends ElementCore> boolean createElement(T inElement, boolean inNewButUseOldAuditAndID) {
         PreparedStatement state = null;
         PreparedStatement tempState = null;
         ResultSet results = null;
@@ -1687,7 +1687,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Get the new ID
             tempState = conn.prepareStatement("SELECT COUNT(ID) FROM ELEMENTS WHERE ID = ?");
-            if (!inNewButKeepID) {
+            if (!inNewButUseOldAuditAndID) {
                 inElement.setID(generateID());
             }
             tempState.setLong(1, inElement.getID());
@@ -1701,7 +1701,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Insert
             state = conn.prepareStatement(createElement);
-            maintainElement(state, inElement);
+            maintainElement(state, inElement, inNewButUseOldAuditAndID);
             // Execute
             state.executeUpdate();
         }
@@ -1717,7 +1717,7 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends ElementCore> boolean updateElement(T inElement, String inOldName) {
+    public <T extends ElementCore> boolean updateElement(T inElement, String inOldName, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
             // Make sure the name isn't already used
@@ -1729,7 +1729,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Update
             state = conn.prepareStatement(updateElement);
-            maintainElement(state, inElement);
+            maintainElement(state, inElement, inUseOldAudit);
             state.setLong(16, inElement.getID());
             // Execute
             state.executeUpdate();
@@ -1744,7 +1744,7 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
-    private <T extends ElementCore> void maintainElement(PreparedStatement state, T inElement) throws SQLException {
+    private <T extends ElementCore> void maintainElement(PreparedStatement state, T inElement, boolean inUseOldAudit) throws SQLException {
         state.setLong(1, inElement.getID());
         state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
         state.setString(3, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getOtherName()), 150));
@@ -1758,13 +1758,15 @@ public abstract class DBI_JDBC implements DBI {
         state.setString(11, UtilsData.stringFromObject(inElement.getType()));
         state.setString(12, UtilsData.stringFromObject(inElement.getFeedingClass()));
         state.setString(13, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getReferenceID()), 50));
-        setupAuditInfo(inElement);
+        if (!inUseOldAudit) {
+            setupAuditInfo(inElement);
+        }
         state.setLong(14, inElement.getAuditTime());
         state.setString(15, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getAuditUser()), 150));
     }
 
     @Override
-    public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButKeepID) {
+    public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButUseOldAuditAndID) {
         PreparedStatement state = null;
         PreparedStatement tempState = null;
         ResultSet results = null;
@@ -1776,7 +1778,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Get the new ID
             tempState = conn.prepareStatement("SELECT COUNT(ID) FROM LOCATIONS WHERE ID = ?");
-            if (!inNewButKeepID) {
+            if (!inNewButUseOldAuditAndID) {
                 inLocation.setID(generateID());
             }
             tempState.setLong(1, inLocation.getID());
@@ -1790,7 +1792,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Insert
             state = conn.prepareStatement(createLocation);
-            maintainLocation(state, inLocation);
+            maintainLocation(state, inLocation, inNewButUseOldAuditAndID);
             // Execute
             state.executeUpdate();
         }
@@ -1806,7 +1808,7 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName) {
+    public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
             // Make sure the name isn't already used
@@ -1818,7 +1820,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Update
             state = conn.prepareStatement(updateLocation);
-            maintainLocation(state, inLocation);
+            maintainLocation(state, inLocation, inUseOldAudit);
             state.setLong(19,inLocation.getID());
             // Execute
             state.executeUpdate();
@@ -1833,7 +1835,7 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
-    private <T extends LocationCore> void maintainLocation(PreparedStatement state, T inLocation) throws SQLException {
+    private <T extends LocationCore> void maintainLocation(PreparedStatement state, T inLocation, boolean inUseOldAudit) throws SQLException {
         state.setLong(1, inLocation.getID());
         state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
         state.setString(3, UtilsData.sanitizeString(inLocation.getDescription()));
@@ -1850,13 +1852,15 @@ public abstract class DBI_JDBC implements DBI {
         state.setDouble(14, inLocation.getLonSeconds());
         state.setString(15, UtilsData.stringFromObject(inLocation.getGPSAccuracy()));
         state.setDouble(16, inLocation.getGPSAccuracyValue());
-        setupAuditInfo(inLocation);
+        if (!inUseOldAudit) {
+            setupAuditInfo(inLocation);
+        }
         state.setLong(17, inLocation.getAuditTime());
         state.setString(18, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getAuditUser()), 150));
     }
 
     @Override
-    public <T extends VisitCore> boolean createVisit(T inVisit, boolean inNewButKeepID) {
+    public <T extends VisitCore> boolean createVisit(T inVisit, boolean inNewButUseOldAuditAndID) {
         PreparedStatement state = null;
         PreparedStatement tempState = null;
         ResultSet results = null;
@@ -1868,7 +1872,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Get the new ID
             tempState = conn.prepareStatement("SELECT COUNT(ID) FROM VISITS WHERE ID = ?");
-            if (!inNewButKeepID) {
+            if (!inNewButUseOldAuditAndID) {
                 inVisit.setID(generateID());
             }
             tempState.setLong(1, inVisit.getID());
@@ -1882,7 +1886,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Insert
             state = conn.prepareStatement(createVisit);
-            maintainVisit(state, inVisit);
+            maintainVisit(state, inVisit, inNewButUseOldAuditAndID);
             // Execute
             state.executeUpdate();
         }
@@ -1898,7 +1902,7 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName) {
+    public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
             // Make sure the name isn't already used
@@ -1910,7 +1914,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Update
             state = conn.prepareStatement(updateVisit);
-            maintainVisit(state, inVisit);
+            maintainVisit(state, inVisit, inUseOldAudit);
             state.setLong(11, inVisit.getID());
             // Execute
             state.executeUpdate();
@@ -1925,7 +1929,7 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
-    private <T extends VisitCore> void maintainVisit(PreparedStatement state, T inVisit) throws SQLException {
+    private <T extends VisitCore> void maintainVisit(PreparedStatement state, T inVisit, boolean inUseOldAudit) throws SQLException {
         state.setLong(1, inVisit.getID());
         state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
         if (inVisit.getStartDate() != null) {
@@ -1944,18 +1948,20 @@ public abstract class DBI_JDBC implements DBI {
         state.setString(6, UtilsData.stringFromObject(inVisit.getGameWatchingIntensity()));
         state.setString(7, UtilsData.stringFromObject(inVisit.getType()));
         state.setLong(8, inVisit.getLocationID());
-        setupAuditInfo(inVisit);
+        if (!inUseOldAudit) {
+            setupAuditInfo(inVisit);
+        }
         state.setLong(9, inVisit.getAuditTime());
         state.setString(10, UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getAuditUser()), 150));
     }
 
     @Override
-    public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButKeepID) {
+    public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButUseOldAuditAndID) {
         PreparedStatement state = null;
         PreparedStatement tempState = null;
         ResultSet results = null;
         try {
-            if (!inNewButKeepID) {
+            if (!inNewButUseOldAuditAndID) {
                 // Get the new ID
                 tempState = conn.prepareStatement("SELECT COUNT(ID) FROM SIGHTINGS WHERE ID = ?");
                 inSighting.setID(generateID());
@@ -1971,7 +1977,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Insert
             state = conn.prepareStatement(createSighting);
-            maintainSighting(state, inSighting);
+            maintainSighting(state, inSighting, inNewButUseOldAuditAndID);
             // Execute
             state.executeUpdate();
         }
@@ -1987,12 +1993,12 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends SightingCore> boolean updateSighting(T inSighting) {
+    public <T extends SightingCore> boolean updateSighting(T inSighting, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
             // Update
             state = conn.prepareStatement(updateSighting);
-            maintainSighting(state, inSighting);
+            maintainSighting(state, inSighting, inUseOldAudit);
             state.setLong(36, inSighting.getID());
             // Execute
             state.executeUpdate();
@@ -2007,7 +2013,7 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
-    private <T extends SightingCore> void maintainSighting(PreparedStatement state, T inSighting) throws SQLException {
+    private <T extends SightingCore> void maintainSighting(PreparedStatement state, T inSighting, boolean inUseOldAudit) throws SQLException {
         // Populate the values
         state.setLong(1, inSighting.getID());
         if (inSighting.getDate() != null) {
@@ -2047,7 +2053,9 @@ public abstract class DBI_JDBC implements DBI {
         state.setDouble(31, inSighting.getGPSAccuracyValue());
         state.setString(32, UtilsData.stringFromObject(inSighting.getTimeAccuracy()));
         state.setString(33, UtilsData.stringFromObject(inSighting.getAge()));
-        setupAuditInfo(inSighting);
+        if (!inUseOldAudit) {
+            setupAuditInfo(inSighting);
+        }
         state.setLong(34, inSighting.getAuditTime());
         state.setString(35, UtilsData.limitLength(UtilsData.sanitizeString(inSighting.getAuditUser()), 150));
     }
