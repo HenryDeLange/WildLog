@@ -216,7 +216,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 sql = "SELECT * "
                         + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
                         + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
-                        + "FROM LOCATIONS";
+                        + " FROM LOCATIONS";
                 if (inLocation != null && inLocation.getName() != null && !inLocation.getName().isEmpty()) {
                     sql = sql + " WHERE NAME = ''" + inLocation.getName().replaceAll("'", "''") + "''";
                 }
