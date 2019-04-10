@@ -80,7 +80,7 @@ public class ImageResizeDialog extends JDialog {
         setModal(true);
         setPreferredSize(new java.awt.Dimension(600, 480));
 
-        btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnConfirm.setToolTipText("Move the Observations from the selected Period to the new Period and then delete the initial Period.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirm.setFocusPainted(false);

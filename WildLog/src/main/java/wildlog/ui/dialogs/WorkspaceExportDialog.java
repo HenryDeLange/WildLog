@@ -544,7 +544,7 @@ public class WorkspaceExportDialog extends JDialog {
                                 if (chkOnlyFirstSighting.isSelected()) {
                                     uniqueElementsPerVisit = new HashSet<>();
                                 }
-                                saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode) treWorkspace.getModel().getRoot(), 
+                                exportRecords(newDBI, destinationWorkspace, (DefaultMutableTreeNode) treWorkspace.getModel().getRoot(), 
                                         totalSelectedNodes, this, new ProgressCounter(), uniqueElementsPerVisit, 
                                         UtilsTime.getLocalDateFromDate(dtpStartDate.getDate()), UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()));
                                 newDBI.close();
@@ -672,7 +672,7 @@ public class WorkspaceExportDialog extends JDialog {
         }
     }
 
-    private void saveChildren(WildLogDBI inNewDBI, Path inDestinationWorkspace, DefaultMutableTreeNode inNode, int inTotalNodes, 
+    private void exportRecords(WildLogDBI inNewDBI, Path inDestinationWorkspace, DefaultMutableTreeNode inNode, int inTotalNodes, 
             ProgressbarTask inProgressbarTask, ProgressCounter inCounter, Set<String> inUniqueElementsPerVisit, 
             LocalDate inStartDate, LocalDate inEndDate) {
         if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
@@ -773,7 +773,7 @@ public class WorkspaceExportDialog extends JDialog {
         }
         for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
-            saveChildren(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter, inUniqueElementsPerVisit, inStartDate, inEndDate);
+            exportRecords(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter, inUniqueElementsPerVisit, inStartDate, inEndDate);
         }
     }
 

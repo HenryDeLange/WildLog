@@ -2,6 +2,7 @@ package wildlog.ui.dialogs;
 
 import java.awt.Cursor;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -249,7 +250,7 @@ public class WorkspaceImportDialog extends JDialog {
 
         grpConflicts.add(rdbConflictAutoResolve);
         rdbConflictAutoResolve.setSelected(true);
-        rdbConflictAutoResolve.setText("Automatically use the most recently edited record");
+        rdbConflictAutoResolve.setText("Automatically choose the most recently edited record and largest file");
         rdbConflictAutoResolve.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the most recently edited record will automatically be used in the active Workspace.</html>");
         rdbConflictAutoResolve.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbConflictAutoResolve.setFocusPainted(false);
@@ -508,15 +509,19 @@ public class WorkspaceImportDialog extends JDialog {
 
     private void importRecords(DefaultMutableTreeNode inNode, int inTotalNodes, ProgressbarTask inProgressbarTask, ProgressCounter inCounter, 
             Set<String> inProcessedData, PrintWriter inFeedback) {
-        
-// TODO: Handle potential name clashes
-        
         if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
                 if (dataWrapper.getDataObject() instanceof Location) {
                     if (inProcessedData.add("L" + ((Location) dataWrapper.getDataObject()).getID())) {
                         Location importLocation = importDBI.findLocation(((Location) dataWrapper.getDataObject()).getID(), null, Location.class);
+                        // Check to make sure the name of the importing records is unique the active workspace
+                        Location checkWorkspaceName = app.getDBI().findLocation(0, importLocation.getName(), Location.class);
+                        while (checkWorkspaceName != null && checkWorkspaceName.getID() != importLocation.getID()) {
+                            importLocation.setName("wlimport_" + importLocation.getName());
+                            checkWorkspaceName = app.getDBI().findLocation(0, importLocation.getName(), Location.class);
+                        }
+                        // Save the new record
                         Location workspaceLocation = app.getDBI().findLocation(importLocation.getID(), null, Location.class);
                         if (workspaceLocation == null) {
                             // New
@@ -545,15 +550,11 @@ public class WorkspaceImportDialog extends JDialog {
                                     }
                                     else
                                     if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
-                                        inFeedback.println("Skipped Place: " + workspaceLocation.getDisplayName() + " [" + workspaceLocation.getID() + "]");
+                                        inFeedback.println("Keep Workspace Place: " + workspaceLocation.getDisplayName() + " [" + workspaceLocation.getID() + "]");
                                     }
                                     else {
-                                        // Left unresolved, so we fall back to choosing the most recent record
-                                        if (importLocation.getAuditTime() > workspaceLocation.getAuditTime()) {
-                                            app.getDBI().updateLocation(importLocation, importLocation.getName(), true);
-                                            importLocationTotal++;
-                                            inFeedback.println("Auto Updated Place: " + importLocation.getDisplayName() + " [" + importLocation.getID() + "]");
-                                        }
+                                        // Left unresolved, so we fall back to skipping the record
+                                        inFeedback.println("Skipped Place: " + workspaceLocation.getDisplayName() + " [" + workspaceLocation.getID() + "]");
                                     }
                                 }
                             }
@@ -565,6 +566,13 @@ public class WorkspaceImportDialog extends JDialog {
                 if (dataWrapper.getDataObject() instanceof Visit) {
                     if (inProcessedData.add("V" + ((Visit) dataWrapper.getDataObject()).getID())) {
                         Visit importVisit = importDBI.findVisit(((Visit) dataWrapper.getDataObject()).getID(), null, true, Visit.class);
+                        // Check to make sure the name of the importing records is unique the active workspace
+                        Visit checkWorkspaceName = app.getDBI().findVisit(0, importVisit.getName(), false, Visit.class);
+                        while (checkWorkspaceName != null && checkWorkspaceName.getID() != importVisit.getID()) {
+                            importVisit.setName("wlimport_" + importVisit.getName());
+                            checkWorkspaceName = app.getDBI().findVisit(0, importVisit.getName(), false, Visit.class);
+                        }
+                        // Save the new record
                         Visit workspaceVisit = app.getDBI().findVisit(importVisit.getID(), null, true, Visit.class);
                         if (workspaceVisit == null) {
                             // New
@@ -593,15 +601,11 @@ public class WorkspaceImportDialog extends JDialog {
                                     }
                                     else
                                     if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
-                                        inFeedback.println("Skipped Period: " + workspaceVisit.getDisplayName() + " [" + workspaceVisit.getID() + "]");
+                                        inFeedback.println("Keep Workspace Period: " + workspaceVisit.getDisplayName() + " [" + workspaceVisit.getID() + "]");
                                     }
                                     else {
-                                        // Left unresolved, so we fall back to choosing the most recent record
-                                        if (importVisit.getAuditTime() > workspaceVisit.getAuditTime()) {
-                                            app.getDBI().updateVisit(importVisit, importVisit.getName(), true);
-                                            importVisitTotal++;
-                                            inFeedback.println("Auto Updated Period: " + importVisit.getDisplayName() + " [" + importVisit.getID() + "]");
-                                        }
+                                        // Left unresolved, so we fall back to skipping the record
+                                        inFeedback.println("Skipped Period: " + workspaceVisit.getDisplayName() + " [" + workspaceVisit.getID() + "]");
                                     }
                                 }
                             }
@@ -613,6 +617,13 @@ public class WorkspaceImportDialog extends JDialog {
                 if (dataWrapper.getDataObject() instanceof Element) {
                     if (inProcessedData.add("E" + ((Element) dataWrapper.getDataObject()).getID())) {
                         Element importElement = importDBI.findElement(((Element) dataWrapper.getDataObject()).getID(), null, Element.class);
+                        // Check to make sure the name of the importing records is unique the active workspace
+                        Element checkWorkspaceName = app.getDBI().findElement(0, importElement.getPrimaryName(), Element.class);
+                        while (checkWorkspaceName != null && checkWorkspaceName.getID() != importElement.getID()) {
+                            importElement.setPrimaryName("wlimport_" + importElement.getPrimaryName());
+                            checkWorkspaceName = app.getDBI().findElement(0, importElement.getPrimaryName(), Element.class);
+                        }
+                        // Save the new record
                         Element workspaceElement = app.getDBI().findElement(importElement.getID(), null, Element.class);
                         if (workspaceElement == null) {
                             // New
@@ -641,15 +652,11 @@ public class WorkspaceImportDialog extends JDialog {
                                     }
                                     else
                                     if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
-                                        inFeedback.println("Skipped Creature: " + workspaceElement.getDisplayName() + " [" + workspaceElement.getID() + "]");
+                                        inFeedback.println("Keep Workspace Creature: " + workspaceElement.getDisplayName() + " [" + workspaceElement.getID() + "]");
                                     }
                                     else {
-                                        // Left unresolved, so we fall back to choosing the most recent record
-                                        if (importElement.getAuditTime() > workspaceElement.getAuditTime()) {
-                                            app.getDBI().updateElement(importElement, importElement.getPrimaryName(), true);
-                                            importElementTotal++;
-                                            inFeedback.println("Auto Updated Creature: " + importElement.getDisplayName() + " [" + importElement.getID() + "]");
-                                        }
+                                        // Left unresolved, so we fall back to skipping the record
+                                        inFeedback.println("Skipped Creature: " + workspaceElement.getDisplayName() + " [" + workspaceElement.getID() + "]");
                                     }
                                 }
                             }
@@ -670,11 +677,11 @@ public class WorkspaceImportDialog extends JDialog {
                     else {
                         // Update
                         if (!importSighting.hasTheSameContent(workpaceSighting)) {
+                            importSightingConflicts++;
                             if (rdbConflictAutoResolve.isSelected()) {
                                 if (importSighting.getAuditTime() > workpaceSighting.getAuditTime()) {
                                     app.getDBI().updateSighting(importSighting, true);
                                     importSightingTotal++;
-                                    importSightingConflicts++;
                                     inFeedback.println("Auto Updated Observation: " + importSighting.getDisplayName() + " [" + importSighting.getID() + "]");
                                 }
                             }
@@ -684,22 +691,15 @@ public class WorkspaceImportDialog extends JDialog {
                                 if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.IMPORT) {
                                     app.getDBI().updateSighting(importSighting, true);
                                     importSightingTotal++;
-                                    importSightingConflicts++;
                                     inFeedback.println("Manual Updated Observation: " + importSighting.getDisplayName() + " [" + importSighting.getID() + "]");
                                 }
                                 else
                                 if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
-                                    importSightingConflicts++;
-                                    inFeedback.println("Skipped Observation: " + workpaceSighting.getDisplayName() + " [" + workpaceSighting.getID() + "]");
+                                    inFeedback.println("Keep Workspace Observation: " + workpaceSighting.getDisplayName() + " [" + workpaceSighting.getID() + "]");
                                 }
                                 else {
-                                    // Left unresolved, so we fall back to choosing the most recent record
-                                    if (importSighting.getAuditTime() > workpaceSighting.getAuditTime()) {
-                                        app.getDBI().updateSighting(importSighting, true);
-                                        importSightingTotal++;
-                                        importSightingConflicts++;
-                                        inFeedback.println("Auto Updated Observation: " + importSighting.getDisplayName() + " [" + importSighting.getID()+ "]");
-                                    }
+                                    // Left unresolved, so we fall back to skipping the record
+                                    inFeedback.println("Skipped Observation: " + workpaceSighting.getDisplayName() + " [" + workpaceSighting.getID() + "]");
                                 }
                             }
                         }
@@ -717,14 +717,14 @@ public class WorkspaceImportDialog extends JDialog {
         }
     }
 
-    private void saveFiles(String inExternalWildLogFileID, PrintWriter inFeedback) {
+    private void saveFiles(String inWildLogFileID, PrintWriter inFeedback) {
         // Note: Ek kan WildLogFile.getAbsolutePath() op die import file roep want dit sal relative tot die huidige active workspace wees.
         if (!rdbImportNoFiles.isSelected()) {
             WildLogFileType fileType = null;
             if (rdbImportImagesOnly.isSelected()) {
                 fileType = WildLogFileType.IMAGE;
             }
-            List<WildLogFile> listExternalFiles = importDBI.listWildLogFiles(inExternalWildLogFileID, fileType, WildLogFile.class);
+            List<WildLogFile> listExternalFiles = importDBI.listWildLogFiles(inWildLogFileID, fileType, WildLogFile.class);
             for (WildLogFile fileToImport : listExternalFiles) {
                 if (app.getDBI().countWildLogFiles(fileToImport.getID(), null) == 0) {
                     // Die file bestaan nie in die workspace nie, kan dus nuut geskep/gecopy word
@@ -744,49 +744,46 @@ public class WorkspaceImportDialog extends JDialog {
                     inFeedback.println("Imported File: " + fileToImport.getDBFilePath() + " [" + fileToImport.getID() + "]");
                 }
                 else {
-                    // This file is already in the current workspace
-                    WildLogFile workpaceFile = app.getDBI().findWildLogFile(fileToImport.getID(), null, null, null, WildLogFile.class);
-                    if (rdbConflictAutoResolve.isSelected()) {
-                        if (fileToImport.getAuditTime() > workpaceFile.getAuditTime()) {
-                            // Copy file
-                            copyFile(fileToImport);
-                            // Save DB entry
-                            app.getDBI().updateWildLogFile(fileToImport, true);
-                            importFileTotal++;
-                            importFileConflicts++;
-                            inFeedback.println("Auto Updated File: " + fileToImport.getDBFilePath() + " [" + fileToImport.getID() + "]");
-                        }
-                    }
-                    else {
-                        WorkspaceImportConflictDialog dialog = new WorkspaceImportConflictDialog(
-                                importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath(), workpaceFile.getAbsolutePath());
-                        dialog.setVisible(true);
-                        if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.IMPORT) {
-                            // Copy file
-                            copyFile(fileToImport);
-                            // Save DB entry
-                            app.getDBI().updateWildLogFile(fileToImport, true);
-                            importFileTotal++;
-                            importFileConflicts++;
-                            inFeedback.println("Manual Updated File: " + fileToImport.getDBFilePath() + " [" + fileToImport.getID() + "]");
-                        }
-                        else
-                        if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
-                            importFileConflicts++;
-                            inFeedback.println("Skipped File: " + workpaceFile.getDBFilePath() + " [" + workpaceFile.getID() + "]");
-                        }
-                        else {
-                            // Left unresolved, so we fall back to choosing the most recent record
-                            if (fileToImport.getAuditTime() > workpaceFile.getAuditTime()) {
+                    importFileConflicts++;
+                    try {
+                        Path fileToImportFullPath = importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath();
+                        // This file is already in the current workspace
+                        WildLogFile workpaceFile = app.getDBI().findWildLogFile(fileToImport.getID(), null, null, null, WildLogFile.class);
+                        if (rdbConflictAutoResolve.isSelected()) {
+                            if (Files.size(fileToImportFullPath) > Files.size(workpaceFile.getAbsolutePath())) {
                                 // Copy file
                                 copyFile(fileToImport);
                                 // Save DB entry
                                 app.getDBI().updateWildLogFile(fileToImport, true);
                                 importFileTotal++;
-                                importFileConflicts++;
-                                inFeedback.println("Auto Updated File: " + fileToImport.getDBFilePath()+ " [" + fileToImport.getID()+ "]");
+                                inFeedback.println("Auto Updated File: " + fileToImport.getDBFilePath() + " [" + fileToImport.getID() + "]");
                             }
                         }
+                        else {
+                            if (Files.size(fileToImportFullPath) != Files.size(workpaceFile.getAbsolutePath())) {
+                                WorkspaceImportConflictDialog dialog = new WorkspaceImportConflictDialog(fileToImportFullPath, workpaceFile.getAbsolutePath());
+                                dialog.setVisible(true);
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.IMPORT) {
+                                    // Copy file
+                                    copyFile(fileToImport);
+                                    // Save DB entry
+                                    app.getDBI().updateWildLogFile(fileToImport, true);
+                                    importFileTotal++;
+                                    inFeedback.println("Manual Updated File: " + fileToImport.getDBFilePath() + " [" + fileToImport.getID() + "]");
+                                }
+                                else
+                                if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.WORKSPACE) {
+                                    inFeedback.println("Keep Workspace File: " + workpaceFile.getDBFilePath() + " [" + workpaceFile.getID() + "]");
+                                }
+                                else {
+                                    // Left unresolved, so we fall back to skipping the record
+                                    inFeedback.println("Skipped File: " + workpaceFile.getDBFilePath() + " [" + workpaceFile.getID() + "]");
+                                }
+                            }
+                        }
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                 }
             }
@@ -925,13 +922,11 @@ public class WorkspaceImportDialog extends JDialog {
     }//GEN-LAST:event_rdbImportThumbnailsActionPerformed
 
     private int checkConflicts(DefaultMutableTreeNode inNode, Set<String> inProcessedData) {
-        
-// TODO: Handle files
-        
         int conflict = 0;
         if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
+                // Check the record
                 if (dataWrapper.getDataObject() instanceof Location) {
                     if (inProcessedData.add("L" + ((Location) dataWrapper.getDataObject()).getID())) {
                         Location importLocation = importDBI.findLocation(((Location) dataWrapper.getDataObject()).getID(), null, Location.class);
@@ -941,6 +936,7 @@ public class WorkspaceImportDialog extends JDialog {
                                 conflict = 1;
                             }
                         }
+                        conflict = conflict + checkFileConflicts(importLocation.getWildLogFileID());
                     }
                 }
                 else
@@ -953,6 +949,7 @@ public class WorkspaceImportDialog extends JDialog {
                                 conflict = 1;
                             }
                         }
+                        conflict = conflict + checkFileConflicts(importVisit.getWildLogFileID());
                     }
                 }
                 else
@@ -965,6 +962,7 @@ public class WorkspaceImportDialog extends JDialog {
                                 conflict = 1;
                             }
                         }
+                        conflict = conflict + checkFileConflicts(importElement.getWildLogFileID());
                     }
                 }
                 else
@@ -976,6 +974,7 @@ public class WorkspaceImportDialog extends JDialog {
                             conflict = 1;
                         }
                     }
+                    conflict = conflict + checkFileConflicts(importSighting.getWildLogFileID());
                 }
             }
         }
@@ -984,6 +983,31 @@ public class WorkspaceImportDialog extends JDialog {
             conflict = conflict + checkConflicts(childNode, inProcessedData);
         }
         return conflict;
+    }
+    
+    private int checkFileConflicts(String inWildLogFileID) {
+        int conflicts = 0;
+        if (!rdbImportNoFiles.isSelected()) {
+            WildLogFileType fileType = null;
+            if (rdbImportImagesOnly.isSelected()) {
+                fileType = WildLogFileType.IMAGE;
+            }
+            List<WildLogFile> listExternalFiles = importDBI.listWildLogFiles(inWildLogFileID, fileType, WildLogFile.class);
+            for (WildLogFile fileToImport : listExternalFiles) {
+                if (app.getDBI().countWildLogFiles(fileToImport.getID(), null) != 0) {
+                    WildLogFile workpaceFile = app.getDBI().findWildLogFile(fileToImport.getID(), null, null, null, WildLogFile.class);
+                    try {
+                        if (Files.size(importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath()) != Files.size(workpaceFile.getAbsolutePath())) {
+                            conflicts++;
+                        }
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                }
+            }
+        }
+        return conflicts;
     }
     
     private void loadLocationTree() {

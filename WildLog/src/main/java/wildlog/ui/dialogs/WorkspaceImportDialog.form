@@ -359,7 +359,7 @@
           <ComponentRef name="grpConflicts"/>
         </Property>
         <Property name="selected" type="boolean" value="true"/>
-        <Property name="text" type="java.lang.String" value="Automatically use the most recently edited record"/>
+        <Property name="text" type="java.lang.String" value="Automatically choose the most recently edited record and largest file"/>
         <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the most recently edited record will automatically be used in the active Workspace.&lt;/html&gt;"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>

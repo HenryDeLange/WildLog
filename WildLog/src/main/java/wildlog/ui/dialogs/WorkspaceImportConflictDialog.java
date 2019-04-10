@@ -1,12 +1,14 @@
 package wildlog.ui.dialogs;
 
+import java.awt.Color;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
-import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsImageProcessing;
@@ -44,8 +46,17 @@ public class WorkspaceImportConflictDialog extends JDialog {
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
         // Setup UI
-        txpImport.insertIcon(UtilsImageProcessing.getScaledIcon(inImportRecord, WildLogThumbnailSizes.NORMAL.getSize(), true));
-        txpWorkspace.insertIcon(UtilsImageProcessing.getScaledIcon(inWorkspaceRecord, WildLogThumbnailSizes.NORMAL.getSize(), true));
+        txpImport.insertIcon(UtilsImageProcessing.getScaledIcon(inImportRecord, 400, true));
+        txpWorkspace.insertIcon(UtilsImageProcessing.getScaledIcon(inWorkspaceRecord, 400, true));
+        try {
+            txpImport.setToolTipText("Size: " + Files.size(inImportRecord));
+            txpWorkspace.setToolTipText("Size: " + Files.size(inWorkspaceRecord));
+        }
+        catch (IOException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        txpImport.setBackground(Color.BLACK);
+        txpWorkspace.setBackground(Color.BLACK);
     }
 
     /** This method is called from within the constructor to
@@ -102,7 +113,6 @@ public class WorkspaceImportConflictDialog extends JDialog {
         txpImport.setEditable(false);
         txpImport.setContentType("text/html"); // NOI18N
         txpImport.setText("");
-        txpImport.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txpImport.setName("txpImport"); // NOI18N
         jScrollPane1.setViewportView(txpImport);
 
@@ -144,8 +154,6 @@ public class WorkspaceImportConflictDialog extends JDialog {
 
         txpWorkspace.setEditable(false);
         txpWorkspace.setContentType("text/html"); // NOI18N
-        txpWorkspace.setText("");
-        txpWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txpWorkspace.setName("txpWorkspace"); // NOI18N
         jScrollPane3.setViewportView(txpWorkspace);
 
