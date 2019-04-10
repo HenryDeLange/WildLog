@@ -306,7 +306,7 @@ public class PanelTabLocations extends JPanel {
             }
             // Get Image
             long tempLocationID = (Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 7);
-            int fotoCount = app.getDBI().countWildLogFiles(null, Location.WILDLOGFILE_ID_PREFIX + tempLocationID);
+            int fotoCount = app.getDBI().countWildLogFiles(0, Location.WILDLOGFILE_ID_PREFIX + tempLocationID);
             if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + tempLocationID, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }

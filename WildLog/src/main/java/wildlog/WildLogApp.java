@@ -146,8 +146,7 @@ public class WildLogApp extends Application {
             if (openedWorkspace == false) {
                 int choice = WLOptionPane.showConfirmDialog(getMainFrame(),
                         "<html>The WildLog Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> could not be opened. "
-                                + "<br/>It is likely that another instance of WildLog already has this Workspace open."
-                                + "<br/>If the problem persists please consult the Manual or contact support@mywild.co.za for help."
+                                + "<br/>If the problem persists please consult the manual to restore a previous backup or contact support@mywild.co.za for help."
                                 + "<br/><br/>You can <b>press OK to select another Workspace</b>, or press Cancel to close this instance of WildLog.</html>",
                         "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
                 if (choice == JOptionPane.OK_OPTION) {
@@ -263,7 +262,7 @@ public class WildLogApp extends Application {
                                 printStream.print("&NumberOfLocations=" + dbi.countLocations(null));
                                 printStream.print("&NumberOfVisits=" + dbi.countVisits(null, 0));
                                 printStream.print("&NumberOfSightings=" + dbi.countSightings(0, 0, 0, 0));
-                                printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(null, null));
+                                printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(0, null));
                                 printStream.print("&PartialLog=" + logFileSnippit);
                                 printStream.print("&ZippedLog=" + Base64.getEncoder().encodeToString(logFileZip.toByteArray()).replaceAll("\\+", "%2B"));
                                 // Have to get the input stream in order to actually send the request

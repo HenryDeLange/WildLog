@@ -165,8 +165,8 @@ public class MergeSightingDialog extends JDialog {
                 // Move files
                 List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
                 for (WildLogFile file : lstFiles) {
-                    file.setId(destinationSighting.getWildLogFileID());
-                    app.getDBI().updateWildLogFile(file);
+                    file.setLinkID(destinationSighting.getWildLogFileID());
+                    app.getDBI().updateWildLogFile(file, false);
                 }
                 // Move iNaturalist link (if none is already present on the To Sighting)
                 INaturalistLinkedData linkedData = app.getDBI().findINaturalistLinkedData(sighting.getID(), 0, INaturalistLinkedData.class);

@@ -280,6 +280,7 @@ public final class UtilsFileProcessing {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         WildLogFile wildLogFile = new WildLogFile(
+                0,
                 inDAOWithID.getWildLogFileID(),
                 toFile.getFileName().toString(),
                 WildLogPaths.getFullWorkspacePrefix().relativize(toFile).toString(),
@@ -287,7 +288,7 @@ public final class UtilsFileProcessing {
                 Calendar.getInstance().getTime(),
                 UtilsImageProcessing.getDateFromFileDate(inFromFile),
                 fileSize);
-        inApp.getDBI().createWildLogFile(wildLogFile);
+        inApp.getDBI().createWildLogFile(wildLogFile, false);
         return wildLogFile;
     }
     

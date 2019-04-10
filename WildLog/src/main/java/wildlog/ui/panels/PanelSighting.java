@@ -176,7 +176,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
         // Setup location and element images
         if (locationWL != null) {
-            int fotoCount = app.getDBI().countWildLogFiles(null, locationWL.getWildLogFileID());
+            int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
             if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.SMALL, app);
             }
@@ -188,7 +188,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
         if (element != null) {
-            int fotoCount = app.getDBI().countWildLogFiles(null, element.getWildLogFileID());
+            int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
             if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
             }
@@ -380,7 +380,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnDurationMinutes.setValue(sighting.getDurationMinutes());
         spnDurationSeconds.setValue(sighting.getDurationSeconds());
         // Setup the sighting's image
-        int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, sighting.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -2301,7 +2301,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnINaturalistActionPerformed
 
     private void setupNumberOfImages() {
-        int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, sighting.getWildLogFileID());
         if (fotoCount > 0) {
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         }

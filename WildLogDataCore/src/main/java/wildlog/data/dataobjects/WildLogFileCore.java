@@ -1,11 +1,13 @@
 package wildlog.data.dataobjects;
 
 import java.util.Date;
+import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.WildLogFileType;
 
 
-public class WildLogFileCore {
-    protected String id; // The id should be in the format [WILDLOGFILE_ID_PREFIX + id] of the parent data object
+public class WildLogFileCore extends DataObjectWithAudit {
+    protected long id;
+    protected String linkID; // The id should be in the format [WILDLOGFILE_ID_PREFIX + id] based on the parent data object
     protected String filename;
     protected String originalFileLocation; // This is used as the DB table ID
     protected Date uploadDate;
@@ -18,8 +20,10 @@ public class WildLogFileCore {
     public WildLogFileCore() {
     }
     
-    public WildLogFileCore(String inID, String inFilename, String inOriginalFileLocation, WildLogFileType inFileType, Date inUploadDate, Date inFileDate, long inFileSize) {
+    public WildLogFileCore(long inID, String inLinkID, String inFilename, String inOriginalFileLocation, 
+            WildLogFileType inFileType, Date inUploadDate, Date inFileDate, long inFileSize) {
         id = inID;
+        linkID = inLinkID;
         filename = inFilename;
         originalFileLocation = inOriginalFileLocation;
         uploadDate = inUploadDate;
@@ -58,12 +62,12 @@ public class WildLogFileCore {
         fileType = inFileType;
     }
 
-    public String getId() {
-        return id;
+    public String getLinkID() {
+        return linkID;
     }
 
-    public void setId(String inId) {
-        id = inId;
+    public void setLinkID(String inLinkID) {
+        linkID = inLinkID;
     }
 
     public String getFilename() {

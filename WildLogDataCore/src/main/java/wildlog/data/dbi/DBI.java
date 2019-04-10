@@ -28,14 +28,14 @@ public interface DBI {
     public int countLocations(String inName);
     public int countVisits(String inName, long inLocationID);
     public int countSightings(long inID, long inElementID, long inLocationID, long inVisitID);
-    public int countWildLogFiles(String inDBFilePath, String inWildLogFileID);
+    public int countWildLogFiles(long inID, String inWildLogFileID);
     public int countUsers();
 
     public <T extends ElementCore> T findElement(long inID, String inPrimaryName, Class<T> inReturnType);
     public <T extends LocationCore> T findLocation(long inID, String inName, Class<T> inReturnType);
     public <T extends VisitCore> T findVisit(long inID, String inName, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends SightingCore> T findSighting(long inID, boolean inIncludeCachedValues, Class<T> inReturnType);
-    public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
+    public <T extends WildLogFileCore> T findWildLogFile(long inID, String inWildLogFileID, WildLogFileType inWildLogFileType, String inDBFilePath, Class<T> inReturnType);
     public <T extends WildLogOptions> T findWildLogOptions(Class<T> inReturnType);
     public <T extends AdhocData> T findAdhocData(String inFieldID, String inDataKey, Class<T> inReturnType);
     public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType);
@@ -54,7 +54,7 @@ public interface DBI {
     public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButUseOldAuditAndID);
     public <T extends VisitCore> boolean createVisit(T inVisit, boolean inNewButUseOldAuditAndID);
     public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButUseOldAuditAndID);
-    public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile);
+    public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile, boolean inNewButUseOldAuditAndID);
     public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean createAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData);
@@ -64,7 +64,7 @@ public interface DBI {
     public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName, boolean inUseOldAudit);
     public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName, boolean inUseOldAudit);
     public <T extends SightingCore> boolean updateSighting(T inSighting, boolean inUseOldAudit);
-    public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile);
+    public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile, boolean inUseOldAudit);
     public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean updateAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData);
@@ -74,7 +74,7 @@ public interface DBI {
     public boolean deleteLocation(long inID);
     public boolean deleteVisit(long inID);
     public boolean deleteSighting(long inID);
-    public boolean deleteWildLogFile(String inDBFilePath);
+    public boolean deleteWildLogFile(long inID);
     public boolean deleteAdhocData(String inFieldID, String inDataKey);
     public boolean deleteINaturalistLinkedData(long inWildLogID, long inINaturalistID);
     public boolean deleteUser(String inUsername);

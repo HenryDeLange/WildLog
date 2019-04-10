@@ -326,7 +326,7 @@ public class PanelTabElements extends javax.swing.JPanel {
             }
             // Get Image
             long tempElementID = (Long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 6);
-            int fotoCount = app.getDBI().countWildLogFiles(null, Element.WILDLOGFILE_ID_PREFIX + tempElementID);
+            int fotoCount = app.getDBI().countWildLogFiles(0, Element.WILDLOGFILE_ID_PREFIX + tempElementID);
             if (fotoCount > 0) {
                 UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + tempElementID, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }

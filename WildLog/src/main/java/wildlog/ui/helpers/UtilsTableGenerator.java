@@ -1456,7 +1456,7 @@ public final class UtilsTableGenerator {
 
     private static ImageIcon setupThumbnailIcon(WildLogApp inApp, String inWildLogFileID) {
         if (inApp.getWildLogOptions().isUseThumbnailTables()) {
-            WildLogFile wildLogFile = inApp.getDBI().findWildLogFile(null, inWildLogFileID, null, WildLogFile.class);
+            WildLogFile wildLogFile = inApp.getDBI().findWildLogFile(0, inWildLogFileID, null, null, WildLogFile.class);
             if (wildLogFile != null) {
                 return new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL).toString());
             }

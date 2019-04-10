@@ -230,10 +230,10 @@ public class MergeVisitDialog extends JDialog {
                 // Update the files
                 if (chkMergeVisitFiles.isSelected()) {
                     List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(
-                            Visit.WILDLOGFILE_ID_PREFIX + tempFromVisit, null, WildLogFile.class);
+                            Visit.WILDLOGFILE_ID_PREFIX + tempFromVisit.getID(), null, WildLogFile.class);
                     for (WildLogFile wildLogFile : lstWildLogFiles) {
-                        wildLogFile.setId(Visit.WILDLOGFILE_ID_PREFIX + (String) lstToVisit.getSelectedValue());
-                        app.getDBI().updateWildLogFile(wildLogFile);
+                        wildLogFile.setLinkID(Visit.WILDLOGFILE_ID_PREFIX + ((Visit) lstToVisit.getSelectedValue()).getID());
+                        app.getDBI().updateWildLogFile(wildLogFile, false);
                     }
                 }
                 // Delete the visit

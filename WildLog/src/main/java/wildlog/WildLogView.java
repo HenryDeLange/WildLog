@@ -2341,7 +2341,7 @@ public final class WildLogView extends JFrame {
                                             null, 
                                             app, false, null, false, true);
                                     // Delete the wrong entry
-                                    app.getDBI().deleteWildLogFile(inWildLogFile.getDBFilePath());
+                                    app.getDBI().deleteWildLogFile(inWildLogFile.getID());
                                     fileCount.counter++;
                                 }
                             }
@@ -2382,7 +2382,7 @@ public final class WildLogView extends JFrame {
 // TODO: As die file bestaan maar nie in die DB link nie kan mens dalk probeer "slim" wees en die link afly deur ander info soos size, date en die path...
                                             WildLogFile wildLogFile = new WildLogFile();
                                             wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile).toString());
-                                            if (app.getDBI().findWildLogFile(wildLogFile.getDBFilePath(), null, null, WildLogFile.class) == null) {
+                                            if (app.getDBI().findWildLogFile(0, null, null, wildLogFile.getDBFilePath(), WildLogFile.class) == null) {
                                                 finalHandleFeedback.println("PROBLEM:     File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
                                                 finalHandleFeedback.println("  +RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
                                                 // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
@@ -2581,24 +2581,24 @@ public final class WildLogView extends JFrame {
                         int countOther = 0;
                         for (WildLogFile wildLogFile : allFiles) {
                             // Check the WildLogFile's content
-                            if (wildLogFile.getId() == null) {
-                                finalHandleFeedback.println("PROBLEM:     File record without an ID. FilePath: " + wildLogFile.getDBFilePath());
-                                finalHandleFeedback.println("  +RESOLVED: Tried to delete the database file record and file on disk.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                            if (wildLogFile.getLinkID() == null || wildLogFile.getLinkID().isEmpty()) {
+                                finalHandleFeedback.println("PROBLEM:     File record without a LinkID. FileID: " + wildLogFile.getID() + " | FilePath: " + wildLogFile.getDBFilePath() + " | FileLinkID: " + wildLogFile.getLinkID());
+                                finalHandleFeedback.println("  +RESOLVED: Delete the database file record and file on disk.");
+                                app.getDBI().deleteWildLogFile(wildLogFile.getID());
                                 filesWithoutID++;
                                 continue;
                             }
                             if (wildLogFile.getDBFilePath() == null) {
-                                finalHandleFeedback.println("PROBLEM:     File path missing from database record. FileID: " + wildLogFile.getId());
+                                finalHandleFeedback.println("PROBLEM:     File path missing from database record. FileID: " + wildLogFile.getID() + " | FilePath: " + wildLogFile.getDBFilePath() + " | FileLinkID: " + wildLogFile.getLinkID());
                                 finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                app.getDBI().deleteWildLogFile(wildLogFile.getID());
                                 filesWithoutPath++;
                                 continue;
                             }
                             if (!Files.exists(wildLogFile.getAbsolutePath())) {
-                                finalHandleFeedback.println("PROBLEM:     File record in the database can't be found on disk. FilePath: " + wildLogFile.getDBFilePath());
+                                finalHandleFeedback.println("PROBLEM:     File record in the database can't be found on disk. FileID: " + wildLogFile.getID() + " | FilePath: " + wildLogFile.getDBFilePath() + " | FileLinkID: " + wildLogFile.getLinkID());
                                 finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                app.getDBI().deleteWildLogFile(wildLogFile.getID());
                                 filesNotOnDisk++;
                                 continue;
                             }
@@ -2614,19 +2614,19 @@ public final class WildLogView extends JFrame {
                                         + ", FileType: " + wildLogFile.getFileType());
                                 finalHandleFeedback.println("  +RESOLVED: Changed FileType to " + WildLogFileType.OTHER + ".");
                                 wildLogFile.setFileType(WildLogFileType.OTHER);
-                                app.getDBI().updateWildLogFile(wildLogFile);
+                                app.getDBI().updateWildLogFile(wildLogFile, false);
                                 filesWithBadType++;
                             }
                             // Check the WildLogFile's linkage
-                            if (wildLogFile.getId().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
+                            if (wildLogFile.getLinkID().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 final Element temp = app.getDBI().findElement(
-                                        Long.parseLong(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())), null, Element.class);
+                                        Long.parseLong(wildLogFile.getLinkID().substring(Element.WILDLOGFILE_ID_PREFIX.length())), null, Element.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getId() + ", CreatureName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
+                                            + ", ID: " + wildLogFile.getID()+ ", CreatureID Used: " + wildLogFile.getLinkID().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getID());
                                     filesWithBadID++;
                                     continue;
                                 }
@@ -2637,15 +2637,15 @@ public final class WildLogView extends JFrame {
                                         filesMoved);
                             }
                             else 
-                            if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
+                            if (wildLogFile.getLinkID().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 final Visit temp = app.getDBI().findVisit(
-                                        Long.parseLong(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())), null, true, Visit.class);
+                                        Long.parseLong(wildLogFile.getLinkID().substring(Visit.WILDLOGFILE_ID_PREFIX.length())), null, true, Visit.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:     Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getId() + ", PeriodName Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
+                                            + ", ID: " + wildLogFile.getID() + ", PeriodID Used: " + wildLogFile.getLinkID().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("  +RESOLVED: Deleted the file databse record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getID());
                                     filesWithBadID++;
                                     continue;
                                 }
@@ -2656,15 +2656,15 @@ public final class WildLogView extends JFrame {
                                         filesMoved);
                             }
                             else 
-                            if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
+                            if (wildLogFile.getLinkID().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 final Location temp = app.getDBI().findLocation(
-                                        Long.parseLong(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())), null, Location.class);
+                                        Long.parseLong(wildLogFile.getLinkID().substring(Location.WILDLOGFILE_ID_PREFIX.length())), null, Location.class);
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getId() + ", PlaceName Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
+                                            + ", ID: " + wildLogFile.getID() + ", PlaceID Used: " + wildLogFile.getLinkID().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getID());
                                     filesWithBadID++;
                                     continue;
                                 }
@@ -2675,12 +2675,12 @@ public final class WildLogView extends JFrame {
                                         filesMoved);
                             }
                             else 
-                            if (wildLogFile.getId().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
+                            if (wildLogFile.getLinkID().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 Sighting temp = null;
                                 try {
                                     temp = app.getDBI().findSighting(
-                                            Long.parseLong(wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), true, Sighting.class);
+                                            Long.parseLong(wildLogFile.getLinkID().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), true, Sighting.class);
                                 }
                                 catch (NumberFormatException ex) {
                                     finalHandleFeedback.println("PROBLEM:       Can't get linked Observation's ID.");
@@ -2688,9 +2688,9 @@ public final class WildLogView extends JFrame {
                                 }
                                 if (temp == null) {
                                     finalHandleFeedback.println("PROBLEM:     Could not find linked Observation for this file. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getId() + ", ObservationID Used: " + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
+                                            + ", ID: " + wildLogFile.getID() + ", ObservationID Used: " + wildLogFile.getLinkID().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                    app.getDBI().deleteWildLogFile(wildLogFile.getID());
                                     filesWithBadID++;
                                     continue;
                                 }
@@ -2701,9 +2701,9 @@ public final class WildLogView extends JFrame {
                                         filesMoved);
                             }
                             else {
-                                finalHandleFeedback.println("PROBLEM:     File ID is not correctly formatted.");
+                                finalHandleFeedback.println("PROBLEM:     File LinkID is not correctly formatted.");
                                 finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                                app.getDBI().deleteWildLogFile(wildLogFile.getID());
                                 filesWithBadID++;
                             }
                             fileProcessCounter++;
@@ -2771,7 +2771,7 @@ public final class WildLogView extends JFrame {
                                             + "Changed " + oldDate
                                             + " to " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(actualFileDate));
                                     wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
-                                    app.getDBI().updateWildLogFile(wildLogFile);
+                                    app.getDBI().updateWildLogFile(wildLogFile, false);
                                     filesWithIncorrectDate++;
                                 }
                             }
@@ -2782,7 +2782,7 @@ public final class WildLogView extends JFrame {
                                     finalHandleFeedback.println("  +RESOLVED: Updated the database File Size value of the file record. "
                                             + "Changed " + wildLogFile.getFileSize() + " to " + actualFileSize);
                                     wildLogFile.setFileSize(actualFileSize);
-                                    app.getDBI().updateWildLogFile(wildLogFile);
+                                    app.getDBI().updateWildLogFile(wildLogFile, false);
                                     filesWithIncorrectSize++;
                                 }
                             }
@@ -2972,21 +2972,21 @@ public final class WildLogView extends JFrame {
                             List<WildLogFile> listFiles = new ArrayList<>(128);
                             List<Element> lstElements = app.getDBI().listElements(null, null, null, Element.class);
                             for (Element element : lstElements) {
-                                WildLogFile image = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
+                                WildLogFile image = app.getDBI().findWildLogFile(0, element.getWildLogFileID(), WildLogFileType.IMAGE, null, WildLogFile.class);
                                 if (image != null) {
                                     listFiles.add(image);
                                 }
                             }
                             List<Location> lstLocation = app.getDBI().listLocations(null, Location.class);
                             for (Location location : lstLocation) {
-                                WildLogFile image = app.getDBI().findWildLogFile(null, location.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
+                                WildLogFile image = app.getDBI().findWildLogFile(0, location.getWildLogFileID(), WildLogFileType.IMAGE, null, WildLogFile.class);
                                 if (image != null) {
                                     listFiles.add(image);
                                 }
                             }
                             List<Visit> lstVisit = app.getDBI().listVisits(null, 0, null, false, Visit.class);
                             for (Visit visit : lstVisit) {
-                                WildLogFile image = app.getDBI().findWildLogFile(null, visit.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class);
+                                WildLogFile image = app.getDBI().findWildLogFile(0, visit.getWildLogFileID(), WildLogFileType.IMAGE, null, WildLogFile.class);
                                 if (image != null) {
                                     listFiles.add(image);
                                 }
@@ -3035,8 +3035,8 @@ public final class WildLogView extends JFrame {
                             Collections.sort(listFiles, new Comparator<WildLogFileCore>() {
                                 @Override
                                 public int compare(WildLogFileCore wlFile1, WildLogFileCore wlFile2) {
-                                    String prioritisedID1 = wlFile1.getId();
-                                    String prioritisedID2 = wlFile2.getId();
+                                    String prioritisedID1 = wlFile1.getLinkID();
+                                    String prioritisedID2 = wlFile2.getLinkID();
                                     // Maak seker Visits word voor Sightings gedoen
                                     if (prioritisedID1.charAt(0) == 'V') {
                                         prioritisedID1 = "LZZZ" + prioritisedID1;
@@ -3301,7 +3301,7 @@ public final class WildLogView extends JFrame {
                         // Save the element to the new DB
                         syncDBI.createElement(element, true);
                         // Copy the files
-                        WildLogFile wildLogFile = app.getDBI().findWildLogFile(null, element.getWildLogFileID(), null, WildLogFile.class);
+                        WildLogFile wildLogFile = app.getDBI().findWildLogFile(0, element.getWildLogFileID(), null, null, WildLogFile.class);
                         if (wildLogFile != null) {
                             try {
                                 // Android kan nie die zip handle as die folders of files snaakse name het met - of _ in nie...
@@ -3329,7 +3329,7 @@ public final class WildLogView extends JFrame {
                                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                                 }
                                 // Create the WildLogFile entry in the DB
-                                syncDBI.createWildLogFile(wildLogFile);
+                                syncDBI.createWildLogFile(wildLogFile, false);
                             }
                             catch  (Exception ex) {
                                 // Moenie stop as iets skeef geloop het met een van die files nie, doen steeds die res...

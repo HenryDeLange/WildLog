@@ -803,7 +803,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             lljTran.transform(LLJTran.ROT_90);
                             // Get a new name for the file (because if the same name is used the ImageIcons don't get 
                             // refreshed if they have been viewed already since Java chaches them)
-                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), wildLogFile.getDBFilePath(), 
+                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getID(), wildLogFile.getLinkID(), wildLogFile.getFilename(), wildLogFile.getDBFilePath(), 
                                     wildLogFile.getFileType(), new Date(), null, -1);
                             newWildLogFile.setDefaultFile(wildLogFile.isDefaultFile());
                             int shortenedAttempt = 0;
@@ -827,10 +827,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
                             }
                             // Delete old DB file enrty and save new one
-                            app.getDBI().deleteWildLogFile(wildLogFile.getDBFilePath());
+                            app.getDBI().deleteWildLogFile(wildLogFile.getID());
                             newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(newWildLogFile.getAbsolutePath()));
                             newWildLogFile.setFileSize(Files.size(newWildLogFile.getAbsolutePath()));
-                            app.getDBI().createWildLogFile(newWildLogFile);
+                            app.getDBI().createWildLogFile(newWildLogFile, false);
                             // Cleanup
                             lljTran.freeMemory();
                             // Stop any future tasks that might be submitted to prefent us loading the file unnessesarily
@@ -840,7 +840,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             }
                             // Reload the image
                             preloadedImages.remove(wildLogFile.getAbsolutePath().toString());
-                            setupFile(app.getDBI().listWildLogFiles(newWildLogFile.getId(), null, WildLogFile.class));
+                            setupFile(app.getDBI().listWildLogFiles(newWildLogFile.getLinkID(), null, WildLogFile.class));
                             // Recreate the thumbnails
                             // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
@@ -1479,23 +1479,23 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         List<WildLogFile> files = app.getDBI().listWildLogFiles(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementID(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
-                            app.getDBI().updateWildLogFile(tempFile);
+                            app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sightingWrapper.getSighting().getElementID(), null, Element.class),
                             Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, null, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getCachedElementName()).resolve(
                                                         wildLogFile.getFilename())).toString(), 
-                                null, null, WildLogFile.class);
-                        // Die WildLofFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
+                                WildLogFile.class);
+                        // Die WildLogFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
                         if (uploadedWildLogFile != null) {
                             uploadedWildLogFile.setDefaultFile(true);
-                            app.getDBI().updateWildLogFile(uploadedWildLogFile);
+                            app.getDBI().updateWildLogFile(uploadedWildLogFile, false);
                         }
                         if (app.getWildLogOptions().isEnableSounds()) {
                             Toolkit.getDefaultToolkit().beep();
@@ -1520,23 +1520,23 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         List<WildLogFile> files = app.getDBI().listWildLogFiles(Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationID(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
-                            app.getDBI().updateWildLogFile(tempFile);
+                            app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(sightingWrapper.getSighting().getLocationID(), null, Location.class),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, null, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getCachedLocationName()).resolve(
                                                         wildLogFile.getFilename())).toString(),
-                                null, null, WildLogFile.class);
-                        // Die WildLofFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
+                                WildLogFile.class);
+                        // Die WildLogFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
                         if (uploadedWildLogFile != null) {
                             uploadedWildLogFile.setDefaultFile(true);
-                            app.getDBI().updateWildLogFile(uploadedWildLogFile);
+                            app.getDBI().updateWildLogFile(uploadedWildLogFile, false);
                         }
                         if (app.getWildLogOptions().isEnableSounds()) {
                             Toolkit.getDefaultToolkit().beep();
@@ -1557,23 +1557,23 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         List<WildLogFile> files = app.getDBI().listWildLogFiles(Location.WILDLOGFILE_ID_PREFIX + visit.getLocationID(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
-                            app.getDBI().updateWildLogFile(tempFile);
+                            app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(visit.getLocationID(), null, Location.class),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, null, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
                                                 visit.getCachedLocationName()).resolve(
                                                         wildLogFile.getFilename())).toString(),
-                                null, null, WildLogFile.class);
-                        // Die WildLofFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
+                                WildLogFile.class);
+                        // Die WildLogFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
                         if (uploadedWildLogFile != null) {
                             uploadedWildLogFile.setDefaultFile(true);
-                            app.getDBI().updateWildLogFile(uploadedWildLogFile);
+                            app.getDBI().updateWildLogFile(uploadedWildLogFile, false);
                         }
                         if (app.getWildLogOptions().isEnableSounds()) {
                             Toolkit.getDefaultToolkit().beep();
@@ -1598,23 +1598,23 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         List<WildLogFile> files = app.getDBI().listWildLogFiles(Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitID(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
-                            app.getDBI().updateWildLogFile(tempFile);
+                            app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         UtilsFileProcessing.performFileUpload(app.getDBI().findVisit(sightingWrapper.getSighting().getVisitID(), null, true, Visit.class),
                             Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedVisitName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, null, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getCachedVisitName()).resolve(
                                                         wildLogFile.getFilename())).toString(),
-                                null, null, WildLogFile.class);
-                        // Die WildLofFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
+                                WildLogFile.class);
+                        // Die WildLogFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
                         if (uploadedWildLogFile != null) {
                             uploadedWildLogFile.setDefaultFile(true);
-                            app.getDBI().updateWildLogFile(uploadedWildLogFile);
+                            app.getDBI().updateWildLogFile(uploadedWildLogFile, false);
                         }
                         if (app.getWildLogOptions().isEnableSounds()) {
                             Toolkit.getDefaultToolkit().beep();
@@ -1746,7 +1746,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 "Are you sure you want to delete the current File?",
                                 "Delete File?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (result == JOptionPane.YES_OPTION) {
-                            app.getDBI().deleteWildLogFile(lstFiles.get(imageIndex).getDBFilePath());
+                            app.getDBI().deleteWildLogFile(lstFiles.get(imageIndex).getID());
                             doTheRefresh(null);
                         }
                     }

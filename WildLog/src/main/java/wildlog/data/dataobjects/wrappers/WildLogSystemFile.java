@@ -19,8 +19,8 @@ public class WildLogSystemFile extends WildLogFile {
     public static final String WILDLOG_FOLDER_PREFIX  = "WildLogSystem";
     private final Path originalPath;
 
-    public WildLogSystemFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType) {
-        super(inID, inFilename, inFilePath, inFileType, null, null, 0);
+    public WildLogSystemFile(long inID, String inLinkID, String inFilename, String inFilePath, WildLogFileType inFileType) {
+        super(inID, inLinkID, inFilename, inFilePath, inFileType, null, null, 0);
         originalPath = WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath()
                 .resolve(WILDLOG_FOLDER_PREFIX)
                 .resolve(inFilename).normalize().toAbsolutePath();
@@ -90,7 +90,7 @@ public class WildLogSystemFile extends WildLogFile {
     }
 
     @Override
-    public void setId(String id) {
+    public void setLinkID(String id) {
         WildLogApp.LOGGER.log(Level.WARN, "Don't try to change a WildLogSystemFile...");
     }
 

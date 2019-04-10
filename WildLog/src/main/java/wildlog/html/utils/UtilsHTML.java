@@ -286,13 +286,13 @@ public final class UtilsHTML {
             Path thumbnailAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().relativize(thumbnailPath);
             // Add to Main Slider
             if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                mainSlider.append(mainSliderTemplate.replace("ZZZ1-alt", wildLogFile.getId())
+                mainSlider.append(mainSliderTemplate.replace("ZZZ1-alt", Long.toString(wildLogFile.getID()))
                                                     .replace("ZZZ1-title", wildLogFile.getFilename())
                                                     .replace("href=\"#bigImgZZZ1\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
                                                     .replace("src=\"./ZZZ1.jpg\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\""));
             }
             else {
-                mainSlider.append(mainSliderTemplate.replace("ZZZ1-alt", wildLogFile.getId())
+                mainSlider.append(mainSliderTemplate.replace("ZZZ1-alt", Long.toString(wildLogFile.getID()))
                                                     .replace("ZZZ1-title", wildLogFile.getFilename())
                                                     .replace("href=\"#bigImgZZZ1\"", "href=\"" + wildLogFile.getAbsolutePath() + "\"")
                                                     .replace("src=\"./ZZZ1.jpg\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\""));
@@ -300,8 +300,8 @@ public final class UtilsHTML {
             mainSlider.append(System.lineSeparator());
             // Add to full image list
             if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                imageList.append(imageListTemplate.replace("ZZZ1-alt1", wildLogFile.getId())
-                                                  .replace("ZZZ1-alt2", wildLogFile.getId())
+                imageList.append(imageListTemplate.replace("ZZZ1-alt1", Long.toString(wildLogFile.getID()))
+                                                  .replace("ZZZ1-alt2", Long.toString(wildLogFile.getID()))
                                                   .replace("ZZZ1-title1", wildLogFile.getFilename())
                                                   .replace("ZZZ1-title2", wildLogFile.getFilename())
                                                   .replace("id=\"smallImgZZZ1\"", "id=\"smallImg" + wildLogFile.getDBFilePath() + "\"")
@@ -416,20 +416,20 @@ public final class UtilsHTML {
                 UtilsFileProcessing.copyFile(fromFile, thumbnailPath, true, true);
                 Path thumbnailAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().relativize(thumbnailPath);
                 if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                    sliderBuilder.append(sliderTemplate.replace("ZZZ2-alt", wildLogFile.getId())
+                    sliderBuilder.append(sliderTemplate.replace("ZZZ2-alt", Long.toString(wildLogFile.getID()))
                                                        .replace("ZZZ2-title", wildLogFile.getFilename())
                                                        .replace("href=\"#bigImgZZZ2\"", "href=\"#bigImg" + wildLogFile.getDBFilePath() + "\"")
                                                        .replace("src=\"./ZZZ2.jpg\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\""));
                 }
                 else {
-                    sliderBuilder.append(sliderTemplate.replace("ZZZ2-alt", wildLogFile.getId())
+                    sliderBuilder.append(sliderTemplate.replace("ZZZ2-alt", Long.toString(wildLogFile.getID()))
                                                        .replace("ZZZ2-title", wildLogFile.getFilename())
                                                        .replace("href=\"#bigImgZZZ2\"", "href=\"" + wildLogFile.getAbsolutePath() + "\"")
                                                        .replace("src=\"./ZZZ2.jpg\"", "src=\"../" + thumbnailAsRelativePath.toString() + "\""));
                 }
                 sliderBuilder.append(System.lineSeparator());
                 if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                    lightboxBuilder.append(lightboxTemplate.replace("ZZZ2-alt", wildLogFile.getId())
+                    lightboxBuilder.append(lightboxTemplate.replace("ZZZ2-alt", Long.toString(wildLogFile.getID()))
                                                            .replace("ZZZ2-title", wildLogFile.getFilename())
                                                            .replace("id=\"bigImgZZZ2\"", "id=\"bigImg" + wildLogFile.getDBFilePath() + "\"")
                                                            .replace("src=\"./ZZZ2.jpg\"", "src=\"" + wildLogFile.getAbsolutePath() + "\""));

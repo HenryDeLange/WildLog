@@ -1276,7 +1276,7 @@ public class INatSightingDialog extends JDialog {
     }
     
     private void setupNumberOfImagesWL() {
-        int fotoCount = app.getDBI().countWildLogFiles(null, sighting.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, sighting.getWildLogFileID());
         if (fotoCount > 0) {
             lblNumberOfImagesWL.setText(imageCounterWL + 1 + " of " + fotoCount);
         }

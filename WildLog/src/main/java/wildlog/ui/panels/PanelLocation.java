@@ -115,7 +115,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         initComponents();
         // Setup images
         imageIndex = 0;
-        int fotoCount = app.getDBI().countWildLogFiles(null, locationWL.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1131,7 +1131,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblNumberOfSightings.setText("0");
             lblNumberOfVisits.setText("0");
         }
-        int fotoCount = app.getDBI().countWildLogFiles(null, locationWL.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1464,7 +1464,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void setupNumberOfImages() {
-        int fotoCount = app.getDBI().countWildLogFiles(null, locationWL.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         }

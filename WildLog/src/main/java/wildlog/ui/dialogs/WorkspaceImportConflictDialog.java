@@ -1,12 +1,15 @@
 package wildlog.ui.dialogs;
 
+import java.nio.file.Path;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.utils.UtilsImageProcessing;
 
 
 public class WorkspaceImportConflictDialog extends JDialog {
@@ -28,6 +31,21 @@ public class WorkspaceImportConflictDialog extends JDialog {
                 .replace("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>", ""));
         txpWorkspace.setText(inWorkspaceRecord.toHTML(false, false, false, null, UtilsHTMLExportTypes.ForHTML, null)
                 .replace("<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>", ""));
+    }
+    
+    public WorkspaceImportConflictDialog(Path inImportRecord, Path inWorkspaceRecord) {
+        super();
+        WildLogApp.LOGGER.log(Level.INFO, "[WorkspaceImportConflictDialog]");
+        initComponents();
+        // Setup the default behavior
+        UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
+        UtilsDialog.addEscapeKeyListener(this);
+        // Setup the glasspane on this dialog as well for the JOptionPane's
+        UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
+        UtilsDialog.addModalBackgroundPanel(this, null);
+        // Setup UI
+        txpImport.insertIcon(UtilsImageProcessing.getScaledIcon(inImportRecord, WildLogThumbnailSizes.NORMAL.getSize(), true));
+        txpWorkspace.insertIcon(UtilsImageProcessing.getScaledIcon(inWorkspaceRecord, WildLogThumbnailSizes.NORMAL.getSize(), true));
     }
 
     /** This method is called from within the constructor to

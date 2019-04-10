@@ -17,6 +17,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.ElementType;
@@ -761,13 +762,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
-    public boolean deleteWildLogFile(String inDBFilePath) {
+    public boolean deleteWildLogFile(long inID) {
         // Note: This method only deletes one file at a time, and all it's "default" thumbnails.
-        // First, remove the database entry.
-        super.deleteWildLogFile(inDBFilePath);
+        // First, get the path of the original file (to delete it from the disk)
+        String dbFilePath = findWildLogFile(inID, null, null, null, WildLogFile.class).getDBFilePath();
+        // Next, remove the database entry.
+        super.deleteWildLogFile(inID);
         // Next, delete the original image
         try {
-            Files.deleteIfExists(WildLogPaths.getFullWorkspacePrefix().resolve(inDBFilePath).normalize().toAbsolutePath());
+            Files.deleteIfExists(WildLogPaths.getFullWorkspacePrefix().resolve(dbFilePath).normalize().toAbsolutePath());
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -776,7 +779,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
             try {
                 // Note: Ek wil hier net die path kry, nie die thumbnail generate nie (so ek gebruik nie WildLogFile.getAbsoluteThumbnailPath() nie).
-                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(inDBFilePath, size));
+                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(dbFilePath, size));
             }
             catch (IOException ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

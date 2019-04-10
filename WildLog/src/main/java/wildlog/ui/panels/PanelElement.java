@@ -92,7 +92,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         initComponents();
         // Setup images
         imageIndex = 0;
-        int fotoCount = app.getDBI().countWildLogFiles(null, element.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1198,7 +1198,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             lblNumberOfSightings.setText("0");
             lblNumberOfLocations.setText("0");
         }
-        int fotoCount = app.getDBI().countWildLogFiles(null, element.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
@@ -1356,7 +1356,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
 
     private void setupNumberOfImages() {
-        int fotoCount = app.getDBI().countWildLogFiles(null, element.getWildLogFileID());
+        int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
         if (fotoCount > 0) {
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
         } 

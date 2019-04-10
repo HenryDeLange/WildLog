@@ -135,14 +135,17 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableFiles = "CREATE TABLE FILES ("
-            + "ID varchar(175) NOT NULL, "
+            + "ID bigint PRIMARY KEY NOT NULL, "
+            + "LINKID varchar(175) NOT NULL, "
             + "FILENAME varchar(255), "
             + "ORIGINALPATH varchar(500) NOT NULL, "
             + "FILETYPE varchar(50), "
             + "UPLOADDATE date, "
             + "ISDEFAULT smallint, "
             + "FILEDATE timestamp, "
-            + "FILESIZE bigint)";
+            + "FILESIZE bigint, "
+            + "AUDITTIME bigint NOT NULL, "
+            + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG ("
             + "VERSION int DEFAULT " + WILDLOG_DB_VERSION + ", "
             + "DEFAULTLATITUDE double DEFAULT -28.7, "
@@ -300,14 +303,17 @@ public abstract class DBI_JDBC implements DBI {
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createFile = "INSERT INTO FILES ("
             + "ID, "
+            + "LINKID, "
             + "FILENAME, "
             + "ORIGINALPATH, "
             + "FILETYPE, "
             + "UPLOADDATE, "
             + "ISDEFAULT, "
             + "FILEDATE, "
-            + "FILESIZE) "
-            + "VALUES (?,?,?,?,?,?,?,?)";
+            + "FILESIZE, "
+            + "AUDITTIME, "
+            + "AUDITUSER) "
+            + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createWildLogOptions = "INSERT INTO WILDLOG VALUES ("
             + "DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, ?, DEFAULT, DEFAULT, DEFAULT)";
     protected static final String createAdhocData = "INSERT INTO ADHOC ("
@@ -414,14 +420,17 @@ public abstract class DBI_JDBC implements DBI {
             + "WHERE ID = ?";
     protected static final String updateFile = "UPDATE FILES SET "
             + "ID = ?, "
+            + "LINKID = ?, "
             + "FILENAME = ?, "
             + "ORIGINALPATH = ?, "
             + "FILETYPE = ?, "
             + "UPLOADDATE = ?, "
             + "ISDEFAULT = ?, "
             + "FILEDATE = ?, "
-            + "FILESIZE = ? "
-            + "WHERE ORIGINALPATH = ?";
+            + "FILESIZE = ?, "
+            + "AUDITTIME = ?, "
+            + "AUDITUSER = ? "
+            + "WHERE ID = ?";
     protected static final String updateWildLogOptions = "UPDATE WILDLOG SET "
             + "DEFAULTLATITUDE = ?, "
             + "DEFAULTLONGITUDE = ?, "
@@ -461,7 +470,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteElement = "DELETE FROM ELEMENTS "
             + "WHERE ID = ?";
     protected static final String deleteFile = "DELETE FROM FILES "
-            + "WHERE ORIGINALPATH = ?";
+            + "WHERE ID = ?";
     protected static final String deleteAdhocData = "DELETE FROM ADHOC "
             + "WHERE FIELDID = ? AND DATAKEY = ?";
     protected static final String deleteINaturalistLinkedData = "DELETE "
@@ -545,11 +554,11 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableFiles);
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (ID)");
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (LINKID)");
                 state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (LINKID, ISDEFAULT)");
                 state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (LINKID, FILETYPE, ISDEFAULT)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -785,20 +794,20 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public int countWildLogFiles(String inDBFilePath, String inWildLogFileID) {
+    public int countWildLogFiles(long inID, String inWildLogFileID) {
         PreparedStatement state = null;
         ResultSet results = null;
         int count = 0;
         try {
             String sql = countFile;
-            if (inDBFilePath != null && UtilsData.sanitizeString(inDBFilePath).length() > 0) {
-                sql = sql + " WHERE ORIGINALPATH = ?";
+            if (inID > 0) {
+                sql = sql + " WHERE ID = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inDBFilePath.replace("\\", "/")));
+                state.setLong(1, inID);
             }
             else
             if (inWildLogFileID != null && UtilsData.sanitizeString(inWildLogFileID).length() > 0) {
-                sql = sql + " WHERE ID = ?";
+                sql = sql + " WHERE LINKID = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
             }
@@ -1132,21 +1141,21 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogFileCore> T findWildLogFile(String inDBFilePath, String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType) {
+    public <T extends WildLogFileCore> T findWildLogFile(long inID, String inWildLogFileID, WildLogFileType inWildLogFileType, String inDBFilePath, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T tempFile = null;
         try {
             String sql = findFile;
-            if (inDBFilePath != null) {
-                sql = sql + " WHERE ORIGINALPATH = ?";
-                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH LIMIT 1";
+            if (inID > 0) {
+                sql = sql + " WHERE ID = ?";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inDBFilePath.replace("\\", "/")));
+                state.setLong(1, inID);
             }
             else
-            if (inWildLogFileID != null) {
-                sql = sql + " WHERE ID = ?";
+            if (inWildLogFileID != null && !inWildLogFileID.isEmpty()) {
+                sql = sql + " WHERE LINKID = ?";
                 if (inWildLogFileType != null) {
                     sql = sql + " AND FILETYPE = ?";
                 }
@@ -1156,6 +1165,20 @@ public abstract class DBI_JDBC implements DBI {
                 if (inWildLogFileType != null) {
                     state.setString(2, UtilsData.stringFromObject(inWildLogFileType));
                 }
+            }
+            else
+            if (inWildLogFileType != null) {
+                sql = sql + " WHERE FILETYPE = ?";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH LIMIT 1";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.stringFromObject(inWildLogFileType));
+            }
+            else
+            if (inDBFilePath != null && !inDBFilePath.isEmpty()) {
+                sql = sql + " WHERE ORIGINALPATH = ?";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inDBFilePath));
             }
             if (state != null) {
                 results = state.executeQuery();
@@ -1184,7 +1207,8 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     protected <T extends WildLogFileCore> void populateWildLogFile(ResultSet inResults, T inWildLogFile) throws SQLException {
-        inWildLogFile.setId(inResults.getString("ID"));
+        inWildLogFile.setID(inResults.getLong("ID"));
+        inWildLogFile.setLinkID(inResults.getString("LINKID"));
         inWildLogFile.setFilename(inResults.getString("FILENAME"));
         inWildLogFile.setDBFilePath(inResults.getString("ORIGINALPATH").replace("\\", "/"));
         inWildLogFile.setFileType(WildLogFileType.getEnumFromText(inResults.getString("FILETYPE")));
@@ -1202,6 +1226,8 @@ public abstract class DBI_JDBC implements DBI {
             inWildLogFile.setFileDate(null);
         }
         inWildLogFile.setFileSize(inResults.getLong("FILESIZE"));
+        inWildLogFile.setAuditTime(inResults.getLong("AUDITTIME"));
+        inWildLogFile.setAuditUser(inResults.getString("AUDITUSER"));
     }
 
     @Override
@@ -1517,14 +1543,14 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listFile;
             if (inWildLogFileID != null && (inWildLogFileType == null || WildLogFileType.NONE.equals(inWildLogFileType))) {
-                sql = sql + " WHERE ID = ?";
+                sql = sql + " WHERE LINKID = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
             }
             else
             if (inWildLogFileID != null && !(inWildLogFileType == null || WildLogFileType.NONE.equals(inWildLogFileType))) {
-                sql = sql + " WHERE ID = ? AND FILETYPE = ?";
+                sql = sql + " WHERE LINKID = ? AND FILETYPE = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFileID));
@@ -1686,18 +1712,8 @@ public abstract class DBI_JDBC implements DBI {
                 return false;
             }
             // Get the new ID
-            tempState = conn.prepareStatement("SELECT COUNT(ID) FROM ELEMENTS WHERE ID = ?");
             if (!inNewButUseOldAuditAndID) {
                 inElement.setID(generateID());
-            }
-            tempState.setLong(1, inElement.getID());
-            // Make sure it is unique (should almost always be, but let's be safe...)
-            results = tempState.executeQuery();
-            while (results.next() && results.getInt(1) > 0) {
-                // ID already used, try a new ID
-                inElement.setID(generateID());
-                tempState.setLong(1, inElement.getID());
-                results = tempState.executeQuery();
             }
             // Insert
             state = conn.prepareStatement(createElement);
@@ -1777,18 +1793,8 @@ public abstract class DBI_JDBC implements DBI {
                 return false;
             }
             // Get the new ID
-            tempState = conn.prepareStatement("SELECT COUNT(ID) FROM LOCATIONS WHERE ID = ?");
             if (!inNewButUseOldAuditAndID) {
                 inLocation.setID(generateID());
-            }
-            tempState.setLong(1, inLocation.getID());
-            // Make sure it is unique (should almost always be, but let's be safe...)
-            results = tempState.executeQuery();
-            while (results.next() && results.getInt(1) > 0) {
-                // ID already used, try a new ID
-                inLocation.setID(generateID());
-                tempState.setLong(1, inLocation.getID());
-                results = tempState.executeQuery();
             }
             // Insert
             state = conn.prepareStatement(createLocation);
@@ -1871,18 +1877,8 @@ public abstract class DBI_JDBC implements DBI {
                 return false;
             }
             // Get the new ID
-            tempState = conn.prepareStatement("SELECT COUNT(ID) FROM VISITS WHERE ID = ?");
             if (!inNewButUseOldAuditAndID) {
                 inVisit.setID(generateID());
-            }
-            tempState.setLong(1, inVisit.getID());
-            // Make sure it is unique (should almost always be, but let's be safe...)
-            results = tempState.executeQuery();
-            while (results.next() && results.getInt(1) > 0) {
-                // ID already used, try a new ID
-                inVisit.setID(generateID());
-                tempState.setLong(1, inVisit.getID());
-                results = tempState.executeQuery();
             }
             // Insert
             state = conn.prepareStatement(createVisit);
@@ -1961,19 +1957,9 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement tempState = null;
         ResultSet results = null;
         try {
+            // Get the new ID
             if (!inNewButUseOldAuditAndID) {
-                // Get the new ID
-                tempState = conn.prepareStatement("SELECT COUNT(ID) FROM SIGHTINGS WHERE ID = ?");
                 inSighting.setID(generateID());
-                tempState.setLong(1, inSighting.getID());
-                // Make sure it is unique (should almost always be, but let's be safe...)
-                results = tempState.executeQuery();
-                while (results.next() && results.getInt(1) > 0) {
-                    // ID already used, try a new ID
-                    inSighting.setID(generateID());
-                    tempState.setLong(1, inSighting.getID());
-                    results = tempState.executeQuery();
-                }
             }
             // Insert
             state = conn.prepareStatement(createSighting);
@@ -2061,12 +2047,16 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile) {
+    public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile, boolean inNewButUseOldAuditAndID) {
         PreparedStatement state = null;
         try {
             // Insert
             state = conn.prepareStatement(createFile);
-            maintainWildLogFile(state, inWildLogFile);
+            // Get the new ID
+            if (!inNewButUseOldAuditAndID) {
+                inWildLogFile.setID(generateID());
+            }
+            maintainWildLogFile(state, inWildLogFile, inNewButUseOldAuditAndID);
             // Execute
             state.executeUpdate();
         }
@@ -2081,13 +2071,13 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile) {
+    public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
             // Update
             state = conn.prepareStatement(updateFile);
-            maintainWildLogFile(state, inWildLogFile);
-            state.setString(9, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
+            maintainWildLogFile(state, inWildLogFile, inUseOldAudit);
+            state.setLong(12, inWildLogFile.getID());
             // Execute
             state.executeUpdate();
         }
@@ -2101,25 +2091,31 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
-    private <T extends WildLogFileCore> void maintainWildLogFile(PreparedStatement state, T inWildLogFile) throws SQLException {
-        state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
-        state.setString(2, UtilsData.sanitizeString(inWildLogFile.getFilename()));
-        state.setString(3, UtilsData.sanitizeString(inWildLogFile.getDBFilePath().replace("\\", "/")));
-        state.setString(4, UtilsData.stringFromObject(inWildLogFile.getFileType()));
+    private <T extends WildLogFileCore> void maintainWildLogFile(PreparedStatement state, T inWildLogFile, boolean inUseOldAudit) throws SQLException {
+        state.setLong(1, inWildLogFile.getID());
+        state.setString(2, UtilsData.sanitizeString(inWildLogFile.getLinkID()));
+        state.setString(3, UtilsData.sanitizeString(inWildLogFile.getFilename()));
+        state.setString(4, UtilsData.sanitizeString(inWildLogFile.getDBFilePath().replace("\\", "/")));
+        state.setString(5, UtilsData.stringFromObject(inWildLogFile.getFileType()));
         if (inWildLogFile.getUploadDate() != null) {
-            state.setDate(5, new java.sql.Date(inWildLogFile.getUploadDate().getTime()));
+            state.setDate(6, new java.sql.Date(inWildLogFile.getUploadDate().getTime()));
         }
         else {
-            state.setDate(5, null);
+            state.setDate(6, null);
         }
-        state.setBoolean(6, inWildLogFile.isDefaultFile());
+        state.setBoolean(7, inWildLogFile.isDefaultFile());
         if (inWildLogFile.getFileDate() != null) {
-            state.setTimestamp(7, new Timestamp(inWildLogFile.getFileDate().getTime()));
+            state.setTimestamp(8, new Timestamp(inWildLogFile.getFileDate().getTime()));
         }
         else {
-            state.setTimestamp(7, null);
+            state.setTimestamp(8, null);
         }
-        state.setLong(8, inWildLogFile.getFileSize());
+        state.setLong(9, inWildLogFile.getFileSize());
+        if (!inUseOldAudit) {
+            setupAuditInfo(inWildLogFile);
+        }
+        state.setLong(10, inWildLogFile.getAuditTime());
+        state.setString(11, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogFile.getAuditUser()), 150));
     }
 
     @Override
@@ -2241,7 +2237,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Fotos
             List<WildLogFileCore> fileList = listWildLogFiles(ElementCore.WILDLOGFILE_ID_PREFIX + inID, null, WildLogFileCore.class);
             for (WildLogFileCore temp : fileList) {
-                deleteWildLogFile(temp.getDBFilePath());
+                deleteWildLogFile(temp.getID());
             }
         }
         catch (SQLException ex) {
@@ -2271,7 +2267,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Fotos
             List<WildLogFileCore> fileList = listWildLogFiles(LocationCore.WILDLOGFILE_ID_PREFIX + inID, null, WildLogFileCore.class);
             for (WildLogFileCore temp : fileList) {
-                deleteWildLogFile(temp.getDBFilePath());
+                deleteWildLogFile(temp.getID());
             }
         }
         catch (SQLException ex) {
@@ -2300,7 +2296,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Fotos
             List<WildLogFileCore> fileList = listWildLogFiles(VisitCore.WILDLOGFILE_ID_PREFIX + inID, null, WildLogFileCore.class);
             for (WildLogFileCore temp : fileList) {
-                deleteWildLogFile(temp.getDBFilePath());
+                deleteWildLogFile(temp.getID());
             }
         }
         catch (SQLException ex) {
@@ -2324,7 +2320,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Fotos
             List<WildLogFileCore> fileList = listWildLogFiles(SightingCore.WILDLOGFILE_ID_PREFIX + inID, null, WildLogFileCore.class);
             for (WildLogFileCore temp : fileList) {
-                deleteWildLogFile(temp.getDBFilePath());
+                deleteWildLogFile(temp.getID());
             }
             // Delete any linked iNaturalist data
             deleteINaturalistLinkedData(inID, 0);
@@ -2340,12 +2336,12 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public boolean deleteWildLogFile(String inDBFilePath) {
+    public boolean deleteWildLogFile(long inID) {
         // Note: This method only deletes one file at a time from the database.
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteFile);
-            state.setString(1, UtilsData.sanitizeString(inDBFilePath.replace("\\", "/")));
+            state.setLong(1, inID);
             // Delete File from database
             state.executeUpdate();
         }
@@ -2577,7 +2573,7 @@ public abstract class DBI_JDBC implements DBI {
     
     @Override
     public long generateID() {
-        return System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
+        return System.currentTimeMillis()*1000000L + randomGenerator.nextInt(1000000);
     }
 
     @Override

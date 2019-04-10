@@ -231,7 +231,7 @@ public class UtilsImageProcessing {
 
     public static int previousImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        int fotoCount = inApp.getDBI().countWildLogFiles(null, inID);
+        int fotoCount = inApp.getDBI().countWildLogFiles(0, inID);
         if (fotoCount > 0) {
             if (newImageIndex > 0) {
                 newImageIndex = newImageIndex - 1;
@@ -249,7 +249,7 @@ public class UtilsImageProcessing {
 
     public static int nextImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        int fotoCount = inApp.getDBI().countWildLogFiles(null, inID);
+        int fotoCount = inApp.getDBI().countWildLogFiles(0, inID);
         if (fotoCount > 0) {
             if (newImageIndex < fotoCount - 1) {
                 newImageIndex = newImageIndex + 1;
@@ -275,7 +275,7 @@ public class UtilsImageProcessing {
             else {
                 lstFiles.get(t).setDefaultFile(true);
             }
-            inApp.getDBI().updateWildLogFile(lstFiles.get(t));
+            inApp.getDBI().updateWildLogFile(lstFiles.get(t), false);
             if (inApp.getWildLogOptions().isEnableSounds()) {
                 Toolkit.getDefaultToolkit().beep();
             }
@@ -294,7 +294,7 @@ public class UtilsImageProcessing {
             List<WildLogFile> fotos = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
             if (fotos.size() > 0) {
                 WildLogFile tempFoto = fotos.get(newImageIndex);
-                inApp.getDBI().deleteWildLogFile(tempFoto.getDBFilePath());
+                inApp.getDBI().deleteWildLogFile(tempFoto.getID());
                 if (fotos.size() > 1) {
                     newImageIndex = newImageIndex - 1;
                     newImageIndex = nextImage(inID, newImageIndex, inImageLabel, inSize, inApp);

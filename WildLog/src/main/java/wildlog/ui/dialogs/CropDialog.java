@@ -264,7 +264,7 @@ public class CropDialog extends JDialog {
                     // If you pass the 2nd parameter as false, Exif information is not loaded and hence will not be written.
                     lljTran.read(LLJTran.READ_ALL, true);
                     // Get a name for the new cropped file
-                    WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), 
+                    WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getID(), wildLogFile.getLinkID(), wildLogFile.getFilename(), 
                             wildLogFile.getDBFilePath(), wildLogFile.getFileType(), new Date(), null, -1);
                     if (iNaturalistUploadFile == null) {
                         while (Files.exists(newWildLogFile.getAbsolutePath())) {
@@ -363,7 +363,7 @@ public class CropDialog extends JDialog {
                         // Not a iNat crop, so the image will be added to the Workspace
                         newWildLogFile.setFileDate(UtilsImageProcessing.getDateFromFileDate(newWildLogFile.getAbsolutePath()));
                         newWildLogFile.setFileSize(Files.size(newWildLogFile.getAbsolutePath()));
-                        WildLogApp.getApplication().getDBI().createWildLogFile(newWildLogFile);
+                        WildLogApp.getApplication().getDBI().createWildLogFile(newWildLogFile, false);
                     }
                     else {
                         // An iNat crop, so the image can be resized to 2048px 
