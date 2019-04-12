@@ -171,7 +171,7 @@ public class LocationSelectionDialog extends JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    protected long getSelectedLocationID() {
+    public long getSelectedLocationID() {
         return selectedLocationID;
     }
     

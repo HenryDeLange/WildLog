@@ -1,12 +1,18 @@
 package wildlog.data.dbi;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.JOptionPane;
@@ -20,12 +26,25 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
+import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
+import wildlog.data.enums.GPSAccuracy;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.LifeStatus;
+import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.TimeAccuracy;
+import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.maps.utils.UtilsGPS;
+import wildlog.ui.dialogs.WorkspaceImportDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.UtilsCompression;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.WildLogPaths;
 
 
@@ -288,7 +307,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         " ((CASE WHEN L.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN L.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (L.LatDEGREES + (L.LatMINUTES + L.LatSECONDS /60.0)/60.0)) AS PLACE_LATITUDE, " +
                         " ((CASE WHEN L.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN L.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (L.LonDEGREES + (L.LonMINUTES + L.LonSECONDS /60.0)/60.0)) AS PLACE_LONGITUDE, " +
                         " V.NAME AS PERIOD, V.VISITTYPE AS PERIOD_TYPE, V.STARTDATE AS PERIOD_START_DATE, V.ENDDATE AS PERIOD_END_DATE, V.DESCRIPTION AS PERIOD_DESCRIPTION, " +
-                        " S.SIGHTINGCOUNTER AS OBSERVATION, S.CERTAINTY, S.SIGHTINGEVIDENCE AS EVIDENCE, " +
+                        " S.ID AS OBSERVATION, S.CERTAINTY, S.SIGHTINGEVIDENCE AS EVIDENCE, " +
                         " S.TIMEACCURACY AS TIME_ACCURACY, S.TIMEOFDAY AS TIME_OF_DAY, " +
                         " trunc(S.SIGHTINGDATE) OBSERVATION_DATE, cast(S.SIGHTINGDATE as time) OBSERVATION_TIME, " +
                         " S.GPSACCURACY AS OBSERVATION_GPS_ACCURACY, S.GPSACCURACYVALUE AS OBSERVATION_GPS_ACCURACY_VALUE, " +
@@ -296,28 +315,28 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         " ((CASE WHEN S.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN S.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (S.LonDEGREES + (S.LonMINUTES + S.LonSECONDS /60.0)/60.0)) AS OBSERVATION_LONGITUDE, " +
                         " S.NUMBEROFELEMENTS AS NUMBER_OF_CREATURES, S.LIFESTATUS AS LIFE_STATUS, S.TAG, S.DETAILS " +
                         " FROM SIGHTINGS S " +
-                        " LEFT JOIN ELEMENTS E ON S.ELEMENTNAME = E.PRIMARYNAME " +
-                        " LEFT JOIN LOCATIONS L ON S.LOCATIONNAME = L.NAME " +
-                        " LEFT JOIN VISITS V ON S.VISITNAME = V.NAME ";
+                        " LEFT JOIN ELEMENTS E ON S.ELEMENTID = E.ID " +
+                        " LEFT JOIN LOCATIONS L ON S.LOCATIONID = L.ID " +
+                        " LEFT JOIN VISITS V ON S.VISITID = V.ID ";
             String andIndicator = " WHERE ";
             if (inElement != null && inElement.getPrimaryName()!= null && !inElement.getPrimaryName().isEmpty()) {
-                sql = sql + andIndicator + " S.ELEMENTNAME = ''" + inElement.getPrimaryName().replaceAll("'", "''") + "''";
+                sql = sql + andIndicator + " S.ELEMENTID = ''" + inElement.getID() + "''";
                 andIndicator = " AND ";
             }
             if (inLocation != null && inLocation.getName() != null && !inLocation.getName().isEmpty()) {
-                sql = sql + andIndicator + " S.LOCATIONNAME = ''" + inLocation.getName().replaceAll("'", "''") + "''";
+                sql = sql + andIndicator + " S.LOCATIONID = ''" + inLocation.getID() + "''";
                 andIndicator = " AND ";
             }
             if (inVisit != null && inVisit.getName() != null && !inVisit.getName().isEmpty()) {
-                sql = sql + andIndicator + " S.VISITNAME = ''" + inVisit.getName().replaceAll("'", "''") + "''";
+                sql = sql + andIndicator + " S.VISITID = ''" + inVisit.getID() + "''";
                 andIndicator = " AND ";
             }
             if (inSighting != null && inSighting.getID()> 0) {
-                sql = sql + andIndicator + " S.SIGHTINGCOUNTER = " + inSighting.getID();
+                sql = sql + andIndicator + " S.ID = " + inSighting.getID();
                 andIndicator = " AND ";
             }
             if (inLstSightings != null && !inLstSightings.isEmpty()) {
-                sql = sql + andIndicator + " S.SIGHTINGCOUNTER IN (";
+                sql = sql + andIndicator + " S.ID IN (";
                 for (Sighting tempSighting : inLstSightings) {
                     sql = sql + tempSighting.getID() + ",";
                 }
@@ -343,271 +362,410 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
-    public boolean doImportCSV(Path inPath, String inPrefix, boolean includeWildLogFilesTable) {
+    public void doImportCSV(Path inCSVPath, boolean inAutoResolve, boolean includeWildLogFilesTable) {
+        WorkspaceImportDialog importDialog = new WorkspaceImportDialog();
         Statement state = null;
         ResultSet results = null;
-        boolean success = true;
-//        try {
-//            state = conn.createStatement();
-//            // Import Elements
-//            if (Files.exists(inPath.resolve("Creatures.csv").toAbsolutePath())) {
-//                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Creatures.csv").toAbsolutePath().toString() + "')");
-//                while (results.next()) {
-//                    Element tempElement = new Element();
-//                    populateElement(results, tempElement);
-//                    tempElement.setPrimaryName(inPrefix + results.getString("PRIMARYNAME"));
-//                    success = success && createElement(tempElement);
-//                }
-//                results.close();
-//            }
-//            // Import Locations
-//            if (Files.exists(inPath.resolve("Places.csv").toAbsolutePath())) {
-//                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Places.csv").toAbsolutePath().toString() + "')");
-//                while (results.next()) {
-//                    Location tempLocation = new Location();
-//                    populateLocation(results, tempLocation);
-//                    tempLocation.setName(inPrefix + results.getString("NAME"));
-//                    success = success && createLocation(tempLocation);
-//                }
-//                results.close();
-//            }
-//            // Import Visits
-//            if (Files.exists(inPath.resolve("Periods.csv").toAbsolutePath())) {
-//                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Periods.csv").toAbsolutePath().toString() + "')");
-//                while (results.next()) {
-//                    Visit tempVisit = new Visit();
-//                    populateVisit(results, tempVisit);
-//                    tempVisit.setName(inPrefix + results.getString("NAME"));
-//                    tempVisit.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
-//                    success = success && createVisit(tempVisit);
-//                }
-//                results.close();
-//            }
-//            // Import Sightings
-//            if (Files.exists(inPath.resolve("Observations.csv").toAbsolutePath())) {
-//                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Observations.csv").toAbsolutePath().toString() + "')");
-//                while (results.next()) {
-//                    Sighting tempSighting = new Sighting();
-//                    populateSighting(results, tempSighting);
-//                    tempSighting.setSightingCounter(0);
-//                    tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
-//                    tempSighting.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
-//                    tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
-//                    success = success && createSighting(tempSighting, false);
-//                }
-//                results.close();
-//            }
-//            if (includeWildLogFilesTable) {
-//                if (Files.exists(inPath.resolve("Files.csv").toAbsolutePath())) {
-//                    results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
-//                    while (results.next()) {
-//                        WildLogFile wildLogFile = new WildLogFile();
-//                        populateWildLogFile(results, wildLogFile);
-//                        wildLogFile.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
-//                        success = success && createWildLogFile(wildLogFile);
-//                    }
-//                }
-//            }
-//        }
-//        catch (SQLException ex) {
-//            printSQLException(ex);
-//            return false;
-//        }
-//        finally {
-//            // ResultSet
-//            try {
-//                if (results != null) {
-//                    results.close();
-//                    results = null;
-//                }
-//            }
-//            catch (SQLException sqle) {
-//                printSQLException(sqle);
-//            }
-//            // Statement
-//            try {
-//                if (state != null) {
-//                    state.close();
-//                    state = null;
-//                }
-//            }
-//            catch (SQLException sqle) {
-//                printSQLException(sqle);
-//            }
-//        }
-        return success;
+        try {
+            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+            PrintWriter feedback = null;
+            try {
+                feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                feedback.println("---------------------------------------------");
+                feedback.println("------------- CSV Import Report -------------");
+                feedback.println("---------------------------------------------");
+                feedback.println("");
+                state = conn.createStatement();
+                // Import Elements
+                if (Files.exists(inCSVPath.resolve("Creatures.csv").toAbsolutePath())) {
+                    results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("Creatures.csv").toAbsolutePath().toString() + "')");
+                    while (results.next()) {
+                        Element tempElement = new Element();
+                        populateElement(results, tempElement);
+                        importDialog.importElementRecord(tempElement, inAutoResolve, feedback);
+                    }
+                    results.close();
+                }
+                // Import Locations
+                if (Files.exists(inCSVPath.resolve("Places.csv").toAbsolutePath())) {
+                    results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("Places.csv").toAbsolutePath().toString() + "')");
+                    while (results.next()) {
+                        Location tempLocation = new Location();
+                        populateLocation(results, tempLocation);
+                        importDialog.importLocationRecord(tempLocation, inAutoResolve, feedback);
+                    }
+                    results.close();
+                }
+                // Import Visits
+                if (Files.exists(inCSVPath.resolve("Periods.csv").toAbsolutePath())) {
+                    results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("Periods.csv").toAbsolutePath().toString() + "')");
+                    while (results.next()) {
+                        Visit tempVisit = new Visit();
+                        populateVisit(results, tempVisit, false);
+                        importDialog.importVisitRecord(tempVisit, inAutoResolve, feedback);
+                    }
+                    results.close();
+                }
+                // Import Sightings
+                if (Files.exists(inCSVPath.resolve("Observations.csv").toAbsolutePath())) {
+                    results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("Observations.csv").toAbsolutePath().toString() + "')");
+                    while (results.next()) {
+                        Sighting tempSighting = new Sighting();
+                        populateSighting(results, tempSighting, false);
+                        importDialog.importSightingRecord(tempSighting, inAutoResolve, feedback);
+                    }
+                    results.close();
+                }
+                if (includeWildLogFilesTable) {
+                    if (Files.exists(inCSVPath.resolve("Files.csv").toAbsolutePath())) {
+                        results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
+                        while (results.next()) {
+                            WildLogFile wildLogFile = new WildLogFile();
+                            populateWildLogFile(results, wildLogFile);
+                            createWildLogFile(wildLogFile, true);
+                        }
+                    }
+                }
+                importDialog.writeImportSummary(feedback);
+            }
+            catch (Exception ex) {
+                if (feedback != null) {
+                    feedback.println("");
+                    feedback.println("--------------------------------------");
+                    feedback.println("--------------- ERROR ----------------");
+                    feedback.println(ex.toString());
+                    feedback.println("--------------------------------------");
+                    feedback.println("");
+                }
+                throw ex;
+            }
+            finally {
+                if (feedback != null) {
+                    feedback.println("");
+                    feedback.println("--------------------------------------");
+                    feedback.println("-------------- FINISHED --------------");
+                    feedback.println("--------------------------------------");
+                    feedback.println("");
+                    feedback.flush();
+                    feedback.close();
+                    // Open the summary document
+                    UtilsFileProcessing.openFile(feedbackFile);
+                }
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                    "Could not import the CSV files.",
+                    "Import CSV Error", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                    "Could not import the CSV files.",
+                    "Import CSV Error", JOptionPane.ERROR_MESSAGE);
+        }
+        finally {
+            // ResultSet
+            try {
+                if (results != null) {
+                    results.close();
+                    results = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
     }
     
     @Override
-    public boolean doImportBasicCSV(Path inPath, String inPrefix) {
+    public void doImportBasicCSV(Path inPath) {
         Statement state = null;
         ResultSet resultSet = null;
-        boolean success = true;
-//        try {
-//            state = conn.createStatement();
-//            resultSet = state.executeQuery("CALL CSVREAD('" + inPath.toAbsolutePath().toString() + "')");
-//            while (resultSet.next() && success) {
-//                // Import Elements
-//                Element element = new Element();
-//                element.setPrimaryName(inPrefix + resultSet.getString("CREATURE"));
-//                element.setScientificName(resultSet.getString("SCIENTIFIC_NAME"));
-//                element.setType(ElementType.getEnumFromText(resultSet.getString("CREATURE_TYPE")));
-//                if (countElements(element.getPrimaryName(), null) == 0) {
-//                    success = success && createElement(element);
-//                }
-//                // Import Locations
-//                if (success) {
-//                    Location location = new Location();
-//                    location.setName(inPrefix + resultSet.getString("PLACE"));
-//                    location.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("PLACE_GPS_ACCURACY")));
-//                    location.setGPSAccuracyValue(resultSet.getDouble("PLACE_GPS_ACCURACY_VALUE"));
-//                    double lat = resultSet.getDouble("PLACE_LATITUDE");
-//                    if (lat != 0) {
-//                        Latitudes latitude;
-//                        if (lat < 0) {
-//                            latitude = Latitudes.SOUTH;
-//                        }
-//                        else {
-//                            latitude = Latitudes.NORTH;
-//                        }
-//                        location.setLatitude(latitude);
-//                        location.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
-//                        location.setLatMinutes(UtilsGPS.getMinutes(lat));
-//                        location.setLatSeconds(UtilsGPS.getSeconds(lat));
-//                    }
-//                    double lon = resultSet.getDouble("PLACE_LONGITUDE");
-//                    if (lon != 0) {
-//                        Longitudes longitude;
-//                        if (lon < 0) {
-//                            longitude = Longitudes.WEST;
-//                        }
-//                        else {
-//                            longitude = Longitudes.EAST;
-//                        }
-//                        location.setLongitude(longitude);
-//                        location.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
-//                        location.setLonMinutes(UtilsGPS.getMinutes(lon));
-//                        location.setLonSeconds(UtilsGPS.getSeconds(lon));
-//                    }
-//                    if (countLocations(location.getName()) == 0) {
-//                        success = success && createLocation(location);
-//                    }
-//                }
-//                // Import Visits
-//                if (success) {
-//                    Visit visit = new Visit();
-//                    visit.setName(inPrefix + resultSet.getString("PERIOD"));
-//                    visit.setLocationName(inPrefix + resultSet.getString("PLACE"));
-//                    visit.setType(VisitType.getEnumFromText(resultSet.getString("PERIOD_TYPE")));
-//                    if (resultSet.getDate("PERIOD_START_DATE") != null) {
-//                        visit.setStartDate(new Date(resultSet.getDate("PERIOD_START_DATE").getTime()));
-//                    }
-//                    else {
-//                        visit.setStartDate(null);
-//                    }
-//                    if (resultSet.getDate("PERIOD_END_DATE") != null) {
-//                        visit.setEndDate(new Date(resultSet.getDate("PERIOD_END_DATE").getTime()));
-//                    }
-//                    else {
-//                        visit.setEndDate(null);
-//                    }
-//                    visit.setDescription(resultSet.getString("PERIOD_DESCRIPTION"));
-//                    if (countVisits(visit.getName(), null) == 0) {
-//                        success = success && createVisit(visit);
-//                    }
-//                }
-//                // Import Sightings
-//                if (success) {
-//                    Sighting sighting = new Sighting();
-//                    sighting.setSightingCounter(0); // Indicate a new Sighting ID needs to be created
-//                    sighting.setElementName(inPrefix + resultSet.getString("CREATURE"));
-//                    sighting.setLocationName(inPrefix + resultSet.getString("PLACE"));
-//                    sighting.setVisitName(inPrefix + resultSet.getString("PERIOD"));
-//                    sighting.setCertainty(Certainty.getEnumFromText(resultSet.getString("CERTAINTY")));
-//                    sighting.setSightingEvidence(SightingEvidence.getEnumFromText(resultSet.getString("EVIDENCE")));
-//                    sighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(resultSet.getString("TIME_ACCURACY")));
-//                    sighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(resultSet.getString("TIME_OF_DAY")));
-//                    if (resultSet.getTimestamp("OBSERVATION_DATE") != null) {
-//                        Timestamp timestamp = resultSet.getTimestamp("OBSERVATION_DATE");
-//                        if (timestamp != null) {
-//                            sighting.setDate(new Date(timestamp.getTime()));
-//                        }
-//                    }
-//                    else {
-//                        sighting.setDate(null);
-//                    }
-//                    if (resultSet.getTime("OBSERVATION_TIME") != null && sighting.getDate() != null) {
-//                        Time time = resultSet.getTime("OBSERVATION_TIME");
-//                        if (time != null) {
-//                            LocalDateTime localDateTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
-//                            sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime.with(time.toLocalTime())));
-//                        }
-//                    }
-//                    sighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("OBSERVATION_GPS_ACCURACY")));
-//                    sighting.setGPSAccuracyValue(resultSet.getDouble("OBSERVATION_GPS_ACCURACY_VALUE"));
-//                    double lat = resultSet.getDouble("OBSERVATION_LATITUDE");
-//                    if (lat != 0) {
-//                        Latitudes latitude;
-//                        if (lat < 0) {
-//                            latitude = Latitudes.SOUTH;
-//                        }
-//                        else {
-//                            latitude = Latitudes.NORTH;
-//                        }
-//                        sighting.setLatitude(latitude);
-//                        sighting.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
-//                        sighting.setLatMinutes(UtilsGPS.getMinutes(lat));
-//                        sighting.setLatSeconds(UtilsGPS.getSeconds(lat));
-//                    }
-//                    double lon = resultSet.getDouble("OBSERVATION_LONGITUDE");
-//                    if (lon != 0) {
-//                        Longitudes longitude;
-//                        if (lon < 0) {
-//                            longitude = Longitudes.WEST;
-//                        }
-//                        else {
-//                            longitude = Longitudes.EAST;
-//                        }
-//                        sighting.setLongitude(longitude);
-//                        sighting.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
-//                        sighting.setLonMinutes(UtilsGPS.getMinutes(lon));
-//                        sighting.setLonSeconds(UtilsGPS.getSeconds(lon));
-//                    }
-//                    sighting.setNumberOfElements(resultSet.getInt("NUMBER_OF_CREATURES"));
-//                    sighting.setLifeStatus(LifeStatus.getEnumFromText(resultSet.getString("LIFE_STATUS")));
-//                    sighting.setTag(resultSet.getString("TAG"));
-//                    sighting.setDetails(resultSet.getString("DETAILS"));
-//                    success = success && createSighting(sighting, false);
-//                }
-//            }
-//        }
-//        catch (SQLException ex) {
-//            printSQLException(ex);
-//            return false;
-//        }
-//        finally {
-//            // ResultSet
-//            try {
-//                if (resultSet != null) {
-//                    resultSet.close();
-//                    resultSet = null;
-//                }
-//            }
-//            catch (SQLException sqle) {
-//                printSQLException(sqle);
-//            }
-//            // Statement
-//            try {
-//                if (state != null) {
-//                    state.close();
-//                    state = null;
-//                }
-//            }
-//            catch (SQLException sqle) {
-//                printSQLException(sqle);
-//            }
-//        }
-        return success;
+        try {
+            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+            PrintWriter feedback = null;
+            try {
+                int importElementCreated = 0;
+                int importLocationCreated = 0;
+                int importVisitCreated = 0;
+                int importSightingCreated = 0;
+                int importElementUpdated = 0;
+                int importLocationUpdated = 0;
+                int importVisitUpdated = 0;
+                int importSightingUpdated = 0;
+                feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                feedback.println("---------------------------------------------------");
+                feedback.println("------------- Basic CSV Import Report -------------");
+                feedback.println("---------------------------------------------------");
+                feedback.println("");
+                state = conn.createStatement();
+                resultSet = state.executeQuery("CALL CSVREAD('" + inPath.toAbsolutePath().toString() + "')");
+                while (resultSet.next()) {
+                    // Import Elements
+                    boolean isNew = false;
+                    Element element = findElement(0, resultSet.getString("CREATURE").trim(), Element.class);
+                    if (element == null) {
+                        element = new Element();
+                        element.setPrimaryName(resultSet.getString("CREATURE").trim());
+                        isNew = true;
+                    }
+                    element.setScientificName(resultSet.getString("SCIENTIFIC_NAME"));
+                    element.setType(ElementType.getEnumFromText(resultSet.getString("CREATURE_TYPE")));
+                    if (isNew) {
+                        createElement(element, false);
+                        importElementCreated++;
+                        feedback.println("Created Creature: " + element.getDisplayName() + " [" + element.getID() + "]");
+                    }
+                    else {
+                        updateElement(element, element.getPrimaryName(), false);
+                        importElementUpdated++;
+                        feedback.println("Updated Creature: " + element.getDisplayName() + " [" + element.getID() + "]");
+                    }
+                    // Import Locations
+                    isNew = false;
+                    Location location = findLocation(0, resultSet.getString("PLACE").trim(), Location.class);
+                    if (location == null) {
+                        location = new Location();
+                        location.setName(resultSet.getString("PLACE").trim());
+                        isNew = true;
+                    }
+                    location.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("PLACE_GPS_ACCURACY")));
+                    location.setGPSAccuracyValue(resultSet.getDouble("PLACE_GPS_ACCURACY_VALUE"));
+                    double lat = resultSet.getDouble("PLACE_LATITUDE");
+                    if (lat != 0) {
+                        Latitudes latitude;
+                        if (lat < 0) {
+                            latitude = Latitudes.SOUTH;
+                        }
+                        else {
+                            latitude = Latitudes.NORTH;
+                        }
+                        location.setLatitude(latitude);
+                        location.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
+                        location.setLatMinutes(UtilsGPS.getMinutes(lat));
+                        location.setLatSeconds(UtilsGPS.getSeconds(lat));
+                    }
+                    double lon = resultSet.getDouble("PLACE_LONGITUDE");
+                    if (lon != 0) {
+                        Longitudes longitude;
+                        if (lon < 0) {
+                            longitude = Longitudes.WEST;
+                        }
+                        else {
+                            longitude = Longitudes.EAST;
+                        }
+                        location.setLongitude(longitude);
+                        location.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
+                        location.setLonMinutes(UtilsGPS.getMinutes(lon));
+                        location.setLonSeconds(UtilsGPS.getSeconds(lon));
+                    }
+                    if (isNew) {
+                        createLocation(location, false);
+                        importLocationCreated++;
+                        feedback.println("Created Place: " + location.getDisplayName() + " [" + location.getID() + "]");
+                    }
+                    else {
+                        updateLocation(location, location.getName(), false);
+                        importLocationUpdated++;
+                        feedback.println("Updated Place: " + location.getDisplayName() + " [" + location.getID() + "]");
+                    }
+                    // Import Visits
+                    isNew = false;
+                    Visit visit = findVisit(0, resultSet.getString("PERIOD").trim(), false, Visit.class);
+                    if (visit == null) {
+                        visit = new Visit();
+                        visit.setName(resultSet.getString("PERIOD").trim());
+                        isNew = true;
+                    }
+                    visit.setLocationID(location.getID());
+                    visit.setType(VisitType.getEnumFromText(resultSet.getString("PERIOD_TYPE")));
+                    if (resultSet.getDate("PERIOD_START_DATE") != null) {
+                        visit.setStartDate(new Date(resultSet.getDate("PERIOD_START_DATE").getTime()));
+                    }
+                    else {
+                        visit.setStartDate(null);
+                    }
+                    if (resultSet.getDate("PERIOD_END_DATE") != null) {
+                        visit.setEndDate(new Date(resultSet.getDate("PERIOD_END_DATE").getTime()));
+                    }
+                    else {
+                        visit.setEndDate(null);
+                    }
+                    visit.setDescription(resultSet.getString("PERIOD_DESCRIPTION"));
+                    if (isNew) {
+                        createVisit(visit, false);
+                        importVisitCreated++;
+                        feedback.println("Created Period: " + visit.getDisplayName() + " [" + visit.getID() + "]");
+                    }
+                    else {
+                        updateVisit(visit, visit.getName(), false);
+                        importVisitUpdated++;
+                        feedback.println("Updated Period: " + visit.getDisplayName() + " [" + visit.getID() + "]");
+                    }
+                    // Import Sightings
+                    isNew = false;
+                    Sighting sighting = findSighting(resultSet.getLong("OBSERVATION"), false, Sighting.class);
+                    if (sighting == null) {
+                        sighting = new Sighting();
+                        isNew = true;
+                    }
+                    sighting.setID(0); // Indicate a new Sighting ID needs to be created
+                    sighting.setElementID(element.getID());
+                    sighting.setLocationID(location.getID());
+                    sighting.setVisitID(visit.getID());
+                    sighting.setCertainty(Certainty.getEnumFromText(resultSet.getString("CERTAINTY")));
+                    sighting.setSightingEvidence(SightingEvidence.getEnumFromText(resultSet.getString("EVIDENCE")));
+                    sighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(resultSet.getString("TIME_ACCURACY")));
+                    sighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(resultSet.getString("TIME_OF_DAY")));
+                    if (resultSet.getTimestamp("OBSERVATION_DATE") != null) {
+                        Timestamp timestamp = resultSet.getTimestamp("OBSERVATION_DATE");
+                        if (timestamp != null) {
+                            sighting.setDate(new Date(timestamp.getTime()));
+                        }
+                    }
+                    else {
+                        sighting.setDate(null);
+                    }
+                    if (resultSet.getTime("OBSERVATION_TIME") != null && sighting.getDate() != null) {
+                        Time time = resultSet.getTime("OBSERVATION_TIME");
+                        if (time != null) {
+                            LocalDateTime localDateTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
+                            sighting.setDate(UtilsTime.getDateFromLocalDateTime(localDateTime.with(time.toLocalTime())));
+                        }
+                    }
+                    sighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(resultSet.getString("OBSERVATION_GPS_ACCURACY")));
+                    sighting.setGPSAccuracyValue(resultSet.getDouble("OBSERVATION_GPS_ACCURACY_VALUE"));
+                    lat = resultSet.getDouble("OBSERVATION_LATITUDE");
+                    if (lat != 0) {
+                        Latitudes latitude;
+                        if (lat < 0) {
+                            latitude = Latitudes.SOUTH;
+                        }
+                        else {
+                            latitude = Latitudes.NORTH;
+                        }
+                        sighting.setLatitude(latitude);
+                        sighting.setLatDegrees(UtilsGPS.getDegrees(latitude, lat));
+                        sighting.setLatMinutes(UtilsGPS.getMinutes(lat));
+                        sighting.setLatSeconds(UtilsGPS.getSeconds(lat));
+                    }
+                    lon = resultSet.getDouble("OBSERVATION_LONGITUDE");
+                    if (lon != 0) {
+                        Longitudes longitude;
+                        if (lon < 0) {
+                            longitude = Longitudes.WEST;
+                        }
+                        else {
+                            longitude = Longitudes.EAST;
+                        }
+                        sighting.setLongitude(longitude);
+                        sighting.setLonDegrees(UtilsGPS.getDegrees(longitude, lon));
+                        sighting.setLonMinutes(UtilsGPS.getMinutes(lon));
+                        sighting.setLonSeconds(UtilsGPS.getSeconds(lon));
+                    }
+                    sighting.setNumberOfElements(resultSet.getInt("NUMBER_OF_CREATURES"));
+                    sighting.setLifeStatus(LifeStatus.getEnumFromText(resultSet.getString("LIFE_STATUS")));
+                    sighting.setTag(resultSet.getString("TAG"));
+                    sighting.setDetails(resultSet.getString("DETAILS"));
+                    if (isNew) {
+                        createSighting(sighting, false);
+                        importSightingCreated++;
+                        feedback.println("Created Observation: " + sighting.getDisplayName() + " [" + sighting.getID() + "]");
+                    }
+                    else {
+                        createSighting(sighting, false);
+                        importSightingUpdated++;
+                        feedback.println("Updated Observation: " + sighting.getDisplayName() + " [" + sighting.getID() + "]");
+                    }
+                }
+                int importCreates = importElementCreated + importLocationCreated + importVisitCreated + importSightingCreated;
+                int importUpdates = importElementUpdated + importLocationUpdated + importVisitUpdated + importSightingUpdated;
+                WildLogApp.LOGGER.log(Level.INFO, "Created {} and updated {} records successfully using the Basic CSV Import.", importCreates, importUpdates);
+                feedback.println("");
+                feedback.println("-------------- SUMMARY --------------");
+                feedback.println("TOTAL CREATED            : " + importCreates);
+                feedback.println("TOTAL UPDATED            : " + importUpdates);
+                feedback.println("");
+                feedback.println("Places created           : " + importLocationCreated);
+                feedback.println("Places updated           : " + importLocationUpdated);
+                feedback.println("Periods created          : " + importVisitCreated);
+                feedback.println("Periods updated          : " + importVisitUpdated);
+                feedback.println("Creatures created        : " + importElementCreated);
+                feedback.println("Creatures updated        : " + importElementUpdated);
+                feedback.println("Observations created     : " + importSightingCreated);
+                feedback.println("Observations updated     : " + importSightingUpdated);
+            }
+            catch (Exception ex) {
+                if (feedback != null) {
+                    feedback.println("");
+                    feedback.println("--------------------------------------");
+                    feedback.println("--------------- ERROR ----------------");
+                    feedback.println(ex.toString());
+                    feedback.println("--------------------------------------");
+                    feedback.println("");
+                }
+                throw ex;
+            }
+            finally {
+                if (feedback != null) {
+                    feedback.println("");
+                    feedback.println("--------------------------------------");
+                    feedback.println("-------------- FINISHED --------------");
+                    feedback.println("--------------------------------------");
+                    feedback.println("");
+                    feedback.flush();
+                    feedback.close();
+                    // Open the summary document
+                    UtilsFileProcessing.openFile(feedbackFile);
+                }
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                    "Could not import the Basic CSV file.",
+                    "Import Basic CSV Error", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                    "Could not import the Basic CSV file.",
+                    "Import Basic CSV Error", JOptionPane.ERROR_MESSAGE);
+        }
+        finally {
+            // ResultSet
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                    resultSet = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
     }
 
     @Override

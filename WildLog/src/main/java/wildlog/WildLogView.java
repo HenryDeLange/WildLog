@@ -124,6 +124,7 @@ import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
+import wildlog.ui.panels.bulkupload.LocationSelectionDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -306,6 +307,8 @@ public final class WildLogView extends JFrame {
             btnBulkImport.setEnabled(false);
             btnBulkImport.setVisible(false);
         }
+        btnStashFiles.setBackground(tabHome.getBackground());
+        btnBulkImport.setBackground(tabHome.getBackground());
     }
 
     private void setupTabHeaderHome() {
@@ -687,7 +690,7 @@ public final class WildLogView extends JFrame {
         });
 
         btnBulkImport.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnBulkImport.setText("Bulk Import Files");
+        btnBulkImport.setText("Bulk Import");
         btnBulkImport.setToolTipText("Import multiple files at once using the Bulk Import feature.");
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBulkImport.setEnabled(false);
@@ -1949,39 +1952,30 @@ public final class WildLogView extends JFrame {
                     if (result == JFileChooser.APPROVE_OPTION) {
                         tabbedPanel.setSelectedIndex(0);
                         Path path = fileChooser.getSelectedFile().toPath();
-                        String prefix = WLOptionPane.showInputDialog(app.getMainFrame(),
-                                "<html>Please provide a prefix to use for the imported data. "
-                                        + "<br>The prefix will be used to map the imported data to new unique records. "
-                                        + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
-                                "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
-                        if (prefix != null) {
-                            int choice = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                                    "<html><b>Would you like to <u>exclude</u> the WildLog File references</b>? "
-                                    + "<br><br><hr>"
-                                    + "<br>Note: The CSV Import can not import the actual files, but only the database links "
-                                    + "<br>to the files. If you select NO, then you will have to manually copy the files into the correct folders."
-                                    + "<br><br><hr>"
-                                    + "<br>It is <b>strongly recommended</b> to select <b>YES</b> to prevent more than one record to be "
-                                    + "<br>linked to the same file. The import will fail if a duplicate link is attempted.</html>",
-                                    "Exclude Database File References", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                            boolean excludeWildLogFiles = false;
-                            if (choice == JOptionPane.YES_OPTION || choice == JOptionPane.CLOSED_OPTION) {
-                                excludeWildLogFiles = true;
-                            }
-                            boolean hasErrors = false;
-                            try {
-                                hasErrors = !app.getDBI().doImportCSV(path, prefix, !excludeWildLogFiles);
-                            }
-                            catch (Exception ex) {
-                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                hasErrors = true;
-                            }
-                            if (hasErrors) {
-                                WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                        "Not all of the data could be successfully imported.",
-                                        "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
-                            }
+                        int choice = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "<html><b>Would you like to automatically resolve conflicts? "
+                                + "<br><br><hr>"
+                                + "<br>If you select YES (recommended) then conflicts will be automatically resolved based on the most recently edited record."
+                                + "<br>If you select NO then a popup will be opened for each conflict, asking you to choose which record to use.</html>",
+                                "Auto-Resolve Conflicts?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        boolean autoResolve = false;
+                        if (choice == JOptionPane.YES_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+                            autoResolve = true;
                         }
+                        choice = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "<html><b>Would you like to <u>exclude</u> the WildLog File references</b>? "
+                                + "<br><br><hr>"
+                                + "<br>Note: The CSV Import does not import the actual files, but only the database links to the files. "
+                                + "<br>If you select NO, then you will have to afterwards manually copy the files into the correct location under the Workspace's Files folder. "
+                                + "<br>The import will fail if a duplicate link is created or the files are manually copied incorrectly after the import. "
+                                + "<br><br><hr>"
+                                + "<br>It is <b>strongly recommended</b> to select <b>YES</b> to prevent creating incorrect links to the files.</html>",
+                                "Exclude Database File References?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        boolean excludeWildLogFiles = false;
+                        if (choice == JOptionPane.YES_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+                            excludeWildLogFiles = true;
+                        }
+                        app.getDBI().doImportCSV(path, autoResolve, !excludeWildLogFiles);
                     }
                     setMessage("Done with the CSV WildLog Import");
                     tabHomeComponentShown(null);
@@ -3423,7 +3417,7 @@ public final class WildLogView extends JFrame {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            WorkspaceImportDialog dialog = new WorkspaceImportDialog(app, selectedPath);
+                            WorkspaceImportDialog dialog = new WorkspaceImportDialog(selectedPath);
                             dialog.setVisible(true);
                         }
                     });
@@ -4075,26 +4069,7 @@ public final class WildLogView extends JFrame {
                     if (result == JFileChooser.APPROVE_OPTION) {
                         tabbedPanel.setSelectedIndex(0);
                         Path path = fileChooser.getSelectedFile().toPath();
-                        String prefix = WLOptionPane.showInputDialog(app.getMainFrame(),
-                                "<html>Please provide a prefix to use for the imported data. "
-                                        + "<br>The prefix will be used to map the imported data to new unique records. "
-                                        + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
-                                "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
-                        if (prefix != null) {
-                            boolean hasErrors = false;
-                            try {
-                                hasErrors = !app.getDBI().doImportBasicCSV(path, prefix);
-                            }
-                            catch (Exception ex) {
-                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                hasErrors = true;
-                            }
-                            if (hasErrors) {
-                                WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                        "Not all of the data could be successfully imported.",
-                                        "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
-                            }
-                        }
+                        app.getDBI().doImportBasicCSV(path);
                     }
                     setMessage("Done with the CSV Basic Import");
                     tabHomeComponentShown(null);
@@ -4429,7 +4404,17 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_btnStashFilesActionPerformed
 
     private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
-// TODO
+        LocationSelectionDialog locationDialog = new LocationSelectionDialog(this, app, 0);
+        locationDialog.setVisible(true);
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, 
+                        app.getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class), 
+                        null, null, null), tabbedPanel);
+                return null;
+            }
+        });
     }//GEN-LAST:event_btnBulkImportActionPerformed
 
     public void browseSelectedElement(Element inElement) {
