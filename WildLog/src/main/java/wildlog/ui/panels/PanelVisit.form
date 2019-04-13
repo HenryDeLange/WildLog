@@ -395,7 +395,7 @@
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="pnlButtonsLeft" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="pnlButtonRight" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnlButtonsRight" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -404,7 +404,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="pnlButtonRight" min="-2" max="-2" attributes="0"/>
+                          <Component id="pnlButtonsRight" min="-2" max="-2" attributes="0"/>
                           <Component id="pnlButtonsLeft" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
@@ -413,12 +413,12 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Container class="javax.swing.JPanel" name="pnlButtonRight">
+            <Container class="javax.swing.JPanel" name="pnlButtonsRight">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f0" green="e4" red="e6" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="pnlButtonRight" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="pnlButtonsRight" noResource="true"/>
               </Properties>
 
               <Layout>
@@ -886,8 +886,9 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="cmbType">
               <Properties>
+                <Property name="maximumRowCount" type="int" value="15"/>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new DefaultComboBoxModel(VisitType.values())" type="code"/>
+                  <Connection code="new DefaultComboBoxModel(VisitType.valuesForDroplist())" type="code"/>
                 </Property>
                 <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="visit.getType()" type="code"/>

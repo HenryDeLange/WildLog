@@ -34,6 +34,7 @@ public enum WildLogPaths {
     WILDLOG_FILES_IMAGES                  (Paths.get("Files", "Images")),
     WILDLOG_FILES_MOVIES                  (Paths.get("Files", "Movies")),
     WILDLOG_FILES_OTHER                   (Paths.get("Files", "Other")),
+    WILDLOG_FILES_STASH                   (Paths.get("Files", "Stashed")),
     WILDLOG_LOST_FILES                    (Paths.get("LostFiles")),
     WILDLOG_THUMBNAILS                    (Paths.get("Thumbnails")),
     WILDLOG_MAPS                          (Paths.get("Maps")),

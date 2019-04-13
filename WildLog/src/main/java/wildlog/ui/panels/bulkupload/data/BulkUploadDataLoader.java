@@ -3,7 +3,6 @@ package wildlog.ui.panels.bulkupload.data;
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Metadata;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,6 +35,7 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogFileExtentions;
@@ -59,13 +59,13 @@ public class BulkUploadDataLoader {
                 }
             }
         }
-        final List<Path> lstAllFiles = getListOfFilesToImport(inLstFolderPaths, inIsRecuresive);
+        final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(inLstFolderPaths, inIsRecuresive);
         if (lstAllFiles.isEmpty() && !inIsRecuresive) {
             int result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
                     "No supported files were found in the specified folder. Would you like to search in the subfolders as well?", 
                     "Include subfolders?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
-                lstAllFiles.addAll(getListOfFilesToImport(inLstFolderPaths, true));
+                lstAllFiles.addAll(UtilsFileProcessing.getListOfFilesToImport(inLstFolderPaths, true));
             }
             else {
                 return null;
@@ -216,47 +216,6 @@ public class BulkUploadDataLoader {
         return new String[] {
             "Observations", "Images"
         };
-    }
-
-    private static List<Path> getListOfFilesToImport(List<Path> inListPaths, boolean inIncludeFolders) {
-        List<Path> lstAllFiles = new ArrayList<>();
-        if (inListPaths != null) {
-            for (Path path : inListPaths) {
-                if (path != null) {
-                    lstAllFiles.addAll(getListOfFilesToImport(path.toFile(), inIncludeFolders));
-                }
-            }
-        }
-        return lstAllFiles;
-    }
-    
-    private static List<Path> getListOfFilesToImport(File inRoot, boolean inIncludeFolders) {
-        List<Path> lstFilesToImport = new ArrayList<>();
-        if (inRoot != null) {
-            if (inRoot.isFile()) {
-                if (WildLogFileExtentions.Images.isKnownExtention(inRoot.toPath()) 
-                        || WildLogFileExtentions.Movies.isKnownExtention(inRoot.toPath())) {
-                    lstFilesToImport.add(inRoot.toPath());
-                }
-            }
-            else {
-                File[] tempFileList = inRoot.listFiles();
-                if (tempFileList != null) {
-                    for (File tempFile : tempFileList) {
-                        if (inIncludeFolders && tempFile.isDirectory()) {
-                            lstFilesToImport.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
-                        }
-                        else {
-                            if (WildLogFileExtentions.Images.isKnownExtention(tempFile.toPath()) 
-                                    || WildLogFileExtentions.Movies.isKnownExtention(tempFile.toPath())) {
-                                lstFilesToImport.add(tempFile.toPath());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return lstFilesToImport;
     }
 
 }

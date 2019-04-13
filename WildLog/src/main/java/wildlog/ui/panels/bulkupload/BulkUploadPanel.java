@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -69,6 +70,7 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogApplicationTypes;
+import wildlog.utils.WildLogPaths;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
@@ -83,6 +85,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private Location selectedLocation;
     private List<Path> lstImportPaths = null;
     private boolean showAsTab = false;
+    private VisitType originalVisitType = VisitType.UNKNOWN;
 
     
 // TODO: Add a button that does the "adjust date and time" popup for all observations
@@ -96,6 +99,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         app = inApp;
         selectedLocation = inLocation;
         existingVisit = inExistingVisit;
+        // Store the original visit type, because we need to know what it was when we do the saving
+        if (existingVisit != null) {
+            originalVisitType = existingVisit.getType();
+        }
         panelToRefresh = inPanelToRefresh;
         if (inlstImportPaths != null) {
             lstImportPaths = inlstImportPaths;
@@ -143,9 +150,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             btnSelectLocation.setEnabled(false);
             // Visit fields
             txtVisitName.setText(existingVisit.getName());
-            txtVisitName.setEnabled(false);
-            cmbVisitType.setSelectedItem(existingVisit.getType());
-            cmbVisitType.setEnabled(false);
+            if (VisitType.STASHED != existingVisit.getType()) {
+                txtVisitName.setEnabled(false);
+                cmbVisitType.setSelectedItem(existingVisit.getType());
+                cmbVisitType.setEnabled(false);
+            }
+            else {
+                cmbVisitType.setSelectedItem(VisitType.NONE);
+            }
             dtpStartDate.setDate(existingVisit.getStartDate());
             dtpEndDate.setDate(existingVisit.getEndDate());
         }
@@ -231,7 +243,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
     
     private void setupVisitName() {
-        if (existingVisit == null || existingVisit.getID() <= 0) {
+        if (existingVisit == null || existingVisit.getID() <= 0 || existingVisit.getType() == VisitType.STASHED) {
             if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN || 
                     WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
                 String locationName;
@@ -369,7 +381,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel3.setText("Start Date:");
         jLabel3.setName("jLabel3"); // NOI18N
 
-        cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.values()));
+        cmbVisitType.setMaximumRowCount(15);
+        cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.valuesForDroplist()));
         cmbVisitType.setSelectedItem(VisitType.OTHER);
         cmbVisitType.setFocusable(false);
         cmbVisitType.setName("cmbVisitType"); // NOI18N
@@ -514,17 +527,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addComponent(chkIncludeSubfolders)
-                .addGap(5, 5, 5))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(btnReload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(2, 2, 2)
+                        .addComponent(chkIncludeSubfolders))
+                    .addComponent(btnReload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
 
@@ -806,8 +818,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 "Can't Save", JOptionPane.ERROR_MESSAGE);
                         return null;
                     }
+                    if (visit != null && existingVisit != null && existingVisit.getID() != visit.getID()) {
+                            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "The existing Period could not be saved.",
+                                    "Can't Save", JOptionPane.ERROR_MESSAGE);
+                            return null;
+                        }
                     if (visit == null) {
                         visit = new Visit(0, txtVisitName.getText());
+                        if (existingVisit != null && existingVisit.getID() > 0) {
+                            visit.setID(existingVisit.getID());
+                        }
                     }
                     visit.setLocationID(selectedLocation.getID());
                     visit.setCachedLocationName(app.getDBI().findLocation(visit.getLocationID(), null, Location.class).getName());
@@ -1043,10 +1064,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         WildLogApp.LOGGER.log(Level.INFO, "ExecutorService {} took {} hours, {} minutes, {} seconds to save the sightings", 
                                 new Object[]{executorServiceName, hours, minutes, seconds});
                     }
-                    this.setTaskProgress(99);
-                    this.setMessage("Saving the Bulk Import: Saving the Period... " + this.getProgress() + "%");
+                    // Delete the stashed files
+                    if (VisitType.STASHED == originalVisitType) {
+                        this.setTaskProgress(99);
+                        this.setMessage("Saving the Bulk Import: Deleting the stashed files... " + this.getProgress() + "%");
+                        Files.deleteIfExists(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()));
+                    }
                     // Saving is done, now open the visits's tab
                     if (existingVisit == null || existingVisit.getID() == 0) {
+                        // First close the old one in case it was open
+// FIXME: Hierdie werk nie: Dit maak nie die oop tab toe nie...
+                        UtilsPanelGenerator.removeOpenedTab(visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle);
                         UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, selectedLocation);
                     }
                     else {

@@ -480,7 +480,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbVisitType.setBackground(new java.awt.Color(230, 226, 224));
         lsbVisitType.setForeground(new java.awt.Color(176, 153, 145));
-        lsbVisitType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(VisitType.values())));
+        lsbVisitType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(VisitType.valuesForDroplist())));
         lsbVisitType.setFocusable(false);
         lsbVisitType.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbVisitType.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -925,8 +925,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(0, 0, 0))
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(5, 5, 5))
         );
@@ -1058,7 +1057,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         inFilterProperties.setMoonphase(0);
         inFilterProperties.setMoonphaseIsLess(true);
         inFilterProperties.setMoonphaseIsMore(true);
-        inFilterProperties.setVisitTypes(Arrays.asList(VisitType.values()));
+        inFilterProperties.setVisitTypes(Arrays.asList(VisitType.valuesForDroplist()));
         inFilterProperties.setEvidences(Arrays.asList(SightingEvidence.values()));
         inFilterProperties.setLifeStatuses(Arrays.asList(LifeStatus.values()));
         inFilterProperties.setTimeAccuracies(Arrays.asList(TimeAccuracy.values()));

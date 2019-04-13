@@ -556,5 +556,46 @@ public final class UtilsFileProcessing {
         }
         return new ArrayList<>(0);
     }
+    
+    public static List<Path> getListOfFilesToImport(List<Path> inListPaths, boolean inIncludeFolders) {
+        List<Path> lstAllFiles = new ArrayList<>();
+        if (inListPaths != null) {
+            for (Path path : inListPaths) {
+                if (path != null) {
+                    lstAllFiles.addAll(getListOfFilesToImport(path.toFile(), inIncludeFolders));
+                }
+            }
+        }
+        return lstAllFiles;
+    }
+    
+    private static List<Path> getListOfFilesToImport(File inRoot, boolean inIncludeFolders) {
+        List<Path> lstFilesToImport = new ArrayList<>();
+        if (inRoot != null) {
+            if (inRoot.isFile()) {
+                if (WildLogFileExtentions.Images.isKnownExtention(inRoot.toPath()) 
+                        || WildLogFileExtentions.Movies.isKnownExtention(inRoot.toPath())) {
+                    lstFilesToImport.add(inRoot.toPath());
+                }
+            }
+            else {
+                File[] tempFileList = inRoot.listFiles();
+                if (tempFileList != null) {
+                    for (File tempFile : tempFileList) {
+                        if (inIncludeFolders && tempFile.isDirectory()) {
+                            lstFilesToImport.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
+                        }
+                        else {
+                            if (WildLogFileExtentions.Images.isKnownExtention(tempFile.toPath()) 
+                                    || WildLogFileExtentions.Movies.isKnownExtention(tempFile.toPath())) {
+                                lstFilesToImport.add(tempFile.toPath());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return lstFilesToImport;
+    }
 
 }

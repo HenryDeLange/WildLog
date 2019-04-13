@@ -45,6 +45,7 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogApplicationTypes;
+import wildlog.utils.WildLogPaths;
 
 
 public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {
@@ -177,6 +178,52 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnAdvanced.setEnabled(false);
                 btnAdvanced.setVisible(false);
             }
+        }
+        // As dit 'n Stashed visit is dan moet ek die UI sodanig aanpas
+        if (VisitType.STASHED == visit.getType()) {
+            visitIncludes.setBackground(getBackground().darker());
+            pnlInfo.setBackground(getBackground().darker());
+            pnlFiles.setBackground(getBackground().darker());
+            pnlButtonsRight.setBackground(getBackground().darker());
+            pnlButtonsLeft.setBackground(getBackground().darker());
+            pnlButtons.setBackground(getBackground().darker());
+            btnPreviousImage.setBackground(getBackground().darker());
+            btnNextImage.setBackground(getBackground().darker());
+            btnUpdate.setBackground(getBackground().darker());
+            btnBulkImport.setBackground(getBackground().darker());
+            btnGoLocation.setBackground(getBackground().darker());
+            btnBrowse.setBackground(getBackground().darker());
+            cmbType.setEnabled(false);
+            cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
+            cmbType.setSelectedItem(visit.getType());
+            txtName.setEnabled(false);
+            dtpStartDate.setEnabled(false);
+            dtpEndDate.setEnabled(false);
+            cmbGameWatchIntensity.setEnabled(false);
+            btnExport.setEnabled(false);
+            btnExport.setVisible(false);
+            btnDeleteSighting.setEnabled(false);
+            btnDeleteSighting.setVisible(false);
+            btnDeleteImage.setEnabled(false);
+            btnDeleteImage.setVisible(false);
+            btnReport.setEnabled(false);
+            btnReport.setVisible(false);
+            btnSlideshow.setEnabled(false);
+            btnSlideshow.setVisible(false);
+            btnAdvanced.setEnabled(false);
+            btnAdvanced.setVisible(false);
+            pnlSightings.setEnabled(false);
+            pnlSightings.setVisible(false);
+            btnAddSighting.setEnabled(false);
+            btnAddSighting.setVisible(false);
+            pnlSelectedFiles.setVisible(false);
+            btnMapSighting.setEnabled(false);
+            btnMapSighting.setVisible(false);
+            btnUploadImage.setEnabled(false);
+            btnUploadImage.setVisible(false);
+            btnSetMainImage.setEnabled(false);
+            btnSetMainImage.setVisible(false);
+            lblNumberOfImages.setVisible(false);
         }
     }
 
@@ -328,7 +375,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnSetMainImage = new javax.swing.JButton();
         btnPreviousImage = new javax.swing.JButton();
         pnlButtons = new javax.swing.JPanel();
-        pnlButtonRight = new javax.swing.JPanel();
+        pnlButtonsRight = new javax.swing.JPanel();
         btnBrowse = new javax.swing.JButton();
         btnGoLocation = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
@@ -551,8 +598,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         pnlButtons.setBackground(new java.awt.Color(230, 228, 240));
         pnlButtons.setName("pnlButtons"); // NOI18N
 
-        pnlButtonRight.setBackground(new java.awt.Color(230, 228, 240));
-        pnlButtonRight.setName("pnlButtonRight"); // NOI18N
+        pnlButtonsRight.setBackground(new java.awt.Color(230, 228, 240));
+        pnlButtonsRight.setName("pnlButtonsRight"); // NOI18N
 
         btnBrowse.setBackground(new java.awt.Color(230, 228, 240));
         btnBrowse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
@@ -611,22 +658,22 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
-        javax.swing.GroupLayout pnlButtonRightLayout = new javax.swing.GroupLayout(pnlButtonRight);
-        pnlButtonRight.setLayout(pnlButtonRightLayout);
-        pnlButtonRightLayout.setHorizontalGroup(
-            pnlButtonRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlButtonRightLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlButtonsRightLayout = new javax.swing.GroupLayout(pnlButtonsRight);
+        pnlButtonsRight.setLayout(pnlButtonsRightLayout);
+        pnlButtonsRightLayout.setHorizontalGroup(
+            pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlButtonsRightLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlButtonRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
         );
-        pnlButtonRightLayout.setVerticalGroup(
-            pnlButtonRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlButtonRightLayout.createSequentialGroup()
+        pnlButtonsRightLayout.setVerticalGroup(
+            pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlButtonsRightLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -754,14 +801,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 .addGap(0, 0, 0)
                 .addComponent(pnlButtonsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(pnlButtonRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlButtonsRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         pnlButtonsLayout.setVerticalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLayout.createSequentialGroup()
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlButtonRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlButtonsRight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnlButtonsLeft, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
@@ -797,7 +844,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel54.setText("Period Type:");
         jLabel54.setName("jLabel54"); // NOI18N
 
-        cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
+        cmbType.setMaximumRowCount(15);
+        cmbType.setModel(new DefaultComboBoxModel(VisitType.valuesForDroplist()));
         cmbType.setSelectedItem(visit.getType());
         cmbType.setFocusable(false);
         cmbType.setName("cmbType"); // NOI18N
@@ -1539,8 +1587,17 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsPanelGenerator.openBulkUploadTab(
-                            new BulkUploadPanel(app, this, locationForVisit, visit, null, panelVisitHandle), (JTabbedPane)getParent());
+                    if (VisitType.STASHED == visit.getType()) {
+                        List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(
+                                new File[] { WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).toFile() });
+                        final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
+                        UtilsPanelGenerator.openBulkUploadTab(
+                                new BulkUploadPanel(app, this, locationForVisit, visit, lstAllFiles, panelVisitHandle), (JTabbedPane)getParent());
+                    }
+                    else {
+                        UtilsPanelGenerator.openBulkUploadTab(
+                                new BulkUploadPanel(app, this, locationForVisit, visit, null, panelVisitHandle), (JTabbedPane)getParent());
+                    }
                     return null;
                 }
             });
@@ -1629,9 +1686,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblSightingImage;
     private javax.swing.JLabel lblVisitName;
-    private javax.swing.JPanel pnlButtonRight;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlButtonsLeft;
+    private javax.swing.JPanel pnlButtonsRight;
     private javax.swing.JPanel pnlFiles;
     private javax.swing.JPanel pnlInfo;
     private javax.swing.JPanel pnlSelectedFiles;

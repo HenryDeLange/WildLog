@@ -206,8 +206,9 @@
             </Component>
             <Component class="javax.swing.JComboBox" name="cmbVisitType">
               <Properties>
+                <Property name="maximumRowCount" type="int" value="15"/>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new DefaultComboBoxModel(VisitType.values())" type="code"/>
+                  <Connection code="new DefaultComboBoxModel(VisitType.valuesForDroplist())" type="code"/>
                 </Property>
                 <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="VisitType.OTHER" type="code"/>

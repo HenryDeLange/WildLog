@@ -4,11 +4,14 @@ package wildlog.data.enums;
 public enum VisitType {
     VACATION("Vacation"),
     REMOTE_CAMERA("Camera Trap"),
-    BIRD_ATLASSING("Census, Atlas, etc."),
+    MICROSCOPE("Microscope"),
+    MOTHLIGHT("Moth Light"),
     DAY_VISIT("Day Visit"),
     INCIDENTAL("Incidental"),
+    ATLASSING("Census, Atlas, etc."),
     OTHER("Other"),
     UNKNOWN("Unknown"),
+    STASHED("Stashed Files"),
     NONE("");
 
     private final String text;
@@ -32,6 +35,17 @@ public enum VisitType {
             }
         }
         return NONE;
+    }
+    
+    public static VisitType[] valuesForDroplist() {
+        VisitType[] values = new VisitType[values().length - 1];
+        int i = 0;
+        for (VisitType visitType : values()) {
+            if (visitType != STASHED) {
+                values[i++] = visitType;
+            }
+        }
+        return values;
     }
 
 }
