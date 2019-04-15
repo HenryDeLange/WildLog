@@ -5,7 +5,6 @@ import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -86,6 +85,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private List<Path> lstImportPaths = null;
     private boolean showAsTab = false;
     private VisitType originalVisitType = VisitType.UNKNOWN;
+    private String originalVisitName = null;
 
     
 // TODO: Add a button that does the "adjust date and time" popup for all observations
@@ -102,6 +102,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Store the original visit type, because we need to know what it was when we do the saving
         if (existingVisit != null) {
             originalVisitType = existingVisit.getType();
+            originalVisitName = existingVisit.getName();
         }
         panelToRefresh = inPanelToRefresh;
         if (inlstImportPaths != null) {
@@ -1068,18 +1069,25 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     if (VisitType.STASHED == originalVisitType) {
                         this.setTaskProgress(99);
                         this.setMessage("Saving the Bulk Import: Deleting the stashed files... " + this.getProgress() + "%");
-                        Files.deleteIfExists(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()));
+                        UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(originalVisitName).toFile());
                     }
                     // Saving is done, now open the visits's tab
                     if (existingVisit == null || existingVisit.getID() == 0) {
-                        // First close the old one in case it was open
-// FIXME: Hierdie werk nie: Dit maak nie die oop tab toe nie...
-                        UtilsPanelGenerator.removeOpenedTab(visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle);
+                        // Open the new tab
                         UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, selectedLocation);
                     }
                     else {
                         if (panelToRefresh != null) {
-                            panelToRefresh.doTheRefresh(visit);
+                            if (VisitType.STASHED == originalVisitType) {
+                                // First close the old tab in case it was open
+                                UtilsPanelGenerator.removeOpenedTab(visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle);
+                                // Open a new tab
+                                UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, selectedLocation);
+                            }
+                            else {
+                                // Refresh the open tab
+                                panelToRefresh.doTheRefresh(visit);
+                            }
                         }
                     }
                     this.setMessage("Saving the Bulk Import: Finished");

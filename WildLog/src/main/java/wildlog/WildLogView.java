@@ -237,6 +237,10 @@ public final class WildLogView extends JFrame {
             sprWorkspaceUsers.setVisible(false);
             mnuAboutWEI.setEnabled(false);
             mnuAboutWEI.setVisible(false);
+            btnStashFiles.setEnabled(false);
+            btnStashFiles.setVisible(false);
+            btnBulkImport.setEnabled(false);
+            btnBulkImport.setVisible(false);
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
@@ -244,6 +248,10 @@ public final class WildLogView extends JFrame {
             lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-250px.png")));
             lblBlog.setText("http://wei.org.za ");
             setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
+            btnStashFiles.setEnabled(true);
+            btnStashFiles.setVisible(true);
+            btnBulkImport.setEnabled(true);
+            btnBulkImport.setVisible(true);
         }
         else
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
@@ -251,13 +259,13 @@ public final class WildLogView extends JFrame {
             lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-250px.png")));
             lblBlog.setText("http://wei.org.za ");
             setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
-        }
-        // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             btnStashFiles.setEnabled(true);
             btnStashFiles.setVisible(true);
             btnBulkImport.setEnabled(true);
             btnBulkImport.setVisible(true);
+        }
+        // Enforce user access
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             sprWorkspace1.setVisible(false);
             sprWorkspace2.setVisible(false);
             mnuCleanWorkspace.setEnabled(false);
@@ -301,12 +309,6 @@ public final class WildLogView extends JFrame {
             sprHelp.setVisible(false);
             mnuAboutWildNote.setEnabled(false);
             mnuAboutWildNote.setVisible(false);
-        }
-        else {
-            btnStashFiles.setEnabled(false);
-            btnStashFiles.setVisible(false);
-            btnBulkImport.setEnabled(false);
-            btnBulkImport.setVisible(false);
         }
         btnStashFiles.setBackground(tabHome.getBackground());
         btnBulkImport.setBackground(tabHome.getBackground());
@@ -2213,6 +2215,9 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuChangeWorkspaceActionPerformed
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
+        
+// TODO: Check die nuwe Stashed folder ook. Skuif file wat daar is maar nie 'n visit het nie na daai orphan folder nou
+        
         WildLogApp.LOGGER.log(Level.INFO, "[CleanWorkspace]");
         // Popup 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
         int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
@@ -4446,8 +4451,12 @@ public final class WildLogView extends JFrame {
                                 int filesProcessed = 0;
                                 for (Path sourcePath : lstAllFiles) {
                                     try {
-// FIXME: Al die files work in een folder gecopy, dis OK as ek kan seker maak files met die selfde naam vanaf ander folders oorskryf nie mekaar nie - andersins moet ek die folders ook copy
-                                        UtilsFileProcessing.copyFile(sourcePath, destinationPath.resolve(sourcePath.getParent().relativize(sourcePath)), false, false);
+                                        // Ek will alles die files in een folder hê (nie sub-folders nie), so ek moet files rename as hulle name conflict
+                                        Path writePath = destinationPath.resolve(sourcePath.getParent().relativize(sourcePath));
+                                        while (Files.exists(writePath)) {
+                                            writePath = destinationPath.resolve("wl_" + writePath.getFileName().toString());
+                                        }
+                                        UtilsFileProcessing.copyFile(sourcePath, writePath, false, false);
                                     }
                                     catch (Exception ex) {
                                         WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);

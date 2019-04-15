@@ -920,6 +920,21 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
+    public boolean deleteVisit(long inID) {
+        // First check if this was visit with stashed files, if it was then delete the files firts
+        Visit visit = findVisit(inID, null, false, Visit.class);
+        try {
+            if (VisitType.STASHED == visit.getType()) {
+                UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).toFile());
+            }
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        return super.deleteVisit(inID);
+    }
+
+    @Override
     public boolean deleteWildLogFile(long inID) {
         // Note: This method only deletes one file at a time, and all it's "default" thumbnails.
         // First, get the path of the original file (to delete it from the disk)

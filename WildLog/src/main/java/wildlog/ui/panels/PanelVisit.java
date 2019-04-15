@@ -125,14 +125,19 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         initComponents();
         // Setup images
         imageIndex = 0;
-        int fotoCount = app.getDBI().countWildLogFiles(0, visit.getWildLogFileID());
-        if (fotoCount > 0) {
-            UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
-            lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
+        if (VisitType.STASHED != visit.getType()) {
+            int fotoCount = app.getDBI().countWildLogFiles(0, visit.getWildLogFileID());
+            if (fotoCount > 0) {
+                UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                lblNumberOfImages.setText(imageIndex+1 + " of " + fotoCount);
+            }
+            else {
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+                lblNumberOfImages.setText("0 of 0");
+            }
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-            lblNumberOfImages.setText("0 of 0");
+            setupStashedImages();
         }
         imageSightingIndex = 0;
         // Setup the table
@@ -223,7 +228,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnUploadImage.setVisible(false);
             btnSetMainImage.setEnabled(false);
             btnSetMainImage.setVisible(false);
-            lblNumberOfImages.setVisible(false);
         }
     }
 
@@ -550,14 +554,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFilesLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFilesLayout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(0, 0, 0)
-                        .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35))
                     .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlFilesLayout.createSequentialGroup()
                         .addGap(265, 265, 265)
@@ -565,8 +570,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addGroup(pnlFilesLayout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         pnlFilesLayout.setVerticalGroup(
             pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1252,14 +1256,19 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
-        int fotoCount = app.getDBI().countWildLogFiles(0, visit.getWildLogFileID());
-        if (fotoCount > 0) {
-            UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        if (VisitType.STASHED != visit.getType()) {
+            int fotoCount = app.getDBI().countWildLogFiles(0, visit.getWildLogFileID());
+            if (fotoCount > 0) {
+                UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            }
+            else {
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            }
+            setupNumberOfImages();
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            setupStashedImages();
         }
-        setupNumberOfImages();
         if (visit.getName() != null) {
             lblVisitName.setText(visit.getName() + " - [" + locationForVisit.getName() + "]");
         }
@@ -1352,8 +1361,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
-        setupNumberOfImages();
+        if (VisitType.STASHED != visit.getType()) {
+            imageIndex = UtilsImageProcessing.previousImage(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            setupNumberOfImages();
+        }
+        else {
+            imageIndex--;
+            setupStashedImages();
+        }
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
@@ -1368,8 +1383,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_tblSightingsMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
-        setupNumberOfImages();
+        if (VisitType.STASHED != visit.getType()) {
+            imageIndex = UtilsImageProcessing.nextImage(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            setupNumberOfImages();
+        }
+        else {
+            imageIndex++;
+            setupStashedImages();
+        }
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
@@ -1637,6 +1658,32 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
         lblNumberOfSightingImages.setToolTipText(lblNumberOfSightingImages.getText());
     }
+    
+    private void setupStashedImages() {
+        Path stashPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
+        String[] files = stashPath.toFile().list();
+        if (files != null) {
+            if (imageIndex < 0) {
+                imageIndex = files.length - 1;
+            }
+            else
+            if (imageIndex > (files.length - 1)) {
+                imageIndex = 0;
+            }
+            if (files.length > 0) {
+                lblImage.setIcon(UtilsImageProcessing.getScaledIcon(stashPath.resolve(files[imageIndex]), WildLogThumbnailSizes.NORMAL.getSize(), true));
+                lblNumberOfImages.setText((imageIndex + 1) + " of " + files.length);
+            }
+            else {
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+                lblNumberOfImages.setText("0 of 0");
+            }
+        }
+        else {
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblNumberOfImages.setText("0 of 0");
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
@@ -1698,5 +1745,4 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JTextField txtName;
     private javax.swing.JPanel visitIncludes;
     // End of variables declaration//GEN-END:variables
-
 }
