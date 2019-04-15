@@ -51,12 +51,14 @@ import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.reports.implementations.AbundanceRichnessChart;
 import wildlog.ui.reports.implementations.DayAndNightChart;
 import wildlog.ui.reports.implementations.DurationChart;
 import wildlog.ui.reports.implementations.ElementsChart;
 import wildlog.ui.reports.implementations.EventTimelineChart;
 import wildlog.ui.reports.implementations.LocationChart;
 import wildlog.ui.reports.implementations.MoonphaseChart;
+import wildlog.ui.reports.implementations.PresenceAbsenceChart;
 import wildlog.ui.reports.implementations.RelationshipsChart;
 import wildlog.ui.reports.implementations.SightingPropertiesChart;
 import wildlog.ui.reports.implementations.SightingStatsChart;
@@ -165,6 +167,8 @@ public class ReportsBaseDialog extends JFrame {
             reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription, this));
             reports.add(new RelationshipsChart(lstFilteredData, lblReportDescription, this));
             reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new AbundanceRichnessChart(lstFilteredData, lblReportDescription, this));
+            reports.add(new PresenceAbsenceChart(lstFilteredData, lblReportDescription, this));
             reports.add(new TextReports(lstFilteredData, lblReportDescription, this));
         }
         // Add the reports

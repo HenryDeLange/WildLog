@@ -498,7 +498,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     }
 
     private Chart createAccumulationVisitReport(List<Sighting> inSightings, boolean inIsForObservations) {
-        // Get the fisrt and last Visit date
+        // Get the first and last Visit date
         Map<String, DateWrapper> mapVisitDates = new HashMap<>();
         TemporalAmount dateDiffRange = null;
         for (Sighting sighting : inSightings) {
