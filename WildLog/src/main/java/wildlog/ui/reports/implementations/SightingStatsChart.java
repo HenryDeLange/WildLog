@@ -46,6 +46,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
 // TODO: Nog opsies:
 //        [Most Frequent (Mode)]
 //        [Average (Mean)]
+//        [RMSE (Root-mean-square-error)]
 //        [Weighted Average (Weighted Mean)] -> The more time a value is present the more relevant it becomes
     private final String[] options = new String[] {"Minimum", "Average", "Maximum"};
       

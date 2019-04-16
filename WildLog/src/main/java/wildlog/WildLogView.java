@@ -301,6 +301,9 @@ public final class WildLogView extends JFrame {
             mnuImportWorkspace.setVisible(false);
             mnuImportIUCNList.setEnabled(false);
             mnuImportIUCNList.setVisible(false);
+            sprEcho.setVisible(false);
+            mnuEchoWorkspace.setEnabled(false);
+            mnuEchoWorkspace.setVisible(false);
             sprBackup.setVisible(false);
             mnuBackupRestore.setEnabled(false);
             mnuBackupRestore.setVisible(false);
@@ -442,6 +445,8 @@ public final class WildLogView extends JFrame {
         backupMenu = new javax.swing.JMenu();
         mnuBackupDatabase = new javax.swing.JMenuItem();
         mnuBackupRestore = new javax.swing.JMenuItem();
+        sprEcho = new javax.swing.JPopupMenu.Separator();
+        mnuEchoWorkspace = new javax.swing.JMenuItem();
         sprBackup = new javax.swing.JPopupMenu.Separator();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
@@ -1021,6 +1026,20 @@ public final class WildLogView extends JFrame {
             }
         });
         backupMenu.add(mnuBackupRestore);
+
+        sprEcho.setName("sprEcho"); // NOI18N
+        backupMenu.add(sprEcho);
+
+        mnuEchoWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuEchoWorkspace.setText("Echo Backup Workspace");
+        mnuEchoWorkspace.setToolTipText("Makes a backup of the Workspace by making a target folder reflect the active Workspace's files.");
+        mnuEchoWorkspace.setName("mnuEchoWorkspace"); // NOI18N
+        mnuEchoWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuEchoWorkspaceActionPerformed(evt);
+            }
+        });
+        backupMenu.add(mnuEchoWorkspace);
 
         sprBackup.setName("sprBackup"); // NOI18N
         backupMenu.add(sprBackup);
@@ -3169,6 +3188,7 @@ public final class WildLogView extends JFrame {
                     UtilsFileProcessing.openFile(feedbackFile);
                     return null;
                 }
+                
                 @Override
                 protected void finished() {
                     super.finished();
@@ -4500,6 +4520,138 @@ public final class WildLogView extends JFrame {
         });
     }//GEN-LAST:event_btnBulkImportActionPerformed
 
+    private void mnuEchoWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEchoWorkspaceActionPerformed
+        WLOptionPane.showMessageDialog(app.getMainFrame(),
+                "<html>The <i>Echo Backup Workspace</i> process will delete all files from the target folder that aren't in the active Workspace "
+                + "<br>and copy all files from the active Workspace to the target folder that aren't already present (files will be replaced if their size differ)."
+                + "<hr>"
+                + "This process is best used to make (and periodically update) a backup copy of the active Workspace.</html>",
+                "Echo Backup Workspace", JOptionPane.WARNING_MESSAGE);
+        // Close all tabs and go to the home tab
+        tabbedPanel.setSelectedIndex(0);
+        while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+            tabbedPanel.remove(STATIC_TAB_COUNT);
+        }
+        // Lock the input/display and show busy message
+        // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
+        tabbedPanel.setSelectedIndex(0);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                JPanel panel = new JPanel(new AbsoluteLayout());
+                panel.setPreferredSize(new Dimension(400, 50));
+                panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
+                JLabel label = new JLabel("<html>Busy with Echo Backup Workspace. Please be patient, this might take a while. <br/>"
+                        + "Don't close the application until the process is finished.</html>");
+                label.setFont(new Font("Tahoma", Font.BOLD, 12));
+                label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
+                panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+                panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
+                panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+                JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
+                glassPane.removeAll();
+                glassPane.setLayout(new BorderLayout(100, 100));
+                glassPane.add(panel, BorderLayout.CENTER);
+                glassPane.addMouseListener(new MouseAdapter() {});
+                glassPane.addKeyListener(new KeyAdapter() {});
+                app.getMainFrame().setGlassPane(glassPane);
+                app.getMainFrame().getGlassPane().setVisible(true);
+                app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            }
+        });
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                
+// TODO: Try to implement a progressbar, somehow (without it getting silly where I need to first build a list of all changed before I start...)
+                
+                WLFileChooser fileChooser = new WLFileChooser();
+                fileChooser.setDialogTitle("Select the target folder");
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.setMultiSelectionEnabled(false);
+                int result = fileChooser.showOpenDialog(app.getMainFrame());
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    // Need to close the databse in order to be allowed to copy it
+                    app.getDBI().close();
+                    // Setup the report
+
+// TODO: Show a report after the process finishes
+
+                    // Start walking the folders
+                    Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
+                    Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath();
+                    // Walk the echo path and delete all folders and files that aren't in the active Workspace
+                    Files.walkFileTree(echoPath, new SimpleFileVisitor<Path>() {
+
+                        @Override
+                        public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
+                            if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFolderPath)))) {
+                                UtilsFileProcessing.deleteRecursive(inFolderPath.toFile());
+                                return FileVisitResult.SKIP_SUBTREE;
+                            }
+
+// TODO: Skip the thumbnails, export and bundled maps folders
+
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        @Override
+                        public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
+                            if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFilePath)))) {
+                                UtilsFileProcessing.deleteRecursive(inFilePath.toFile());
+                            }
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                    });
+                    // Walk the active workspace and copy all files that aren't already present in the echo path
+                    Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
+
+                        @Override
+                        public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
+                            Path echoFolder = echoPath.resolve(workspacePath.relativize(inFolderPath));
+                            if (!Files.exists(echoFolder)) {
+                                Files.createDirectories(echoFolder);
+                            }
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                        @Override
+                        public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
+                            Path echoFile = echoPath.resolve(workspacePath.relativize(inFilePath));
+                            if (!Files.exists(echoFile)) {
+                                UtilsFileProcessing.copyFile(inFilePath, echoFile, false, false);
+                            }
+                            else
+                            if (Files.size(inFilePath) != Files.size(inFilePath)) {
+                                UtilsFileProcessing.copyFile(inFilePath, echoFile, true, true);
+                            }
+                            return FileVisitResult.CONTINUE;
+                        }
+
+                    });
+                    // Finish the report
+// TODO
+                }
+                return null;
+            }
+            
+            @Override
+            protected void finished() {
+                super.finished();
+                // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
+                // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                        app.quit(null);
+                    }
+                });
+            }
+        });
+    }//GEN-LAST:event_mnuEchoWorkspaceActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4606,6 +4758,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuCreateSlideshow;
     private javax.swing.JMenuItem mnuCreateWorkspace;
     private javax.swing.JMenuItem mnuDBConsole;
+    private javax.swing.JMenuItem mnuEchoWorkspace;
     private javax.swing.JMenuItem mnuExifMenuItem;
     private javax.swing.JMenuItem mnuExportCSV;
     private javax.swing.JMenuItem mnuExportCSVBasic;
@@ -4642,6 +4795,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu slideshowMenu;
     private javax.swing.JPopupMenu.Separator sprBackup;
+    private javax.swing.JPopupMenu.Separator sprEcho;
     private javax.swing.JPopupMenu.Separator sprExtra;
     private javax.swing.JPopupMenu.Separator sprHelp;
     private javax.swing.JPopupMenu.Separator sprImport1;
