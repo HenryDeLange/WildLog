@@ -1,9 +1,6 @@
 package wildlog.ui.reports.implementations;
 
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,7 +75,6 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
         rdbPerLocation = new RadioButton("Per Place");
         rdbPerLocation.setToggleGroup(toggleGroup);
         rdbPerLocation.setCursor(Cursor.HAND);
-        rdbPerLocation.setSelected(true);
         lstCustomButtons.add(rdbPerLocation);
         rdbPerVisit = new RadioButton("Per Period");
         rdbPerVisit.setToggleGroup(toggleGroup);
@@ -87,6 +83,7 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
         rdbPerElement = new RadioButton("Per Creature");
         rdbPerElement.setToggleGroup(toggleGroup);
         rdbPerElement.setCursor(Cursor.HAND);
+        rdbPerElement.setSelected(true);
         lstCustomButtons.add(rdbPerElement);
     }
 
@@ -109,7 +106,6 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
         Map<String, Map<Integer, ReportDataWrapper>> mapGroupedData = new HashMap<>();
         LocalDate intervalDate = UtilsTime.getLocalDateFromDate(inSightings.get(0).getDate());
         int intervalCount = 0;
-// FIXME: Double check die waardes en dit lyk my die heel groot intervals werk nie reg nie?
         for (Sighting sighting : inSightings) {
             String key = generateGroupingKey(sighting);
             Map<Integer, ReportDataWrapper> mapIntervalData = mapGroupedData.get(key);
@@ -121,7 +117,7 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
             }
             LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
             // Move to the next interval
-            while (!isInInterval(Period.between(intervalDate, sightingDate))) {
+            while (!isInInterval(intervalDate, sightingDate)) {
                 // Add empty intervals (if any)
                 intervalDate = nextInterval(intervalDate);
                 intervalCount++;
@@ -202,31 +198,8 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
         return null;
     }
     
-    private boolean isInInterval(TemporalAmount inTemporalAmount) {
-        if (cmbInterval.getSelectionModel().isSelected(0)) {
-            return inTemporalAmount.get(ChronoUnit.DAYS) <= 3;
-        }
-        else
-        if (cmbInterval.getSelectionModel().isSelected(1)) {
-            return inTemporalAmount.get(ChronoUnit.DAYS) <= 7;
-        }
-        else
-        if (cmbInterval.getSelectionModel().isSelected(2)) {
-            return inTemporalAmount.get(ChronoUnit.DAYS) <= 14;
-        }
-        else
-        if (cmbInterval.getSelectionModel().isSelected(3)) {
-            return inTemporalAmount.get(ChronoUnit.DAYS) <= 28;
-        }
-        else
-        if (cmbInterval.getSelectionModel().isSelected(4)) {
-            return inTemporalAmount.get(ChronoUnit.DAYS) <= 91;
-        }
-        else
-        if (cmbInterval.getSelectionModel().isSelected(5)) {
-            return inTemporalAmount.get(ChronoUnit.YEARS) <= 1;
-        }
-        return false;
+    private boolean isInInterval(LocalDate inIntervalStartDate, LocalDate inSightingDate) {
+        return !inSightingDate.isBefore(inIntervalStartDate) && inSightingDate.isBefore(nextInterval(inIntervalStartDate));
     }
     
     private LocalDate nextInterval(LocalDate inIntervalDate) {
