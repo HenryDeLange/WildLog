@@ -1,6 +1,7 @@
 package wildlog.utils;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,17 +10,23 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import org.apache.logging.log4j.Level;
+import org.apache.pdfbox.filter.Base85Hack;
 import wildlog.WildLogApp;
+
 
 public final class UtilsCompression {
     
     private UtilsCompression() {
     }
 
+    
     public static void zipFolder(Path inZipFilePath, Path inSourceFolderPath) {
         byte[] buffer = new byte[1024];
         try {
@@ -108,6 +115,76 @@ public final class UtilsCompression {
                 }
             }
         }
+    }
+    
+    public static String compress(String inUncompressedText) {
+        ByteArrayOutputStream outputStream = null;
+        try {
+            byte[] bytes = inUncompressedText.getBytes();
+            Deflater deflater = new Deflater();
+            deflater.setLevel(Deflater.BEST_COMPRESSION);
+            deflater.setInput(bytes);
+            outputStream = new ByteArrayOutputStream(bytes.length);
+            deflater.finish();
+            byte[] buffer = new byte[1024];
+            while (!deflater.finished()) {
+                int count = deflater.deflate(buffer);
+                outputStream.write(buffer, 0, count);
+            }
+            deflater.end();
+            outputStream.close();
+            byte[] output = outputStream.toByteArray();
+            // Return compressed text
+            return Base85Hack.encode(output);
+        }
+        catch (IOException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+            }
+        }
+        return inUncompressedText;
+    }
+
+    public static String decompress(String inCompressedText)  {
+        ByteArrayOutputStream outputStream = null;
+        try {
+            byte[] bytes = Base85Hack.decode(inCompressedText);
+            Inflater inflater = new Inflater();
+            inflater.setInput(bytes);
+            outputStream = new ByteArrayOutputStream(bytes.length);
+            byte[] buffer = new byte[1024];
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+                outputStream.write(buffer, 0, count);
+            }
+            inflater.end();
+            outputStream.close();
+            byte[] output = outputStream.toByteArray();
+            // Return uncompressed text
+            return new String(output);
+        }
+        catch (IOException | DataFormatException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+            }
+        }
+        return inCompressedText;
     }
 
 }

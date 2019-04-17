@@ -46,6 +46,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
@@ -102,7 +103,7 @@ public class INatSightingDialog extends JDialog {
         if (linkedData != null && linkedData.getINaturalistData() != null && !linkedData.getINaturalistData().isEmpty()) {
             if (rdbSummary.isSelected()) {
                 try {
-                    JsonObject jsonObs = PARSER.parse(linkedData.getINaturalistData()).getAsJsonObject();
+                    JsonObject jsonObs = PARSER.parse(UtilsCompression.decompress(linkedData.getINaturalistData())).getAsJsonObject();
                     StringBuilder builder =new StringBuilder(256);
                     builder.append("Species Guess: ");
                     builder.append(jsonObs.get("species_guess").getAsString()).append(System.lineSeparator());
@@ -131,7 +132,7 @@ public class INatSightingDialog extends JDialog {
                 }
             }
             else {
-                txtInfo.setText(linkedData.getINaturalistData());
+                txtInfo.setText(UtilsCompression.decompress(linkedData.getINaturalistData()));
             }
             txtInfo.setCaretPosition(0);
             imageCounterINat = 0;
@@ -155,7 +156,7 @@ public class INatSightingDialog extends JDialog {
         try {
             getGlassPane().setVisible(true);
             getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            JsonElement jsonElement = PARSER.parse(linkedData.getINaturalistData());
+            JsonElement jsonElement = PARSER.parse(UtilsCompression.decompress(linkedData.getINaturalistData()));
             JsonArray photos = jsonElement.getAsJsonObject().get("observation_photos").getAsJsonArray();
             if (photos.size() > 0) {
                 if (imageCounterINat >= photos.size()) {
@@ -841,7 +842,7 @@ public class INatSightingDialog extends JDialog {
                     // Save die inligting in WildLog
                     linkedData = new INaturalistLinkedData(sighting.getID(), 
                             jsonElement.getAsJsonArray().get(0).getAsJsonObject().get("id").getAsLong(), 
-                            GSON.toJson(jsonElement));
+                            UtilsCompression.compress(GSON.toJson(jsonElement)));
                     if (oldINaturalistID == 0) {
                         app.getDBI().createINaturalistLinkedData(linkedData);
                     }
@@ -945,7 +946,7 @@ public class INatSightingDialog extends JDialog {
                         // Save die inligting in WildLog
                         linkedData = new INaturalistLinkedData(sighting.getID(), 
                                 jsonElement.getAsJsonObject().get("id").getAsLong(), 
-                                GSON.toJson(jsonElement));
+                                UtilsCompression.compress(GSON.toJson(jsonElement)));
                         app.getDBI().updateINaturalistLinkedData(linkedData);
                     }
                 });
@@ -1054,7 +1055,7 @@ public class INatSightingDialog extends JDialog {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        JsonElement jsonElement = PARSER.parse(linkedData.getINaturalistData());
+                        JsonElement jsonElement = PARSER.parse(UtilsCompression.decompress(linkedData.getINaturalistData()));
                         JsonArray photos = jsonElement.getAsJsonObject().get("observation_photos").getAsJsonArray();
                         if (photos.size() > 0 && imageCounterINat < photos.size()) {
 //                            String photoURL = "https://static.inaturalist.org/photos/" 
@@ -1219,6 +1220,7 @@ public class INatSightingDialog extends JDialog {
                 List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
                 if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
                         && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
+                    Files.createDirectories(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath());
                     CropDialog dialog = new CropDialog(INatSightingDialog.this, lstWildLogFiles.get(imageCounterWL));
                     final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
                     dialog.setINaturalistUploadFile(tempFile);

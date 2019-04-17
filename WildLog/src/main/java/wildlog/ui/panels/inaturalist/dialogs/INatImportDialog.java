@@ -24,6 +24,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
@@ -374,7 +376,7 @@ public class INatImportDialog extends JDialog {
                                     // Save the LinkedData
                                     try {
                                         app.getDBI().createINaturalistLinkedData(new INaturalistLinkedData(
-                                                sighting.getID(), iNatID, GSON.toJson(INatAPI.getObservation(iNatID))));
+                                                sighting.getID(), iNatID, UtilsCompression.compress(GSON.toJson(INatAPI.getObservation(iNatID)))));
                                     }
                                     catch (Exception ex) {
                                         WildLogApp.LOGGER.log(Level.ERROR, "ERROR: WildLog Database Error: WildLogID = {} | iNatID = {}", 
@@ -405,7 +407,7 @@ public class INatImportDialog extends JDialog {
                                     feedback.println("UpdateWL   - The iNaturalist Observation " + iNatID + " already has a linked WildLog Observation " 
                                             + foundWildLogID + ". The latest data will be downloaded.");
                                     // Update the LinkedData
-                                    linkedData.setINaturalistData(GSON.toJson(iNatFullObs));
+                                    linkedData.setINaturalistData(UtilsCompression.compress(GSON.toJson(iNatFullObs)));
                                     try {
                                         app.getDBI().updateINaturalistLinkedData(linkedData);
                                     }
@@ -438,7 +440,7 @@ public class INatImportDialog extends JDialog {
                                     // Insert the LinkedData
                                     try {
                                         app.getDBI().createINaturalistLinkedData(new INaturalistLinkedData(
-                                                sighting.getID(), iNatID, GSON.toJson(iNatFullObs)));
+                                                sighting.getID(), iNatID, UtilsCompression.compress(GSON.toJson(iNatFullObs))));
                                     }
                                     catch (Exception ex) {
                                         WildLogApp.LOGGER.log(Level.ERROR, "ERROR: WildLog Database Error: WildLogID = {} | iNatID = {}", 
@@ -524,12 +526,19 @@ public class INatImportDialog extends JDialog {
                 }
                 sighting.setLocationID(locationID);
                 sighting.setVisitID(visitID);
-                String scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
-                String[] words = scientificName.split(" ");
-                if (words.length > 2) {
-                    scientificName = words[0] + " " + words[1];
+                String scientificName = "UNKNOWN";
+                if (iNatFullObs.get("taxon") != null) {
+                    scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
                 }
                 List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
+                if (lstElements.isEmpty()) {
+                    // Try at a higher level (subspecies might not be present)
+                    String[] words = scientificName.split(" ");
+                    if (words.length > 2) {
+                        scientificName = words[0] + " " + words[1];
+                    }
+                    lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
+                }
                 if (lstElements != null && lstElements.size() == 1) {
                     sighting.setElementID(lstElements.get(0).getID());
                 }
@@ -603,6 +612,7 @@ public class INatImportDialog extends JDialog {
 // FIXME: Die foto se EXIF data gaan verlore... Find uit hoe ek die oorspronklikke foto met EXIF kan kry...
         
         if (inJsonArrayPhotos != null) {
+            Files.createDirectories(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath());
             for (int imageCounterINat = 0; imageCounterINat < inJsonArrayPhotos.size(); imageCounterINat++) {
                 String photoURL = inJsonArrayPhotos.get(imageCounterINat).getAsJsonObject().get("photo").getAsJsonObject().get("large_url").getAsString()
                         .replace("large", "original");
@@ -909,11 +919,14 @@ public class INatImportDialog extends JDialog {
                             }
                         }
                         // Get the scientific names
-                        String iNatScientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
-                        String[] words = iNatScientificName.split(" ");
-                        if (words.length > 2) {
-                            iNatScientificName = words[0] + " " + words[1];
+                        String iNatScientificName = "UNKNOWN";
+                        if (iNatFullObs.get("taxon") != null) {
+                            iNatScientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
                         }
+//                        String[] words = iNatScientificName.split(" ");
+//                        if (words.length > 2) {
+//                            iNatScientificName = words[0] + " " + words[1];
+//                        }
                         if (foundWildLogID > 0) {
                             Sighting sighting = app.getDBI().findSighting(foundWildLogID, false, Sighting.class);
                             if (sighting != null) {
@@ -928,7 +941,7 @@ public class INatImportDialog extends JDialog {
                                             lstMismatches = new ArrayList<>(5);
                                             mapMismatches.put(iNatScientificName, lstMismatches);
                                         }
-                                        lstMismatches.add("WildLogID [" + foundWildLogID + "] / iNaturalistID [" + iNatID + "]");
+                                        lstMismatches.add("WildLog Observation ID: [" + foundWildLogID + "]   <<>>   iNaturalist ID: [" + iNatID + "]   <<>>   " + " Creature: [" + element.getID() + "] " + element.getPrimaryName());
                                     }
                                 }
                             }
@@ -941,9 +954,12 @@ public class INatImportDialog extends JDialog {
                     feedback.println("");
                     feedback.println("");
                     feedback.println("+++++ MISMATCHED SCIENTIFIC NAMES +++++");
-                    for (Map.Entry<String, List<String>> entry : mapMismatches.entrySet()) {
-                        feedback.println(entry.getKey() + " [" + entry.getValue().size() + " mismatches]");
-                        for (String mismatch : entry.getValue()) {
+                    List<String> lstKeys = new ArrayList<>(mapMismatches.keySet());
+                    Collections.sort(lstKeys);
+                    for (String key : lstKeys) {
+                        List<String> lstMismatches = mapMismatches.get(key);
+                        feedback.println("[" + key + "] has " + lstMismatches.size() + " mismatches:");
+                        for (String mismatch : lstMismatches) {
                             feedback.println("    " + mismatch);
                         }
                         feedback.println("");
