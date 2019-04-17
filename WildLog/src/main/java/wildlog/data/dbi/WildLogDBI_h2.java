@@ -367,7 +367,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         Statement state = null;
         ResultSet results = null;
         try {
-            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("CSVImportReport.txt");
             PrintWriter feedback = null;
             try {
                 feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
@@ -494,7 +494,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         Statement state = null;
         ResultSet resultSet = null;
         try {
-            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("BasicCSVImportReport.txt");
             PrintWriter feedback = null;
             try {
                 int importElementCreated = 0;

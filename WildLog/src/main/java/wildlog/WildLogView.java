@@ -4527,127 +4527,217 @@ public final class WildLogView extends JFrame {
                 + "<hr>"
                 + "This process is best used to make (and periodically update) a backup copy of the active Workspace.</html>",
                 "Echo Backup Workspace", JOptionPane.WARNING_MESSAGE);
-        // Close all tabs and go to the home tab
-        tabbedPanel.setSelectedIndex(0);
-        while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
-            tabbedPanel.remove(STATIC_TAB_COUNT);
-        }
-        // Lock the input/display and show busy message
-        // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
-        tabbedPanel.setSelectedIndex(0);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                JPanel panel = new JPanel(new AbsoluteLayout());
-                panel.setPreferredSize(new Dimension(400, 50));
-                panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
-                JLabel label = new JLabel("<html>Busy with Echo Backup Workspace. Please be patient, this might take a while. <br/>"
-                        + "Don't close the application until the process is finished.</html>");
-                label.setFont(new Font("Tahoma", Font.BOLD, 12));
-                label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
-                panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-                panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
-                panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
-                JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
-                glassPane.removeAll();
-                glassPane.setLayout(new BorderLayout(100, 100));
-                glassPane.add(panel, BorderLayout.CENTER);
-                glassPane.addMouseListener(new MouseAdapter() {});
-                glassPane.addKeyListener(new KeyAdapter() {});
-                app.getMainFrame().setGlassPane(glassPane);
-                app.getMainFrame().getGlassPane().setVisible(true);
-                app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            }
-        });
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                
-// TODO: Try to implement a progressbar, somehow (without it getting silly where I need to first build a list of all changed before I start...)
-                
                 WLFileChooser fileChooser = new WLFileChooser();
                 fileChooser.setDialogTitle("Select the target folder");
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fileChooser.setMultiSelectionEnabled(false);
                 int result = fileChooser.showOpenDialog(app.getMainFrame());
                 if (result == JFileChooser.APPROVE_OPTION) {
-                    // Need to close the databse in order to be allowed to copy it
-                    app.getDBI().close();
-                    // Setup the report
-
-// TODO: Show a report after the process finishes
-
-                    // Start walking the folders
-                    Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
-                    Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath();
-                    // Walk the echo path and delete all folders and files that aren't in the active Workspace
-                    Files.walkFileTree(echoPath, new SimpleFileVisitor<Path>() {
-
-                        @Override
-                        public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
-                            if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFolderPath)))) {
-                                UtilsFileProcessing.deleteRecursive(inFolderPath.toFile());
-                                return FileVisitResult.SKIP_SUBTREE;
-                            }
-
-// TODO: Skip the thumbnails, export and bundled maps folders
-
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                        @Override
-                        public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
-                            if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFilePath)))) {
-                                UtilsFileProcessing.deleteRecursive(inFilePath.toFile());
-                            }
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                    });
-                    // Walk the active workspace and copy all files that aren't already present in the echo path
-                    Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
-
-                        @Override
-                        public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
-                            Path echoFolder = echoPath.resolve(workspacePath.relativize(inFolderPath));
-                            if (!Files.exists(echoFolder)) {
-                                Files.createDirectories(echoFolder);
-                            }
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                        @Override
-                        public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
-                            Path echoFile = echoPath.resolve(workspacePath.relativize(inFilePath));
-                            if (!Files.exists(echoFile)) {
-                                UtilsFileProcessing.copyFile(inFilePath, echoFile, false, false);
-                            }
-                            else
-                            if (Files.size(inFilePath) != Files.size(inFilePath)) {
-                                UtilsFileProcessing.copyFile(inFilePath, echoFile, true, true);
-                            }
-                            return FileVisitResult.CONTINUE;
-                        }
-
-                    });
-                    // Finish the report
-// TODO
-                }
-                return null;
-            }
-            
-            @Override
-            protected void finished() {
-                super.finished();
-                // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
-                // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                        app.quit(null);
+                    // Close all tabs and go to the home tab
+                    tabbedPanel.setSelectedIndex(0);
+                    while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                        tabbedPanel.remove(STATIC_TAB_COUNT);
                     }
-                });
+                    // Lock the input/display and show busy message
+                    // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
+                    tabbedPanel.setSelectedIndex(0);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            JPanel panel = new JPanel(new AbsoluteLayout());
+                            panel.setPreferredSize(new Dimension(400, 50));
+                            panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
+                            JLabel label = new JLabel("<html>Busy with Echo Backup Workspace. Please be patient, this might take a while. <br/>"
+                                    + "Don't close the application until the process is finished.</html>");
+                            label.setFont(new Font("Tahoma", Font.BOLD, 12));
+                            label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
+                            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+                            panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
+                            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+                            JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
+                            glassPane.removeAll();
+                            glassPane.setLayout(new BorderLayout(100, 100));
+                            glassPane.add(panel, BorderLayout.CENTER);
+                            glassPane.addMouseListener(new MouseAdapter() {});
+                            glassPane.addKeyListener(new KeyAdapter() {});
+                            app.getMainFrame().setGlassPane(glassPane);
+                            app.getMainFrame().getGlassPane().setVisible(true);
+                            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                        }
+                    });
+                    UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            setProgress(0);
+                            setMessage("Starting the Echo Workspace Backup");
+                            // Need to close the databse in order to be allowed to copy it
+                            app.getDBI().close();
+                            setProgress(1);
+                            setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
+                            // Setup the report
+                            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("EchoWorkspaceReport.txt");
+                            PrintWriter feedback = null;
+                            try {
+                                feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                                feedback.println("--------------------------------------------------");
+                                feedback.println("---------- Echo Workspace Backup Report ----------");
+                                feedback.println("--------------------------------------------------");
+                                feedback.println("");
+                                // Start walking the folders and building a list of what needs to be copied / deleted
+                                final List<Path> lstPathsToDelete = new ArrayList<>();
+                                final List<Path> lstPathsToCopyFrom = new ArrayList<>();
+                                final List<Path> lstPathsToCopyTo = new ArrayList<>();
+                                Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
+                                Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath();
+                                // Walk the echo path and delete all folders and files that aren't in the active Workspace
+                                Files.walkFileTree(echoPath, new SimpleFileVisitor<Path>() {
+
+                                    @Override
+                                    public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
+                                        if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFolderPath)))) {
+                                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath());
+                                            return FileVisitResult.SKIP_SUBTREE;
+                                        }
+                                        // Always delete some folders (if somehow present)
+                                        if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
+                                                || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
+                                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath());
+                                            return FileVisitResult.SKIP_SUBTREE;
+                                        }
+                                        return FileVisitResult.CONTINUE;
+                                    }
+
+                                    @Override
+                                    public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
+                                        if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFilePath)))) {
+                                            lstPathsToDelete.add(inFilePath.normalize().toAbsolutePath());
+                                        }
+                                        return FileVisitResult.CONTINUE;
+                                    }
+
+                                });
+                                // Walk the active workspace and copy all files that aren't already present in the echo path
+                                Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
+
+                                    @Override
+                                    public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
+                                        // Skip some folders
+                                        if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
+                                                || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
+                                            return FileVisitResult.SKIP_SUBTREE;
+                                        }
+                                        return FileVisitResult.CONTINUE;
+                                    }
+
+                                    @Override
+                                    public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
+                                        // Skip the report file
+                                        if (inFilePath.equals(feedbackFile)) {
+                                            return FileVisitResult.SKIP_SUBTREE;
+                                        }
+                                        Path echoFile = echoPath.resolve(workspacePath.relativize(inFilePath));
+                                        if (!Files.exists(echoFile)) {
+                                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath());
+                                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath());
+                                        }
+                                        else
+                                        if (Files.size(inFilePath) != Files.size(echoFile)) {
+                                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath());
+                                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath());
+                                        }
+                                        return FileVisitResult.CONTINUE;
+                                    }
+
+                                });
+                                // To the actual file processing based on the built up lists
+                                double totalActions = lstPathsToDelete.size() + lstPathsToCopyTo.size();
+                                for (int t = 0; t < lstPathsToDelete.size(); t++) {
+                                    Path pathToDelete = lstPathsToDelete.get(t);
+                                    // Delete the folder or file
+                                    UtilsFileProcessing.deleteRecursive(pathToDelete.toFile());
+                                    // Update report and progress
+                                    feedback.println("Deleted   : " + pathToDelete.toString());
+                                    setProgress(1 + (int) (((double) t) / totalActions * 98.0));
+                                    setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
+                                }
+                                for (int t = 0; t < lstPathsToCopyFrom.size(); t++) {
+                                    Path pathToCopyFrom = lstPathsToCopyFrom.get(t);
+                                    Path pathToCopyTo = lstPathsToCopyTo.get(t);
+                                    // Make sure the folders exist
+                                    Files.createDirectories(pathToCopyTo.getParent());
+                                    // Perfrom the action
+                                    if (!Files.exists(pathToCopyTo)) {
+                                        // Copy the file
+                                        UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, false, false);
+                                        // Update report and progress
+                                        feedback.println("Copied    : " + pathToCopyTo.toString());
+                                    }
+                                    else {
+                                        // Replace the file
+                                        UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, true, true);
+                                        // Update report and progress
+                                        feedback.println("Replaced  : " + pathToCopyTo.toString());
+                                    }
+                                    setProgress(1 + (int) (((double) (lstPathsToDelete.size() + t)) / totalActions * 98.0));
+                                    setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
+                                }
+                            }
+                            // Finish the report
+                            catch (Exception ex) {
+                                if (feedback != null) {
+                                    feedback.println("");
+                                    feedback.println("--------------------------------------");
+                                    feedback.println("--------------- ERROR ----------------");
+                                    feedback.println(ex.toString());
+                                    feedback.println("--------------------------------------");
+                                    feedback.println("");
+                                }
+                                throw ex;
+                            }
+                            finally {
+                                if (feedback != null) {
+                                    feedback.println("");
+                                    feedback.println("--------------------------------------");
+                                    feedback.println("-------------- FINISHED --------------");
+                                    feedback.println("--------------------------------------");
+                                    feedback.println("");
+                                    feedback.flush();
+                                    feedback.close();
+                                    // Copy the report to the echo folder
+                                    try {
+                                        Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath();
+                                        UtilsFileProcessing.copyFile(feedbackFile, echoPath.resolve(feedbackFile.getFileName()), true, true);
+                                    }
+                                    catch (Exception ex) {
+                                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                    }
+                                    // Open the summary document
+                                    UtilsFileProcessing.openFile(feedbackFile);
+                                }
+                            }
+                            setProgress(100);
+                            setMessage("Done with the Echo Workspace Backup");
+                            return null;
+                        }
+
+                        @Override
+                        protected void finished() {
+                            super.finished();
+                            // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
+                            // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                    app.quit(null);
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
     }//GEN-LAST:event_mnuEchoWorkspaceActionPerformed

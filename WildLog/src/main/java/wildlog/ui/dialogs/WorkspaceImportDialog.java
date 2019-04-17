@@ -403,7 +403,7 @@ public class WorkspaceImportDialog extends JDialog {
                         try {
                             int totalSelectedNodes = getNumberOfSelectedNodes(treWorkspace.getModel(), (DefaultMutableTreeNode) treWorkspace.getModel().getRoot());
                             if (totalSelectedNodes > 0) {
-                                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+                                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("WorkspaceImportReport.txt");
                                 PrintWriter feedback = null;
                                 try {
                                     feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
