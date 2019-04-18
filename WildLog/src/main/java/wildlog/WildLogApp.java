@@ -102,10 +102,11 @@ public class WildLogApp extends Application {
         WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");
         super.initialize(arg0);
         // Get the threadcount
-        threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
+        threadCount = Runtime.getRuntime().availableProcessors();
         if (threadCount < 3) {
             threadCount = 3;
         }
+        WildLogApp.LOGGER.log(Level.INFO, "ExecutorService ThreadPools will be created using {} threads.", threadCount);
         // Make sure all the basic data/file folders are in place
         try {
             Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());

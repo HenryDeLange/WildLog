@@ -6,8 +6,8 @@ import org.jdesktop.application.Task;
 
 public abstract class ProgressbarTask<T extends Object, V extends Object> extends Task<T, V> {
 
-    public ProgressbarTask(Application application) {
-        super(application);
+    public ProgressbarTask(Application inApplication) {
+        super(inApplication);
     }
 
     @Override

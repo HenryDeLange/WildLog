@@ -38,15 +38,16 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.inaturalist.INatAPI;
 import wildlog.inaturalist.queryobjects.INaturalistAddObservation;
 import wildlog.inaturalist.queryobjects.INaturalistUpdateObservation;
-import wildlog.inaturalist.queryobjects.INaturalistUploadPhoto;
 import wildlog.inaturalist.queryobjects.enums.INaturalistGeoprivacy;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.CropDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.panels.inaturalist.helpers.INatProgressbarTask;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsCompression;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
@@ -54,15 +55,16 @@ import wildlog.utils.WildLogSystemImages;
 
 
 public class INatSightingDialog extends JDialog {
+    private static final JsonParser PARSER = new JsonParser();
     private final WildLogApp app = WildLogApp.getApplication();
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final JsonParser PARSER = new JsonParser();
     private final Sighting sighting;
     private INaturalistLinkedData linkedData = null;
     private int imageCounterWL = 0;
     private int imageCounterINat = 0;
-
-
+    private INatProgressbarTask iNatTask = null;
+    
+    
     public INatSightingDialog(JFrame inParent, Sighting inSighting) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[INatSightingDialog]");
@@ -248,6 +250,7 @@ public class INatSightingDialog extends JDialog {
         btnDownloadImage = new javax.swing.JButton();
         lblImageINat = new javax.swing.JLabel();
         btnPreviousImageINat = new javax.swing.JButton();
+        btnRefreshImages = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("iNaturalist Observation Details");
@@ -627,7 +630,7 @@ public class INatSightingDialog extends JDialog {
 
         btnDownloadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ShowGPS.png"))); // NOI18N
         btnDownloadImage.setText("Download Image");
-        btnDownloadImage.setToolTipText("Download the latest details for this Observation from iNaturalist.");
+        btnDownloadImage.setToolTipText("Download the displayed image from iNaturalist and add it to the WildLog Observation as a Workspace file.");
         btnDownloadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDownloadImage.setFocusPainted(false);
         btnDownloadImage.setMargin(new java.awt.Insets(2, 8, 2, 2));
@@ -655,28 +658,46 @@ public class INatSightingDialog extends JDialog {
             }
         });
 
+        btnRefreshImages.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ShowGPS.png"))); // NOI18N
+        btnRefreshImages.setText("Refresh Images");
+        btnRefreshImages.setToolTipText("Download the latest details for this Observation from iNaturalist.");
+        btnRefreshImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRefreshImages.setFocusPainted(false);
+        btnRefreshImages.setMargin(new java.awt.Insets(2, 8, 2, 2));
+        btnRefreshImages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshImagesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlINatImagesLayout = new javax.swing.GroupLayout(pnlINatImages);
         pnlINatImages.setLayout(pnlINatImagesLayout);
         pnlINatImagesLayout.setHorizontalGroup(
             pnlINatImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlINatImagesLayout.createSequentialGroup()
                 .addGap(3, 3, 3)
-                .addGroup(pnlINatImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlINatImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlINatImagesLayout.createSequentialGroup()
-                        .addComponent(btnPreviousImageINat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(lblNumberOfImagesINat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnNextImageINat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblImageINat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDownloadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3))
+                        .addComponent(btnRefreshImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(2, 2, 2)
+                        .addComponent(btnDownloadImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlINatImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(pnlINatImagesLayout.createSequentialGroup()
+                            .addComponent(btnPreviousImageINat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(10, 10, 10)
+                            .addComponent(lblNumberOfImagesINat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(10, 10, 10)
+                            .addComponent(btnNextImageINat, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblImageINat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(5, 5, 5))
         );
         pnlINatImagesLayout.setVerticalGroup(
             pnlINatImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlINatImagesLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addComponent(btnDownloadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlINatImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDownloadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefreshImages, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(2, 2, 2)
                 .addComponent(lblImageINat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
@@ -692,11 +713,11 @@ public class INatSightingDialog extends JDialog {
         pnlImagesLayout.setHorizontalGroup(
             pnlImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlImagesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(11, Short.MAX_VALUE)
                 .addComponent(pnlWildLogImages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(pnlINatImages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         pnlImagesLayout.setVerticalGroup(
             pnlImagesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1003,41 +1024,24 @@ public class INatSightingDialog extends JDialog {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
-                        if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
-                                && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
-                            INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
-                            iNatPhoto.setObservation_id(linkedData.getINaturalistID());
-                            iNatPhoto.setFile(lstWildLogFiles.get(imageCounterWL).getAbsolutePath());
-                            INatAPI.uploadPhoto(iNatPhoto, WildLogApp.getINaturalistToken());
-                        }
-                        else {
-                            WLOptionPane.showMessageDialog(INatSightingDialog.this,
-                                    "<html>Please select an <i>image</i> file linked to this Observation to be uploaded to iNaturalist.</html>",
-                                    "Can't Upload", WLOptionPane.WARNING_MESSAGE);
-                        }
+                    List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+                    if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
+                            && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
+                        sumbitNewINatTask(linkedData.getINaturalistID(), lstWildLogFiles.get(imageCounterWL).getAbsolutePath(), WildLogApp.getINaturalistToken(), false);
                     }
-                    catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    else {
                         WLOptionPane.showMessageDialog(INatSightingDialog.this,
-                                "<html>The WildLog Image was not uploaded to iNaturalist.</html>",
-                                "Upload Error", WLOptionPane.ERROR_MESSAGE);
+                                "<html>Please select an <i>image</i> file linked to this Observation to be uploaded to iNaturalist.</html>",
+                                "Can't Upload", WLOptionPane.WARNING_MESSAGE);
                     }
-                    finally {
-                        // Opdateer die UI en kry die volledige nuutste WildLog linked data
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (app.getWildLogOptions().isEnableSounds()) {
-                                    Toolkit.getDefaultToolkit().beep();
-                                }
-                                getGlassPane().setCursor(Cursor.getDefaultCursor());
-                                getGlassPane().setVisible(false);
-                                btnDownloadActionPerformed(null);
-                            }
-                        });
-                    }
+                    // Opdateer die UI en kry die volledige nuutste WildLog linked data
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            getGlassPane().setCursor(Cursor.getDefaultCursor());
+                            getGlassPane().setVisible(false);
+                        }
+                    });
                 }
             });
         }
@@ -1216,59 +1220,43 @@ public class INatSightingDialog extends JDialog {
             getGlassPane().setVisible(true);
             getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             // Stuur die file na iNaturalist
-            try {
-                List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
-                if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
-                        && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
+            List<WildLogFile> lstWildLogFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+            if (lstWildLogFiles != null && !lstWildLogFiles.isEmpty() && imageCounterWL < lstWildLogFiles.size() 
+                    && WildLogFileType.IMAGE.equals(lstWildLogFiles.get(imageCounterWL).getFileType())) {
+                CropDialog dialog = new CropDialog(INatSightingDialog.this, lstWildLogFiles.get(imageCounterWL));
+                final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
+                try {
                     Files.createDirectories(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath());
-                    CropDialog dialog = new CropDialog(INatSightingDialog.this, lstWildLogFiles.get(imageCounterWL));
-                    final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
-                    dialog.setINaturalistUploadFile(tempFile);
-                    dialog.setVisible(true);
-                    if (Files.exists(tempFile)) {
-                        INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
-                        iNatPhoto.setObservation_id(linkedData.getINaturalistID());
-                        iNatPhoto.setFile(tempFile);
-                        INatAPI.uploadPhoto(iNatPhoto, WildLogApp.getINaturalistToken());
-                        try {
-                            Files.delete(tempFile);
-                        }
-                        catch (IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        }
-                        if (app.getWildLogOptions().isEnableSounds()) {
-                            Toolkit.getDefaultToolkit().beep();
-                        }
-                    }
                 }
-                else {
-                    WLOptionPane.showMessageDialog(INatSightingDialog.this,
-                            "<html>Please select an <i>image</i> file linked to this Observation to be uploaded to iNaturalist.</html>",
-                            "Can't Upload", WLOptionPane.WARNING_MESSAGE);
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
+                dialog.setINaturalistUploadFile(tempFile);
+                dialog.setVisible(true);
+                sumbitNewINatTask(linkedData.getINaturalistID(), tempFile, WildLogApp.getINaturalistToken(), true);
             }
-            catch (Exception ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            else {
                 WLOptionPane.showMessageDialog(INatSightingDialog.this,
-                        "<html>The WildLog Image was not uploaded to iNaturalist.</html>",
-                        "Upload Error", WLOptionPane.ERROR_MESSAGE);
+                        "<html>Please select an <i>image</i> file linked to this Observation to be uploaded to iNaturalist.</html>",
+                        "Can't Upload", WLOptionPane.WARNING_MESSAGE);
             }
-            finally {
-                // Opdateer die UI en kry die volledige nuutste WildLog linked data
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        getGlassPane().setCursor(Cursor.getDefaultCursor());
-                        getGlassPane().setVisible(false);
-                        btnDownloadActionPerformed(null);
-                    }
-                });
-            }
+            // Opdateer die UI en kry die volledige nuutste WildLog linked data
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    getGlassPane().setCursor(Cursor.getDefaultCursor());
+                    getGlassPane().setVisible(false);
+                }
+            });
         }
         else {
             showMessageForNoINatID();
         }
     }//GEN-LAST:event_btnUploadCroppedImageActionPerformed
+
+    private void btnRefreshImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshImagesActionPerformed
+        btnDownloadActionPerformed(evt);
+    }//GEN-LAST:event_btnRefreshImagesActionPerformed
 
     public void showMessageForNoINatID() throws HeadlessException {
         WLOptionPane.showMessageDialog(this,
@@ -1295,6 +1283,19 @@ public class INatSightingDialog extends JDialog {
             lblNumberOfImagesINat.setText("0 of 0");
         }
     }
+    
+    private void sumbitNewINatTask(long inINatID, Path inFile, String inINatToken, boolean inDeleteFile) {
+        if (iNatTask == null || iNatTask.isDone()) {
+            // Create a new task
+            iNatTask = new INatProgressbarTask(app);
+            iNatTask.submitTask(inINatID, inFile, inINatToken, inDeleteFile);
+            UtilsConcurency.kickoffProgressbarTask(app, iNatTask);
+        }
+        else {
+            // Update the existing task to add one more item to its queue
+            iNatTask.submitTask(inINatID, inFile, inINatToken, inDeleteFile);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;
@@ -1304,6 +1305,7 @@ public class INatSightingDialog extends JDialog {
     private javax.swing.JButton btnOK;
     private javax.swing.JButton btnPreviousImageINat;
     private javax.swing.JButton btnPreviousImageWL;
+    private javax.swing.JButton btnRefreshImages;
     private javax.swing.JButton btnRemoveFromINat;
     private javax.swing.JButton btnUnlinkFromWildLog;
     private javax.swing.JButton btnUploadCroppedImage;
