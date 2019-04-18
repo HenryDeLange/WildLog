@@ -156,13 +156,23 @@ public class CropDialog extends JDialog {
             }
             // Draw crop box
             if (dragging) {
+                int firstX = Math.min(beginX, dragX);
+                int firstY = Math.min(beginY, dragY);
+                int lastX = Math.max(beginX, dragX);
+                int lastY = Math.max(beginY, dragY);
+                int boxWidth = lastX - firstX;
+                int boxHeight = lastY - firstY;
+                int square = Math.min(boxWidth, boxHeight);
+                g.setColor(Color.PINK);
+                g.drawRect(firstX - 1, firstY - 1, square + 1, square + 1);
                 g.setColor(Color.RED);
-                g.drawRect(Math.min(beginX, dragX), Math.min(beginY, dragY), 
-                        Math.abs(beginX - dragX), Math.abs(beginY - dragY));
-                int boxWidth = Math.abs(beginX - dragX);
-                int boxHeight = Math.abs(beginY - dragY);
-                g.setFont(g.getFont().deriveFont(Font.BOLD, 15));
-                ((Graphics) g).drawString(boxWidth + ":" + boxHeight, Math.min(beginX, dragX) + 3, Math.min(beginY, dragY) - 3);
+                g.drawRect(firstX, firstY, boxWidth, boxHeight);
+                g.setColor(Color.YELLOW);
+                g.drawRect(firstX - 1, firstY - 1, boxWidth + 2, boxHeight + 2);
+                g.setColor(Color.RED);
+                g.setFont(g.getFont().deriveFont(Font.BOLD, 16));
+                ((Graphics) g).drawString("w:" + boxWidth, Math.min(beginX, dragX) + 5, Math.min(beginY, dragY) - 5);
+                ((Graphics) g).drawString("h: " + boxHeight, Math.max(beginX, dragX) + 5, Math.min(beginY, dragY) + 15);
             }
             else 
             if (cropped) {
