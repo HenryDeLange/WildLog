@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>.\WildLog.jar</jar>
-  <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLog.exe</outfile>
+  <jar>.\WildLog-WEIAdmin.jar</jar>
+  <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLog-WEIAdmin.exe</outfile>
   <errTitle>WildLog Startup Error</errTitle>
   <cmdLine>properties=./wildlog.properties</cmdLine>
   <chdir></chdir>

@@ -21,7 +21,9 @@ public class INatProgressbarTask extends ProgressbarTask {
     }
     
     public void submitTask(long inINatID, Path inFile, String inINatToken, boolean inDeleteFile) {
+        
 // FIXME: Ek raai ek sal moet sync op iets om seker te maak dat ek nie soms uploads verloor nie
+
         iNatQueue.add(new INatTaskEntry(inINatID, inFile, inINatToken, inDeleteFile));
         setProgress(0);
         setMessage("Busy with the queued iNaturalist file uploads: 1 of " + iNatQueue.size());
