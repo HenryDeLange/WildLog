@@ -1635,6 +1635,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 element.setReferenceID(results.getString("REFERENCEID"));
                 // Save the record to the new table
                 createElement(element, false);
+                // Force a silly 1 millisecond sleep to make SURE the new IDs are unique
+                try {
+                    Thread.sleep(1L);
+                }
+                catch (InterruptedException ex) {
+                    WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                }
             }
             closeResultset(results);
             results = state.executeQuery("SELECT * FROM TEMP_LOCATIONS ORDER BY NAME");
@@ -1658,6 +1665,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 location.setGPSAccuracyValue(results.getDouble("GPSACCURACYVALUE"));
                 // Save the record to the new table
                 createLocation(location, false);
+                // Force a silly 1 millisecond sleep to make SURE the new IDs are unique
+                try {
+                    Thread.sleep(1L);
+                }
+                catch (InterruptedException ex) {
+                    WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                }
             }
             closeResultset(results);
             results = state.executeQuery("SELECT * FROM TEMP_VISITS ORDER BY NAME");
@@ -1691,6 +1705,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 }
                 // Save the record to the new table
                 createVisit(visit, false);
+                // Force a silly 1 millisecond sleep to make SURE the new IDs are unique
+                try {
+                    Thread.sleep(1L);
+                }
+                catch (InterruptedException ex) {
+                    WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                }
             }
             closeResultset(results);
             results = state.executeQuery("SELECT * FROM TEMP_SIGHTINGS ORDER BY ELEMENTNAME, LOCATIONNAME, VISITNAME");
@@ -1762,13 +1783,72 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 // Save the record to the new table
                 setupAuditInfo(sighting);
                 createSighting(sighting, true);
+                // Force a silly 1 millisecond sleep to make SURE the new IDs are unique
+                try {
+                    Thread.sleep(1L);
+                }
+                catch (InterruptedException ex) {
+                    WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                }
             }
             closeResultset(results);
             results = state.executeQuery("SELECT * FROM TEMP_FILES ORDER BY ID, ORIGINALPATH");
             while (results.next()) {
                 // Populate the record from the old table
                 WildLogFile wildLogFile = new WildLogFile();
-                wildLogFile.setLinkID(results.getString("ID"));
+                String oldID = results.getString("ID");
+                if (oldID.startsWith("E")) {
+                    Element element = findElement(0, oldID.substring(oldID.indexOf('-') + 1), Element.class);
+                    if (element != null) {
+                        wildLogFile.setLinkID(element.getWildLogFileID());
+                    }
+                    else {
+                        WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
+                                + "because the linked Element for [" + oldID + "] could not be found.");
+                        continue;
+                    }
+                }
+                else
+                if (oldID.startsWith("L")) {
+                    Location location = findLocation(0, oldID.substring(oldID.indexOf('-') + 1), Location.class);
+                    if (location != null) {
+                        wildLogFile.setLinkID(location.getWildLogFileID());
+                    }
+                    else {
+                        WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
+                                + "because the linked Location for [" + oldID + "] could not be found.");
+                        continue;
+                    }
+                }
+                else
+                if (oldID.startsWith("V")) {
+                    Visit visit = findVisit(0, oldID.substring(oldID.indexOf('-') + 1), false, Visit.class);
+                    if (visit != null) {
+                        wildLogFile.setLinkID(visit.getWildLogFileID());
+                    }
+                    else {
+                        WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
+                                + "because the linked Visit for [" + oldID + "] could not be found.");
+                        continue;
+                    }
+                }
+                else
+                if (oldID.startsWith("S")) {
+                    Sighting sighting = findSighting(Long.parseLong(oldID.substring(oldID.indexOf('-') + 1)), false, Sighting.class);
+                    if (sighting != null) {
+                        wildLogFile.setLinkID(sighting.getWildLogFileID());
+                    }
+                    else {
+                        WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
+                                + "because the linked Sighting for [" + oldID + "] could not be found.");
+                        continue;
+                    }
+                }
+                else {
+                    WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
+                                + "because the linked record for [" + oldID + "] could not be found.");
+                        continue;
+                }
                 wildLogFile.setFilename(results.getString("FILENAME"));
                 wildLogFile.setDBFilePath(results.getString("ORIGINALPATH").replace("\\", "/"));
                 wildLogFile.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
@@ -1788,6 +1868,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 wildLogFile.setFileSize(results.getLong("FILESIZE"));
                 // Save the record to the new table
                 createWildLogFile(wildLogFile, false);
+                // Force a silly 1 millisecond sleep to make SURE the new IDs are unique
+                try {
+                    Thread.sleep(1L);
+                }
+                catch (InterruptedException ex) {
+                    WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                }
             }
             closeResultset(results);
             // Drop the old tables

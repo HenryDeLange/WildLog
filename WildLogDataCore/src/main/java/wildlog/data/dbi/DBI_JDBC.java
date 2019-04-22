@@ -507,9 +507,9 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableElements);
                 // Create other indexes
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
-                state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
-                state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V12_ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
                     createElement(new ElementCore(0, "Unknown Creature"), false);
@@ -521,7 +521,7 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableLocations);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V12_LOCATION_NAME ON LOCATIONS (NAME)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
                     createLocation(new LocationCore(0, "Some Place"), false);
@@ -533,8 +533,8 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableVisits);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS VISIT_NAME ON VISITS (NAME)");
-                state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONID)");
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V12_VISIT_NAME ON VISITS (NAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_VISIT_LOCATION ON VISITS (LOCATIONID)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
                     createVisit(new VisitCore(0, "Casual Observations", findLocation(0, "Some Place", LocationCore.class).getID()), false);
@@ -546,13 +546,12 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableSightings);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS SIGHTING_ID ON SIGHTINGS (ID)");
-                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTID)");
-                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_LOCATION ON SIGHTINGS (LOCATIONID)");
-                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_VISIT ON SIGHTINGS (VISITID)");
-                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTID, LOCATIONID)");
-                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTID, VISITID)");
-                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_LOCATION ON SIGHTINGS (LOCATIONID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_VISIT ON SIGHTINGS (VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTID, LOCATIONID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTID, VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -560,12 +559,12 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableFiles);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (LINKID)");
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (LINKID, ISDEFAULT)");
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
-                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (LINKID, FILETYPE, ISDEFAULT)");
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V12_FILE_ORGPATH ON FILES (ORIGINALPATH)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_ID ON FILES (LINKID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_FILETYPE ON FILES (FILETYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_ID_DEFAULT ON FILES (LINKID, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_ID_TYPE_DEFAULT ON FILES (LINKID, FILETYPE, ISDEFAULT)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -2580,7 +2579,12 @@ public abstract class DBI_JDBC implements DBI {
     
     @Override
     public long generateID() {
-        return System.currentTimeMillis()*1000000L + randomGenerator.nextInt(1000000);
+//        return UUID.randomUUID().getMostSignificantBits();
+        // Gebruik die mees betekenisvolle gedeelte van die tyd, en dan 'n random getal.
+        // Dan draai die getal om, sodat die ID vinniger uniek raak (vir indekse) andersins begin almal met byna dieselfde waardes.
+        // VErvang dan die laaste drie geyalle met 'n unieke getal.
+        return Long.parseLong(Long.toString(randomGenerator.nextInt(100000)) + new StringBuilder(Long.toString(System.currentTimeMillis())).reverse().toString()) 
+                / 1000L * 1000L + randomGenerator.nextInt(1000);
     }
 
     @Override

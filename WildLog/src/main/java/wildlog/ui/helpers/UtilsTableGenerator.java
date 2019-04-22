@@ -70,7 +70,9 @@ public final class UtilsTableGenerator {
 
     private UtilsTableGenerator() {
     }
-
+    
+// TODO: Verander al die per-rekord-sub-queries om eerder regte joins te gebruik, dit sal sekerlik baie vinniger wees
+    
     public static void setupElementTableLarge(final WildLogApp inApp, final JTable inTable, final String inElementPrimaryName, final ElementType inElementType, final String inFilterText) {
         // Deterimine the row IDs of the previously selected rows.
         final long[] selectedRowIDs = getSelectedRowIDs(inTable, 6);
@@ -254,6 +256,7 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupLocationTableLarge(final WildLogApp inApp, final JTable inTable, final String inLocationName) {
+        long start = System.currentTimeMillis();
         // Deterimine the row IDs of the previously selected rows.
         final long[] selectedRowIDs = getSelectedRowIDs(inTable, 7);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
@@ -346,6 +349,7 @@ public final class UtilsTableGenerator {
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
                 }
+                System.out.println("setupLocationTableLarge = " + (System.currentTimeMillis() - start));
             }
         });
     }
@@ -451,6 +455,7 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupVisitTableSmallWithSightings(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
+        long start = System.currentTimeMillis();
         // Deterimine the row IDs of the previously selected rows.
         final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
@@ -529,6 +534,7 @@ public final class UtilsTableGenerator {
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
                 }
+                System.out.println("setupVisitTableSmallWithSightings = " + (System.currentTimeMillis() - start));
             }
         });
     }
@@ -1036,6 +1042,7 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupElementsTableMediumForLocation(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
+        long start = System.currentTimeMillis();
         // Deterimine the row IDs of the previously selected rows.
         final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
@@ -1120,6 +1127,7 @@ public final class UtilsTableGenerator {
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
                 }
+            System.out.println("setupElementsTableMediumForLocation = " + (System.currentTimeMillis() - start));
             }
         });
     }
