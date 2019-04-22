@@ -65,9 +65,11 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
+import wildlog.ui.panels.inaturalist.helpers.INatProgressbarTask;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.LoggingPrintStream;
 import wildlog.utils.NamedThreadFactory;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogPaths;
@@ -371,6 +373,7 @@ public class WildLogApp extends Application {
         view.setVisible(true);
         UtilsDialog.setupGlassPaneOnMainFrame(view);
         addExitListener(new ExitListener() {
+            
             @Override
             public boolean canExit(EventObject event) {
                 boolean doShutdown = true;
@@ -386,9 +389,12 @@ public class WildLogApp extends Application {
                                 "<html>There are background processes running that have not finished yet. "
                                         + "<br>It is <b>recommended to wait for these processes to finish</b>."
                                         + "<br>(See the progressbar at the bottom right hand corner for details.)"
-                                        + "<br><b>Continue to Exit WildLog?</b></html>",
+                                        + "<br><b>Wait for the processes to finish before exiting WildLog?</b></html>",
                                 "Warning! Unfinished Processes...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (result == JOptionPane.YES_OPTION) {
+                            doShutdown = false;
+                        }
+                        else {
                             WildLogApp.LOGGER.log(Level.INFO, "Trying to stop running processes before exiting...");
                             // Try to stop the running processes before the DB gets closed
                             TaskService taskService = getContext().getTaskService();
@@ -401,7 +407,20 @@ public class WildLogApp extends Application {
                                 //LOGGER.log(Level.SEVERE, ex.toString(), ex);
                             }
                         }
-                        else {
+                    }
+                    // There is a very small chance that a task can be added to the INATQUEUE while the progressbar is busy stopping.
+                    // In that case the task might never get processed if there are no future iNat progressbars created to pick it up.
+                    // That is why the INATQUEUE is checked before the application exits.
+                    else
+                    if (INatProgressbarTask.getINatQueueSize() > 0) {
+                        WildLogApp.LOGGER.log(Level.WARN, "Not all iNaturalist uploads were processed! There are still {} tasks in the queue.", INatProgressbarTask.getINatQueueSize());
+                        int result = WLOptionPane.showConfirmDialog(getMainFrame(),
+                                "<html>There are pending iNaturalist uploads. "
+                                        + "<br>Would you like to attempt to perform these uploads before exiting WildLog?</html>",
+                                "Warning! Unfinished iNaturalist Uploads...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                        if (result == JOptionPane.YES_OPTION) {
+                            INatProgressbarTask iNatTask = new INatProgressbarTask(WildLogApp.getApplication());
+                            UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), iNatTask);
                             doShutdown = false;
                         }
                     }
@@ -411,6 +430,7 @@ public class WildLogApp extends Application {
                 }
                 return doShutdown;
             }
+            
             @Override
             public void willExit(EventObject event) {
                 if (dbi != null) {
@@ -418,6 +438,7 @@ public class WildLogApp extends Application {
                     WildLogApp.LOGGER.log(Level.INFO, "Closing workspace...");
                 }
             }
+            
         });
     }
 

@@ -71,8 +71,8 @@ public class CropDialog extends JDialog {
         // Add escape listener
         UtilsDialog.addEscapeKeyListener(this);
         // Setup the image
-        setTitle("Crop Popup - " + wildLogFile.getFilename());
-        ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), WildLogThumbnailSizes.VERY_LARGE.getSize(), true);
+        setTitle("Crop - " + wildLogFile.getFilename());
+        ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), WildLogThumbnailSizes.VERY_VERY_LARGE.getSize(), true);
         ((CroppingPanel) pnlImage).setImage(imageIcon.getImage(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
         pnlImage.setMinimumSize(new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight()));
         pnlImage.setPreferredSize(new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight()));
@@ -164,7 +164,7 @@ public class CropDialog extends JDialog {
                 int boxHeight = lastY - firstY;
                 int square = Math.min(boxWidth, boxHeight);
                 g.setColor(Color.PINK);
-                g.drawRect(firstX - 1, firstY - 1, square + 1, square + 1);
+                g.drawRect(firstX - 1 + (boxWidth - square)/2, firstY - 1 + (boxHeight - square)/2, square + 1, square + 1);
                 g.setColor(Color.RED);
                 g.drawRect(firstX, firstY, boxWidth, boxHeight);
                 g.setColor(Color.YELLOW);
@@ -350,7 +350,7 @@ public class CropDialog extends JDialog {
                     try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newWildLogFile.getAbsolutePath().toFile()))) {
                         // Get crop coordinates
                         CroppingPanel panel = ((CroppingPanel) pnlImage);
-                        double ratio = ((double) Math.max(lljTran.getWidth(), lljTran.getHeight())) / ((double) WildLogThumbnailSizes.VERY_LARGE.getSize());
+                        double ratio = ((double) Math.max(lljTran.getWidth(), lljTran.getHeight())) / ((double) WildLogThumbnailSizes.VERY_VERY_LARGE.getSize());
                         int firstX = Math.min(panel.getBeginX(), panel.getEndX());
                         int firstY = Math.min(panel.getBeginY(), panel.getEndY());
                         int lastX = Math.max(panel.getBeginX(), panel.getEndX());

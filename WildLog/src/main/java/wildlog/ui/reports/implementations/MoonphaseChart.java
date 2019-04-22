@@ -488,9 +488,9 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                 }
             }
         }
-        for (Map.Entry<String, VisitDates> entry : mapDates.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue().startDate.toString() + " - "  + entry.getValue().endDate.toString() + " ("  + entry.getValue().endDateFromVisit + ")");
-        }
+//        for (Map.Entry<String, VisitDates> entry : mapDates.entrySet()) {
+//            System.out.println(entry.getKey() + " : " + entry.getValue().startDate.toString() + " - "  + entry.getValue().endDate.toString() + " ("  + entry.getValue().endDateFromVisit + ")");
+//        }
         return mapDates;
     }
     

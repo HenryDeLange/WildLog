@@ -128,20 +128,20 @@ public final class UtilsTime {
         return calendar.getTime();
     }
     
-    public static void calculateSunAndMoon(Sighting sighting) {
+    public static void calculateSunAndMoon(Sighting inSighting) {
         // Check if time is usable
-        if (sighting.getDate() != null && sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
+        if (inSighting.getDate() != null && inSighting.getTimeAccuracy() != null && inSighting.getTimeAccuracy().isUsableTime()) {
             // Moon phase
-            sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+            inSighting.setMoonPhase(AstroCalculator.getMoonPhase(inSighting.getDate()));
             // Check if GPS is usable
-            if (sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
-                    && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
-                double latitude = UtilsGPS.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                double longitude = UtilsGPS.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+            if (inSighting.getLatitude() != null && !inSighting.getLatitude().equals(Latitudes.NONE)
+                    && inSighting.getLongitude() != null && !inSighting.getLongitude().equals(Longitudes.NONE)) {
+                double latitude = UtilsGPS.getDecimalDegree(inSighting.getLatitude(), inSighting.getLatDegrees(), inSighting.getLatMinutes(), inSighting.getLatSeconds());
+                double longitude = UtilsGPS.getDecimalDegree(inSighting.getLongitude(), inSighting.getLonDegrees(), inSighting.getLonMinutes(), inSighting.getLonSeconds());
                 // Sun Light
-                sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                inSighting.setTimeOfDay(AstroCalculator.getSunCategory(inSighting.getDate(), latitude, longitude));
                 // Moon Light
-                sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                inSighting.setMoonlight(AstroCalculator.getMoonlight(inSighting.getDate(), latitude, longitude));
             }
         }
     }

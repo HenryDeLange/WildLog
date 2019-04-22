@@ -1,5 +1,7 @@
 package wildlog.data.dbi;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +11,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.ElementCore;
 import wildlog.data.dataobjects.INaturalistLinkedData;
@@ -48,7 +49,7 @@ import wildlog.data.utils.UtilsData;
 
 
 public abstract class DBI_JDBC implements DBI {
-    protected final Random randomGenerator = new Random(System.nanoTime()); // ThreadLocalRandom is beter maar net in Java 7
+    protected SecureRandom randomGenerator;
     // Version
     protected static final int WILDLOG_DB_VERSION = 12;
     // Tables
@@ -486,6 +487,12 @@ public abstract class DBI_JDBC implements DBI {
     protected Connection conn;
 
     public DBI_JDBC() {
+        try {
+            randomGenerator = SecureRandom.getInstanceStrong();
+        }
+        catch (NoSuchAlgorithmException ex) {
+            randomGenerator = new SecureRandom();
+        }
     }
 
     @Override

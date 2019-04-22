@@ -2235,8 +2235,10 @@ public final class WildLogView extends JFrame {
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
         
+        
 // TODO: Check die nuwe Stashed folder ook. Skuif file wat daar is maar nie 'n visit het nie na daai orphan folder nou
         
+
         WildLogApp.LOGGER.log(Level.INFO, "[CleanWorkspace]");
         // Popup 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
         int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
@@ -4593,6 +4595,8 @@ public final class WildLogView extends JFrame {
                                 Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
                                 Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath();
                                 // Walk the echo path and delete all folders and files that aren't in the active Workspace
+                                setProgress(2);
+                                setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + getProgress() + "%");
                                 Files.walkFileTree(echoPath, new SimpleFileVisitor<Path>() {
 
                                     @Override
@@ -4619,6 +4623,8 @@ public final class WildLogView extends JFrame {
                                     }
 
                                 });
+                                setProgress(3);
+                                setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + getProgress() + "%");
                                 // Walk the active workspace and copy all files that aren't already present in the echo path
                                 Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
 
@@ -4652,6 +4658,8 @@ public final class WildLogView extends JFrame {
                                     }
 
                                 });
+                                setProgress(4);
+                                setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
                                 // To the actual file processing based on the built up lists
                                 double totalActions = lstPathsToDelete.size() + lstPathsToCopyTo.size();
                                 for (int t = 0; t < lstPathsToDelete.size(); t++) {
@@ -4660,8 +4668,8 @@ public final class WildLogView extends JFrame {
                                     UtilsFileProcessing.deleteRecursive(pathToDelete.toFile());
                                     // Update report and progress
                                     feedback.println("Deleted   : " + pathToDelete.toString());
-                                    setProgress(1 + (int) (((double) t) / totalActions * 98.0));
-                                    setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
+                                    setProgress(4 + (int) (((double) t) / totalActions * 95.0));
+                                    setMessage("Busy with the Echo Workspace Backup: Deleting files... " + getProgress() + "%");
                                 }
                                 for (int t = 0; t < lstPathsToCopyFrom.size(); t++) {
                                     Path pathToCopyFrom = lstPathsToCopyFrom.get(t);
@@ -4681,8 +4689,8 @@ public final class WildLogView extends JFrame {
                                         // Update report and progress
                                         feedback.println("Replaced  : " + pathToCopyTo.toString());
                                     }
-                                    setProgress(1 + (int) (((double) (lstPathsToDelete.size() + t)) / totalActions * 98.0));
-                                    setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
+                                    setProgress(4 + (int) (((double) (lstPathsToDelete.size() + t)) / totalActions * 95.0));
+                                    setMessage("Busy with the Echo Workspace Backup: Copying files... " + getProgress() + "%");
                                 }
                             }
                             // Finish the report

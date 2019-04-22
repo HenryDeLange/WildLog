@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import org.h2.jdbc.JdbcSQLException;
 import wildlog.WildLogApp;
+import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -26,17 +27,30 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
+import wildlog.data.dbi.legacy.Legacy_DBI_JDBC;
+import wildlog.data.dbi.legacy.Legacy_SightingCore;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Age;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
+import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.GPSAccuracy;
+import wildlog.data.enums.GameViewRating;
+import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LifeStatus;
+import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.Moonlight;
+import wildlog.data.enums.Sex;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
+import wildlog.data.enums.UnitsTemperature;
+import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.Weather;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.WorkspaceImportDialog;
@@ -93,6 +107,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
                 state.close();
                 WildLogApp.LOGGER.log(Level.INFO, "Database username and password updated.");
+               
                 
 // TODO: Hier kort 'n form van database recovery as dinge skeef loop...
 // DOEN MISKIEN IETS SOOS HIERDIE:
@@ -101,6 +116,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 //   laat die user dan browse na 'n SQL dump (maak die file browser oop by the backups folder).
 //   Maak dan 'n uwe DB (met ander password) en run die SCRIPT FROM command om die DB te laai.
 //   Wanneer dit klaar is delete die temp username.
+
 
             }
             // Create table, indexes, etc.
@@ -928,7 +944,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).toFile());
             }
         }
-        catch (Exception ex) {
+        catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         return super.deleteVisit(inID);
@@ -995,8 +1011,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             boolean databaseAndApplicationInSync = false;
             boolean wasMajorUpgrade = false;
             boolean upgradeWasDone = false;
+            boolean upgradeSuccess = true;
             int choice = JOptionPane.CANCEL_OPTION;
             for (int t = 0; t <= WILDLOG_DB_VERSION; t++) {
+                if (!upgradeSuccess) {
+                    WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                            "<html>There was an unexpected problem during the database upgrade!</html>",
+                            "WildLog Upgrade Error", JOptionPane.ERROR_MESSAGE);
+                    break;
+                }
                 results = state.executeQuery("SELECT VERSION FROM WILDLOG");
                 if (results.next()) {
                     if (results.getInt("VERSION") > WILDLOG_DB_VERSION) {
@@ -1025,64 +1048,65 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 // Procede with the needed updates
                                 if (results.getInt("VERSION") == 0) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
-                                    doUpdate1();
+                                    upgradeSuccess = doUpdate1();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 1) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v1 (before upgrade to 2)"));
-                                    doUpdate2();
+                                    upgradeSuccess = doUpdate2();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 2) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v2 (before upgrade to 3)"));
-                                    doUpdate3();
+                                    upgradeSuccess = doUpdate3();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 3) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v3 (before upgrade to 4)"));
-                                    doUpdate4();
+                                    upgradeSuccess = doUpdate4();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 4) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4 (before upgrade to 5)"));
-                                    doUpdate5();
+                                    upgradeSuccess = doUpdate5();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 5) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v5 (before upgrade to 6)"));
-                                    doUpdate6();
+                                    upgradeSuccess = doUpdate6();
                                     wasMajorUpgrade = true;
                                 }
                                 else
                                 if (results.getInt("VERSION") == 6) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v6 (before upgrade to 7)"));
-                                    doUpdate7();
+                                    upgradeSuccess = doUpdate7();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 7) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v7 (before upgrade to 8)"));
-                                    doUpdate8();
+                                    upgradeSuccess = doUpdate8();
                                     wasMajorUpgrade = true; // Omdat die Files se folder struktuur verander het...
                                 }
                                 else
                                 if (results.getInt("VERSION") == 8) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v8 (before upgrade to 9)"));
-                                    doUpdate9();
+                                    upgradeSuccess = doUpdate9();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 9) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v9 (before upgrade to 10)"));
-                                    doUpdate10();
+                                    upgradeSuccess = doUpdate10();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 10) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v10 (before upgrade to 11)"));
-                                    doUpdate11();
+                                    upgradeSuccess = doUpdate11();
                                 }
                                 else
                                 if (results.getInt("VERSION") == 11) {
-                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v10 (before upgrade to 12)"));
-                                    doUpdate12();
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v11 (before upgrade to 12)"));
+                                    upgradeSuccess = doUpdate12();
+                                    wasMajorUpgrade = true; // Omdat die GUIDs by gekom het en baie koelomme verwyder was
                                 }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
@@ -1112,12 +1136,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             }
             else {
                 WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                        "<html>The database could not be successfully updated!"
+                        "<html>The database could not be successfully upgraded!"
                                 + "<br/>Make sure that you are running the latest version of WildLog."
                                 + "<br/>Confirm that the Workspace isn't already open by another WildLog instance."
                                 + "<br/>It is possible that the datbase might be broken or corrupted. "
                                 + "If this is the case you can restore a backup copy and try again, please consult the Manual for details."
-                                + "<br/>Contact support@mywild.co.za if the problmes persist.</html>",
+                                + "<br/>Contact support@mywild.co.za if the problem persists.</html>",
                         "WildLog Upgrade Error", JOptionPane.ERROR_MESSAGE);
                 WildLogApp.getApplication().exit();
             }
@@ -1131,7 +1155,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     // Private update methods
-    private void doUpdate1() {
+    private boolean doUpdate1() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 1");
         // This update recreates the tables with IGNORECASE enabled
         // This update might only be relevant for H2, but it is the main
@@ -1149,11 +1173,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE SIGHTINGS RENAME TO TEMP_SIGHTINGS");
             state.execute("ALTER TABLE FILES RENAME TO TEMP_FILES");
             // Create new tables
-            state.execute(tableElements);
-            state.execute(tableLocations);
-            state.execute(tableVisits);
-            state.execute(tableSightings);
-            state.execute(tableFiles);
+            state.execute(Legacy_DBI_JDBC.tableElements);
+            state.execute(Legacy_DBI_JDBC.tableLocations);
+            state.execute(Legacy_DBI_JDBC.tableVisits);
+            state.execute(Legacy_DBI_JDBC.tableSightings);
+            state.execute(Legacy_DBI_JDBC.tableFiles);
             // Copy data accross from old tables
             state.executeUpdate("INSERT INTO ELEMENTS SELECT PRIMARYNAME, OTHERNAME, SCIENTIFICNAME, DESCRIPTION, DISTRIBUTION, NUTRITION, WATERDEPENDANCE, SIZEMALEMIN, SIZEMALEMAX , SIZEFEMALEMIN, SIZEFEMALEMAX, SIZEUNIT, WEIGHTMALEMIN, WEIGHTMALEMAX, WEIGHTFEMALEMIN, WEIGHTFEMALEMAX, WEIGHTUNIT, BREEDINGDURATION, BREEDINGNUMBER, WISHLISTRATING, DIAGNOSTICDESCRIPTION, ACTIVETIME, ENDANGEREDSTATUS, BEHAVIOURDESCRIPTION, ADDFREQUENCY, ELEMENTTYPE, FEEDINGCLASS, LIFESPAN, REFERENCEID FROM TEMP_ELEMENTS");
             state.executeUpdate("INSERT INTO LOCATIONS SELECT * FROM TEMP_LOCATIONS");
@@ -1171,14 +1195,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 1");
+        return true;
     }
 
-    private void doUpdate2() {
+    private boolean doUpdate2() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 2");
         // This update adds a column to the options table
         Statement state = null;
@@ -1196,14 +1222,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 2");
+        return true;
     }
 
-    private void doUpdate3() {
+    private boolean doUpdate3() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 3");
         // This update removes and alters some tables and adds new wildlog options
         Statement state = null;
@@ -1249,137 +1277,159 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 3");
+        return true;
     }
 
-    private void doUpdate4() {
-//        WildLogApp.LOGGER.log(Level.INFO, "Starting update 4");
-//        // This update removes and alters some tables and adds new wildlog options
-//        Statement state = null;
-//        ResultSet results = null;
-//        try {
-//            state = conn.createStatement();
-//            // Make changes to Location
-//            state.execute("ALTER TABLE LOCATIONS ADD COLUMN GPSACCURACY varchar(50)");
-//            // Make changes to Sightings
-//            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN GPSACCURACY varchar(50)");
-//            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TIMEACCURACY varchar(50)");
-//            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN AGE varchar(50)");
-//            // Migrate TimeAccuracy data
-//            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 1");
-//            while (results.next()) {
-//                Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
-//                sighting.setTimeAccuracy(TimeAccuracy.UNKNOWN);
-//                updateSighting(sighting);
-//            }
-//            results.close();
-//            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 0");
-//            while (results.next()) {
-//                Sighting sighting = findSighting(results.getLong("SIGHTINGCOUNTER"), Sighting.class);
-//                sighting.setTimeAccuracy(TimeAccuracy.GOOD);
-//                updateSighting(sighting);
-//            }
-//            results.close();
-//            state.execute("ALTER TABLE SIGHTINGS DROP COLUMN UNKNOWNTIME");
-//            state.executeUpdate("UPDATE SIGHTINGS SET TIMEACCURACY = 'GOOD' WHERE TIMEACCURACY IS NULL OR TIMEACCURACY = ''");
-//            // Make changes to Files
-//            // NOTE: It is best to make sure that Clean Workspace in v3 has been run before upgrading
-//            state.executeUpdate("UPDATE FILES SET ORIGINALPATH = replace(replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/Files', 'Files'), 'WildLog/Files', 'Files')");
-//            // Create indexes
-//            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
-//            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
-//            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
-//            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
-//            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS VISIT_NAME ON VISITS (NAME)");
-//            state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONNAME)");
-//            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS SIGHTING_CNT ON SIGHTINGS (SIGHTINGCOUNTER)");
-//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTNAME)");
-//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_LOCATION ON SIGHTINGS (LOCATIONNAME)");
-//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_VISIT ON SIGHTINGS (VISITNAME)");
-//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTNAME, LOCATIONNAME)");
-//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTNAME, VISITNAME)");
-//            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
-//            try {
-//                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
-//            }
-//            catch (SQLException ex) {
-//                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
-//                // Try again to create the index, but settle for non-unique
-//                state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
-//            }
-//            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (ID)");
-//            state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
-//            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
-//            state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
-//            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
-//            // Make changes to Wildlog settings
-//            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILTABLES smallint DEFAULT true");
-//            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILBROWSE smallint DEFAULT false");
-//            state.execute("ALTER TABLE WILDLOG ADD COLUMN ENABLESOUNDS smallint DEFAULT true");
-//            // Update Sightings and WildLog files to use the new UUIDs
-//            List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
-//            for (Sighting sighting : lstSightings) {
-//                long newID = sighting.getDate().getTime()*1000000L + randomGenerator.nextInt(999999);
-//                results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
-//                while (results.next() && results.getInt(1) > 0) {
-//                    // ID already used, try a new ID
-//                    newID = System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
-//                    results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
-//                }
-//                state.executeUpdate("UPDATE SIGHTINGS SET SIGHTINGCOUNTER = " + newID + " WHERE SIGHTINGCOUNTER = " + sighting.getSightingCounter());
-//                state.executeUpdate("UPDATE FILES SET ID = '" + new Sighting(newID).getWildLogFileID() + "' WHERE ID = '" + sighting.getWildLogFileID() + "'");
-//            }
-//            // Update the version number
-//            state.executeUpdate("UPDATE WILDLOG SET VERSION=4");
-//        }
-//        catch (SQLException ex) {
-//            printSQLException(ex);
-//        }
-//        finally {
-//            closeStatementAndResultset(state, results);
-//        }
-//        WildLogApp.LOGGER.log(Level.INFO, "Finished update 4");
+    private boolean doUpdate4() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 4");
+        // This update removes and alters some tables and adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            Legacy_DBI_JDBC legacy_DBI_JDBC = new Legacy_DBI_JDBC(conn);
+            state = conn.createStatement();
+            // Make changes to Location
+            state.execute("ALTER TABLE LOCATIONS ADD COLUMN GPSACCURACY varchar(50)");
+            // Make changes to Sightings
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN GPSACCURACY varchar(50)");
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TIMEACCURACY varchar(50)");
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN AGE varchar(50)");
+            // Migrate TimeAccuracy data
+            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 1");
+            while (results.next()) {
+                Legacy_SightingCore sighting = legacy_DBI_JDBC.findSighting(results.getLong("SIGHTINGCOUNTER"), Legacy_SightingCore.class);
+                sighting.setTimeAccuracy(TimeAccuracy.UNKNOWN);
+                legacy_DBI_JDBC.updateSighting(sighting);
+            }
+            results.close();
+            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 0");
+            while (results.next()) {
+                Legacy_SightingCore sighting = legacy_DBI_JDBC.findSighting(results.getLong("SIGHTINGCOUNTER"), Legacy_SightingCore.class);
+                sighting.setTimeAccuracy(TimeAccuracy.GOOD);
+                legacy_DBI_JDBC.updateSighting(sighting);
+            }
+            results.close();
+            state.execute("ALTER TABLE SIGHTINGS DROP COLUMN UNKNOWNTIME");
+            state.executeUpdate("UPDATE SIGHTINGS SET TIMEACCURACY = 'GOOD' WHERE TIMEACCURACY IS NULL OR TIMEACCURACY = ''");
+            // Make changes to Files
+            // NOTE: It is best to make sure that Clean Workspace in v3 has been run before upgrading
+            state.executeUpdate("UPDATE FILES SET ORIGINALPATH = replace(replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/Files', 'Files'), 'WildLog/Files', 'Files')");
+            // Create indexes
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
+            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS VISIT_NAME ON VISITS (NAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONNAME)");
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS SIGHTING_CNT ON SIGHTINGS (SIGHTINGCOUNTER)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_LOCATION ON SIGHTINGS (LOCATIONNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_VISIT ON SIGHTINGS (VISITNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTNAME, LOCATIONNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTNAME, VISITNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
+            try {
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
+                // Try again to create the index, but settle for non-unique
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+            }
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (ID)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
+            // Make changes to Wildlog settings
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILTABLES smallint DEFAULT true");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILBROWSE smallint DEFAULT false");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN ENABLESOUNDS smallint DEFAULT true");
+            // Update Sightings and WildLog files to use the new UUIDs
+            List<Legacy_SightingCore> lstSightings = legacy_DBI_JDBC.listSightings(0, null, null, null, false, Legacy_SightingCore.class);
+            for (Legacy_SightingCore sighting : lstSightings) {
+                long newID = sighting.getDate().getTime()*1000000L + randomGenerator.nextInt(999999);
+                results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
+                while (results.next() && results.getInt(1) > 0) {
+                    // ID already used, try a new ID
+                    newID = System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
+                    results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
+                }
+                state.executeUpdate("UPDATE SIGHTINGS SET SIGHTINGCOUNTER = " + newID + " WHERE SIGHTINGCOUNTER = " + sighting.getSightingCounter());
+                state.executeUpdate("UPDATE FILES SET ID = '" + new Sighting(newID).getWildLogFileID() + "' WHERE ID = '" + sighting.getWildLogFileID() + "'");
+            }
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=4");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 4");
+        return true;
     }
     
-    private void doUpdate5() {
-//        WildLogApp.LOGGER.log(Level.INFO, "Starting update 5");
-//        // This update adds new wildlog options
-//        Statement state = null;
-//        ResultSet results = null;
-//        try {
-//            state = conn.createStatement();
-//            // Make changes to WildLog Options
-//            state.execute("ALTER TABLE WILDLOG ADD COLUMN USESCIENTIFICNAMES smallint DEFAULT true");
-//            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
-//            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACEID bigint DEFAULT 0");
-//            WildLogOptions options = findWildLogOptions(WildLogOptions.class);
-//            options.setWorkspaceID(generateID());
-//            updateWildLogOptions(options);
-//            // Recalculate all sun and moon phase info (the enums changed)
-//            List<Sighting> lstSightings = listSightings(0, null, null, null, false, Sighting.class);
-//            for (Sighting sighting : lstSightings) {
-//                UtilsTime.calculateSunAndMoon(sighting);
-//                updateSighting(sighting);
-//            }
-//            // Increase the cache size slightly (doubled) in KB
-//            state.execute("SET CACHE_SIZE 32768");
-//            // Update the version number
-//            state.executeUpdate("UPDATE WILDLOG SET VERSION=5");
-//        }
-//        catch (SQLException ex) {
-//            printSQLException(ex);
-//        }
-//        finally {
-//            closeStatementAndResultset(state, results);
-//        }
-//        WildLogApp.LOGGER.log(Level.INFO, "Finished update 5");
+    private boolean doUpdate5() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 5");
+        // This update adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            Legacy_DBI_JDBC legacy_DBI_JDBC = new Legacy_DBI_JDBC(conn);
+            state = conn.createStatement();
+            // Make changes to WildLog Options
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN USESCIENTIFICNAMES smallint DEFAULT true");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACEID bigint DEFAULT 0");
+            WildLogOptions options = legacy_DBI_JDBC.findWildLogOptions(WildLogOptions.class);
+            options.setWorkspaceID(generateID());
+            legacy_DBI_JDBC.updateWildLogOptions(options);
+            // Recalculate all sun and moon phase info (the enums changed)
+            List<Legacy_SightingCore> lstSightings = legacy_DBI_JDBC.listSightings(0, null, null, null, false, Legacy_SightingCore.class);
+            for (Legacy_SightingCore sighting : lstSightings) {
+                // Check if time is usable
+                if (sighting.getDate() != null && sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
+                    // Moon phase
+                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+                    // Check if GPS is usable
+                    if (sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
+                            && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
+                        double latitude = UtilsGPS.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                        double longitude = UtilsGPS.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                        // Sun Light
+                        sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                        // Moon Light
+                        sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                    }
+                }
+                legacy_DBI_JDBC.updateSighting(sighting);
+            }
+            // Increase the cache size slightly (doubled) in KB
+            state.execute("SET CACHE_SIZE 32768");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=5");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 5");
+        return true;
     }
     
-    private void doUpdate6() {
+    private boolean doUpdate6() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 6");
         // This update adds new wildlog options
         Statement state = null;
@@ -1394,14 +1444,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 6");
+        return true;
     }
     
-    private void doUpdate7() {
+    private boolean doUpdate7() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 7");
         // This update adds new wildlog options
         Statement state = null;
@@ -1418,14 +1470,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 7");
+        return true;
     }
     
-    private void doUpdate8() {
+    private boolean doUpdate8() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 8");
         // This update adds new wildlog options
         Statement state = null;
@@ -1440,14 +1494,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 8");
+        return true;
     }
     
-    private void doUpdate9() {
+    private boolean doUpdate9() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 9");
         // This update adds new wildlog options
         Statement state = null;
@@ -1461,14 +1517,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 9");
+        return true;
     }
     
-    private void doUpdate10() {
+    private boolean doUpdate10() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 10");
         // This update added the new INATURALIST table
         Statement state = null;
@@ -1482,14 +1540,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 10");
+        return true;
     }
     
-    private void doUpdate11() {
+    private boolean doUpdate11() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 11");
         // This update added the new INATURALIST table
         Statement state = null;
@@ -1504,14 +1564,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 11");
+        return true;
     }
     
-    private void doUpdate12() {
+    private boolean doUpdate12() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 12");
         // This update adds new wildlog options
         Statement state = null;
@@ -1539,16 +1601,213 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE ELEMENTS DROP COLUMN ACTIVETIME");
             state.execute("ALTER TABLE ELEMENTS DROP COLUMN ADDFREQUENCY");
             state.execute("ALTER TABLE ELEMENTS DROP COLUMN LIFESPAN");
+            state.execute("ALTER TABLE LOCATIONS DROP COLUMN ACCOMMODATIONTYPE");
+            state.execute("ALTER TABLE LOCATIONS DROP COLUMN CATERING");
+            state.execute("ALTER TABLE LOCATIONS DROP COLUMN CONTACTNUMBERS");
+            state.execute("ALTER TABLE LOCATIONS DROP COLUMN WEBSITE");
+            state.execute("ALTER TABLE LOCATIONS DROP COLUMN EMAIL");
+            state.execute("ALTER TABLE LOCATIONS DROP COLUMN DIRECTIONS");
+            // Setup the new tables that use GUIDs and has Audit data
+            // Rename old tables
+            state.execute("ALTER TABLE ELEMENTS RENAME TO TEMP_ELEMENTS");
+            state.execute("ALTER TABLE LOCATIONS RENAME TO TEMP_LOCATIONS");
+            state.execute("ALTER TABLE VISITS RENAME TO TEMP_VISITS");
+            state.execute("ALTER TABLE SIGHTINGS RENAME TO TEMP_SIGHTINGS");
+            state.execute("ALTER TABLE FILES RENAME TO TEMP_FILES");
+            // Create tables using the new structure
+            initialize(false);
+            // Copy data accross from old tables
+            results = state.executeQuery("SELECT * FROM TEMP_ELEMENTS ORDER BY PRIMARYNAME");
+            while (results.next()) {
+                // Populate the record from the old table
+                Element element = new Element();
+                element.setPrimaryName(results.getString("PRIMARYNAME"));
+                element.setOtherName(results.getString("OTHERNAME"));
+                element.setScientificName(results.getString("SCIENTIFICNAME"));
+                element.setDescription(results.getString("DESCRIPTION"));
+                element.setDistribution(results.getString("DISTRIBUTION"));
+                element.setNutrition(results.getString("NUTRITION"));
+                element.setDiagnosticDescription(results.getString("DIAGNOSTICDESCRIPTION"));
+                element.setEndangeredStatus(EndangeredStatus.getEnumFromText(results.getString("ENDANGEREDSTATUS")));
+                element.setBehaviourDescription(results.getString("BEHAVIOURDESCRIPTION"));
+                element.setType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
+                element.setFeedingClass(FeedingClass.getEnumFromText(results.getString("FEEDINGCLASS")));
+                element.setReferenceID(results.getString("REFERENCEID"));
+                // Save the record to the new table
+                createElement(element, false);
+            }
+            closeResultset(results);
+            results = state.executeQuery("SELECT * FROM TEMP_LOCATIONS ORDER BY NAME");
+            while (results.next()) {
+                // Populate the record from the old table
+                Location location = new Location();
+                location.setName(results.getString("NAME"));
+                location.setDescription(results.getString("DESCRIPTION"));
+                location.setRating(LocationRating.getEnumFromText(results.getString("RATING")));
+                location.setGameViewingRating(GameViewRating.getEnumFromText(results.getString("GAMEVIEWINGRATING")));
+                location.setHabitatType(results.getString("HABITATTYPE"));
+                location.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
+                location.setLatDegrees(results.getInt("LATDEGREES"));
+                location.setLatMinutes(results.getInt("LATMINUTES"));
+                location.setLatSeconds(results.getDouble("LATSECONDS"));
+                location.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
+                location.setLonDegrees(results.getInt("LONDEGREES"));
+                location.setLonMinutes(results.getInt("LONMINUTES"));
+                location.setLonSeconds(results.getDouble("LONSECONDS"));
+                location.setGPSAccuracy(GPSAccuracy.getEnumFromText(results.getString("GPSACCURACY")));
+                location.setGPSAccuracyValue(results.getDouble("GPSACCURACYVALUE"));
+                // Save the record to the new table
+                createLocation(location, false);
+            }
+            closeResultset(results);
+            results = state.executeQuery("SELECT * FROM TEMP_VISITS ORDER BY NAME");
+            while (results.next()) {
+                // Populate the record from the old table
+                Visit visit = new Visit();
+                visit.setName(results.getString("NAME"));
+                if (results.getDate("STARTDATE") != null) {
+                    visit.setStartDate(new Date(results.getDate("STARTDATE").getTime()));
+                }
+                else {
+                    visit.setStartDate(null);
+                }
+                if (results.getDate("ENDDATE") != null) {
+                    visit.setEndDate(new Date(results.getDate("ENDDATE").getTime()));
+                }
+                else {
+                    visit.setEndDate(null);
+                }
+                visit.setDescription(results.getString("DESCRIPTION"));
+                visit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(results.getString("GAMEWATCHINGINTENSITY")));
+                visit.setType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
+                Location location = findLocation(0, results.getString("LOCATIONNAME"), Location.class);
+                if (location != null) {
+                    visit.setLocationID(location.getID());
+                }
+                else {
+                    WildLogApp.LOGGER.log(Level.WARN, "Could not save the Visit [" + visit.getName() + "] "
+                            + "because the linked Location [" + results.getString("LOCATIONNAME") + "] could not be found.");
+                    continue;
+                }
+                // Save the record to the new table
+                createVisit(visit, false);
+            }
+            closeResultset(results);
+            results = state.executeQuery("SELECT * FROM TEMP_SIGHTINGS ORDER BY ELEMENTNAME, LOCATIONNAME, VISITNAME");
+            while (results.next()) {
+                // Populate the record from the old table
+                Sighting sighting = new Sighting();
+                sighting.setID(results.getLong("SIGHTINGCOUNTER"));
+                if (results.getTimestamp("SIGHTINGDATE") != null) {
+                    sighting.setDate(new Date(results.getTimestamp("SIGHTINGDATE").getTime()));
+                }
+                else {
+                    sighting.setDate(null);
+                }
+                Element element = findElement(0, results.getString("ELEMENTNAME"), Element.class);
+                if (element != null) {
+                    sighting.setElementID(element.getID());
+                }
+                else {
+                    WildLogApp.LOGGER.log(Level.WARN, "Could not save the Sighting [" + sighting.getID() + "] "
+                            + "because the linked Element [" + results.getString("ELEMENTNAME") + "] could not be found.");
+                    continue;
+                }
+                Location location = findLocation(0, results.getString("LOCATIONNAME"), Location.class);
+                if (location != null) {
+                    sighting.setLocationID(location.getID());
+                }
+                else {
+                    WildLogApp.LOGGER.log(Level.WARN, "Could not save Visit [" + sighting.getID() + "] "
+                            + "because the linked Location [" + results.getString("LOCATIONNAME") + "] could not be found.");
+                    continue;
+                }
+                Visit visit = findVisit(0, results.getString("VISITNAME"), false, Visit.class);
+                if (visit != null) {
+                    sighting.setVisitID(visit.getID());
+                }
+                else {
+                    WildLogApp.LOGGER.log(Level.WARN, "Could not save the Sighting [" + sighting.getID() + "] "
+                            + "because the linked Visit [" + results.getString("VISITNAME") + "] could not be found.");
+                    continue;
+                }
+                sighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(results.getString("TIMEOFDAY")));
+                sighting.setWeather(Weather.getEnumFromText(results.getString("WEATHER")));
+                sighting.setViewRating(ViewRating.getEnumFromText(results.getString("VIEWRATING")));
+                sighting.setCertainty(Certainty.getEnumFromText(results.getString("CERTAINTY")));
+                sighting.setNumberOfElements(results.getInt("NUMBEROFELEMENTS"));
+                sighting.setDetails(results.getString("DETAILS"));
+                sighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
+                sighting.setLatDegrees(results.getInt("LATDEGREES"));
+                sighting.setLatMinutes(results.getInt("LATMINUTES"));
+                sighting.setLatSeconds(results.getDouble("LATSECONDS"));
+                sighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
+                sighting.setLonDegrees(results.getInt("LONDEGREES"));
+                sighting.setLonMinutes(results.getInt("LONMINUTES"));
+                sighting.setLonSeconds(results.getDouble("LONSECONDS"));
+                sighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
+                sighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
+                sighting.setMoonPhase(results.getInt("MOONPHASE"));
+                sighting.setTemperature(results.getDouble("TEMPERATURE"));
+                sighting.setUnitsTemperature(UnitsTemperature.getEnumFromText(results.getString("TEMPERATUREUNIT")));
+                sighting.setLifeStatus(LifeStatus.getEnumFromText(results.getString("LIFESTATUS")));
+                sighting.setSex(Sex.getEnumFromText(results.getString("SEX")));
+                sighting.setTag(results.getString("TAG"));
+                sighting.setDurationMinutes(results.getInt("DURATIONMINUTES"));
+                sighting.setDurationSeconds(results.getDouble("DURATIONSECONDS"));
+                sighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(results.getString("GPSACCURACY")));
+                sighting.setGPSAccuracyValue(results.getDouble("GPSACCURACYVALUE"));
+                sighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(results.getString("TIMEACCURACY")));
+                sighting.setAge(Age.getEnumFromText(results.getString("AGE")));
+                // Save the record to the new table
+                setupAuditInfo(sighting);
+                createSighting(sighting, true);
+            }
+            closeResultset(results);
+            results = state.executeQuery("SELECT * FROM TEMP_FILES ORDER BY ID, ORIGINALPATH");
+            while (results.next()) {
+                // Populate the record from the old table
+                WildLogFile wildLogFile = new WildLogFile();
+                wildLogFile.setLinkID(results.getString("ID"));
+                wildLogFile.setFilename(results.getString("FILENAME"));
+                wildLogFile.setDBFilePath(results.getString("ORIGINALPATH").replace("\\", "/"));
+                wildLogFile.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
+                if (results.getDate("UPLOADDATE") != null) {
+                    wildLogFile.setUploadDate(new Date(results.getDate("UPLOADDATE").getTime()));
+                }
+                else {
+                    wildLogFile.setUploadDate(null);
+                }
+                wildLogFile.setDefaultFile(results.getBoolean("ISDEFAULT"));
+                if (results.getTimestamp("FILEDATE") != null) {
+                    wildLogFile.setFileDate(new Date(results.getTimestamp("FILEDATE").getTime()));
+                }
+                else {
+                    wildLogFile.setFileDate(null);
+                }
+                wildLogFile.setFileSize(results.getLong("FILESIZE"));
+                // Save the record to the new table
+                createWildLogFile(wildLogFile, false);
+            }
+            closeResultset(results);
+            // Drop the old tables
+            state.execute("DROP TABLE TEMP_ELEMENTS");
+            state.execute("DROP TABLE TEMP_LOCATIONS");
+            state.execute("DROP TABLE TEMP_VISITS");
+            state.execute("DROP TABLE TEMP_SIGHTINGS");
+            state.execute("DROP TABLE TEMP_FILES");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=12");
         }
         catch (SQLException ex) {
             printSQLException(ex);
+            return false;
         }
         finally {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 12");
+        return true;
     }
 
 }

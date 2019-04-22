@@ -14,30 +14,27 @@ import wildlog.ui.helpers.WLOptionPane;
 
 
 public class INatProgressbarTask extends ProgressbarTask {
-    private final Deque<INatTaskEntry> iNatQueue = new ArrayDeque<>();
+    private static final Deque<INatTaskEntry> INATQUEUE = new ArrayDeque<>();
 
     public INatProgressbarTask(Application inApplication) {
         super(inApplication);
     }
     
     public void submitTask(long inINatID, Path inFile, String inINatToken, boolean inDeleteFile) {
-        
-// FIXME: Ek raai ek sal moet sync op iets om seker te maak dat ek nie soms uploads verloor nie
-
-        iNatQueue.add(new INatTaskEntry(inINatID, inFile, inINatToken, inDeleteFile));
+        INATQUEUE.add(new INatTaskEntry(inINatID, inFile, inINatToken, inDeleteFile));
         setProgress(0);
-        setMessage("Busy with the queued iNaturalist file uploads: 1 of " + iNatQueue.size());
+        setMessage("Busy with the queued iNaturalist file uploads: 1 of " + INATQUEUE.size());
     }
 
     @Override
     protected Object doInBackground() throws Exception {
         setProgress(0);
-        setMessage("Starting the queued iNaturalist file uploads: " + iNatQueue.size() + " queued");
-        while (!iNatQueue.isEmpty()) {
+        setMessage("Starting the queued iNaturalist file uploads: " + INATQUEUE.size() + " queued");
+        while (!INATQUEUE.isEmpty()) {
             setProgress(0);
-            setMessage("Busy with the queued iNaturalist file uploads: 1 of " + iNatQueue.size());
+            setMessage("Busy with the queued iNaturalist file uploads: 1 of " + INATQUEUE.size());
             // Get the next file to upload, but don't remove from the queue until after it has been processed
-            INatTaskEntry taskEntry = iNatQueue.peek();
+            INatTaskEntry taskEntry = INATQUEUE.peek();
             if (Files.exists(taskEntry.getPath())) {
                 try {
                     INaturalistUploadPhoto iNatPhoto = new INaturalistUploadPhoto();
@@ -57,10 +54,11 @@ public class INatProgressbarTask extends ProgressbarTask {
                 }
             }
             // Remove the file form the queue after it has been processed
-            iNatQueue.poll();
+            INATQUEUE.poll();
         }
         setProgress(100);
         setMessage("Done with all queued iNaturalist file uploads");
+        cancel(false);
         return null;
     }
     
@@ -112,6 +110,10 @@ public class INatProgressbarTask extends ProgressbarTask {
             deleteAfterwards = inDeleteAfterwards;
         }
         
+    }
+    
+    public static int getINatQueueSize() {
+        return INATQUEUE.size();
     }
     
 }

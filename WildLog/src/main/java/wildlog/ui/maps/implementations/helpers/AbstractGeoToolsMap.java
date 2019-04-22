@@ -220,8 +220,9 @@ public abstract class AbstractGeoToolsMap<T extends DataObjectWithGPS> extends A
     }
     
     protected Layer getLayerForSightings(final List<Sighting> inLstSightings) {
-        System.out.println("getting lsighting layer");
+        
 // TODO: Figure uit hoe om die map te zoom na waar die punte geplot is
+
         FeatureLayer pointLayer = null;
         try {
             SimpleFeatureType type = DataUtilities.createType("WildLogPointType", "geom:Point,name:String,mydata:String");

@@ -23,6 +23,8 @@ public enum WildLogThumbnailSizes {
     LARGE(512),
     /** 700px - For Photos (Browse, Export) */
     VERY_LARGE(700),
+    /** 875px - For Photos (Cropping) */
+    VERY_VERY_LARGE(875),
     /** 1024px - For Photos (Export) */
     EXTRA_LARGE(1024),
     /** 2048px - For Photos (Max size to be uploaded to iNaturalist) */
