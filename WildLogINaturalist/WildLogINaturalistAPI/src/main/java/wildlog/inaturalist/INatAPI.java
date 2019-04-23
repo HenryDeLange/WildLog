@@ -66,15 +66,22 @@ public class INatAPI {
         return null;
     }
     
-    public static List<JsonObject> getUserObservations(String inINaturalistLoginName) {
+    public static List<JsonObject> getUserObservations(String inINaturalistLoginName, String inTaxonID, String inPlaceName) {
         try {    
             int requestPage = 0;
             int totalEntries = 0;
             final List<JsonObject> lstAllINaturalistResults = new ArrayList<>(PAGE_LIMIT_INATURALIST);
             do {
                 requestPage = requestPage + 1; // Note: Increase first because page 0 and 1 seems to return the same info
-                URL url = new URL("https://www.inaturalist.org/observations/" + inINaturalistLoginName + ".json"
-                        + "?page=" + requestPage + "&per_page=" + PAGE_LIMIT_INATURALIST);
+                String urlString = "https://www.inaturalist.org/observations/" + inINaturalistLoginName + ".json"
+                        + "?page=" + requestPage + "&per_page=" + PAGE_LIMIT_INATURALIST;
+                if (inTaxonID != null && !inTaxonID.isEmpty()) {
+                    urlString = urlString + "&taxon_id=" + inTaxonID;
+                }
+                if (inPlaceName != null && !inPlaceName.isEmpty()) {
+                    urlString = urlString + "&place_id=" + inPlaceName;
+                }
+                URL url = new URL(urlString);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setDoInput(true);

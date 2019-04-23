@@ -455,8 +455,6 @@ public class WildLogApp extends Application {
      * @param args
      */
     public static void main(String[] args) {
-        System.out.println("" + System.currentTimeMillis());
-        System.out.println("" + Long.MAX_VALUE);
         System.out.println("Startup args = " + Arrays.toString(args));
         // Set default startup settings
         ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath().normalize();

@@ -99,14 +99,19 @@ public class INatImportDialog extends JDialog {
         btnCompareScientificNames = new javax.swing.JButton();
         btnFindMissingInWildLog = new javax.swing.JButton();
         btnFindMissingInINaturalist = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtTaxonID = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtPlaceID = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import iNaturalist Observations");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/iNaturalist_small.png")).getImage());
-        setMaximumSize(new java.awt.Dimension(800, 420));
-        setMinimumSize(new java.awt.Dimension(600, 380));
+        setMaximumSize(new java.awt.Dimension(800, 500));
+        setMinimumSize(new java.awt.Dimension(620, 440));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(600, 390));
+        setPreferredSize(new java.awt.Dimension(630, 445));
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -218,6 +223,19 @@ public class INatImportDialog extends JDialog {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setText("Taxon ID:");
+
+        txtTaxonID.setToolTipText("The iNaturalist Taxon ID.");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setText("Place ID:");
+
+        txtPlaceID.setToolTipText("The iNaturalist Place ID.");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setText("Downloaded observations can be limited to a specific Taxon or Place by using the fields below (optional):");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -228,17 +246,29 @@ public class INatImportDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(5, 5, 5))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnFindMissingInWildLog, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                    .addComponent(btnFindMissingInWildLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnFindMissingInINaturalist, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnCompareScientificNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnCompareScientificNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(5, 5, 5)
+                        .addComponent(txtTaxonID)
+                        .addGap(25, 25, 25)
+                        .addComponent(jLabel2)
+                        .addGap(5, 5, 5)
+                        .addComponent(txtPlaceID)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,6 +281,14 @@ public class INatImportDialog extends JDialog {
                         .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtTaxonID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtPlaceID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addComponent(btnImport, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
                 .addComponent(btnCompareScientificNames, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -329,7 +367,7 @@ public class INatImportDialog extends JDialog {
                     String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
                     setTaskProgress(2);
                     setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
-                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
+                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName, txtTaxonID.getText(), txtPlaceID.getText());
                     setTaskProgress(5);
                     setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
                     String locationName = "iNaturalist Observations";
@@ -664,7 +702,7 @@ public class INatImportDialog extends JDialog {
                     String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
                     setTaskProgress(2);
                     setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
-                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
+                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName, txtTaxonID.getText(), txtPlaceID.getText());
                     setTaskProgress(5);
                     setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
                     int countGoodLinks = 0;
@@ -788,7 +826,7 @@ public class INatImportDialog extends JDialog {
                     String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
                     setTaskProgress(2);
                     setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
-                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
+                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName, txtTaxonID.getText(), txtPlaceID.getText());
                     setTaskProgress(5);
                     setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
                     List<Long> lstINatIDs = new ArrayList<>(lstObservationsJsonObjects.size());
@@ -897,7 +935,7 @@ public class INatImportDialog extends JDialog {
                     String loginName = userJsonElement.getAsJsonObject().get("login").getAsString();
                     setTaskProgress(2);
                     setMessage("Busy with the iNaturalist-WildLog scientific name comparison... " + getProgress() + "%");
-                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName);
+                    List<JsonObject> lstObservationsJsonObjects = INatAPI.getUserObservations(loginName, txtTaxonID.getText(), txtPlaceID.getText());
                     setTaskProgress(5);
                     setMessage("Busy with the iNaturalist-WildLog scientific name comparison... " + getProgress() + "%");
                     Map<String, List<String>> mapMismatches = new HashMap<>(15);
@@ -1008,8 +1046,13 @@ public class INatImportDialog extends JDialog {
     private javax.swing.JButton btnImport;
     private javax.swing.JButton btnOK;
     private javax.swing.JButton btnViewWebsite;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JPanel pnlButtons;
+    private javax.swing.JTextField txtPlaceID;
+    private javax.swing.JTextField txtTaxonID;
     // End of variables declaration//GEN-END:variables
 }
