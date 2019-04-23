@@ -149,8 +149,9 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG ("
             + "VERSION int DEFAULT " + WILDLOG_DB_VERSION + ", "
-            + "DEFAULTLATITUDE double DEFAULT -28.7, "
+            + "DEFAULTLATITUDE double DEFAULT -28.2, "
             + "DEFAULTLONGITUDE double DEFAULT 24.7, "
+            + "DEFAULTZOOM double DEFAULT 20.0, "
             + "DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, "
             + "DEFAULTSLIDESHOWSIZE int DEFAULT 750, "
             + "USETHUMBNAILTABLES smallint DEFAULT true, "
@@ -316,7 +317,7 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITUSER) "
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createWildLogOptions = "INSERT INTO WILDLOG VALUES ("
-            + "DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, ?, DEFAULT, DEFAULT, DEFAULT)";
+            + "DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, ?, DEFAULT, DEFAULT, DEFAULT)";
     protected static final String createAdhocData = "INSERT INTO ADHOC ("
             + "FIELDID, "
             + "DATAKEY, "
@@ -435,6 +436,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String updateWildLogOptions = "UPDATE WILDLOG SET "
             + "DEFAULTLATITUDE = ?, "
             + "DEFAULTLONGITUDE = ?, "
+            + "DEFAULTZOOM = ?, "
             + "DEFAULTSLIDESHOWSPEED = ?, "
             + "DEFAULTSLIDESHOWSIZE = ?, "
             + "USETHUMBNAILTABLES = ?, "
@@ -1249,6 +1251,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempWildLogOptions.setDatabaseVersion(results.getInt("VERSION"));
                 tempWildLogOptions.setDefaultLatitude(results.getDouble("DEFAULTLATITUDE"));
                 tempWildLogOptions.setDefaultLongitude(results.getDouble("DEFAULTLONGITUDE"));
+                tempWildLogOptions.setDefaultZoom(results.getDouble("DEFAULTZOOM"));
                 tempWildLogOptions.setDefaultSlideshowSpeed(results.getFloat("DEFAULTSLIDESHOWSPEED"));
                 tempWildLogOptions.setDefaultSlideshowSize(results.getInt("DEFAULTSLIDESHOWSIZE"));
                 tempWildLogOptions.setUseThumbnailTables(results.getBoolean("USETHUMBNAILTABLES"));
@@ -2153,17 +2156,18 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.prepareStatement(updateWildLogOptions);
             state.setDouble(1, inWildLogOptions.getDefaultLatitude());
             state.setDouble(2, inWildLogOptions.getDefaultLongitude());
-            state.setFloat(3, inWildLogOptions.getDefaultSlideshowSpeed());
-            state.setInt(4, inWildLogOptions.getDefaultSlideshowSize());
-            state.setBoolean(5, inWildLogOptions.isUseThumbnailTables());
-            state.setBoolean(6, inWildLogOptions.isUseThumnailBrowsing());
-            state.setBoolean(7, inWildLogOptions.isEnableSounds());
-            state.setBoolean(8, inWildLogOptions.isUseScientificNames());
-            state.setString(9, inWildLogOptions.getWorkspaceName());
-            state.setLong(10, inWildLogOptions.getWorkspaceID());
-            state.setBoolean(11, inWildLogOptions.isUploadLogs());
-            state.setBoolean(12, inWildLogOptions.isBundledPlayers());
-            state.setBoolean(13, inWildLogOptions.isUseIndividualsInSightingPath());
+            state.setDouble(3, inWildLogOptions.getDefaultZoom());
+            state.setFloat(4, inWildLogOptions.getDefaultSlideshowSpeed());
+            state.setInt(5, inWildLogOptions.getDefaultSlideshowSize());
+            state.setBoolean(6, inWildLogOptions.isUseThumbnailTables());
+            state.setBoolean(7, inWildLogOptions.isUseThumnailBrowsing());
+            state.setBoolean(8, inWildLogOptions.isEnableSounds());
+            state.setBoolean(9, inWildLogOptions.isUseScientificNames());
+            state.setString(10, inWildLogOptions.getWorkspaceName());
+            state.setLong(11, inWildLogOptions.getWorkspaceID());
+            state.setBoolean(12, inWildLogOptions.isUploadLogs());
+            state.setBoolean(13, inWildLogOptions.isBundledPlayers());
+            state.setBoolean(14, inWildLogOptions.isUseIndividualsInSightingPath());
             // Execute
             state.executeUpdate();
          }

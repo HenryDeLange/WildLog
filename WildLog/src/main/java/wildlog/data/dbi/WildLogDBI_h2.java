@@ -959,7 +959,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         super.deleteWildLogFile(inID);
         // Next, delete the original image
         try {
-            Files.deleteIfExists(WildLogPaths.getFullWorkspacePrefix().resolve(dbFilePath).normalize().toAbsolutePath());
+            Files.deleteIfExists(WildLogPaths.getFullWorkspacePrefix().resolve(dbFilePath).normalize().toAbsolutePath().normalize());
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -1582,6 +1582,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state = conn.createStatement();
             // Increase the cache size to 75MB (in KB)
             state.execute("SET CACHE_SIZE 76800");
+            // Add the offline map zoom level
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTZOOM double DEFAULT 20.0");
             // Drop the columns I'm no longer going to support going forward
             state.execute("ALTER TABLE ELEMENTS DROP COLUMN WATERDEPENDANCE");
             state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEMALEMIN");

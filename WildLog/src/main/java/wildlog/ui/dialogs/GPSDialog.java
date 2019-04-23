@@ -1,7 +1,5 @@
 package wildlog.ui.dialogs;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -37,8 +35,10 @@ import javax.swing.text.JTextComponent;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
 import org.apache.logging.log4j.Level;
-import org.geotools.data.DataSourceException;
 import org.geotools.data.DataUtilities;
+import org.geotools.data.FileDataStore;
+import org.geotools.data.FileDataStoreFinder;
+import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.factory.FactoryRegistryException;
 import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.SchemaException;
@@ -48,6 +48,8 @@ import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.GridReaderLayer;
 import org.geotools.styling.Style;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import wildlog.WildLogApp;
@@ -1803,11 +1805,19 @@ public class GPSDialog extends JDialog {
         map = new GeoToolsMapJavaFX(inJFXPanel, false);
         // Background layer
         try {
+            // Base raster
             GeoTiffReader reader = new GeoTiffReader(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath()
                     .resolve(BundledMapLayers.EARTH_MODERN.getRelativePath()).toFile());
             map.addLayer(new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader)));
+            // Countries
+            FileDataStore shapeStore = FileDataStoreFinder.getDataStore(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath()
+                    .resolve(BundledMapLayers.BASE_WORLD.getRelativePath()).toFile());
+            SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
+            FeatureLayer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource,
+                    Color.BLACK, Color.BLACK, 0.8, 0.0), BundledMapLayers.BASE_WORLD.name());
+            map.addLayer(shapelayer);
         }
-        catch (DataSourceException ex) {
+        catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         // Point layer
@@ -1825,8 +1835,13 @@ public class GPSDialog extends JDialog {
         catch (SchemaException | FactoryRegistryException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
+        // Set the default map bounds and zoom
+        map.setStartBounds(
+                WildLogApp.getApplication().getWildLogOptions().getDefaultLatitude(), 
+                WildLogApp.getApplication().getWildLogOptions().getDefaultLongitude(), 
+                WildLogApp.getApplication().getWildLogOptions().getDefaultZoom());
         // Reload the map to make sure the layers are added correctly, etc.
-        map.reloadMap();
+        //map.reloadMap(); // Not needed, will be done by the setStartBounds() method when its done
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

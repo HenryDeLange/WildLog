@@ -664,7 +664,7 @@ public final class WildLogView extends JFrame {
         lblSettingsPath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         lblSettingsPath.setForeground(new java.awt.Color(163, 179, 144));
         lblSettingsPath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString());
+        lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().normalize().toString());
         lblSettingsPath.setName("lblSettingsPath"); // NOI18N
 
         lblEdition.setFont(new java.awt.Font("Tahoma", 0, 30)); // NOI18N
@@ -1536,8 +1536,8 @@ public final class WildLogView extends JFrame {
         mappingMenu.setText("Map Settings");
         mappingMenu.setName("mappingMenu"); // NOI18N
 
-        mnuMapStartMenuItem.setText("Set Legacy Map Start Location");
-        mnuMapStartMenuItem.setToolTipText("Select the GPS location where the Legacy Online Map will open at by default.");
+        mnuMapStartMenuItem.setText("Set Offline Map Start Position");
+        mnuMapStartMenuItem.setToolTipText("Select the GPS location where the Offline Maps will open at by default.");
         mnuMapStartMenuItem.setName("mnuMapStartMenuItem"); // NOI18N
         mnuMapStartMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1754,7 +1754,7 @@ public final class WildLogView extends JFrame {
     private void mnuMapStartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMapStartMenuItemActionPerformed
         WildLogOptions options = app.getWildLogOptions();
         String inputLat = (String) WLOptionPane.showInputDialog(app.getMainFrame(),
-                "Please specify the default Latitude to use for the map. (As decimal degrees, for example -33.4639)",
+                "Please specify the default Latitude to use for the Offline Maps. (As decimal degrees, for example -33.4639)",
                 "Default Latitude", JOptionPane.QUESTION_MESSAGE,  
                 null, null, options.getDefaultLatitude());
         if (inputLat != null) {
@@ -1766,12 +1766,24 @@ public final class WildLogView extends JFrame {
             }
         }
         String inputLon = (String) WLOptionPane.showInputDialog(app.getMainFrame(),
-                "Please specify the default Longitude to use for the map. (As decimal degrees, for example 20.9562)",
+                "Please specify the default Longitude to use for the Offline Maps. (As decimal degrees, for example 20.9562)",
                 "Default Longitude", JOptionPane.QUESTION_MESSAGE,  
                 null, null, options.getDefaultLongitude());
         if (inputLon != null) {
             try {
                 options.setDefaultLongitude(Double.parseDouble(inputLon));
+            }
+            catch (NumberFormatException e) {
+                // Do Nothing
+            }
+        }
+        String inputZoom = (String) WLOptionPane.showInputDialog(app.getMainFrame(),
+                "Please specify the default Zoom to use for the Offline Maps. (As a decimal value, for example 12.5)",
+                "Default Zoom", JOptionPane.QUESTION_MESSAGE,  
+                null, null, options.getDefaultZoom());
+        if (inputZoom != null) {
+            try {
+                options.setDefaultZoom(Double.parseDouble(inputZoom));
             }
             catch (NumberFormatException e) {
                 // Do Nothing
@@ -4593,7 +4605,7 @@ public final class WildLogView extends JFrame {
                                 final List<Path> lstPathsToCopyFrom = new ArrayList<>();
                                 final List<Path> lstPathsToCopyTo = new ArrayList<>();
                                 Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
-                                Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath();
+                                Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
                                 // Walk the echo path and delete all folders and files that aren't in the active Workspace
                                 setProgress(2);
                                 setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + getProgress() + "%");
@@ -4602,13 +4614,13 @@ public final class WildLogView extends JFrame {
                                     @Override
                                     public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
                                         if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFolderPath)))) {
-                                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath());
+                                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath().normalize());
                                             return FileVisitResult.SKIP_SUBTREE;
                                         }
                                         // Always delete some folders (if somehow present)
                                         if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
                                                 || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
-                                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath());
+                                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath().normalize());
                                             return FileVisitResult.SKIP_SUBTREE;
                                         }
                                         return FileVisitResult.CONTINUE;
@@ -4617,7 +4629,7 @@ public final class WildLogView extends JFrame {
                                     @Override
                                     public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
                                         if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFilePath)))) {
-                                            lstPathsToDelete.add(inFilePath.normalize().toAbsolutePath());
+                                            lstPathsToDelete.add(inFilePath.normalize().toAbsolutePath().normalize());
                                         }
                                         return FileVisitResult.CONTINUE;
                                     }
@@ -4646,13 +4658,13 @@ public final class WildLogView extends JFrame {
                                         }
                                         Path echoFile = echoPath.resolve(workspacePath.relativize(inFilePath));
                                         if (!Files.exists(echoFile)) {
-                                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath());
-                                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath());
+                                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath().normalize());
+                                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath().normalize());
                                         }
                                         else
                                         if (Files.size(inFilePath) != Files.size(echoFile)) {
-                                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath());
-                                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath());
+                                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath().normalize());
+                                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath().normalize());
                                         }
                                         return FileVisitResult.CONTINUE;
                                     }
@@ -4716,7 +4728,7 @@ public final class WildLogView extends JFrame {
                                     feedback.close();
                                     // Copy the report to the echo folder
                                     try {
-                                        Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath();
+                                        Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
                                         UtilsFileProcessing.copyFile(feedbackFile, echoPath.resolve(feedbackFile.getFileName()), true, true);
                                     }
                                     catch (Exception ex) {

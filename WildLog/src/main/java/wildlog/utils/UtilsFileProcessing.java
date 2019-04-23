@@ -199,7 +199,7 @@ public final class UtilsFileProcessing {
             int inSequenceIndex, WildLogApp inApp, DataObjectWithWildLogFile inDAOWithID, boolean inCreateThumbnails, Object inTheLock, 
             LocalDateTime inFirstFileDate) {
         // Make the folder
-        Path toFolder = inWorkspacePath.getAbsoluteFullPath().resolve(inPrefixFolder).normalize().toAbsolutePath();
+        Path toFolder = inWorkspacePath.getAbsoluteFullPath().resolve(inPrefixFolder).normalize().toAbsolutePath().normalize();
         try {
             Files.createDirectories(toFolder);
         }
@@ -351,7 +351,7 @@ public final class UtilsFileProcessing {
                     if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
                         if (Files.exists(WildLogPaths.OPEN_JPEGVIEW.getAbsoluteFullPath())) {
                             ProcessBuilder processBuilder = new ProcessBuilder(WildLogPaths.OPEN_JPEGVIEW.getAbsoluteFullPath().toString(), 
-                                    inPath.normalize().toAbsolutePath().toString());
+                                    inPath.normalize().toAbsolutePath().normalize().toString());
                             Process process = processBuilder.start();
                             usedBundledViewers = true;
                         }
@@ -360,7 +360,7 @@ public final class UtilsFileProcessing {
                     if (WildLogFileExtentions.Movies.isKnownExtention(inPath)) {
                         if (Files.exists(WildLogPaths.OPEN_MEDIA_PLAYER_CLASSIC.getAbsoluteFullPath())) {
                             ProcessBuilder processBuilder = new ProcessBuilder(WildLogPaths.OPEN_MEDIA_PLAYER_CLASSIC.getAbsoluteFullPath().toString(), 
-                                    inPath.normalize().toAbsolutePath().toString());
+                                    inPath.normalize().toAbsolutePath().normalize().toString());
                             Process process = processBuilder.start();
                             usedBundledViewers = true;
                         }
@@ -368,7 +368,7 @@ public final class UtilsFileProcessing {
                 }
                 // Use the default way of openng if no bundled viewer was used
                 if (!usedBundledViewers) {
-                    Desktop.getDesktop().open(inPath.normalize().toAbsolutePath().toFile());
+                    Desktop.getDesktop().open(inPath.normalize().toAbsolutePath().normalize().toFile());
                 }
             }
             catch (IOException ex) {
@@ -378,17 +378,17 @@ public final class UtilsFileProcessing {
                 try {
                     String os = System.getProperty("os.name").toLowerCase();
                     if (os.contains("mac")) {
-                        String[] commands = {"open", "%s", inPath.normalize().toAbsolutePath().toFile().toString()};
+                        String[] commands = {"open", "%s", inPath.normalize().toAbsolutePath().normalize().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                     else
                     if (os.contains("windows") || os.contains("nt")) {
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath.normalize().toAbsolutePath().toFile().toString()};
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath.normalize().toAbsolutePath().normalize().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                     else
                     if ((os.contains("windows") || os.contains("nt")) && (os.equals("windows 95") || os.equals("windows 98"))) {
-                        String[] commands = {"command.com", "/C", "start", "%s", inPath.normalize().toAbsolutePath().toFile().toString()};
+                        String[] commands = {"command.com", "/C", "start", "%s", inPath.normalize().toAbsolutePath().normalize().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                 }

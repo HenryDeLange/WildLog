@@ -1,7 +1,5 @@
 package wildlog.maps.geotools;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,6 +25,8 @@ import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
 import org.geotools.styling.SLD;
 import org.geotools.styling.Style;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -57,13 +57,16 @@ public class BasicLauncher {
         btnIdentify.addActionListener((e) -> { map.identify(); });
         btnIdentify.setPreferredSize(new Dimension(0, 50));
         frame.add(btnIdentify, BorderLayout.NORTH);
+        JButton btnReposition = new JButton("Reposition");
+        btnReposition.addActionListener((e) -> { map.setStartBounds(-33.733778, 26.569936, 2); });
+        btnReposition.setPreferredSize(new Dimension(0, 50));
+        frame.add(btnReposition, BorderLayout.SOUTH);
         // ADD LAYERS
         // GeoTiff
         try {
-            File geotiff = new File("C:\\Users\\Henry\\Desktop\\Maps\\__FINALE_MAPS\\Earth Colours - Modern\\world_today_medium.tif");
-//            File geotiff = new File("C:\\WildLogToets\\WildLog\\Maps\\Layers\\Climate_Temperature_Min\\02Feb.tif");
+            File geotiff = new File("..\\WildLogMapData\\src\\main\\resources\\Layers\\Earth_Modern\\world_modern.tif");
             GeoTiffReader reader = new GeoTiffReader(geotiff);
-            Layer gridlayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader), "world - base layer");
+            GridReaderLayer gridlayer = new GridReaderLayer(reader, GeoToolsLayerUtils.createGeoTIFFStyleRGB(reader), "world - base layer");
             map.addLayer(gridlayer);
         }
         catch (DataSourceException ex) {
@@ -71,7 +74,7 @@ public class BasicLauncher {
         }
         // Shapefile
         try {
-            File shapefile = new File("C:\\Users\\Henry\\Desktop\\Maps\\__FINALE_MAPS\\Base - World\\Small\\world.shp");
+            File shapefile = new File("..\\WildLogMapData\\src\\main\\resources\\Layers\\Base_World\\world.shp");
             FileDataStore shapeStore = FileDataStoreFinder.getDataStore(shapefile);
             SimpleFeatureSource shapeSource = shapeStore.getFeatureSource();
             Layer shapelayer = new FeatureLayer(shapeSource, GeoToolsLayerUtils.createShapefileStyleBasic(shapeSource, 
@@ -97,7 +100,6 @@ public class BasicLauncher {
             collection.add(feature);
             Style pointStyle = SLD.createPointStyle("Circle", Color.MAGENTA, Color.MAGENTA, 0.9f, 15);
             FeatureLayer pointLayer = new FeatureLayer(collection, pointStyle, "custom points");
-// FIXME: Make the points selectable... (Maybe too small, or something weird about the layer or feature types...)
             map.addLayer(pointLayer);
         }
         catch (SchemaException | FactoryRegistryException ex) {
@@ -109,6 +111,8 @@ public class BasicLauncher {
 //        File adf = new File("C:\\Users\\Henry\\Desktop\\Maps\\Temperature\\Mean\\tmean_5m_esri\\tmean\\tmean_1\\w001001.adf");
 //        BaseGDALGridCoverage2DReader reader = new AIGReader(adf);
         
+        // Set the startup bounds
+        map.setStartBounds(-28.2, 24.7, 20);
         // RELOAD MAP (to display the added layers)
         map.reloadMap();
     }

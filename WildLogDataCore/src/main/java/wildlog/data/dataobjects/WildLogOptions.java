@@ -5,6 +5,7 @@ public class WildLogOptions {
     private int databaseVersion;
     private double defaultLatitude;
     private double defaultLongitude;
+    private double defaultZoom;
     private float defaultSlideshowSpeed;
     private int defaultSlideshowSize;
     private boolean useThumbnailTables;
@@ -40,6 +41,14 @@ public class WildLogOptions {
 
     public void setDefaultLongitude(double inDefaultLongitude) {
         defaultLongitude = inDefaultLongitude;
+    }
+
+    public double getDefaultZoom() {
+        return defaultZoom;
+    }
+
+    public void setDefaultZoom(double inDefaultZoom) {
+        this.defaultZoom = inDefaultZoom;
     }
 
     public float getDefaultSlideshowSpeed() {

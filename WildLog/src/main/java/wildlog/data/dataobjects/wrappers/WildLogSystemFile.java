@@ -23,7 +23,7 @@ public class WildLogSystemFile extends WildLogFile {
         super(inID, inLinkID, inFilename, inFilePath, inFileType, null, null, 0);
         originalPath = WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath()
                 .resolve(WILDLOG_FOLDER_PREFIX)
-                .resolve(inFilename).normalize().toAbsolutePath();
+                .resolve(inFilename).normalize().toAbsolutePath().normalize();
         // Make sure the file original file has been copied out of the JAR and is in the thumbnails folder.
         copyOriginalFileToThumbnails();
     }

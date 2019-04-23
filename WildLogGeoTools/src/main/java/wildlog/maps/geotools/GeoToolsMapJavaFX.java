@@ -30,11 +30,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
+import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
 import org.geotools.renderer.GTRenderer;
@@ -121,7 +123,6 @@ public class GeoToolsMapJavaFX {
                     imageView.getScene().getRoot().setCursor(Cursor.DEFAULT);
                     List<Map<String, String>> lstInfoForLayers = new ArrayList<>();
                     for (Layer layer : mapContent.layers()) {
-// TODO: Handle GeoTIFF layers ook
                         if (layer instanceof FeatureLayer) {
                             FeatureLayer featureLayer = (FeatureLayer) layer;
                             Rectangle screenRect = new Rectangle((int) inMouseEvent.getSceneX() - 5, (int) inMouseEvent.getSceneY() - 5, 10, 10);
@@ -138,7 +139,7 @@ public class GeoToolsMapJavaFX {
                                 for (SimpleFeature simpleFeature : features.toArray(new SimpleFeature[]{})) {
                                     // Get the attributes to display
                                     Map<String, String> mapInfo = new LinkedHashMap<>();
-                                    mapInfo.put("<<< " + layer.getTitle() + " >>>", "");
+                                    mapInfo.put("*** SHAPE LAYER ***", layer.getTitle());
                                     for (Property value : simpleFeature.getValue()) {
                                         if (value != null && value.getName() != null && value.getValue() != null 
                                                 && !value.getName().toString().equals(propertyName)) {
@@ -154,7 +155,28 @@ public class GeoToolsMapJavaFX {
                                 ex.printStackTrace(System.err);
                             }
                         }
+                        else
+                        if (layer instanceof GridReaderLayer) {
+                            GridReaderLayer gridReaderLayer = (GridReaderLayer) layer;
+                            Map<String, String> mapInfo = new LinkedHashMap<>();
+                            mapInfo.put("*** RASTER LAYER ***", gridReaderLayer.getTitle());
+                            lstInfoForLayers.add(mapInfo);
+                        }
                     }
+                    // Die cursor is dodgy, so ek stel dit maar orals en wrapped in Swing + JavaFx runnables
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    imageView.setCursor(Cursor.DEFAULT);
+                                    imageView.getScene().setCursor(Cursor.DEFAULT);
+                                    imageView.getScene().getRoot().setCursor(Cursor.DEFAULT);
+                                }
+                            });
+                        }
+                    });
                     if (!lstInfoForLayers.isEmpty()) {
                         Platform.runLater(new Runnable() {
                             @Override
@@ -397,13 +419,45 @@ public class GeoToolsMapJavaFX {
         reloadMap();
     }
     
-    public void identify() {
-        identifyIsActive = true;
-// FIXME: Die cursor storie werk nie altyd nie...? Lyk of die probleem gebeur na 'n zoom...
-        Platform.runLater(new Runnable() {
+    public void setStartBounds(double inLat, double inLon, double inZoom) {
+        // Delay the repositioning a little bit to give the jfxPanel time to get its final size
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                imageView.getScene().getRoot().setCursor(Cursor.CROSSHAIR);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        double ratio = (double) jfxPanel.getHeight() / (double) jfxPanel.getWidth();
+                        double x1 = inLon - (inZoom * 0.5);
+                        double x2 = inLon + (inZoom * 0.5);
+                        double y1 = inLat - (inZoom * 0.5 * ratio);
+                        double y2 = inLat + (inZoom * 0.5 * ratio);
+                        mapContent.getViewport().setMatchingAspectRatio(true);
+                        mapContent.getViewport().setBounds(new ReferencedEnvelope(
+                                Math.min(x1, x2), Math.max(x1, x2),
+                                Math.min(y1, y2), Math.max(y1, y2),
+                                mapContent.getCoordinateReferenceSystem()));
+                        reloadMap();
+                    }
+                });
+            }
+        });
+    }
+    
+    public void identify() {
+        identifyIsActive = true;
+        // Die cursor is dodgy, so ek stel dit maar orals en wrapped in Swing + JavaFx runnables
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        imageView.setCursor(Cursor.CROSSHAIR);
+                        imageView.getScene().setCursor(Cursor.CROSSHAIR);
+                        imageView.getScene().getRoot().setCursor(Cursor.CROSSHAIR);
+                    }
+                });
             }
         });
     }

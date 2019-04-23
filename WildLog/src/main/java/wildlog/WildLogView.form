@@ -780,8 +780,8 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuMapStartMenuItem">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Set Legacy Map Start Location"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select the GPS location where the Legacy Online Map will open at by default."/>
+                    <Property name="text" type="java.lang.String" value="Set Offline Map Start Position"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select the GPS location where the Offline Maps will open at by default."/>
                     <Property name="name" type="java.lang.String" value="mnuMapStartMenuItem" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1510,7 +1510,7 @@
                     </Property>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString()" type="code"/>
+                      <Connection code="WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().normalize().toString()" type="code"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblSettingsPath" noResource="true"/>
                   </Properties>

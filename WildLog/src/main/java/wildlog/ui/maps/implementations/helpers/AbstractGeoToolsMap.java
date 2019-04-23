@@ -1,7 +1,5 @@
 package wildlog.ui.maps.implementations.helpers;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.List;
@@ -29,11 +27,12 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.geometry.jts.JTSFactoryFinder;
-import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
 import org.geotools.styling.Style;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import wildlog.WildLogApp;
@@ -75,25 +74,23 @@ public abstract class AbstractGeoToolsMap<T extends DataObjectWithGPS> extends A
             public void run() {
                 // Create the map when the initial JFXPanel size is available. 
                 // The map needs to be recreated, because the root node must be reset.
-                // Remember the map position and zoom
-                ReferencedEnvelope bounds = null;
                 if (map != null) {
-                    bounds = map.getBounds();
                     // Dispose the old map
                     map.dispose();
                 }
                 // Create the new map
                 map = new GeoToolsMapJavaFX(mapsBaseDialog.getJFXMapPanel(), enhanceContrast);
-                // Reapply the map position and zoom
-                if (bounds != null) {
-                    map.setBounds(bounds);
-                }
-                // Continue to create the layers for the map
+                // Create the layers for the map
                 createMap(mapsBaseDialog.getJFXMapPanel().getScene());
+                // Use the default coordinates for the initial load
+                map.setStartBounds(
+                        WildLogApp.getApplication().getWildLogOptions().getDefaultLatitude(), 
+                        WildLogApp.getApplication().getWildLogOptions().getDefaultLongitude(), 
+                        WildLogApp.getApplication().getWildLogOptions().getDefaultZoom());
                 // Add the watermark overlay
                 applyWatermark();
                 // Refresh the map to display the added layers
-                map.reloadMap();
+                //map.reloadMap(); // Not needed, will be done by the setStartBounds() method when its done
                 // Hide waiting cursor
                 mapsBaseDialog.getGlassPane().setCursor(java.awt.Cursor.getDefaultCursor());
                 mapsBaseDialog.getGlassPane().setVisible(false);
@@ -220,9 +217,6 @@ public abstract class AbstractGeoToolsMap<T extends DataObjectWithGPS> extends A
     }
     
     protected Layer getLayerForSightings(final List<Sighting> inLstSightings) {
-        
-// TODO: Figure uit hoe om die map te zoom na waar die punte geplot is
-
         FeatureLayer pointLayer = null;
         try {
             SimpleFeatureType type = DataUtilities.createType("WildLogPointType", "geom:Point,name:String,mydata:String");

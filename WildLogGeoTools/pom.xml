@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mywild</groupId>
     <artifactId>WildLogGeoTools</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>This library encapsulates the core GeoTools functionality to make it easier for WildLog to import and use.
 (It is also easier to use GeoTools with Maven and I don't want to move WildLog to Maven at this point in time.)</description>
@@ -16,7 +16,7 @@
         <!--<geotools.version>16.2</geotools.version>-->
         <!--<geotools.version>17.1</geotools.version>-->
         <!--<geotools.version>17.4</geotools.version>-->
-        <geotools.version>19.1</geotools.version>
+        <geotools.version>20.0</geotools.version>
         <!-- THE GEOTIFFS WORKS DON'T WORK IN THESE VERSIONS -->
         <!--<geotools.version>15-SNAPSHOT</geotools.version>-->
         <!--<geotools.version>14-RC1</geotools.version>-->
