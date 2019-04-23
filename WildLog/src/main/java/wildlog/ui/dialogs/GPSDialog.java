@@ -104,6 +104,8 @@ public class GPSDialog extends JDialog {
     private boolean dmsHasBeenLoaded = false;
     private WebView webView = null;
     private boolean markerWasMovedButNotYetRead = false;
+    private boolean showingOnlineMap = false;
+    private boolean showingOfflineMap = false;
 
     
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
@@ -420,6 +422,7 @@ public class GPSDialog extends JDialog {
         pnlMapTools = new javax.swing.JPanel();
         btnUpdateGPSOnMap = new javax.swing.JButton();
         btnUpdateGPSFromMap = new javax.swing.JButton();
+        lblOfflineTip = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         cmbAccuracy = new javax.swing.JComboBox();
         spnLatDecimal = new javax.swing.JSpinner();
@@ -627,22 +630,32 @@ public class GPSDialog extends JDialog {
             }
         });
 
+        lblOfflineTip.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        lblOfflineTip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblOfflineTip.setText("To move the point on the map use CTRL + left-click, or simply right-click.");
+        lblOfflineTip.setName("lblOfflineTip"); // NOI18N
+
         javax.swing.GroupLayout pnlMapToolsLayout = new javax.swing.GroupLayout(pnlMapTools);
         pnlMapTools.setLayout(pnlMapToolsLayout);
         pnlMapToolsLayout.setHorizontalGroup(
             pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlMapToolsLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(btnUpdateGPSOnMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0)
-                .addComponent(btnUpdateGPSFromMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMapToolsLayout.createSequentialGroup()
+                        .addComponent(btnUpdateGPSOnMap, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                        .addGap(1, 1, 1)
+                        .addComponent(btnUpdateGPSFromMap, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))
+                    .addComponent(lblOfflineTip, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         pnlMapToolsLayout.setVerticalGroup(
             pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(btnUpdateGPSFromMap)
-                .addComponent(btnUpdateGPSOnMap))
+            .addGroup(pnlMapToolsLayout.createSequentialGroup()
+                .addGroup(pnlMapToolsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnUpdateGPSFromMap)
+                    .addComponent(btnUpdateGPSOnMap))
+                .addGap(1, 1, 1)
+                .addComponent(lblOfflineTip))
         );
 
         pnlMap.add(pnlMapTools, java.awt.BorderLayout.PAGE_START);
@@ -819,7 +832,7 @@ public class GPSDialog extends JDialog {
                                     .addGap(10, 10, 10)
                                     .addComponent(spnLatMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(10, 10, 10)
-                                    .addComponent(spnLatSec, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                                    .addComponent(spnLatSec))
                                 .addComponent(spnLatDecimal)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(120, 120, 120)
@@ -890,9 +903,9 @@ public class GPSDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(tglDecimalDegrees, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                                .addComponent(tglDecimalDegrees, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tglDegMinSec, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE))
+                                .addComponent(tglDegMinSec, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1174,6 +1187,8 @@ public class GPSDialog extends JDialog {
     }
     
     private void btnUseOfflineMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseOfflineMapActionPerformed
+        showingOnlineMap = false;
+        showingOfflineMap = true;
         // Setup the map
         if (!pnlMap.isVisible()) {
             pnlMap.setVisible(true);
@@ -1181,6 +1196,10 @@ public class GPSDialog extends JDialog {
             UtilsDialog.setDialogToCenter(getOwner(), this);
         }
         pnlMap.removeAll();
+        lblOfflineTip.setVisible(showingOfflineMap);
+        pnlMap.add(pnlMapTools, BorderLayout.NORTH);
+        pnlMap.invalidate();
+        pnlMap.repaint();
         JFXPanel jfxPanel = new JFXPanel();
         jfxPanel.setPreferredSize(pnlMap.getSize());
         pnlMap.add(jfxPanel, BorderLayout.CENTER);
@@ -1363,6 +1382,8 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_btnUseRelatedActionPerformed
 
     private void btnUseOnlineMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseOnlineMapActionPerformed
+        showingOnlineMap = true;
+        showingOfflineMap = false;
         // Setup the map
         if (!pnlMap.isVisible()) {
             pnlMap.setVisible(true);
@@ -1370,6 +1391,7 @@ public class GPSDialog extends JDialog {
             UtilsDialog.setDialogToCenter(getOwner(), this);
         }
         pnlMap.removeAll();
+        lblOfflineTip.setVisible(showingOfflineMap);
         pnlMap.add(pnlMapTools, BorderLayout.NORTH);
         pnlMap.invalidate();
         pnlMap.repaint();
@@ -1431,83 +1453,122 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_tglWestActionPerformed
 
     private void btnUpdateGPSFromMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateGPSFromMapActionPerformed
-        if (webView != null) {
+        if (showingOnlineMap) {
+            if (webView != null) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            // Get Marker Latitude
+                            Object result = webView.getEngine().executeScript("getMarkerLatitude()");
+                            if (result instanceof Double) {
+                                uiLatitude = (double) result;
+                            }
+                            else 
+                            if (result instanceof Integer) {
+                                uiLatitude = (double) ((int) result);
+                            }
+                            // Get Marker Longitude
+                            result = webView.getEngine().executeScript("getMarkerLongitude()");
+                            if (result instanceof Double) {
+                                uiLongitude = (double) result;
+                            }
+                            else 
+                            if (result instanceof Integer) {
+                                uiLongitude = (double) ((int) result);
+                            }
+                            // Update the UI
+                            if (tglDecimalDegrees.isSelected()) {
+                                setupDD();
+                            }
+                            else {
+                                setupDMS();
+                            }
+                            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                Toolkit.getDefaultToolkit().beep();
+                            }
+                            markerWasMovedButNotYetRead = false;
+                        }
+                        catch (JSException ex) {
+                            // Ignore most of these errors which can happen when pressing the button before the page was fully loaded
+                            WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+                        }
+                        catch (Exception ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        }
+                    }
+                });
+            }
+        }
+        else
+        if (showingOfflineMap) {
             Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        // Get Marker Latitude
-                        Object result = webView.getEngine().executeScript("getMarkerLatitude()");
-                        if (result instanceof Double) {
-                            uiLatitude = (double) result;
+                    @Override
+                    public void run() {
+                        try {
+                            // Get Marker Latitude
+                            uiLatitude = map.getPlacedPointLatitude();
+                            // Get Marker Longitude
+                            uiLongitude = map.getPlacedPointLongitude();
+                            // Update the UI
+                            if (tglDecimalDegrees.isSelected()) {
+                                setupDD();
+                            }
+                            else {
+                                setupDMS();
+                            }
+                            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                Toolkit.getDefaultToolkit().beep();
+                            }
                         }
-                        else 
-                        if (result instanceof Integer) {
-                            uiLatitude = (double) ((int) result);
+                        catch (JSException ex) {
+                            // Ignore most of these errors which can happen when pressing the button before the page was fully loaded
+                            WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
                         }
-                        // Get Marker Longitude
-                        result = webView.getEngine().executeScript("getMarkerLongitude()");
-                        if (result instanceof Double) {
-                            uiLongitude = (double) result;
+                        catch (Exception ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
-                        else 
-                        if (result instanceof Integer) {
-                            uiLongitude = (double) ((int) result);
-                        }
-                        // Update the UI
-                        if (tglDecimalDegrees.isSelected()) {
-                            setupDD();
-                        }
-                        else {
-                            setupDMS();
-                        }
-                        if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                            Toolkit.getDefaultToolkit().beep();
-                        }
-                        markerWasMovedButNotYetRead = false;
                     }
-                    catch (JSException ex) {
-                        // Ignore most of these errors which can happen when pressing the button before the page was fully loaded
-                        WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
-                    }
-                    catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    }
-                }
-            });
+                });
         }
     }//GEN-LAST:event_btnUpdateGPSFromMapActionPerformed
 
     private void btnUpdateGPSOnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateGPSOnMapActionPerformed
-        if (webView != null) {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        // Get latest values from UI
-                        if (tglDecimalDegrees.isSelected()) {
-                            loadValuesFromDD();
+        if(showingOnlineMap) {
+            if (webView != null) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            // Get latest values from UI
+                            if (tglDecimalDegrees.isSelected()) {
+                                loadValuesFromDD();
+                            }
+                            else {
+                                loadValuesFromDMS();
+                            }
+                            // Set the Marker Latitude and Longitude
+                            webView.getEngine().executeScript("setMarkerLatLon(" + uiLatitude + ", " + uiLongitude + ")");
+                            // Update the UI
+                            if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
+                                Toolkit.getDefaultToolkit().beep();
+                            }
+                            markerWasMovedButNotYetRead = false;
                         }
-                        else {
-                            loadValuesFromDMS();
+                        catch (JSException ex) {
+                            // Ignore most of these errors which can happen when pressing the button before the page was fully loaded
+                            WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
                         }
-                        // Set the Marker Latitude and Longitude
-                        webView.getEngine().executeScript("setMarkerLatLon(" + uiLatitude + ", " + uiLongitude + ")");
-                        // Update the UI
-                        if (WildLogApp.getApplication().getWildLogOptions().isEnableSounds()) {
-                            Toolkit.getDefaultToolkit().beep();
+                        catch (Exception ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                         }
-                        markerWasMovedButNotYetRead = false;
                     }
-                    catch (JSException ex) {
-                        // Ignore most of these errors which can happen when pressing the button before the page was fully loaded
-                        WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
-                    }
-                    catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    }
-                }
-            });
+                });
+            }
+        }
+        else
+        if (showingOfflineMap) {
+            btnUseOfflineMapActionPerformed(evt);
         }
     }//GEN-LAST:event_btnUpdateGPSOnMapActionPerformed
 
@@ -1803,6 +1864,7 @@ public class GPSDialog extends JDialog {
             map.dispose();
         }
         map = new GeoToolsMapJavaFX(inJFXPanel, false);
+        map.setPlacePoint(true);
         // Background layer
         try {
             // Base raster
@@ -1863,6 +1925,7 @@ public class GPSDialog extends JDialog {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel lblOfflineTip;
     private javax.swing.JPanel pnlMap;
     private javax.swing.JPanel pnlMapTools;
     private javax.swing.JSpinner spnAccuracy;

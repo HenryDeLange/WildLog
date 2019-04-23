@@ -32,8 +32,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.factory.FactoryRegistryException;
+import org.geotools.feature.DefaultFeatureCollection;
+import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.GridReaderLayer;
@@ -41,8 +47,12 @@ import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
 import org.geotools.renderer.GTRenderer;
 import org.geotools.renderer.lite.StreamingRenderer;
+import org.geotools.styling.Style;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -53,6 +63,9 @@ public class GeoToolsMapJavaFX {
     private final MapContent mapContent = new MapContent();
     private ImageView imageView;
     private boolean identifyIsActive = false;
+    private boolean placePoint = false;
+    private double placedPointLatitude;
+    private double placedPointLongitude;
     
 
     public GeoToolsMapJavaFX(JFXPanel inJFXPanel, boolean inEnhanceContrast) {
@@ -116,6 +129,37 @@ public class GeoToolsMapJavaFX {
             public void handle(MouseEvent inMouseEvent) {
                 if (inMouseEvent.getClickCount() == 2) {
                     zoomIn();
+                }
+                else
+                if (inMouseEvent.getClickCount() == 1 && (inMouseEvent.isControlDown() || inMouseEvent.isPopupTrigger()) && placePoint) {
+                    for (Layer layer : mapContent.layers()) {
+                        if (layer instanceof FeatureLayer && layer.getTitle().equals("WildLogPointLayer")) {
+                            mapContent.removeLayer(layer);
+                            Rectangle screenRect = new Rectangle((int) inMouseEvent.getSceneX(), (int) inMouseEvent.getSceneY(), 1, 1);
+                            mapContent.getViewport().setScreenArea(new Rectangle(jfxPanel.getWidth(), jfxPanel.getHeight()));
+                            mapContent.getViewport().setMatchingAspectRatio(true);
+                            AffineTransform transform = mapContent.getViewport().getScreenToWorld();
+                            Rectangle2D worldRect = transform.createTransformedShape(screenRect).getBounds2D();
+                            ReferencedEnvelope bbox = new ReferencedEnvelope(worldRect, mapContent.getCoordinateReferenceSystem());
+                            placedPointLatitude = bbox.getMinY();
+                            placedPointLongitude = bbox.getMinX();
+                            try {
+                                SimpleFeatureType type = DataUtilities.createType("WildLogPointType", "geom:Point,name:String,mydata:String");
+                                SimpleFeatureBuilder builder = new SimpleFeatureBuilder(type);
+                                DefaultFeatureCollection collection = new DefaultFeatureCollection();
+                                GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
+                                builder.add(geometryFactory.createPoint(new Coordinate(bbox.getMinX(), bbox.getMinY())));
+                                SimpleFeature feature = builder.buildFeature("GPS Point");
+                                collection.add(feature);
+                                Style pointStyle = GeoToolsLayerUtils.createPointStyle(new Color(80, 15, 5), new Color(175, 30, 20), 1.0, 1.0, 10);
+                                mapContent.addLayer(new FeatureLayer(collection, pointStyle, "WildLogPointLayer"));
+                            }
+                            catch (SchemaException | FactoryRegistryException ex) {
+                                ex.printStackTrace(System.err);
+                            }
+                            reloadMap();
+                        }
+                    }
                 }
                 else
                 if (inMouseEvent.getClickCount() == 1 && (inMouseEvent.isControlDown() || identifyIsActive)) {
@@ -463,6 +507,18 @@ public class GeoToolsMapJavaFX {
                 });
             }
         });
+    }
+
+    public void setPlacePoint(boolean inPlacePoint) {
+        placePoint = inPlacePoint;
+    }
+
+    public double getPlacedPointLatitude() {
+        return placedPointLatitude;
+    }
+
+    public double getPlacedPointLongitude() {
+        return placedPointLongitude;
     }
     
 }

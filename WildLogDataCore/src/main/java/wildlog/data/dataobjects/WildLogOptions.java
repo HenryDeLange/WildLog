@@ -48,7 +48,7 @@ public class WildLogOptions {
     }
 
     public void setDefaultZoom(double inDefaultZoom) {
-        this.defaultZoom = inDefaultZoom;
+        defaultZoom = inDefaultZoom;
     }
 
     public float getDefaultSlideshowSpeed() {

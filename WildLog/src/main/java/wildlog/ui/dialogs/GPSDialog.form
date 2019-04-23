@@ -52,9 +52,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="tglDecimalDegrees" pref="185" max="32767" attributes="0"/>
+                              <Component id="tglDecimalDegrees" max="32767" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="tglDegMinSec" pref="186" max="32767" attributes="0"/>
+                              <Component id="tglDegMinSec" max="32767" attributes="0"/>
                           </Group>
                           <Component id="jPanel1" max="32767" attributes="0"/>
                       </Group>
@@ -355,20 +355,28 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="btnUpdateGPSOnMap" max="32767" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="btnUpdateGPSFromMap" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="btnUpdateGPSOnMap" pref="252" max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                              <Component id="btnUpdateGPSFromMap" pref="252" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="lblOfflineTip" max="32767" attributes="0"/>
+                      </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnUpdateGPSFromMap" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="btnUpdateGPSOnMap" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnUpdateGPSFromMap" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnUpdateGPSOnMap" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                      <Component id="lblOfflineTip" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -415,6 +423,16 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateGPSFromMapActionPerformed"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblOfflineTip">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="11" style="2"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="text" type="java.lang.String" value="To move the point on the map use CTRL + left-click, or simply right-click."/>
+                <Property name="name" type="java.lang.String" value="lblOfflineTip" noResource="true"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>
@@ -464,7 +482,7 @@
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                       <Component id="spnLatMin" min="-2" pref="50" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                      <Component id="spnLatSec" pref="120" max="32767" attributes="0"/>
+                                      <Component id="spnLatSec" max="32767" attributes="0"/>
                                   </Group>
                                   <Component id="spnLatDecimal" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">

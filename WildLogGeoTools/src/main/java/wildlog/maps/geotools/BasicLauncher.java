@@ -113,6 +113,8 @@ public class BasicLauncher {
         
         // Set the startup bounds
         map.setStartBounds(-28.2, 24.7, 20);
+        // Enable the placing of points
+        map.setPlacePoint(true);
         // RELOAD MAP (to display the added layers)
         map.reloadMap();
     }
