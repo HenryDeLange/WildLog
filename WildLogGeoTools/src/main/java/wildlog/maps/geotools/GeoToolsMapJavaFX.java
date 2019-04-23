@@ -377,6 +377,8 @@ public class GeoToolsMapJavaFX {
             @Override
             public void run() {
                 mapContent.getViewport().setBounds(inReferencedEnvelope);
+                // Reload the map
+                reloadMap();
             }
          });
     }
@@ -401,6 +403,7 @@ public class GeoToolsMapJavaFX {
                 minY + getDistance(minY, maxY) * ZOOM_SCALE / 4.0,
                 maxY - getDistance(minY, maxY) * ZOOM_SCALE / 4.0,
                 mapContent.getCoordinateReferenceSystem()));
+        // Reload the map
         reloadMap();
     }
     

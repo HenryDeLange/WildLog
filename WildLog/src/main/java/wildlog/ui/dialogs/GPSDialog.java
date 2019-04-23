@@ -1835,13 +1835,11 @@ public class GPSDialog extends JDialog {
         catch (SchemaException | FactoryRegistryException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
-        // Set the default map bounds and zoom
+        // Set the default map bounds and zoom (it will also do map.reloadMap() when done)
         map.setStartBounds(
                 WildLogApp.getApplication().getWildLogOptions().getDefaultLatitude(), 
                 WildLogApp.getApplication().getWildLogOptions().getDefaultLongitude(), 
                 WildLogApp.getApplication().getWildLogOptions().getDefaultZoom());
-        // Reload the map to make sure the layers are added correctly, etc.
-        //map.reloadMap(); // Not needed, will be done by the setStartBounds() method when its done
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables

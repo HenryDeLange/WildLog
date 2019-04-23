@@ -27,6 +27,7 @@ import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
@@ -74,7 +75,10 @@ public abstract class AbstractGeoToolsMap<T extends DataObjectWithGPS> extends A
             public void run() {
                 // Create the map when the initial JFXPanel size is available. 
                 // The map needs to be recreated, because the root node must be reset.
+                // Remember the map position and zoom
+                ReferencedEnvelope bounds = null;
                 if (map != null) {
+                    bounds = map.getBounds();
                     // Dispose the old map
                     map.dispose();
                 }
@@ -82,15 +86,18 @@ public abstract class AbstractGeoToolsMap<T extends DataObjectWithGPS> extends A
                 map = new GeoToolsMapJavaFX(mapsBaseDialog.getJFXMapPanel(), enhanceContrast);
                 // Create the layers for the map
                 createMap(mapsBaseDialog.getJFXMapPanel().getScene());
-                // Use the default coordinates for the initial load
-                map.setStartBounds(
-                        WildLogApp.getApplication().getWildLogOptions().getDefaultLatitude(), 
-                        WildLogApp.getApplication().getWildLogOptions().getDefaultLongitude(), 
-                        WildLogApp.getApplication().getWildLogOptions().getDefaultZoom());
+                // Set the start position of the map (the methods will do the map.reloadMap() when they are done)
+                if (bounds != null) {
+                    map.setBounds(bounds);
+                }
+                else {
+                    map.setStartBounds(
+                            WildLogApp.getApplication().getWildLogOptions().getDefaultLatitude(), 
+                            WildLogApp.getApplication().getWildLogOptions().getDefaultLongitude(), 
+                            WildLogApp.getApplication().getWildLogOptions().getDefaultZoom());
+                }
                 // Add the watermark overlay
                 applyWatermark();
-                // Refresh the map to display the added layers
-                //map.reloadMap(); // Not needed, will be done by the setStartBounds() method when its done
                 // Hide waiting cursor
                 mapsBaseDialog.getGlassPane().setCursor(java.awt.Cursor.getDefaultCursor());
                 mapsBaseDialog.getGlassPane().setVisible(false);
