@@ -1192,7 +1192,7 @@ public class GPSDialog extends JDialog {
         showingOfflineMap = true;
         // Copy the bundled maps to the WorkSpace
         // Note: Dit mag lank vat die eerste keer, maar dis hopelik steeds beter om dit hier te doen en te wag (vs. multihtreaded as die program begin)
-        UtilsFileProcessing.copyMapLayersWithPopup();
+        UtilsFileProcessing.copyMapLayersWithPopup(this);
         // Setup the map
         if (!pnlMap.isVisible()) {
             pnlMap.setVisible(true);

@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.RootPaneContainer;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import org.apache.logging.log4j.Level;
@@ -95,7 +97,7 @@ public final class UtilsConcurency {
                 if (!inExecutorService.awaitTermination(1150, TimeUnit.MILLISECONDS)) {
                     // If we are still running the popup should be displayed and then continue the work
                     final JDialog popup;
-                    if (inParent instanceof JDialog) {
+                    if (inParent != null && inParent instanceof JDialog) {
                         popup = new JDialog(inParent, "Long Running Process", false);
                         popup.setVisible(false);
                         UtilsDialog.addModalBackgroundPanel(inParent, popup);
@@ -199,17 +201,22 @@ public final class UtilsConcurency {
      * @param inExecutorService - The service to stop and wait for.
      * @param inTaskList - The tasks to run
      * @param inRunWhenDone - Code that needs to run after the SwingWorker is done (to update the UI)
-     * @param inJDialogUsesAsParent - If the parent is a JDialog pass it in, otherwise use null to use the application's main frame.
+     * @param inParentContainer - If the parent is a JDialog or JFrame pass it in, otherwise use null to use the application's main frame.
      * @param inMessage - The message to show in the popup
      * @return
      */
     public static <T> boolean waitForExecutorToRunTasksWithPopup(final ExecutorService inExecutorService, 
             final Collection<? extends Callable<T>> inTaskList, final Runnable inRunWhenDone, 
-            final JDialog inJDialogUsesAsParent, final String inMessage) {
+            final RootPaneContainer inParentContainer, final String inMessage) {
         // Create the popup
         JDialog popup;
-        if (inJDialogUsesAsParent instanceof JDialog) {
-            popup = new JDialog(inJDialogUsesAsParent, "Long Running Process", true);
+        if (inParentContainer instanceof JDialog) {
+            popup = new JDialog((JDialog) inParentContainer, "Long Running Process", true);
+            popup.setVisible(false);
+        }
+        else
+        if (inParentContainer instanceof JFrame) {
+            popup = new JDialog((JFrame) inParentContainer, "Long Running Process", true);
             popup.setVisible(false);
         }
         else {
@@ -255,9 +262,14 @@ public final class UtilsConcurency {
         }
         catch (TimeoutException ex) {
             // The upload is taking long, so show the popup
-            if (inJDialogUsesAsParent instanceof JDialog) {
-                UtilsDialog.setDialogToCenter(inJDialogUsesAsParent, popup);
-                UtilsDialog.addModalBackgroundPanel(inJDialogUsesAsParent, popup);
+            if (inParentContainer instanceof JDialog) {
+                UtilsDialog.setDialogToCenter((JDialog) inParentContainer, popup);
+                UtilsDialog.addModalBackgroundPanel(inParentContainer, popup);
+            }
+            else
+            if (inParentContainer instanceof JFrame) {
+                UtilsDialog.setDialogToCenter((JFrame) inParentContainer, popup);
+                UtilsDialog.addModalBackgroundPanel(inParentContainer, popup);
             }
             else {
                 UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), popup);

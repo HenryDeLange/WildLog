@@ -131,7 +131,7 @@ public class GeoToolsMapJavaFX {
                     zoomIn();
                 }
                 else
-                if (inMouseEvent.getClickCount() == 1 && (inMouseEvent.isControlDown() || inMouseEvent.isPopupTrigger()) && placePoint) {
+                if (inMouseEvent.getClickCount() == 1 && (inMouseEvent.isControlDown() || inMouseEvent.isPopupTrigger() || inMouseEvent.isSecondaryButtonDown()) && placePoint) {
                     for (Layer layer : mapContent.layers()) {
                         if (layer instanceof FeatureLayer && layer.getTitle().equals("WildLogPointLayer")) {
                             mapContent.removeLayer(layer);

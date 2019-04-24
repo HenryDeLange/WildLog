@@ -14,8 +14,7 @@ public final class UtilsMaps {
     private UtilsMaps() {
     }
 
-     public static void copyMapLayers() {
-        WildLogApp.LOGGER.log(Level.INFO, "Start copying Map Layers");
+    public static void copyMapLayers() {
         // GeoTiffs
         copyGeoTiff(BundledMapLayers.ALTITUDE);
         copyGeoTiff(BundledMapLayers.CLIMATE_PRECIPITATION_AVERAGE);
@@ -40,7 +39,6 @@ public final class UtilsMaps {
         copyShapefiles(BundledMapLayers.BIOMES_WORLD);
         copyShapefiles(BundledMapLayers.PROTECTED_AREAS_LOCAL_FORMAL);
         copyShapefiles(BundledMapLayers.PROTECTED_AREAS_LOCAL_INFORMAL);
-        WildLogApp.LOGGER.log(Level.INFO, "Done copying Map Layers");
     }
     
     private static void copyGeoTiff(BundledMapLayers inBundledMapLayers) {

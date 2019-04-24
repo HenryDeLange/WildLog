@@ -436,6 +436,7 @@ public final class UtilsFileProcessing {
      */
     public static void createFileFromStream(InputStream inFileToRead, Path inFileToWrite) {
         if (!Files.exists(inFileToWrite)) {
+            WildLogApp.LOGGER.log(Level.INFO, "Copying file from stream: " + inFileToWrite.toString());
             try {
                 // More than one thread can try to create these files at once, or very quickly after each other, resulting in IO errors, 
                 // thus I need to add some synchronization to make it throw less exceptions.
@@ -522,7 +523,7 @@ public final class UtilsFileProcessing {
         return inString.replaceAll("[^A-Za-z0-9.]+", "");
     }
     
-    public static void copyMapLayersWithPopup() {
+    public static void copyMapLayersWithPopup(RootPaneContainer inParentContainer) {
         try {
             Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
             Files.createDirectories(WildLogPaths.WILDLOG_MAPS_CUSTOM.getAbsoluteFullPath());
@@ -539,7 +540,7 @@ public final class UtilsFileProcessing {
                 return null;
             }
         });
-        UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, null, null, "  Setting up initial mapping data...  ");
+        UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, null, inParentContainer, "  Setting up initial mapping data...  ");
     }
     
     /**
