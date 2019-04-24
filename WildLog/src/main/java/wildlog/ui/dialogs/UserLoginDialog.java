@@ -1,13 +1,11 @@
 package wildlog.ui.dialogs;
 
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
@@ -15,6 +13,7 @@ import wildlog.data.dataobjects.WildLogUser;
 import wildlog.encryption.PasswordEncryptor;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.utils.DummyTaskbarFrame;
 import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogPaths;
 
@@ -24,7 +23,7 @@ public class UserLoginDialog extends JDialog {
     private boolean loginSuccess = false;
 
     public UserLoginDialog() {
-        super(new TaskbarFrame("WildLog Login", new ImageIcon(
+        super(new DummyTaskbarFrame("WildLog Login", new ImageIcon(
                 WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage()));
         WildLogApp.LOGGER.log(Level.INFO, "[UserLoginDialog]");
         initComponents();
@@ -264,7 +263,7 @@ public class UserLoginDialog extends JDialog {
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (!visible) {
-            ((TaskbarFrame) getParent()).dispose();
+            ((DummyTaskbarFrame) getParent()).dispose();
         }
     }
 
@@ -283,15 +282,4 @@ public class UserLoginDialog extends JDialog {
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
-}
-
-class TaskbarFrame extends JFrame {
-    TaskbarFrame(String inTitle, Image inIcon) {
-        super(inTitle);
-        setUndecorated(true);
-        setVisible(true);
-        setLocationRelativeTo(null);
-        setIconImage(inIcon);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }
 }

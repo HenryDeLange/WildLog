@@ -3,6 +3,8 @@ package wildlog.utils;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.apache.logging.log4j.Level;
+import wildlog.WildLogApp;
 
 /**
  * This enum centralizes all file path related logic for the application. <br>
@@ -97,6 +99,10 @@ public enum WildLogPaths {
         }
         else {
             activeWorkspacePrefix = Paths.get(inPrefix).toAbsolutePath().normalize();
+        }
+        if (new File(File.separator).toPath().toAbsolutePath().normalize().equals(activeWorkspacePrefix)) {
+            activeWorkspacePrefix = activeWorkspacePrefix.resolve(DEFAULT_WORKSPACE_NAME.getRelativePath()).toAbsolutePath().normalize();
+            WildLogApp.LOGGER.log(Level.INFO, "Corrected wildloghome to not point to the main drive, but to a folder instead: " + activeWorkspacePrefix.toString());
         }
     }
 

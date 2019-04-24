@@ -530,36 +530,18 @@ public class WildLogApp extends Application {
         WildLogApp.LOGGER.log(Level.INFO, "");
         // Try to read the settings file containing the wildloghome (active workspace)
         try {
+            // If the file does not exist create it before attempting to read it
+            if (!Files.exists(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildloghome"))) {
+                writeDefaultWildLogHome();
+            }
+            // Read the wildloghome file
             configureWildLogHomeBasedOnSettingsFile();
         }
         catch (IOException ex) {
             // Daar was 'n probleem om die wildloghome settings file te lees, probeer om 'n nuwe wildloghome file te maak
             WildLogApp.LOGGER.log(Level.INFO, "Could not find the wildloghome file. Will try to create it...");
             WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
-            FileWriter writer = null;
-            try {
-                writer = new FileWriter(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildloghome").toFile());
-                if (new File(File.separator).canWrite()) {
-                    writer.write(File.separator);
-                }
-                else {
-                    writer.write(System.getProperty("user.home") + File.separatorChar);
-                }
-            }
-            catch (IOException ioex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
-            }
-            finally {
-                if (writer != null) {
-                    try {
-                        writer.flush();
-                        writer.close();
-                    }
-                    catch (IOException ioex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
-                    }
-                }
-            }
+            writeDefaultWildLogHome();
             // As ek steeds nie 'n wildloghome file kan gelees kry nie vra die user vir 'n wildloghome om te gebruik
             try {
                 configureWildLogHomeBasedOnSettingsFile();
@@ -577,6 +559,37 @@ public class WildLogApp extends Application {
         WildLogApp.LOGGER.log(Level.INFO, "Command Line Arguments: {}", Arrays.toString(args));
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
+    }
+
+    private static void writeDefaultWildLogHome() {
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildloghome").toFile());
+            Path defaultWorkspacePath = new File(File.separator).toPath().resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
+            String wildloghome = "";
+            if (defaultWorkspacePath.toFile().canWrite()) {
+                wildloghome = defaultWorkspacePath.toAbsolutePath().toString();
+            }
+            else {
+                wildloghome = System.getProperty("user.home") + File.separatorChar + WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath();
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "Writing wildloghome: " + wildloghome);
+            writer.write(wildloghome);
+        }
+        catch (IOException ioex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
+        }
+        finally {
+            if (writer != null) {
+                try {
+                    writer.flush();
+                    writer.close();
+                }
+                catch (IOException ioex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
+                }
+            }
+        }
     }
 
     private static void configureWildLogHomeBasedOnSettingsFile() throws IOException {

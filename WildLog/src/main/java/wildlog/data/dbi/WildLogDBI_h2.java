@@ -53,6 +53,7 @@ import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
+import wildlog.ui.dialogs.BusyDialog;
 import wildlog.ui.dialogs.WorkspaceImportDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.UtilsCompression;
@@ -981,6 +982,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         Statement state = null;
         ResultSet results = null;
         try {
+            BusyDialog busyDialog = new BusyDialog("WildLog Upgrade");
             state = conn.createStatement();
             results = state.executeQuery("SELECT * FROM WILDLOG");
             // If there isn't a row create one
@@ -1045,6 +1047,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                         "Upgrade WildLog Database Structure", JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
                             }
                             if (choice == JOptionPane.OK_OPTION) {
+                                if (!upgradeWasDone) {
+                                    busyDialog.setVisible(true);
+                                }
                                 // Procede with the needed updates
                                 if (results.getInt("VERSION") == 0) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
@@ -1118,6 +1123,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     }
                 }
             }
+            busyDialog.setVisible(false);
+            busyDialog.dispose();
             if (databaseAndApplicationInSync) {
                 if (upgradeWasDone) {
                     if (wasMajorUpgrade) {
@@ -1140,7 +1147,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 + "<br/>Make sure that you are running the latest version of WildLog."
                                 + "<br/>Confirm that the Workspace isn't already open by another WildLog instance."
                                 + "<br/>It is possible that the datbase might be broken or corrupted. "
-                                + "If this is the case you can restore a backup copy and try again, please consult the Manual for details."
+                                + "<br/>If this is the case you can restore a backup copy and try again, please consult the Manual for details."
                                 + "<br/>Contact support@mywild.co.za if the problem persists.</html>",
                         "WildLog Upgrade Error", JOptionPane.ERROR_MESSAGE);
                 WildLogApp.getApplication().exit();
