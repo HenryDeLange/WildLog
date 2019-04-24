@@ -490,7 +490,7 @@ public abstract class DBI_JDBC implements DBI {
 
     public DBI_JDBC() {
         try {
-            randomGenerator = SecureRandom.getInstanceStrong();
+            randomGenerator = SecureRandom.getInstance("SHA1PRNG"); // Need to specify, otherwise it is INSANELY SLOW on Ubuntu
         }
         catch (NoSuchAlgorithmException ex) {
             randomGenerator = new SecureRandom();
@@ -599,7 +599,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute(tableWildLogOptions);
                 closeStatement(state);
                 if (inCreateDefaultRecords) {
-                    createWildLogOptions(new WildLogOptions());
+                    createWildLogOptions();
                 }
                 // Since this is the first time the database is being created, also update the cache size for H2 (might fail on other DBs)
                 try {
@@ -2128,7 +2128,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions) {
+    public <T extends WildLogOptions> boolean createWildLogOptions() {
         PreparedStatement state = null;
         try {
             // Insert

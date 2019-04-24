@@ -520,22 +520,24 @@ public class CheckAndClean {
                 cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER, filesNotInDB, countOther, (int)(countOther/(double)fileProcessCounter*20));
                 // Kyk of die Stashed Files folders 'n bestaande Visit het
                 File fileStashes = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().toFile();
-                for (File stash : fileStashes.listFiles()) {
-                    if (inApp.getDBI().countVisits(stash.getName(), 0) == 0) {
-                        finalHandleFeedback.println("PROBLEM:     Stashed Files in Workspace are not linked to a Stashed Period in the database: " + stash.getAbsolutePath());
-                        finalHandleFeedback.println("  +RESOLVED: Moved the Stashed Files from the Workspace to the LostFiles folder.");
-                        // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
-                        List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(new File[] {stash});
-                        final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
-                        for (Path stashedFile : lstAllFiles) {
-                            Path destination = WildLogPaths.WILDLOG_LOST_FILES.getAbsoluteFullPath().resolve(WildLogPaths.getFullWorkspacePrefix().relativize(stashedFile));
-                            while (Files.exists(destination)) {
-                                destination = destination.getParent().resolve("wl_" + destination.getFileName());
+                if (fileStashes != null) {
+                    for (File stash : fileStashes.listFiles()) {
+                        if (inApp.getDBI().countVisits(stash.getName(), 0) == 0) {
+                            finalHandleFeedback.println("PROBLEM:     Stashed Files in Workspace are not linked to a Stashed Period in the database: " + stash.getAbsolutePath());
+                            finalHandleFeedback.println("  +RESOLVED: Moved the Stashed Files from the Workspace to the LostFiles folder.");
+                            // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
+                            List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(new File[] {stash});
+                            final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
+                            for (Path stashedFile : lstAllFiles) {
+                                Path destination = WildLogPaths.WILDLOG_LOST_FILES.getAbsoluteFullPath().resolve(WildLogPaths.getFullWorkspacePrefix().relativize(stashedFile));
+                                while (Files.exists(destination)) {
+                                    destination = destination.getParent().resolve("wl_" + destination.getFileName());
+                                }
+                                UtilsFileProcessing.copyFile(stashedFile, destination, false, false);
                             }
-                            UtilsFileProcessing.copyFile(stashedFile, destination, false, false);
+                            UtilsFileProcessing.deleteRecursive(stash);
+                            badStashes++;
                         }
-                        UtilsFileProcessing.deleteRecursive(stash);
-                        badStashes++;
                     }
                 }
             }

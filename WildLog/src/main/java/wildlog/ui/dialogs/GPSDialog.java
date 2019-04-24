@@ -75,6 +75,7 @@ import wildlog.ui.helpers.filters.GpxFilter;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.maps.implementations.PointMap;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
@@ -1189,6 +1190,9 @@ public class GPSDialog extends JDialog {
     private void btnUseOfflineMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseOfflineMapActionPerformed
         showingOnlineMap = false;
         showingOfflineMap = true;
+        // Copy the bundled maps to the WorkSpace
+        // Note: Dit mag lank vat die eerste keer, maar dis hopelik steeds beter om dit hier te doen en te wag (vs. multihtreaded as die program begin)
+        UtilsFileProcessing.copyMapLayersWithPopup();
         // Setup the map
         if (!pnlMap.isVisible()) {
             pnlMap.setVisible(true);

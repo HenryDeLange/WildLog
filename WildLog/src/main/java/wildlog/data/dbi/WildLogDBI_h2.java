@@ -108,20 +108,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
                 state.close();
                 WildLogApp.LOGGER.log(Level.INFO, "Database username and password updated.");
-               
-                
-// TODO: Hier kort 'n form van database recovery as dinge skeef loop...
-// DOEN MISKIEN IETS SOOS HIERDIE:
-//   Verander die error popup om opsies te wys: "Open Different Workspace", "Try to restore from backup", Cancel"
-//   Vir die restore opsie, delete (rename na _datestamp_broken) die stukkende DB en 
-//   laat die user dan browse na 'n SQL dump (maak die file browser oop by the backups folder).
-//   Maak dan 'n uwe DB (met ander password) en run die SCRIPT FROM command om die DB te laai.
-//   Wanneer dit klaar is delete die temp username.
-
-
             }
             // Create table, indexes, etc.
-            started = initialize(inCreateDefaultRecords);
+            started = super.initialize(inCreateDefaultRecords);
             // Check database version and perform updates if required.
             // This also creates the WildLogOptions row the first time
             doUpdates();
@@ -987,7 +976,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             results = state.executeQuery("SELECT * FROM WILDLOG");
             // If there isn't a row create one
             if (!results.next()) {
-                createWildLogOptions(new WildLogOptions());
+                createWildLogOptions();
                 // Check whether this is a very old database (before the WildLogOptions existed)
                 results = state.executeQuery("select count(*) from information_schema.columns where table_name = 'SIGHTINGS' and column_name = 'MOONLIGHT'");
                 if (results.next() && results.getInt(1) < 1) {

@@ -97,8 +97,8 @@ public class WildLogApp extends Application {
     * The WildLogDBI is initialized in startup() and closed in shutdown()
     * */
     private WildLogDBI dbi;
-
-
+    
+    
     @Override
     protected void initialize(String[] arg0) {
         WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");

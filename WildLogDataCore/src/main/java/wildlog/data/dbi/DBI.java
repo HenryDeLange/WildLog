@@ -55,7 +55,7 @@ public interface DBI {
     public <T extends VisitCore> boolean createVisit(T inVisit, boolean inNewButUseOldAuditAndID);
     public <T extends SightingCore> boolean createSighting(T inSighting, boolean inNewButUseOldAuditAndID);
     public <T extends WildLogFileCore> boolean createWildLogFile(T inWildLogFile, boolean inNewButUseOldAuditAndID);
-    public <T extends WildLogOptions> boolean createWildLogOptions(T inWildLogOptions);
+    public <T extends WildLogOptions> boolean createWildLogOptions();
     public <T extends AdhocData> boolean createAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData);
     public <T extends WildLogUser> boolean createUser(T inWildLogUser);
