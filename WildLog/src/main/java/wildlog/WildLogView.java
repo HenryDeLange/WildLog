@@ -27,21 +27,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
@@ -74,15 +69,12 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
-import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Certainty;
-import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
@@ -131,6 +123,7 @@ import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.CheckAndClean;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsConcurency;
@@ -2246,11 +2239,6 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuChangeWorkspaceActionPerformed
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
-        
-        
-// TODO: Check die nuwe Stashed folder ook. Skuif file wat daar is maar nie 'n visit het nie na daai orphan folder nou
-        
-
         WildLogApp.LOGGER.log(Level.INFO, "[CleanWorkspace]");
         // Popup 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
         int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
@@ -2261,958 +2249,78 @@ public final class WildLogView extends JFrame {
                         + "In addition all unnessasary files will be removed from the Workspace. </html>",
                 "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            final int recreateThumbnailsResult = WLOptionPane.showOptionDialog(app.getMainFrame(),
-                    "<html>Would you like to also recreate all cached image thumbnails?"
-                            + "<br/>Recreating the thumbnails can improve system performance and might correct thumbnails that are displaying incorrectly."
-                            + "<br/>Warning: This step is optional but recommended. It can take very long to complete."
-                            + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
-                    "Recreate Thumbnails?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                    null, new String[] {
-                        "Recreate only essential thumbnails (Recommended)",
-                        "Recreate all thumbnails", 
-                        "Don't recreate any thumbnails"
-                    }, null);
-            // Close all tabs and go to the home tab
-            tabbedPanel.setSelectedIndex(0);
-            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
-                tabbedPanel.remove(STATIC_TAB_COUNT);
-            }
-            // Lock the input/display and show busy message
-            // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
-            tabbedPanel.setSelectedIndex(0);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    JPanel panel = new JPanel(new AbsoluteLayout());
-                    panel.setPreferredSize(new Dimension(400, 50));
-                    panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
-                    JLabel label = new JLabel("<html>Busy cleaning Workspace. Please be patient, this might take a while. <br/>"
-                            + "Don't close the application until the process is finished.</html>");
-                    label.setFont(new Font("Tahoma", Font.BOLD, 12));
-                    label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
-                    panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-                    panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
-                    panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
-                    JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
-                    glassPane.removeAll();
-                    glassPane.setLayout(new BorderLayout(100, 100));
-                    glassPane.add(panel, BorderLayout.CENTER);
-                    glassPane.addMouseListener(new MouseAdapter() {});
-                    glassPane.addKeyListener(new KeyAdapter() {});
-                    app.getMainFrame().setGlassPane(glassPane);
-                    app.getMainFrame().getGlassPane().setVisible(true);
-                    app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                }
-            });
-            // Start the process in another thread to allow the UI to update correctly and use the progressbar for feedback
-            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    long startTime = System.currentTimeMillis();
-                    setProgress(0);
-                    setMessage("Workspace Cleanup starting...");
-                    // Setup the feedback file
-                    Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("WorkspaceCleanupFeedback.txt");
-                    PrintWriter feedback = null;
-                    // Start cleanup
-                    try {
-                        feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
-                        feedback.println("------------------------------------------------");
-                        feedback.println("---------- STARTING WORKSPACE CLEANUP ----------");
-                        feedback.println("------------------------------------------------");
-                        feedback.println("     (See the end of the file for a summary)    ");
-                        feedback.println("------------------------------------------------");
-                        feedback.println("");
-                        // Create a final reference to the feedback writer for use in inner classes, etc.
-                        final PrintWriter finalHandleFeedback = feedback;
-                        // Setup helper classes (Op hierdie stadium wil ek al die code op een plek hou, ek kan dit later in Util methods in skuif of iets...)
-                        class CleanupCounter {
-                            public int counter = 0;
-                        }
-                        class CleanupHelper {
-                            private void doTheMove(DataObjectWithWildLogFile inDAOWithFile, Path inExpectedPath, Path inExpectedPrefix, WildLogFile inWildLogFile, final CleanupCounter fileCount) {
-                                Path shouldBePath = inExpectedPath.resolve(inExpectedPrefix);
-                                Path currentPath = inWildLogFile.getAbsolutePath().getParent();
-                                boolean renameBasedOnSighting = false;
-                                String fileName = inWildLogFile.getRelativePath().getFileName().toString();
-                                if (inDAOWithFile instanceof Sighting) {
-                                    String currentName = fileName.substring(0, fileName.lastIndexOf('.'));
-                                    // Remove the sequence number (if present) and original filename from the name,
-                                    // to make sure we compare the expected names without the sequence number interfering
-                                    int indexSeq = currentName.lastIndexOf(UtilsFileProcessing.INDICATOR_SEQ);
-                                    if (indexSeq > 0) {
-                                        currentName = currentName.substring(0, indexSeq);
-                                    }
-                                    int indexFile = currentName.lastIndexOf(UtilsFileProcessing.INDICATOR_FILE);
-                                    if (indexFile > 0) {
-                                        currentName = currentName.substring(0, indexFile);
-                                    }
-                                    // Get the dates to use for the expected name
-                                    LocalDateTime fileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFile(inWildLogFile.getAbsolutePath()));
-                                    List<WildLogFile> lstGroupedFiles = app.getDBI().listWildLogFiles(inDAOWithFile.getWildLogFileID(), null, WildLogFile.class);
-                                    LocalDateTime firstFileDate = null;
-                                    for (WildLogFile wildLogFile : lstGroupedFiles) {
-                                        LocalDateTime groupedFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFile(wildLogFile.getAbsolutePath()));
-                                        if (firstFileDate == null || (groupedFileDate != null && groupedFileDate.isBefore(firstFileDate))) {
-                                            firstFileDate = groupedFileDate;
-                                        }
-                                    }
-                                    // Compare the actual and expected names
-                                    if (!((Sighting)inDAOWithFile).getCustomFileName(firstFileDate, fileDate).equals(currentName)) {
-                                        renameBasedOnSighting = true;
-                                        fileName = ((Sighting)inDAOWithFile).getCustomFileName(firstFileDate, fileDate) + fileName.substring(fileName.lastIndexOf('.'));
-                                    }
-                                }
-                                if (!shouldBePath.equals(currentPath) || renameBasedOnSighting) {
-                                    finalHandleFeedback.println("PROBLEM:     Incorrect or outdated file path   : " + inWildLogFile.getAbsolutePath());
-                                    finalHandleFeedback.println("  +RESOLVED: Moved the file to the correct path: " + shouldBePath.resolve(fileName));
-                                    // "Re-upload" the file to the correct location
-                                    UtilsFileProcessing.performFileUpload(
-                                            inDAOWithFile,
-                                            inExpectedPrefix,
-                                            new File[]{inWildLogFile.getAbsolutePath().toFile()},
-                                            null, 
-                                            app, false, null, false, true);
-                                    // Delete the wrong entry
-                                    app.getDBI().deleteWildLogFile(inWildLogFile.getID());
-                                    fileCount.counter++;
-                                }
-                            }
-                            public void moveFilesToCorrectFolders(DataObjectWithWildLogFile inDAOWithFile, WildLogFile inWildLogFile, Path inPrefix, final CleanupCounter fileCount) {
-                                // Check to make sure the parent paths are correct, if not then move the file to the correct place and add a new DB entry before deleting the old one
-                                // Maak seker alle DB paths is relative (nie absolute nie) en begin met propper WL roots
-                                if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
-                                    doTheMove(inDAOWithFile,
-                                            WildLogPaths.WILDLOG_FILES_IMAGES.getAbsoluteFullPath(),
-                                            inPrefix,
-                                            inWildLogFile,
-                                            fileCount);
-                                }
-                                else
-                                if (WildLogFileType.MOVIE.equals(inWildLogFile.getFileType())) {
-                                    doTheMove(inDAOWithFile,
-                                            WildLogPaths.WILDLOG_FILES_MOVIES.getAbsoluteFullPath(),
-                                            inPrefix,
-                                            inWildLogFile,
-                                            fileCount);
-                                }
-                                else {
-                                    doTheMove(inDAOWithFile,
-                                            WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath(),
-                                            inPrefix,
-                                            inWildLogFile,
-                                            fileCount);
-                                }
-                            }
-                            public void checkDiskFilesAreInDB(WildLogPaths inWildLogPaths, final CleanupCounter fileCount, final int inFileProcessCounter, final int inTotalToIncrease) throws IOException {
-                                final int baseProgress = getProgress();
-                                final CleanupCounter counter = new CleanupCounter();
-                                Files.walkFileTree(inWildLogPaths.getAbsoluteFullPath(), new SimpleFileVisitor<Path>() {
-                                    @Override
-                                    public FileVisitResult visitFile(Path originalFile, BasicFileAttributes attrs) throws IOException {
-                                        if (attrs.isRegularFile()) {
-                                            // Kyk in DB of die path bestaan, as dit nie daar is nie delete die file
-// TODO: As die file bestaan maar nie in die DB link nie kan mens dalk probeer "slim" wees en die link afly deur ander info soos size, date en die path...
-                                            WildLogFile wildLogFile = new WildLogFile();
-                                            wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile).toString());
-                                            if (app.getDBI().findWildLogFile(0, null, null, wildLogFile.getDBFilePath(), WildLogFile.class) == null) {
-                                                finalHandleFeedback.println("PROBLEM:     File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
-                                                finalHandleFeedback.println("  +RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
-                                                // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
-                                                Path destination = WildLogPaths.WILDLOG_LOST_FILES.getAbsoluteFullPath().resolve(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile));
-                                                while (Files.exists(destination)) {
-                                                    destination = destination.getParent().resolve("wl_" + destination.getFileName());
-                                                }
-                                                UtilsFileProcessing.copyFile(originalFile, destination, false, true);
-                                                UtilsFileProcessing.deleteRecursive(originalFile.toFile());
-                                                fileCount.counter++;
-                                            }
-                                        }
-                                        // Assuming there are more or less as many files left as what was processed in step 1
-                                        if (counter.counter < inFileProcessCounter) {
-                                            counter.counter++;
-                                        }
-                                        setProgress(baseProgress + (int)(counter.counter/(double)inFileProcessCounter*inTotalToIncrease));
-                                        setMessage("Cleanup Step 3: Validate that the Workspace files are in the database... " + getProgress() + "%");
-                                        return FileVisitResult.CONTINUE;
-                                    }
-                                });
-                            }
-                        }
-                        final CleanupHelper cleanupHelper = new CleanupHelper();
-                        // Do a quick DB backup
-                        app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS_CHECK_AND_CLEAN.getAbsoluteFullPath()
-                                .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now())));
-                        setProgress(1);
-                        finalHandleFeedback.println("** Starting Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
-                        
-                        // ---------------------1---------------------
-                        // Check the rest of the data for inconsistencies (all Locations, Visits, Creatures and Observations link correctly)
-                        setMessage("Cleanup Step 1: Check links between records in the database... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("1) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
-                        int badDataLinks = 0;
-                        // Check Elements
-                        List<Element> allElements = app.getDBI().listElements(null, null, null, Element.class);
-                        for (Element element : allElements) {
-                            // Validate the ID is larger than 0
-                            if (element.getID() <= 0) {
-                                badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:     The Creature had an incorrect ID. "
-                                        + "Creature: " + element.getPrimaryName());
-                                finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
-                                element.setID(app.getDBI().generateID());
-                                app.getDBI().updateElement(element, element.getPrimaryName(), false);
-                            }
-                        }
-                        // Check Locations
-                        List<Location> allLocations = app.getDBI().listLocations(null, Location.class);
-                        for (Location location : allLocations) {
-                            // Validate the ID is larger than 0
-                            if (location.getID() <= 0) {
-                                badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:     The Place had an incorrect ID. "
-                                        + "Place: " + location.getName());
-                                finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
-                                location.setID(app.getDBI().generateID());
-                                app.getDBI().updateLocation(location, location.getName(), false);
-                            }
-                        }
-                        // Check Visits
-                        List<Visit> allVisits = app.getDBI().listVisits(null, 0, null, true, Visit.class);
-                        int countVisits = 0;
-                        for (Visit visit : allVisits) {
-                            // Validate the ID is larger than 0
-                            if (visit.getID() <= 0) {
-                                badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:     The Period had an incorrect ID. "
-                                        + "Period: " + visit.getName());
-                                finalHandleFeedback.println("  +RESOLVED: Generated a new ID.");
-                                visit.setID(app.getDBI().generateID());
-                                app.getDBI().updateVisit(visit, visit.getName(), false);
-                            }
-                            // Validate the Visit to Location link
-                            Location temp = app.getDBI().findLocation(visit.getLocationID(), null, Location.class);
-                            if (temp == null) {
-                                badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:     Could not find link between Period and Place. "
-                                        + "Period: " + visit.getName() + ", Place: " + visit.getCachedLocationName());
-                                finalHandleFeedback.println("  +RESOLVED: Moved Period to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
-                                if (newLocation == null) {
-                                    newLocation = new Location(0, "WildLog_lost_and_found");
-                                    app.getDBI().createLocation(newLocation, false);
-                                }
-                                visit.setLocationID(newLocation.getID());
-                                // Still an issue with sightings not going to point to the correct place... (handled in the code below)
-                                app.getDBI().updateVisit(visit, visit.getName(), false);
-                            }
-                            countVisits++;
-                            setProgress(1 + (int)(countVisits/(double)allVisits.size()*3));
-                            setMessage("Cleanup Step 1: Check links between records in the database... " + getProgress() + "%");
-                        }
-                        // Check Sightings
-                        List<Sighting> allSightings = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
-                        int countSightings = 0;
-                        for (Sighting sighting : allSightings) {
-                            // Validate the Sighting to Location link
-                            Location tempLocation = app.getDBI().findLocation(sighting.getLocationID(), null, Location.class);
-                            if (tempLocation == null) {
-                                badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:     Could not find link between Observation and Place. "
-                                        + "Observation: " + sighting.getID() + ", Place: " + sighting.getCachedLocationName());
-                                finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
-                                if (newLocation == null) {
-                                    newLocation = new Location(0, "WildLog_lost_and_found");
-                                    app.getDBI().createLocation(newLocation, false);
-                                }
-                                sighting.setLocationID(newLocation.getID());
-                                app.getDBI().updateSighting(sighting, false);
-                            }
-                            // Validate the Sighting to Element link
-                            Element tempElement = app.getDBI().findElement(sighting.getElementID(), null, Element.class);
-                            if (tempElement == null) {
-                                badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:     Could not find link between Observation and Creature. "
-                                        + "Observation: " + sighting.getID()+ ", Creature: " + sighting.getCachedElementName());
-                                finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Creature called 'WildLog_lost_and_found'.");
-                                Element newElement = app.getDBI().findElement(0, "WildLog_lost_and_found", Element.class);
-                                if (newElement == null) {
-                                    newElement = new Element(0, "WildLog_lost_and_found");
-                                    app.getDBI().createElement(newElement, false);
-                                }
-                                sighting.setElementID(newElement.getID());
-                                app.getDBI().updateSighting(sighting, false);
-                            }
-                            // Validate the Sighting to Visit link
-                            Visit tempVisit = app.getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
-                            if (tempVisit == null) {
-                                badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:     Could not find link between Observation and Period. "
-                                        + "Observation: " + sighting.getID() + ", Period: " + sighting.getCachedVisitName());
-                                finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Period called 'WildLog_lost_and_found'.");
-                                // Location
-                                Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
-                                if (newLocation == null) {
-                                    newLocation = new Location(0, "WildLog_lost_and_found");
-                                    app.getDBI().createLocation(newLocation, false);
-                                }
-                                sighting.setLocationID(newLocation.getID());
-                                // Visit
-                                Visit newVisit = app.getDBI().findVisit(0, "WildLog_lost_and_found", false, Visit.class);
-                                if (newVisit == null) {
-                                    newVisit = new Visit(0, "WildLog_lost_and_found");
-                                    newVisit.setLocationID(newLocation.getID());
-                                    app.getDBI().createVisit(newVisit, false);
-                                }
-                                sighting.setVisitID(newVisit.getID());
-                                app.getDBI().updateSighting(sighting, false);
-                            }
-                            // Make sure the Sighting is using a legitimate Location-Visit pair
-                            Visit checkSightingVisit = app.getDBI().findVisit(sighting.getVisitID(), null, true, Visit.class);
-                            if (checkSightingVisit.getLocationID() != sighting.getLocationID()) {
-                                badDataLinks++;
-                                finalHandleFeedback.println("PROBLEM:     The Observation and Period references different Places. "
-                                        + "Observation: " + sighting.getCachedLocationName() + ", Period: " + checkSightingVisit.getCachedLocationName());
-                                finalHandleFeedback.println("  +RESOLVED: Moved Observation and Period to a new Place called 'WildLog_lost_and_found'.");
-                                Location newLocation = app.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
-                                if (newLocation == null) {
-                                    newLocation = new Location(0, "WildLog_lost_and_found");
-                                    app.getDBI().createLocation(newLocation, false);
-                                }
-                                // Update sighting
-                                sighting.setLocationID(newLocation.getID());
-                                app.getDBI().updateSighting(sighting, false);
-                                // Update visit
-                                checkSightingVisit.setLocationID(newLocation.getID());
-                                app.getDBI().updateVisit(checkSightingVisit, checkSightingVisit.getName(), false);
-                            }
-                            countSightings++;
-                            setProgress(4 + (int)(countSightings/(double)allSightings.size()*4));
-                            setMessage("Cleanup Step 1: Check links between records in the database... " + getProgress() + "%");
-                        }
-                        setProgress(8);
-                        
-                        // ---------------------2---------------------
-                        // First check database files
-                        // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
-                        setMessage("Cleanup Step 2: Validate database references to the files in the Workspace... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("2) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
-                        List<WildLogFile> allFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
-                        int filesWithoutID = 0;
-                        int filesWithoutPath = 0;
-                        int filesNotOnDisk = 0;
-                        int filesWithMissingData = 0;
-                        int filesWithBadType = 0;
-                        int filesWithBadID = 0;
-                        CleanupCounter filesMoved = new CleanupCounter();
-                        int fileProcessCounter = 0;
-                        int countImages = 0;
-                        int countMovies = 0;
-                        int countOther = 0;
-                        for (WildLogFile wildLogFile : allFiles) {
-                            // Check the WildLogFile's content
-                            if (wildLogFile.getLinkID() == null || wildLogFile.getLinkID().isEmpty()) {
-                                finalHandleFeedback.println("PROBLEM:     File record without a LinkID. FileID: " + wildLogFile.getID() + " | FilePath: " + wildLogFile.getDBFilePath() + " | FileLinkID: " + wildLogFile.getLinkID());
-                                finalHandleFeedback.println("  +RESOLVED: Delete the database file record and file on disk.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                                filesWithoutID++;
-                                continue;
-                            }
-                            if (wildLogFile.getDBFilePath() == null) {
-                                finalHandleFeedback.println("PROBLEM:     File path missing from database record. FileID: " + wildLogFile.getID() + " | FilePath: " + wildLogFile.getDBFilePath() + " | FileLinkID: " + wildLogFile.getLinkID());
-                                finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                                filesWithoutPath++;
-                                continue;
-                            }
-                            if (!Files.exists(wildLogFile.getAbsolutePath())) {
-                                finalHandleFeedback.println("PROBLEM:     File record in the database can't be found on disk. FileID: " + wildLogFile.getID() + " | FilePath: " + wildLogFile.getDBFilePath() + " | FileLinkID: " + wildLogFile.getLinkID());
-                                finalHandleFeedback.println("  +RESOLVED: Deleted the database file record.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                                filesNotOnDisk++;
-                                continue;
-                            }
-                            if (wildLogFile.getFilename() == null || wildLogFile.getFilename().isEmpty() || wildLogFile.getUploadDate() == null) {
-                                finalHandleFeedback.println("WARNING:    Database file record missing data. FilePath: " + wildLogFile.getAbsolutePath()
-                                        + ", Filename: " + wildLogFile.getFilename()
-                                        + ", UploadDate: " + wildLogFile.getUploadDate());
-                                finalHandleFeedback.println("  -UNRESOLVED: No action taken...");
-                                filesWithMissingData++;
-                            }
-                            if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
-                                finalHandleFeedback.println("PROBLEM:     Unknown FileType of database file record. FilePath: " + wildLogFile.getDBFilePath()
-                                        + ", FileType: " + wildLogFile.getFileType());
-                                finalHandleFeedback.println("  +RESOLVED: Changed FileType to " + WildLogFileType.OTHER + ".");
-                                wildLogFile.setFileType(WildLogFileType.OTHER);
-                                app.getDBI().updateWildLogFile(wildLogFile, false);
-                                filesWithBadType++;
-                            }
-                            // Check the WildLogFile's linkage
-                            if (wildLogFile.getLinkID().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
-                                // Make sure it is linked
-                                final Element temp = app.getDBI().findElement(
-                                        Long.parseLong(wildLogFile.getLinkID().substring(Element.WILDLOGFILE_ID_PREFIX.length())), null, Element.class);
-                                if (temp == null) {
-                                    finalHandleFeedback.println("PROBLEM:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getID()+ ", CreatureID Used: " + wildLogFile.getLinkID().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                                    filesWithBadID++;
-                                    continue;
-                                }
-                                // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(temp, 
-                                        wildLogFile,
-                                        Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()).normalize(),
-                                        filesMoved);
-                            }
-                            else 
-                            if (wildLogFile.getLinkID().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
-                                // Make sure it is linked
-                                final Visit temp = app.getDBI().findVisit(
-                                        Long.parseLong(wildLogFile.getLinkID().substring(Visit.WILDLOGFILE_ID_PREFIX.length())), null, true, Visit.class);
-                                if (temp == null) {
-                                    finalHandleFeedback.println("PROBLEM:     Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getID() + ", PeriodID Used: " + wildLogFile.getLinkID().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file databse record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                                    filesWithBadID++;
-                                    continue;
-                                }
-                                // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(temp, 
-                                        wildLogFile,
-                                        Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getCachedLocationName(), temp.getName()).normalize(),
-                                        filesMoved);
-                            }
-                            else 
-                            if (wildLogFile.getLinkID().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
-                                // Make sure it is linked
-                                final Location temp = app.getDBI().findLocation(
-                                        Long.parseLong(wildLogFile.getLinkID().substring(Location.WILDLOGFILE_ID_PREFIX.length())), null, Location.class);
-                                if (temp == null) {
-                                    finalHandleFeedback.println("PROBLEM:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getID() + ", PlaceID Used: " + wildLogFile.getLinkID().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                                    filesWithBadID++;
-                                    continue;
-                                }
-                                // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(temp, 
-                                        wildLogFile,
-                                        Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()).normalize(),
-                                        filesMoved);
-                            }
-                            else 
-                            if (wildLogFile.getLinkID().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
-                                // Make sure it is linked
-                                Sighting temp = null;
-                                try {
-                                    temp = app.getDBI().findSighting(
-                                            Long.parseLong(wildLogFile.getLinkID().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), true, Sighting.class);
-                                }
-                                catch (NumberFormatException ex) {
-                                    finalHandleFeedback.println("PROBLEM:       Can't get linked Observation's ID.");
-                                    finalHandleFeedback.println("  -UNRESOLVED: Try to continue to delete the file.");
-                                }
-                                if (temp == null) {
-                                    finalHandleFeedback.println("PROBLEM:     Could not find linked Observation for this file. FilePath: " + wildLogFile.getDBFilePath()
-                                            + ", ID: " + wildLogFile.getID() + ", ObservationID Used: " + wildLogFile.getLinkID().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
-                                    finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                    app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                                    filesWithBadID++;
-                                    continue;
-                                }
-                                // Make sure the file path is correct
-                                cleanupHelper.moveFilesToCorrectFolders(temp, 
-                                        wildLogFile,
-                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()).normalize(),
-                                        filesMoved);
-                            }
-                            else {
-                                finalHandleFeedback.println("PROBLEM:     File LinkID is not correctly formatted.");
-                                finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                                app.getDBI().deleteWildLogFile(wildLogFile.getID());
-                                filesWithBadID++;
-                            }
-                            fileProcessCounter++;
-                            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                                countImages++;
-                            }
-                            else
-                            if (WildLogFileType.MOVIE.equals(wildLogFile.getFileType())) {
-                                countMovies++;
-                            }
-                            else
-                            if (WildLogFileType.OTHER.equals(wildLogFile.getFileType())) {
-                                countOther++;
-                            }
-                            setProgress(8 + (int)(fileProcessCounter/(double)allFiles.size()*19));
-                            setMessage("Cleanup Step 2: Validate database references to the files in the Workspace... " + getProgress() + "%");
-                        }
-// TODO: If a file wasn't found then try to use the existing name and FileDate and FileSize to guess the link (or is it better just to move the files to the lost folder???)
-                        setProgress(27);
-
-                        // ---------------------3---------------------
-                        setMessage("Cleanup Step 3: Validate that the Workspace files are in the database... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("3) Make sure the files in the Workspace are present in the database.");
-                        // Secondly check the files on disk
-                        CleanupCounter filesNotInDB = new CleanupCounter();
-                        try {
-                            // Kyk of al die files op die hardeskyf in die database bestaan
-                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_IMAGES, filesNotInDB, countImages, (int)(countImages/(double)fileProcessCounter*20));
-                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_MOVIES, filesNotInDB, countMovies, (int)(countMovies/(double)fileProcessCounter*20));
-                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER, filesNotInDB, countOther, (int)(countOther/(double)fileProcessCounter*20));
-                        }
-                        catch (IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, "Could not check all files on disk.");
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            finalHandleFeedback.println("PROBLEM:       Could not check all files on disk.");
-                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                        }
-                        setProgress(47);
-
-                        // ---------------------4---------------------
-                        // By this time the file link should be "trusted" enough to use it to update inconsistent FileDate and FileSize values (not just empty ones)
-                        int filesWithIncorrectDate = 0;
-                        int filesWithIncorrectSize = 0;
-                        setMessage("Cleanup Step 4: Check the file size and dates... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("4) Compare the size and modified date of the files on disk to the values stored in the database.");
-                        allFiles = app.getDBI().listWildLogFiles(null, null, WildLogFile.class);
-                        fileProcessCounter = 0;
-                        for (WildLogFile wildLogFile : allFiles) {
-                            LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
-                            long actualFileSize = Files.size(wildLogFile.getAbsolutePath());
-                            if (actualFileDate != null) {
-                                if (wildLogFile.getFileDate() == null || !actualFileDate.isEqual(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()))) {
-                                    finalHandleFeedback.println("PROBLEM:     The Modified Date of the file on disk is not the same as the value stored in the database. "
-                                            + "FilePath: " + wildLogFile.getAbsolutePath());
-                                    String oldDate;
-                                    if (wildLogFile.getFileDate() == null) {
-                                        oldDate = "null";
-                                    }
-                                    else {
-                                        oldDate = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()));
-                                    }
-                                    finalHandleFeedback.println("  +RESOLVED: Updated the database Modified Date value of the file record. "
-                                            + "Changed " + oldDate
-                                            + " to " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(actualFileDate));
-                                    wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
-                                    app.getDBI().updateWildLogFile(wildLogFile, false);
-                                    filesWithIncorrectDate++;
-                                }
-                            }
-                            if (actualFileSize > 0) {
-                                if (actualFileSize != wildLogFile.getFileSize()) {
-                                    finalHandleFeedback.println("PROBLEM:     The File Size of the file on disk is not the same as the value stored in the database. "
-                                            + "FilePath: " + wildLogFile.getAbsolutePath());
-                                    finalHandleFeedback.println("  +RESOLVED: Updated the database File Size value of the file record. "
-                                            + "Changed " + wildLogFile.getFileSize() + " to " + actualFileSize);
-                                    wildLogFile.setFileSize(actualFileSize);
-                                    app.getDBI().updateWildLogFile(wildLogFile, false);
-                                    filesWithIncorrectSize++;
-                                }
-                            }
-                            setProgress(47 + (int)(fileProcessCounter++/(double)allFiles.size()*12));
-                            setMessage("Cleanup Step 4: Check the file size and dates... " + getProgress() + "%");
-                        }
-                        setProgress(69);
-                        
-                        // ---------------------4---------------------
-                        // As alles klaar is delete alle lee en temporary folders
-                        setMessage("Cleanup Step 5: Delete empty folders in WildLog\\Files\\... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("5) Delete all empty folders in the Workspace's Images, Movies and Other files folders.");
-                        try {
-                            UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(WildLogPaths.WILDLOG_FILES.getAbsoluteFullPath().toFile());
-                        }
-                        catch (final IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete all empty folders.");
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            finalHandleFeedback.println("PROBLEM:       Could not delete all empty folders.");
-                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                        }
-                        setProgress(71);
-
-                        // ---------------------6---------------------
-                        // Delete alle temporary/onnodige files en folders
-                        setMessage("Cleanup Step 6: Delete exports and thumbnails... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("6) Delete all exports and thumbnails (since these files can be recreated from within WildLog).");
-                        try {
-                            UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT.getAbsoluteFullPath().toFile());
-                        }
-                        catch (final IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete export folders.");
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            finalHandleFeedback.println("PROBLEM:       Could not delete export folders.");
-                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                        }
-                        setProgress(72);
-                        setMessage("Cleanup Step 6: Delete exports and thumbnails... " + getProgress() + "%");
-                        try {
-                            UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
-                        }
-                        catch (final IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, "Could not delete thumbnail folders.");
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            finalHandleFeedback.println("PROBLEM:       Could not delete thumbnail folders.");
-                            finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                        }
-                        setProgress(79);
-
-                        // ---------------------7---------------------
-                        // Check GPS Accuracy
-                        setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("7) Check the GPS Accuracy values.");
-                        allSightings = app.getDBI().listSightings(0, 0, 0, false, Sighting.class);
-                        int countGPSAccuracy = 0;
-                        int badGPSAccuracy = 0;
-                        for (Sighting sighting : allSightings) {
-                            if ((sighting.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(sighting.getGPSAccuracy()))
-                                    && sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
-                                    && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
-                                sighting.setGPSAccuracy(GPSAccuracy.AVERAGE);
-                                sighting.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
-                                app.getDBI().updateSighting(sighting, false);
-                                badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:     GPS information found without GPS Accuracy for Observation (" + sighting.getID() + ").");
-                                finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
-                            }
-                            else {
-                                if ((sighting.getGPSAccuracy() != null && !GPSAccuracy.NONE.equals(sighting.getGPSAccuracy()))
-                                        && (sighting.getLatitude() == null || Latitudes.NONE.equals(sighting.getLatitude())
-                                        || sighting.getLongitude() == null || Longitudes.NONE.equals(sighting.getLongitude()))) {
-                                    sighting.setGPSAccuracy(GPSAccuracy.NONE);
-                                    sighting.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
-                                    app.getDBI().updateSighting(sighting, false);
-                                    badGPSAccuracy++;
-                                    finalHandleFeedback.println("PROBLEM:     GPS Accuracy information found without GPS location for Observation (" + sighting.getID() + ").");
-                                    finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a value of NONE.");
-                                }
-                            }
-                            if (sighting.getGPSAccuracy() != null && (sighting.getGPSAccuracyValue() < sighting.getGPSAccuracy().getMinMeters()
-                                    || sighting.getGPSAccuracyValue() > sighting.getGPSAccuracy().getMaxMeters())) {
-                                sighting.setGPSAccuracyValue(sighting.getGPSAccuracy().getMaxMeters());
-                                app.getDBI().updateSighting(sighting, false);
-                                badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:     GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Observation (" + sighting.getID() + ").");
-                                finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
-                            }
-                            countGPSAccuracy++;
-                            setProgress(79 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
-                            setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
-                        }
-                        allLocations = app.getDBI().listLocations(null, Location.class);
-                        countGPSAccuracy = 0;
-                        for (Location location : allLocations) {
-                            if ((location.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
-                                    && location.getLatitude() != null && !Latitudes.NONE.equals(location.getLatitude())
-                                    && location.getLongitude() != null && !Longitudes.NONE.equals(location.getLongitude())) {
-                                location.setGPSAccuracy(GPSAccuracy.AVERAGE);
-                                location.setGPSAccuracyValue(GPSAccuracy.AVERAGE.getMaxMeters());
-                                app.getDBI().updateLocation(location, location.getName(), false);
-                                badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:     GPS information found without GPS Accuracy for Place (" + location.getName() + ").");
-                                finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
-                            }
-                            else {
-                                if ((location.getGPSAccuracy() != null && !GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
-                                        && (location.getLatitude() == null || Latitudes.NONE.equals(location.getLatitude())
-                                        || location.getLongitude() == null || Longitudes.NONE.equals(location.getLongitude()))) {
-                                    location.setGPSAccuracy(GPSAccuracy.NONE);
-                                    location.setGPSAccuracyValue(GPSAccuracy.NONE.getMaxMeters());
-                                    app.getDBI().updateLocation(location, location.getName(), false);
-                                    badGPSAccuracy++;
-                                    finalHandleFeedback.println("PROBLEM:     GPS Accuracy information found without GPS location for Place (" + location.getName() + ").");
-                                    finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy to a value of NONE.");
-                                }
-                            }
-                            if (location.getGPSAccuracy() != null && (location.getGPSAccuracyValue() < location.getGPSAccuracy().getMinMeters()
-                                    || location.getGPSAccuracyValue() > location.getGPSAccuracy().getMaxMeters())) {
-                                location.setGPSAccuracyValue(location.getGPSAccuracy().getMaxMeters());
-                                app.getDBI().updateLocation(location, location.getName(), false);
-                                badGPSAccuracy++;
-                                finalHandleFeedback.println("PROBLEM:     GPS Accuracy category information found with a GPS Accuracy Value outside its bounds for Place (" + location.getName() + ").");
-                                finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
-                            }
-                            countGPSAccuracy++;
-                            setProgress(81 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
-                            setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + getProgress() + "%");
-                        }
-                        setProgress(83);
-                        
-                        // ---------------------8---------------------
-                        // Checks Visit dates
-                        setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + getProgress() + "%");
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("8) Check the Period and linked Observation date ranges.");
-                        allSightings = app.getDBI().listSightings(0, 0, 0, false, Sighting.class);
-                        Collections.sort(allSightings, new Comparator<Sighting>() {
-                            @Override
-                            public int compare(Sighting inSighting1, Sighting inSighting2) {
-                                return Long.compare(inSighting1.getVisitID(), inSighting2.getVisitID());
-                            }
-                        });
-                        int badVisitDates = 0;
-                        int linkCount = 0;
-                        Set<Long> processedVisits = new HashSet<>();
-                        for (Sighting sighting : allSightings) {
-                            Visit visit = app.getDBI().findVisit(sighting.getVisitID(), null, true, Visit.class);
-                            if (processedVisits.add(visit.getID())) {
-                                if (visit.getStartDate() == null) {
-                                    finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") does not have a Start Date.");
-                                    finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Periods to have atleast a Start Date. The dates are used by the Charts and Maps.");
-                                    badVisitDates++;
-                                }
-                                if (visit.getStartDate() == null && visit.getEndDate() != null) {
-                                    finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") has an End Date but does not have a Start Date.");
-                                    finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Periods with an End Date to also have a Start Date.");
-                                    badVisitDates++;
-                                }
-                                if (visit.getStartDate() != null && visit.getEndDate() != null && visit.getEndDate().before(visit.getStartDate())) {
-                                    finalHandleFeedback.println("WARNING:   The Period (" + visit.getName() + ") has an End Date that is before the Start Date.");
-                                    finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Periods to have a valid date range.");
-                                    badVisitDates++;
-                                }
-                            }
-                            LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
-                            if ((visit.getStartDate() != null && sightingDate.isBefore(UtilsTime.getLocalDateFromDate(visit.getStartDate()))) 
-                                    || (visit.getEndDate() != null && sightingDate.isAfter(UtilsTime.getLocalDateFromDate(visit.getEndDate())))) {
-                                finalHandleFeedback.println("WARNING:   The date for Observation (" + sighting.getID() + ") does not fall within the dates from Period (" + visit.getName() + ").");
-                                finalHandleFeedback.println("  -UNRESOLVED: It is recommended for all Observations to use dates that fall within the Start date and End Date of the linked Period.");
-                                badVisitDates++;
-                            }
-                            linkCount++;
-                            setProgress(83 + (int)(linkCount/(double)allSightings.size()*2));
-                            setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + getProgress() + "%");
-                        }
-                        
-                        // ---------------------9---------------------
-                        // Re-create die default thumbnails
-                        if (recreateThumbnailsResult == 0) {
-                            // Recreate essential thumbnails
-                            setMessage("Cleanup Step 9: (Optional) Recreating essential default thumbnails... " + getProgress() + "%");
-                            finalHandleFeedback.println("");
-                            finalHandleFeedback.println("9) Recreate the default thumbnails for essential images.");
-                            List<WildLogFile> listFiles = new ArrayList<>(128);
-                            List<Element> lstElements = app.getDBI().listElements(null, null, null, Element.class);
-                            for (Element element : lstElements) {
-                                WildLogFile image = app.getDBI().findWildLogFile(0, element.getWildLogFileID(), WildLogFileType.IMAGE, null, WildLogFile.class);
-                                if (image != null) {
-                                    listFiles.add(image);
-                                }
-                            }
-                            List<Location> lstLocation = app.getDBI().listLocations(null, Location.class);
-                            for (Location location : lstLocation) {
-                                WildLogFile image = app.getDBI().findWildLogFile(0, location.getWildLogFileID(), WildLogFileType.IMAGE, null, WildLogFile.class);
-                                if (image != null) {
-                                    listFiles.add(image);
-                                }
-                            }
-                            List<Visit> lstVisit = app.getDBI().listVisits(null, 0, null, false, Visit.class);
-                            for (Visit visit : lstVisit) {
-                                WildLogFile image = app.getDBI().findWildLogFile(0, visit.getWildLogFileID(), WildLogFileType.IMAGE, null, WildLogFile.class);
-                                if (image != null) {
-                                    listFiles.add(image);
-                                }
-                            }
-                            ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
-                            final CleanupCounter countThumbnails = new CleanupCounter();
-                            for (final WildLogFile wildLogFile : listFiles) {
-                                executorService.submit(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // Maak net die nodigste thumbnails, want anders vat dinge donners lank
-                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
-                                        // Not going to bother with synchornization here, since it's just the progress bar
-                                        countThumbnails.counter++;
-                                        setProgress(85 + (int)(countThumbnails.counter/(double)listFiles.size()*14));
-                                        setMessage("Cleanup Step 9: (Optional) Recreating essential default thumbnails... " + getProgress() + "%");
-                                    }
-                                });
-                            }
-                            for (WildLogSystemImages systemFile : WildLogSystemImages.values()) {
-                                for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-                                    systemFile.getWildLogFile().getAbsoluteThumbnailPath(size);
-                                }
-                            }
-                            // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
-                            executorService.shutdown();
-                            if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
-                                finalHandleFeedback.println("PROBLEM:       Processing the thumbnails took too long.");
-                                finalHandleFeedback.println("  -UNRESOLVED: Thumbnails can be created on demand by the application.");
-                            }
-                            setProgress(99);
-                        }
-                        else 
-                        if (recreateThumbnailsResult == 1) {
-                            // Recreate all thumbnails
-                            setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... " + getProgress() + "%");
-                            finalHandleFeedback.println("");
-                            finalHandleFeedback.println("9) Recreate the default thumbnails for all images.");
-                            List<WildLogFile> listFiles =app.getDBI().listWildLogFiles(null, WildLogFileType.IMAGE, WildLogFile.class);
-                            // Sort the files by name to put the related location, element, visit and sighting images close to one another, 
-                            // otherwise the loading from disk actually gets worse because the files are all over the place.
-                            // This way the read-ahead will get more hits and be faster.
-                            Collections.sort(listFiles, new Comparator<WildLogFileCore>() {
-                                @Override
-                                public int compare(WildLogFileCore wlFile1, WildLogFileCore wlFile2) {
-                                    String prioritisedID1 = wlFile1.getLinkID();
-                                    String prioritisedID2 = wlFile2.getLinkID();
-                                    // Maak seker Visits word voor Sightings gedoen
-                                    if (prioritisedID1.charAt(0) == 'V') {
-                                        prioritisedID1 = "LZZZ" + prioritisedID1;
-                                    }
-                                    if (prioritisedID2.charAt(0) == 'V') {
-                                        prioritisedID2 = "LZZZ" + prioritisedID2;
-                                    }
-                                    return prioritisedID1.compareTo(prioritisedID2);
-                                }
-                            });
-                            ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
-                            final CleanupCounter countThumbnails = new CleanupCounter();
-                            for (final WildLogFile wildLogFile : listFiles) {
-                                executorService.submit(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // Maak net die nodigste thumbnails, want anders vat dinge donners lank
-                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
-                                        // Not going to bother with synchornization here, since it's just the progress bar
-                                        countThumbnails.counter++;
-                                        setProgress(85 + (int)(countThumbnails.counter/(double)listFiles.size()*14));
-                                        setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... " + getProgress() + "%");
-                                    }
-                                });
-                            }
-                            for (WildLogSystemImages systemFile : WildLogSystemImages.values()) {
-                                for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-                                    systemFile.getWildLogFile().getAbsoluteThumbnailPath(size);
-                                }
-                            }
-                            // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
-                            executorService.shutdown();
-                            if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
-                                finalHandleFeedback.println("PROBLEM:       Processing the thumbnails took too long.");
-                                finalHandleFeedback.println("  -UNRESOLVED: Thumbnails can be created on demand by the application.");
-                            }
-                            setProgress(99);
-                        }
-                        else {
-                            setProgress(99);
-                            setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... SKIPPED " + getProgress() + "%");
-                            finalHandleFeedback.println("9) Recreate the default thumbnails for all images. SKIPPED");
-                        }
-
-                        // ---------------------?---------------------
-                        // Recreate the database (to optimise file size and indexes)
-                        // TODO: Recreate the database. See http://www.h2database.com/html/features.html#compacting
-//                        public static void compact(String dir, String dbName,
-//        String user, String password) throws Exception {
-//    String url = "jdbc:h2:" + dir + "/" + dbName;
-//    String file = "data/test.sql";
-//    Script.execute(url, user, password, file);
-//    DeleteDbFiles.execute(dir, dbName, true);
-//    RunScript.execute(url, user, password, file, null, false);
-//}
-                        
-                        // ---------------------?---------------------
-                        // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
-// TODO: Maybe delete all non-wildlog files from the rest of the Workspace during cleanup?
-
-                        // --------------------- DONE ---------------------
-                        // Write out the summary
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("** Finished Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
-                        finalHandleFeedback.println("Files on disk moved to new folder: " + filesMoved.counter);
-                        finalHandleFeedback.println("Database file records with no reference to a file on disk: " + filesWithoutPath);
-                        finalHandleFeedback.println("Database file records with a reference to a file on disk, but the file was not found: " + filesNotOnDisk);
-                        finalHandleFeedback.println("Database file records with no ID: " + filesWithoutID);
-                        finalHandleFeedback.println("Database file records with incorrect ID: " + filesWithBadID);
-                        finalHandleFeedback.println("Database file records with incorrect type: " + filesWithBadType);
-                        finalHandleFeedback.println("Database file records with missing non-essential data: " + filesWithMissingData);
-                        finalHandleFeedback.println("Workspace files not found in the database: " + filesNotInDB.counter);
-                        finalHandleFeedback.println("Database file records with an incorrect File Modified Date stored in the database: " + filesWithIncorrectDate);
-                        finalHandleFeedback.println("Database file records with an incorrect File Size stored in the database: " + filesWithIncorrectSize);
-                        finalHandleFeedback.println("Incorrect links between database records: " + badDataLinks);
-                        finalHandleFeedback.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
-                        finalHandleFeedback.println("Periods with problematic Start Date and End Date values: " + badVisitDates);
-                        finalHandleFeedback.println("");
-                        finalHandleFeedback.println("+++++++++++++++++++ DURATION +++++++++++++++++++");
-                        long duration = System.currentTimeMillis() - startTime;
-                        int hours = (int) (((double) duration)/(1000.0*60.0*60.0));
-                        int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
-                        int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
-                        feedback.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
-                        // Print info to logs aswell (for upload)
-                        WildLogApp.LOGGER.log(Level.INFO, "+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
-                        WildLogApp.LOGGER.log(Level.INFO, "Files on disk moved to new folder: {}", filesMoved.counter);
-                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with no reference to a file on disk: {}", filesWithoutPath);
-                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with a reference to a file on disk, but the file was not found: {}", filesNotOnDisk);
-                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with no ID: {}", filesWithoutID);
-                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with incorrect ID: {}", filesWithBadID);
-                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with incorrect type: {}", filesWithBadType);
-                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with missing non-essential data: {}", filesWithMissingData);
-                        WildLogApp.LOGGER.log(Level.INFO, "Workspace files not found in the database: {}", filesNotInDB.counter);
-                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with an incorrect File Modified Date: {}", filesWithIncorrectDate);
-                        WildLogApp.LOGGER.log(Level.INFO, "Database file records with an incorrect File Size: {}", filesWithIncorrectSize);
-                        WildLogApp.LOGGER.log(Level.INFO, "Incorrect links between database records: {}", badDataLinks);
-                        WildLogApp.LOGGER.log(Level.INFO, "Records with incorrect GPS Accuracy: {}", badGPSAccuracy);
-                        WildLogApp.LOGGER.log(Level.INFO, "Periods with problematic Start Date and End Date values: {}", badVisitDates);
-                        WildLogApp.LOGGER.log(Level.INFO, "+++++++++++++++++++ DURATION +++++++++++++++++++");
-                        WildLogApp.LOGGER.log(Level.INFO, "{} hours, {} minutes, {} seconds", new Object[]{hours, minutes, seconds});
-                        setMessage("Finished Workspace Cleanup...");
-                        setProgress(100);
-                    }
-                    catch (IOException ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, "An exception occured while cleaning the Workspace!!");
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        if (feedback != null) {
-                            feedback.println("PROBLEM:       An exception occured while cleaning the Workspace!!");
-                            feedback.println("  -UNRESOLVED: Unexpected error... " + ex.getMessage());
-                        }
-                    }
-                    finally {
-                        if (feedback != null) {
-                            feedback.println("");
-                            feedback.println("------------------------------------------------");
-                            feedback.println("---------- FINISHED WORKSPACE CLEANUP ----------");
-                            feedback.println("------------------------------------------------");
-                            feedback.println("");
-                            feedback.flush();
-                            feedback.close();
-                        }
-                    }
-                    // Open the summary document
-                    UtilsFileProcessing.openFile(feedbackFile);
-                    return null;
-                }
-                
-                @Override
-                protected void finished() {
-                    super.finished();
-                    // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
-                    // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
+                    final int recreateThumbnailsResult = WLOptionPane.showOptionDialog(app.getMainFrame(),
+                            "<html>Would you like to also recreate all cached image thumbnails?"
+                                    + "<br/>Recreating the thumbnails can improve system performance and might correct thumbnails that are displaying incorrectly."
+                                    + "<br/>Warning: This step is optional but recommended. It can take very long to complete."
+                                    + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
+                            "Recreate Thumbnails?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                            null, new String[] {
+                                "Recreate only essential thumbnails (Recommended)",
+                                "Recreate all thumbnails", 
+                                "Don't recreate any thumbnails"
+                            }, null);
+                    // Ja... Ek moet STUPID baie SwingUtilities.invokeLater calls gebruik...
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                            app.quit(null);
+                            // Close all tabs and go to the home tab
+                            tabbedPanel.setSelectedIndex(0);
+                            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                                tabbedPanel.remove(STATIC_TAB_COUNT);
+                            }
+                            // Lock the input/display and show busy message
+                            // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
+                            tabbedPanel.setSelectedIndex(0);
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    JPanel panel = new JPanel(new AbsoluteLayout());
+                                    panel.setPreferredSize(new Dimension(400, 50));
+                                    panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
+                                    JLabel label = new JLabel("<html>Busy cleaning Workspace. Please be patient, this might take a while. <br/>"
+                                            + "Don't close the application until the process is finished.</html>");
+                                    label.setFont(new Font("Tahoma", Font.BOLD, 12));
+                                    label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
+                                    panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+                                    panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
+                                    panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+                                    JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
+                                    glassPane.removeAll();
+                                    glassPane.setLayout(new BorderLayout(100, 100));
+                                    glassPane.add(panel, BorderLayout.CENTER);
+                                    glassPane.addMouseListener(new MouseAdapter() {});
+                                    glassPane.addKeyListener(new KeyAdapter() {});
+                                    app.getMainFrame().setGlassPane(glassPane);
+                                    app.getMainFrame().getGlassPane().setVisible(true);
+                                    app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                                }
+                            });
+                            // Start the process in another thread to allow the UI to update correctly and use the progressbar for feedback
+                            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                                @Override
+                                protected Object doInBackground() throws Exception {
+                                    CheckAndClean.doCheckAndClean(app, this, recreateThumbnailsResult);
+                                    return null;
+                                }
+
+                                @Override
+                                protected void finished() {
+                                    super.finished();
+                                    // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
+                                    // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
+                                    SwingUtilities.invokeLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                            app.quit(null);
+                                        }
+                                    });
+                                }
+                            });
                         }
                     });
                 }
@@ -4469,7 +3577,7 @@ public final class WildLogView extends JFrame {
                                 // Create the new visit of type Stash
                                 Location location = app.getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class);
                                 Visit visit = new Visit();
-                                visit.setName("File Stash - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(LocalDateTime.now()));
+                                visit.setName("File Stash - " + UtilsTime.WL_DATE_FORMATTER_FOR_STASHED_VISIT_NAME.format(LocalDateTime.now()));
                                 visit.setType(VisitType.STASHED);
                                 visit.setLocationID(location.getID());
                                 app.getDBI().createVisit(visit, false);
@@ -4535,6 +3643,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_btnBulkImportActionPerformed
 
     private void mnuEchoWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEchoWorkspaceActionPerformed
+        WildLogApp.LOGGER.log(Level.INFO, "[EchoWorkspace]");
         WLOptionPane.showMessageDialog(app.getMainFrame(),
                 "<html>The <i>Echo Backup Workspace</i> process will delete all files from the target folder that aren't in the active Workspace "
                 + "<br>and copy all files from the active Workspace to the target folder that aren't already present (files will be replaced if their size differ)."
@@ -4550,209 +3659,215 @@ public final class WildLogView extends JFrame {
                 fileChooser.setMultiSelectionEnabled(false);
                 int result = fileChooser.showOpenDialog(app.getMainFrame());
                 if (result == JFileChooser.APPROVE_OPTION) {
-                    // Close all tabs and go to the home tab
-                    tabbedPanel.setSelectedIndex(0);
-                    while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
-                        tabbedPanel.remove(STATIC_TAB_COUNT);
-                    }
-                    // Lock the input/display and show busy message
-                    // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
-                    tabbedPanel.setSelectedIndex(0);
+                    // Ja... Ek moet STUPID baie SwingUtilities.invokeLater calls gebruik...
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            JPanel panel = new JPanel(new AbsoluteLayout());
-                            panel.setPreferredSize(new Dimension(400, 50));
-                            panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
-                            JLabel label = new JLabel("<html>Busy with Echo Backup Workspace. Please be patient, this might take a while. <br/>"
-                                    + "Don't close the application until the process is finished.</html>");
-                            label.setFont(new Font("Tahoma", Font.BOLD, 12));
-                            label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
-                            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-                            panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
-                            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
-                            JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
-                            glassPane.removeAll();
-                            glassPane.setLayout(new BorderLayout(100, 100));
-                            glassPane.add(panel, BorderLayout.CENTER);
-                            glassPane.addMouseListener(new MouseAdapter() {});
-                            glassPane.addKeyListener(new KeyAdapter() {});
-                            app.getMainFrame().setGlassPane(glassPane);
-                            app.getMainFrame().getGlassPane().setVisible(true);
-                            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                        }
-                    });
-                    UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                        @Override
-                        protected Object doInBackground() throws Exception {
-                            setProgress(0);
-                            setMessage("Starting the Echo Workspace Backup");
-                            // Need to close the databse in order to be allowed to copy it
-                            app.getDBI().close();
-                            setProgress(1);
-                            setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
-                            // Setup the report
-                            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("EchoWorkspaceReport.txt");
-                            PrintWriter feedback = null;
-                            try {
-                                feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
-                                feedback.println("--------------------------------------------------");
-                                feedback.println("---------- Echo Workspace Backup Report ----------");
-                                feedback.println("--------------------------------------------------");
-                                feedback.println("");
-                                // Start walking the folders and building a list of what needs to be copied / deleted
-                                final List<Path> lstPathsToDelete = new ArrayList<>();
-                                final List<Path> lstPathsToCopyFrom = new ArrayList<>();
-                                final List<Path> lstPathsToCopyTo = new ArrayList<>();
-                                Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
-                                Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
-                                // Walk the echo path and delete all folders and files that aren't in the active Workspace
-                                setProgress(2);
-                                setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + getProgress() + "%");
-                                Files.walkFileTree(echoPath, new SimpleFileVisitor<Path>() {
-
-                                    @Override
-                                    public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
-                                        if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFolderPath)))) {
-                                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath().normalize());
-                                            return FileVisitResult.SKIP_SUBTREE;
-                                        }
-                                        // Always delete some folders (if somehow present)
-                                        if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
-                                                || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
-                                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath().normalize());
-                                            return FileVisitResult.SKIP_SUBTREE;
-                                        }
-                                        return FileVisitResult.CONTINUE;
-                                    }
-
-                                    @Override
-                                    public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
-                                        if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFilePath)))) {
-                                            lstPathsToDelete.add(inFilePath.normalize().toAbsolutePath().normalize());
-                                        }
-                                        return FileVisitResult.CONTINUE;
-                                    }
-
-                                });
-                                setProgress(3);
-                                setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + getProgress() + "%");
-                                // Walk the active workspace and copy all files that aren't already present in the echo path
-                                Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
-
-                                    @Override
-                                    public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
-                                        // Skip some folders
-                                        if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
-                                                || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
-                                            return FileVisitResult.SKIP_SUBTREE;
-                                        }
-                                        return FileVisitResult.CONTINUE;
-                                    }
-
-                                    @Override
-                                    public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
-                                        // Skip the report file
-                                        if (inFilePath.equals(feedbackFile)) {
-                                            return FileVisitResult.SKIP_SUBTREE;
-                                        }
-                                        Path echoFile = echoPath.resolve(workspacePath.relativize(inFilePath));
-                                        if (!Files.exists(echoFile)) {
-                                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath().normalize());
-                                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath().normalize());
-                                        }
-                                        else
-                                        if (Files.size(inFilePath) != Files.size(echoFile)) {
-                                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath().normalize());
-                                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath().normalize());
-                                        }
-                                        return FileVisitResult.CONTINUE;
-                                    }
-
-                                });
-                                setProgress(4);
-                                setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
-                                // To the actual file processing based on the built up lists
-                                double totalActions = lstPathsToDelete.size() + lstPathsToCopyTo.size();
-                                for (int t = 0; t < lstPathsToDelete.size(); t++) {
-                                    Path pathToDelete = lstPathsToDelete.get(t);
-                                    // Delete the folder or file
-                                    UtilsFileProcessing.deleteRecursive(pathToDelete.toFile());
-                                    // Update report and progress
-                                    feedback.println("Deleted   : " + pathToDelete.toString());
-                                    setProgress(4 + (int) (((double) t) / totalActions * 95.0));
-                                    setMessage("Busy with the Echo Workspace Backup: Deleting files... " + getProgress() + "%");
-                                }
-                                for (int t = 0; t < lstPathsToCopyFrom.size(); t++) {
-                                    Path pathToCopyFrom = lstPathsToCopyFrom.get(t);
-                                    Path pathToCopyTo = lstPathsToCopyTo.get(t);
-                                    // Make sure the folders exist
-                                    Files.createDirectories(pathToCopyTo.getParent());
-                                    // Perfrom the action
-                                    if (!Files.exists(pathToCopyTo)) {
-                                        // Copy the file
-                                        UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, false, false);
-                                        // Update report and progress
-                                        feedback.println("Copied    : " + pathToCopyTo.toString());
-                                    }
-                                    else {
-                                        // Replace the file
-                                        UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, true, true);
-                                        // Update report and progress
-                                        feedback.println("Replaced  : " + pathToCopyTo.toString());
-                                    }
-                                    setProgress(4 + (int) (((double) (lstPathsToDelete.size() + t)) / totalActions * 95.0));
-                                    setMessage("Busy with the Echo Workspace Backup: Copying files... " + getProgress() + "%");
-                                }
+                            // Close all tabs and go to the home tab
+                            tabbedPanel.setSelectedIndex(0);
+                            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                                tabbedPanel.remove(STATIC_TAB_COUNT);
                             }
-                            // Finish the report
-                            catch (Exception ex) {
-                                if (feedback != null) {
-                                    feedback.println("");
-                                    feedback.println("--------------------------------------");
-                                    feedback.println("--------------- ERROR ----------------");
-                                    feedback.println(ex.toString());
-                                    feedback.println("--------------------------------------");
-                                    feedback.println("");
-                                }
-                                throw ex;
-                            }
-                            finally {
-                                if (feedback != null) {
-                                    feedback.println("");
-                                    feedback.println("--------------------------------------");
-                                    feedback.println("-------------- FINISHED --------------");
-                                    feedback.println("--------------------------------------");
-                                    feedback.println("");
-                                    feedback.flush();
-                                    feedback.close();
-                                    // Copy the report to the echo folder
-                                    try {
-                                        Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
-                                        UtilsFileProcessing.copyFile(feedbackFile, echoPath.resolve(feedbackFile.getFileName()), true, true);
-                                    }
-                                    catch (Exception ex) {
-                                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                    }
-                                    // Open the summary document
-                                    UtilsFileProcessing.openFile(feedbackFile);
-                                }
-                            }
-                            setProgress(100);
-                            setMessage("Done with the Echo Workspace Backup");
-                            return null;
-                        }
-
-                        @Override
-                        protected void finished() {
-                            super.finished();
-                            // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
-                            // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
+                            // Lock the input/display and show busy message
+                            // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
+                            tabbedPanel.setSelectedIndex(0);
                             SwingUtilities.invokeLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                    app.quit(null);
+                                    JPanel panel = new JPanel(new AbsoluteLayout());
+                                    panel.setPreferredSize(new Dimension(400, 50));
+                                    panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
+                                    JLabel label = new JLabel("<html>Busy with Echo Backup Workspace. Please be patient, this might take a while. <br/>"
+                                            + "Don't close the application until the process is finished.</html>");
+                                    label.setFont(new Font("Tahoma", Font.BOLD, 12));
+                                    label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
+                                    panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+                                    panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
+                                    panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+                                    JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
+                                    glassPane.removeAll();
+                                    glassPane.setLayout(new BorderLayout(100, 100));
+                                    glassPane.add(panel, BorderLayout.CENTER);
+                                    glassPane.addMouseListener(new MouseAdapter() {});
+                                    glassPane.addKeyListener(new KeyAdapter() {});
+                                    app.getMainFrame().setGlassPane(glassPane);
+                                    app.getMainFrame().getGlassPane().setVisible(true);
+                                    app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                                }
+                            });
+                            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                                @Override
+                                protected Object doInBackground() throws Exception {
+                                    setProgress(0);
+                                    setMessage("Starting the Echo Workspace Backup");
+                                    // Need to close the databse in order to be allowed to copy it
+                                    app.getDBI().close();
+                                    setProgress(1);
+                                    setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
+                                    // Setup the report
+                                    Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("EchoWorkspaceReport.txt");
+                                    PrintWriter feedback = null;
+                                    try {
+                                        feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                                        feedback.println("--------------------------------------------------");
+                                        feedback.println("---------- Echo Workspace Backup Report ----------");
+                                        feedback.println("--------------------------------------------------");
+                                        feedback.println("");
+                                        // Start walking the folders and building a list of what needs to be copied / deleted
+                                        final List<Path> lstPathsToDelete = new ArrayList<>();
+                                        final List<Path> lstPathsToCopyFrom = new ArrayList<>();
+                                        final List<Path> lstPathsToCopyTo = new ArrayList<>();
+                                        Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
+                                        Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
+                                        // Walk the echo path and delete all folders and files that aren't in the active Workspace
+                                        setProgress(2);
+                                        setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + getProgress() + "%");
+                                        Files.walkFileTree(echoPath, new SimpleFileVisitor<Path>() {
+
+                                            @Override
+                                            public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
+                                                if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFolderPath)))) {
+                                                    lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath().normalize());
+                                                    return FileVisitResult.SKIP_SUBTREE;
+                                                }
+                                                // Always delete some folders (if somehow present)
+                                                if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
+                                                        || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
+                                                    lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath().normalize());
+                                                    return FileVisitResult.SKIP_SUBTREE;
+                                                }
+                                                return FileVisitResult.CONTINUE;
+                                            }
+
+                                            @Override
+                                            public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
+                                                if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFilePath)))) {
+                                                    lstPathsToDelete.add(inFilePath.normalize().toAbsolutePath().normalize());
+                                                }
+                                                return FileVisitResult.CONTINUE;
+                                            }
+
+                                        });
+                                        setProgress(3);
+                                        setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + getProgress() + "%");
+                                        // Walk the active workspace and copy all files that aren't already present in the echo path
+                                        Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
+
+                                            @Override
+                                            public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
+                                                // Skip some folders
+                                                if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
+                                                        || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
+                                                    return FileVisitResult.SKIP_SUBTREE;
+                                                }
+                                                return FileVisitResult.CONTINUE;
+                                            }
+
+                                            @Override
+                                            public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
+                                                // Skip the report file
+                                                if (inFilePath.equals(feedbackFile)) {
+                                                    return FileVisitResult.SKIP_SUBTREE;
+                                                }
+                                                Path echoFile = echoPath.resolve(workspacePath.relativize(inFilePath));
+                                                if (!Files.exists(echoFile)) {
+                                                    lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath().normalize());
+                                                    lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath().normalize());
+                                                }
+                                                else
+                                                if (Files.size(inFilePath) != Files.size(echoFile)) {
+                                                    lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath().normalize());
+                                                    lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath().normalize());
+                                                }
+                                                return FileVisitResult.CONTINUE;
+                                            }
+
+                                        });
+                                        setProgress(4);
+                                        setMessage("Busy with the Echo Workspace Backup " + getProgress() + "%");
+                                        // To the actual file processing based on the built up lists
+                                        double totalActions = lstPathsToDelete.size() + lstPathsToCopyTo.size();
+                                        for (int t = 0; t < lstPathsToDelete.size(); t++) {
+                                            Path pathToDelete = lstPathsToDelete.get(t);
+                                            // Delete the folder or file
+                                            UtilsFileProcessing.deleteRecursive(pathToDelete.toFile());
+                                            // Update report and progress
+                                            feedback.println("Deleted   : " + pathToDelete.toString());
+                                            setProgress(4 + (int) (((double) t) / totalActions * 95.0));
+                                            setMessage("Busy with the Echo Workspace Backup: Deleting files... " + getProgress() + "%");
+                                        }
+                                        for (int t = 0; t < lstPathsToCopyFrom.size(); t++) {
+                                            Path pathToCopyFrom = lstPathsToCopyFrom.get(t);
+                                            Path pathToCopyTo = lstPathsToCopyTo.get(t);
+                                            // Make sure the folders exist
+                                            Files.createDirectories(pathToCopyTo.getParent());
+                                            // Perfrom the action
+                                            if (!Files.exists(pathToCopyTo)) {
+                                                // Copy the file
+                                                UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, false, false);
+                                                // Update report and progress
+                                                feedback.println("Copied    : " + pathToCopyTo.toString());
+                                            }
+                                            else {
+                                                // Replace the file
+                                                UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, true, true);
+                                                // Update report and progress
+                                                feedback.println("Replaced  : " + pathToCopyTo.toString());
+                                            }
+                                            setProgress(4 + (int) (((double) (lstPathsToDelete.size() + t)) / totalActions * 95.0));
+                                            setMessage("Busy with the Echo Workspace Backup: Copying files... " + getProgress() + "%");
+                                        }
+                                    }
+                                    // Finish the report
+                                    catch (Exception ex) {
+                                        if (feedback != null) {
+                                            feedback.println("");
+                                            feedback.println("--------------------------------------");
+                                            feedback.println("--------------- ERROR ----------------");
+                                            feedback.println(ex.toString());
+                                            feedback.println("--------------------------------------");
+                                            feedback.println("");
+                                        }
+                                        throw ex;
+                                    }
+                                    finally {
+                                        if (feedback != null) {
+                                            feedback.println("");
+                                            feedback.println("--------------------------------------");
+                                            feedback.println("-------------- FINISHED --------------");
+                                            feedback.println("--------------------------------------");
+                                            feedback.println("");
+                                            feedback.flush();
+                                            feedback.close();
+                                            // Copy the report to the echo folder
+                                            try {
+                                                Path echoPath = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
+                                                UtilsFileProcessing.copyFile(feedbackFile, echoPath.resolve(feedbackFile.getFileName()), true, true);
+                                            }
+                                            catch (Exception ex) {
+                                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                            }
+                                            // Open the summary document
+                                            UtilsFileProcessing.openFile(feedbackFile);
+                                        }
+                                    }
+                                    setProgress(100);
+                                    setMessage("Done with the Echo Workspace Backup");
+                                    return null;
+                                }
+
+                                @Override
+                                protected void finished() {
+                                    super.finished();
+                                    // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
+                                    // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
+                                    SwingUtilities.invokeLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                            app.quit(null);
+                                        }
+                                    });
                                 }
                             });
                         }
