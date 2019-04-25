@@ -224,6 +224,10 @@ public class UtilsImageProcessing {
     public static ImageIcon getScaledIconForOtherFiles(WildLogThumbnailSizes inSize) {
         return getScaledIconForPlaceholder(WildLogSystemImages.OTHER_FILES.getWildLogFile(), inSize);
     }
+    
+    public static ImageIcon getScaledIconForStashedFiles(WildLogThumbnailSizes inSize) {
+        return getScaledIconForPlaceholder(WildLogSystemImages.STASH.getWildLogFile(), inSize);
+    }
 
     private static ImageIcon getScaledIconForPlaceholder(WildLogSystemFile inWildLogSystemFile, WildLogThumbnailSizes inSize) {
         return new ImageIcon(inWildLogSystemFile.getAbsoluteThumbnailPath(inSize).toString());

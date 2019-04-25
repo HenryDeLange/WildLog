@@ -679,11 +679,15 @@ public final class WildLogView extends JFrame {
         jSeparator26.setName("jSeparator26"); // NOI18N
 
         btnStashFiles.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnStashFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Stash Icon.png"))); // NOI18N
         btnStashFiles.setText("Stash Files");
         btnStashFiles.setToolTipText("Stash files in the WildLog Workspace for later processing.");
         btnStashFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnStashFiles.setEnabled(false);
         btnStashFiles.setFocusPainted(false);
+        btnStashFiles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnStashFiles.setIconTextGap(10);
+        btnStashFiles.setMargin(new java.awt.Insets(2, 40, 2, 14));
         btnStashFiles.setName("btnStashFiles"); // NOI18N
         btnStashFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -692,11 +696,15 @@ public final class WildLogView extends JFrame {
         });
 
         btnBulkImport.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Impor Large.png"))); // NOI18N
         btnBulkImport.setText("Bulk Import");
         btnBulkImport.setToolTipText("Import multiple files at once using the Bulk Import feature.");
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBulkImport.setEnabled(false);
         btnBulkImport.setFocusPainted(false);
+        btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnBulkImport.setIconTextGap(10);
+        btnBulkImport.setMargin(new java.awt.Insets(2, 40, 2, 14));
         btnBulkImport.setName("btnBulkImport"); // NOI18N
         btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

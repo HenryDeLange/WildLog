@@ -42,6 +42,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
@@ -385,7 +386,12 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Visit tempVisit = listVisits.get(finalT);
-                                data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                if (VisitType.STASHED != tempVisit.getType()) {
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                }
+                                else {
+                                    data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.VERY_SMALL);
+                                }
                                 data[finalT][1] = tempVisit.getName();
                                 data[finalT][2] = tempVisit.getStartDate();
                                 data[finalT][3] = tempVisit.getEndDate();
@@ -483,7 +489,12 @@ public final class UtilsTableGenerator {
                                 @Override
                                 public Object call() throws Exception {
                                     Visit tempVisit = listVisits.get(finalT);
-                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                    if (VisitType.STASHED != tempVisit.getType()) {
+                                        data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                    }
+                                    else {
+                                        data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.VERY_SMALL);
+                                    }
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
                                     data[finalT][3] = inApp.getDBI().countSightings(0, 0, 0, tempVisit.getID());
@@ -566,7 +577,12 @@ public final class UtilsTableGenerator {
                                 @Override
                                 public Object call() throws Exception {
                                     Visit tempVisit = listVisits.get(finalT);
-                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                    if (VisitType.STASHED != tempVisit.getType()) {
+                                        data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
+                                    }
+                                    else {
+                                        data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.VERY_SMALL);
+                                    }
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
                                     data[finalT][3] = tempVisit.getType();

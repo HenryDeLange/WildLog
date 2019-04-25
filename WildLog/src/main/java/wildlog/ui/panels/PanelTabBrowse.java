@@ -62,6 +62,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
@@ -1044,6 +1045,15 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     btnSetDefaultElementImage.setEnabled(false);
                     btnSetDefaultLocationImage.setEnabled(true);
                     btnSetDefaultVisitImage.setEnabled(false);
+                    Visit visit = (Visit) (DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                    if (VisitType.STASHED == visit.getType()) {
+                        try {
+                            imageView.setImage(app.getClass().getResource("resources/icons/Stash.png"));
+                        }
+                        catch (IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        }
+                    }
                 }
                 else {
                     btnSetDefaultElementImage.setEnabled(false);
