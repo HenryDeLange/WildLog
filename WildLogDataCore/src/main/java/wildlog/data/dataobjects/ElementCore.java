@@ -9,7 +9,6 @@ import wildlog.data.utils.UtilsData;
 
 
 public class ElementCore extends DataObjectWithAudit implements DataObjectWithWildLogFile {
-    public static final String WILDLOGFILE_ID_PREFIX = "E";
     public static final String WILDLOG_FOLDER_PREFIX = "Creatures";
     protected String primaryName; // Must be unique
     protected String otherName;
@@ -51,8 +50,8 @@ public class ElementCore extends DataObjectWithAudit implements DataObjectWithWi
     }
 
     @Override
-    public String getWildLogFileID() {
-        return WILDLOGFILE_ID_PREFIX + id;
+    public long getWildLogFileID() {
+        return id;
     }
     
     @Override

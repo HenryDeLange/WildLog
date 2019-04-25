@@ -50,6 +50,7 @@ import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
+import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
@@ -944,7 +945,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     public boolean deleteWildLogFile(long inID) {
         // Note: This method only deletes one file at a time, and all it's "default" thumbnails.
         // First, get the path of the original file (to delete it from the disk)
-        String dbFilePath = findWildLogFile(inID, null, null, null, WildLogFile.class).getDBFilePath();
+        String dbFilePath = findWildLogFile(inID, 0, null, null, WildLogFile.class).getDBFilePath();
         // Next, remove the database entry.
         super.deleteWildLogFile(inID);
         // Next, delete the original image
@@ -1580,31 +1581,85 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("SET CACHE_SIZE 76800");
             // Add the offline map zoom level
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTZOOM double DEFAULT 20.0");
-            // Drop the columns I'm no longer going to support going forward
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WATERDEPENDANCE");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEMALEMIN");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEMALEMAX");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEFEMALEMIN");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEFEMALEMAX");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZEUNIT");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN SIZETYPE");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTMALEMIN");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTMALEMAX");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTFEMALEMIN");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTFEMALEMAX");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WEIGHTUNIT");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN BREEDINGDURATION");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN BREEDINGNUMBER");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN WISHLISTRATING");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN ACTIVETIME");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN ADDFREQUENCY");
-            state.execute("ALTER TABLE ELEMENTS DROP COLUMN LIFESPAN");
-            state.execute("ALTER TABLE LOCATIONS DROP COLUMN ACCOMMODATIONTYPE");
-            state.execute("ALTER TABLE LOCATIONS DROP COLUMN CATERING");
-            state.execute("ALTER TABLE LOCATIONS DROP COLUMN CONTACTNUMBERS");
-            state.execute("ALTER TABLE LOCATIONS DROP COLUMN WEBSITE");
-            state.execute("ALTER TABLE LOCATIONS DROP COLUMN EMAIL");
-            state.execute("ALTER TABLE LOCATIONS DROP COLUMN DIRECTIONS");
+            // Copy the data from the columns that will be deleted into the description field - to not loose it completely
+            try {
+                state.execute("UPDATE ELEMENTS \n"
+                        + "SET DIAGNOSTICDESCRIPTION = CONCAT(DIAGNOSTICDESCRIPTION, \n"
+                        + "SELECT UPGRADE_VALUES FROM (\n"
+                        + "SELECT PRIMARYNAME UPGRADE_PRIMARYNAME, \n"
+                        + "concat(\n"
+                        + "'\n\n"
+                        + "----- WildLog v6 Upgrade -----', \n"
+                        + "case when (WATERDEPENDANCE is null or length(WATERDEPENDANCE) = 0) then '' else concat('\n"
+                        + "WATERDEPENDANCE: ', WATERDEPENDANCE) end, \n"
+                        + "case when (SIZEMALEMIN is null or SIZEMALEMIN = 0) then '' else concat('\n"
+                        + "SIZEMALEMIN: ', SIZEMALEMIN) end, \n"
+                        + "case when (SIZEMALEMAX is null or SIZEMALEMAX = 0) then '' else concat('\n"
+                        + "SIZEMALEMAX: ', SIZEMALEMAX) end, \n"
+                        + "case when (SIZEFEMALEMIN is null or SIZEFEMALEMIN = 0) then '' else concat('\n"
+                        + "SIZEFEMALEMIN: ', SIZEFEMALEMIN) end, \n"
+                        + "case when (SIZEFEMALEMAX is null or SIZEFEMALEMAX = 0) then '' else concat('\n"
+                        + "SIZEFEMALEMAX: ', SIZEFEMALEMAX) end, \n"
+                        + "case when (SIZEUNIT is null or length(SIZEUNIT) = 0) then '' else concat('\n"
+                        + "SIZEUNIT: ', SIZEUNIT) end, \n"
+                        + "case when (SIZETYPE is null or length(SIZETYPE) = 0) then '' else concat('\n"
+                        + "SIZETYPE: ', SIZETYPE) end, \n"
+                        + "case when (WEIGHTMALEMIN is null or WEIGHTMALEMIN = 0) then '' else concat('\n"
+                        + "WEIGHTMALEMIN: ', WEIGHTMALEMIN) end, \n"
+                        + "case when (WEIGHTMALEMAX is null or WEIGHTMALEMAX = 0) then '' else concat('\n"
+                        + "WEIGHTMALEMAX: ', WEIGHTMALEMAX) end, \n"
+                        + "case when (WEIGHTFEMALEMIN is null or WEIGHTFEMALEMIN = 0) then '' else concat('\n"
+                        + "WEIGHTFEMALEMIN: ', WEIGHTFEMALEMIN) end, \n"
+                        + "case when (WEIGHTFEMALEMAX is null or WEIGHTFEMALEMAX = 0) then '' else concat('\n"
+                        + "WEIGHTFEMALEMAX: ', WEIGHTFEMALEMAX) end, \n"
+                        + "case when (WEIGHTUNIT is null or length(WEIGHTUNIT) = 0) then '' else concat('\n"
+                        + "WEIGHTUNIT: ', WEIGHTUNIT) end, \n"
+                        + "case when (BREEDINGDURATION is null or length(BREEDINGDURATION) = 0) then '' else concat('\n"
+                        + "BREEDINGDURATION: ', BREEDINGDURATION) end, \n"
+                        + "case when (BREEDINGNUMBER is null or length(BREEDINGNUMBER) = 0) then '' else concat('\n"
+                        + "BREEDINGNUMBER: ', BREEDINGNUMBER) end, \n"
+                        + "case when (WISHLISTRATING is null or length(WISHLISTRATING) = 0) then '' else concat('\n"
+                        + "WISHLISTRATING: ', WISHLISTRATING) end, \n"
+                        + "case when (ACTIVETIME is null or length(ACTIVETIME) = 0) then '' else concat('\n"
+                        + "ACTIVETIME: ', ACTIVETIME) end, \n"
+                        + "case when (ADDFREQUENCY is null or length(ADDFREQUENCY) = 0) then '' else concat('\n"
+                        + "ADDFREQUENCY: ', ADDFREQUENCY) end, \n"
+                        + "case when (LIFESPAN is null or length(LIFESPAN) = 0) then '' else concat('\n"
+                        + "LIFESPAN: ', LIFESPAN) end) UPGRADE_VALUES\n"
+                        + "FROM ELEMENTS)\n"
+                        + "WHERE UPGRADE_PRIMARYNAME = PRIMARYNAME\n"
+                        + "AND LENGTH(UPGRADE_VALUES) > 40)");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+            }
+            try {
+                state.execute("UPDATE LOCATIONS \n"
+                        + "SET DESCRIPTION = CONCAT(DESCRIPTION, \n"
+                        + "SELECT UPGRADE_VALUES FROM (\n"
+                        + "SELECT NAME UPGRADE_NAME, \n"
+                        + "concat(\n"
+                        + "'\n\n"
+                        + "----- WildLog v6 Upgrade -----', \n"
+                        + "case when (ACCOMMODATIONTYPE is null or length(ACCOMMODATIONTYPE) = 0) then '' else concat('\n"
+                        + "ACCOMMODATIONTYPE: ', ACCOMMODATIONTYPE) end, \n"
+                        + "case when (CATERING is null or length(CATERING) = 0) then '' else concat('\n"
+                        + "CATERING: ', CATERING) end, \n"
+                        + "case when (CONTACTNUMBERS is null or length(CONTACTNUMBERS) = 0) then '' else concat('\n"
+                        + "CONTACTNUMBERS: ', CONTACTNUMBERS) end, \n"
+                        + "case when (WEBSITE is null or length(WEBSITE) = 0) then '' else concat('\n"
+                        + "WEBSITE: ', WEBSITE) end, \n"
+                        + "case when (EMAIL is null or length(EMAIL) = 0) then '' else concat('\n"
+                        + "EMAIL: ', EMAIL) end, \n"
+                        + "case when (DIRECTIONS is null or length(DIRECTIONS) = 0) then '' else concat('\n"
+                        + "DIRECTIONS: ', DIRECTIONS) end) UPGRADE_VALUES\n"
+                        + "FROM LOCATIONS)\n"
+                        + "WHERE UPGRADE_NAME = NAME\n"
+                        + "AND LENGTH(UPGRADE_VALUES) > 40)");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+            }
             // Setup the new tables that use GUIDs and has Audit data
             // Rename old tables
             state.execute("ALTER TABLE ELEMENTS RENAME TO TEMP_ELEMENTS");
@@ -1799,6 +1854,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Element element = findElement(0, oldID.substring(oldID.indexOf('-') + 1), Element.class);
                     if (element != null) {
                         wildLogFile.setLinkID(element.getWildLogFileID());
+                        wildLogFile.setLinkType(WildLogFileLinkType.ELEMENT);
                     }
                     else {
                         WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
@@ -1811,6 +1867,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Location location = findLocation(0, oldID.substring(oldID.indexOf('-') + 1), Location.class);
                     if (location != null) {
                         wildLogFile.setLinkID(location.getWildLogFileID());
+                        wildLogFile.setLinkType(WildLogFileLinkType.LOCATION);
                     }
                     else {
                         WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
@@ -1823,6 +1880,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Visit visit = findVisit(0, oldID.substring(oldID.indexOf('-') + 1), false, Visit.class);
                     if (visit != null) {
                         wildLogFile.setLinkID(visit.getWildLogFileID());
+                        wildLogFile.setLinkType(WildLogFileLinkType.VISIT);
                     }
                     else {
                         WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
@@ -1835,6 +1893,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Sighting sighting = findSighting(Long.parseLong(oldID.substring(oldID.indexOf('-') + 1)), false, Sighting.class);
                     if (sighting != null) {
                         wildLogFile.setLinkID(sighting.getWildLogFileID());
+                        wildLogFile.setLinkType(WildLogFileLinkType.SIGHTING);
                     }
                     else {
                         WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "

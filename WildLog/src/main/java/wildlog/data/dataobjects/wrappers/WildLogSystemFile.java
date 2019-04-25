@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTMLExportTypes;
@@ -19,8 +20,8 @@ public class WildLogSystemFile extends WildLogFile {
     public static final String WILDLOG_FOLDER_PREFIX  = "WildLogSystem";
     private final Path originalPath;
 
-    public WildLogSystemFile(long inID, String inLinkID, String inFilename, String inFilePath, WildLogFileType inFileType) {
-        super(inID, inLinkID, inFilename, inFilePath, inFileType, null, null, 0);
+    public WildLogSystemFile(long inID, long inLinkID, WildLogFileLinkType inLinkType, String inFilename, String inFilePath, WildLogFileType inFileType) {
+        super(inID, inLinkID, inLinkType, inFilename, inFilePath, inFileType, null, null, 0);
         originalPath = WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath()
                 .resolve(WILDLOG_FOLDER_PREFIX)
                 .resolve(inFilename).normalize().toAbsolutePath().normalize();
@@ -90,7 +91,7 @@ public class WildLogSystemFile extends WildLogFile {
     }
 
     @Override
-    public void setLinkID(String id) {
+    public void setLinkID(long id) {
         WildLogApp.LOGGER.log(Level.WARN, "Don't try to change a WildLogSystemFile...");
     }
 

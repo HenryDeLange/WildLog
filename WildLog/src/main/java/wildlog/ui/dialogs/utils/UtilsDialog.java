@@ -203,7 +203,7 @@ public final class UtilsDialog {
         }
     }
 
-    public static void showExifPopup(String inID, int inIndex, final WildLogApp inApp) {
+    public static void showExifPopup(long inID, int inIndex, final WildLogApp inApp) {
         List<WildLogFile> files = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
         if (files.size() > 0) {
             if (WildLogFileType.IMAGE.equals(files.get(inIndex).getFileType())) {

@@ -8,7 +8,6 @@ import wildlog.data.utils.UtilsData;
 
 
 public class LocationCore extends DataObjectWithGPS implements DataObjectWithWildLogFile {
-    public static final String WILDLOGFILE_ID_PREFIX = "L";
     public static final String WILDLOG_FOLDER_PREFIX = "Places";
     protected String name; // Must be unique
     protected String description;
@@ -43,8 +42,8 @@ public class LocationCore extends DataObjectWithGPS implements DataObjectWithWil
     }
 
     @Override
-    public String getWildLogFileID() {
-        return WILDLOGFILE_ID_PREFIX + id;
+    public long getWildLogFileID() {
+        return id;
     }
     
     @Override

@@ -39,7 +39,7 @@ public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWit
     }
 
     @Override
-    public String getWildLogFileID() {
+    public long getWildLogFileID() {
         return sighting.getWildLogFileID();
     }
 

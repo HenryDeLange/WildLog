@@ -229,9 +229,9 @@ public class UtilsImageProcessing {
         return new ImageIcon(inWildLogSystemFile.getAbsoluteThumbnailPath(inSize).toString());
     }
 
-    public static int previousImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
+    public static int previousImage(long inLinkID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        int fotoCount = inApp.getDBI().countWildLogFiles(0, inID);
+        int fotoCount = inApp.getDBI().countWildLogFiles(0, inLinkID);
         if (fotoCount > 0) {
             if (newImageIndex > 0) {
                 newImageIndex = newImageIndex - 1;
@@ -242,14 +242,14 @@ public class UtilsImageProcessing {
                 }
                 newImageIndex = fotoCount - 1;
             }
-            setupFoto(inID, newImageIndex, inImageLabel, inSize, inApp);
+            setupFoto(inLinkID, newImageIndex, inImageLabel, inSize, inApp);
         }
         return newImageIndex;
     }
 
-    public static int nextImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
+    public static int nextImage(long inLinkID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        int fotoCount = inApp.getDBI().countWildLogFiles(0, inID);
+        int fotoCount = inApp.getDBI().countWildLogFiles(0, inLinkID);
         if (fotoCount > 0) {
             if (newImageIndex < fotoCount - 1) {
                 newImageIndex = newImageIndex + 1;
@@ -260,14 +260,14 @@ public class UtilsImageProcessing {
                 }
                 newImageIndex = 0;
             }
-            setupFoto(inID, newImageIndex, inImageLabel, inSize, inApp);
+            setupFoto(inLinkID, newImageIndex, inImageLabel, inSize, inApp);
         }
         return newImageIndex;
     }
 
-    public static int setMainImage(String inID, int inImageIndex, WildLogApp inApp) {
+    public static int setMainImage(long inLinkID, int inImageIndex, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        List<WildLogFile> lstFiles = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
+        List<WildLogFile> lstFiles = inApp.getDBI().listWildLogFiles(inLinkID, null, WildLogFile.class);
         for (int t = 0; t < lstFiles.size(); t++) {
             if (t != newImageIndex) {
                 lstFiles.get(t).setDefaultFile(false);
@@ -284,20 +284,20 @@ public class UtilsImageProcessing {
         return newImageIndex;
     }
 
-    public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
+    public static int removeImage(long inLinkID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
         if (inImageLabel != null) {
             // Flush the old image data - this should help to render newly uploaded images with the same name as the deleted image correctly
             if (inImageLabel.getIcon() instanceof ImageIcon) {
                 ((ImageIcon) inImageLabel.getIcon()).getImage().flush();
             }
-            List<WildLogFile> fotos = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
+            List<WildLogFile> fotos = inApp.getDBI().listWildLogFiles(inLinkID, null, WildLogFile.class);
             if (fotos.size() > 0) {
                 WildLogFile tempFoto = fotos.get(newImageIndex);
                 inApp.getDBI().deleteWildLogFile(tempFoto.getID());
                 if (fotos.size() > 1) {
                     newImageIndex = newImageIndex - 1;
-                    newImageIndex = nextImage(inID, newImageIndex, inImageLabel, inSize, inApp);
+                    newImageIndex = nextImage(inLinkID, newImageIndex, inImageLabel, inSize, inApp);
                 }
                 else {
                     inImageLabel.setIcon(getScaledIconForNoFiles(inSize));
@@ -310,9 +310,9 @@ public class UtilsImageProcessing {
         return newImageIndex;
     }
 
-    public static void setupFoto(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
+    public static void setupFoto(long inLinkID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         if (inImageLabel != null) {
-            List<WildLogFile> files = inApp.getDBI().listWildLogFiles(inID, null, WildLogFile.class);
+            List<WildLogFile> files = inApp.getDBI().listWildLogFiles(inLinkID, null, WildLogFile.class);
             if (files.size() > inImageIndex) {
                 if (files.get(inImageIndex).getFileType() != null) {
                     if (files.get(inImageIndex).getFileType().equals(WildLogFileType.IMAGE)) {

@@ -34,6 +34,7 @@ import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -67,7 +68,8 @@ public class CheckAndClean {
                 public int counter = 0;
             }
             class CleanupHelper {
-                private void doTheMove(DataObjectWithWildLogFile inDAOWithFile, Path inExpectedPath, Path inExpectedPrefix, WildLogFile inWildLogFile, final CleanupCounter fileCount) {
+                private void doTheMove(DataObjectWithWildLogFile inDAOWithFile, Path inExpectedPath, Path inExpectedPrefix, WildLogFileLinkType inLinkType, 
+                        WildLogFile inWildLogFile, final CleanupCounter fileCount) {
                     Path shouldBePath = inExpectedPath.resolve(inExpectedPrefix);
                     Path currentPath = inWildLogFile.getAbsolutePath().getParent();
                     boolean renameBasedOnSighting = false;
@@ -106,7 +108,7 @@ public class CheckAndClean {
                         // "Re-upload" the file to the correct location
                         UtilsFileProcessing.performFileUpload(
                                 inDAOWithFile,
-                                inExpectedPrefix,
+                                inExpectedPrefix, inLinkType, 
                                 new File[]{inWildLogFile.getAbsolutePath().toFile()},
                                 null, 
                                 inApp, false, null, false, true);
@@ -115,13 +117,13 @@ public class CheckAndClean {
                         fileCount.counter++;
                     }
                 }
-                public void moveFilesToCorrectFolders(DataObjectWithWildLogFile inDAOWithFile, WildLogFile inWildLogFile, Path inPrefix, final CleanupCounter fileCount) {
+                public void moveFilesToCorrectFolders(DataObjectWithWildLogFile inDAOWithFile, WildLogFile inWildLogFile, Path inPrefix, WildLogFileLinkType inLinkType, final CleanupCounter fileCount) {
                     // Check to make sure the parent paths are correct, if not then move the file to the correct place and add a new DB entry before deleting the old one
                     // Maak seker alle DB paths is relative (nie absolute nie) en begin met propper WL roots
                     if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
                         doTheMove(inDAOWithFile,
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getAbsoluteFullPath(),
-                                inPrefix,
+                                inPrefix, inLinkType, 
                                 inWildLogFile,
                                 fileCount);
                     }
@@ -129,14 +131,14 @@ public class CheckAndClean {
                     if (WildLogFileType.MOVIE.equals(inWildLogFile.getFileType())) {
                         doTheMove(inDAOWithFile,
                                 WildLogPaths.WILDLOG_FILES_MOVIES.getAbsoluteFullPath(),
-                                inPrefix,
+                                inPrefix, inLinkType, 
                                 inWildLogFile,
                                 fileCount);
                     }
                     else {
                         doTheMove(inDAOWithFile,
                                 WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath(),
-                                inPrefix,
+                                inPrefix, inLinkType, 
                                 inWildLogFile,
                                 fileCount);
                     }
@@ -152,7 +154,7 @@ public class CheckAndClean {
 // TODO: As die file bestaan maar nie in die DB link nie kan mens dalk probeer "slim" wees en die link afly deur ander info soos size, date en die path...
                                 WildLogFile wildLogFile = new WildLogFile();
                                 wildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(originalFile).toString());
-                                if (inApp.getDBI().findWildLogFile(0, null, null, wildLogFile.getDBFilePath(), WildLogFile.class) == null) {
+                                if (inApp.getDBI().findWildLogFile(0, 0, null, wildLogFile.getDBFilePath(), WildLogFile.class) == null) {
                                     finalHandleFeedback.println("PROBLEM:     File in Workspace not present in the database: " + wildLogFile.getAbsolutePath());
                                     finalHandleFeedback.println("  +RESOLVED: Moved the file from the Workspace to the LostFiles folder: " + wildLogFile.getDBFilePath());
                                     // Move the file to the LostFiles folder (don't delete, because we might want the file back to re-upload, etc.) 
@@ -337,7 +339,7 @@ public class CheckAndClean {
             inProgressbarTask.setMessage("Cleanup Step 2: Validate database references to the files in the Workspace... " + inProgressbarTask.getProgress() + "%");
             finalHandleFeedback.println("");
             finalHandleFeedback.println("2) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
-            List<WildLogFile> allFiles = inApp.getDBI().listWildLogFiles(null, null, WildLogFile.class);
+            List<WildLogFile> allFiles = inApp.getDBI().listWildLogFiles(0, null, WildLogFile.class);
             int filesWithoutID = 0;
             int filesWithoutPath = 0;
             int filesNotOnDisk = 0;
@@ -352,7 +354,7 @@ public class CheckAndClean {
             int badStashes = 0;
             for (WildLogFile wildLogFile : allFiles) {
                 // Check the WildLogFile's content
-                if (wildLogFile.getLinkID() == null || wildLogFile.getLinkID().isEmpty()) {
+                if (wildLogFile.getLinkID() == 0) {
                     finalHandleFeedback.println("PROBLEM:     File record without a LinkID. FileID: " + wildLogFile.getID() + " | FilePath: " + wildLogFile.getDBFilePath() + " | FileLinkID: " + wildLogFile.getLinkID());
                     finalHandleFeedback.println("  +RESOLVED: Delete the database file record and file on disk.");
                     inApp.getDBI().deleteWildLogFile(wildLogFile.getID());
@@ -389,13 +391,12 @@ public class CheckAndClean {
                     filesWithBadType++;
                 }
                 // Check the WildLogFile's linkage
-                if (wildLogFile.getLinkID().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
+                if (wildLogFile.getLinkType() == WildLogFileLinkType.ELEMENT) {
                     // Make sure it is linked
-                    final Element temp = inApp.getDBI().findElement(
-                            Long.parseLong(wildLogFile.getLinkID().substring(Element.WILDLOGFILE_ID_PREFIX.length())), null, Element.class);
+                    final Element temp = inApp.getDBI().findElement(wildLogFile.getLinkID(), null, Element.class);
                     if (temp == null) {
                         finalHandleFeedback.println("PROBLEM:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
-                                + ", ID: " + wildLogFile.getID()+ ", CreatureID Used: " + wildLogFile.getLinkID().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
+                                + ", ID: " + wildLogFile.getID()+ ", CreatureID Used: " + wildLogFile.getLinkID());
                         finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
                         inApp.getDBI().deleteWildLogFile(wildLogFile.getID());
                         filesWithBadID++;
@@ -404,17 +405,34 @@ public class CheckAndClean {
                     // Make sure the file path is correct
                     cleanupHelper.moveFilesToCorrectFolders(temp, 
                             wildLogFile,
-                            Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()).normalize(),
+                            Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()).normalize(), WildLogFileLinkType.ELEMENT, 
                             filesMoved);
                 }
                 else 
-                if (wildLogFile.getLinkID().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
+                if (wildLogFile.getLinkType() == WildLogFileLinkType.LOCATION) {
                     // Make sure it is linked
-                    final Visit temp = inApp.getDBI().findVisit(
-                            Long.parseLong(wildLogFile.getLinkID().substring(Visit.WILDLOGFILE_ID_PREFIX.length())), null, true, Visit.class);
+                    final Location temp = inApp.getDBI().findLocation(wildLogFile.getLinkID(), null, Location.class);
+                    if (temp == null) {
+                        finalHandleFeedback.println("PROBLEM:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
+                                + ", ID: " + wildLogFile.getID() + ", PlaceID Used: " + wildLogFile.getLinkID());
+                        finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
+                        inApp.getDBI().deleteWildLogFile(wildLogFile.getID());
+                        filesWithBadID++;
+                        continue;
+                    }
+                    // Make sure the file path is correct
+                    cleanupHelper.moveFilesToCorrectFolders(temp, 
+                            wildLogFile,
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()).normalize(), WildLogFileLinkType.LOCATION, 
+                            filesMoved);
+                }
+                else 
+                if (wildLogFile.getLinkType() == WildLogFileLinkType.VISIT) {
+                    // Make sure it is linked
+                    final Visit temp = inApp.getDBI().findVisit(wildLogFile.getLinkID(), null, true, Visit.class);
                     if (temp == null) {
                         finalHandleFeedback.println("PROBLEM:     Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
-                                + ", ID: " + wildLogFile.getID() + ", PeriodID Used: " + wildLogFile.getLinkID().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
+                                + ", ID: " + wildLogFile.getID() + ", PeriodID Used: " + wildLogFile.getLinkID());
                         finalHandleFeedback.println("  +RESOLVED: Deleted the file databse record and file from disk.");
                         inApp.getDBI().deleteWildLogFile(wildLogFile.getID());
                         filesWithBadID++;
@@ -423,35 +441,15 @@ public class CheckAndClean {
                     // Make sure the file path is correct
                     cleanupHelper.moveFilesToCorrectFolders(temp, 
                             wildLogFile,
-                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getCachedLocationName(), temp.getName()).normalize(),
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getCachedLocationName(), temp.getName()).normalize(), WildLogFileLinkType.VISIT, 
                             filesMoved);
                 }
                 else 
-                if (wildLogFile.getLinkID().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
-                    // Make sure it is linked
-                    final Location temp = inApp.getDBI().findLocation(
-                            Long.parseLong(wildLogFile.getLinkID().substring(Location.WILDLOGFILE_ID_PREFIX.length())), null, Location.class);
-                    if (temp == null) {
-                        finalHandleFeedback.println("PROBLEM:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
-                                + ", ID: " + wildLogFile.getID() + ", PlaceID Used: " + wildLogFile.getLinkID().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
-                        finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
-                        inApp.getDBI().deleteWildLogFile(wildLogFile.getID());
-                        filesWithBadID++;
-                        continue;
-                    }
-                    // Make sure the file path is correct
-                    cleanupHelper.moveFilesToCorrectFolders(temp, 
-                            wildLogFile,
-                            Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()).normalize(),
-                            filesMoved);
-                }
-                else 
-                if (wildLogFile.getLinkID().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
+                if (wildLogFile.getLinkType() == WildLogFileLinkType.SIGHTING) {
                     // Make sure it is linked
                     Sighting temp = null;
                     try {
-                        temp = inApp.getDBI().findSighting(
-                                Long.parseLong(wildLogFile.getLinkID().substring(Sighting.WILDLOGFILE_ID_PREFIX.length())), true, Sighting.class);
+                        temp = inApp.getDBI().findSighting(wildLogFile.getLinkID(), true, Sighting.class);
                     }
                     catch (NumberFormatException ex) {
                         finalHandleFeedback.println("PROBLEM:       Can't get linked Observation's ID.");
@@ -459,7 +457,7 @@ public class CheckAndClean {
                     }
                     if (temp == null) {
                         finalHandleFeedback.println("PROBLEM:     Could not find linked Observation for this file. FilePath: " + wildLogFile.getDBFilePath()
-                                + ", ID: " + wildLogFile.getID() + ", ObservationID Used: " + wildLogFile.getLinkID().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
+                                + ", ID: " + wildLogFile.getID() + ", ObservationID Used: " + wildLogFile.getLinkID());
                         finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
                         inApp.getDBI().deleteWildLogFile(wildLogFile.getID());
                         filesWithBadID++;
@@ -468,11 +466,11 @@ public class CheckAndClean {
                     // Make sure the file path is correct
                     cleanupHelper.moveFilesToCorrectFolders(temp, 
                             wildLogFile,
-                            Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()).normalize(),
+                            Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()).normalize(), WildLogFileLinkType.SIGHTING, 
                             filesMoved);
                 }
                 else {
-                    finalHandleFeedback.println("PROBLEM:     File LinkID is not correctly formatted.");
+                    finalHandleFeedback.println("PROBLEM:     File ID [" + wildLogFile.getID() + "] does not have a correct LinkType [" + wildLogFile.getLinkType() + "], with LinkID [" + wildLogFile.getLinkID() + "].");
                     finalHandleFeedback.println("  +RESOLVED: Deleted the file database record and file from disk.");
                     inApp.getDBI().deleteWildLogFile(wildLogFile.getID());
                     filesWithBadID++;
@@ -556,7 +554,7 @@ public class CheckAndClean {
             inProgressbarTask.setMessage("Cleanup Step 4: Check the file size and dates... " + inProgressbarTask.getProgress() + "%");
             finalHandleFeedback.println("");
             finalHandleFeedback.println("4) Compare the size and modified date of the files on disk to the values stored in the database.");
-            allFiles = inApp.getDBI().listWildLogFiles(null, null, WildLogFile.class);
+            allFiles = inApp.getDBI().listWildLogFiles(0, null, WildLogFile.class);
             fileProcessCounter = 0;
             for (WildLogFile wildLogFile : allFiles) {
                 LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
@@ -833,15 +831,15 @@ public class CheckAndClean {
                 inProgressbarTask.setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... " + inProgressbarTask.getProgress() + "%");
                 finalHandleFeedback.println("");
                 finalHandleFeedback.println("9) Recreate the default thumbnails for all images.");
-                List<WildLogFile> listFiles =inApp.getDBI().listWildLogFiles(null, WildLogFileType.IMAGE, WildLogFile.class);
+                List<WildLogFile> listFiles =inApp.getDBI().listWildLogFiles(0, WildLogFileType.IMAGE, WildLogFile.class);
                 // Sort the files by name to put the related location, element, visit and sighting images close to one another, 
                 // otherwise the loading from disk actually gets worse because the files are all over the place.
                 // This way the read-ahead will get more hits and be faster.
                 Collections.sort(listFiles, new Comparator<WildLogFileCore>() {
                     @Override
                     public int compare(WildLogFileCore wlFile1, WildLogFileCore wlFile2) {
-                        String prioritisedID1 = wlFile1.getLinkID();
-                        String prioritisedID2 = wlFile2.getLinkID();
+                        String prioritisedID1 = wlFile1.getLinkType().toString();
+                        String prioritisedID2 = wlFile2.getLinkType().toString();
                         // Maak seker Visits word voor Sightings gedoen
                         if (prioritisedID1.charAt(0) == 'V') {
                             prioritisedID1 = "LZZZ" + prioritisedID1;

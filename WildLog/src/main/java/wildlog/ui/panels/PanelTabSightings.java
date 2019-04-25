@@ -593,11 +593,11 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRowCount() == 1 && tblSightings.getModel().getColumnCount() > 8) {
-            long sightingCounter = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
-            int fotoCount = app.getDBI().countWildLogFiles(0, Sighting.WILDLOGFILE_ID_PREFIX + sightingCounter);
+            long sightingID = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
+            int fotoCount = app.getDBI().countWildLogFiles(0, sightingID);
             if (fotoCount > 0 ) {
                 imageIndex = 0;
-                UtilsImageProcessing.setupFoto(Sighting.WILDLOGFILE_ID_PREFIX + sightingCounter, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
@@ -722,8 +722,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblSightings.getSelectedRowCount() == 1) {
-            long tempSightingCounter = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
-            UtilsFileProcessing.openFile(Sighting.WILDLOGFILE_ID_PREFIX + tempSightingCounter, imageIndex, app);
+            long tempSightingID = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
+            UtilsFileProcessing.openFile(tempSightingID, imageIndex, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
@@ -867,15 +867,15 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void btnPrevFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevFileActionPerformed
         if (tblSightings.getSelectedRowCount() == 1) {
-            long sightingCounter = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
-            imageIndex = UtilsImageProcessing.previousImage(Sighting.WILDLOGFILE_ID_PREFIX + sightingCounter, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            long sightingID = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
+            imageIndex = UtilsImageProcessing.previousImage(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
     }//GEN-LAST:event_btnPrevFileActionPerformed
 
     private void btnNextFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextFileActionPerformed
         if (tblSightings.getSelectedRowCount() == 1) {
-            long sightingCounter = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
-            imageIndex = UtilsImageProcessing.nextImage(Sighting.WILDLOGFILE_ID_PREFIX + sightingCounter, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            long sightingID = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
+            imageIndex = UtilsImageProcessing.nextImage(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
         }
     }//GEN-LAST:event_btnNextFileActionPerformed
 

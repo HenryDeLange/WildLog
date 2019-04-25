@@ -9,7 +9,6 @@ import wildlog.data.utils.UtilsData;
 
 
 public class VisitCore extends DataObjectWithAudit implements DataObjectWithWildLogFile {
-    public static final String WILDLOGFILE_ID_PREFIX = "V";
     public static final String WILDLOG_FOLDER_PREFIX = "Periods";
     protected String name; // Must be unique
     protected Date startDate;
@@ -53,8 +52,8 @@ public class VisitCore extends DataObjectWithAudit implements DataObjectWithWild
     }
 
     @Override
-    public String getWildLogFileID() {
-        return WILDLOGFILE_ID_PREFIX + id;
+    public long getWildLogFileID() {
+        return id;
     }
     
     @Override

@@ -324,8 +324,7 @@ public class InfoBox extends JPanel {
         dialog.setVisible(true);
         // Update the UI
         table.getCellEditor().stopCellEditing();
-        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getElementID(), 
-                0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        UtilsImageProcessing.setupFoto(sightingWrapper.getElementID(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
         sightingWrapper.setIcon(lblImage.getIcon());
         populateUI();
     }//GEN-LAST:event_btnEditActionPerformed
@@ -343,7 +342,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnChooseCreatureActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getElementID(), 0, app);
+        UtilsFileProcessing.openFile(sightingWrapper.getElementID(), 0, app);
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
@@ -365,8 +364,7 @@ public class InfoBox extends JPanel {
                 table.getCellEditor().stopCellEditing();
                 sightingWrapper.setElementID(ElementSelectionDialog.getPreviousElementID());
                 sightingWrapper.setCachedElementName(ElementSelectionDialog.getPreviousElementName());
-                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + ElementSelectionDialog.getPreviousElementID(), 
-                        0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+                UtilsImageProcessing.setupFoto(ElementSelectionDialog.getPreviousElementID(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
                 sightingWrapper.setIcon(lblImage.getIcon());
                 evt.consume();
             }

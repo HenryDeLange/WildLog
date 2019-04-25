@@ -50,6 +50,7 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
+import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WildLogUserTypes;
@@ -335,7 +336,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(sighting,
-                Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
+                Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()), WildLogFileLinkType.SIGHTING, 
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
                     @Override

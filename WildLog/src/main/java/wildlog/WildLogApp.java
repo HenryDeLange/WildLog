@@ -269,7 +269,7 @@ public class WildLogApp extends Application {
                                 printStream.print("&NumberOfLocations=" + dbi.countLocations(null));
                                 printStream.print("&NumberOfVisits=" + dbi.countVisits(null, 0));
                                 printStream.print("&NumberOfSightings=" + dbi.countSightings(0, 0, 0, 0));
-                                printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(0, null));
+                                printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(0, 0));
                                 printStream.print("&PartialLog=" + logFileSnippit);
                                 printStream.print("&ZippedLog=" + Base64.getEncoder().encodeToString(logFileZip.toByteArray()).replaceAll("\\+", "%2B"));
                                 // Have to get the input stream in order to actually send the request

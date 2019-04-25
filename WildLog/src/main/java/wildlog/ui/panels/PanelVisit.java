@@ -23,6 +23,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
@@ -233,7 +234,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(visit,
-                Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(locationForVisit.getName()).resolve(visit.getName()),
+                Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(locationForVisit.getName()).resolve(visit.getName()), WildLogFileLinkType.VISIT, 
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
                     @Override
@@ -328,9 +329,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void refreshSightingInfo() {
         if (sighting != null) {
             if (sighting.getElementID() > 0) {
-                int fotoCount = app.getDBI().countWildLogFiles(0, Element.WILDLOGFILE_ID_PREFIX + sighting.getElementID());
+                int fotoCount = app.getDBI().countWildLogFiles(0, sighting.getElementID());
                 if (fotoCount > 0) {
-                    UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + sighting.getElementID(), 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+                    UtilsImageProcessing.setupFoto(sighting.getElementID(), 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
                 }
                 else {
                     lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));

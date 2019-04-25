@@ -39,6 +39,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
@@ -141,7 +142,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
         else {
             lblLocation.setText("");
-            UtilsImageProcessing.setupFoto("", 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+            lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
         // If this bulk import was called from the Visit then set the name and disable the fields
         if (existingVisit != null && existingVisit.getID() > 0) {
@@ -949,7 +950,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         visitFiles[t] = lstVisitFiles.get(t).toFile();
                     }
                     UtilsFileProcessing.performFileUpload(visit,
-                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()),
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()), WildLogFileLinkType.VISIT, 
                             visitFiles,
                             null, 
                             app, false, null, true, false);
@@ -1036,7 +1037,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 }
                                 // Save the corresponding images
                                 UtilsFileProcessing.performFileUpload(sightingWrapper,
-                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.toPath()),
+                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.toPath()), WildLogFileLinkType.SIGHTING, 
                                         files.toArray(new File[files.size()]),
                                         null, 
                                         app, false, null, true, uploadListContainsDuplicates);
@@ -1112,7 +1113,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
         else {
             lblLocation.setText("");
-            UtilsImageProcessing.setupFoto("", 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+            lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
         // Re-check all species images already assigned since some might have changed
         DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
@@ -1183,8 +1184,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnSelectLocationActionPerformed
 
     private void lblImageLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageLocationMouseReleased
-        if (lblLocation.getText() != null && !lblLocation.getText().isEmpty()) {
-            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + lblLocation.getText(), 0, app);
+        if (selectedLocation != null) {
+            UtilsFileProcessing.openFile(selectedLocation.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblImageLocationMouseReleased
 

@@ -274,8 +274,8 @@ public class CropDialog extends JDialog {
                     // If you pass the 2nd parameter as false, Exif information is not loaded and hence will not be written.
                     lljTran.read(LLJTran.READ_ALL, true);
                     // Get a name for the new cropped file
-                    WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getID(), wildLogFile.getLinkID(), wildLogFile.getFilename(), 
-                            wildLogFile.getDBFilePath(), wildLogFile.getFileType(), new Date(), null, -1);
+                    WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getID(), wildLogFile.getLinkID(), wildLogFile.getLinkType(), 
+                            wildLogFile.getFilename(), wildLogFile.getDBFilePath(), wildLogFile.getFileType(), new Date(), null, -1);
                     if (iNaturalistUploadFile == null) {
                         while (Files.exists(newWildLogFile.getAbsolutePath())) {
                             String newFilename = newWildLogFile.getFilename();

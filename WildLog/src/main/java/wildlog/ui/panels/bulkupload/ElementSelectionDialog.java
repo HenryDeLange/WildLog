@@ -85,7 +85,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 }
             }
         });
-        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + inSelectedElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        UtilsImageProcessing.setupFoto(inSelectedElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
     }
 
     /** This method is called from within the constructor to
@@ -255,8 +255,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
-            UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX 
-                    + tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3), 0, app);
+            UtilsFileProcessing.openFile((long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3), 0, app);
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 
@@ -295,7 +294,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                     }
                 }
                 // Update the icon
-                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + previousElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+                UtilsImageProcessing.setupFoto(previousElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
                 // Do the select action
                 btnSelectActionPerformed(null);
             }
@@ -308,9 +307,9 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
-            String selectedID = tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3).toString();
+            long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
             // Change the image
-            UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+            UtilsImageProcessing.setupFoto(selectedID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
         }
         else {
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));

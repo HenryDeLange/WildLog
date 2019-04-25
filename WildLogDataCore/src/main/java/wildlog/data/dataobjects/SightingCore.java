@@ -20,7 +20,6 @@ import wildlog.data.utils.UtilsData;
 
 
 public class SightingCore extends DataObjectWithGPS implements DataObjectWithWildLogFile {
-    public static final String WILDLOGFILE_ID_PREFIX = "S";
     public static final String WILDLOG_FOLDER_PREFIX = "Observations";
     protected Date date; // Must include the time
     protected ActiveTimeSpesific timeOfDay;
@@ -89,8 +88,8 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     }
 
     @Override
-    public String getWildLogFileID() {
-        return WILDLOGFILE_ID_PREFIX + id;
+    public long getWildLogFileID() {
+        return id;
     }
     
     @Override

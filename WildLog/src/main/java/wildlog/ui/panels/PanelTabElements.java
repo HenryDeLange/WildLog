@@ -8,7 +8,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Element;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.helpers.UtilsPanelGenerator;
@@ -326,9 +325,9 @@ public class PanelTabElements extends javax.swing.JPanel {
             }
             // Get Image
             long tempElementID = (Long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 6);
-            int fotoCount = app.getDBI().countWildLogFiles(0, Element.WILDLOGFILE_ID_PREFIX + tempElementID);
+            int fotoCount = app.getDBI().countWildLogFiles(0, tempElementID);
             if (fotoCount > 0) {
-                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + tempElementID, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(tempElementID, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
@@ -441,7 +440,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
             long tempElementID = (Long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 6);
-            UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX + tempElementID, 0, app);
+            UtilsFileProcessing.openFile(tempElementID, 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 

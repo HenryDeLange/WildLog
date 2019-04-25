@@ -25,10 +25,18 @@ public class BusyDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("WildLog Busy");
         setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
+        setMaximumSize(new java.awt.Dimension(400, 10));
+        setMinimumSize(new java.awt.Dimension(400, 10));
+        setPreferredSize(new java.awt.Dimension(400, 10));
         setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(153, 34, 18));
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -42,5 +50,6 @@ public class BusyDialog extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

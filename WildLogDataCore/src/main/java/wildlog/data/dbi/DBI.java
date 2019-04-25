@@ -28,14 +28,14 @@ public interface DBI {
     public int countLocations(String inName);
     public int countVisits(String inName, long inLocationID);
     public int countSightings(long inID, long inElementID, long inLocationID, long inVisitID);
-    public int countWildLogFiles(long inID, String inWildLogFileID);
+    public int countWildLogFiles(long inID, long inLinkID);
     public int countUsers();
 
     public <T extends ElementCore> T findElement(long inID, String inPrimaryName, Class<T> inReturnType);
     public <T extends LocationCore> T findLocation(long inID, String inName, Class<T> inReturnType);
     public <T extends VisitCore> T findVisit(long inID, String inName, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends SightingCore> T findSighting(long inID, boolean inIncludeCachedValues, Class<T> inReturnType);
-    public <T extends WildLogFileCore> T findWildLogFile(long inID, String inWildLogFileID, WildLogFileType inWildLogFileType, String inDBFilePath, Class<T> inReturnType);
+    public <T extends WildLogFileCore> T findWildLogFile(long inID, long inLinkID, WildLogFileType inWildLogFileType, String inDBFilePath, Class<T> inReturnType);
     public <T extends WildLogOptions> T findWildLogOptions(Class<T> inReturnType);
     public <T extends AdhocData> T findAdhocData(String inFieldID, String inDataKey, Class<T> inReturnType);
     public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType);
@@ -45,7 +45,7 @@ public interface DBI {
     public <T extends LocationCore> List<T> listLocations(String inName, Class<T> inReturnType);
     public <T extends VisitCore> List<T> listVisits(String inName, long inLocationID, VisitType inVisitType, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends SightingCore> List<T> listSightings(long inElementID, long inLocationID, long inVisitID, boolean inIncludeCachedValues, Class<T> inReturnType);
-    public <T extends WildLogFileCore> List<T> listWildLogFiles(String inWildLogFileID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
+    public <T extends WildLogFileCore> List<T> listWildLogFiles(long inLinkID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
     public <T extends AdhocData> List<T> listAdhocDatas(String inFieldID, Class<T> inReturnType);
     public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType);
     public <T extends WildLogUser> List<T> listUsers(WildLogUserTypes inType, Class<T> inReturnType);

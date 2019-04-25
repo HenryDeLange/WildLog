@@ -493,7 +493,7 @@ public class SlideshowDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnGIFActionPerformed
 
-    private void createSlideshowWithoutSightings(String inName, String inWildLogFileID) {
+    private void createSlideshowWithoutSightings(String inName, long inWildLogFileID) {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -508,7 +508,7 @@ public class SlideshowDialog extends JDialog {
         });
     }
     
-    private void createGIFWithoutSightings(String inName, String inWildLogFileID) {
+    private void createGIFWithoutSightings(String inName, long inWildLogFileID) {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -523,7 +523,7 @@ public class SlideshowDialog extends JDialog {
         });
     }
     
-    private void createPowerPointWithoutSightings(String inName, String inWildLogFileID) {
+    private void createPowerPointWithoutSightings(String inName, long inWildLogFileID) {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -538,7 +538,7 @@ public class SlideshowDialog extends JDialog {
         });
     }
     
-    private void createPDFWithoutSightings(String inName, String inWildLogFileID) {
+    private void createPDFWithoutSightings(String inName, long inWildLogFileID) {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {

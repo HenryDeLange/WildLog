@@ -80,6 +80,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.utils.WildLogConstants;
@@ -2703,7 +2704,7 @@ public final class WildLogView extends JFrame {
                             if (mapFilesToLink != null && mapFilesToLink.get(sighting.getDate().getTime()/IMAGE_LINK_INTERVAL) != null) {
                                 List<File> lstFiles = mapFilesToLink.get(sighting.getDate().getTime()/IMAGE_LINK_INTERVAL);
                                 UtilsFileProcessing.performFileUpload(sighting,
-                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
+                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()), WildLogFileLinkType.SIGHTING, 
                                         lstFiles.toArray(new File[lstFiles.size()]),
                                         null, 
                                         app, false, null, true, true);

@@ -14,7 +14,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsTableGenerator;
@@ -73,7 +72,7 @@ public class LocationSelectionDialog extends JDialog {
                 }
             }
         });
-        UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + inSelectedLocationID, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+        UtilsImageProcessing.setupFoto(inSelectedLocationID, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
     }
 
     /** This method is called from within the constructor to
@@ -185,8 +184,7 @@ public class LocationSelectionDialog extends JDialog {
 
     private void lblImageLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageLocationMouseReleased
         if (!tblLocation.getSelectionModel().isSelectionEmpty()) {
-            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX 
-                    + tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2), 0, app);
+            UtilsFileProcessing.openFile((long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2), 0, app);
         }
     }//GEN-LAST:event_lblImageLocationMouseReleased
 
@@ -210,9 +208,9 @@ public class LocationSelectionDialog extends JDialog {
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (!tblLocation.getSelectionModel().isSelectionEmpty()) {
-            String selectedID = tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2).toString();
+            long selectedID = (long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2);
             // Change the image
-            UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedID, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+            UtilsImageProcessing.setupFoto(selectedID, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
         }
         else {
             lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));

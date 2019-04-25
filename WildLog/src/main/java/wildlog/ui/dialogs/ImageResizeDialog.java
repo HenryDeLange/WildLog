@@ -275,7 +275,7 @@ public class ImageResizeDialog extends JDialog {
             for (Element element : (List<Element>) lstPrimary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
-                            Element.WILDLOGFILE_ID_PREFIX + element, WildLogFileType.IMAGE, WildLogFile.class));
+                            element.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class));
                 }
                 if (chkIncludeSightings.isSelected()) {
                     lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class));
@@ -287,7 +287,7 @@ public class ImageResizeDialog extends JDialog {
             for (Location location : (List<Location>) lstPrimary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
-                            Location.WILDLOGFILE_ID_PREFIX + location, WildLogFileType.IMAGE, WildLogFile.class));
+                            location.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class));
                 }
                 if (chkIncludeSightings.isSelected()) {
                     lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(0, 0, location.getID(), false, Sighting.class));
@@ -299,7 +299,7 @@ public class ImageResizeDialog extends JDialog {
             for (Visit visit : (List<Visit>) lstSecondary.getSelectedValuesList()) {
                 if (chkIncludeCategory.isSelected()) {
                     lstWildLogFiles.addAll(WildLogApp.getApplication().getDBI().listWildLogFiles(
-                            Visit.WILDLOGFILE_ID_PREFIX + visit, WildLogFileType.IMAGE, WildLogFile.class));
+                            visit.getWildLogFileID(), WildLogFileType.IMAGE, WildLogFile.class));
                 }
                 if (chkIncludeSightings.isSelected()) {
                     lstSightings.addAll(WildLogApp.getApplication().getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class));

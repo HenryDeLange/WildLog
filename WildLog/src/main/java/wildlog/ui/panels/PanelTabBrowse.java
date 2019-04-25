@@ -62,6 +62,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WildLogUserTypes;
@@ -803,8 +804,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             lljTran.transform(LLJTran.ROT_90);
                             // Get a new name for the file (because if the same name is used the ImageIcons don't get 
                             // refreshed if they have been viewed already since Java chaches them)
-                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getID(), wildLogFile.getLinkID(), wildLogFile.getFilename(), wildLogFile.getDBFilePath(), 
-                                    wildLogFile.getFileType(), new Date(), null, -1);
+                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getID(), wildLogFile.getLinkID(), wildLogFile.getLinkType(), 
+                                    wildLogFile.getFilename(), wildLogFile.getDBFilePath(), wildLogFile.getFileType(), new Date(), null, -1);
                             newWildLogFile.setDefaultFile(wildLogFile.isDefaultFile());
                             int shortenedAttempt = 0;
                             while (Files.exists(newWildLogFile.getAbsolutePath())) {
@@ -1099,8 +1100,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     if (tempNode.getUserObject() instanceof DataObjectWithWildLogFile
                                             && expandedNode.getUserObject() instanceof DataObjectWithWildLogFile) {
                                         // Use the WildLogFileID to compare because it should be more unique than the toString()
-                                        if (((DataObjectWithWildLogFile) tempNode.getUserObject()).getWildLogFileID().equals(
-                                                ((DataObjectWithWildLogFile) expandedNode.getUserObject()).getWildLogFileID())) {
+                                        if (((DataObjectWithWildLogFile) tempNode.getUserObject()).getWildLogFileID() == 
+                                                ((DataObjectWithWildLogFile) expandedNode.getUserObject()).getWildLogFileID()) {
                                             treBrowsePhoto.expandPath(tempTreePath);
                                             break;
                                         }
@@ -1128,16 +1129,16 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (tempNode.getUserObject() instanceof DataObjectWithWildLogFile
                                 && selectedNode.getUserObject() instanceof DataObjectWithWildLogFile) {
                             // Use the WildLogFileID to compare because it should be more unique than the toString()
-                            if (((DataObjectWithWildLogFile) tempNode.getUserObject()).getWildLogFileID().equals(
-                                    ((DataObjectWithWildLogFile) selectedNode.getUserObject()).getWildLogFileID())) {
+                            if (((DataObjectWithWildLogFile) tempNode.getUserObject()).getWildLogFileID() == 
+                                    ((DataObjectWithWildLogFile) selectedNode.getUserObject()).getWildLogFileID()) {
                                 if (tempNode.getParent() != null && selectedNode.getParent() != null && 
                                         ((DefaultMutableTreeNode) tempNode.getParent()).getUserObject().toString()
                                         .equals(((DefaultMutableTreeNode) selectedNode.getParent()).getUserObject().toString())) {
                                     if (((DefaultMutableTreeNode) tempNode.getParent()).getUserObject() instanceof DataObjectWithWildLogFile
                                         && ((DefaultMutableTreeNode) selectedNode.getParent()).getUserObject() instanceof DataObjectWithWildLogFile) {
                                         // Use the WildLogFileID to compare because it should be more unique than the toString()
-                                        if (((DataObjectWithWildLogFile) ((DefaultMutableTreeNode) tempNode.getParent()).getUserObject()).getWildLogFileID().equals(
-                                                ((DataObjectWithWildLogFile) ((DefaultMutableTreeNode) selectedNode.getParent()).getUserObject()).getWildLogFileID())) {
+                                        if (((DataObjectWithWildLogFile) ((DefaultMutableTreeNode) tempNode.getParent()).getUserObject()).getWildLogFileID() == 
+                                                ((DataObjectWithWildLogFile) ((DefaultMutableTreeNode) selectedNode.getParent()).getUserObject()).getWildLogFileID()) {
                                             treBrowsePhoto.setSelectionPath(tempTreePath);
                                             break;
                                         }
@@ -1476,17 +1477,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
-                        List<WildLogFile> files = app.getDBI().listWildLogFiles(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementID(), null, WildLogFile.class);
+                        List<WildLogFile> files = app.getDBI().listWildLogFiles(sightingWrapper.getSighting().getElementID(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sightingWrapper.getSighting().getElementID(), null, Element.class),
-                            Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName()),
+                            Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName()), WildLogFileLinkType.ELEMENT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, null, null, 
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getCachedElementName()).resolve(
@@ -1517,17 +1518,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
-                        List<WildLogFile> files = app.getDBI().listWildLogFiles(Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationID(), null, WildLogFile.class);
+                        List<WildLogFile> files = app.getDBI().listWildLogFiles(sightingWrapper.getSighting().getLocationID(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(sightingWrapper.getSighting().getLocationID(), null, Location.class),
-                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName()),
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName()), WildLogFileLinkType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, null, null, 
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getCachedLocationName()).resolve(
@@ -1554,17 +1555,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
-                        List<WildLogFile> files = app.getDBI().listWildLogFiles(Location.WILDLOGFILE_ID_PREFIX + visit.getLocationID(), null, WildLogFile.class);
+                        List<WildLogFile> files = app.getDBI().listWildLogFiles(visit.getLocationID(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(visit.getLocationID(), null, Location.class),
-                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName()),
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName()), WildLogFileLinkType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, null, null, 
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
                                                 visit.getCachedLocationName()).resolve(
@@ -1595,17 +1596,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
                     WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
-                        List<WildLogFile> files = app.getDBI().listWildLogFiles(Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitID(), null, WildLogFile.class);
+                        List<WildLogFile> files = app.getDBI().listWildLogFiles(sightingWrapper.getSighting().getVisitID(), null, WildLogFile.class);
                         for (WildLogFile tempFile : files) {
                             tempFile.setDefaultFile(false);
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         UtilsFileProcessing.performFileUpload(app.getDBI().findVisit(sightingWrapper.getSighting().getVisitID(), null, true, Visit.class),
-                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedVisitName()),
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedVisitName()), WildLogFileLinkType.VISIT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
-                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, null, null, 
+                        WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(
                                                 sightingWrapper.getSighting().getCachedVisitName()).resolve(
@@ -1714,10 +1715,35 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
                 DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                String prefix;
+                WildLogFileLinkType linkType;
+                if (temp instanceof Element) {
+                    prefix = Element.WILDLOG_FOLDER_PREFIX;
+                    linkType = WildLogFileLinkType.ELEMENT;
+                }
+                else
+                if (temp instanceof Location) {
+                    prefix = Location.WILDLOG_FOLDER_PREFIX;
+                    linkType = WildLogFileLinkType.LOCATION;
+                }
+                else
+                if (temp instanceof Visit) {
+                    prefix = Visit.WILDLOG_FOLDER_PREFIX;
+                    linkType = WildLogFileLinkType.VISIT;
+                }
+                else
+                if (temp instanceof SightingWrapper) {
+                    prefix = Sighting.WILDLOG_FOLDER_PREFIX;
+                    linkType = WildLogFileLinkType.SIGHTING;
+                }
+                else {
+                    prefix = "UNKNOWN";
+                    linkType = WildLogFileLinkType.NONE;
+                }
                 if (temp != null) {
                     List<File> files = UtilsFileProcessing.showFileUploadDialog(app, app.getMainFrame());
                     UtilsFileProcessing.performFileUpload(temp,
-                        Paths.get(temp.getWildLogFileID()),
+                        Paths.get(prefix), linkType, 
                         files.toArray(new File[files.size()]),
                         new Runnable() {
                             @Override
@@ -2213,8 +2239,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 public void run() {
                     for (int t = 0; t < treBrowsePhoto.getRowCount() - 1; t++) {
                         // Use the WildLogFileID to compare because it should be more unique than the toString()
-                        if (inSighting.getWildLogFileID().equals(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getPathForRow(t + 1)
-                                .getLastPathComponent()).getUserObject()).getWildLogFileID())) {
+                        if (inSighting.getWildLogFileID() == ((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getPathForRow(t + 1)
+                                .getLastPathComponent()).getUserObject()).getWildLogFileID()) {
                             treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t + 1));
                             treBrowsePhoto.scrollRowToVisible(t + 1);
                             treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(t + 1));
