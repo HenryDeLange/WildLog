@@ -3,6 +3,7 @@ package wildlog.ui.panels;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -170,7 +171,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         cmbElementTypesBrowseTab = new javax.swing.JComboBox();
         dtpStartDate = new org.jdesktop.swingx.JXDatePicker();
         rdbBrowseDate = new javax.swing.JRadioButton();
-        btnRotate = new javax.swing.JButton();
+        btnRotateRight = new javax.swing.JButton();
         btnViewImage = new javax.swing.JButton();
         btnRefreshDates = new javax.swing.JButton();
         scrTextArea = new javax.swing.JScrollPane();
@@ -195,6 +196,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnBrowsePrev = new javax.swing.JButton();
         btnZoomIn = new javax.swing.JButton();
         btnCrop = new javax.swing.JButton();
+        btnRotateLeft = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 213, 186));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -271,17 +273,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        btnRotate.setBackground(new java.awt.Color(204, 213, 186));
-        btnRotate.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        btnRotate.setText("Rotate");
-        btnRotate.setToolTipText("Rotate the image clockwise.");
-        btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRotate.setFocusPainted(false);
-        btnRotate.setFocusable(false);
-        btnRotate.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        btnRotate.addActionListener(new java.awt.event.ActionListener() {
+        btnRotateRight.setBackground(new java.awt.Color(204, 213, 186));
+        btnRotateRight.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnRotateRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/RotateR.png"))); // NOI18N
+        btnRotateRight.setToolTipText("Rotate the image clockwise.");
+        btnRotateRight.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRotateRight.setFocusPainted(false);
+        btnRotateRight.setFocusable(false);
+        btnRotateRight.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnRotateRight.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRotateActionPerformed(evt);
+                btnRotateRightActionPerformed(evt);
             }
         });
 
@@ -591,15 +593,30 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnCrop.setBackground(new java.awt.Color(204, 213, 186));
         btnCrop.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        btnCrop.setText("Crop");
+        btnCrop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Crop.png"))); // NOI18N
         btnCrop.setToolTipText("Rotate the image clockwise.");
         btnCrop.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCrop.setFocusPainted(false);
         btnCrop.setFocusable(false);
+        btnCrop.setIconTextGap(0);
         btnCrop.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnCrop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCropActionPerformed(evt);
+            }
+        });
+
+        btnRotateLeft.setBackground(new java.awt.Color(204, 213, 186));
+        btnRotateLeft.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnRotateLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/RotateL.png"))); // NOI18N
+        btnRotateLeft.setToolTipText("Rotate the image anti-clockwise.");
+        btnRotateLeft.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRotateLeft.setFocusPainted(false);
+        btnRotateLeft.setFocusable(false);
+        btnRotateLeft.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnRotateLeft.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRotateLeftActionPerformed(evt);
             }
         });
 
@@ -641,9 +658,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addGap(2, 2, 2)
                         .addComponent(btnSetDefaultVisitImage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCrop, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)
-                        .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnCrop)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnRotateLeft)
+                        .addGap(1, 1, 1)
+                        .addComponent(btnRotateRight))
                     .addComponent(imageView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlImageNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -654,9 +673,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnViewEXIF)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCopyImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCopyImage)
                         .addGap(2, 2, 2)
-                        .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnViewImage)))
                 .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
@@ -665,13 +684,15 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnDefault, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSetDefaultElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSetDefaultLocationImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSetDefaultVisitImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCrop, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnDefault, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSetDefaultElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSetDefaultLocationImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSetDefaultVisitImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnRotateRight, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnCrop, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnRotateLeft, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -785,7 +806,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_rdbBrowseDateItemStateChanged
 
-    private void btnRotateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotateActionPerformed
+    private void btnRotateRightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotateRightActionPerformed
+        doRotate(false);
+    }//GEN-LAST:event_btnRotateRightActionPerformed
+
+    private void doRotate(boolean inDoFlip) throws HeadlessException {
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
                 DataObjectWithWildLogFile tempNode = (DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
@@ -803,9 +828,13 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             // If you pass the 2nd parameter as false, Exif information is not loaded and hence will not be written.
                             lljTran.read(LLJTran.READ_ALL, true);
                             lljTran.transform(LLJTran.ROT_90);
-                            // Get a new name for the file (because if the same name is used the ImageIcons don't get 
+                            if (inDoFlip) {
+                                lljTran.transform(LLJTran.FLIP_H);
+                                lljTran.transform(LLJTran.FLIP_V);
+                            }
+                            // Get a new name for the file (because if the same name is used the ImageIcons don't get
                             // refreshed if they have been viewed already since Java chaches them)
-                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getID(), wildLogFile.getLinkID(), wildLogFile.getLinkType(), 
+                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getID(), wildLogFile.getLinkID(), wildLogFile.getLinkType(),
                                     wildLogFile.getFilename(), wildLogFile.getDBFilePath(), wildLogFile.getFileType(), new Date(), null, -1);
                             newWildLogFile.setDefaultFile(wildLogFile.isDefaultFile());
                             int shortenedAttempt = 0;
@@ -870,7 +899,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 }
             }
         }
-    }//GEN-LAST:event_btnRotateActionPerformed
+    }
 
     private void btnViewEXIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEXIFActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
@@ -1815,6 +1844,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_btnCropActionPerformed
 
+    private void btnRotateLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotateLeftActionPerformed
+        doRotate(true);
+    }//GEN-LAST:event_btnRotateLeftActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         List<Location> locations = app.getDBI().listLocations(null, Location.class);
@@ -2279,7 +2312,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private javax.swing.JButton btnGoBrowseSelection;
     private javax.swing.JButton btnRefreshBrowseTree;
     private javax.swing.JButton btnRefreshDates;
-    private javax.swing.JButton btnRotate;
+    private javax.swing.JButton btnRotateLeft;
+    private javax.swing.JButton btnRotateRight;
     private javax.swing.JButton btnSetDefaultElementImage;
     private javax.swing.JButton btnSetDefaultLocationImage;
     private javax.swing.JButton btnSetDefaultVisitImage;
