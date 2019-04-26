@@ -1032,7 +1032,7 @@ public final class WildLogView extends JFrame {
         sprEcho.setName("sprEcho"); // NOI18N
         backupMenu.add(sprEcho);
 
-        mnuEchoWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuEchoWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Echo.gif"))); // NOI18N
         mnuEchoWorkspace.setText("Echo Backup Workspace");
         mnuEchoWorkspace.setToolTipText("Makes a backup of the Workspace by making a target folder reflect the active Workspace's files.");
         mnuEchoWorkspace.setName("mnuEchoWorkspace"); // NOI18N
@@ -1409,7 +1409,7 @@ public final class WildLogView extends JFrame {
         jSeparator24.setName("jSeparator24"); // NOI18N
         advancedMenu.add(jSeparator24);
 
-        mnuINaturalistToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
+        mnuINaturalistToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_small.png"))); // NOI18N
         mnuINaturalistToken.setText("Setup iNaturalist Authorization");
         mnuINaturalistToken.setToolTipText("Configure the iNaturalist Authorization Token for this WildLog session.");
         mnuINaturalistToken.setName("mnuINaturalistToken"); // NOI18N

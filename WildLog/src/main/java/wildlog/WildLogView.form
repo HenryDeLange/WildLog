@@ -178,7 +178,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuEchoWorkspace">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/Echo.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Echo Backup Workspace"/>
                 <Property name="toolTipText" type="java.lang.String" value="Makes a backup of the Workspace by making a target folder reflect the active Workspace&apos;s files."/>
@@ -632,7 +632,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuINaturalistToken">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/iNaturalist_white.png"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/iNaturalist_small.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Setup iNaturalist Authorization"/>
                 <Property name="toolTipText" type="java.lang.String" value="Configure the iNaturalist Authorization Token for this WildLog session."/>

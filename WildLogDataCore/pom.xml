@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mywild</groupId>
     <artifactId>WildLogDataCore</artifactId>
-    <version>1.12-SNAPSHOT</version>
+    <version>1.12</version>
     <packaging>jar</packaging>
     
     <properties>

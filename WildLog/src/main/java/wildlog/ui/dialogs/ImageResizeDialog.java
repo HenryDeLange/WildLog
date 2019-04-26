@@ -158,7 +158,7 @@ public class ImageResizeDialog extends JDialog {
         spnSize.setModel(new javax.swing.SpinnerNumberModel(700, 100, 2000, 50));
         spnSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jLabel6.setText("pixels wide.");
+        jLabel6.setText("px");
 
         chkIncludeCategory.setText("Resize Category Images");
         chkIncludeCategory.setToolTipText("If selected the images of the selected category will be resized.");
@@ -185,7 +185,7 @@ public class ImageResizeDialog extends JDialog {
                         .addComponent(spnSize, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(jLabel6)
-                        .addGap(15, 15, 15)
+                        .addGap(25, 25, 25)
                         .addComponent(chkIncludeCategory)
                         .addGap(0, 0, 0)
                         .addComponent(chkIncludeSightings)
