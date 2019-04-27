@@ -65,8 +65,7 @@ public class LocationCore extends DataObjectWithGPS implements DataObjectWithWil
         if (inLocation == null) {
             return false;
         }
-        return UtilsData.isTheSame(this, inLocation)
-                && UtilsData.isTheSame(getID(), inLocation.getID())
+        return UtilsData.isTheSame(getID(), inLocation.getID())
                 && UtilsData.isTheSame(getDescription(), inLocation.getDescription())
                 && UtilsData.isTheSame(getGameViewingRating(), inLocation.getGameViewingRating())
                 && UtilsData.isTheSame(getHabitatType(), inLocation.getHabitatType())

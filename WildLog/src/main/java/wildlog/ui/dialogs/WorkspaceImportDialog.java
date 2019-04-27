@@ -769,12 +769,14 @@ public class WorkspaceImportDialog extends JDialog {
                     inFeedback.println("Imported File: " + fileToImport.getDBFilePath() + " [" + fileToImport.getID() + "]");
                 }
                 else {
-                    importFileConflicts++;
                     try {
                         Path fileToImportFullPath = importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath();
                         // This file is already in the current workspace
                         WildLogFile workpaceFile = WildLogApp.getApplication().getDBI().findWildLogFile(fileToImport.getID(), 0, null, null, WildLogFile.class);
                         if (rdbConflictAutoResolve.isSelected()) {
+                            if (Files.size(fileToImportFullPath) != Files.size(workpaceFile.getAbsolutePath())) {
+                                importFileConflicts++;
+                            }
                             if (Files.size(fileToImportFullPath) > Files.size(workpaceFile.getAbsolutePath())) {
                                 // Copy file
                                 copyFile(fileToImport);
@@ -786,6 +788,7 @@ public class WorkspaceImportDialog extends JDialog {
                         }
                         else {
                             if (Files.size(fileToImportFullPath) != Files.size(workpaceFile.getAbsolutePath())) {
+                                importFileConflicts++;
                                 WorkspaceImportConflictDialog dialog = new WorkspaceImportConflictDialog(fileToImportFullPath, workpaceFile.getAbsolutePath());
                                 dialog.setVisible(true);
                                 if (dialog.getSelectedRecord() == WorkspaceImportConflictDialog.ResolvedRecord.IMPORT) {

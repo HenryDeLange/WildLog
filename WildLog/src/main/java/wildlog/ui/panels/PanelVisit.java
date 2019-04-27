@@ -275,7 +275,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
         else {
             String name = visit.getName();
-            if (name ==null || name.isEmpty()) {
+            if (name == null || name.isEmpty()) {
                 name = "<New Period>";
             }
             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 

@@ -98,7 +98,7 @@ public class WorkspaceImportConflictDialog extends JDialog {
         jPanel1.setName("jPanel1"); // NOI18N
 
         btnUseImport.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnUseImport.setText("Use the new Import record");
+        btnUseImport.setText("Choose the record being imported");
         btnUseImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseImport.setFocusPainted(false);
         btnUseImport.setName("btnUseImport"); // NOI18N
@@ -162,7 +162,7 @@ public class WorkspaceImportConflictDialog extends JDialog {
         jLabel2.setName("jLabel2"); // NOI18N
 
         btnUseWorkspace.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnUseWorkspace.setText("Use the existing Workspace record");
+        btnUseWorkspace.setText("Keep the record already in the Workspace");
         btnUseWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseWorkspace.setFocusPainted(false);
         btnUseWorkspace.setName("btnUseWorkspace"); // NOI18N
@@ -204,12 +204,13 @@ public class WorkspaceImportConflictDialog extends JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(jLabel3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 890, Short.MAX_VALUE)
-                .addGap(5, 5, 5))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 890, Short.MAX_VALUE)
+                        .addGap(5, 5, 5))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

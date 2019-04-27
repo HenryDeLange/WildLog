@@ -111,8 +111,7 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
         if (inSighting == null) {
             return false;
         }
-        return UtilsData.isTheSame(this, inSighting)
-                && UtilsData.isTheSame(getID(), inSighting.getID())
+        return UtilsData.isTheSame(getID(), inSighting.getID())
                 && UtilsData.isTheSame(getAge(), inSighting.getAge())
                 && UtilsData.isTheSame(getCertainty(), inSighting.getCertainty())
                 && UtilsData.isTheSame(getDate(), inSighting.getDate())

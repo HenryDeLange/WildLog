@@ -207,7 +207,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
         else {
             String name = locationWL.getName();
-            if (name ==null || name.isEmpty()) {
+            if (name == null || name.isEmpty()) {
                 name = "<New Place>";
             }
             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 

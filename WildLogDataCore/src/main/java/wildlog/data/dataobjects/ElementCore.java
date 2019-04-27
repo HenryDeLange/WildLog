@@ -73,8 +73,7 @@ public class ElementCore extends DataObjectWithAudit implements DataObjectWithWi
         if (inElement == null) {
             return false;
         }
-        return UtilsData.isTheSame(this, inElement)
-                && UtilsData.isTheSame(getID(), inElement.getID())
+        return UtilsData.isTheSame(getID(), inElement.getID())
                 && UtilsData.isTheSame(getBehaviourDescription(), inElement.getBehaviourDescription())
                 && UtilsData.isTheSame(getDescription(), inElement.getDescription())
                 && UtilsData.isTheSame(getDiagnosticDescription(), inElement.getDiagnosticDescription())

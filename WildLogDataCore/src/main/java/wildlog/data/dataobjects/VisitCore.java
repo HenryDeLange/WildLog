@@ -75,13 +75,11 @@ public class VisitCore extends DataObjectWithAudit implements DataObjectWithWild
         if (inVisit == null) {
             return false;
         }
-        return UtilsData.isTheSame(this, inVisit)
-                && UtilsData.isTheSame(getID(), inVisit.getID())
+        return UtilsData.isTheSame(getID(), inVisit.getID())
                 && UtilsData.isTheSame(getDescription(), inVisit.getDescription())
                 && UtilsData.isTheSame(getEndDate(), inVisit.getEndDate())
                 && UtilsData.isTheSame(getGameWatchingIntensity(), inVisit.getGameWatchingIntensity())
                 && UtilsData.isTheSame(getLocationID(), inVisit.getLocationID())
-                && UtilsData.isTheSame(getCachedLocationName(), inVisit.getCachedLocationName())
                 && UtilsData.isTheSame(getName(), inVisit.getName())
                 && UtilsData.isTheSame(getStartDate(), inVisit.getStartDate())
                 && UtilsData.isTheSame(getType(), inVisit.getType())
