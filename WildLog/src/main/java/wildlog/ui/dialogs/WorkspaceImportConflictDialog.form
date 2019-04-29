@@ -38,7 +38,7 @@
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jSplitPane1" pref="890" max="32767" attributes="0"/>
+                      <Component id="jSplitPane1" pref="910" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
               </Group>

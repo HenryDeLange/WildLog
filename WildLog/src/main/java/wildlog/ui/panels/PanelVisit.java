@@ -1246,8 +1246,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             setupNumberOfSightingImages();
             List<Long> allElements = new ArrayList<>();
             for (int i = 0; i < sightings.size(); i++) {
-                if (!allElements.contains(sightings.get(i).getID())) {
-                    allElements.add(sightings.get(i).getID());
+                if (!allElements.contains(sightings.get(i).getElementID())) {
+                    allElements.add(sightings.get(i).getElementID());
                 }
             }
             lblNumberOfElements.setText(Integer.toString(allElements.size()));

@@ -825,7 +825,15 @@ public class WorkspaceImportDialog extends JDialog {
                 fileToImport.getAbsolutePath(), false, true);
         // Resize the file (if the option was selected)
         if (rdbImportThumbnails.isSelected()) {
-            UtilsImageProcessing.resizeImage(fileToImport, ((WildLogThumbnailSizes) cmbThumbnailSize.getSelectedItem()).getSize());
+            try {
+                UtilsImageProcessing.resizeImage(fileToImport, ((WildLogThumbnailSizes) cmbThumbnailSize.getSelectedItem()).getSize());
+            }
+            catch (Exception ex) {
+                WildLogApp.LOGGER.log(Level.WARN, "Could not resize the image during the import process: {}", fileToImport.getAbsolutePath().toString());
+                // Sometimes the resize might fail for certain types of images, 
+                // then we don't want to crash the process, but just continue to the next file
+                WildLogApp.LOGGER.log(Level.WARN, ex.toString(), ex);
+            }
         }
         // Create thumbnails
         if (WildLogFileType.IMAGE.equals(fileToImport.getFileType())) {

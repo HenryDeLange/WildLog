@@ -518,7 +518,7 @@ public class CheckAndClean {
                 cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER, filesNotInDB, countOther, (int)(countOther/(double)fileProcessCounter*20));
                 // Kyk of die Stashed Files folders 'n bestaande Visit het
                 File fileStashes = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().toFile();
-                if (fileStashes != null) {
+                if (fileStashes != null && fileStashes.listFiles() != null) {
                     for (File stash : fileStashes.listFiles()) {
                         if (inApp.getDBI().countVisits(stash.getName(), 0) == 0) {
                             finalHandleFeedback.println("PROBLEM:     Stashed Files in Workspace are not linked to a Stashed Period in the database: " + stash.getAbsolutePath());

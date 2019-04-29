@@ -745,6 +745,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                 filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
                 northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+        // Refresh the image
+        tblSightingsMouseReleased(null);
     }//GEN-LAST:event_formComponentShown
 
     @Override
@@ -781,6 +783,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                     filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
                     northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+            // Refresh the image
+            tblSightingsMouseReleased(null);
         }
     }
     
@@ -794,6 +798,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                     filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
                     northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+            // Refresh the image
+            tblSightingsMouseReleased(null);
         }
     }//GEN-LAST:event_btnFilterElementsActionPerformed
 
@@ -807,6 +813,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                     filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
                     northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+            // Refresh the image
+            tblSightingsMouseReleased(null);
         }
     }//GEN-LAST:event_btnFilterLocationActionPerformed
 
@@ -824,6 +832,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                     filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
                     northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+            // Refresh the image
+            tblSightingsMouseReleased(null);
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
@@ -856,6 +866,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                 filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
                 northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+        // Refresh the image
+        tblSightingsMouseReleased(null);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
 
     private void btnGoBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBrowseActionPerformed
@@ -889,6 +901,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
                 filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
                 northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+        // Refresh the image
+        tblSightingsMouseReleased(null);
     }//GEN-LAST:event_btnFilterMapActionPerformed
 
     private void btnBulkEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkEditSightingActionPerformed
