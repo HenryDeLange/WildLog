@@ -1,12 +1,25 @@
 package wildlog.ui.panels;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -33,6 +46,7 @@ import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterGPSDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
+import wildlog.ui.helpers.ScrollableWrappedFlowLayout;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.WLOptionPane;
@@ -43,6 +57,7 @@ import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.WildLogApplicationTypes;
 
 
@@ -94,13 +109,15 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblSightings = new javax.swing.JTable();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel7 = new javax.swing.JLabel();
+        pnlLayoutView = new javax.swing.JPanel();
+        scrSightings = new javax.swing.JScrollPane();
+        tblSightings = new javax.swing.JTable();
         btnGoSighting = new javax.swing.JButton();
         btnAddSighting = new javax.swing.JButton();
         btnDeleteSighting = new javax.swing.JButton();
-        lblImage = new javax.swing.JLabel();
+        btnBulkEditSighting = new javax.swing.JButton();
         pnlViews = new javax.swing.JPanel();
         btnGoLocation = new javax.swing.JButton();
         btnGoVisit = new javax.swing.JButton();
@@ -118,9 +135,12 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterMap = new javax.swing.JButton();
         btnResetFilters = new javax.swing.JButton();
         lblFilterDetails = new javax.swing.JLabel();
-        btnPrevFile = new javax.swing.JButton();
+        pnlImage = new javax.swing.JPanel();
         btnNextFile = new javax.swing.JButton();
-        btnBulkEditSighting = new javax.swing.JButton();
+        btnPrevFile = new javax.swing.JButton();
+        lblImage = new javax.swing.JLabel();
+        rdbLayoutTable = new javax.swing.JRadioButton();
+        rdbLayoutGrid = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -128,6 +148,14 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 formComponentShown(evt);
             }
         });
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Observations List:");
+
+        pnlLayoutView.setBackground(new java.awt.Color(235, 233, 221));
+        pnlLayoutView.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(198, 192, 158)));
+        pnlLayoutView.setLayout(new java.awt.BorderLayout());
 
         tblSightings.setAutoCreateRowSorter(true);
         tblSightings.setMaximumSize(new java.awt.Dimension(300, 300));
@@ -149,11 +177,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 tblSightingsKeyReleased(evt);
             }
         });
-        jScrollPane1.setViewportView(tblSightings);
+        scrSightings.setViewportView(tblSightings);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("Observations List:");
+        pnlLayoutView.add(scrSightings, java.awt.BorderLayout.CENTER);
 
         btnGoSighting.setBackground(new java.awt.Color(235, 233, 221));
         btnGoSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
@@ -188,18 +214,15 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         });
 
-        lblImage.setBackground(new java.awt.Color(0, 0, 0));
-        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblImage.setFocusable(false);
-        lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
-        lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
-        lblImage.setOpaque(true);
-        lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
-        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                lblImageMouseReleased(evt);
+        btnBulkEditSighting.setBackground(new java.awt.Color(235, 233, 221));
+        btnBulkEditSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
+        btnBulkEditSighting.setText("Bulk Edit");
+        btnBulkEditSighting.setToolTipText("Open a popup box to edit all of the selected Observations at once.");
+        btnBulkEditSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBulkEditSighting.setFocusPainted(false);
+        btnBulkEditSighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBulkEditSightingActionPerformed(evt);
             }
         });
 
@@ -488,19 +511,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGap(5, 5, 5))
         );
 
-        btnPrevFile.setBackground(new java.awt.Color(235, 233, 221));
-        btnPrevFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
-        btnPrevFile.setToolTipText("Load previous file.");
-        btnPrevFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPrevFile.setFocusPainted(false);
-        btnPrevFile.setFocusable(false);
-        btnPrevFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        btnPrevFile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrevFileActionPerformed(evt);
-            }
-        });
-
         btnNextFile.setBackground(new java.awt.Color(235, 233, 221));
         btnNextFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextFile.setToolTipText("Load next file.");
@@ -514,15 +524,82 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         });
 
-        btnBulkEditSighting.setBackground(new java.awt.Color(235, 233, 221));
-        btnBulkEditSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
-        btnBulkEditSighting.setText("Bulk Edit");
-        btnBulkEditSighting.setToolTipText("Open a popup box to edit all of the selected Observations at once.");
-        btnBulkEditSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBulkEditSighting.setFocusPainted(false);
-        btnBulkEditSighting.addActionListener(new java.awt.event.ActionListener() {
+        btnPrevFile.setBackground(new java.awt.Color(235, 233, 221));
+        btnPrevFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
+        btnPrevFile.setToolTipText("Load previous file.");
+        btnPrevFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPrevFile.setFocusPainted(false);
+        btnPrevFile.setFocusable(false);
+        btnPrevFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnPrevFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBulkEditSightingActionPerformed(evt);
+                btnPrevFileActionPerformed(evt);
+            }
+        });
+
+        lblImage.setBackground(new java.awt.Color(0, 0, 0));
+        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblImage.setFocusable(false);
+        lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
+        lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
+        lblImage.setOpaque(true);
+        lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlImageLayout = new javax.swing.GroupLayout(pnlImage);
+        pnlImage.setLayout(pnlImageLayout);
+        pnlImageLayout.setHorizontalGroup(
+            pnlImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlImageLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(btnPrevFile)
+                .addGap(0, 0, 0)
+                .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(btnNextFile)
+                .addContainerGap())
+        );
+        pnlImageLayout.setVerticalGroup(
+            pnlImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlImageLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(pnlImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPrevFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnNextFile, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
+        );
+
+        rdbLayoutTable.setBackground(new java.awt.Color(235, 233, 221));
+        buttonGroup1.add(rdbLayoutTable);
+        rdbLayoutTable.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        rdbLayoutTable.setSelected(true);
+        rdbLayoutTable.setText("Table Layout");
+        rdbLayoutTable.setToolTipText("Show the results in as rows in a table.");
+        rdbLayoutTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLayoutTable.setFocusable(false);
+        rdbLayoutTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbLayoutTableActionPerformed(evt);
+            }
+        });
+
+        rdbLayoutGrid.setBackground(new java.awt.Color(235, 233, 221));
+        buttonGroup1.add(rdbLayoutGrid);
+        rdbLayoutGrid.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        rdbLayoutGrid.setText("Grid Layout");
+        rdbLayoutGrid.setToolTipText("Show the results as images in a grid.");
+        rdbLayoutGrid.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLayoutGrid.setFocusable(false);
+        rdbLayoutGrid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbLayoutGridActionPerformed(evt);
             }
         });
 
@@ -540,18 +617,23 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                     .addComponent(btnGoSighting, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                     .addComponent(btnBulkEditSighting, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnPrevFile)
-                        .addGap(0, 0, 0)
-                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(btnNextFile)))
+                        .addGap(10, 10, 10)
+                        .addComponent(pnlLayoutView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(rdbLayoutTable)
+                                .addGap(25, 25, 25)
+                                .addComponent(rdbLayoutGrid)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(pnlImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -560,13 +642,17 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(pnlLayoutView, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPrevFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnNextFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(15, 15, 15)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(rdbLayoutTable)
+                                    .addComponent(rdbLayoutGrid)))
+                            .addComponent(pnlImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(10, 10, 10)
@@ -580,8 +666,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                         .addGap(20, 20, 20)
                         .addComponent(pnlViews, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnlFeatures, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5))
+                        .addComponent(pnlFeatures, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -741,10 +827,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (lstFilteredElements == null) {
             lstFilteredElements = generateIDList(app.getDBI().listElements(null, null, null, Element.class));
         }
-        // Load the table
-        UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
-                northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+        // Load the view
+        reloadUI();
         // Refresh the image
         tblSightingsMouseReleased(null);
     }//GEN-LAST:event_formComponentShown
@@ -780,11 +864,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (dialog.isSelectionMade()) {
             filterProperties = dialog.getSelectedFilterProperties();
             // Filter the original results using the provided values
-            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
-                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
-            // Refresh the image
-            tblSightingsMouseReleased(null);
+            reloadUI();
         }
     }
     
@@ -795,11 +875,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (dialog.isSelectionMade()) {
             lstFilteredElements = dialog.getSelectedData();
             // Filter the original results using the provided values
-            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
-                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
-            // Refresh the image
-            tblSightingsMouseReleased(null);
+            reloadUI();
         }
     }//GEN-LAST:event_btnFilterElementsActionPerformed
 
@@ -810,11 +886,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (dialog.isSelectionMade()) {
             lstFilteredLocations = dialog.getSelectedData();
             // Filter the original results using the provided values
-            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
-                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
-            // Refresh the image
-            tblSightingsMouseReleased(null);
+            reloadUI();
         }
     }//GEN-LAST:event_btnFilterLocationActionPerformed
 
@@ -829,11 +901,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (dialog.isSelectionMade()) {
             lstFilteredVisits = dialog.getSelectedData();
             // Filter the original results using the provided values
-            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
-                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
-            // Refresh the image
-            tblSightingsMouseReleased(null);
+            reloadUI();
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
@@ -863,11 +931,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void btnResetFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetFiltersActionPerformed
         setupDefaultFilters();
-        UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
-                northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
-        // Refresh the image
-        tblSightingsMouseReleased(null);
+        reloadUI();
     }//GEN-LAST:event_btnResetFiltersActionPerformed
 
     private void btnGoBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBrowseActionPerformed
@@ -898,11 +962,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         northEast_Longitude = dialog.getNorthEast_Longitude();
         southWest_Latitude = dialog.getSouthWest_Latitude();
         southWest_Longitude = dialog.getSouthWest_Longitude();
-        UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
-                northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
-        // Refresh the image
-        tblSightingsMouseReleased(null);
+        reloadUI();
     }//GEN-LAST:event_btnFilterMapActionPerformed
 
     private void btnBulkEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkEditSightingActionPerformed
@@ -986,6 +1046,14 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         }
     }//GEN-LAST:event_btnBulkEditSightingActionPerformed
 
+    private void rdbLayoutTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbLayoutTableActionPerformed
+        reloadUI();
+    }//GEN-LAST:event_rdbLayoutTableActionPerformed
+
+    private void rdbLayoutGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbLayoutGridActionPerformed
+        reloadUI();
+    }//GEN-LAST:event_rdbLayoutGridActionPerformed
+
     private List<Sighting> getListOfSightingsFromTable() {
         List<Sighting> lstSightingsToMap;
         if (tblSightings.getColumnCount() == 1) {
@@ -1056,6 +1124,96 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         }
         return lstIDs;
     }
+    
+    private void reloadUI() {
+        if (rdbLayoutGrid.isSelected()) {
+            pnlImage.setVisible(false);
+            // Clear the old table (to hopefully free up its resources)
+            tblSightings.setModel(new DefaultTableModel(new String[]{"inactive"}, 0));
+            pnlLayoutView.removeAll();
+            pnlLayoutView.revalidate();
+            pnlLayoutView.repaint();
+            // Setup the new grid
+            final JPanel pnlGrid = new JPanel();
+            pnlGrid.setLayout(new ScrollableWrappedFlowLayout(FlowLayout.CENTER));
+            JLabel lblTemp = new JLabel("Loading...");
+            lblTemp.setForeground(Color.WHITE);
+            lblTemp.setFont(lblTemp.getFont().deriveFont(18f));
+            pnlGrid.add(lblTemp);
+            pnlGrid.setBackground(Color.BLACK);
+            JScrollPane scrGrid = new JScrollPane(pnlGrid, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            scrGrid.getVerticalScrollBar().setUnitIncrement(25);
+            pnlLayoutView.add(scrGrid, BorderLayout.CENTER);
+            pnlLayoutView.revalidate();
+            pnlLayoutView.repaint();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    LocalDateTime startDateTime;
+                    if (filterProperties.getStartDate() != null) {
+                        startDateTime = LocalDateTime.of(filterProperties.getStartDate(), LocalTime.MIN);
+                    }
+                    else {
+                        startDateTime = null;
+                    }
+                    LocalDateTime endDateTime;
+                    if (filterProperties.getEndDate() != null) {
+                        endDateTime = LocalDateTime.of(filterProperties.getEndDate(), LocalTime.MAX);
+                    }
+                    else {
+                        endDateTime = null;
+                    }
+                    List<Sighting> lstSightings = app.getDBI().searchSightings(filterProperties.getSightingIDs(), 
+                                UtilsTime.getDateFromLocalDateTime(startDateTime), UtilsTime.getDateFromLocalDateTime(endDateTime), 
+                                lstFilteredLocations, lstFilteredVisits, lstFilteredElements, true, Sighting.class);
+                    pnlGrid.removeAll();
+                    if (!lstSightings.isEmpty()) {
+                        ((ScrollableWrappedFlowLayout) pnlGrid.getLayout()).setAlignment(FlowLayout.LEFT);
+                        for (Sighting sighting : lstSightings) {
+                            JLabel lblSightingBox = new JLabel();
+                            lblSightingBox.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+                            lblSightingBox.setOpaque(true);
+                            lblSightingBox.setBackground(Color.BLACK);
+                            lblSightingBox.setMinimumSize(new Dimension(WildLogThumbnailSizes.MEDIUM.getSize(), WildLogThumbnailSizes.MEDIUM.getSize()));
+                            lblSightingBox.setPreferredSize(new Dimension(WildLogThumbnailSizes.MEDIUM.getSize(), WildLogThumbnailSizes.MEDIUM.getSize()));
+                            lblSightingBox.setMaximumSize(new Dimension(WildLogThumbnailSizes.MEDIUM.getSize(), WildLogThumbnailSizes.MEDIUM.getSize()));
+                            lblSightingBox.setHorizontalAlignment(SwingConstants.CENTER);
+                            lblSightingBox.setVerticalAlignment(SwingConstants.CENTER);
+                            lblSightingBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                            lblSightingBox.addMouseListener(new java.awt.event.MouseAdapter() {
+                                @Override
+                                public void mouseReleased(MouseEvent inEvt) {
+                                    UtilsFileProcessing.openFile(sighting.getID(), 0, app);
+                                }
+                            });
+                            UtilsImageProcessing.setupFoto(sighting.getID(), 0, lblSightingBox, WildLogThumbnailSizes.MEDIUM, app);
+                            pnlGrid.add(lblSightingBox);
+                        }
+                    }
+                    else {
+                        JLabel lblTemp = new JLabel("No Observations were found that match the currently active filters.");
+                        lblTemp.setForeground(Color.WHITE);
+                        lblTemp.setFont(lblTemp.getFont().deriveFont(18f));
+                        pnlGrid.add(lblTemp);
+                    }
+                }
+            });
+        }
+        else
+        if (rdbLayoutTable.isSelected()) {
+            pnlImage.setVisible(true);
+            pnlLayoutView.removeAll();
+            pnlLayoutView.revalidate();
+            pnlLayoutView.repaint();
+            pnlLayoutView.add(scrSightings, BorderLayout.CENTER);
+            // Load the table
+            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
+                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+            // Refresh the image
+            tblSightingsMouseReleased(null);
+        }
+    }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
@@ -1077,13 +1235,18 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private javax.swing.JButton btnPrevFile;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnResetFilters;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFilterDetails;
     private javax.swing.JLabel lblImage;
     private javax.swing.JPanel pnlFeatures;
     private javax.swing.JPanel pnlFilters;
+    private javax.swing.JPanel pnlImage;
+    private javax.swing.JPanel pnlLayoutView;
     private javax.swing.JPanel pnlViews;
+    private javax.swing.JRadioButton rdbLayoutGrid;
+    private javax.swing.JRadioButton rdbLayoutTable;
+    private javax.swing.JScrollPane scrSightings;
     private javax.swing.JTable tblSightings;
     // End of variables declaration//GEN-END:variables
 }

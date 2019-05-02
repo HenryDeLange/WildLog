@@ -31,7 +31,7 @@ public class ButtonTableRenderer implements TableCellRenderer {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent inEvent) {
-                ((PanelTabSightings) ((JButton) inEvent.getSource()).getParent().getParent().getParent().getParent()).showFilterDialog();
+                ((PanelTabSightings) ((JButton) inEvent.getSource()).getParent().getParent().getParent().getParent().getParent()).showFilterDialog();
             }
         });
         return button;
