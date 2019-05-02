@@ -364,4 +364,14 @@ public final class UtilsUI {
 
     }
     
+    /**
+     * This will scroll the table to show the provided row number at the top.
+     */
+    public static void scrollTableRowToTop(JTable inTable, int inRow) {
+        // First scroll to the bottom, then to the relevant row.
+        // This way it will put the row at the top, instead of sometimes being in the middle or end.
+        inTable.scrollRectToVisible(inTable.getCellRect(inTable.getRowCount() - 1, 0, true));
+        inTable.scrollRectToVisible(inTable.getCellRect(inRow, 0, true));
+    }
+    
 }

@@ -846,7 +846,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             SwingUtilities.invokeLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
+                                    UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
                                 }
                             });
                             WLOptionPane.showMessageDialog(app.getMainFrame(),
@@ -863,7 +863,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             SwingUtilities.invokeLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
+                                    UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
                                 }
                             });
                             WLOptionPane.showMessageDialog(app.getMainFrame(),
@@ -888,7 +888,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 SwingUtilities.invokeLater(new Runnable() {
                                     @Override
                                     public void run() {
-                                        tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
+                                        UtilsUI.scrollTableRowToTop(tblBulkImport, finalRowCount);
                                     }
                                 });
                                 return null;
