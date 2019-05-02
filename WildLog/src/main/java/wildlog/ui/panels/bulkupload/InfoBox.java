@@ -26,6 +26,7 @@ import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.ui.panels.bulkupload.helpers.WideComboBox;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -38,7 +39,6 @@ public class InfoBox extends JPanel {
     private final Location location;
     private final Visit visit;
     private final JTable table;
-    
 
 
     public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, Location inLocation, Visit inVisit, JTable inTable) {
@@ -109,7 +109,7 @@ public class InfoBox extends JPanel {
         jLabel5 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel6 = new javax.swing.JLabel();
-        cmbCertainty = new javax.swing.JComboBox<>();
+        cmbCertainty = new WideComboBox<>();
         jLabel7 = new javax.swing.JLabel();
 
         jSeparator3.setName("jSeparator3"); // NOI18N
