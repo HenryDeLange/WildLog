@@ -566,17 +566,23 @@ public final class UtilsTableGenerator {
                                         };
                 // Load data from DB
                 if (inLocationID > 0) {
-                    final List<Visit> listVisits = inApp.getDBI().listVisits(null, inLocationID, null, false, Visit.class);
-                    if (!listVisits.isEmpty()) {
-                        Collection<Callable<Object>> listCallables = new ArrayList<>(listVisits.size());
+                    final List<Visit> lstVisits = inApp.getDBI().listVisits(null, inLocationID, null, false, Visit.class);
+                    // Remove stashed visits (because this table is only used on the Sighting popup)
+                    for (int t = lstVisits.size() - 1; t >= 0; t--) {
+                        if (VisitType.STASHED  == lstVisits.get(t).getType()) {
+                            lstVisits.remove(t);
+                        }
+                    }
+                    if (!lstVisits.isEmpty()) {
+                        Collection<Callable<Object>> listCallables = new ArrayList<>(lstVisits.size());
                         // Setup new table data
-                        final Object[][] data = new Object[listVisits.size()][columnNames.length];
-                        for (int t = 0; t < listVisits.size(); t++) {
+                        final Object[][] data = new Object[lstVisits.size()][columnNames.length];
+                        for (int t = 0; t < lstVisits.size(); t++) {
                             final int finalT = t;
                             listCallables.add(new Callable<Object>() {
                                 @Override
                                 public Object call() throws Exception {
-                                    Visit tempVisit = listVisits.get(finalT);
+                                    Visit tempVisit = lstVisits.get(finalT);
                                     if (VisitType.STASHED != tempVisit.getType()) {
                                         data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
                                     }

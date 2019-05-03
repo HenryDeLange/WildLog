@@ -13,6 +13,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 
@@ -255,6 +256,12 @@ public class MergeVisitDialog extends JDialog {
             Location tempLocation = (Location) lstFromLocation.getSelectedValue();
             List<Visit> visits = app.getDBI().listVisits(null, tempLocation.getID(), null, false, Visit.class);
             Collections.sort(visits);
+            // Remove stashed visits (because this table is only used on the Sighting popup)
+            for (int t = visits.size() - 1; t >= 0; t--) {
+                if (VisitType.STASHED  == visits.get(t).getType()) {
+                    visits.remove(t);
+                }
+            }
             for (Visit tempVisit : visits) {
                 visitModel.addElement(tempVisit);
             }
@@ -268,6 +275,12 @@ public class MergeVisitDialog extends JDialog {
             Location tempLocation = (Location) lstToLocation.getSelectedValue();
             List<Visit> visits = app.getDBI().listVisits(null, tempLocation.getID(), null, false, Visit.class);
             Collections.sort(visits);
+            // Remove stashed visits (because this table is only used on the Sighting popup)
+            for (int t = visits.size() - 1; t >= 0; t--) {
+                if (VisitType.STASHED  == visits.get(t).getType()) {
+                    visits.remove(t);
+                }
+            }
             for (Visit tempVisit : visits) {
                 visitModel.addElement(tempVisit);
             }
