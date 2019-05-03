@@ -1212,6 +1212,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
      * @return 
      */
     public static boolean checkFilterPropertiesMatch(FilterProperties inFilterProperties, Sighting inSighting) {
+System.out.println("Filter : " + inSighting.getID());
         if (inFilterProperties != null) {
             // Date
             if (inFilterProperties.getStartDate() != null) {
@@ -1292,7 +1293,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                     return false;
                 }
             }
-
             // Visit Type
             if (inFilterProperties.getVisitTypes() != null && !inFilterProperties.getVisitTypes().isEmpty()) {
                 boolean found = false;
@@ -1572,6 +1572,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 }
             }
         }
+System.out.println("TRUE");
         return true;
     }
     

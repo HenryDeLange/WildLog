@@ -2,22 +2,22 @@ package wildlog.ui.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import javax.swing.BorderFactory;
+import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
@@ -25,6 +25,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
 import wildlog.data.dataobjects.interfaces.DataObjectBasicInfo;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -51,6 +52,7 @@ import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.maps.MapsBaseDialog;
+import wildlog.ui.panels.helpers.SightingBox;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.reports.ReportsBaseDialog;
@@ -74,6 +76,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private double northEast_Longitude;
     private double southWest_Latitude;
     private double southWest_Longitude;
+    private enum LayoutType {TABLE, GRID};
+    private LayoutType activeLayout = LayoutType.TABLE;
 
     public PanelTabSightings(WildLogApp inApp, JTabbedPane inTabbedPanel) {
         app = inApp;
@@ -140,7 +144,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnPrevFile = new javax.swing.JButton();
         lblImage = new javax.swing.JLabel();
         rdbLayoutTable = new javax.swing.JRadioButton();
-        rdbLayoutGrid = new javax.swing.JRadioButton();
+        rdbLayoutGridSightings = new javax.swing.JRadioButton();
+        rdbLayoutGridFiles = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -578,9 +583,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
         rdbLayoutTable.setBackground(new java.awt.Color(235, 233, 221));
         buttonGroup1.add(rdbLayoutTable);
-        rdbLayoutTable.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        rdbLayoutTable.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         rdbLayoutTable.setSelected(true);
-        rdbLayoutTable.setText("Table Layout");
+        rdbLayoutTable.setText("Table View");
         rdbLayoutTable.setToolTipText("Show the results in as rows in a table.");
         rdbLayoutTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbLayoutTable.setFocusable(false);
@@ -590,16 +595,29 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         });
 
-        rdbLayoutGrid.setBackground(new java.awt.Color(235, 233, 221));
-        buttonGroup1.add(rdbLayoutGrid);
-        rdbLayoutGrid.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        rdbLayoutGrid.setText("Grid Layout");
-        rdbLayoutGrid.setToolTipText("Show the results as images in a grid.");
-        rdbLayoutGrid.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLayoutGrid.setFocusable(false);
-        rdbLayoutGrid.addActionListener(new java.awt.event.ActionListener() {
+        rdbLayoutGridSightings.setBackground(new java.awt.Color(235, 233, 221));
+        buttonGroup1.add(rdbLayoutGridSightings);
+        rdbLayoutGridSightings.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        rdbLayoutGridSightings.setText("Grid View (Observations)");
+        rdbLayoutGridSightings.setToolTipText("Show the results as images in a grid.");
+        rdbLayoutGridSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLayoutGridSightings.setFocusable(false);
+        rdbLayoutGridSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbLayoutGridActionPerformed(evt);
+                rdbLayoutGridSightingsActionPerformed(evt);
+            }
+        });
+
+        rdbLayoutGridFiles.setBackground(new java.awt.Color(235, 233, 221));
+        buttonGroup1.add(rdbLayoutGridFiles);
+        rdbLayoutGridFiles.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        rdbLayoutGridFiles.setText("Grid View (Files)");
+        rdbLayoutGridFiles.setToolTipText("Show the results as images in a grid.");
+        rdbLayoutGridFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLayoutGridFiles.setFocusable(false);
+        rdbLayoutGridFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbLayoutGridFilesActionPerformed(evt);
             }
         });
 
@@ -620,7 +638,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(pnlLayoutView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(pnlLayoutView, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -630,8 +648,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(rdbLayoutTable)
-                                .addGap(25, 25, 25)
-                                .addComponent(rdbLayoutGrid)
+                                .addGap(15, 15, 15)
+                                .addComponent(rdbLayoutGridSightings)
+                                .addGap(15, 15, 15)
+                                .addComponent(rdbLayoutGridFiles)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addComponent(pnlImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -650,7 +670,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                                 .addGap(15, 15, 15)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(rdbLayoutTable)
-                                    .addComponent(rdbLayoutGrid)))
+                                    .addComponent(rdbLayoutGridSightings)
+                                    .addComponent(rdbLayoutGridFiles)))
                             .addComponent(pnlImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
@@ -721,17 +742,13 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_tblSightingsKeyReleased
 
     private void btnGoSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoSightingActionPerformed
-        if (tblSightings.getSelectedRowCount() == 1) {
-            Sighting sighting = app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
-                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8), true, Sighting.class);
-            Element element = app.getDBI().findElement((Long) tblSightings.getModel().getValueAt(
-                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 10), null, Element.class);
-            Location location = app.getDBI().findLocation((Long) tblSightings.getModel().getValueAt(
-                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 11), null, Location.class);
-            Visit visit = app.getDBI().findVisit((Long) tblSightings.getModel().getValueAt(
-                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 12), null, false, Visit.class);
-            PanelSighting dialog = new PanelSighting(
-                    app, app.getMainFrame(), "Edit an Existing Observation",
+        List<Sighting> lstSelectedSightings = getListOfSelectedSightings(activeLayout, true);
+        if (lstSelectedSightings.size() == 1) {
+            Sighting sighting = app.getDBI().findSighting(lstSelectedSightings.get(0).getID(), true, Sighting.class);
+            Element element = app.getDBI().findElement(lstSelectedSightings.get(0).getElementID(), null, Element.class);
+            Location location = app.getDBI().findLocation(lstSelectedSightings.get(0).getLocationID(), null, Location.class);
+            Visit visit = app.getDBI().findVisit(lstSelectedSightings.get(0).getVisitID(), null, false, Visit.class);
+            PanelSighting dialog = new PanelSighting(app, app.getMainFrame(), "Edit an Existing Observation",
                     sighting, location, visit, element, this, false, false, false, false);
             dialog.setVisible(true);
         }
@@ -743,13 +760,12 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnGoSightingActionPerformed
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
-        if (tblSightings.getSelectedRowCount() >= 1) {
+        List<Sighting> lstSelectedSightings = getListOfSelectedSightings(activeLayout, true);
+        if (lstSelectedSightings.size() >= 1) {
             app.getMainFrame().getGlassPane().setVisible(true);
             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            for (int t = 0; t < tblSightings.getSelectedRows().length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (Long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRows()[t]), 10),
-                    PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
+            for (Sighting sighting : lstSelectedSightings) {
+                UtilsPanelGenerator.openPanelAsTab(app, sighting.getElementID(), PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
             app.getMainFrame().getGlassPane().setVisible(false);
@@ -757,7 +773,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnGoElementActionPerformed
 
     private void btnAddSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSightingActionPerformed
-        tblSightings.clearSelection();
         PanelSighting dialog = new PanelSighting(
                 app, app.getMainFrame(), "Add a New Observation",
                 new Sighting(), null, null, null, this, true, false, false, false);
@@ -766,9 +781,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
+        List<Sighting> lstSelectedSightings = getListOfSelectedSightings(activeLayout, true);
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             if (WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER) {
-                if (tblSightings.getSelectedRowCount() > 1) {
+                if (lstSelectedSightings.size() > 1) {
                     WLOptionPane.showMessageDialog(app.getMainFrame(),
                         "Only one Observation can be deleted at a time. Please select one row in the table and try again.",
                         "Select One Observation", JOptionPane.WARNING_MESSAGE);
@@ -779,13 +795,13 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 return;
             }
         }
-        if (tblSightings.getSelectedRowCount() > 0) {
+        if (lstSelectedSightings.size() > 0) {
            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                    "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
                    "Delete Observations(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (result == JOptionPane.YES_OPTION) {
-                for (int row : tblSightings.getSelectedRows())  {
-                    app.getDBI().deleteSighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 8));
+                for (Sighting sighting : lstSelectedSightings)  {
+                    app.getDBI().deleteSighting(sighting.getID());
                 }
                 doTheRefresh(this);
             }
@@ -793,13 +809,12 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnDeleteSightingActionPerformed
 
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
-        if (tblSightings.getSelectedRowCount() >= 1) {
+        List<Sighting> lstSelectedSightings = getListOfSelectedSightings(activeLayout, true);
+        if (lstSelectedSightings.size() >= 1) {
             app.getMainFrame().getGlassPane().setVisible(true);
             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            for (int t = 0; t < tblSightings.getSelectedRows().length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (Long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRows()[t]), 11),
-                    PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
+            for (Sighting sighting : lstSelectedSightings) {
+                UtilsPanelGenerator.openPanelAsTab(app, sighting.getLocationID(), PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
             app.getMainFrame().getGlassPane().setVisible(false);
@@ -828,9 +843,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             lstFilteredElements = generateIDList(app.getDBI().listElements(null, null, null, Element.class));
         }
         // Load the view
-        reloadUI();
-        // Refresh the image
-        tblSightingsMouseReleased(null);
+        reloadUI(activeLayout);
     }//GEN-LAST:event_formComponentShown
 
     @Override
@@ -839,15 +852,12 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }
     
     private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
-        if (tblSightings.getSelectedRowCount() >= 1) {
+        List<Sighting> lstSelectedSightings = getListOfSelectedSightings(activeLayout, true);
+        if (lstSelectedSightings.size() >= 1) {
             app.getMainFrame().getGlassPane().setVisible(true);
             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            for (int t = 0; t < tblSightings.getSelectedRows().length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (Long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRows()[t]), 12),
-                    PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, 
-                    app.getDBI().findLocation((Long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRows()[t]), 11), null, Location.class));
+            for (Sighting sighting : lstSelectedSightings) {
+                UtilsPanelGenerator.openPanelAsTab(app, sighting.getVisitID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, null);
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
             app.getMainFrame().getGlassPane().setVisible(false);
@@ -864,7 +874,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (dialog.isSelectionMade()) {
             filterProperties = dialog.getSelectedFilterProperties();
             // Filter the original results using the provided values
-            reloadUI();
+            reloadUI(activeLayout);
         }
     }
     
@@ -875,7 +885,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (dialog.isSelectionMade()) {
             lstFilteredElements = dialog.getSelectedData();
             // Filter the original results using the provided values
-            reloadUI();
+            reloadUI(activeLayout);
         }
     }//GEN-LAST:event_btnFilterElementsActionPerformed
 
@@ -886,7 +896,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (dialog.isSelectionMade()) {
             lstFilteredLocations = dialog.getSelectedData();
             // Filter the original results using the provided values
-            reloadUI();
+            reloadUI(activeLayout);
         }
     }//GEN-LAST:event_btnFilterLocationActionPerformed
 
@@ -901,12 +911,12 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         if (dialog.isSelectionMade()) {
             lstFilteredVisits = dialog.getSelectedData();
             // Filter the original results using the provided values
-            reloadUI();
+            reloadUI(activeLayout);
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
-        List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
+        List<Sighting> lstSightingsToUse = getListOfSelectedSightings(activeLayout, false);
         if (!lstSightingsToUse.isEmpty()) {
             MapsBaseDialog dialog = new MapsBaseDialog("WildLog Maps - Observations", lstSightingsToUse, 0);
             dialog.setVisible(true);
@@ -914,7 +924,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
+        List<Sighting> lstSightingsToUse = getListOfSelectedSightings(activeLayout, false);
         if (!lstSightingsToUse.isEmpty()) {
             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - Observations", lstSightingsToUse);
             dialog.setVisible(true);
@@ -922,7 +932,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
-        List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
+        List<Sighting> lstSightingsToUse = getListOfSelectedSightings(activeLayout, false);
         if (!lstSightingsToUse.isEmpty()) {
             ExportDialog dialog = new ExportDialog(app, null, null, null, null, lstSightingsToUse);
             dialog.setVisible(true);
@@ -931,7 +941,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void btnResetFiltersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetFiltersActionPerformed
         setupDefaultFilters();
-        reloadUI();
+        reloadUI(activeLayout);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
 
     private void btnGoBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBrowseActionPerformed
@@ -962,11 +972,11 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         northEast_Longitude = dialog.getNorthEast_Longitude();
         southWest_Latitude = dialog.getSouthWest_Latitude();
         southWest_Longitude = dialog.getSouthWest_Longitude();
-        reloadUI();
+        reloadUI(activeLayout);
     }//GEN-LAST:event_btnFilterMapActionPerformed
 
     private void btnBulkEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkEditSightingActionPerformed
-        List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
+        List<Sighting> lstSightingsToUse = getListOfSelectedSightings(activeLayout, false);
         if (!lstSightingsToUse.isEmpty()) {
             Sighting bulkSighting = new Sighting();
             PanelSighting dialog = new PanelSighting(
@@ -1047,59 +1057,82 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnBulkEditSightingActionPerformed
 
     private void rdbLayoutTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbLayoutTableActionPerformed
-        reloadUI();
+        reloadUI(activeLayout);
+        activeLayout = LayoutType.TABLE;
     }//GEN-LAST:event_rdbLayoutTableActionPerformed
 
-    private void rdbLayoutGridActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbLayoutGridActionPerformed
-        reloadUI();
-    }//GEN-LAST:event_rdbLayoutGridActionPerformed
+    private void rdbLayoutGridSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbLayoutGridSightingsActionPerformed
+        reloadUI(activeLayout);
+        activeLayout = LayoutType.GRID;
+    }//GEN-LAST:event_rdbLayoutGridSightingsActionPerformed
 
-    private List<Sighting> getListOfSightingsFromTable() {
-        List<Sighting> lstSightingsToMap;
-        if (tblSightings.getColumnCount() == 1) {
-            lstSightingsToMap = new ArrayList<>(0);
-        }
-        else {
-            int result = WLOptionPane.showOptionDialog(app.getMainFrame(),
-                    "Please select which subset of Observations should be used.",
-                    "Which Observations to use?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                    null, new String[]{
-                        "All active Observations (" + tblSightings.getRowCount() + ")", 
-                        "Only selected Observations (" + tblSightings.getSelectedRowCount() + ")"}, 
-                    null);
-            if (result != JOptionPane.CLOSED_OPTION) {
-                if (result == 0) {
-                    // Use all Sightings
-                    lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
-                    for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
-                        Sighting sighting = app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
-                                tblSightings.convertRowIndexToModel(row), 8), true, Sighting.class);
-                        sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
-                                tblSightings.convertRowIndexToModel(row), 4));
-                        sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
-                                tblSightings.convertRowIndexToModel(row), 5));
-                        lstSightingsToMap.add(sighting);
+    private void rdbLayoutGridFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbLayoutGridFilesActionPerformed
+        reloadUI(activeLayout);
+        activeLayout = LayoutType.GRID;
+    }//GEN-LAST:event_rdbLayoutGridFilesActionPerformed
+
+    private List<Sighting> getListOfSelectedSightings(LayoutType inLayoutType, boolean inUseOnlySelectedSightings) {
+        List<Sighting> lstSelectedSightings = new ArrayList<>(0);
+        if (inLayoutType == LayoutType.TABLE) {
+            if (tblSightings.getColumnCount() != 1) {
+                int result = 1;
+                if (!inUseOnlySelectedSightings) {
+                result = WLOptionPane.showOptionDialog(app.getMainFrame(),
+                        "Please select which subset of Observations should be used.",
+                        "Which Observations to use?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                        null, new String[]{
+                            "All active Observations (" + tblSightings.getRowCount() + ")", 
+                            "Only selected Observations (" + tblSightings.getSelectedRowCount() + ")"}, 
+                        null);
+                }
+                if (result != JOptionPane.CLOSED_OPTION) {
+                    if (result == 0) {
+                        // Use all Sightings
+                        lstSelectedSightings = new ArrayList<>(tblSightings.getRowCount());
+                        for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
+                            Sighting sighting = app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
+                                    tblSightings.convertRowIndexToModel(row), 8), true, Sighting.class);
+                            sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                                    tblSightings.convertRowIndexToModel(row), 4));
+                            sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                                    tblSightings.convertRowIndexToModel(row), 5));
+                            lstSelectedSightings.add(sighting);
+                        }
+                    }
+                    else {
+                        // Use selected Sightings
+                        lstSelectedSightings = new ArrayList<>(tblSightings.getSelectedRowCount());
+                        for (int row : tblSightings.getSelectedRows()) {
+                            Sighting sighting = app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
+                                    tblSightings.convertRowIndexToModel(row), 8), true, Sighting.class);
+                            sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                                    tblSightings.convertRowIndexToModel(row), 4));
+                            sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                                    tblSightings.convertRowIndexToModel(row), 5));
+                            lstSelectedSightings.add(sighting);
+                        }
                     }
                 }
                 else {
-                    // Use selected Sightings
-                    lstSightingsToMap = new ArrayList<>(tblSightings.getSelectedRowCount());
-                    for (int row : tblSightings.getSelectedRows()) {
-                        Sighting sighting = app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
-                                tblSightings.convertRowIndexToModel(row), 8), true, Sighting.class);
-                        sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
-                                tblSightings.convertRowIndexToModel(row), 4));
-                        sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
-                                tblSightings.convertRowIndexToModel(row), 5));
-                        lstSightingsToMap.add(sighting);
+                    lstSelectedSightings = new ArrayList<>(0);
+                }
+            }
+        }
+        else
+        if (inLayoutType == LayoutType.GRID) {
+            Set<Long> processedIDs = new HashSet<>();
+            for (Component componenet : ((JPanel) ((JScrollPane) pnlLayoutView.getComponent(0)).getViewport().getComponent(0)).getComponents()) {
+                if (componenet instanceof SightingBox) {
+                    SightingBox sightingBox = (SightingBox) componenet;
+                    if (sightingBox.isSelected()) {
+                        if (processedIDs.add(sightingBox.getSighting().getID())) {
+                            lstSelectedSightings.add(sightingBox.getSighting());
+                        }
                     }
                 }
             }
-            else {
-                lstSightingsToMap = new ArrayList<>(0);
-            }
         }
-        return lstSightingsToMap;
+        return lstSelectedSightings;
     }
     
     private void setupDefaultFilters() {
@@ -1125,8 +1158,25 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         return lstIDs;
     }
     
-    private void reloadUI() {
-        if (rdbLayoutGrid.isSelected()) {
+    private void reloadUI(LayoutType inPrevLayoutType) {
+        // Get the currently selected sightings
+        List<Sighting> lstSelectedSightings = getListOfSelectedSightings(inPrevLayoutType, true);
+        // Reload the UI
+        if (rdbLayoutTable.isSelected()) {
+            pnlImage.setVisible(true);
+            pnlLayoutView.removeAll();
+            pnlLayoutView.revalidate();
+            pnlLayoutView.repaint();
+            pnlLayoutView.add(scrSightings, BorderLayout.CENTER);
+            // Load the table
+            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
+                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
+                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
+            // Refresh the image
+            tblSightingsMouseReleased(null);
+        }
+        else
+        if (rdbLayoutGridSightings.isSelected() || rdbLayoutGridFiles.isSelected()) {
             pnlImage.setVisible(false);
             // Clear the old table (to hopefully free up its resources)
             tblSightings.setModel(new DefaultTableModel(new String[]{"inactive"}, 0));
@@ -1166,28 +1216,26 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                     List<Sighting> lstSightings = app.getDBI().searchSightings(filterProperties.getSightingIDs(), 
                                 UtilsTime.getDateFromLocalDateTime(startDateTime), UtilsTime.getDateFromLocalDateTime(endDateTime), 
                                 lstFilteredLocations, lstFilteredVisits, lstFilteredElements, true, Sighting.class);
+                    Collections.sort(lstSightings);
                     pnlGrid.removeAll();
                     if (!lstSightings.isEmpty()) {
                         ((ScrollableWrappedFlowLayout) pnlGrid.getLayout()).setAlignment(FlowLayout.LEFT);
                         for (Sighting sighting : lstSightings) {
-                            JLabel lblSightingBox = new JLabel();
-                            lblSightingBox.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-                            lblSightingBox.setOpaque(true);
-                            lblSightingBox.setBackground(Color.BLACK);
-                            lblSightingBox.setMinimumSize(new Dimension(WildLogThumbnailSizes.MEDIUM.getSize(), WildLogThumbnailSizes.MEDIUM.getSize()));
-                            lblSightingBox.setPreferredSize(new Dimension(WildLogThumbnailSizes.MEDIUM.getSize(), WildLogThumbnailSizes.MEDIUM.getSize()));
-                            lblSightingBox.setMaximumSize(new Dimension(WildLogThumbnailSizes.MEDIUM.getSize(), WildLogThumbnailSizes.MEDIUM.getSize()));
-                            lblSightingBox.setHorizontalAlignment(SwingConstants.CENTER);
-                            lblSightingBox.setVerticalAlignment(SwingConstants.CENTER);
-                            lblSightingBox.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                            lblSightingBox.addMouseListener(new java.awt.event.MouseAdapter() {
-                                @Override
-                                public void mouseReleased(MouseEvent inEvt) {
-                                    UtilsFileProcessing.openFile(sighting.getID(), 0, app);
+                            if (rdbLayoutGridSightings.isSelected()) {
+                                generateGridBox(pnlGrid, sighting, 0);
+                            }
+                            else
+                            if (rdbLayoutGridFiles.isSelected()) {
+                                List<WildLogFile> lstSightingFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+                                if (lstSightingFiles != null && !lstSightingFiles.isEmpty()) {
+                                    for (int t = 0; t < lstSightingFiles.size(); t++) {
+                                        generateGridBox(pnlGrid, sighting, t);
+                                    }
                                 }
-                            });
-                            UtilsImageProcessing.setupFoto(sighting.getID(), 0, lblSightingBox, WildLogThumbnailSizes.MEDIUM, app);
-                            pnlGrid.add(lblSightingBox);
+                                else {
+                                    generateGridBox(pnlGrid, sighting, 0);
+                                }
+                            }
                         }
                     }
                     else {
@@ -1199,20 +1247,39 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 }
             });
         }
-        else
-        if (rdbLayoutTable.isSelected()) {
-            pnlImage.setVisible(true);
-            pnlLayoutView.removeAll();
-            pnlLayoutView.revalidate();
-            pnlLayoutView.repaint();
-            pnlLayoutView.add(scrSightings, BorderLayout.CENTER);
-            // Load the table
-            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, lblFilterDetails, 
-                    filterProperties, lstFilteredLocations, lstFilteredVisits, lstFilteredElements, 
-                    northEast_Latitude, northEast_Longitude, southWest_Latitude, southWest_Longitude);
-            // Refresh the image
-            tblSightingsMouseReleased(null);
-        }
+        // After the table / grid has been loaded, then reselect the sightings
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // Reselect the previously selected sightings
+                if (rdbLayoutTable.isSelected()) {
+                    if (!lstSelectedSightings.isEmpty() && tblSightings.getColumnCount() != 1) {
+                        long[] selectedRowIDs = new long[lstSelectedSightings.size()];
+                        for (int t = 0; t < lstSelectedSightings.size(); t++) {
+                            selectedRowIDs[t] = lstSelectedSightings.get(t).getID();
+                        }
+                        UtilsTableGenerator.setupPreviousRowSelection(tblSightings, selectedRowIDs, 8);
+                    }
+                }
+                else
+                if (rdbLayoutGridSightings.isSelected() || rdbLayoutGridFiles.isSelected()) {
+                    for (Sighting sighting : lstSelectedSightings) {
+                        for (Component componenet : ((JPanel) ((JScrollPane) pnlLayoutView.getComponent(0)).getViewport().getComponent(0)).getComponents()) {
+                            if (componenet instanceof SightingBox) {
+                                SightingBox sightingBox = (SightingBox) componenet;
+                                if (sighting.getID() == sightingBox.getSighting().getID()) {
+                                    sightingBox.toggleSelection();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    private void generateGridBox(JPanel inPnlGrid, Sighting inSighting, int inFileIndex) {
+        inPnlGrid.add(new SightingBox(inSighting, inFileIndex, rdbLayoutGridFiles.isSelected()));
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1244,7 +1311,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private javax.swing.JPanel pnlImage;
     private javax.swing.JPanel pnlLayoutView;
     private javax.swing.JPanel pnlViews;
-    private javax.swing.JRadioButton rdbLayoutGrid;
+    private javax.swing.JRadioButton rdbLayoutGridFiles;
+    private javax.swing.JRadioButton rdbLayoutGridSightings;
     private javax.swing.JRadioButton rdbLayoutTable;
     private javax.swing.JScrollPane scrSightings;
     private javax.swing.JTable tblSightings;
