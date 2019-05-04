@@ -261,6 +261,8 @@ public final class WildLogView extends JFrame {
             btnStashFiles.setVisible(true);
             btnBulkImport.setEnabled(true);
             btnBulkImport.setVisible(true);
+            // Show a small "getting started" popup
+            
         }
         // Enforce user access
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {

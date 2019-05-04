@@ -806,7 +806,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnUpdateActionPerformed() - The data will be saved to the workspace.");
+                WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnUpdateActionPerformed() - The data will first be validated.");
                 long time = System.currentTimeMillis();
                 this.setTaskProgress(0);
                 this.setMessage("Saving the Bulk Import: Validating...");
@@ -934,6 +934,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         }
                     }
                     // Everything seems fine, start saving and close the tab to prevent new edits
+                    WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnUpdateActionPerformed() - The data will be saved to the workspace.");
                     this.setTaskProgress(0);
                     this.setMessage("Saving the Bulk Import: Starting...");
                     closeTab();

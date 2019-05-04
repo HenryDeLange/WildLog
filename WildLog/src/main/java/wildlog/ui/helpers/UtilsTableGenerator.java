@@ -62,6 +62,7 @@ import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public final class UtilsTableGenerator {
@@ -277,6 +278,10 @@ public final class UtilsTableGenerator {
                                         "Observations",
                                         "ID" // Hidden
                                         };
+                if(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
+                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                    columnNames[3] = "Description";
+                }
                 // Load data from DB
                 final List<Location> listLocations = inApp.getDBI().listLocations(inLocationName, Location.class);
                 if (!listLocations.isEmpty()) {
@@ -292,7 +297,14 @@ public final class UtilsTableGenerator {
                                 data[finalT][0] = setupThumbnailIcon(inApp, tempLocation.getWildLogFileID());
                                 data[finalT][1] = tempLocation.getName();
                                 data[finalT][2] = tempLocation.getRating();
-                                data[finalT][3] = tempLocation.getGameViewingRating();
+                                
+                                if(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
+                                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                                    data[finalT][3] = tempLocation.getDescription();
+                                }
+                                else {
+                                    data[finalT][3] = tempLocation.getGameViewingRating();
+                                }
                                 data[finalT][4] = new WildLogTableModelDataWrapper(
                                         UtilsGPS.getLatitudeString(tempLocation), 
                                         UtilsGPS.getLatDecimalDegree(tempLocation));
@@ -320,9 +332,17 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(2).setMinWidth(90);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(100);
                     inTable.getColumnModel().getColumn(2).setMaxWidth(120);
-                    inTable.getColumnModel().getColumn(3).setMinWidth(90);
-                    inTable.getColumnModel().getColumn(3).setPreferredWidth(100);
-                    inTable.getColumnModel().getColumn(3).setMaxWidth(120);
+                    if(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
+                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                        inTable.getColumnModel().getColumn(3).setMinWidth(150);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(250);
+                        inTable.getColumnModel().getColumn(3).setMaxWidth(550);
+                    }
+                    else {
+                        inTable.getColumnModel().getColumn(3).setMinWidth(90);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+                        inTable.getColumnModel().getColumn(3).setMaxWidth(120);
+                    }
                     inTable.getColumnModel().getColumn(4).setMinWidth(100);
                     inTable.getColumnModel().getColumn(4).setPreferredWidth(110);
                     inTable.getColumnModel().getColumn(4).setMaxWidth(125);
