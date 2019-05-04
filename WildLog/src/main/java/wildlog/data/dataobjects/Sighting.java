@@ -16,13 +16,13 @@ import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsTemperature;
-import wildlog.data.enums.WildLogUserTypes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.maps.kml.generator.KmlEntry;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsTime;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.xml.utils.UtilsXML;
 
 
@@ -182,7 +182,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         if (!inIsSummary) {
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Tag:</b><br/>", tag, true);
         }
-        if (!inIsSummary && (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.WILDLOG_MASTER || WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.OWNER)) {
+        if (!inIsSummary && (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER)) {
             html.append("<br/><hr/>");
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>ID:</b><br/>", id, true);
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit Time:</b><br/>", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(

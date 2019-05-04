@@ -7,11 +7,11 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithTXT;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
-import wildlog.data.enums.WildLogUserTypes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsTime;
+import wildlog.utils.WildLogApplicationTypes;
 import wildlog.xml.utils.UtilsXML;
 
 
@@ -53,7 +53,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         if (!inIsSummary) {
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Food/Nutrition:</b><br/>", nutrition, true);
         }
-        if (!inIsSummary && (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.WILDLOG_MASTER || WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.OWNER)) {
+        if (!inIsSummary && (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER)) {
             html.append("<br/><hr/>");
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>ID:</b><br/>", id, true);
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit Time:</b><br/>", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(
