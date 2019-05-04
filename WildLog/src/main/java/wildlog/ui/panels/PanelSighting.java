@@ -70,6 +70,7 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogFileExtentions;
+import wildlog.utils.WildLogPaths;
 
 
 public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataChanges {
@@ -332,6 +333,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 });
             }
         }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+            btnSetDefaultElementImage.setEnabled(false);
+            btnSetDefaultElementImage.setVisible(false);
+        }
     }
 
     private void uploadFiles(List<File> inFiles) {
@@ -432,6 +437,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         tblElement = new javax.swing.JTable();
         cmbElementType = new javax.swing.JComboBox();
         btnAddNewElement = new javax.swing.JButton();
+        btnSetDefaultElementImage = new javax.swing.JButton();
         pnlLocationControls = new javax.swing.JPanel();
         lblLocation = new javax.swing.JLabel();
         txtSearchLocation = new javax.swing.JTextField();
@@ -673,19 +679,17 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 .addGap(0, 0, 0)
                 .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addGroup(pnlImageControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(pnlImageControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlImageControlsLayout.createSequentialGroup()
                         .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
                         .addGroup(pnlImageControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlImageControlsLayout.createSequentialGroup()
-                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5))
+                .addGap(5, 11, Short.MAX_VALUE))
         );
 
         pnlElementControls.setBackground(new java.awt.Color(208, 204, 181));
@@ -752,6 +756,21 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         });
 
+        btnSetDefaultElementImage.setBackground(new java.awt.Color(204, 213, 186));
+        btnSetDefaultElementImage.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnSetDefaultElementImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        btnSetDefaultElementImage.setText("Set Creature File");
+        btnSetDefaultElementImage.setToolTipText("Set the active file as the default image for the selected Creature.");
+        btnSetDefaultElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetDefaultElementImage.setFocusPainted(false);
+        btnSetDefaultElementImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnSetDefaultElementImage.setName("btnSetDefaultElementImage"); // NOI18N
+        btnSetDefaultElementImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetDefaultElementImageActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlElementControlsLayout = new javax.swing.GroupLayout(pnlElementControls);
         pnlElementControls.setLayout(pnlElementControlsLayout);
         pnlElementControlsLayout.setHorizontalGroup(
@@ -762,6 +781,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     .addGroup(pnlElementControlsLayout.createSequentialGroup()
                         .addComponent(lblElement)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSetDefaultElementImage)
+                        .addGap(20, 20, 20)
                         .addComponent(btnAddNewElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlElementControlsLayout.createSequentialGroup()
                         .addComponent(txtSearch)
@@ -776,13 +797,15 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 .addGap(2, 2, 2)
                 .addGroup(pnlElementControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAddNewElement, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblElement))
+                    .addGroup(pnlElementControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblElement)
+                        .addComponent(btnSetDefaultElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(3, 3, 3)
                 .addGroup(pnlElementControlsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(1, 1, 1)
-                .addComponent(sclElement, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(sclElement, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 
@@ -1340,7 +1363,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     .addComponent(cmbAge, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbSex, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
-                    .addComponent(spnNumberOfElements))
+                    .addComponent(spnNumberOfElements, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
         pnlSightingFieldsLayout.setVerticalGroup(
@@ -1632,7 +1655,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                                 .addComponent(lblElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
                                 .addComponent(lblLocationImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(pnlVisitControls, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(pnlVisitControls, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)))
                     .addGroup(sightingIncludesLayout.createSequentialGroup()
                         .addComponent(pnlSightingFields, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
@@ -2301,6 +2324,42 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         dialog.setVisible(true);
     }//GEN-LAST:event_btnINaturalistActionPerformed
 
+    private void btnSetDefaultElementImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDefaultElementImageActionPerformed
+        List<WildLogFile> listWildLogFile = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+        if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
+            WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
+            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
+                List<WildLogFile> files = app.getDBI().listWildLogFiles(sighting.getElementID(), null, WildLogFile.class);
+                for (WildLogFile tempFile : files) {
+                    tempFile.setDefaultFile(false);
+                    app.getDBI().updateWildLogFile(tempFile, false);
+                }
+                String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
+                UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sighting.getElementID(), null, Element.class),
+                    Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sighting.getCachedElementName() + uniqueIdentifier), WildLogFileLinkType.ELEMENT,
+                    new File[] {wildLogFile.getAbsolutePath().toFile()},
+                    null,
+                    app, true, null, true, true);
+                WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null,
+                        WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
+                                sighting.getCachedElementName() + uniqueIdentifier).resolve(wildLogFile.getFilename())).toString(),
+                        WildLogFile.class);
+                if (uploadedWildLogFile != null) {
+                    uploadedWildLogFile.setDefaultFile(true);
+                    app.getDBI().updateWildLogFile(uploadedWildLogFile, false);
+                }
+                if (app.getWildLogOptions().isEnableSounds()) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
+                WLOptionPane.showConfirmDialog(this,
+                    "The first image for the Creature '" + sighting.getCachedElementName() + "' was successfully changed.",
+                    "Changed First Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                // Refresh the elements table
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+            }
+        }
+    }//GEN-LAST:event_btnSetDefaultElementImageActionPerformed
+
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().countWildLogFiles(0, sighting.getWildLogFileID());
         if (fotoCount > 0) {
@@ -2360,6 +2419,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JButton btnINaturalist;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousImage;
+    private javax.swing.JButton btnSetDefaultElementImage;
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdateSighting;
     private javax.swing.JButton btnUploadImage;

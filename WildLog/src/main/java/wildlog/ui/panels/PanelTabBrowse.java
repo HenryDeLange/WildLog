@@ -1521,18 +1521,18 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             tempFile.setDefaultFile(false);
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
+                        String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                         UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sightingWrapper.getSighting().getElementID(), null, Element.class),
-                            Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName()), WildLogFileLinkType.ELEMENT, 
+                            Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName() + uniqueIdentifier), WildLogFileLinkType.ELEMENT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(
-                                                sightingWrapper.getSighting().getCachedElementName()).resolve(
+                                                sightingWrapper.getSighting().getCachedElementName() + uniqueIdentifier).resolve(
                                                         wildLogFile.getFilename())).toString(), 
                                 WildLogFile.class);
-                        // Die WildLogFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
                         if (uploadedWildLogFile != null) {
                             uploadedWildLogFile.setDefaultFile(true);
                             app.getDBI().updateWildLogFile(uploadedWildLogFile, false);
@@ -1562,18 +1562,18 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             tempFile.setDefaultFile(false);
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
+                        String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                         UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(sightingWrapper.getSighting().getLocationID(), null, Location.class),
-                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName()), WildLogFileLinkType.LOCATION, 
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName() + uniqueIdentifier), WildLogFileLinkType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
-                                                sightingWrapper.getSighting().getCachedLocationName()).resolve(
+                                                sightingWrapper.getSighting().getCachedLocationName() + uniqueIdentifier).resolve(
                                                         wildLogFile.getFilename())).toString(),
                                 WildLogFile.class);
-                        // Die WildLogFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
                         if (uploadedWildLogFile != null) {
                             uploadedWildLogFile.setDefaultFile(true);
                             app.getDBI().updateWildLogFile(uploadedWildLogFile, false);
@@ -1599,18 +1599,18 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             tempFile.setDefaultFile(false);
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
+                        String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                         UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(visit.getLocationID(), null, Location.class),
-                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName()), WildLogFileLinkType.LOCATION, 
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName() + uniqueIdentifier), WildLogFileLinkType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(
-                                                visit.getCachedLocationName()).resolve(
+                                                visit.getCachedLocationName() + uniqueIdentifier).resolve(
                                                         wildLogFile.getFilename())).toString(),
                                 WildLogFile.class);
-                        // Die WildLogFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
                         if (uploadedWildLogFile != null) {
                             uploadedWildLogFile.setDefaultFile(true);
                             app.getDBI().updateWildLogFile(uploadedWildLogFile, false);
@@ -1640,18 +1640,18 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             tempFile.setDefaultFile(false);
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
+                        String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                         UtilsFileProcessing.performFileUpload(app.getDBI().findVisit(sightingWrapper.getSighting().getVisitID(), null, true, Visit.class),
-                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedVisitName()), WildLogFileLinkType.VISIT, 
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedVisitName() + uniqueIdentifier), WildLogFileLinkType.VISIT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
                         WildLogFile uploadedWildLogFile = app.getDBI().findWildLogFile(0, 0, null, 
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
                                         Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(
-                                                sightingWrapper.getSighting().getCachedVisitName()).resolve(
+                                                sightingWrapper.getSighting().getCachedVisitName() + uniqueIdentifier).resolve(
                                                         wildLogFile.getFilename())).toString(),
                                 WildLogFile.class);
-                        // Die WildLogFile kan null wees as die file rename was tydens die upload? (omdat daar reeds 'n file met dieselfe naam bestaan - baie klein kans)
                         if (uploadedWildLogFile != null) {
                             uploadedWildLogFile.setDefaultFile(true);
                             app.getDBI().updateWildLogFile(uploadedWildLogFile, false);

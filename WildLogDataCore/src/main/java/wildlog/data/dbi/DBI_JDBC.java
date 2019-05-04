@@ -1190,7 +1190,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE ORIGINALPATH = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inDBFilePath));
+                state.setString(1, UtilsData.sanitizeString(inDBFilePath).replace("\\", "/"));
             }
             if (state != null) {
                 results = state.executeQuery();
