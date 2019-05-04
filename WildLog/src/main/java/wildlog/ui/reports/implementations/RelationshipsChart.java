@@ -50,7 +50,7 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
     
     
     public RelationshipsChart(List<Sighting> inLstData, JLabel inChartDescLabel, ReportsBaseDialog inReportsBaseDialog) {
-        super("Relationship Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
+        super("Associations Charts", inLstData, inChartDescLabel, inReportsBaseDialog);
         lstCustomButtons = new ArrayList<>(8);
         ToggleButton btnPieChartElementTypes = new ToggleButton("Creature Associations");
         btnPieChartElementTypes.setToggleGroup(BUTTON_GROUP);
@@ -83,15 +83,20 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
         lstCustomButtons.add(cmbGPS);
         cmbCompareDates = new ComboBox<>(FXCollections.observableArrayList(new String[] {
             "Ignore Dates", 
+            "Within 1 Minute", 
+            "Within 5 Minutes", 
+            "Within 10 Minutes", 
+            "Within 30 Minutes", 
+            "Within 2 Hours", 
             "Within 1 Day-Night Cycle", 
             "Within 2 Day-Night Cycles", 
             "Within 3 Day-Night Cycles", 
             "Within 7 Day-Night Cycles", 
             "Within 14 Day-Night Cycles"}));
         cmbCompareDates.setCursor(Cursor.HAND);
-        cmbCompareDates.setVisibleRowCount(10);
+        cmbCompareDates.setVisibleRowCount(11);
         cmbCompareDates.getSelectionModel().clearSelection();
-        cmbCompareDates.getSelectionModel().select(3);
+        cmbCompareDates.getSelectionModel().select(6);
         lstCustomButtons.add(cmbCompareDates);
         cmbType = new ComboBox<>(FXCollections.observableArrayList(new String[] {
             "Total Count", 
@@ -101,7 +106,7 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
             "Related Percentage (maximum)",
             "One-Way Relationships"}));
         cmbType.setCursor(Cursor.HAND);
-        cmbType.setVisibleRowCount(10);
+        cmbType.setVisibleRowCount(6);
         cmbType.getSelectionModel().clearSelection();
         cmbType.getSelectionModel().select(3);
         lstCustomButtons.add(cmbType);
@@ -146,6 +151,10 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
             // Dates
             if (cmbCompareDates.getSelectionModel().isSelected(0)) {
                 info = info + " The Date and Time of Observations are not taken into account.";
+            }
+            else
+            if (cmbCompareDates.getSelectionModel().getSelectedIndex() <= 5) {
+                info = info + " The amount of time between Observations are compared.";
             }
             else {
                 info = info + " The number of day-night cycles between Observations are compared.";
@@ -364,7 +373,8 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
     }
     
     private boolean isRelated(Sighting inSighting1, Sighting inSighting2) {
-        // Maak seker dis ander Element
+        // Maak seker dis 'n ander Element
+// TODO: WEI wil hê dat 'n element met homself kan compare... Dit mag dalk bietjie moeilik wees met die manier hoe ek die maps op bou...
         if (inSighting1.getElementID() == inSighting2.getElementID()) {
             return false;
         }
@@ -398,34 +408,69 @@ public class RelationshipsChart extends AbstractReport<Sighting> {
                 return false;
             }
         }
-        // Check Date
+        // Check Time / Dates
         if (!cmbCompareDates.getSelectionModel().isSelected(0)) {
-            int requieredDays;
-            if (cmbCompareDates.getSelectionModel().isSelected(1)) {
-                requieredDays = 1;
-            }
-            else
-            if (cmbCompareDates.getSelectionModel().isSelected(2)) {
-                requieredDays = 2;
-            }
-            else
-            if (cmbCompareDates.getSelectionModel().isSelected(3)) {
-                requieredDays = 3;
-            }
-            else
-            if (cmbCompareDates.getSelectionModel().isSelected(4)) {
-                requieredDays = 7;
-            }
-            else
-            if (cmbCompareDates.getSelectionModel().isSelected(5)) {
-                requieredDays = 14;
+            if (cmbCompareDates.getSelectionModel().getSelectedIndex() <= 5) {
+                // Check minutes or hours
+                int requieredMinutes;
+                if (cmbCompareDates.getSelectionModel().isSelected(1)) {
+                    requieredMinutes = 1;
+                }
+                else
+                if (cmbCompareDates.getSelectionModel().isSelected(2)) {
+                    requieredMinutes = 5;
+                }
+                else
+                if (cmbCompareDates.getSelectionModel().isSelected(3)) {
+                    requieredMinutes = 10;
+                }
+                else
+                if (cmbCompareDates.getSelectionModel().isSelected(4)) {
+                    requieredMinutes = 30;
+                }
+                else
+                if (cmbCompareDates.getSelectionModel().isSelected(5)) {
+                    requieredMinutes = 120;
+                }
+                else {
+                    requieredMinutes = Integer.MIN_VALUE;
+                }
+                long minuteDifference = Math.abs(ChronoUnit.MINUTES.between(
+                        UtilsTime.getLocalDateTimeFromDate(inSighting1.getDate()), 
+                        UtilsTime.getLocalDateTimeFromDate(inSighting2.getDate())));
+                if (minuteDifference > requieredMinutes){
+                    return false;
+                }
             }
             else {
-                requieredDays = Integer.MIN_VALUE;
-            }
-            long dayDifference = Math.abs(ChronoUnit.DAYS.between(getAdjustedDate(inSighting1), getAdjustedDate(inSighting2)));
-            if (dayDifference > requieredDays){
-                return false;
+                // Check days
+                int requieredDays;
+                if (cmbCompareDates.getSelectionModel().isSelected(6)) {
+                    requieredDays = 1;
+                }
+                else
+                if (cmbCompareDates.getSelectionModel().isSelected(7)) {
+                    requieredDays = 2;
+                }
+                else
+                if (cmbCompareDates.getSelectionModel().isSelected(8)) {
+                    requieredDays = 3;
+                }
+                else
+                if (cmbCompareDates.getSelectionModel().isSelected(9)) {
+                    requieredDays = 7;
+                }
+                else
+                if (cmbCompareDates.getSelectionModel().isSelected(10)) {
+                    requieredDays = 14;
+                }
+                else {
+                    requieredDays = Integer.MIN_VALUE;
+                }
+                long dayDifference = Math.abs(ChronoUnit.DAYS.between(getAdjustedDate(inSighting1), getAdjustedDate(inSighting2)));
+                if (dayDifference > requieredDays){
+                    return false;
+                }
             }
         }
         // As alles reg was, dan is die Sightings verwant aan mekaar

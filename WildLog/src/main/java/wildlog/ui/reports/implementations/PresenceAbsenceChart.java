@@ -36,7 +36,7 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
     private enum ChartType {PRESENCE_ABSENCE_BUBBLE_CHART};
     private ChartType chartType;
     private final ComboBox<String> cmbInterval;
-    private final String[] options = new String[] {"3 Days", "7 Days", "14 Days", "28 Days", "91 Days", "1 Year"};
+    private final String[] options = new String[] {"1 Day", "3 Days", "7 Days", "14 Days", "28 Days", "91 Days", "1 Year"};
     private CheckBox chkUseTotals;
     private RadioButton rdbPerLocation;
     private RadioButton rdbPerVisit;
@@ -54,7 +54,9 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PRESENCE_ABSENCE_BUBBLE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the presence or absence of a Creature over a time period.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the presence or absence of a Creature over a time period. "
+// TODO: Ek weet nie of dit 'n probleem is of nie, maar hierdie werk op kalender dae, nie day-night-cycles nie...
+                        + "<i>(Calendar days are used, not day-night cycles.)</i></html>");
             }
         });
         lstCustomButtons.add(btnPieChartSightingCount);
@@ -67,7 +69,7 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
         lstCustomButtons.add(new Label("Interval size:"));
         cmbInterval = new ComboBox<>(FXCollections.observableArrayList(options));
         cmbInterval.setCursor(Cursor.HAND);
-        cmbInterval.setVisibleRowCount(6);
+        cmbInterval.setVisibleRowCount(7);
         cmbInterval.getSelectionModel().clearSelection();
         cmbInterval.getSelectionModel().select(1);
         lstCustomButtons.add(cmbInterval);
@@ -204,26 +206,30 @@ public class PresenceAbsenceChart extends AbstractReport<Sighting> {
     
     private LocalDate nextInterval(LocalDate inIntervalDate) {
         if (cmbInterval.getSelectionModel().isSelected(0)) {
-            return inIntervalDate.plusDays(3);
+            return inIntervalDate.plusDays(1);
         }
         else
         if (cmbInterval.getSelectionModel().isSelected(1)) {
-            return inIntervalDate.plusDays(7);
+            return inIntervalDate.plusDays(3);
         }
         else
         if (cmbInterval.getSelectionModel().isSelected(2)) {
-            return inIntervalDate.plusDays(14);
+            return inIntervalDate.plusDays(7);
         }
         else
         if (cmbInterval.getSelectionModel().isSelected(3)) {
-            return inIntervalDate.plusDays(28);
+            return inIntervalDate.plusDays(14);
         }
         else
         if (cmbInterval.getSelectionModel().isSelected(4)) {
-            return inIntervalDate.plusDays(91);
+            return inIntervalDate.plusDays(28);
         }
         else
         if (cmbInterval.getSelectionModel().isSelected(5)) {
+            return inIntervalDate.plusDays(91);
+        }
+        else
+        if (cmbInterval.getSelectionModel().isSelected(6)) {
             return inIntervalDate.plusYears(1);
         }
         return null;
