@@ -243,7 +243,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 }
                 Path filePath = root.resolve("Input - " + name + " (" + System.currentTimeMillis() + ").csv");
                 Files.createDirectories(filePath.getParent());
-                WildLogApp.getApplication().getDBI().doExportCSV(filePath, false, null, null, null, null, lstSightings);
+                WildLogApp.getApplication().getDBI().doExportFullCSV(filePath, false, null, null, null, null, lstSightings);
                 UtilsFileProcessing.openFile(filePath);
                 setProgress(100);
                 setMessage("Done Exporting CSV Input for '" + name + "'");

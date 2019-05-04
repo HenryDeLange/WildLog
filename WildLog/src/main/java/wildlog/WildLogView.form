@@ -229,17 +229,17 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportCSVBasicActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuExportCSV">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExportCSVFull">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to CSV (WildLog format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to CSV files. (Open in Excel, ArcGIS, etc.)"/>
-                <Property name="name" type="java.lang.String" value="mnuExportCSV" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="mnuExportCSVFull" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportCSVActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportCSVFullActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator18">

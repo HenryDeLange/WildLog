@@ -582,38 +582,38 @@ public class ExportDialog extends JDialog {
                 List<Sighting> lstSightingsToUse = lstSightings;
                 Path path;
                 if (location != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName() + ".csv");
                     if (lstSightingsToUse == null) {
                         lstSightingsToUse = app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class);
                     }
                 }
                 else
                 if (visit != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName() + ".csv");
                     if (lstSightingsToUse == null) {
                         lstSightingsToUse = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
                     }
                 }
                 else
                 if (element != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName() + ".csv");
                     if (lstSightingsToUse == null) {
                         lstSightingsToUse = app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class);
                     }
                 }
                 else
                 if (sighting != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName());
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.getDisplayName() + ".csv");
                 }
                 else
                 if (lstSightings != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations");
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("Observations.csv");
                 }
                 else {
                     path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath();
                 }
-                Files.createDirectories(path);
-                app.getDBI().doExportCSV(path, false, location, visit, element, sighting, lstSightingsToUse);
+                Files.createDirectories(path.getParent());
+                app.getDBI().doExportFullCSV(path, false, location, visit, element, sighting, lstSightingsToUse);
                 UtilsFileProcessing.openFile(path);
                 setMessage("Done with the CSV WildLog Export");
                 return null;

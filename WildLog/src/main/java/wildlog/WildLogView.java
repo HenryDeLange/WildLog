@@ -449,7 +449,7 @@ public final class WildLogView extends JFrame {
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         mnuExportCSVBasic = new javax.swing.JMenuItem();
-        mnuExportCSV = new javax.swing.JMenuItem();
+        mnuExportCSVFull = new javax.swing.JMenuItem();
         jSeparator18 = new javax.swing.JPopupMenu.Separator();
         mnuExportHTML = new javax.swing.JMenuItem();
         mnuExportHTMLAdvanced = new javax.swing.JMenuItem();
@@ -1088,16 +1088,16 @@ public final class WildLogView extends JFrame {
         });
         exportMenu.add(mnuExportCSVBasic);
 
-        mnuExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
-        mnuExportCSV.setText("Export All to CSV (WildLog format)");
-        mnuExportCSV.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
-        mnuExportCSV.setName("mnuExportCSV"); // NOI18N
-        mnuExportCSV.addActionListener(new java.awt.event.ActionListener() {
+        mnuExportCSVFull.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
+        mnuExportCSVFull.setText("Export All to CSV (WildLog format)");
+        mnuExportCSVFull.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
+        mnuExportCSVFull.setName("mnuExportCSVFull"); // NOI18N
+        mnuExportCSVFull.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExportCSVActionPerformed(evt);
+                mnuExportCSVFullActionPerformed(evt);
             }
         });
-        exportMenu.add(mnuExportCSV);
+        exportMenu.add(mnuExportCSVFull);
 
         jSeparator18.setName("jSeparator18"); // NOI18N
         exportMenu.add(jSeparator18);
@@ -2067,7 +2067,7 @@ public final class WildLogView extends JFrame {
         UtilsFileProcessing.openFile(WildLogPaths.OPEN_H2.getRelativePath());
     }//GEN-LAST:event_mnuDBConsoleActionPerformed
 
-    private void mnuExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportCSVActionPerformed
+    private void mnuExportCSVFullActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportCSVFullActionPerformed
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -2077,14 +2077,14 @@ public final class WildLogView extends JFrame {
                 Files.createDirectories(path);
                 setProgress(0);
                 setMessage("Busy with the CSV WildLog Export");
-                app.getDBI().doExportCSV(path, true, null, null, null, null, null);
+                app.getDBI().doExportFullCSV(path, true, null, null, null, null, null);
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_ALL.getAbsoluteFullPath());
                 setProgress(100);
                 setMessage("Done with the CSV WildLog Export");
                 return null;
             }
         });
-    }//GEN-LAST:event_mnuExportCSVActionPerformed
+    }//GEN-LAST:event_mnuExportCSVFullActionPerformed
 
     private void mnuExportHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportHTMLActionPerformed
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
@@ -4019,8 +4019,8 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem mnuEchoWorkspace;
     private javax.swing.JMenuItem mnuExifMenuItem;
-    private javax.swing.JMenuItem mnuExportCSV;
     private javax.swing.JMenuItem mnuExportCSVBasic;
+    private javax.swing.JMenuItem mnuExportCSVFull;
     private javax.swing.JMenuItem mnuExportExcelBasic;
     private javax.swing.JMenuItem mnuExportHTML;
     private javax.swing.JMenuItem mnuExportHTMLAdvanced;
