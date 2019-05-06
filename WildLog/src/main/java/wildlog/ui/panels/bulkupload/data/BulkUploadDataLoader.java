@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LifeStatus;
@@ -45,7 +46,8 @@ import wildlog.utils.WildLogSystemImages;
 public class BulkUploadDataLoader {
     
     public static BulkUploadDataWrapper genenrateTableData(List<Path> inLstFolderPaths, boolean inIsRecuresive, 
-            int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp) {
+            int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp, 
+            boolean inForceLocationGPS, Location inLocation) {
         long time = System.currentTimeMillis();
         WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadDataWrapper.genenrateTableData() - The files will be read and prepared for the table to display.");
         inProgressbarTask.setMessage("Bulk Import Preparation: Configuring...");
@@ -115,7 +117,7 @@ public class BulkUploadDataLoader {
                     // Start a new sighting and image list for the linked images
                     sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
                     // Set other defaults for the sighting
-                    setDefaultsForNewBulkUploadSightings(sightingKey);
+                    setDefaultsForNewBulkUploadSightings(sightingKey, inForceLocationGPS, inLocation);
                     // Update the map
                     finalMap.put(sightingKey, new BulkUploadImageListWrapper());
                     // Set the date for this sighting
@@ -147,7 +149,8 @@ public class BulkUploadDataLoader {
         return wrapper;
     }
 
-    public static void setDefaultsForNewBulkUploadSightings(BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
+    public static void setDefaultsForNewBulkUploadSightings(BulkUploadSightingWrapper inBulkUploadSightingWrapper, 
+            boolean inForceLocationGPS, Location inLocation) {
         // Setup the certainty
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             inBulkUploadSightingWrapper.setCertainty(Certainty.NONE);
@@ -158,6 +161,13 @@ public class BulkUploadDataLoader {
         inBulkUploadSightingWrapper.setSightingEvidence(SightingEvidence.SEEN);
         inBulkUploadSightingWrapper.setLifeStatus(LifeStatus.ALIVE);
         inBulkUploadSightingWrapper.setTimeAccuracy(TimeAccuracy.GOOD);
+        // For WEI default to the GPS of the location
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            if (inForceLocationGPS && inLocation != null && UtilsGPS.hasGPSData(inLocation)) {
+                UtilsGPS.copyGpsBetweenDOs(inBulkUploadSightingWrapper, inLocation);
+            }
+        }
     }
 
     private static void loadFileData(Path inFile, List<BulkUploadImageFileWrapper> inImageList) {

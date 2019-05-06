@@ -2342,6 +2342,9 @@ public final class WildLogView extends JFrame {
                                         @Override
                                         public void run() {
                                             // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                            WLOptionPane.showMessageDialog(null, 
+                                                    "The Check and Clean Workspace process has completed. Please restart the application.", 
+                                                    "Checked and Cleaned the Workspace", WLOptionPane.INFORMATION_MESSAGE);
                                             app.quit(null);
                                         }
                                     });
@@ -3660,6 +3663,7 @@ public final class WildLogView extends JFrame {
                                                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                                                     @Override
                                                     protected Object doInBackground() throws Exception {
+                                                        long startTime = System.currentTimeMillis();
                                                         setProgress(0);
                                                         setMessage("Starting the Echo Workspace Backup");
                                                         // Need to close the databse in order to be allowed to copy it
@@ -3795,6 +3799,14 @@ public final class WildLogView extends JFrame {
                                                         finally {
                                                             if (feedback != null) {
                                                                 feedback.println("");
+                                                                feedback.println("--------------- DURATION ----------------");
+                                                                long duration = System.currentTimeMillis() - startTime;
+                                                                int hours = (int) (((double) duration)/(1000.0*60.0*60.0));
+                                                                int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
+                                                                int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
+                                                                feedback.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
+                                                                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Duration: {} hours, {} minutes, {} seconds", hours, minutes, seconds);
+                                                                feedback.println("");
                                                                 feedback.println("--------------------------------------");
                                                                 feedback.println("-------------- FINISHED --------------");
                                                                 feedback.println("--------------------------------------");
@@ -3827,6 +3839,9 @@ public final class WildLogView extends JFrame {
                                                             @Override
                                                             public void run() {
                                                                 // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                                                WLOptionPane.showMessageDialog(null, 
+                                                                        "The Echo Backup Workspace process has completed. Please restart the application.", 
+                                                                        "Echo Backup Workspace", WLOptionPane.INFORMATION_MESSAGE);
                                                                 app.quit(null);
                                                             }
                                                         });

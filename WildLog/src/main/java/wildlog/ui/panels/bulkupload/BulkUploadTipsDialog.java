@@ -1,5 +1,6 @@
 package wildlog.ui.panels.bulkupload;
 
+import javax.swing.ImageIcon;
 import org.apache.logging.log4j.Level;
 import javax.swing.JDialog;
 import wildlog.WildLogApp;
@@ -33,6 +34,7 @@ public class BulkUploadTipsDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Bulk Import Tips");
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Bulk Import.png")).getImage());
         setModal(true);
         setName("aboutBox"); // NOI18N
 

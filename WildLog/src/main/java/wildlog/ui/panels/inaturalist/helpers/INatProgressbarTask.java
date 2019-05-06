@@ -48,7 +48,7 @@ public class INatProgressbarTask extends ProgressbarTask {
                 catch (Exception ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                            "<html>A WildLog Image was not uploaded to iNaturalist."
+                            "<html>There was an unexpected problem uploading the WildLog Image to iNaturalist."
                             + "<br>iNaturalist Observation ID: " + taskEntry.getINatID() + "</html>",
                             "Upload Error", WLOptionPane.ERROR_MESSAGE);
                 }

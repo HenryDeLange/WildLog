@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -88,11 +89,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private VisitType originalVisitType = VisitType.UNKNOWN;
     private String originalVisitName = null;
 
+// TODO: Save bulk imports halfway, be stashing the files and then saving the sighting details to the adhoc table
     
 // TODO: Add a button that does the "adjust date and time" popup for all observations
     
 // TODO: Om ding vinniger te maak kan ek 'n HashMap hou van elke file se metadata (exif - basies net die gps + date?) wanneer ek dit die eerste keer lees, dan later as ek safe kan dit die cache gebruik in plaas van weer die files lees
-    
 
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, Location inLocation, Visit inExistingVisit, 
             List<Path> inlstImportPaths, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
@@ -163,6 +164,19 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             dtpStartDate.setDate(existingVisit.getStartDate());
             dtpEndDate.setDate(existingVisit.getEndDate());
         }
+        // Setup the setting for forcing location's GPS on all observations
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+            chkForceLocationGPSCoordinates.setSelected(false);
+        }
+        else
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            chkForceLocationGPSCoordinates.setSelected(true);
+        }
+        else {
+            chkForceLocationGPSCoordinates.setEnabled(false);
+            chkForceLocationGPSCoordinates.setSelected(false);
+            chkForceLocationGPSCoordinates.setVisible(false);
+        }
         // Setup the tab's content
         setupTab(inProgressbarTask);
         // Setup the initial visit name
@@ -217,7 +231,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             model.fireTableDataChanged();
             BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(
                     lstImportPaths, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), 
-                    inProgressbarTask, lblFilesRead, app);
+                    inProgressbarTask, lblFilesRead, app, 
+                    chkForceLocationGPSCoordinates.isSelected(), selectedLocation);
             if (wrapper != null) {
                 model.getDataVector().addAll(UtilsTableGenerator.convertToVector(wrapper.getData()));
                 SwingUtilities.invokeLater(new Runnable() {
@@ -340,6 +355,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel8 = new javax.swing.JLabel();
         btnReload = new javax.swing.JButton();
         chkIncludeSubfolders = new javax.swing.JCheckBox();
+        chkForceLocationGPSCoordinates = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnSelectLocation = new javax.swing.JButton();
@@ -512,8 +528,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkIncludeSubfolders.setBackground(new java.awt.Color(153, 180, 115));
         chkIncludeSubfolders.setText("Include Subfolders");
         chkIncludeSubfolders.setToolTipText("Select this checkbox and press the Reload button to also look in subfolder for files to include in the Bulk Import.");
+        chkIncludeSubfolders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkIncludeSubfolders.setFocusable(false);
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
+
+        chkForceLocationGPSCoordinates.setBackground(new java.awt.Color(153, 180, 115));
+        chkForceLocationGPSCoordinates.setText("Always use the Place's GPS");
+        chkForceLocationGPSCoordinates.setToolTipText("Select this checkbox if all new Observations should always use the Place's GPS coordinates (if present).");
+        chkForceLocationGPSCoordinates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkForceLocationGPSCoordinates.setFocusable(false);
+        chkForceLocationGPSCoordinates.setName("chkForceLocationGPSCoordinates"); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -530,7 +554,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(jLabel7))
-                    .addComponent(chkIncludeSubfolders))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(chkIncludeSubfolders)
+                        .addGap(18, 18, 18)
+                        .addComponent(chkForceLocationGPSCoordinates)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(btnReload)
                 .addGap(5, 5, 5))
@@ -547,7 +574,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(2, 2, 2)
-                        .addComponent(chkIncludeSubfolders))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(chkIncludeSubfolders)
+                            .addComponent(chkForceLocationGPSCoordinates)))
                     .addComponent(btnReload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
@@ -1247,11 +1276,20 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         lblFilesLinked.setText(lblFilesLinked.getText().substring(0, lblFilesLinked.getText().lastIndexOf(':') + 1) + " " + fileCount);
     }
 
+    public Location getSelectedLocation() {
+        return selectedLocation;
+    }
+
+    public JCheckBox getChkForceLocationGPSCoordinates() {
+        return chkForceLocationGPSCoordinates;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGPSForAll;
     private javax.swing.JButton btnReload;
     private javax.swing.JButton btnSelectLocation;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JCheckBox chkForceLocationGPSCoordinates;
     private javax.swing.JCheckBox chkIncludeSubfolders;
     private javax.swing.JComboBox cmbVisitType;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;

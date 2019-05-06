@@ -1,5 +1,6 @@
 package wildlog.ui.dialogs;
 
+import javax.swing.ImageIcon;
 import org.apache.logging.log4j.Level;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
@@ -40,6 +41,7 @@ public class WelcomeDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Getting Started");
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-square-20px.png")).getImage());
         setModal(true);
         setName("aboutBox"); // NOI18N
         setResizable(false);

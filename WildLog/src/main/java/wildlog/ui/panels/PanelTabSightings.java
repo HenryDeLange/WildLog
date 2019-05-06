@@ -1192,7 +1192,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             pnlGrid.add(lblTemp);
             pnlGrid.setBackground(Color.BLACK);
             JScrollPane scrGrid = new JScrollPane(pnlGrid, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            scrGrid.getVerticalScrollBar().setUnitIncrement(25);
+            scrGrid.getVerticalScrollBar().setUnitIncrement(35);
             pnlLayoutView.add(scrGrid, BorderLayout.CENTER);
             pnlLayoutView.revalidate();
             pnlLayoutView.repaint();

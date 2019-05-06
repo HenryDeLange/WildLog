@@ -220,9 +220,10 @@ public class ImageBox extends JPanel {
         DefaultTableModel model = ((DefaultTableModel)table.getModel());
         BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
         BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
-        BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper);
         newSightingWrapper.setDate(imageWrapper.getDate());
         UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
+        BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper, 
+                bulkUploadPanel.getChkForceLocationGPSCoordinates().isSelected(), bulkUploadPanel.getSelectedLocation());
         BulkUploadImageListWrapper currentListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
         currentListWrapper.getImageList().remove(imageWrapper);
         if (currentListWrapper.getImageList().isEmpty()) {
@@ -292,7 +293,8 @@ public class ImageBox extends JPanel {
                     DefaultTableModel model = ((DefaultTableModel)table.getModel());
                     BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
                     BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
-                    BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper);
+                    BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper, 
+                            bulkUploadPanel.getChkForceLocationGPSCoordinates().isSelected(), bulkUploadPanel.getSelectedLocation());
                     newSightingWrapper.setDate(imageWrapper.getDate());
                     UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
                     BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper();
