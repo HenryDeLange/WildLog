@@ -178,6 +178,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Make dates pretty
         dtpStartDate.getComponent(1).setBackground(pnlTop.getBackground());
         dtpEndDate.getComponent(1).setBackground(pnlTop.getBackground());
+        // For WEI show a tips popup
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    BulkUploadTipsDialog dialog = new BulkUploadTipsDialog();
+                    dialog.setVisible(true);
+                }
+            });
+        }
     }
 
     public final void setupTab(ProgressbarTask inProgressbarTask) {
