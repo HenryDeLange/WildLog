@@ -79,7 +79,6 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.TimeAccuracy;
-import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogFileLinkType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
@@ -100,6 +99,7 @@ import wildlog.ui.dialogs.MoveVisitDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.SystemMonitorDialog;
 import wildlog.ui.dialogs.UserManagementDialog;
+import wildlog.ui.dialogs.WelcomeDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
 import wildlog.ui.dialogs.WildLogWEIAboutBox;
 import wildlog.ui.dialogs.WildNoteAboutBox;
@@ -312,6 +312,14 @@ public final class WildLogView extends JFrame {
             sprHelp.setVisible(false);
             mnuAboutWildNote.setEnabled(false);
             mnuAboutWildNote.setVisible(false);
+            // Show the WEI welcome popup
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    WelcomeDialog dialog = new WelcomeDialog();
+                    dialog.setVisible(true);
+                }
+            });
         }
         btnStashFiles.setBackground(tabHome.getBackground());
         btnBulkImport.setBackground(tabHome.getBackground());
@@ -3566,84 +3574,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuAboutWEIActionPerformed
 
     private void btnStashFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStashFilesActionPerformed
-        WLOptionPane.showMessageDialog(app.getMainFrame(),
-                "Stashed files are stored in the WildLog Workspace as a special type of Period which can then be processed at a later stage using the Bulk Import feature.",
-                "About Stashed Files", JOptionPane.INFORMATION_MESSAGE);
-        // Doen hierdie in 'n invokeLater sodat die glasspane reg werk na die popup
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-                UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                    @Override
-                    protected Object doInBackground() throws Exception {
-                        setProgress(0);
-                        setMessage("Starting the Stash Files Process");
-                        LocationSelectionDialog locationDialog = new LocationSelectionDialog(app.getMainFrame(), app, 0);
-                        locationDialog.setVisible(true);
-                        if (locationDialog.isSelectionMade()) {
-                            // Get the folder to import
-                            WLFileChooser fileChooser = new WLFileChooser();
-                            fileChooser.setDialogTitle("Select files or folders to stash");
-                            fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-                            fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                            fileChooser.setMultiSelectionEnabled(true);
-                            //fileChooser.setFileFilter(new ImageFilter());
-                            int result = fileChooser.showOpenDialog(app.getMainFrame());
-                            if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFiles() != null) {
-                                setProgress(1);
-                                setMessage("Busy with the Stash Files Process " + getProgress() + "%");
-                                // Create the new visit of type Stash
-                                Location location = app.getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class);
-                                Visit visit = new Visit();
-                                visit.setName("File Stash - " + UtilsTime.WL_DATE_FORMATTER_FOR_STASHED_VISIT_NAME.format(LocalDateTime.now()));
-                                visit.setType(VisitType.STASHED);
-                                visit.setLocationID(location.getID());
-                                app.getDBI().createVisit(visit, false);
-                                setProgress(2);
-                                setMessage("Busy with the Stash Files Process " + getProgress() + "%");
-                                // Copy the files into the stash folder
-                                List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(fileChooser.getSelectedFiles());
-                                final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
-                                Path destinationPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
-                                setProgress(3);
-                                setMessage("Busy with the Stash Files Process " + getProgress() + "%");
-                                int errors = 0;
-                                int filesProcessed = 0;
-                                for (Path sourcePath : lstAllFiles) {
-                                    try {
-                                        // Ek will alles die files in een folder hê (nie sub-folders nie), so ek moet files rename as hulle name conflict
-                                        Path writePath = destinationPath.resolve(sourcePath.getParent().relativize(sourcePath));
-                                        while (Files.exists(writePath)) {
-                                            writePath = destinationPath.resolve("wl_" + writePath.getFileName().toString());
-                                        }
-                                        UtilsFileProcessing.copyFile(sourcePath, writePath, false, false);
-                                    }
-                                    catch (Exception ex) {
-                                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                        errors++;
-                                    }
-                                    filesProcessed++;
-                                    setProgress(3 + (int) (((double) filesProcessed / (double) lstAllFiles.size()) * 96.0));
-                                    setMessage("Busy with the Stash Files Process " + getProgress() + "%");
-                                }
-                                if (errors > 0) {
-                                    WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                            "There were " + errors + " unexpected errors while trying to stash the files.",
-                                            "Errors Stashing Files", JOptionPane.ERROR_MESSAGE);
-                                }
-                                setProgress(99);
-                                setMessage("Busy with the Stash Files Process " + getProgress() + "%");
-                                // Open the tab to show all is done
-                                UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, location);
-                            }
-                        }
-                        setProgress(100);
-                        setMessage("Done with the Stash Files Process");
-                        return null;
-                    }
-                });
-//            }
-//        });
+        UtilsFileProcessing.doStashFiles();
     }//GEN-LAST:event_btnStashFilesActionPerformed
 
     private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed

@@ -229,6 +229,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnUploadImage.setVisible(false);
             btnSetMainImage.setEnabled(false);
             btnSetMainImage.setVisible(false);
+            lblElements.setVisible(false);
+            lblNumberOfElements.setVisible(false);
         }
     }
 
@@ -369,7 +371,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         visitIncludes = new javax.swing.JPanel();
         lblVisitName = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
-        jLabel8 = new javax.swing.JLabel();
+        lblElements = new javax.swing.JLabel();
         lblNumberOfElements = new javax.swing.JLabel();
         pnlFiles = new javax.swing.JPanel();
         btnUploadImage = new javax.swing.JButton();
@@ -449,9 +451,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         jSeparator3.setName("jSeparator3"); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
-        jLabel8.setText("Creatures:");
-        jLabel8.setName("jLabel8"); // NOI18N
+        lblElements.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        lblElements.setText("Creatures:");
+        lblElements.setName("lblElements"); // NOI18N
 
         lblNumberOfElements.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblNumberOfElements.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1192,7 +1194,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addComponent(lblVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(5, 5, 5)
-                        .addComponent(jLabel8)
+                        .addComponent(lblElements)
                         .addGap(0, 0, 0)
                         .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator3)
@@ -1218,7 +1220,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                                 .addGap(3, 3, 3)
                                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblVisitName, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblElements, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(2, 2, 2)
                         .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1720,13 +1722,13 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JLabel lblElementImage;
+    private javax.swing.JLabel lblElements;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfImages;
