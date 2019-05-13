@@ -5,9 +5,12 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -203,8 +206,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
             cmbType.setSelectedItem(visit.getType());
             txtName.setEnabled(false);
-            dtpStartDate.setEnabled(false);
-            dtpEndDate.setEnabled(false);
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
+                    && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                dtpStartDate.setEnabled(false);
+                dtpEndDate.setEnabled(false);
+            }
             cmbGameWatchIntensity.setEnabled(false);
             btnExport.setEnabled(false);
             btnExport.setVisible(false);
@@ -847,6 +853,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
+        dtpStartDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dtpStartDatePropertyChange(evt);
+            }
+        });
 
         jLabel54.setText("Period Type:");
         jLabel54.setName("jLabel54"); // NOI18N
@@ -868,6 +879,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
+        dtpEndDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dtpEndDatePropertyChange(evt);
+            }
+        });
 
         jLabel1.setText("Start Date:");
         jLabel1.setName("jLabel1"); // NOI18N
@@ -1553,6 +1569,18 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     result = app.getDBI().updateVisit(visit, oldName, false);
                 }
                 if (result == true) {
+                    // If this is a stashed visit and the name changed, then rename the folder
+                    if (visit.getType() == VisitType.STASHED && !visit.getName().equalsIgnoreCase(oldName)) {
+                        try {
+                            Path oldStashPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(oldName);
+                            Path newStashPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
+                            Files.move(oldStashPath, newStashPath);
+                        }
+                        catch (IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        }
+                    }
+                    // Refresh the UI
                     txtName.setBackground(new Color(204, 255, 204));
                     txtName.setText(visit.getName());
                     lastSavedVisit = visit.cloneShallow();
@@ -1627,6 +1655,34 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             });
         }
     }//GEN-LAST:event_btnBulkImportActionPerformed
+
+    private void dtpStartDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dtpStartDatePropertyChange
+        dtpEndDatePropertyChange(evt);
+    }//GEN-LAST:event_dtpStartDatePropertyChange
+
+    private void dtpEndDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dtpEndDatePropertyChange
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            LocalDate startDate;
+            if (dtpStartDate.getDate() != null) {
+                startDate = UtilsTime.getLocalDateFromDate(dtpStartDate.getDate());
+            }
+            else {
+                startDate = LocalDate.now();
+            }
+            LocalDate endDate;
+            if (dtpEndDate.getDate() != null) {
+                endDate = UtilsTime.getLocalDateFromDate(dtpEndDate.getDate());
+            }
+            else {
+                endDate = LocalDate.now();
+            }
+            txtName.setText(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(startDate) 
+                    + "-" + UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(endDate)
+                    + "_" + locationForVisit.getName()
+                    + " - File Stash");
+        }
+    }//GEN-LAST:event_dtpEndDatePropertyChange
 
     private void populateVisitFromUI() {
         visit.setName(UtilsData.limitLength(txtName.getText(), 100));

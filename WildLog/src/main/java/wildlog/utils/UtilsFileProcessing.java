@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -637,7 +638,16 @@ public final class UtilsFileProcessing {
                         // Create the new visit of type Stash
                         Location location = WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class);
                         Visit visit = new Visit();
-                        visit.setName("File Stash - " + UtilsTime.WL_DATE_FORMATTER_FOR_STASHED_VISIT_NAME.format(LocalDateTime.now()));
+                        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
+                                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                            visit.setName(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(LocalDate.now()) 
+                                    + "-" + UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(LocalDate.now())
+                                    + "_" + location.getName()
+                                    + " - File Stash");
+                        }
+                        else {
+                            visit.setName("File Stash - " + UtilsTime.WL_DATE_FORMATTER_FOR_STASHED_VISIT_NAME.format(LocalDateTime.now()));
+                        }
                         visit.setType(VisitType.STASHED);
                         visit.setLocationID(location.getID());
                         WildLogApp.getApplication().getDBI().createVisit(visit, false);
