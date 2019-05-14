@@ -818,7 +818,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.setLong(1, inID);
             }
             else
-            if (inLinkID > 0) {
+            if (inLinkID >= 0) {
                 sql = sql + " WHERE LINKID = ?";
                 state = conn.prepareStatement(sql);
                 state.setLong(1, inLinkID);

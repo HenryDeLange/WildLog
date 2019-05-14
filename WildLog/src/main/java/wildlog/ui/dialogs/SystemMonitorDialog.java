@@ -552,7 +552,7 @@ public class SystemMonitorDialog extends JFrame {
                 WildLogApp.getApplication().getDBI().countSightings(0, 0, 0, 0)));
         UtilsReports.setupChartTooltips(controller.getCrtDBSightings(), true, true, false, false, true, seriesDBSightings.get(0).getData().size() - 1);
         seriesDBFiles.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
-                WildLogApp.getApplication().getDBI().countWildLogFiles(0, 0)));
+                WildLogApp.getApplication().getDBI().countWildLogFiles(0, -1)));
         UtilsReports.setupChartTooltips(controller.getCrtDBFiles(), true, true, false, false, true, seriesDBFiles.get(0).getData().size() - 1);
         controller.getLblConnections().setText(WildLogApp.getApplication().getDBI().activeSessionsCount() + " connections");
     }

@@ -1018,6 +1018,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             boolean upgradeSuccess = true;
             int choice = JOptionPane.CANCEL_OPTION;
             for (int t = 0; t <= WILDLOG_DB_VERSION; t++) {
+                
+// TODO: If an upgrade is needed, then it may be best to close the server mode connection and reopen it in single mode instead, 
+// otherwise the upgrade might start twice if people launch the app twice...
+                
                 if (!upgradeSuccess) {
                     WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
                             "<html>There was an unexpected problem during the database upgrade!</html>",

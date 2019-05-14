@@ -30,6 +30,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+// TODO: Move to test package?
 /**
  * Only used in the Maven project for easy launching and testing.
  */
