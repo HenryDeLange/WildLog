@@ -153,6 +153,7 @@ public class WildLogApp extends Application {
             if (openedWorkspace == false) {
                 int choice = WLOptionPane.showConfirmDialog(getMainFrame(),
                         "<html>The WildLog Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> could not be opened. "
+                                + "<br/>A database upgrade might be in progress, or the Workspace is no longer accessible, or the Workspace might been corrupted."
                                 + "<br/>If the problem persists please consult the manual to restore a previous backup or contact support@mywild.co.za for help."
                                 + "<br/><br/>You can <b>press OK to select another Workspace</b>, or press Cancel to close this instance of WildLog.</html>",
                         "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);

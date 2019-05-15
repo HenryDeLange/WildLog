@@ -38,7 +38,7 @@
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
     <copyright>2019</copyright>
     <productVersion>6.0.0.0</productVersion>
-    <txtProductVersion>WildLog v6.0.0 BETA</txtProductVersion>
+    <txtProductVersion>WildLog v6.0.0</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>

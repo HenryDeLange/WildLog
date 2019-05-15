@@ -65,6 +65,7 @@ import wildlog.utils.WildLogPaths;
 
 
 public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
+    private final String connectionURL;
     
     /**
      * Use this constructor to connect to the default Workspace database.
@@ -77,44 +78,23 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     /**
      * WARNING: Only use this constructor if you want to connect to a second H2 DB instance. The default
      * workspace database should use a constructor that does NOT specify the connection URL.
-     * @param inConnectionURL
-     * @param inCreateDefaultRecords
-     * @throws java.lang.Exception
      */
     public WildLogDBI_h2(String inConnectionURL, boolean inCreateDefaultRecords, boolean inH2AutoServer) throws Exception {
         super();
         Statement state = null;
         ResultSet results = null;
         boolean started = true;
-        String connection = "jdbc:h2:" + inConnectionURL 
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=100";
-        if (inH2AutoServer) {
-            connection = connection + ";AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9229";
-        }
+        connectionURL = inConnectionURL;
         try {
-            Class.forName("org.h2.Driver").newInstance();
-            Properties props = new Properties();
-            props.setProperty("USER", "wildlog");
-            props.setProperty("PASSWORD", "wildlog");
-            try {
-                conn = DriverManager.getConnection(connection, props);
-            }
-            catch (JdbcSQLException ex) {
-                WildLogApp.LOGGER.log(Level.INFO, "Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
-                WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
-                // Might be trying to use the wrong password, try again with old password and update it
-                props = new Properties();
-                conn = DriverManager.getConnection(connection, props);
-                state = conn.createStatement();
-                state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
-                state.close();
-                WildLogApp.LOGGER.log(Level.INFO, "Database username and password updated.");
-            }
+            setupConnection(inH2AutoServer);
             // Create table, indexes, etc.
             started = super.initialize(inCreateDefaultRecords);
             // Check database version and perform updates if required.
             // This also creates the WildLogOptions row the first time
             doUpdates();
+            // After the updates have completed, recreate the connection using the original inH2AutoServer value
+            close();
+            setupConnection(inH2AutoServer);
         }
         catch (ClassNotFoundException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, "\nUnable to load the JDBC driver.");
@@ -146,6 +126,35 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 throw new Exception("Could not open WildLog database.");
             }
         }
+    }
+    
+    private void setupConnection(boolean inH2AutoServer) 
+            throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        String connection = "jdbc:h2:" + connectionURL 
+                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=100";
+        if (inH2AutoServer) {
+            connection = connection + ";AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9229";
+        }
+        Class.forName("org.h2.Driver").newInstance();
+        Properties props = new Properties();
+        props.setProperty("USER", "wildlog");
+        props.setProperty("PASSWORD", "wildlog");
+        try {
+            conn = DriverManager.getConnection(connection, props);
+        }
+        catch (JdbcSQLException ex) {
+            WildLogApp.LOGGER.log(Level.INFO, "Could not connect to database, could be a very old version. "
+                    + "Try to connect and update the database using the old username and password...");
+            WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
+            // Might be trying to use the wrong password, try again with old password and update it
+            props = new Properties();
+            conn = DriverManager.getConnection(connection, props);
+            Statement state = conn.createStatement();
+            state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
+            state.close();
+            WildLogApp.LOGGER.log(Level.INFO, "Database username and password updated.");
+        }
+
     }
     
     
@@ -980,7 +989,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         return true;
     }
 
-    private void doUpdates() {
+    private void doUpdates() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Statement state = null;
         ResultSet results = null;
         try {
@@ -1018,32 +1027,31 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             boolean upgradeSuccess = true;
             int choice = JOptionPane.CANCEL_OPTION;
             for (int t = 0; t <= WILDLOG_DB_VERSION; t++) {
-                
-// TODO: If an upgrade is needed, then it may be best to close the server mode connection and reopen it in single mode instead, 
-// otherwise the upgrade might start twice if people launch the app twice...
-                
                 if (!upgradeSuccess) {
                     WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
                             "<html>There was an unexpected problem during the database upgrade!</html>",
                             "WildLog Upgrade Error", JOptionPane.ERROR_MESSAGE);
                     break;
                 }
+                closeStatement(state);
+                state = conn.createStatement();
                 results = state.executeQuery("SELECT VERSION FROM WILDLOG");
                 if (results.next()) {
-                    if (results.getInt("VERSION") > WILDLOG_DB_VERSION) {
+                    int currentDBVersion = results.getInt("VERSION");
+                    if (currentDBVersion > WILDLOG_DB_VERSION) {
                         // The application codebase is older than the database version, need to update the application first
                         databaseAndApplicationInSync = false;
                         break;
                     }
                     else {
                         // The database and application versions are in sync
-                        if (results.getInt("VERSION") == WILDLOG_DB_VERSION) {
+                        if (currentDBVersion == WILDLOG_DB_VERSION) {
                             databaseAndApplicationInSync = true;
                             break;
                         }
                         else {
-                            // Only show the popup once
-                            if (!upgradeWasDone) {
+                            // The database will need to be upgraded
+                            if (!upgradeWasDone) { // Only show the popup once
                                 choice = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(),
                                         "<html>The Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> needs to be upgraded. "
                                                 + "<br/>It is recommended to first make a manual backup (make a copy) of the Workspace before continuing, "
@@ -1056,65 +1064,69 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 if (!upgradeWasDone) {
                                     busyDialog.setVisible(true);
                                 }
+                                // If an upgrade is needed, then it may be best to close the server mode connection and reopen it in single mode instead, 
+                                // otherwise the upgrade might start twice if people launch the app twice...
+                                close();
+                                setupConnection(false);
                                 // Procede with the needed updates
-                                if (results.getInt("VERSION") == 0) {
+                                if (currentDBVersion == 0) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
                                     upgradeSuccess = doUpdate1();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 1) {
+                                if (currentDBVersion == 1) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v1 (before upgrade to 2)"));
                                     upgradeSuccess = doUpdate2();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 2) {
+                                if (currentDBVersion == 2) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v2 (before upgrade to 3)"));
                                     upgradeSuccess = doUpdate3();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 3) {
+                                if (currentDBVersion == 3) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v3 (before upgrade to 4)"));
                                     upgradeSuccess = doUpdate4();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 4) {
+                                if (currentDBVersion == 4) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4 (before upgrade to 5)"));
                                     upgradeSuccess = doUpdate5();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 5) {
+                                if (currentDBVersion == 5) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v5 (before upgrade to 6)"));
                                     upgradeSuccess = doUpdate6();
                                     wasMajorUpgrade = true;
                                 }
                                 else
-                                if (results.getInt("VERSION") == 6) {
+                                if (currentDBVersion == 6) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v6 (before upgrade to 7)"));
                                     upgradeSuccess = doUpdate7();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 7) {
+                                if (currentDBVersion == 7) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v7 (before upgrade to 8)"));
                                     upgradeSuccess = doUpdate8();
                                     wasMajorUpgrade = true; // Omdat die Files se folder struktuur verander het...
                                 }
                                 else
-                                if (results.getInt("VERSION") == 8) {
+                                if (currentDBVersion == 8) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v8 (before upgrade to 9)"));
                                     upgradeSuccess = doUpdate9();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 9) {
+                                if (currentDBVersion == 9) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v9 (before upgrade to 10)"));
                                     upgradeSuccess = doUpdate10();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 10) {
+                                if (currentDBVersion == 10) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v10 (before upgrade to 11)"));
                                     upgradeSuccess = doUpdate11();
                                 }
                                 else
-                                if (results.getInt("VERSION") == 11) {
+                                if (currentDBVersion == 11) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v11 (before upgrade to 12)"));
                                     upgradeSuccess = doUpdate12();
                                     wasMajorUpgrade = true; // Omdat die GUIDs by gekom het en baie koelomme verwyder was

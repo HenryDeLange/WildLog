@@ -632,7 +632,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public void close() {
+    public final void close() {
         // Close Connection
         try {
             if (conn != null) {

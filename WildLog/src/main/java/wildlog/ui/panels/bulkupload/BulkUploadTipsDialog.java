@@ -7,6 +7,7 @@ import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public class BulkUploadTipsDialog extends JDialog {
+    int index = 1;
 
     public BulkUploadTipsDialog() {
         super();
@@ -29,8 +30,9 @@ public class BulkUploadTipsDialog extends JDialog {
         javax.swing.JLabel lblTitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblTip = new javax.swing.JLabel();
+        btnPrevious = new javax.swing.JButton();
+        btnNext = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Bulk Import Tips");
@@ -49,35 +51,58 @@ public class BulkUploadTipsDialog extends JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 5));
         jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setLayout(new java.awt.BorderLayout(10, 10));
+        jPanel1.setLayout(new java.awt.GridLayout(1, 1));
 
-        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/BulkImportTip1.png"))); // NOI18N
-        jLabel2.setToolTipText("");
-        jLabel2.setName("jLabel2"); // NOI18N
-        jLabel2.setOpaque(true);
-        jPanel1.add(jLabel2, java.awt.BorderLayout.CENTER);
-
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/BulkImportTip2.png"))); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
-        jLabel1.setOpaque(true);
-        jPanel1.add(jLabel1, java.awt.BorderLayout.PAGE_START);
+        lblTip.setBackground(new java.awt.Color(255, 255, 255));
+        lblTip.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTip.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/BulkImportTip1.png"))); // NOI18N
+        lblTip.setName("lblTip"); // NOI18N
+        lblTip.setOpaque(true);
+        jPanel1.add(lblTip);
 
         jScrollPane1.setViewportView(jPanel1);
+
+        btnPrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
+        btnPrevious.setText("Previous");
+        btnPrevious.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPrevious.setEnabled(false);
+        btnPrevious.setFocusable(false);
+        btnPrevious.setName("btnPrevious"); // NOI18N
+        btnPrevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviousActionPerformed(evt);
+            }
+        });
+
+        btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
+        btnNext.setText("Next");
+        btnNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNext.setFocusable(false);
+        btnNext.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnNext.setName("btnNext"); // NOI18N
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE))
-                .addGap(10, 10, 10))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE))
+                        .addGap(10, 10, 10))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnPrevious, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,17 +110,46 @@ public class BulkUploadTipsDialog extends JDialog {
                 .addGap(10, 10, 10)
                 .addComponent(lblTitle)
                 .addGap(5, 5, 5)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 637, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnPrevious, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNext, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
+        index--;
+        if (index <= 1) {
+            index = 1;
+            btnPrevious.setEnabled(false);
+        }
+        btnNext.setEnabled(true);
+        setupTip();
+    }//GEN-LAST:event_btnPreviousActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        index++;
+        if (index >= 6) {
+            index = 6;
+            btnNext.setEnabled(false);
+        }
+        btnPrevious.setEnabled(true);
+        setupTip();
+    }//GEN-LAST:event_btnNextActionPerformed
+
+    private void setupTip() {
+        lblTip.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/BulkImportTip" + index + ".png")));
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnNext;
+    private javax.swing.JButton btnPrevious;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTip;
     // End of variables declaration//GEN-END:variables
 }
