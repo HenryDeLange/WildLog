@@ -40,7 +40,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.CtrlClickSelectionModel;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.WLOptionPane;
-import wildlog.ui.reports.utils.UtilsReports;
+import wildlog.ui.charts.utils.UtilsCharts;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 
@@ -379,7 +379,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbCertainty.setBackground(new java.awt.Color(230, 226, 224));
         lsbCertainty.setForeground(new java.awt.Color(176, 153, 145));
-        lsbCertainty.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Certainty.values())));
+        lsbCertainty.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(Certainty.values())));
         lsbCertainty.setFocusable(false);
         lsbCertainty.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbCertainty.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -392,7 +392,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbGPSAccuracy.setBackground(new java.awt.Color(230, 226, 224));
         lsbGPSAccuracy.setForeground(new java.awt.Color(176, 153, 145));
-        lsbGPSAccuracy.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(GPSAccuracy.values())));
+        lsbGPSAccuracy.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(GPSAccuracy.values())));
         lsbGPSAccuracy.setFocusable(false);
         lsbGPSAccuracy.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbGPSAccuracy.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -403,7 +403,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbTimeAccuracy.setBackground(new java.awt.Color(230, 226, 224));
         lsbTimeAccuracy.setForeground(new java.awt.Color(176, 153, 145));
-        lsbTimeAccuracy.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(TimeAccuracy.values())));
+        lsbTimeAccuracy.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(TimeAccuracy.values())));
         lsbTimeAccuracy.setFocusable(false);
         lsbTimeAccuracy.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbTimeAccuracy.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -460,7 +460,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbEvidence.setBackground(new java.awt.Color(230, 226, 224));
         lsbEvidence.setForeground(new java.awt.Color(176, 153, 145));
-        lsbEvidence.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(SightingEvidence.values())));
+        lsbEvidence.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(SightingEvidence.values())));
         lsbEvidence.setFocusable(false);
         lsbEvidence.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbEvidence.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -469,7 +469,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbLifeStatus.setBackground(new java.awt.Color(230, 226, 224));
         lsbLifeStatus.setForeground(new java.awt.Color(176, 153, 145));
-        lsbLifeStatus.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(LifeStatus.values())));
+        lsbLifeStatus.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(LifeStatus.values())));
         lsbLifeStatus.setFocusable(false);
         lsbLifeStatus.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbLifeStatus.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -480,7 +480,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbVisitType.setBackground(new java.awt.Color(230, 226, 224));
         lsbVisitType.setForeground(new java.awt.Color(176, 153, 145));
-        lsbVisitType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(VisitType.valuesForDroplist())));
+        lsbVisitType.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(VisitType.valuesForDroplist())));
         lsbVisitType.setFocusable(false);
         lsbVisitType.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbVisitType.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -493,7 +493,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbElementType.setBackground(new java.awt.Color(230, 226, 224));
         lsbElementType.setForeground(new java.awt.Color(176, 153, 145));
-        lsbElementType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(ElementType.values())));
+        lsbElementType.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(ElementType.values())));
         lsbElementType.setFocusable(false);
         lsbElementType.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbElementType.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -553,7 +553,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbTimeOfDay.setBackground(new java.awt.Color(230, 226, 224));
         lsbTimeOfDay.setForeground(new java.awt.Color(176, 153, 145));
-        lsbTimeOfDay.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(ActiveTimeSpesific.values())));
+        lsbTimeOfDay.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(ActiveTimeSpesific.values())));
         lsbTimeOfDay.setFocusable(false);
         lsbTimeOfDay.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbTimeOfDay.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -565,7 +565,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbMoonlight.setBackground(new java.awt.Color(230, 226, 224));
         lsbMoonlight.setForeground(new java.awt.Color(176, 153, 145));
-        lsbMoonlight.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Moonlight.values())));
+        lsbMoonlight.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(Moonlight.values())));
         lsbMoonlight.setFocusable(false);
         lsbMoonlight.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbMoonlight.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -678,7 +678,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbSex.setBackground(new java.awt.Color(230, 226, 224));
         lsbSex.setForeground(new java.awt.Color(176, 153, 145));
-        lsbSex.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Sex.values())));
+        lsbSex.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(Sex.values())));
         lsbSex.setFocusable(false);
         lsbSex.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbSex.setSelectionForeground(new java.awt.Color(23, 38, 4));
@@ -687,7 +687,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbAge.setBackground(new java.awt.Color(230, 226, 224));
         lsbAge.setForeground(new java.awt.Color(176, 153, 145));
-        lsbAge.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Age.values())));
+        lsbAge.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(Age.values())));
         lsbAge.setFocusable(false);
         lsbAge.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbAge.setSelectionForeground(new java.awt.Color(23, 38, 4));

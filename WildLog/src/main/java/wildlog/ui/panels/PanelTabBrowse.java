@@ -79,7 +79,7 @@ import wildlog.ui.helpers.renderers.WildLogTreeCellRenderer;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
-import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
@@ -1426,7 +1426,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                                 if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                     Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                    ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + tempLocation.getName(), 
+                                    ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempLocation.getName(), 
                                             app.getDBI().listSightings(0, tempLocation.getID(), 0, true, Sighting.class));
                                     dialog.setVisible(true);
                                     somethingToReportOn = true;
@@ -1434,7 +1434,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 else
                                 if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                     Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                    ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + tempElement.getPrimaryName(), 
+                                    ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempElement.getPrimaryName(), 
                                             app.getDBI().listSightings(tempElement.getID(), 0, 0, true, Sighting.class));
                                     dialog.setVisible(true);
                                     somethingToReportOn = true;
@@ -1442,7 +1442,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 else
                                 if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                     Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                    ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + tempVisit.getName(), 
+                                    ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + tempVisit.getName(), 
                                             app.getDBI().listSightings(0, 0, tempVisit.getID(), true, Sighting.class));
                                     dialog.setVisible(true);
                                     somethingToReportOn = true;
@@ -1450,7 +1450,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             }
                             if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
                                 Date endDate = UtilsTime.getDateFromLocalDateTime(LocalDateTime.of(UtilsTime.getLocalDateFromDate(dtpEndDate.getDate()), LocalTime.MAX));
-                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
+                                ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
                                         + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
                                         app.getDBI().searchSightings(null, dtpStartDate.getDate(), endDate, null, null, null, false, Sighting.class));
                                 dialog.setVisible(true);

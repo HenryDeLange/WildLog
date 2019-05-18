@@ -60,8 +60,8 @@ import oshi.software.os.OperatingSystem;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.monitor.SystemMonitorController;
-import wildlog.ui.reports.implementations.helpers.IntegerTickLabelFormatter;
-import wildlog.ui.reports.utils.UtilsReports;
+import wildlog.ui.charts.implementations.helpers.IntegerTickLabelFormatter;
+import wildlog.ui.charts.utils.UtilsCharts;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsFileProcessing;
@@ -470,7 +470,7 @@ public class SystemMonitorDialog extends JFrame {
             seriesCPUs.get(t + 1).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                     (int) (hardware.getProcessor().getProcessorCpuLoadBetweenTicks()[t] * 25.0)));
         }
-        UtilsReports.setupChartTooltips(controller.getCrtProcessor(), true, true, false, false, true, seriesCPUs.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtProcessor(), true, true, false, false, true, seriesCPUs.get(0).getData().size() - 1);
         // Memory
         seriesMemory.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (hardware.getMemory().getTotal() / MB)));
@@ -480,7 +480,7 @@ public class SystemMonitorDialog extends JFrame {
                 (int) (Runtime.getRuntime().totalMemory() / MB)));
         seriesMemory.get(3).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / MB)));
-        UtilsReports.setupChartTooltips(controller.getCrtMemory(), true, true, false, false, true, seriesMemory.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtMemory(), true, true, false, false, true, seriesMemory.get(0).getData().size() - 1);
         // Network - Sent
         int activeNetwork = controller.getChbNetwork().getSelectionModel().getSelectedIndex();
         int nowMBs = 0;
@@ -509,7 +509,7 @@ public class SystemMonitorDialog extends JFrame {
         }
         seriesNetwork.get(1).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (((double) nowMBs - (double) prevMBs) / (double) TICK_RATE), nowMBs));
-        UtilsReports.setupChartTooltips(controller.getCrtNetwork(), true, true, false, false, true, seriesNetwork.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtNetwork(), true, true, false, false, true, seriesNetwork.get(0).getData().size() - 1);
         // Disk - Write
         int activeDisk = controller.getChbDisk().getSelectionModel().getSelectedIndex();
         nowMBs = 0;
@@ -537,23 +537,23 @@ public class SystemMonitorDialog extends JFrame {
         }
         seriesDisk.get(1).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 (int) (((double) nowMBs - (double) prevMBs) / (double) TICK_RATE), nowMBs));
-        UtilsReports.setupChartTooltips(controller.getCrtDisk(), true, true, false, false, true, seriesDisk.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtDisk(), true, true, false, false, true, seriesDisk.get(0).getData().size() - 1);
         // Database
         seriesDBLocations.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countLocations(null)));
-        UtilsReports.setupChartTooltips(controller.getCrtDBLocations(), true, true, false, false, true, seriesDBLocations.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtDBLocations(), true, true, false, false, true, seriesDBLocations.get(0).getData().size() - 1);
         seriesDBVisits.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countVisits(null, 0)));
-        UtilsReports.setupChartTooltips(controller.getCrtDBVisits(), true, true, false, false, true, seriesDBVisits.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtDBVisits(), true, true, false, false, true, seriesDBVisits.get(0).getData().size() - 1);
         seriesDBElements.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countElements(null, null)));
-        UtilsReports.setupChartTooltips(controller.getCrtDBElements(), true, true, false, false, true, seriesDBElements.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtDBElements(), true, true, false, false, true, seriesDBElements.get(0).getData().size() - 1);
         seriesDBSightings.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countSightings(0, 0, 0, 0)));
-        UtilsReports.setupChartTooltips(controller.getCrtDBSightings(), true, true, false, false, true, seriesDBSightings.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtDBSightings(), true, true, false, false, true, seriesDBSightings.get(0).getData().size() - 1);
         seriesDBFiles.get(0).getData().add(new XYChart.Data<>(System.currentTimeMillis(), 
                 WildLogApp.getApplication().getDBI().countWildLogFiles(0, -1)));
-        UtilsReports.setupChartTooltips(controller.getCrtDBFiles(), true, true, false, false, true, seriesDBFiles.get(0).getData().size() - 1);
+        UtilsCharts.setupChartTooltips(controller.getCrtDBFiles(), true, true, false, false, true, seriesDBFiles.get(0).getData().size() - 1);
         controller.getLblConnections().setText(WildLogApp.getApplication().getDBI().activeSessionsCount() + " connections");
     }
 

@@ -42,7 +42,7 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
-import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
@@ -1528,7 +1528,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + visit.getName(), 
+            ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + visit.getName(), 
                     app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class));
             dialog.setVisible(true);
         }

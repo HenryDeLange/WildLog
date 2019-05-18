@@ -41,7 +41,7 @@ import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
-import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -1306,7 +1306,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - " + element.getPrimaryName(), 
+            ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - " + element.getPrimaryName(), 
                     app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class));
             dialog.setVisible(true);
         }

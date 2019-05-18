@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -90,6 +91,7 @@ import wildlog.maps.kml.generator.KmlGenerator;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
+import wildlog.reports.ReportVisitDates;
 import wildlog.ui.dialogs.GPSGridConversionDialog;
 import wildlog.ui.dialogs.ImageResizeDialog;
 import wildlog.ui.dialogs.MergeElementsDialog;
@@ -180,7 +182,7 @@ public final class WildLogView extends JFrame {
         progressBar.setVisible(false);
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(app.getContext());
-        taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        taskMonitor.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();
@@ -235,6 +237,8 @@ public final class WildLogView extends JFrame {
             btnStashFiles.setVisible(false);
             btnBulkImport.setEnabled(false);
             btnBulkImport.setVisible(false);
+            reportsMenu.setEnabled(false);
+            reportsMenu.setVisible(false);
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
@@ -261,8 +265,6 @@ public final class WildLogView extends JFrame {
             btnStashFiles.setVisible(true);
             btnBulkImport.setEnabled(true);
             btnBulkImport.setVisible(true);
-            // Show a small "getting started" popup
-            
         }
         // Enforce user access
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
@@ -312,6 +314,8 @@ public final class WildLogView extends JFrame {
             sprHelp.setVisible(false);
             mnuAboutWildNote.setEnabled(false);
             mnuAboutWildNote.setVisible(false);
+            reportsMenu.setEnabled(false);
+            reportsMenu.setVisible(false);
             // Show the WEI welcome popup
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -486,6 +490,8 @@ public final class WildLogView extends JFrame {
         mnuImportWorkspace = new javax.swing.JMenuItem();
         sprImport5 = new javax.swing.JPopupMenu.Separator();
         mnuBulkImport = new javax.swing.JMenuItem();
+        reportsMenu = new javax.swing.JMenu();
+        mnuReportVisitDates = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
         mnuSwitchElementNames = new javax.swing.JMenuItem();
         jSeparator15 = new javax.swing.JPopupMenu.Separator();
@@ -1311,6 +1317,31 @@ public final class WildLogView extends JFrame {
         importMenu.add(mnuBulkImport);
 
         menuBar.add(importMenu);
+
+        reportsMenu.setText("Reports");
+        reportsMenu.setName("reportsMenu"); // NOI18N
+        reportsMenu.addMenuListener(new javax.swing.event.MenuListener() {
+            public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuSelected(javax.swing.event.MenuEvent evt) {
+                reportsMenuMenuSelected(evt);
+            }
+        });
+
+        mnuReportVisitDates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        mnuReportVisitDates.setText("Check Period Dates");
+        mnuReportVisitDates.setToolTipText("Generate a report that analysis the Periods' dates.");
+        mnuReportVisitDates.setName("mnuReportVisitDates"); // NOI18N
+        mnuReportVisitDates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuReportVisitDatesActionPerformed(evt);
+            }
+        });
+        reportsMenu.add(mnuReportVisitDates);
+
+        menuBar.add(reportsMenu);
 
         advancedMenu.setText("Advanced");
         advancedMenu.addMenuListener(new javax.swing.event.MenuListener() {
@@ -3859,6 +3890,14 @@ public final class WildLogView extends JFrame {
         });
     }//GEN-LAST:event_mnuEchoWorkspaceActionPerformed
 
+    private void mnuReportVisitDatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReportVisitDatesActionPerformed
+        ReportVisitDates.doReport(mnuReportVisitDates.getText());
+    }//GEN-LAST:event_mnuReportVisitDatesActionPerformed
+
+    private void reportsMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_reportsMenuMenuSelected
+        WildLogApp.LOGGER.log(Level.INFO, "[ReportsMenu]");
+    }//GEN-LAST:event_reportsMenuMenuSelected
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3991,6 +4030,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenu mnuOther;
     private javax.swing.JMenu mnuPerformance;
     private javax.swing.JMenuItem mnuReduceImagesSize;
+    private javax.swing.JMenuItem mnuReportVisitDates;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuSunAndMoon;
@@ -3999,6 +4039,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuUserGuide;
     private javax.swing.JMenuItem mnuWorkspaceUsers;
     private javax.swing.JProgressBar progressBar;
+    private javax.swing.JMenu reportsMenu;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu slideshowMenu;
     private javax.swing.JPopupMenu.Separator sprBackup;

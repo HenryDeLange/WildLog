@@ -480,7 +480,7 @@ public final class UtilsTableGenerator {
 
     public static void setupVisitTableSmallWithSightings(final WildLogApp inApp, final JTable inTable, final long inLocationID) {
         // Deterimine the row IDs of the previously selected rows.
-        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 4);
+        final long[] selectedRowIDs = getSelectedRowIDs(inTable, 5);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
         // Setup header
         setupLoadingHeader(inTable);
@@ -493,6 +493,7 @@ public final class UtilsTableGenerator {
                                         "",
                                         "Period Name",
                                         "Start Date",
+                                        "End Date",
                                         "Observations",
                                         "ID" // Hidden
                                         };
@@ -517,8 +518,9 @@ public final class UtilsTableGenerator {
                                     }
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
-                                    data[finalT][3] = inApp.getDBI().countSightings(0, 0, 0, tempVisit.getID());
-                                    data[finalT][4] = tempVisit.getID();
+                                    data[finalT][3] = tempVisit.getEndDate();
+                                    data[finalT][4] = inApp.getDBI().countSightings(0, 0, 0, tempVisit.getID());
+                                    data[finalT][5] = tempVisit.getID();
                                     return null;
                                 }
                             });
@@ -533,15 +535,18 @@ public final class UtilsTableGenerator {
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
                         setupRenderersAndThumbnailRows(inTable, false, false, 0);
-                        inTable.getColumnModel().getColumn(1).setMinWidth(75);
+                        inTable.getColumnModel().getColumn(1).setMinWidth(55);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(85);
-                        inTable.getColumnModel().getColumn(2).setMinWidth(80);
+                        inTable.getColumnModel().getColumn(2).setMinWidth(60);
                         inTable.getColumnModel().getColumn(2).setPreferredWidth(90);
                         inTable.getColumnModel().getColumn(2).setMaxWidth(90);
-                        inTable.getColumnModel().getColumn(3).setMinWidth(35);
-                        inTable.getColumnModel().getColumn(3).setPreferredWidth(45);
-                        inTable.getColumnModel().getColumn(3).setMaxWidth(85);
-                        inTable.removeColumn(inTable.getColumnModel().getColumn(4));
+                        inTable.getColumnModel().getColumn(3).setMinWidth(60);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(90);
+                        inTable.getColumnModel().getColumn(3).setMaxWidth(90);
+                        inTable.getColumnModel().getColumn(4).setMinWidth(45);
+                        inTable.getColumnModel().getColumn(4).setPreferredWidth(45);
+                        inTable.getColumnModel().getColumn(4).setMaxWidth(85);
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(5));
                         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
                             inTable.removeColumn(inTable.getColumnModel().getColumn(0));
                         }
@@ -553,7 +558,7 @@ public final class UtilsTableGenerator {
                             inTable.getRowSorter().setSortKeys(lstPreviousSortKeys);
                         }
                         // Setup row selection
-                        setupPreviousRowSelection(inTable, selectedRowIDs, 4);
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 5);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));

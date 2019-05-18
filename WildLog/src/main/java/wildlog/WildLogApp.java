@@ -80,7 +80,9 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     public static String WILDLOG_VERSION = "6.0.0";
-    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
+//a) rename existing periods to reflect the naming convention (camera_start date-end date), 
+//c) also to print out a list of periods and calculate missing days? I have attached an excel of the calculations I have been doing to see missing days.
+    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG_WEI_ADMIN;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
     public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
     public static Logger LOGGER;
@@ -392,7 +394,7 @@ public class WildLogApp extends Application {
                                         + "<br>(See the progressbar at the bottom right hand corner for details.)"
                                         + "<br><b>Wait for the processes to finish before exiting WildLog?</b></html>",
                                 "Warning! Unfinished Processes...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                        if (result == JOptionPane.YES_OPTION) {
+                        if (result != JOptionPane.NO_OPTION) {
                             doShutdown = false;
                         }
                         else {

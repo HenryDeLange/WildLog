@@ -453,7 +453,7 @@ public class PanelTabLocations extends JPanel {
                     tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 7), null, Location.class);
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (Long) tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 4),
+                UtilsPanelGenerator.openPanelAsTab(app, (Long) tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 5),
                     PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, tempLocation);
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());

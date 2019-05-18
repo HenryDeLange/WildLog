@@ -236,7 +236,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 setMessage("Exporting CSV Input for '" + name + "'");
                 Path root;
                 if (ExportType.REPORTS.equals(type)) {
-                    root = WildLogPaths.WILDLOG_EXPORT_REPORTS_CSV.getAbsoluteFullPath();
+                    root = WildLogPaths.WILDLOG_EXPORT_CHARTS_CSV.getAbsoluteFullPath();
                 }
                 else {
                     root = WildLogPaths.WILDLOG_EXPORT_MAPS_CSV.getAbsoluteFullPath();
@@ -263,7 +263,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                     setMessage("Exporting Image for '" + name + "'");
                     Path root;
                     if (ExportType.REPORTS.equals(type)) {
-                        root = WildLogPaths.WILDLOG_EXPORT_REPORTS_PNG.getAbsoluteFullPath();
+                        root = WildLogPaths.WILDLOG_EXPORT_CHARTS_PNG.getAbsoluteFullPath();
                     }
                     else {
                         root = WildLogPaths.WILDLOG_EXPORT_MAPS_PNG.getAbsoluteFullPath();
@@ -292,7 +292,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                     PDDocument doc = null;
                     Path root;
                     if (ExportType.REPORTS.equals(type)) {
-                        root = WildLogPaths.WILDLOG_EXPORT_REPORTS_PDF.getAbsoluteFullPath();
+                        root = WildLogPaths.WILDLOG_EXPORT_CHARTS_PDF.getAbsoluteFullPath();
                     }
                     else {
                         root = WildLogPaths.WILDLOG_EXPORT_MAPS_PDF.getAbsoluteFullPath();
@@ -396,7 +396,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 // Create the image
                 Path rootImage;
                 if (ExportType.REPORTS.equals(type)) {
-                    rootImage = WildLogPaths.WILDLOG_EXPORT_REPORTS_HTML_IMAGES.getAbsoluteFullPath();
+                    rootImage = WildLogPaths.WILDLOG_EXPORT_CHARTS_HTML_IMAGES.getAbsoluteFullPath();
                 }
                 else {
                     rootImage = WildLogPaths.WILDLOG_EXPORT_MAPS_HTML_IMAGES.getAbsoluteFullPath();
@@ -407,7 +407,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                 // Create the HTML content
                 Path rootHtml;
                 if (ExportType.REPORTS.equals(type)) {
-                    rootHtml = WildLogPaths.WILDLOG_EXPORT_REPORTS_HTML.getAbsoluteFullPath();
+                    rootHtml = WildLogPaths.WILDLOG_EXPORT_CHARTS_HTML.getAbsoluteFullPath();
                 }
                 else {
                     rootHtml = WildLogPaths.WILDLOG_EXPORT_MAPS_HTML.getAbsoluteFullPath();
@@ -476,7 +476,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
                     // Create the CSV content
                     Path rootPath;
                     if (ExportType.REPORTS.equals(type)) {
-                        rootPath = WildLogPaths.WILDLOG_EXPORT_REPORTS_CSV.getAbsoluteFullPath();
+                        rootPath = WildLogPaths.WILDLOG_EXPORT_CHARTS_CSV.getAbsoluteFullPath();
                     }
                     else {
                         rootPath = WildLogPaths.WILDLOG_EXPORT_MAPS_CSV.getAbsoluteFullPath();

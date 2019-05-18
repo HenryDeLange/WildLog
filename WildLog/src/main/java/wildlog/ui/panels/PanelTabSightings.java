@@ -55,7 +55,7 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.helpers.SightingBox;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
-import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -926,7 +926,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         List<Sighting> lstSightingsToUse = getListOfSelectedSightings(activeLayout, false);
         if (!lstSightingsToUse.isEmpty()) {
-            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Charts - Observations", lstSightingsToUse);
+            ChartsBaseDialog dialog = new ChartsBaseDialog("WildLog Charts - Observations", lstSightingsToUse);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed

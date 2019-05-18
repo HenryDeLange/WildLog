@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WildLog.ico</icon>
+  <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WEI-Volunteer.ico</icon>
   <jre>
     <path>jre_1_8_0_212</path>
     <bundledJre64Bit>false</bundledJre64Bit>

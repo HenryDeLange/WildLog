@@ -557,6 +557,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_VISIT ON SIGHTINGS (VISITID)");
                 state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTID, LOCATIONID)");
                 state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTID, VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_LOCATION_VISIT ON SIGHTINGS (LOCATIONID, VISITID)");
                 state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
                 closeStatement(state);
             }
@@ -775,6 +776,13 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE ELEMENTID = ?";
                 state = conn.prepareStatement(sql);
                 state.setLong(1, inElementID);
+            }
+            else
+            if (inLocationID > 0 && inVisitID > 0) {
+                sql = sql + " WHERE LOCATIONID = ? AND VISITID = ?";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inLocationID);
+                state.setLong(2, inVisitID);
             }
             else
             if (inLocationID > 0) {
