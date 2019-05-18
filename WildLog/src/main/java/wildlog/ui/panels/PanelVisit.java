@@ -171,6 +171,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpEndDate.getComponent(1).setBackground(visitIncludes.getBackground());
         // Scroll to the top of the text areas
         txtDescription.setCaretPosition(0);
+        // Show or hide fields based on application type
+        if (!(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER)) {
+            btnAutoName.setVisible(false);
+        }
         // Enforce user access
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             btnExport.setEnabled(false);
@@ -413,6 +418,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
         jLabel1 = new javax.swing.JLabel();
         jLabel52 = new javax.swing.JLabel();
+        btnAutoName = new javax.swing.JButton();
         pnlSightings = new javax.swing.JPanel();
         btnEditSighting = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -853,11 +859,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        dtpStartDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                dtpStartDatePropertyChange(evt);
-            }
-        });
 
         jLabel54.setText("Period Type:");
         jLabel54.setName("jLabel54"); // NOI18N
@@ -879,17 +880,24 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        dtpEndDate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                dtpEndDatePropertyChange(evt);
-            }
-        });
 
         jLabel1.setText("Start Date:");
         jLabel1.setName("jLabel1"); // NOI18N
 
         jLabel52.setText("Period Name:");
         jLabel52.setName("jLabel52"); // NOI18N
+
+        btnAutoName.setText("Auto Name");
+        btnAutoName.setToolTipText("Automatically set the name based on the Place and dates.");
+        btnAutoName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAutoName.setFocusPainted(false);
+        btnAutoName.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnAutoName.setName("btnAutoName"); // NOI18N
+        btnAutoName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAutoNameActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
         pnlInfo.setLayout(pnlInfoLayout);
@@ -899,61 +907,70 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 .addGap(5, 5, 5)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addComponent(jLabel53)
-                        .addGap(12, 12, 12)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel54)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbGameWatchIntensity, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlInfoLayout.createSequentialGroup()
+                                .addComponent(jLabel53)
+                                .addGap(12, 12, 12)
+                                .addComponent(jScrollPane14))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlInfoLayout.createSequentialGroup()
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
-                                        .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jLabel4))
+                                        .addGap(71, 71, 71)
+                                        .addComponent(txtName))
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
-                                        .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jLabel54)))
-                                .addGap(5, 5, 5)
-                                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbGameWatchIntensity, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 29, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
-                                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtName, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane14))
-                                .addGap(5, 5, 5))))
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel52)))
+                                        .addComponent(jLabel52)
+                                        .addGap(311, 311, 311)))
+                                .addGap(0, 0, 0)
+                                .addComponent(btnAutoName)))
+                        .addGap(5, 5, 5))))
         );
         pnlInfoLayout.setVerticalGroup(
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlInfoLayout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel52)
+                    .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAutoName, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel52)
-                    .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cmbGameWatchIntensity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addGap(31, 31, 31)
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(5, 5, 5)
+                                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addGap(32, 32, 32)
+                                .addComponent(cmbGameWatchIntensity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
                                 .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(5, 5, 5)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1051,7 +1068,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
             .addComponent(jSeparator5)
         );
@@ -1656,33 +1673,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
     }//GEN-LAST:event_btnBulkImportActionPerformed
 
-    private void dtpStartDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dtpStartDatePropertyChange
-        dtpEndDatePropertyChange(evt);
-    }//GEN-LAST:event_dtpStartDatePropertyChange
-
-    private void dtpEndDatePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dtpEndDatePropertyChange
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
-                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-            LocalDate startDate;
-            if (dtpStartDate.getDate() != null) {
-                startDate = UtilsTime.getLocalDateFromDate(dtpStartDate.getDate());
-            }
-            else {
-                startDate = LocalDate.now();
-            }
-            LocalDate endDate;
-            if (dtpEndDate.getDate() != null) {
-                endDate = UtilsTime.getLocalDateFromDate(dtpEndDate.getDate());
-            }
-            else {
-                endDate = LocalDate.now();
-            }
-            txtName.setText(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(startDate) 
-                    + "-" + UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(endDate)
-                    + "_" + locationForVisit.getName()
-                    + " - File Stash");
-        }
-    }//GEN-LAST:event_dtpEndDatePropertyChange
+    private void btnAutoNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutoNameActionPerformed
+        generateVisitName();
+    }//GEN-LAST:event_btnAutoNameActionPerformed
 
     private void populateVisitFromUI() {
         visit.setName(UtilsData.limitLength(txtName.getText(), 100));
@@ -1743,10 +1736,37 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfImages.setText("0 of 0");
         }
     }
+    
+    private void generateVisitName() {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            LocalDate startDate;
+            if (dtpStartDate.getDate() != null) {
+                startDate = UtilsTime.getLocalDateFromDate(dtpStartDate.getDate());
+            }
+            else {
+                startDate = LocalDate.now();
+            }
+            LocalDate endDate;
+            if (dtpEndDate.getDate() != null) {
+                endDate = UtilsTime.getLocalDateFromDate(dtpEndDate.getDate());
+            }
+            else {
+                endDate = LocalDate.now();
+            }
+            txtName.setText(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(startDate) 
+                    + "-" + UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(endDate)
+                    + "_" + locationForVisit.getName());
+            if (visit.getType() == VisitType.STASHED) {
+                txtName.setText(txtName.getText() + " - File Stash");
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnAdvanced;
+    private javax.swing.JButton btnAutoName;
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnBulkImport;
     private javax.swing.JButton btnDeleteImage;
