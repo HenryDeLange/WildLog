@@ -2,14 +2,14 @@ package wildlog.data.dataobjects;
 
 import java.util.Date;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogFileType;
 
 
 public class WildLogFileCore extends DataObjectWithAudit {
     protected long id;
     protected long linkID; // The ID of the linked data object (Element, Location, etc.)
-    protected WildLogFileLinkType linkType;
+    protected WildLogDataType linkType;
     protected String filename;
     protected String originalFileLocation; // This is used as the DB table ID
     protected Date uploadDate;
@@ -22,7 +22,7 @@ public class WildLogFileCore extends DataObjectWithAudit {
     public WildLogFileCore() {
     }
     
-    public WildLogFileCore(long inID, long inLinkID, WildLogFileLinkType inLinkType, String inFilename, String inOriginalFileLocation, 
+    public WildLogFileCore(long inID, long inLinkID, WildLogDataType inLinkType, String inFilename, String inOriginalFileLocation, 
             WildLogFileType inFileType, Date inUploadDate, Date inFileDate, long inFileSize) {
         id = inID;
         linkID = inLinkID;
@@ -73,11 +73,11 @@ public class WildLogFileCore extends DataObjectWithAudit {
         linkID = inLinkID;
     }
 
-    public WildLogFileLinkType getLinkType() {
+    public WildLogDataType getLinkType() {
         return linkType;
     }
 
-    public void setLinkType(WildLogFileLinkType inLinkType) {
+    public void setLinkType(WildLogDataType inLinkType) {
         linkType = inLinkType;
     }
 

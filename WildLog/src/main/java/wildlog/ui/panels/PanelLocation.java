@@ -21,7 +21,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.LocationRating;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
@@ -174,7 +174,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(locationWL,
-                Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(locationWL.getName()), WildLogFileLinkType.LOCATION, 
+                Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(locationWL.getName()), WildLogDataType.LOCATION, 
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
                     @Override

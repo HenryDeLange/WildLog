@@ -43,7 +43,7 @@ import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
@@ -1229,7 +1229,7 @@ public abstract class DBI_JDBC implements DBI {
     protected <T extends WildLogFileCore> void populateWildLogFile(ResultSet inResults, T inWildLogFile) throws SQLException {
         inWildLogFile.setID(inResults.getLong("ID"));
         inWildLogFile.setLinkID(inResults.getLong("LINKID"));
-        inWildLogFile.setLinkType(WildLogFileLinkType.getEnumFromText(inResults.getString("LINKTYPE")));
+        inWildLogFile.setLinkType(WildLogDataType.getEnumFromText(inResults.getString("LINKTYPE")));
         inWildLogFile.setFilename(inResults.getString("FILENAME"));
         inWildLogFile.setDBFilePath(inResults.getString("ORIGINALPATH").replace("\\", "/"));
         inWildLogFile.setFileType(WildLogFileType.getEnumFromText(inResults.getString("FILETYPE")));

@@ -50,7 +50,7 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WildLogUserTypes;
@@ -341,7 +341,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(sighting,
-                Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()), WildLogFileLinkType.SIGHTING, 
+                Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()), WildLogDataType.SIGHTING, 
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
                     @Override
@@ -2336,7 +2336,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 }
                 String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                 UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sighting.getElementID(), null, Element.class),
-                    Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sighting.getCachedElementName() + uniqueIdentifier), WildLogFileLinkType.ELEMENT,
+                    Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sighting.getCachedElementName() + uniqueIdentifier), WildLogDataType.ELEMENT,
                     new File[] {wildLogFile.getAbsolutePath().toFile()},
                     null,
                     app, true, null, true, true);

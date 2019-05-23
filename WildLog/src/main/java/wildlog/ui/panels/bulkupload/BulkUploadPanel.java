@@ -40,7 +40,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
@@ -990,7 +990,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         visitFiles[t] = lstVisitFiles.get(t).toFile();
                     }
                     UtilsFileProcessing.performFileUpload(visit,
-                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()), WildLogFileLinkType.VISIT, 
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()), WildLogDataType.VISIT, 
                             visitFiles,
                             null, 
                             app, false, null, true, false);
@@ -1077,7 +1077,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 }
                                 // Save the corresponding images
                                 UtilsFileProcessing.performFileUpload(sightingWrapper,
-                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.toPath()), WildLogFileLinkType.SIGHTING, 
+                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.toPath()), WildLogDataType.SIGHTING, 
                                         files.toArray(new File[files.size()]),
                                         null, 
                                         app, false, null, true, uploadListContainsDuplicates);

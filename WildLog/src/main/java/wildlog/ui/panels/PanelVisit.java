@@ -26,7 +26,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
@@ -247,7 +247,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(visit,
-                Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(locationForVisit.getName()).resolve(visit.getName()), WildLogFileLinkType.VISIT, 
+                Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(locationForVisit.getName()).resolve(visit.getName()), WildLogDataType.VISIT, 
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
                     @Override

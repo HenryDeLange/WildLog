@@ -38,7 +38,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -124,7 +124,7 @@ public final class UtilsFileProcessing {
         public int counter = 1;
     }
 
-    public static void performFileUpload(final DataObjectWithWildLogFile inDAOWithID, final Path inPrefixFolder, WildLogFileLinkType inLinkType, 
+    public static void performFileUpload(final DataObjectWithWildLogFile inDAOWithID, final Path inPrefixFolder, WildLogDataType inLinkType, 
             final File[] inFiles, final Runnable inRunWhenDone, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, 
             final boolean inCreateThumbnails, final boolean inHandleSyncIssuesForPossibleDuplicatesInList) {
         // Get the date of the first file 
@@ -207,7 +207,7 @@ public final class UtilsFileProcessing {
         }
     }
 
-    private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, WildLogFileLinkType inLinkType,
+    private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, WildLogDataType inLinkType,
             Path inFromFile, int inSequenceIndex, WildLogApp inApp, DataObjectWithWildLogFile inDAOWithID, boolean inCreateThumbnails, 
             Object inTheLock, LocalDateTime inFirstFileDate) {
         // Make the folder
@@ -252,7 +252,7 @@ public final class UtilsFileProcessing {
     }
 
     private static WildLogFile doTheFileSave(Path toFolder, Path inFromFile, DataObjectWithWildLogFile inDAOWithID, 
-            WildLogFileType inFileType, int inSequenceIndex, WildLogApp inApp, LocalDateTime inFirstFileDate, WildLogFileLinkType inLinkType) {
+            WildLogFileType inFileType, int inSequenceIndex, WildLogApp inApp, LocalDateTime inFirstFileDate, WildLogDataType inLinkType) {
         // Setup the output files
         String fromFileName = inFromFile.getFileName().toString();
         if (inDAOWithID instanceof Sighting && fromFileName.lastIndexOf('.') > 0) {

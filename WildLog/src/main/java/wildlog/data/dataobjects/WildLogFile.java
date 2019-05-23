@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTML;
@@ -20,7 +20,7 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
         super();
     }
 
-    public WildLogFile(long inID, long inLinkID, WildLogFileLinkType inLinkType, String inFilename, String inOriginalFileLocation, 
+    public WildLogFile(long inID, long inLinkID, WildLogDataType inLinkType, String inFilename, String inOriginalFileLocation, 
             WildLogFileType inFileType, Date inUploadDate, Date inFileDate, long inFileSize) {
         super(inID, inLinkID, inLinkType, inFilename, inOriginalFileLocation, inFileType, inUploadDate, inFileDate, inFileSize);
     }

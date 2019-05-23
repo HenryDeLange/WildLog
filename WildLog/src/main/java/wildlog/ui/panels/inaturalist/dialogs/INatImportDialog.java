@@ -46,7 +46,7 @@ import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.inaturalist.INatAPI;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -657,7 +657,7 @@ public class INatImportDialog extends JDialog {
                         .replace("large", "original");
                 final Path tempFile = WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve(System.currentTimeMillis() + ".jpg");
                 UtilsFileProcessing.createFileFromStream(new BufferedInputStream(new URL(photoURL).openStream()), tempFile);
-                UtilsFileProcessing.performFileUpload(inSighting, Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(inSighting.toPath()), WildLogFileLinkType.SIGHTING, 
+                UtilsFileProcessing.performFileUpload(inSighting, Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(inSighting.toPath()), WildLogDataType.SIGHTING, 
                         new File[] {tempFile.toFile()}, new Runnable() {
                     @Override
                     public void run() {

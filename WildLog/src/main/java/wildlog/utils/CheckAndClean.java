@@ -34,7 +34,7 @@ import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -68,7 +68,7 @@ public class CheckAndClean {
                 public int counter = 0;
             }
             class CleanupHelper {
-                private void doTheMove(DataObjectWithWildLogFile inDAOWithFile, Path inExpectedPath, Path inExpectedPrefix, WildLogFileLinkType inLinkType, 
+                private void doTheMove(DataObjectWithWildLogFile inDAOWithFile, Path inExpectedPath, Path inExpectedPrefix, WildLogDataType inLinkType, 
                         WildLogFile inWildLogFile, final CleanupCounter fileCount) {
                     Path shouldBePath = inExpectedPath.resolve(inExpectedPrefix);
                     Path currentPath = inWildLogFile.getAbsolutePath().getParent();
@@ -117,7 +117,7 @@ public class CheckAndClean {
                         fileCount.counter++;
                     }
                 }
-                public void moveFilesToCorrectFolders(DataObjectWithWildLogFile inDAOWithFile, WildLogFile inWildLogFile, Path inPrefix, WildLogFileLinkType inLinkType, final CleanupCounter fileCount) {
+                public void moveFilesToCorrectFolders(DataObjectWithWildLogFile inDAOWithFile, WildLogFile inWildLogFile, Path inPrefix, WildLogDataType inLinkType, final CleanupCounter fileCount) {
                     // Check to make sure the parent paths are correct, if not then move the file to the correct place and add a new DB entry before deleting the old one
                     // Maak seker alle DB paths is relative (nie absolute nie) en begin met propper WL roots
                     if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
@@ -391,7 +391,7 @@ public class CheckAndClean {
                     filesWithBadType++;
                 }
                 // Check the WildLogFile's linkage
-                if (wildLogFile.getLinkType() == WildLogFileLinkType.ELEMENT) {
+                if (wildLogFile.getLinkType() == WildLogDataType.ELEMENT) {
                     // Make sure it is linked
                     final Element temp = inApp.getDBI().findElement(wildLogFile.getLinkID(), null, Element.class);
                     if (temp == null) {
@@ -405,11 +405,11 @@ public class CheckAndClean {
                     // Make sure the file path is correct
                     cleanupHelper.moveFilesToCorrectFolders(temp, 
                             wildLogFile,
-                            Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()).normalize(), WildLogFileLinkType.ELEMENT, 
+                            Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()).normalize(), WildLogDataType.ELEMENT, 
                             filesMoved);
                 }
                 else 
-                if (wildLogFile.getLinkType() == WildLogFileLinkType.LOCATION) {
+                if (wildLogFile.getLinkType() == WildLogDataType.LOCATION) {
                     // Make sure it is linked
                     final Location temp = inApp.getDBI().findLocation(wildLogFile.getLinkID(), null, Location.class);
                     if (temp == null) {
@@ -423,11 +423,11 @@ public class CheckAndClean {
                     // Make sure the file path is correct
                     cleanupHelper.moveFilesToCorrectFolders(temp, 
                             wildLogFile,
-                            Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()).normalize(), WildLogFileLinkType.LOCATION, 
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()).normalize(), WildLogDataType.LOCATION, 
                             filesMoved);
                 }
                 else 
-                if (wildLogFile.getLinkType() == WildLogFileLinkType.VISIT) {
+                if (wildLogFile.getLinkType() == WildLogDataType.VISIT) {
                     // Make sure it is linked
                     final Visit temp = inApp.getDBI().findVisit(wildLogFile.getLinkID(), null, true, Visit.class);
                     if (temp == null) {
@@ -441,11 +441,11 @@ public class CheckAndClean {
                     // Make sure the file path is correct
                     cleanupHelper.moveFilesToCorrectFolders(temp, 
                             wildLogFile,
-                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getCachedLocationName(), temp.getName()).normalize(), WildLogFileLinkType.VISIT, 
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getCachedLocationName(), temp.getName()).normalize(), WildLogDataType.VISIT, 
                             filesMoved);
                 }
                 else 
-                if (wildLogFile.getLinkType() == WildLogFileLinkType.SIGHTING) {
+                if (wildLogFile.getLinkType() == WildLogDataType.SIGHTING) {
                     // Make sure it is linked
                     Sighting temp = null;
                     try {
@@ -466,7 +466,7 @@ public class CheckAndClean {
                     // Make sure the file path is correct
                     cleanupHelper.moveFilesToCorrectFolders(temp, 
                             wildLogFile,
-                            Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()).normalize(), WildLogFileLinkType.SIGHTING, 
+                            Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()).normalize(), WildLogDataType.SIGHTING, 
                             filesMoved);
                 }
                 else {

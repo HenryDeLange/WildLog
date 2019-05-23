@@ -50,7 +50,7 @@ import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
@@ -1882,7 +1882,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Element element = findElement(0, oldID.substring(oldID.indexOf('-') + 1), Element.class);
                     if (element != null) {
                         wildLogFile.setLinkID(element.getWildLogFileID());
-                        wildLogFile.setLinkType(WildLogFileLinkType.ELEMENT);
+                        wildLogFile.setLinkType(WildLogDataType.ELEMENT);
                     }
                     else {
                         WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
@@ -1895,7 +1895,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Location location = findLocation(0, oldID.substring(oldID.indexOf('-') + 1), Location.class);
                     if (location != null) {
                         wildLogFile.setLinkID(location.getWildLogFileID());
-                        wildLogFile.setLinkType(WildLogFileLinkType.LOCATION);
+                        wildLogFile.setLinkType(WildLogDataType.LOCATION);
                     }
                     else {
                         WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
@@ -1908,7 +1908,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Visit visit = findVisit(0, oldID.substring(oldID.indexOf('-') + 1), false, Visit.class);
                     if (visit != null) {
                         wildLogFile.setLinkID(visit.getWildLogFileID());
-                        wildLogFile.setLinkType(WildLogFileLinkType.VISIT);
+                        wildLogFile.setLinkType(WildLogDataType.VISIT);
                     }
                     else {
                         WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "
@@ -1921,7 +1921,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     Sighting sighting = findSighting(Long.parseLong(oldID.substring(oldID.indexOf('-') + 1)), false, Sighting.class);
                     if (sighting != null) {
                         wildLogFile.setLinkID(sighting.getWildLogFileID());
-                        wildLogFile.setLinkType(WildLogFileLinkType.SIGHTING);
+                        wildLogFile.setLinkType(WildLogDataType.SIGHTING);
                     }
                     else {
                         WildLogApp.LOGGER.log(Level.WARN, "Could not save the File [" + results.getString("ORIGINALPATH") + "] "

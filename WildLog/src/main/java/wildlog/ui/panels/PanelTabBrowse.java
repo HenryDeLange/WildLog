@@ -64,7 +64,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WildLogUserTypes;
@@ -1523,7 +1523,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                         UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sightingWrapper.getSighting().getElementID(), null, Element.class),
-                            Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName() + uniqueIdentifier), WildLogFileLinkType.ELEMENT, 
+                            Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName() + uniqueIdentifier), WildLogDataType.ELEMENT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
@@ -1564,7 +1564,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                         UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(sightingWrapper.getSighting().getLocationID(), null, Location.class),
-                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName() + uniqueIdentifier), WildLogFileLinkType.LOCATION, 
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName() + uniqueIdentifier), WildLogDataType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
@@ -1601,7 +1601,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                         UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(visit.getLocationID(), null, Location.class),
-                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName() + uniqueIdentifier), WildLogFileLinkType.LOCATION, 
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName() + uniqueIdentifier), WildLogDataType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
@@ -1642,7 +1642,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
                         UtilsFileProcessing.performFileUpload(app.getDBI().findVisit(sightingWrapper.getSighting().getVisitID(), null, true, Visit.class),
-                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedVisitName() + uniqueIdentifier), WildLogFileLinkType.VISIT, 
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedVisitName() + uniqueIdentifier), WildLogDataType.VISIT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
                             app, true, null, true, true);
@@ -1755,29 +1755,29 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
                 DataObjectWithWildLogFile temp = (DataObjectWithWildLogFile) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 String prefix;
-                WildLogFileLinkType linkType;
+                WildLogDataType linkType;
                 if (temp instanceof Element) {
                     prefix = Element.WILDLOG_FOLDER_PREFIX;
-                    linkType = WildLogFileLinkType.ELEMENT;
+                    linkType = WildLogDataType.ELEMENT;
                 }
                 else
                 if (temp instanceof Location) {
                     prefix = Location.WILDLOG_FOLDER_PREFIX;
-                    linkType = WildLogFileLinkType.LOCATION;
+                    linkType = WildLogDataType.LOCATION;
                 }
                 else
                 if (temp instanceof Visit) {
                     prefix = Visit.WILDLOG_FOLDER_PREFIX;
-                    linkType = WildLogFileLinkType.VISIT;
+                    linkType = WildLogDataType.VISIT;
                 }
                 else
                 if (temp instanceof SightingWrapper) {
                     prefix = Sighting.WILDLOG_FOLDER_PREFIX;
-                    linkType = WildLogFileLinkType.SIGHTING;
+                    linkType = WildLogDataType.SIGHTING;
                 }
                 else {
                     prefix = "UNKNOWN";
-                    linkType = WildLogFileLinkType.NONE;
+                    linkType = WildLogDataType.NONE;
                 }
                 if (temp != null) {
                     List<File> files = UtilsFileProcessing.showFileUploadDialog(app, app.getMainFrame());

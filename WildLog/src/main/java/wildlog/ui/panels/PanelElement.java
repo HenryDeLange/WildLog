@@ -27,7 +27,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.WildLogFileLinkType;
+import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
@@ -153,7 +153,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(element,
-                Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getPrimaryName()), WildLogFileLinkType.ELEMENT, 
+                Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getPrimaryName()), WildLogDataType.ELEMENT, 
                 inFiles.toArray(new File[inFiles.size()]),
                 new Runnable() {
                     @Override
