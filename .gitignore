@@ -17,3 +17,6 @@ WildLogDataCore/nb-configuration.xml
 WildLogINaturalist/WildLogINaturalistAPI/nb-configuration.xml
 /WildLog/AppProperties/WildLogSettings/
 /WildLog/StableReleases/Installer Config Files/WildLog
+/WildLogSyncAzure/target/
+/WildLog/StableReleases/Installer Config Files/WildLog.back.aip
+/WildLog/StableReleases/Installer Config Files/WildLog-cache/
