@@ -2,18 +2,24 @@
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.enums.GameViewRating;
+import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogDataType;
 import wildlog.sync.azure.UtilsSync;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
-public class TestLauncher extends javax.swing.JFrame {
+public class TestLauncher extends JFrame {
+    private static long upCounter = 0L;
+    private static long downCounter = 0L;
 
     public TestLauncher() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -26,7 +32,8 @@ public class TestLauncher extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnUpload = new javax.swing.JButton();
         btnDownload = new javax.swing.JButton();
-        btnDeleteAll = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnDownloadBatch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Azure Sync Tester");
@@ -53,9 +60,23 @@ public class TestLauncher extends javax.swing.JFrame {
             }
         });
 
-        btnDeleteAll.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnDeleteAll.setText("Delete All");
-        btnDeleteAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnDownloadBatch.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDownloadBatch.setText("Download Batch");
+        btnDownloadBatch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDownloadBatch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadBatchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,11 +90,13 @@ public class TestLauncher extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnDeleteAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(20, 20, 20)
-                                .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnDownloadBatch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(10, 10, 10))))
         );
         layout.setVerticalGroup(
@@ -85,19 +108,23 @@ public class TestLauncher extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                     .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(50, 50, 50)
-                .addComponent(btnDeleteAll, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(213, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(btnDownloadBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        LocationCore temp = new LocationCore(246L, "test");
+        LocationCore temp = new LocationCore(246L + upCounter++, "test");
         temp.setDescription("bla bla bla");
-        temp.setHabitatType("baaaa");
+        temp.setHabitatType("baaaa 222 333");
         temp.setGameViewingRating(GameViewRating.MEDIUM);
+        temp.setLongitude(Longitudes.EAST);
+//        temp.setRating(LocationRating.DECENT);
         UtilsSync.uploadData("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
                 WildLogDataType.LOCATION, 123L, 12, temp);
         System.out.println("UPLOADED");
@@ -105,12 +132,22 @@ public class TestLauncher extends javax.swing.JFrame {
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         SyncTableEntry syncTableEntry = UtilsSync.downloadData("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, 246L, 12);
-        System.out.println("DOWNLOADED");
-        System.out.println(syncTableEntry.getWildLogDataType());
-        System.out.println(((LocationCore) syncTableEntry.getData()).getDescription());
-        System.out.println(((LocationCore) syncTableEntry.getData()).getGameViewingRating());
+                WildLogDataType.LOCATION, 123L, 246L + downCounter++);
+        System.out.println("DOWNLOADED: ");
+        System.out.println(syncTableEntry);
     }//GEN-LAST:event_btnDownloadActionPerformed
+
+    private void btnDownloadBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadBatchActionPerformed
+        List<SyncTableEntry> lstSyncTableEntry = UtilsSync.downloadDataBatch("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
+                WildLogDataType.LOCATION, 123L, 0);
+        System.out.println("DOWNLOADED: ");
+        System.out.println(lstSyncTableEntry.size());
+    }//GEN-LAST:event_btnDownloadBatchActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        UtilsSync.deleteData("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
+                WildLogDataType.LOCATION, 123L, 246L);
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     public static void main(String args[]) {
         // Setup the application
@@ -138,8 +175,9 @@ public class TestLauncher extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDeleteAll;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDownload;
+    private javax.swing.JButton btnDownloadBatch;
     private javax.swing.JButton btnUpload;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
