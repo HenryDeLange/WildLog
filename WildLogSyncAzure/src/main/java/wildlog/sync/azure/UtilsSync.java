@@ -17,7 +17,8 @@ import wildlog.data.enums.WildLogDataType;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
 public final class UtilsSync {
-    private static final int BATCH_LIMIT = 75;
+    private static final int BATCH_LIMIT = 50;
+    private static final int URL_LIMIT = 32000;
     
     private UtilsSync() {
     }
@@ -85,7 +86,7 @@ public final class UtilsSync {
                 dataCounter++;
             }
             int batchCounter = 0;
-            final int MAX_RETRY_LIMIT = lstAllBatchDataChunks.size() * 4;
+            final int MAX_RETRY_LIMIT = lstAllBatchDataChunks.size() * 5;
             while (batchCounter < lstAllBatchDataChunks.size() && batchCounter < MAX_RETRY_LIMIT) {
                 try {
                     TableBatchOperation batchOperation = new TableBatchOperation();
@@ -98,20 +99,20 @@ public final class UtilsSync {
                 }
                 catch (StorageException ex) {
                     ex.printStackTrace(System.out);
-                    System.out.println(">>> The batch " + batchCounter + " might be too big, it will be split in half...");
+                    System.out.println(">>> The upload batch " + batchCounter + " might be too big, it will be split in half...");
                     List<DataObjectWithAudit> lstProblematicBatch = lstAllBatchDataChunks.get(batchCounter);
                     if (lstProblematicBatch.size() > 2) {
                         lstAllBatchDataChunks.set(batchCounter, lstProblematicBatch.subList(0, lstProblematicBatch.size() / 2));
                         lstAllBatchDataChunks.add(lstProblematicBatch.subList(lstProblematicBatch.size() / 2, lstProblematicBatch.size()));
                     }
                     else {
-                        System.err.println(">>> The batch " + batchCounter + " can't be made any smaller!!!");
+                        System.err.println(">>> The upload batch " + batchCounter + " can't be made any smaller!!!");
                         throw ex;
                     }
                 }
             }
             if (batchCounter >= MAX_RETRY_LIMIT) {
-                System.err.println("The batch max retry limit was reached!!!");
+                System.err.println("The upload batch max retry limit was reached!!!");
                 return false;
             }
             return true;
@@ -156,7 +157,7 @@ public final class UtilsSync {
                 dataCounter++;
             }
             int batchCounter = 0;
-            final int MAX_RETRY_LIMIT = lstAllBatchDataChunks.size() * 4;
+            final int MAX_RETRY_LIMIT = lstAllBatchDataChunks.size() * 5;
             while (batchCounter < lstAllBatchDataChunks.size() && batchCounter < MAX_RETRY_LIMIT) {
                 try {
                     TableBatchOperation batchOperation = new TableBatchOperation();
@@ -168,20 +169,20 @@ public final class UtilsSync {
                 }
                 catch (StorageException ex) {
                     ex.printStackTrace(System.out);
-                    System.out.println(">>> The batch " + batchCounter + " might be too big, it will be split in half...");
+                    System.out.println(">>> The delete batch " + batchCounter + " might be too big, it will be split in half...");
                     List<SyncTableEntry> lstProblematicBatch = lstAllBatchDataChunks.get(batchCounter);
                     if (lstProblematicBatch.size() > 2) {
                         lstAllBatchDataChunks.set(batchCounter, lstProblematicBatch.subList(0, lstProblematicBatch.size() / 2));
                         lstAllBatchDataChunks.add(lstProblematicBatch.subList(lstProblematicBatch.size() / 2, lstProblematicBatch.size()));
                     }
                     else {
-                        System.err.println(">>> The batch " + batchCounter + " can't be made any smaller!!!");
+                        System.err.println(">>> The delete batch " + batchCounter + " can't be made any smaller!!!");
                         throw ex;
                     }
                 }
             }
             if (batchCounter >= MAX_RETRY_LIMIT) {
-                System.err.println("The batch max retry limit was reached!!!");
+                System.err.println("The delete batch max retry limit was reached!!!");
                 return false;
             }
             return true;
@@ -207,16 +208,51 @@ public final class UtilsSync {
     
     public static List<SyncTableEntry> downloadDataBatch(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, 
             long inAfterSyncTime, List<Long> inLstRecordIDs) {
+        
+// FIXME: Limit the URL length to max 32684 characters by splitting long URLs into multiple calls
+        
         try {
             CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
             CloudTable cloudTable = getTable(cloudTableClient, inType.getDescription());
             TableQuery<SyncTableEntry> query = TableQuery.from(SyncTableEntry.class);
-// TODO: Handle al die params
+            if (inAfterSyncTime > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
+                String baseFilter = TableQuery.combineFilters(
+                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)),
+                        TableQuery.Operators.AND,
+                        TableQuery.generateFilterCondition("syncTime", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, inAfterSyncTime));
+                String idFilter = null;
+                for (long recordID : inLstRecordIDs) {
+                    if (idFilter == null) {
+                        idFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
+                    }
+                    else {
+                        idFilter = idFilter + " " + TableQuery.Operators.OR + " " 
+                                + TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
+                    }
+                }
+                query = query.where(TableQuery.combineFilters(baseFilter, TableQuery.Operators.AND, idFilter));
+            }
+            else
             if (inAfterSyncTime > 0) {
                 query = query.where(TableQuery.combineFilters(
                         TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)),
                         TableQuery.Operators.AND,
                         TableQuery.generateFilterCondition("syncTime", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, inAfterSyncTime)));
+            }
+            else
+            if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
+                String baseFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID));
+                String idFilter = null;
+                for (long recordID : inLstRecordIDs) {
+                    if (idFilter == null) {
+                        idFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
+                    }
+                    else {
+                        idFilter = idFilter + " " + TableQuery.Operators.OR + " " 
+                                + TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
+                    }
+                }
+                query = query.where(TableQuery.combineFilters(baseFilter, TableQuery.Operators.AND, idFilter));
             }
             else {
                 query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)));

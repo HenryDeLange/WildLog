@@ -180,8 +180,12 @@ public class TestLauncher extends JFrame {
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnDownloadBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadBatchActionPerformed
+        List<Long> lstIDs = new ArrayList<>();
+        for (long t = 1000001000L; t < 1000005000L; t++) {
+            lstIDs.add(t);
+        }
         List<SyncTableEntry> lstSyncTableEntry = UtilsSync.downloadDataBatch("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, 0, null);
+                WildLogDataType.LOCATION, 123L, 0, lstIDs);
         System.out.println("DOWNLOADED BATCH: ");
         System.out.println(lstSyncTableEntry.size());
         for (SyncTableEntry entry : lstSyncTableEntry) {
@@ -197,7 +201,7 @@ public class TestLauncher extends JFrame {
 
     private void btnUploadBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadBatchActionPerformed
         List<DataObjectWithAudit> lstData = new ArrayList<>();
-        for (int t = 0; t < 200; t++) {
+        for (long t = 1000000000L; t < 1000006000L; t++) {
             LocationCore temp = new LocationCore(t, "Location " + t);
 //            try {
 //                temp.setDescription(Files.readString(new File("C:\\temp\\temp.txt").toPath().toAbsolutePath()));
