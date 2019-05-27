@@ -208,8 +208,8 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setType(ElementType.getEnumFromText(inProperties.getOrDefault("type", EMPTY_STRING).getValueAsString()));
         tempData.setFeedingClass(FeedingClass.getEnumFromText(inProperties.getOrDefault("feedingClass", EMPTY_STRING).getValueAsString()));
         tempData.setReferenceID(inProperties.getOrDefault("referenceID", EMPTY_STRING).getValueAsString());
-        tempData.setAuditTime(inProperties.getOrDefault("auditTime", EMPTY_LONG).getValueAsLong());
-        tempData.setAuditUser(inProperties.getOrDefault("auditUser", EMPTY_STRING).getValueAsString());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
         return tempData;
     }
     
@@ -231,8 +231,8 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setLonSeconds(inProperties.getOrDefault("lonSeconds", EMPTY_DOUBLE).getValueAsDouble());
         tempData.setGPSAccuracy(GPSAccuracy.getEnumFromText(inProperties.getOrDefault("gpsAccuracy", EMPTY_STRING).getValueAsString()));
         tempData.setGPSAccuracyValue(inProperties.getOrDefault("gpsAccuracyValue", EMPTY_DOUBLE).getValueAsDouble());
-        tempData.setAuditTime(inProperties.getOrDefault("auditTime", EMPTY_LONG).getValueAsLong());
-        tempData.setAuditUser(inProperties.getOrDefault("auditUser", EMPTY_STRING).getValueAsString());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
         return tempData;
     }
     
@@ -246,8 +246,8 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(inProperties.getOrDefault("gameWatchingIntensity", EMPTY_STRING).getValueAsString()));
         tempData.setType(VisitType.getEnumFromText(inProperties.getOrDefault("type", EMPTY_STRING).getValueAsString()));
         tempData.setLocationID(inProperties.getOrDefault("locationID", EMPTY_LONG).getValueAsLong());
-        tempData.setAuditTime(inProperties.getOrDefault("auditTime", EMPTY_LONG).getValueAsLong());
-        tempData.setAuditUser(inProperties.getOrDefault("auditUser", EMPTY_STRING).getValueAsString());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
         return tempData;
     }
     
@@ -286,8 +286,8 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setGPSAccuracyValue(inProperties.getOrDefault("gpsAccuracyValue", EMPTY_DOUBLE).getValueAsDouble());
         tempData.setTimeAccuracy(TimeAccuracy.getEnumFromText(inProperties.getOrDefault("timeAccuracy", EMPTY_STRING).getValueAsString()));
         tempData.setAge(Age.getEnumFromText(inProperties.getOrDefault("age", EMPTY_STRING).getValueAsString()));
-        tempData.setAuditTime(inProperties.getOrDefault("auditTime", EMPTY_LONG).getValueAsLong());
-        tempData.setAuditUser(inProperties.getOrDefault("auditUser", EMPTY_STRING).getValueAsString());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
         return tempData;
     }
     
@@ -296,16 +296,16 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setUsername(inProperties.getOrDefault("username", EMPTY_STRING).getValueAsString());
         tempData.setPassword(inProperties.getOrDefault("password", EMPTY_STRING).getValueAsString());
         tempData.setType(WildLogUserTypes.getEnumFromText(inProperties.getOrDefault("type", EMPTY_STRING).getValueAsString()));
-        tempData.setAuditTime(inProperties.getOrDefault("auditTime", EMPTY_LONG).getValueAsLong());
-        tempData.setAuditUser(inProperties.getOrDefault("auditUser", EMPTY_STRING).getValueAsString());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
         return tempData;
     }
     
     private WildLogDeleteLog readDeleteLogV12(HashMap<String, EntityProperty> inProperties) {
         WildLogDeleteLog tempData = new WildLogDeleteLog();
         tempData.setType(WildLogDataType.getEnumFromText(inProperties.getOrDefault("type", EMPTY_STRING).getValueAsString()));
-        tempData.setAuditTime(inProperties.getOrDefault("auditTime", EMPTY_LONG).getValueAsLong());
-        tempData.setAuditUser(inProperties.getOrDefault("auditUser", EMPTY_STRING).getValueAsString());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
         return tempData;
     }
     
@@ -375,8 +375,8 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
         inProperties.put("feedingClass", new EntityProperty(UtilsData.stringFromObject(inData.getFeedingClass())));
         inProperties.put("referenceID", new EntityProperty(inData.getReferenceID()));
-        inProperties.put("auditTime", new EntityProperty(inData.getAuditTime()));
-        inProperties.put("auditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
     }
     
     private void writeLocationV12(LocationCore inData, HashMap<String, EntityProperty> inProperties) {
@@ -395,8 +395,8 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("lonSeconds", new EntityProperty(inData.getLonSeconds()));
         inProperties.put("gpsAccuracy", new EntityProperty(UtilsData.stringFromObject(inData.getGPSAccuracy())));
         inProperties.put("gpsAccuracyValue", new EntityProperty(inData.getGPSAccuracyValue()));
-        inProperties.put("auditTime", new EntityProperty(inData.getAuditUser()));
-        inProperties.put("auditUser", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
     }
     
     private void writeVisitV12(VisitCore inData, HashMap<String, EntityProperty> inProperties) {
@@ -407,8 +407,8 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("gameWatchingIntensity", new EntityProperty(UtilsData.stringFromObject(inData.getGameWatchingIntensity())));
         inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
         inProperties.put("locationID", new EntityProperty(inData.getLocationID()));
-        inProperties.put("auditTime", new EntityProperty(inData.getAuditUser()));
-        inProperties.put("auditUser", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
     }
     
     private void writeSightingV12(SightingCore inData, HashMap<String, EntityProperty> inProperties) {
@@ -444,22 +444,22 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("gpsAccuracyValue", new EntityProperty(inData.getGPSAccuracyValue()));
         inProperties.put("timeAccuracy", new EntityProperty(UtilsData.stringFromObject(inData.getTimeAccuracy())));
         inProperties.put("age", new EntityProperty(UtilsData.stringFromObject(inData.getAge())));
-        inProperties.put("auditTime", new EntityProperty(inData.getAuditUser()));
-        inProperties.put("auditUser", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
     }
     
     private void writeUserV12(WildLogUser inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("username", new EntityProperty(inData.getUsername()));
         inProperties.put("password", new EntityProperty(inData.getPassword()));
         inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
-        inProperties.put("auditTime", new EntityProperty(inData.getAuditUser()));
-        inProperties.put("auditUser", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
     }
     
     private void writeDeleteLogV12(WildLogDeleteLog inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
-        inProperties.put("auditTime", new EntityProperty(inData.getAuditUser()));
-        inProperties.put("auditUser", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
     }
 
 }
