@@ -202,7 +202,7 @@ public class UserLoginDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        WildLogUser user = app.getDBI().findUser(txtUsername.getText(), WildLogUser.class);
+        WildLogUser user = app.getDBI().findUser(0, txtUsername.getText(), WildLogUser.class);
         if (user != null) {
             String passwordHash = PasswordEncryptor.generateHashedPassword(txtPassword.getPassword());
             if (user.getPassword().equals(passwordHash)) {

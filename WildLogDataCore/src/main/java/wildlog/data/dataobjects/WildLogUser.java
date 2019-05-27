@@ -1,9 +1,10 @@
 package wildlog.data.dataobjects;
 
+import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.WildLogUserTypes;
 
 
-public class WildLogUser {
+public class WildLogUser extends DataObjectWithAudit {
     private String username;
     private String password;
     private WildLogUserTypes type;

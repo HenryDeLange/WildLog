@@ -167,7 +167,7 @@ public class UserManagementDialog extends JDialog {
         if (tblUsers.getSelectedRowCount() > 0) {
             String usernameToDelete = (String) tblUsers.getModel().getValueAt(tblUsers.convertRowIndexToModel(tblUsers.getSelectedRow()), 0);
             // Validate
-            WildLogUser userToDelete = app.getDBI().findUser(usernameToDelete, WildLogUser.class);
+            WildLogUser userToDelete = app.getDBI().findUser(0, usernameToDelete, WildLogUser.class);
             if (WildLogUserTypes.WILDLOG_MASTER == userToDelete.getType()) {
                 WLOptionPane.showMessageDialog(this,
                         "The WildLog Master user can't be deleted.",
@@ -193,7 +193,7 @@ public class UserManagementDialog extends JDialog {
                 if (result == JOptionPane.YES_OPTION) {
                     List<WildLogUser> lstUsers = app.getDBI().listUsers(null, WildLogUser.class);
                     for (WildLogUser user : lstUsers) {
-                        app.getDBI().deleteUser(user.getUsername());
+                        app.getDBI().deleteUser(user.getID());
                     }
                     setVisible(false);
                     dispose();
@@ -204,7 +204,7 @@ public class UserManagementDialog extends JDialog {
                         "Are you sure you want to delete the selected user?",
                         "Delete User", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (result == JOptionPane.YES_OPTION) {
-                    app.getDBI().deleteUser(usernameToDelete);
+                    app.getDBI().deleteUser(userToDelete.getID());
                 }
             }
             // Reload the table

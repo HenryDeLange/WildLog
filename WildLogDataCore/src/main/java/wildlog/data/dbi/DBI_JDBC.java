@@ -17,6 +17,7 @@ import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.VisitCore;
+import wildlog.data.dataobjects.WildLogDeleteLog;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.WildLogUser;
@@ -174,16 +175,25 @@ public abstract class DBI_JDBC implements DBI {
             + "INATURALISTID bigint NOT NULL, "
             + "INATURALISTDATA TEXT)";
     protected static final String tableUsers = "CREATE TABLE WILDLOGUSERS ("
-            + "USERNAME varchar(150) PRIMARY KEY NOT NULL, "
+            + "ID bigint PRIMARY KEY NOT NULL, "
+            + "USERNAME varchar(150) UNIQUE NOT NULL, "
             + "PASSWORD varchar(512) NOT NULL, "
-            + "TYPE varchar(50) NOT NULL)";
+            + "TYPE varchar(50) NOT NULL, "
+            + "AUDITTIME bigint NOT NULL, "
+            + "AUDITUSER varchar(150) NOT NULL)";
+    protected static final String tableDeleteLog = "CREATE TABLE DELETELOGS ("
+            + "ID bigint PRIMARY KEY NOT NULL, "
+            + "TYPE varchar(25) NOT NULL, "
+            + "AUDITTIME bigint NOT NULL, "
+            + "AUDITUSER varchar(150) NOT NULL)";
     // Count
     protected static final String countLocation = "SELECT count(*) FROM LOCATIONS";
     protected static final String countVisit = "SELECT count(*) FROM VISITS";
     protected static final String countSighting = "SELECT count(*) FROM SIGHTINGS";
     protected static final String countElement = "SELECT count(*) FROM ELEMENTS";
     protected static final String countFile = "SELECT count(*) FROM FILES";
-    protected static final String countUsers = "SELECT count(*) FROM WILDLOGUSERS";
+    protected static final String countUser = "SELECT count(*) FROM WILDLOGUSERS";
+    protected static final String countDeleteLog = "SELECT count(*) FROM DELETELOGS";
     // Find
     protected static final String findLocation = "SELECT * FROM LOCATIONS";
     protected static final String findVisit = "SELECT * FROM VISITS";
@@ -205,8 +215,8 @@ public abstract class DBI_JDBC implements DBI {
             + "WHERE FIELDID = ? AND DATAKEY = ?";
     protected static final String findINaturalistLinkedData = "SELECT * FROM INATURALIST "
             + "WHERE WILDLOGID = ? OR INATURALISTID = ?";
-    protected static final String findUser = "SELECT * FROM WILDLOGUSERS "
-            + "WHERE USERNAME = ?";
+    protected static final String findUser = "SELECT * FROM WILDLOGUSERS";
+    protected static final String findDeleteLog = "SELECT * FROM DELETELOGS";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listVisit = "SELECT * FROM VISITS";
@@ -218,6 +228,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String listAdhocData = "SELECT * FROM ADHOC";
     protected static final String listINaturalistLinkedData = "SELECT * FROM INATURALIST";
     protected static final String listUsers = "SELECT * FROM WILDLOGUSERS";
+    protected static final String listDeleteLogs = "SELECT * FROM DELETELOGS";
     // Create
     protected static final String createLocation = "INSERT INTO LOCATIONS ("
             + "ID, "
@@ -332,10 +343,19 @@ public abstract class DBI_JDBC implements DBI {
             + "INATURALISTDATA) "
             + "VALUES (?, ?, ?)";
     protected static final String createUser = "INSERT INTO WILDLOGUSERS ("
+            + "ID, "
             + "USERNAME, "
             + "PASSWORD, "
-            + "TYPE) "
-            + "VALUES (?, ?, ?)";
+            + "TYPE, "
+            + "AUDITTIME, "
+            + "AUDITUSER) "
+            + "VALUES (?, ?, ?, ?, ?, ?)";
+    protected static final String createDeleteLog = "INSERT INTO DELETELOGS ("
+            + "ID, "
+            + "TYPE, "
+            + "AUDITTIME, "
+            + "AUDITUSER) "
+            + "VALUES (?, ?, ?, ?)";
     // Update
     protected static final String updateLocation = "UPDATE LOCATIONS SET "
             + "ID = ?, "
@@ -463,10 +483,13 @@ public abstract class DBI_JDBC implements DBI {
             + "INATURALISTDATA = ? "
             + "WHERE WILDLOGID = ? OR INATURALISTID = ?";
     protected static final String updateUser = "UPDATE WILDLOGUSERS SET "
+            + "ID = ?, "
             + "USERNAME = ?, "
             + "PASSWORD = ?, "
-            + "TYPE = ? "
-            + "WHERE USERNAME = ?";
+            + "TYPE = ?, "
+            + "AUDITTIME = ?, "
+            + "AUDITUSER = ?"
+            + "WHERE ID = ?";
     // Delete
     protected static final String deleteLocation = "DELETE FROM LOCATIONS "
             + "WHERE ID = ?";
@@ -483,7 +506,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteINaturalistLinkedData = "DELETE "
             + "FROM INATURALIST WHERE WILDLOGID = ? OR INATURALISTID = ?";
     protected static final String deleteUser = "DELETE FROM WILDLOGUSERS "
-            + "WHERE USERNAME = ?";
+            + "WHERE ID = ?";
     // Queries
     protected static final String queryLocationCountForElement = "select SIGHTINGS.LOCATIONID, count(*) cnt "
             + "from SIGHTINGS where SIGHTINGS.ELEMENTID = ? group by SIGHTINGS.LOCATIONID order by cnt desc";
@@ -595,6 +618,15 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableUsers);
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "DELETELOGS", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableDeleteLog);
+                state.execute("CREATE INDEX IF NOT EXISTS V12_DELETELOG_AUDITTIME ON DELETELOGS (AUDITTIME)");
+                state.execute("CREATE INDEX IF NOT EXISTS V12_DELETELOG_TYPE ON DELETELOGS (TYPE)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -854,8 +886,37 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         int count = 0;
         try {
-            String sql = countUsers;
+            String sql = countUser;
             state = conn.prepareStatement(sql);
+            results = state.executeQuery();
+            while (results.next()) {
+                count = results.getInt(1);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return count;
+    }
+    
+    @Override
+    public int countDeleteLogs(WildLogDataType inDataType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        int count = 0;
+        try {
+            String sql = countDeleteLog;
+            if (inDataType != null) {
+                sql = sql + " WHERE TYPE = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.stringFromObject(inDataType));
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
             results = state.executeQuery();
             while (results.next()) {
                 count = results.getInt(1);
@@ -1424,7 +1485,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
-            String sql = listVisit;
+            String sql;
             if (inIncludeCachedValues) {
                 sql = listVisitsWithCached;
             }
@@ -1701,9 +1762,65 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             while (results.next()) {
                 T temp = inReturnType.newInstance();
+                temp.setID(results.getLong("ID"));
                 temp.setUsername(results.getString("USERNAME"));
                 temp.setPassword(results.getString("PASSWORD"));
                 temp.setType(WildLogUserTypes.getEnumFromText(results.getString("TYPE")));
+                temp.setAuditTime(results.getLong("AUDITTIME"));
+                temp.setAuditUser(results.getString("AUDITUSER"));
+                tempList.add(temp);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+    
+    @Override
+    public <T extends WildLogDeleteLog> List<T> listDeleteLogs(WildLogDataType inDataType, long inAfterAuditTime, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<T> tempList = new ArrayList<T>();
+        try {
+            String sql = listDeleteLogs;
+            if (inDataType != null && inAfterAuditTime > 0) {
+                sql = sql + " WHERE TYPE = ? AND AUDITTIME >= ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.stringFromObject(inDataType));
+                state.setLong(2, inAfterAuditTime);
+            }
+            else
+            if (inDataType != null) {
+                sql = sql + " WHERE TYPE = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.stringFromObject(inDataType));
+            }
+            else
+            if (inAfterAuditTime > 0) {
+                sql = sql + " WHERE AUDITTIME >= ?";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inAfterAuditTime);
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                T temp = inReturnType.newInstance();
+                temp.setID(results.getLong("ID"));
+                temp.setType(WildLogDataType.getEnumFromText(results.getString("TYPE")));
+                temp.setAuditTime(results.getLong("AUDITTIME"));
+                temp.setAuditUser(results.getString("AUDITUSER"));
                 tempList.add(temp);
             }
         }
@@ -2249,6 +2366,8 @@ public abstract class DBI_JDBC implements DBI {
     public boolean deleteElement(long inID) {
         PreparedStatement state = null;
         try {
+            // Create the DeleteLog record (to know about the delete when syncing)
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.ELEMENT, inID));
             // Delete the ElementCore
             state = conn.prepareStatement(deleteElement);
             state.setLong(1, inID);
@@ -2278,9 +2397,11 @@ public abstract class DBI_JDBC implements DBI {
     public boolean deleteLocation(long inID) {
         PreparedStatement state = null;
         try {
+            // Create the DeleteLog record (to know about the delete when syncing)
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.LOCATION, inID));
+            // Delete LocationCore
             state = conn.prepareStatement(deleteLocation);
             state.setLong(1, inID);
-            // Delete LocationCore
             state.executeUpdate();
             state.close();
             // Delete Visits for this LocationCore
@@ -2308,9 +2429,11 @@ public abstract class DBI_JDBC implements DBI {
     public boolean deleteVisit(long inID) {
         PreparedStatement state = null;
         try {
+            // Create the DeleteLog record (to know about the delete when syncing)
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.VISIT, inID));
+            // Delete VisitCore
             state = conn.prepareStatement(deleteVisit);
             state.setLong(1, inID);
-            // Delete VisitCore
             state.executeUpdate();
             // Delete Sightings for this VisitCore
             List<SightingCore> sightingList = listSightings(0, 0, inID, false, SightingCore.class);
@@ -2337,9 +2460,11 @@ public abstract class DBI_JDBC implements DBI {
     public boolean deleteSighting(long inID) {
         PreparedStatement state = null;
         try {
+            // Create the DeleteLog record (to know about the delete when syncing)
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.SIGHTING, inID));
+            // Delete Sightings
             state = conn.prepareStatement(deleteSighting);
             state.setLong(1, inID);
-            // Delete Sightings
             state.executeUpdate();
             // Delete Fotos
             List<WildLogFileCore> fileList = listWildLogFiles(inID, null, WildLogFileCore.class);
@@ -2364,9 +2489,11 @@ public abstract class DBI_JDBC implements DBI {
         // Note: This method only deletes one file at a time from the database.
         PreparedStatement state = null;
         try {
+            // Create the DeleteLog record (to know about the delete when syncing)
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.FILE, inID));
+            // Delete File from database
             state = conn.prepareStatement(deleteFile);
             state.setLong(1, inID);
-            // Delete File from database
             state.executeUpdate();
         }
         catch (SQLException ex) {
@@ -2723,19 +2850,70 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends WildLogUser> T findUser(String inUsername, Class<T> inReturnType) {
+    public <T extends WildLogUser> T findUser(long inID, String inUsername, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T temp = null;
         try {
-            state = conn.prepareStatement(findUser);
-            state.setString(1, inUsername);
+            String sql = findUser;
+            if (inID > 0) {
+                sql = sql + " WHERE ID = ?";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inID);
+            }
+            else
+            if (inUsername != null && !inUsername.isEmpty()) {
+                sql = sql + " WHERE USERNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, inUsername);
+            }
+            else {
+                return null;
+            }
             results = state.executeQuery();
             if (results.next()) {
                 temp = inReturnType.newInstance();
+                temp.setID(results.getLong("ID"));
                 temp.setUsername(results.getString("USERNAME"));
                 temp.setPassword(results.getString("PASSWORD"));
                 temp.setType(WildLogUserTypes.getEnumFromText(results.getString("TYPE")));
+                temp.setAuditTime(results.getLong("AUDITTIME"));
+                temp.setAuditUser(results.getString("AUDITUSER"));
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return temp;
+    }
+    
+    @Override
+    public <T extends WildLogDeleteLog> T findDeleteLog(long inID, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        T temp = null;
+        try {
+            state = conn.prepareStatement(findDeleteLog);
+            state.setLong(1, inID);
+            results = state.executeQuery();
+            if (results.next()) {
+                temp = inReturnType.newInstance();
+                temp.setID(results.getLong("ID"));
+                temp.setType(WildLogDataType.getEnumFromText(results.getString("TYPE")));
+                temp.setAuditTime(results.getLong("AUDITTIME"));
+                temp.setAuditUser(results.getString("AUDITUSER"));
             }
         }
         catch (SQLException ex) {
@@ -2762,8 +2940,35 @@ public abstract class DBI_JDBC implements DBI {
         try {
             //Insert
             state = conn.prepareStatement(createUser);
+            // Get the new ID
+            inWildLogUser.setID(generateID());
             // Populate the values
-            maintainUser(state, inWildLogUser);
+            maintainUser(state, inWildLogUser, false);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog) {
+        PreparedStatement state = null;
+        try {
+            //Insert
+            state = conn.prepareStatement(createDeleteLog);
+            // Populate the values
+                state.setLong(1, inWildLogDeleteLog.getID());
+                state.setString(2, UtilsData.stringFromObject(inWildLogDeleteLog.getType()));
+                setupAuditInfo(inWildLogDeleteLog);
+                state.setLong(3, inWildLogDeleteLog.getAuditTime());
+                state.setString(4, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogDeleteLog.getAuditUser()), 150));
             // Execute
             state.executeUpdate();
         }
@@ -2784,7 +2989,7 @@ public abstract class DBI_JDBC implements DBI {
             // Update
             state = conn.prepareStatement(updateUser);
             // Populate the values
-            maintainUser(state, inWildLogUser);
+            maintainUser(state, inWildLogUser, false);
             state.setString(4, inWildLogUser.getUsername());
             // Execute
             state.executeUpdate();
@@ -2799,18 +3004,27 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
     
-    private <T extends WildLogUser> void maintainUser(PreparedStatement state, T inWildLogUser) throws SQLException {
-        state.setString(1, UtilsData.limitLength(inWildLogUser.getUsername(), 150));
-        state.setString(2, inWildLogUser.getPassword());
-        state.setString(3, UtilsData.stringFromObject(inWildLogUser.getType()));
+    private <T extends WildLogUser> void maintainUser(PreparedStatement state, T inWildLogUser, boolean inUseOldAudit) throws SQLException {
+        state.setLong(1, inWildLogUser.getID());
+        state.setString(2, UtilsData.limitLength(inWildLogUser.getUsername(), 150));
+        state.setString(3, inWildLogUser.getPassword());
+        state.setString(4, UtilsData.stringFromObject(inWildLogUser.getType()));
+        if (!inUseOldAudit) {
+            setupAuditInfo(inWildLogUser);
+        }
+        state.setLong(5, inWildLogUser.getAuditTime());
+        state.setString(6, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogUser.getAuditUser()), 150));
     }
 
     @Override
-    public boolean deleteUser(String inUsername) {
+    public boolean deleteUser(long inID) {
         PreparedStatement state = null;
         try {
+            // Create the DeleteLog record (to know about the delete when syncing)
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.WILDLOG_USER, inID));
+            // Delete the user
             state = conn.prepareStatement(deleteUser);
-            state.setString(1, inUsername);
+            state.setLong(1, inID);
             state.executeUpdate();
         }
         catch (SQLException ex) {
