@@ -18,7 +18,7 @@ import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
 public final class UtilsSync {
     private static final int BATCH_LIMIT = 50;
-    private static final int URL_LIMIT = 32000;
+    private static final int URL_LIMIT = 30000;
     
     private UtilsSync() {
     }
@@ -208,19 +208,40 @@ public final class UtilsSync {
     
     public static List<SyncTableEntry> downloadDataBatch(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, 
             long inAfterSyncTime, List<Long> inLstRecordIDs) {
-        
-// FIXME: Limit the URL length to max 32684 characters by splitting long URLs into multiple calls
-        
+        // Limit the URL length to max 32684 characters by splitting long URLs into multiple calls
+        List<List<Long>> lstAllBatchDataChunks = new ArrayList<>();
+        if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
+            final int RECORDID_STATEMENT_LENGTH = 35; // Estimated length of " or RowKey eq 9223372036854775807L"
+            final int MAX_RECORDIDS_PER_CALL = URL_LIMIT / RECORDID_STATEMENT_LENGTH;
+            int idCounter = 0;
+            for (Long recordID : inLstRecordIDs) {
+                if (idCounter % MAX_RECORDIDS_PER_CALL == 0) {
+                    List<Long> lstSingleBatchChunk = new ArrayList<>(MAX_RECORDIDS_PER_CALL);
+                    lstAllBatchDataChunks.add(lstSingleBatchChunk);
+                }
+                lstAllBatchDataChunks.get(idCounter / MAX_RECORDIDS_PER_CALL).add(recordID);
+                idCounter++;
+            }
+            List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
+            for (List<Long> lstRecordIDs : lstAllBatchDataChunks) {
+                lstSyncTableEntries.addAll(downloadDataSingleBatch(inStorageConnectionString, inType, inWorkspaceID, inAfterSyncTime, lstRecordIDs));
+            }
+            return lstSyncTableEntries;
+        }
+        else {
+            return downloadDataSingleBatch(inStorageConnectionString, inType, inWorkspaceID, inAfterSyncTime, null);
+        }
+    }
+
+    private static List<SyncTableEntry> downloadDataSingleBatch(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, 
+            long inAfterSyncTime, List<Long> inLstRecordIDs) {
         try {
             CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
             CloudTable cloudTable = getTable(cloudTableClient, inType.getDescription());
             TableQuery<SyncTableEntry> query = TableQuery.from(SyncTableEntry.class);
-            if (inAfterSyncTime > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
-                String baseFilter = TableQuery.combineFilters(
-                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)),
-                        TableQuery.Operators.AND,
-                        TableQuery.generateFilterCondition("syncTime", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, inAfterSyncTime));
-                String idFilter = null;
+            // Create the id filter (if present)
+            String idFilter = null;
+            if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
                 for (long recordID : inLstRecordIDs) {
                     if (idFilter == null) {
                         idFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
@@ -230,6 +251,13 @@ public final class UtilsSync {
                                 + TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
                     }
                 }
+            }
+            // Build the combined filters
+            if (inAfterSyncTime > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
+                String baseFilter = TableQuery.combineFilters(
+                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)),
+                        TableQuery.Operators.AND,
+                        TableQuery.generateFilterCondition("SyncTime", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, inAfterSyncTime));
                 query = query.where(TableQuery.combineFilters(baseFilter, TableQuery.Operators.AND, idFilter));
             }
             else
@@ -237,26 +265,17 @@ public final class UtilsSync {
                 query = query.where(TableQuery.combineFilters(
                         TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)),
                         TableQuery.Operators.AND,
-                        TableQuery.generateFilterCondition("syncTime", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, inAfterSyncTime)));
+                        TableQuery.generateFilterCondition("SyncTime", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, inAfterSyncTime)));
             }
             else
             if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
                 String baseFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID));
-                String idFilter = null;
-                for (long recordID : inLstRecordIDs) {
-                    if (idFilter == null) {
-                        idFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
-                    }
-                    else {
-                        idFilter = idFilter + " " + TableQuery.Operators.OR + " " 
-                                + TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
-                    }
-                }
                 query = query.where(TableQuery.combineFilters(baseFilter, TableQuery.Operators.AND, idFilter));
             }
             else {
                 query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)));
             }
+            // Run the query
             List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
             for (SyncTableEntry syncTableEntry : cloudTable.execute(query)) {
                 lstSyncTableEntries.add(syncTableEntry);

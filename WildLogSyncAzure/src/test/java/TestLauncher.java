@@ -217,8 +217,12 @@ public class TestLauncher extends JFrame {
     }//GEN-LAST:event_btnUploadBatchActionPerformed
 
     private void btnDeleteBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteBatchActionPerformed
+        List<Long> lstIDs = new ArrayList<>();
+        for (long t = 1000000500L; t < 1000004500L; t++) {
+            lstIDs.add(t);
+        }
         UtilsSync.deleteDataBatch("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, null);
+                WildLogDataType.LOCATION, 123L, lstIDs);
         System.out.println("DELETED BATCH");
     }//GEN-LAST:event_btnDeleteBatchActionPerformed
 
