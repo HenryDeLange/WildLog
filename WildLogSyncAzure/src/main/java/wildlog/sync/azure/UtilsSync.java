@@ -2,28 +2,49 @@ package wildlog.sync.azure;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.BlockBlobURL;
+import com.microsoft.azure.storage.blob.ContainerURL;
+import com.microsoft.azure.storage.blob.ListBlobsOptions;
+import com.microsoft.azure.storage.blob.PipelineOptions;
+import com.microsoft.azure.storage.blob.ServiceURL;
+import com.microsoft.azure.storage.blob.SharedKeyCredentials;
+import com.microsoft.azure.storage.blob.StorageURL;
+import com.microsoft.azure.storage.blob.TransferManager;
+import com.microsoft.azure.storage.blob.models.BlobItem;
+import com.microsoft.azure.storage.blob.models.ContainerCreateResponse;
+import com.microsoft.azure.storage.blob.models.ContainerListBlobFlatSegmentResponse;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.CloudTableClient;
 import com.microsoft.azure.storage.table.TableBatchOperation;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
+import com.microsoft.rest.v2.RestException;
+import io.reactivex.Single;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.channels.AsynchronousFileChannel;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
+import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.WildLogDataType;
+import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
 public final class UtilsSync {
     private static final int BATCH_LIMIT = 50;
     private static final int URL_LIMIT = 30000;
+    private static final int MAX_BLOB_BLOCK_SIZE = 8*1024*1024;
     
     private UtilsSync() {
     }
     
-    // TABLES:
+    // DATA:
     
     private static CloudTableClient getTableClient(String inStorageConnectionString) 
             throws InvalidKeyException, URISyntaxException {
@@ -52,8 +73,6 @@ public final class UtilsSync {
         }
         return table;
     }
-    
-    // DATA:
     
     public static boolean uploadData(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, int inDBVersion, DataObjectWithAudit inData) {
         try {
@@ -309,12 +328,136 @@ public final class UtilsSync {
     
     // FILES:
     
-    public static boolean uploadFile() {
-        return true;
+// TODO: Soos dit nou is is die storie async, so dit maak dit moelik om te weet wanneer dit klaar is...
+    
+    private static ContainerURL getContainerURL(String inAccountName, String inAccountKey, long inWorkspaceID) 
+            throws InvalidKeyException, MalformedURLException {
+        SharedKeyCredentials sharedKeyCredentials = new SharedKeyCredentials(inAccountName, inAccountKey);
+        ServiceURL serviceURL = new ServiceURL(new URL("https://" + inAccountName + ".blob.core.windows.net"), 
+                StorageURL.createPipeline(sharedKeyCredentials, new PipelineOptions()));
+        ContainerURL containerURL = serviceURL.createContainerURL(Long.toString(inWorkspaceID));
+        try {
+            ContainerCreateResponse response = containerURL.create(null, null, null).blockingGet();
+            System.out.println("Create Container [" + inWorkspaceID + "] response was " + response.statusCode() + ".");
+        }
+        catch (RestException ex){
+            if (ex instanceof RestException && ((RestException)ex).response().statusCode() != 409) {
+                throw ex;
+            }
+        }
+        return containerURL;
     }
     
-    public static boolean downloadFile() {
-        return true;
+    public static boolean uploadFile(String inAccountName, String inAccountKey, long inWorkspaceID, Path inWorkspacePrefix, 
+            long inParentRecordID, WildLogFileCore inWildLogFile) {
+        try {
+            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inWorkspaceID);
+            BlockBlobURL blockBlob = container.createBlockBlobURL(
+                    inWildLogFile.getLinkType().getDescription() + "/"
+                    + Long.toString(inParentRecordID) + "/"
+                    + Long.toString(inWildLogFile.getID()) + inWildLogFile.getDBFilePath().substring(inWildLogFile.getDBFilePath().lastIndexOf('.')));
+            AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(
+                    inWorkspacePrefix.resolve(inWildLogFile.getDBFilePath()).normalize());
+            TransferManager.uploadFileToBlockBlob(fileChannel, blockBlob, MAX_BLOB_BLOCK_SIZE, null, null)
+                    .subscribe(responseFile -> {
+                        System.out.println("Completed file upload. [Response Code: " + responseFile.response().statusCode() + "]");
+                    });
+            return true;
+        }
+        catch (InvalidKeyException | IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return false;
+    }
+    
+    public static boolean downloadFile(String inAccountName, String inAccountKey, long inWorkspaceID, Path inWorkspacePrefix, 
+            long inParentRecordID, WildLogFileCore inWildLogFile) {
+        try {
+            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inWorkspaceID);
+            BlockBlobURL blockBlob = container.createBlockBlobURL(
+                    inWildLogFile.getLinkType().getDescription() + "/"
+                    + Long.toString(inParentRecordID) + "/"
+                    + Long.toString(inWildLogFile.getID()) + inWildLogFile.getDBFilePath().substring(inWildLogFile.getDBFilePath().lastIndexOf('.')));
+            AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(
+                    inWorkspacePrefix.resolve(inWildLogFile.getDBFilePath()).normalize(), 
+                    StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+            TransferManager.downloadBlobToFile(fileChannel, blockBlob, null, null)
+                    .subscribe(response-> {
+                        System.out.println("Completed file download.");
+                        fileChannel.close();
+                    });
+            return true;
+        }
+        catch (InvalidKeyException | IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return false;
+    }
+    
+    public static boolean deleteFile(String inAccountName, String inAccountKey, long inWorkspaceID, Path inWorkspacePrefix, 
+            long inParentRecordID, WildLogFileCore inWildLogFile) {
+        try {
+            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inWorkspaceID);
+            BlockBlobURL blockBlob = container.createBlockBlobURL(
+                    inWildLogFile.getLinkType().getDescription() + "/"
+                    + Long.toString(inParentRecordID) + "/"
+                    + Long.toString(inWildLogFile.getID()) + inWildLogFile.getDBFilePath().substring(inWildLogFile.getDBFilePath().lastIndexOf('.')));
+            blockBlob.delete(null, null, null)
+                    .subscribe(
+                        response -> System.out.println("Completed file delete."),
+                        error -> System.out.println("An error encountered during deleteBlob: " + error.getMessage())
+                    );
+            return true;
+        }
+        catch (InvalidKeyException | IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return false;
+    }
+    
+    public static List<SyncBlobEntry> getSyncListFileBatch(String inAccountName, String inAccountKey, long inWorkspaceID) {
+        try {
+            List<SyncBlobEntry> lstSyncBlobEntries = new ArrayList<>();
+            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inWorkspaceID);
+            ListBlobsOptions options = new ListBlobsOptions();
+            options.withMaxResults(10);
+            container.listBlobsFlatSegment(null, options, null)
+                    .flatMap(containerListBlobFlatSegmentResponse ->
+                            listAllBlobs(container, containerListBlobFlatSegmentResponse, inWorkspaceID, lstSyncBlobEntries))
+                                    .subscribe(response-> {
+                                        System.out.println("Completed file list.");
+                                    });
+            return lstSyncBlobEntries;
+        }
+        catch (InvalidKeyException | IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+
+    private static Single<ContainerListBlobFlatSegmentResponse> listAllBlobs(ContainerURL inContainer, ContainerListBlobFlatSegmentResponse inResponse, 
+            long inWorkspaceID, List<SyncBlobEntry> inLstSyncBlobEntries) {
+        if (inResponse.body().segment() != null) {
+            for (BlobItem blobItem : inResponse.body().segment().blobItems()) {
+                String[] namePieces = blobItem.name().split("/");
+                inLstSyncBlobEntries.add(new SyncBlobEntry(
+                        WildLogDataType.getEnumFromText(namePieces[0]), 
+                        inWorkspaceID,
+                        Long.parseLong(namePieces[1]), 
+                        Long.parseLong(namePieces[2].substring(0, namePieces[2].lastIndexOf('.')))));
+            }
+        }
+        // If there is not another segment, return this response as the final response.
+        if (inResponse.body().nextMarker() == null) {
+            return Single.just(inResponse);
+        }
+        else {
+            // IMPORTANT: ListBlobsFlatSegment returns the start of the next segment; you MUST use this to get the next segment
+            String nextMarker = inResponse.body().nextMarker();
+            return inContainer.listBlobsFlatSegment(nextMarker, new ListBlobsOptions().withMaxResults(10), null)
+                    .flatMap(containersListBlobFlatSegmentResponse ->
+                            listAllBlobs(inContainer, containersListBlobFlatSegmentResponse, inWorkspaceID, inLstSyncBlobEntries));
+        }
     }
     
 }

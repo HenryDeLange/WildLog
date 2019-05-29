@@ -35,12 +35,12 @@ public enum WildLogDataType {
         return description;
     }
 
-    public static WildLogDataType getEnumFromText(String inKey) {
-        if (inKey == null) {
+    public static WildLogDataType getEnumFromText(String inValue) {
+        if (inValue == null) {
             return NONE;
         }
         for (WildLogDataType theEnum : WildLogDataType.values()) {
-            if (theEnum.key.equalsIgnoreCase(inKey)) {
+            if (theEnum.key.equalsIgnoreCase(inValue) || theEnum.description.equalsIgnoreCase(inValue)) {
                 return theEnum;
             }
         }

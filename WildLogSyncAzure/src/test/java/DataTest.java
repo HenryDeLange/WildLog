@@ -15,11 +15,11 @@ import wildlog.data.enums.WildLogDataType;
 import wildlog.sync.azure.UtilsSync;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
-public class TestLauncher extends JFrame {
+public class DataTest extends JFrame {
     private static long upCounter = 0L;
     private static long downCounter = 0L;
 
-    public TestLauncher() {
+    public DataTest() {
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -45,7 +45,7 @@ public class TestLauncher extends JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Azure Sync Tester");
+        jLabel1.setText("Azure Data Sync Tester");
 
         btnUpload.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnUpload.setText("Upload");
@@ -256,7 +256,7 @@ public class TestLauncher extends JFrame {
         // Launch the application
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TestLauncher().setVisible(true);
+                new DataTest().setVisible(true);
             }
         });
     }

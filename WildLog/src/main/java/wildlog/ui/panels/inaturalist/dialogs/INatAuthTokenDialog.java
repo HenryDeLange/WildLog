@@ -113,7 +113,7 @@ public class INatAuthTokenDialog extends JDialog {
         jLabel2.setText("Step 2");
 
         txtToken.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtToken.setText("Paste the iNaturalist Autherization Token from the MyWild website in here...");
+        txtToken.setText("Paste the iNaturalist Autherization Token from the MyWild website here...");
         txtToken.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtTokenFocusGained(evt);

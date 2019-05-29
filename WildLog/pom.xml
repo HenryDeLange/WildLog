@@ -57,6 +57,11 @@
             <artifactId>WildLogMediaUtilWrapper</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>mywild</groupId>
+            <artifactId>WildLogSyncAzure</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!--Third Party-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>

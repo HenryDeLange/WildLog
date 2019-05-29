@@ -1,56 +1,60 @@
 package wildlog.sync.azure.dataobjects;
 
 import wildlog.data.enums.WildLogDataType;
-import wildlog.data.enums.WildLogFileType;
 
 
 public class SyncBlobEntry {
-    private WildLogDataType type;
-    private long id;
-    private WildLogFileType fileType;
-    private long auditTime;
-    private long syncTime;
+    private WildLogDataType dataType;
+    private long workspaceID;
+    private long parentID;
+    private long recordID;
 
     public SyncBlobEntry() {
     }
 
-    public SyncBlobEntry(WildLogDataType inType, long inID, long inAuditTime, long inSyncTime) {
-        type = inType;
-        id = inID;
-        auditTime = inAuditTime;
-        syncTime = inSyncTime;
+    public SyncBlobEntry(WildLogDataType inDataType, long inWorkspaceID, long inParentID, long inRecordID) {
+        super();
+        dataType = inDataType;
+        workspaceID = inWorkspaceID;
+        parentID = inParentID;
+        recordID = inRecordID;
     }
     
-    public WildLogDataType getType() {
-        return type;
+    public WildLogDataType getDataType() {
+        return dataType;
     }
 
-    public void setType(WildLogDataType inType) {
-        type = inType;
+    public void setDataType(WildLogDataType inDataType) {
+        dataType = inDataType;
+    }
+    
+    public long getWorkspaceID() {
+        return workspaceID;
     }
 
-    public long getID() {
-        return id;
+    public void setWorkspaceID(long inWorkspaceID) {
+        workspaceID = inWorkspaceID;
     }
 
-    public void setID(long inID) {
-        id = inID;
+    public long getParentID() {
+        return parentID;
     }
 
-    public long getAuditTime() {
-        return auditTime;
+    public void setParentID(long inParentID) {
+        parentID = inParentID;
     }
 
-    public void setAuditTime(long inAuditTime) {
-        auditTime = inAuditTime;
+    public long getRecordID() {
+        return recordID;
     }
 
-    public long getSyncTime() {
-        return syncTime;
+    public void setRecordID(long inRecordID) {
+        recordID = inRecordID;
     }
-
-    public void setSyncTime(long inSyncTime) {
-        syncTime = inSyncTime;
+    
+    @Override
+    public String toString() {
+        return "[" + dataType + "] " + workspaceID + "/" + parentID + "/" + recordID;
     }
 
 }
