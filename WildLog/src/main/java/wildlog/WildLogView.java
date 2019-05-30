@@ -107,6 +107,7 @@ import wildlog.ui.dialogs.WildLogWEIAboutBox;
 import wildlog.ui.dialogs.WildNoteAboutBox;
 import wildlog.ui.dialogs.WorkspaceExportDialog;
 import wildlog.ui.dialogs.WorkspaceImportDialog;
+import wildlog.ui.dialogs.WorkspaceSyncDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
@@ -459,6 +460,8 @@ public final class WildLogView extends JFrame {
         mnuBackupRestore = new javax.swing.JMenuItem();
         sprEcho = new javax.swing.JPopupMenu.Separator();
         mnuEchoWorkspace = new javax.swing.JMenuItem();
+        sprSync = new javax.swing.JPopupMenu.Separator();
+        mnuSyncWorkspace = new javax.swing.JMenuItem();
         sprBackup = new javax.swing.JPopupMenu.Separator();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
@@ -1065,6 +1068,20 @@ public final class WildLogView extends JFrame {
             }
         });
         backupMenu.add(mnuEchoWorkspace);
+
+        sprSync.setName("sprSync"); // NOI18N
+        backupMenu.add(sprSync);
+
+        mnuSyncWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
+        mnuSyncWorkspace.setText("Cloud Sync Workspace");
+        mnuSyncWorkspace.setToolTipText("Synchronise the content of this Workspace with that of a cloud backup.");
+        mnuSyncWorkspace.setName("mnuSyncWorkspace"); // NOI18N
+        mnuSyncWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSyncWorkspaceActionPerformed(evt);
+            }
+        });
+        backupMenu.add(mnuSyncWorkspace);
 
         sprBackup.setName("sprBackup"); // NOI18N
         backupMenu.add(sprBackup);
@@ -3898,6 +3915,23 @@ public final class WildLogView extends JFrame {
         WildLogApp.LOGGER.log(Level.INFO, "[ReportsMenu]");
     }//GEN-LAST:event_reportsMenuMenuSelected
 
+    private void mnuSyncWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSyncWorkspaceActionPerformed
+        tabbedPanel.setSelectedIndex(0);
+        int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                "<html>It is recommended that you <b><u>backup your Workspace</u></b> (entire WildLog folder) before continuing. "
+                        + "<br>Press OK if you are ready to start the sync process now.</html>",
+                "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
+                    dialog.setVisible(true);
+                }
+            });
+        }
+    }//GEN-LAST:event_mnuSyncWorkspaceActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4035,6 +4069,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuSunAndMoon;
     private javax.swing.JMenuItem mnuSwitchElementNames;
+    private javax.swing.JMenuItem mnuSyncWorkspace;
     private javax.swing.JMenuItem mnuSystemMonitor;
     private javax.swing.JMenuItem mnuUserGuide;
     private javax.swing.JMenuItem mnuWorkspaceUsers;
@@ -4051,6 +4086,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator sprImport3;
     private javax.swing.JPopupMenu.Separator sprImport4;
     private javax.swing.JPopupMenu.Separator sprImport5;
+    private javax.swing.JPopupMenu.Separator sprSync;
     private javax.swing.JPopupMenu.Separator sprWorkspace1;
     private javax.swing.JPopupMenu.Separator sprWorkspace2;
     private javax.swing.JPopupMenu.Separator sprWorkspaceUsers;

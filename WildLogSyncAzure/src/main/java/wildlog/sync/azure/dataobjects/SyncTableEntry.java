@@ -12,6 +12,7 @@ import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogDeleteLog;
+import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
@@ -35,6 +36,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogDataType;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
 
@@ -45,6 +47,7 @@ public class SyncTableEntry extends TableServiceEntity {
     private static final EntityProperty EMPTY_INT = new EntityProperty(0);
     private static final EntityProperty EMPTY_LONG = new EntityProperty(0L);
     private static final EntityProperty EMPTY_DOUBLE = new EntityProperty(0.0);
+    private static final EntityProperty EMPTY_BOOLEAN = new EntityProperty(false);
     private String dataType;
     private long syncTime;
     private int dbVersion;
@@ -171,9 +174,12 @@ public class SyncTableEntry extends TableServiceEntity {
                 data = readSightingV12(inProperties);
             }
         }
-//        else
-//        if (dataType.equals(WildLogDataType.FILE.getKey())) {
-//        }
+        else
+        if (dataType.equals(WildLogDataType.FILE.getKey())) {
+            if (dbVersion == 12) {
+                data = readFileV12(inProperties);
+            }
+        }
         else
         if (dataType.equals(WildLogDataType.WILDLOG_USER.getKey())) {
             if (dbVersion == 12) {
@@ -291,6 +297,22 @@ public class SyncTableEntry extends TableServiceEntity {
         return tempData;
     }
     
+    private WildLogFileCore readFileV12(HashMap<String, EntityProperty> inProperties) {
+        WildLogFileCore tempData = new WildLogFileCore();
+        tempData.setLinkID(inProperties.getOrDefault("linkID", EMPTY_LONG).getValueAsLong());
+        tempData.setLinkType(WildLogDataType.getEnumFromText(inProperties.getOrDefault("linkType", EMPTY_STRING).getValueAsString()));
+        tempData.setFilename(inProperties.getOrDefault("filename", EMPTY_STRING).getValueAsString());
+        tempData.setDBFilePath(inProperties.getOrDefault("originalFileLocation", EMPTY_STRING).getValueAsString());
+        tempData.setUploadDate(inProperties.getOrDefault("uploadDate", EMPTY_DATE).getValueAsDate());
+        tempData.setFileType(WildLogFileType.getEnumFromText(inProperties.getOrDefault("fileType", EMPTY_STRING).getValueAsString()));
+        tempData.setDefaultFile(inProperties.getOrDefault("defaultFile", EMPTY_BOOLEAN).getValueAsBoolean());
+        tempData.setFileDate(inProperties.getOrDefault("fileDate", EMPTY_DATE).getValueAsDate());
+        tempData.setFileSize(inProperties.getOrDefault("fileSize", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        return tempData;
+    }
+    
     private WildLogUser readUserV12(HashMap<String, EntityProperty> inProperties) {
         WildLogUser tempData = new WildLogUser();
         tempData.setUsername(inProperties.getOrDefault("username", EMPTY_STRING).getValueAsString());
@@ -341,9 +363,12 @@ public class SyncTableEntry extends TableServiceEntity {
                     writeSightingV12((SightingCore) data, properties);
                 }
             }
-//            else
-//            if (dataType.equals(WildLogDataType.FILE.getKey())) {
-//            }
+            else
+            if (dataType.equals(WildLogDataType.FILE.getKey())) {
+                if (dbVersion == 12) {
+                    writeFileV12((WildLogFileCore) data, properties);
+                }
+            }
             else
             if (dataType.equals(WildLogDataType.WILDLOG_USER.getKey())) {
                 if (dbVersion == 12) {
@@ -444,6 +469,20 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("gpsAccuracyValue", new EntityProperty(inData.getGPSAccuracyValue()));
         inProperties.put("timeAccuracy", new EntityProperty(UtilsData.stringFromObject(inData.getTimeAccuracy())));
         inProperties.put("age", new EntityProperty(UtilsData.stringFromObject(inData.getAge())));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+    }
+    
+    private void writeFileV12(WildLogFileCore inData, HashMap<String, EntityProperty> inProperties) {
+        inProperties.put("linkID", new EntityProperty(inData.getLinkID()));
+        inProperties.put("linkType", new EntityProperty(UtilsData.stringFromObject(inData.getLinkType())));
+        inProperties.put("filename", new EntityProperty(inData.getFilename()));
+        inProperties.put("originalFileLocation", new EntityProperty(inData.getDBFilePath()));
+        inProperties.put("uploadDate", new EntityProperty(UtilsData.stringFromObject(inData.getUploadDate())));
+        inProperties.put("fileType", new EntityProperty(UtilsData.stringFromObject(inData.getFileType())));
+        inProperties.put("defaultFile", new EntityProperty(inData.isDefaultFile()));
+        inProperties.put("fileDate", new EntityProperty(UtilsData.stringFromObject(inData.getFileDate())));
+        inProperties.put("fileSize", new EntityProperty(inData.getFileSize()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
     }

@@ -3,10 +3,13 @@ package wildlog.ui.dialogs;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.encryption.TokenEncryptor;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.WLOptionPane;
 
 
 public class WorkspaceSyncDialog extends JDialog {
@@ -22,6 +25,53 @@ public class WorkspaceSyncDialog extends JDialog {
         // Setup the glasspane on this dialog as well for the JOptionPane's
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
+        // Default to the free token's configuration
+        configureFreeToken();
+    }
+    
+    private void configureFreeToken() {
+        btnCheckConflicts.setEnabled(false);
+        rdbConflictAutoResolve.setSelected(true);
+        rdbConflictAsk.setEnabled(false);
+        rdbModeBatch.setSelected(true);
+        rdbModeSingle.setEnabled(false);
+        rdbImportThumbnails.setSelected(true);
+        rdbImportThumbnails.setEnabled(false);
+        rdbImportOriginalImages.setEnabled(false);
+        cmbThumbnailSize.setEnabled(false);
+        rdbImportNoFiles.setSelected(true);
+        rdbImportAllFiles.setEnabled(false);
+        rdbImportImagesOnly.setEnabled(false);
+    }
+    
+    private void configureBasicToken() {
+        btnCheckConflicts.setEnabled(true);
+        rdbConflictAutoResolve.setSelected(true);
+        rdbConflictAsk.setEnabled(true);
+        rdbModeBatch.setSelected(true);
+        rdbModeSingle.setEnabled(true);
+        rdbImportThumbnails.setSelected(true);
+        rdbImportThumbnails.setEnabled(true);
+        rdbImportOriginalImages.setEnabled(false);
+        cmbThumbnailSize.setEnabled(true);
+        rdbImportImagesOnly.setSelected(true);
+        rdbImportAllFiles.setEnabled(false);
+        rdbImportImagesOnly.setEnabled(true);
+    }
+    
+    private void configureFullToken() {
+        btnCheckConflicts.setEnabled(true);
+        rdbConflictAutoResolve.setSelected(true);
+        rdbConflictAsk.setEnabled(true);
+        rdbModeBatch.setSelected(true);
+        rdbModeSingle.setEnabled(true);
+        rdbImportOriginalImages.setSelected(true);
+        rdbImportThumbnails.setEnabled(true);
+        rdbImportOriginalImages.setEnabled(true);
+        cmbThumbnailSize.setEnabled(true);
+        rdbImportAllFiles.setSelected(true);
+        rdbImportAllFiles.setEnabled(true);
+        rdbImportImagesOnly.setEnabled(true);
     }
 
     /**
@@ -35,37 +85,47 @@ public class WorkspaceSyncDialog extends JDialog {
         grpImages = new javax.swing.ButtonGroup();
         grpMode = new javax.swing.ButtonGroup();
         grpConflicts = new javax.swing.ButtonGroup();
+        jLabel4 = new javax.swing.JLabel();
         btnConfirm = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        rdbImportAllFiles = new javax.swing.JRadioButton();
-        rdbImportImagesOnly = new javax.swing.JRadioButton();
-        rdbImportNoFiles = new javax.swing.JRadioButton();
-        jSeparator1 = new javax.swing.JSeparator();
-        rdbImportOriginalImages = new javax.swing.JRadioButton();
-        rdbImportThumbnails = new javax.swing.JRadioButton();
-        jLabel1 = new javax.swing.JLabel();
-        rdbModeBatch = new javax.swing.JRadioButton();
-        rdbModeSingle = new javax.swing.JRadioButton();
-        jLabel5 = new javax.swing.JLabel();
-        rdbConflictAutoResolve = new javax.swing.JRadioButton();
-        rdbConflictAsk = new javax.swing.JRadioButton();
-        jSeparator2 = new javax.swing.JSeparator();
-        jSeparator3 = new javax.swing.JSeparator();
         btnCheckConflicts = new javax.swing.JButton();
-        cmbThumbnailSize = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
+        pnlSyncToken = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txaSyncToken = new javax.swing.JTextArea();
+        btnConfirmSyncToken = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        txtSyncKey = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        pnlSyncOptions = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
+        rdbImportImagesOnly = new javax.swing.JRadioButton();
+        rdbModeSingle = new javax.swing.JRadioButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        rdbConflictAutoResolve = new javax.swing.JRadioButton();
+        cmbThumbnailSize = new javax.swing.JComboBox<>();
+        rdbImportAllFiles = new javax.swing.JRadioButton();
+        rdbConflictAsk = new javax.swing.JRadioButton();
+        rdbImportNoFiles = new javax.swing.JRadioButton();
+        rdbImportOriginalImages = new javax.swing.JRadioButton();
+        rdbModeBatch = new javax.swing.JRadioButton();
+        rdbImportThumbnails = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cloud Sync Workspace");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small.gif")).getImage());
-        setMinimumSize(new java.awt.Dimension(850, 700));
         setModal(true);
+        setResizable(false);
 
-        btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
-        btnConfirm.setToolTipText("Import the selected records to the active Workspace.");
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Cloud Sync Workspace");
+
+        btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
+        btnConfirm.setToolTipText("Sync the active Workspace with the data stored in the cloud.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -74,102 +134,8 @@ public class WorkspaceSyncDialog extends JDialog {
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Files:");
-
-        grpFiles.add(rdbImportAllFiles);
-        rdbImportAllFiles.setText("All Files");
-        rdbImportAllFiles.setToolTipText("Import all files into the current Workspace.");
-        rdbImportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportAllFiles.setFocusPainted(false);
-        rdbImportAllFiles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportAllFilesActionPerformed(evt);
-            }
-        });
-
-        grpFiles.add(rdbImportImagesOnly);
-        rdbImportImagesOnly.setText("Images Only");
-        rdbImportImagesOnly.setToolTipText("Import only image files into the current Workspace.");
-        rdbImportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportImagesOnly.setFocusPainted(false);
-        rdbImportImagesOnly.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportImagesOnlyActionPerformed(evt);
-            }
-        });
-
-        grpFiles.add(rdbImportNoFiles);
-        rdbImportNoFiles.setSelected(true);
-        rdbImportNoFiles.setText("No Files");
-        rdbImportNoFiles.setToolTipText("Don't import any files into the current Workspace.");
-        rdbImportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportNoFiles.setFocusPainted(false);
-        rdbImportNoFiles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportNoFilesActionPerformed(evt);
-            }
-        });
-
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        grpImages.add(rdbImportOriginalImages);
-        rdbImportOriginalImages.setText("Original Images");
-        rdbImportOriginalImages.setToolTipText("Import a copy of the original linked images into the current Workspace.");
-        rdbImportOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportOriginalImages.setFocusPainted(false);
-        rdbImportOriginalImages.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportOriginalImagesActionPerformed(evt);
-            }
-        });
-
-        grpImages.add(rdbImportThumbnails);
-        rdbImportThumbnails.setSelected(true);
-        rdbImportThumbnails.setText("Thumbnail Images");
-        rdbImportThumbnails.setToolTipText("The images that are imported will be reduced in size, the original images will not be imported.");
-        rdbImportThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportThumbnails.setFocusPainted(false);
-        rdbImportThumbnails.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportThumbnailsActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("Mode:");
-
-        grpMode.add(rdbModeBatch);
-        rdbModeBatch.setSelected(true);
-        rdbModeBatch.setText("Batch Mode");
-        rdbModeBatch.setToolTipText("Order the tree nodes by Places, then Periods and lastly Creatures.");
-        rdbModeBatch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbModeBatch.setFocusPainted(false);
-
-        grpMode.add(rdbModeSingle);
-        rdbModeSingle.setText("Single Mode");
-        rdbModeSingle.setToolTipText("Order the tree nodes by Creatures, then Places and lastly Periods.");
-        rdbModeSingle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbModeSingle.setFocusPainted(false);
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel5.setText("Conflicts:");
-
-        grpConflicts.add(rdbConflictAutoResolve);
-        rdbConflictAutoResolve.setSelected(true);
-        rdbConflictAutoResolve.setText("Automatically choose the most recently edited record and largest file");
-        rdbConflictAutoResolve.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the most recently edited record will automatically be used in the active Workspace.</html>");
-        rdbConflictAutoResolve.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbConflictAutoResolve.setFocusPainted(false);
-
-        grpConflicts.add(rdbConflictAsk);
-        rdbConflictAsk.setText("Ask what to do for each conflict");
-        rdbConflictAsk.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the user will be asked which record to use in the active Workspace.</html>");
-        rdbConflictAsk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbConflictAsk.setFocusPainted(false);
-
         btnCheckConflicts.setText("<html>Check for Conflicts</html>");
-        btnCheckConflicts.setToolTipText("Checks how many conflicts there will be when importing using the selected records.");
+        btnCheckConflicts.setToolTipText("Checks how many conflicts there will be when syncing.");
         btnCheckConflicts.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCheckConflicts.setFocusPainted(false);
         btnCheckConflicts.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -179,6 +145,102 @@ public class WorkspaceSyncDialog extends JDialog {
             }
         });
 
+        pnlSyncToken.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Sync Token", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+
+        txaSyncToken.setFont(new java.awt.Font("Monospaced", 0, 11)); // NOI18N
+        txaSyncToken.setLineWrap(true);
+        txaSyncToken.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(txaSyncToken);
+
+        btnConfirmSyncToken.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnConfirmSyncToken.setText("Confirm Token");
+        btnConfirmSyncToken.setToolTipText("Validates the token and then enables the available features.");
+        btnConfirmSyncToken.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnConfirmSyncToken.setFocusPainted(false);
+        btnConfirmSyncToken.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnConfirmSyncToken.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmSyncTokenActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Sync Token:");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setText("<html><b>Please provide your <i>WildLog Cloud Sync Token</i> to enable WildLog to synchronise the data.</b> <br/><br/> If you don't have a <i>WildLog Cloud Sync Token</i> then please contact <u>support@mywild.co.za</> for a custom quotation. <br/><br/> Alternatively, you can use the limited free token by simply leaving the <i>WildLog Cloud Sync Token</i> field empty.</html>");
+
+        javax.swing.GroupLayout pnlSyncTokenLayout = new javax.swing.GroupLayout(pnlSyncToken);
+        pnlSyncToken.setLayout(pnlSyncTokenLayout);
+        pnlSyncTokenLayout.setHorizontalGroup(
+            pnlSyncTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSyncTokenLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(pnlSyncTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(btnConfirmSyncToken, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlSyncTokenLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel6)
+                    .addComponent(jSeparator4))
+                .addGap(5, 5, 5))
+        );
+        pnlSyncTokenLayout.setVerticalGroup(
+            pnlSyncTokenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSyncTokenLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel6)
+                .addGap(10, 10, 10)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(btnConfirmSyncToken, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5))
+        );
+
+        pnlSyncOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Sync Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        grpFiles.add(rdbImportImagesOnly);
+        rdbImportImagesOnly.setText("Images Only");
+        rdbImportImagesOnly.setToolTipText("Sync only images between the current Workspace and the cloud.");
+        rdbImportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbImportImagesOnly.setFocusPainted(false);
+        rdbImportImagesOnly.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbImportImagesOnlyActionPerformed(evt);
+            }
+        });
+
+        grpMode.add(rdbModeSingle);
+        rdbModeSingle.setText("Single Mode");
+        rdbModeSingle.setToolTipText("Perform the sync using single operations for each record.");
+        rdbModeSingle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbModeSingle.setFocusPainted(false);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setText("Mode:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Conflicts:");
+
+        jLabel7.setText("px");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setText("Files:");
+
+        grpConflicts.add(rdbConflictAutoResolve);
+        rdbConflictAutoResolve.setSelected(true);
+        rdbConflictAutoResolve.setText("Automatically choose the most recently edited record and largest file");
+        rdbConflictAutoResolve.setToolTipText("<html>When the active Workspace and the synced Workspace contains records with the same IDs but different data fields then the most recently edited record will automatically be used.</html>");
+        rdbConflictAutoResolve.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbConflictAutoResolve.setFocusPainted(false);
+
         cmbThumbnailSize.setMaximumRowCount(15);
         cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_LARGE);
@@ -186,27 +248,90 @@ public class WorkspaceSyncDialog extends JDialog {
         cmbThumbnailSize.setEnabled(false);
         cmbThumbnailSize.setFocusable(false);
 
-        jLabel7.setText("px");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("Cloud Sync Key:");
-
-        txtSyncKey.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtSyncKey.setText("Paste the WildLog Cloud Sync Key here...");
-        txtSyncKey.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSyncKeyFocusGained(evt);
+        grpFiles.add(rdbImportAllFiles);
+        rdbImportAllFiles.setText("All Files");
+        rdbImportAllFiles.setToolTipText("Sync all files between the current Workspace and the cloud.");
+        rdbImportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbImportAllFiles.setFocusPainted(false);
+        rdbImportAllFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbImportAllFilesActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        grpConflicts.add(rdbConflictAsk);
+        rdbConflictAsk.setText("Ask what to do for each conflict");
+        rdbConflictAsk.setToolTipText("<html>When the active Workspace and the synced Workspace contains records with the same IDs but different data fields then the user will be asked which record to use.</html>");
+        rdbConflictAsk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbConflictAsk.setFocusPainted(false);
+
+        grpFiles.add(rdbImportNoFiles);
+        rdbImportNoFiles.setSelected(true);
+        rdbImportNoFiles.setText("No Files");
+        rdbImportNoFiles.setToolTipText("Don't sync any files between the current Workspace and the cloud.");
+        rdbImportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbImportNoFiles.setFocusPainted(false);
+        rdbImportNoFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbImportNoFilesActionPerformed(evt);
+            }
+        });
+
+        grpImages.add(rdbImportOriginalImages);
+        rdbImportOriginalImages.setText("Original Images");
+        rdbImportOriginalImages.setToolTipText("Sync a copy of the original linked images between the current Workspace and the cloud.");
+        rdbImportOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbImportOriginalImages.setFocusPainted(false);
+        rdbImportOriginalImages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbImportOriginalImagesActionPerformed(evt);
+            }
+        });
+
+        grpMode.add(rdbModeBatch);
+        rdbModeBatch.setSelected(true);
+        rdbModeBatch.setText("Batch Mode");
+        rdbModeBatch.setToolTipText("Perform the sync using batch operations.");
+        rdbModeBatch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbModeBatch.setFocusPainted(false);
+
+        grpImages.add(rdbImportThumbnails);
+        rdbImportThumbnails.setSelected(true);
+        rdbImportThumbnails.setText("Thumbnail Images");
+        rdbImportThumbnails.setToolTipText("The images that are synced will be reduced in size, the original images will not be synced.");
+        rdbImportThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbImportThumbnails.setFocusPainted(false);
+        rdbImportThumbnails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbImportThumbnailsActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlSyncOptionsLayout = new javax.swing.GroupLayout(pnlSyncOptions);
+        pnlSyncOptions.setLayout(pnlSyncOptionsLayout);
+        pnlSyncOptionsLayout.setHorizontalGroup(
+            pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSyncOptionsLayout.createSequentialGroup()
+                        .addComponent(jSeparator3)
+                        .addGap(1, 1, 1))
+                    .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(10, 10, 10)
+                        .addComponent(rdbConflictAutoResolve)
+                        .addGap(5, 5, 5)
+                        .addComponent(rdbConflictAsk))
+                    .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel1)
+                        .addGap(10, 10, 10)
+                        .addComponent(rdbModeBatch)
+                        .addGap(5, 5, 5)
+                        .addComponent(rdbModeSingle))
+                    .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
                         .addComponent(rdbImportAllFiles)
@@ -223,85 +348,81 @@ public class WorkspaceSyncDialog extends JDialog {
                         .addGap(5, 5, 5)
                         .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jLabel7)))
+                .addContainerGap())
+        );
+        pnlSyncOptionsLayout.setVerticalGroup(
+            pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rdbImportOriginalImages)
+                            .addComponent(rdbImportThumbnails)
+                            .addComponent(rdbImportImagesOnly)
+                            .addComponent(rdbImportAllFiles)
+                            .addComponent(rdbImportNoFiles))))
+                .addGap(5, 5, 5)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdbConflictAutoResolve, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdbConflictAsk, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdbModeBatch)
+                    .addComponent(rdbModeSingle))
+                .addGap(5, 5, 5))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(10, 10, 10)
-                                .addComponent(rdbConflictAutoResolve)
-                                .addGap(5, 5, 5)
-                                .addComponent(rdbConflictAsk))
-                            .addComponent(jSeparator2))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(5, 5, 5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jSeparator3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(10, 10, 10)
-                                .addComponent(rdbModeBatch)
-                                .addGap(5, 5, 5)
-                                .addComponent(rdbModeSingle))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtSyncKey)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(pnlSyncToken, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCheckConflicts, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5))
+                .addGap(10, 10, 10))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlSyncOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(130, 130, 130))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(500, 500, 500)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
+                        .addGap(10, 10, 10)
                         .addComponent(btnCheckConflicts, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel7)
-                                    .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(rdbImportOriginalImages)
-                                    .addComponent(rdbImportThumbnails)
-                                    .addComponent(rdbImportImagesOnly)
-                                    .addComponent(rdbImportAllFiles)
-                                    .addComponent(rdbImportNoFiles))))
-                        .addGap(5, 5, 5)
-                        .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rdbConflictAutoResolve, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rdbConflictAsk, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(5, 5, 5)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rdbModeBatch)
-                            .addComponent(rdbModeSingle))
-                        .addGap(5, 5, 5)
-                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSyncKey, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(5, 5, 5))
+                        .addComponent(jLabel4)
+                        .addGap(10, 10, 10)
+                        .addComponent(pnlSyncToken, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10)
+                .addComponent(pnlSyncOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
         );
 
         pack();
@@ -367,13 +488,32 @@ public class WorkspaceSyncDialog extends JDialog {
         }
     }//GEN-LAST:event_rdbImportThumbnailsActionPerformed
 
-    private void txtSyncKeyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSyncKeyFocusGained
-        txtSyncKey.selectAll();
-    }//GEN-LAST:event_txtSyncKeyFocusGained
+    private void btnConfirmSyncTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSyncTokenActionPerformed
+        if (txaSyncToken.getText() == null || txaSyncToken.getText().isEmpty()) {
+            configureFreeToken();
+        }
+        else {
+            String syncToken = TokenEncryptor.decrypt(txaSyncToken.getText());
+            if (syncToken == null || syncToken.isEmpty()) {
+                WLOptionPane.showMessageDialog(this,
+                        "<html>The provided <i>WildLog Cloud Sync Token</i> could not be read. "
+                                + "<br>Please provide a valid <i>WildLog Cloud Sync Token</i>, or contact <u>support@mywild.co.za</> for help.</html>",
+                        "Invalid Sync Token!", JOptionPane.ERROR_MESSAGE);
+            }
+            String[] syncTokenValues = syncToken.split(" ");
+            switch (syncTokenValues[0]) {
+                case "FREE": configureFreeToken(); break;
+                case "BASIC": configureBasicToken(); break;
+                case "FULL": configureFullToken(); break;
+                default: configureFreeToken(); break;
+            }
+        }
+    }//GEN-LAST:event_btnConfirmSyncTokenActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCheckConflicts;
     private javax.swing.JButton btnConfirm;
+    private javax.swing.JButton btnConfirmSyncToken;
     private javax.swing.JComboBox<WildLogThumbnailSizes> cmbThumbnailSize;
     private javax.swing.ButtonGroup grpConflicts;
     private javax.swing.ButtonGroup grpFiles;
@@ -382,12 +522,17 @@ public class WorkspaceSyncDialog extends JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JPanel pnlSyncOptions;
+    private javax.swing.JPanel pnlSyncToken;
     private javax.swing.JRadioButton rdbConflictAsk;
     private javax.swing.JRadioButton rdbConflictAutoResolve;
     private javax.swing.JRadioButton rdbImportAllFiles;
@@ -397,6 +542,6 @@ public class WorkspaceSyncDialog extends JDialog {
     private javax.swing.JRadioButton rdbImportThumbnails;
     private javax.swing.JRadioButton rdbModeBatch;
     private javax.swing.JRadioButton rdbModeSingle;
-    private javax.swing.JTextField txtSyncKey;
+    private javax.swing.JTextArea txaSyncToken;
     // End of variables declaration//GEN-END:variables
 }
