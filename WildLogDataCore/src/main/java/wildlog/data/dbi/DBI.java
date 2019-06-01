@@ -63,7 +63,7 @@ public interface DBI {
     public <T extends WildLogOptions> boolean createWildLogOptions();
     public <T extends AdhocData> boolean createAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData);
-    public <T extends WildLogUser> boolean createUser(T inWildLogUser);
+    public <T extends WildLogUser> boolean createUser(T inWildLogUser, boolean inNewButUseOldAuditAndID);
     public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog);
     
     public <T extends ElementCore> boolean updateElement(T inElement, String inOldName, boolean inUseOldAudit);
@@ -74,7 +74,7 @@ public interface DBI {
     public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions);
     public <T extends AdhocData> boolean updateAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData);
-    public <T extends WildLogUser> boolean updateUser(T inWildLogUser);
+    public <T extends WildLogUser> boolean updateUser(T inWildLogUser, boolean inUseOldAudit);
 
     public boolean deleteElement(long inID);
     public boolean deleteLocation(long inID);

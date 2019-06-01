@@ -11,7 +11,7 @@ public enum WildLogDataType {
     ADHOC("A", "ADHOC"),
     WILDLOG_USER("U", "USERS"),
     WILDLOG_OPTIONS("W", "OPTIONS"),
-    DELETE_LOG("D", "DELETE_LOG"),
+    DELETE_LOG("D", "DELETELOG"),
     NONE("", "");
 
     private final String key;

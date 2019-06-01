@@ -217,13 +217,13 @@ public class UserCreateDialog extends JDialog {
             app.getDBI().createUser(new WildLogUser(
                     "WILDLOGMASTER", 
                     "COouWeD9XsAas0x+pfEGLmph7s9T+Xoc1KNU3BxEe/46lPiYT/sviHfMKlzm3aE7L1sNqI2zk5axZ6Bv5oFpSQ==", 
-                    WildLogUserTypes.WILDLOG_MASTER));
+                    WildLogUserTypes.WILDLOG_MASTER), false);
         }
         // Create the new user
         if (app.getDBI().createUser(new WildLogUser(
                 txtUsername.getText(), 
                 PasswordEncryptor.generateHashedPassword(txtPassword.getPassword()), 
-                (WildLogUserTypes) cmbUserType.getSelectedItem()))) {
+                (WildLogUserTypes) cmbUserType.getSelectedItem()), false)) {
             // Close this dialog
             setVisible(false);
             dispose();

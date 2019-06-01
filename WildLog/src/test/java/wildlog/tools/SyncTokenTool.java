@@ -55,6 +55,7 @@ public class SyncTokenTool extends JFrame {
 
         txaSyncToken.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         txaSyncToken.setLineWrap(true);
+        txaSyncToken.setText("FREE/BASIC/FULL ACCOUNTNAME ACCOUNTKEY CONNECTIONSTRING");
         txaSyncToken.setWrapStyleWord(true);
         txaSyncToken.setPreferredSize(new java.awt.Dimension(600, 200));
         jScrollPane1.setViewportView(txaSyncToken);

@@ -14,6 +14,7 @@ import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogDeleteLog;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogUser;
+import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
 import wildlog.data.enums.Certainty;
@@ -51,14 +52,14 @@ public class SyncTableEntry extends TableServiceEntity {
     private String dataType;
     private long syncTime;
     private int dbVersion;
-    private Object data;
+    private DataObjectWithAudit data;
 
     
     public SyncTableEntry() {
         super();
     }
 
-    public SyncTableEntry(WildLogDataType inDataType, long inWorkspaceID, long inRecordID, long inSyncTime, int inDBVersion, Object inData) {
+    public SyncTableEntry(WildLogDataType inDataType, long inWorkspaceID, long inRecordID, long inSyncTime, int inDBVersion, DataObjectWithAudit inData) {
         super();
         if (inDataType != null) {
             dataType = inDataType.toString();
@@ -129,12 +130,12 @@ public class SyncTableEntry extends TableServiceEntity {
     }
 
     @Ignore
-    public Object getData() {
+    public DataObjectWithAudit getData() {
         return data;
     }
 
     @Ignore
-    public void setData(Object inData) {
+    public void setData(DataObjectWithAudit inData) {
         data = inData;
     }
 
@@ -299,6 +300,7 @@ public class SyncTableEntry extends TableServiceEntity {
     
     private WildLogFileCore readFileV12(HashMap<String, EntityProperty> inProperties) {
         WildLogFileCore tempData = new WildLogFileCore();
+        tempData.setID(Long.parseLong(rowKey));
         tempData.setLinkID(inProperties.getOrDefault("linkID", EMPTY_LONG).getValueAsLong());
         tempData.setLinkType(WildLogDataType.getEnumFromText(inProperties.getOrDefault("linkType", EMPTY_STRING).getValueAsString()));
         tempData.setFilename(inProperties.getOrDefault("filename", EMPTY_STRING).getValueAsString());
@@ -315,6 +317,7 @@ public class SyncTableEntry extends TableServiceEntity {
     
     private WildLogUser readUserV12(HashMap<String, EntityProperty> inProperties) {
         WildLogUser tempData = new WildLogUser();
+        tempData.setID(Long.parseLong(rowKey));
         tempData.setUsername(inProperties.getOrDefault("username", EMPTY_STRING).getValueAsString());
         tempData.setPassword(inProperties.getOrDefault("password", EMPTY_STRING).getValueAsString());
         tempData.setType(WildLogUserTypes.getEnumFromText(inProperties.getOrDefault("type", EMPTY_STRING).getValueAsString()));
@@ -325,6 +328,7 @@ public class SyncTableEntry extends TableServiceEntity {
     
     private WildLogDeleteLog readDeleteLogV12(HashMap<String, EntityProperty> inProperties) {
         WildLogDeleteLog tempData = new WildLogDeleteLog();
+        tempData.setID(Long.parseLong(rowKey));
         tempData.setType(WildLogDataType.getEnumFromText(inProperties.getOrDefault("type", EMPTY_STRING).getValueAsString()));
         tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
         tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());

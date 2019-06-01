@@ -2935,15 +2935,17 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends WildLogUser> boolean createUser(T inWildLogUser) {
+    public <T extends WildLogUser> boolean createUser(T inWildLogUser, boolean inNewButUseOldAuditAndID) {
         PreparedStatement state = null;
         try {
             //Insert
             state = conn.prepareStatement(createUser);
             // Get the new ID
-            inWildLogUser.setID(generateID());
+            if (!inNewButUseOldAuditAndID) {
+                inWildLogUser.setID(generateID());
+            }
             // Populate the values
-            maintainUser(state, inWildLogUser, false);
+            maintainUser(state, inWildLogUser, inNewButUseOldAuditAndID);
             // Execute
             state.executeUpdate();
         }
@@ -2983,13 +2985,13 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends WildLogUser> boolean updateUser(T inWildLogUser) {
+    public <T extends WildLogUser> boolean updateUser(T inWildLogUser, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
             // Update
             state = conn.prepareStatement(updateUser);
             // Populate the values
-            maintainUser(state, inWildLogUser, false);
+            maintainUser(state, inWildLogUser, inUseOldAudit);
             state.setString(4, inWildLogUser.getUsername());
             // Execute
             state.executeUpdate();

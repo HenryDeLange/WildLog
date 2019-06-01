@@ -144,7 +144,7 @@ import wildlog.xml.utils.UtilsXML;
  * The application's main frame.
  */
 public final class WildLogView extends JFrame {
-    private final int STATIC_TAB_COUNT = 5;
+    public static final int STATIC_TAB_COUNT = 5;
     private final WildLogApp app = WildLogApp.getApplication();
     private final Timer messageTimer;
     private final Timer busyIconTimer;
@@ -317,6 +317,8 @@ public final class WildLogView extends JFrame {
             mnuAboutWildNote.setVisible(false);
             reportsMenu.setEnabled(false);
             reportsMenu.setVisible(false);
+            syncMenu.setEnabled(false);
+            syncMenu.setVisible(false);
             // Show the WEI welcome popup
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
@@ -460,8 +462,6 @@ public final class WildLogView extends JFrame {
         mnuBackupRestore = new javax.swing.JMenuItem();
         sprEcho = new javax.swing.JPopupMenu.Separator();
         mnuEchoWorkspace = new javax.swing.JMenuItem();
-        sprSync = new javax.swing.JPopupMenu.Separator();
-        mnuSyncWorkspace = new javax.swing.JMenuItem();
         sprBackup = new javax.swing.JPopupMenu.Separator();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
@@ -493,6 +493,8 @@ public final class WildLogView extends JFrame {
         mnuImportWorkspace = new javax.swing.JMenuItem();
         sprImport5 = new javax.swing.JPopupMenu.Separator();
         mnuBulkImport = new javax.swing.JMenuItem();
+        syncMenu = new javax.swing.JMenu();
+        mnuSyncWorkspace = new javax.swing.JMenuItem();
         reportsMenu = new javax.swing.JMenu();
         mnuReportVisitDates = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
@@ -993,7 +995,7 @@ public final class WildLogView extends JFrame {
         workspaceMenu.add(sprWorkspace2);
 
         mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
-        mnuCleanWorkspace.setText("Check and Clean the Workspace");
+        mnuCleanWorkspace.setText("Check and Clean Workspace");
         mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove non-essential files.");
         mnuCleanWorkspace.setName("mnuCleanWorkspace"); // NOI18N
         mnuCleanWorkspace.addActionListener(new java.awt.event.ActionListener() {
@@ -1068,20 +1070,6 @@ public final class WildLogView extends JFrame {
             }
         });
         backupMenu.add(mnuEchoWorkspace);
-
-        sprSync.setName("sprSync"); // NOI18N
-        backupMenu.add(sprSync);
-
-        mnuSyncWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
-        mnuSyncWorkspace.setText("Cloud Sync Workspace");
-        mnuSyncWorkspace.setToolTipText("Synchronise the content of this Workspace with that of a cloud backup.");
-        mnuSyncWorkspace.setName("mnuSyncWorkspace"); // NOI18N
-        mnuSyncWorkspace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuSyncWorkspaceActionPerformed(evt);
-            }
-        });
-        backupMenu.add(mnuSyncWorkspace);
 
         sprBackup.setName("sprBackup"); // NOI18N
         backupMenu.add(sprBackup);
@@ -1334,6 +1322,31 @@ public final class WildLogView extends JFrame {
         importMenu.add(mnuBulkImport);
 
         menuBar.add(importMenu);
+
+        syncMenu.setText("Sync");
+        syncMenu.setName("syncMenu"); // NOI18N
+        syncMenu.addMenuListener(new javax.swing.event.MenuListener() {
+            public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuSelected(javax.swing.event.MenuEvent evt) {
+                syncMenuMenuSelected(evt);
+            }
+        });
+
+        mnuSyncWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sync.png"))); // NOI18N
+        mnuSyncWorkspace.setText("Cloud Sync Workspace");
+        mnuSyncWorkspace.setToolTipText("Synchronise the content of this Workspace with that of a cloud backup.");
+        mnuSyncWorkspace.setName("mnuSyncWorkspace"); // NOI18N
+        mnuSyncWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSyncWorkspaceActionPerformed(evt);
+            }
+        });
+        syncMenu.add(mnuSyncWorkspace);
+
+        menuBar.add(syncMenu);
 
         reportsMenu.setText("Reports");
         reportsMenu.setName("reportsMenu"); // NOI18N
@@ -2392,7 +2405,7 @@ public final class WildLogView extends JFrame {
                                             // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
                                             WLOptionPane.showMessageDialog(null, 
                                                     "The Check and Clean Workspace process has completed. Please restart the application.", 
-                                                    "Checked and Cleaned the Workspace", WLOptionPane.INFORMATION_MESSAGE);
+                                                    "Completed Check and Clean Workspace", WLOptionPane.INFORMATION_MESSAGE);
                                             app.quit(null);
                                         }
                                     });
@@ -3889,7 +3902,7 @@ public final class WildLogView extends JFrame {
                                                                 // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
                                                                 WLOptionPane.showMessageDialog(null, 
                                                                         "The Echo Backup Workspace process has completed. Please restart the application.", 
-                                                                        "Echo Backup Workspace", WLOptionPane.INFORMATION_MESSAGE);
+                                                                        "Completed Echo Backup Workspace", WLOptionPane.INFORMATION_MESSAGE);
                                                                 app.quit(null);
                                                             }
                                                         });
@@ -3931,6 +3944,10 @@ public final class WildLogView extends JFrame {
             });
         }
     }//GEN-LAST:event_mnuSyncWorkspaceActionPerformed
+
+    private void syncMenuMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_syncMenuMenuSelected
+        WildLogApp.LOGGER.log(Level.INFO, "[SyncMenu]");
+    }//GEN-LAST:event_syncMenuMenuSelected
 
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
@@ -4086,13 +4103,13 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator sprImport3;
     private javax.swing.JPopupMenu.Separator sprImport4;
     private javax.swing.JPopupMenu.Separator sprImport5;
-    private javax.swing.JPopupMenu.Separator sprSync;
     private javax.swing.JPopupMenu.Separator sprWorkspace1;
     private javax.swing.JPopupMenu.Separator sprWorkspace2;
     private javax.swing.JPopupMenu.Separator sprWorkspaceUsers;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
+    private javax.swing.JMenu syncMenu;
     private javax.swing.JPanel tabBrowse;
     private javax.swing.JPanel tabElement;
     private javax.swing.JPanel tabHome;

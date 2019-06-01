@@ -16,6 +16,10 @@ public class WildLogDeleteLog extends DataObjectWithAudit {
         id = inID;
     }
 
+    @Override
+    public String toString() {
+        return type + ":" + id;
+    }
     
     public WildLogDataType getType() {
         return type;

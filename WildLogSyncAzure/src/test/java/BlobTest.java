@@ -119,36 +119,39 @@ public class BlobTest extends JFrame {
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
         WildLogFileCore wildLogFile = new WildLogFileCore();
         wildLogFile.setID(222L);
+        wildLogFile.setLinkID(777L);
         wildLogFile.setLinkType(WildLogDataType.ELEMENT);
         wildLogFile.setDBFilePath("bbb.jpg");
         UtilsSync.uploadFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                123L, new File("C:\\temp").toPath(), 888L, wildLogFile);
+                321L, new File("C:\\temp").toPath(), wildLogFile);
         System.out.println("UPLOADED");
     }//GEN-LAST:event_btnUploadActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         WildLogFileCore wildLogFile = new WildLogFileCore();
         wildLogFile.setID(222L);
+        wildLogFile.setLinkID(777L);
         wildLogFile.setLinkType(WildLogDataType.ELEMENT);
         wildLogFile.setDBFilePath("bbb_download.jpg");
         UtilsSync.downloadFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                123L, new File("C:\\temp").toPath(), 888L, wildLogFile);
+                321L, new File("C:\\temp").toPath(), wildLogFile);
         System.out.println("DOWNLOADED");
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         WildLogFileCore wildLogFile = new WildLogFileCore();
         wildLogFile.setID(222L);
+        wildLogFile.setLinkID(777L);
         wildLogFile.setLinkType(WildLogDataType.ELEMENT);
         wildLogFile.setDBFilePath("bbb.jpg");
         UtilsSync.deleteFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                123L, new File("C:\\temp").toPath(), 888L, wildLogFile);
+                321L, new File("C:\\temp").toPath(), wildLogFile);
         System.out.println("DELETED");
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSyncListBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListBatchActionPerformed
         List<SyncBlobEntry> lstSyncBlobEntry = UtilsSync.getSyncListFileBatch("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                123L);
+                WildLogDataType.ELEMENT, 321L);
         System.out.println("SYNCLIST BATCH: ");
         System.out.println(lstSyncBlobEntry.size());
         for (SyncBlobEntry entry : lstSyncBlobEntry) {
