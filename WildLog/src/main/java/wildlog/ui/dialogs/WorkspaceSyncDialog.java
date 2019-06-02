@@ -34,9 +34,13 @@ import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.WildLogApp;
 import wildlog.WildLogView;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.ElementCore;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogDeleteLog;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
@@ -54,6 +58,13 @@ import wildlog.utils.WildLogPaths;
 
 
 public class WorkspaceSyncDialog extends JDialog {
+    private int syncDeleteUp = 0;
+    private int syncDeleteDown = 0;
+    private int syncDataUp = 0;
+    private int syncDataDown = 0;
+    private int syncFileUp = 0;
+    private int syncFileDown = 0;
+    private int syncFail = 0;
 
 
     public WorkspaceSyncDialog() {
@@ -71,7 +82,6 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void configureFreeToken() {
-        btnCheckConflicts.setEnabled(false);
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(false);
         rdbImportThumbnails.setSelected(true);
@@ -84,7 +94,6 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void configureBasicToken() {
-        btnCheckConflicts.setEnabled(true);
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(true);
         rdbImportThumbnails.setSelected(true);
@@ -97,7 +106,6 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void configureFullToken() {
-        btnCheckConflicts.setEnabled(true);
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(true);
         rdbImportOriginalImages.setSelected(true);
@@ -122,7 +130,6 @@ public class WorkspaceSyncDialog extends JDialog {
         grpConflicts = new javax.swing.ButtonGroup();
         jLabel4 = new javax.swing.JLabel();
         btnConfirm = new javax.swing.JButton();
-        btnCheckConflicts = new javax.swing.JButton();
         pnlSyncToken = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
@@ -162,17 +169,6 @@ public class WorkspaceSyncDialog extends JDialog {
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
-            }
-        });
-
-        btnCheckConflicts.setText("<html>Check for Conflicts</html>");
-        btnCheckConflicts.setToolTipText("Checks how many conflicts there will be when syncing.");
-        btnCheckConflicts.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCheckConflicts.setFocusPainted(false);
-        btnCheckConflicts.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        btnCheckConflicts.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCheckConflictsActionPerformed(evt);
             }
         });
 
@@ -401,9 +397,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlSyncToken, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(10, 10, 10)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCheckConflicts, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -415,10 +409,7 @@ public class WorkspaceSyncDialog extends JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnCheckConflicts, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addGap(10, 10, 10)
@@ -456,10 +447,6 @@ public class WorkspaceSyncDialog extends JDialog {
             syncToken = TokenEncryptor.decrypt(txaSyncToken.getText());
         }
         // Validate the token
-        
-// TODO: Limit free accoun to 1000 records (wys 'n popup wat waarsku as mens free token gebruik)
-
-
         if (syncToken == null || syncToken.isEmpty() || syncToken.split(" ").length != 4) {
             WLOptionPane.showMessageDialog(this,
                     "<html>The provided <i>WildLog Cloud Sync Token</i> could not be read. "
@@ -470,6 +457,26 @@ public class WorkspaceSyncDialog extends JDialog {
         // Parse the token to get the necessary values
         String[] syncTokenValues = syncToken.split(" ");
         WildLogApp.LOGGER.log(Level.INFO, "Sync Mode: {}", syncTokenValues[0]);
+        if (syncTokenValues[0].equals("FREE")) {
+            WLOptionPane.showMessageDialog(this,
+                    "<html>You are currently using the limited free <i>WildLog Cloud Sync Token</i>. "
+                            + "<br>This token can only be used with 1000 or less records and files are not synced."
+                            + "<br>The token is subject to fair use and load restrictions."
+                            + "<br>Contact <u>support@mywild.co.za</> for more details.</html>",
+                    "Using Free Sync Token", JOptionPane.WARNING_MESSAGE);
+            if ((WildLogApp.getApplication().getDBI().countDeleteLogs(null) 
+                    + WildLogApp.getApplication().getDBI().countElements(null, null)
+                    + WildLogApp.getApplication().getDBI().countLocations(null)
+                    + WildLogApp.getApplication().getDBI().countSightings(0, 0, 0, 0)
+                    + WildLogApp.getApplication().getDBI().countUsers()
+                    + WildLogApp.getApplication().getDBI().countVisits(null, 0)) > 1000) {
+                WLOptionPane.showMessageDialog(this,
+                    "<html>This WildLog Workspace exceeds the restrictions of the limted free <i>WildLog Cloud Sync Token</i>. "
+                            + "<br>Please contact <u>support@mywild.co.za</> for help.</html>",
+                    "Free Token Exceeded!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
         String syncAccount = syncTokenValues[1];
         String syncKey = syncTokenValues[2];
         String syncConnection = syncTokenValues[3];
@@ -545,10 +552,7 @@ public class WorkspaceSyncDialog extends JDialog {
                             syncDataRecords(feedback, syncConnection, workspaceID, dbVersion, WildLogDataType.SIGHTING);
                             syncDataRecords(feedback, syncConnection, workspaceID, dbVersion, WildLogDataType.WILDLOG_USER);
                             // SYNC - Files
-                            
-                            
-                            
-// TODO: Summary
+// TODO: Files
                         }
                         // Finish the report
                         catch (Exception ex) {
@@ -560,10 +564,20 @@ public class WorkspaceSyncDialog extends JDialog {
                                 feedback.println("--------------------------------------");
                                 feedback.println("");
                             }
+                            syncFail++;
                             throw ex;
                         }
                         finally {
                             if (feedback != null) {
+                                feedback.println("");
+                                feedback.println("--------------- SUMMARY ----------------");
+                                feedback.println("Failed Sync Actions        : " + syncFail);
+                                feedback.println("Synced DeleteLog Uploads   : " + syncDeleteUp);
+                                feedback.println("Synced DeleteLog Downloads : " + syncDeleteDown);
+                                feedback.println("Synced Data Uploads        : " + syncDataUp);
+                                feedback.println("Synced Data Downloads      : " + syncDataDown);
+                                feedback.println("Synced File Uploads        : " + syncFileUp);
+                                feedback.println("Synced File Downloads      : " + syncFileDown);
                                 feedback.println("");
                                 feedback.println("--------------- DURATION ----------------");
                                 long duration = System.currentTimeMillis() - startTime;
@@ -630,29 +644,6 @@ public class WorkspaceSyncDialog extends JDialog {
        }
     }//GEN-LAST:event_rdbImportNoFilesActionPerformed
 
-    private void btnCheckConflictsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckConflictsActionPerformed
-//        getGlassPane().setVisible(true);
-//        getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-//        int conflicts = 0;
-//        int totalSelectedNodes = getNumberOfSelectedNodes(treWorkspace.getModel(), (DefaultMutableTreeNode) treWorkspace.getModel().getRoot());
-//        if (totalSelectedNodes > 0) {
-//            conflicts = checkConflicts((DefaultMutableTreeNode) treWorkspace.getModel().getRoot(), new HashSet<>());
-//        }
-//        getGlassPane().setCursor(Cursor.getDefaultCursor());
-//        getGlassPane().setVisible(false);
-//        if (conflicts > 0) {
-//            WLOptionPane.showMessageDialog(this,
-//                    "<html>Importing the selected records will result in <b>" + conflicts + " potential conflicts</b>. "
-//                            + "<br>Conflicts can be resolved during the import process.</html>",
-//                    "Potential Conflicts Detected!", JOptionPane.WARNING_MESSAGE);
-//        }
-//        else {
-//            WLOptionPane.showMessageDialog(this,
-//                    "No import conflicts were detected for the selected records.",
-//                    "No Conflicts Detected", JOptionPane.INFORMATION_MESSAGE);
-//        }
-    }//GEN-LAST:event_btnCheckConflictsActionPerformed
-
     private void rdbImportOriginalImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbImportOriginalImagesActionPerformed
         if (rdbImportOriginalImages.isSelected()) {
             cmbThumbnailSize.setEnabled(false);
@@ -696,6 +687,7 @@ public class WorkspaceSyncDialog extends JDialog {
             WildLogApp.LOGGER.log(Level.ERROR, "Sync - Failed: " + inSyncAction.command + " " + inSyncAction.type.getDescription() + " " + inSyncAction.recordID + " " + inSyncAction.details + " " + inSyncAction.data);
             WildLogApp.LOGGER.log(Level.INFO, "Sync - Stacktrace:");
             new Exception().printStackTrace(System.out);
+            syncFail++;
         }
     }
     
@@ -704,7 +696,7 @@ public class WorkspaceSyncDialog extends JDialog {
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Delete Logs - Cloud Entries: " + lstCloudEntries.size());
         List<WildLogDeleteLog> lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listDeleteLogs(null, 0, WildLogDeleteLog.class);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Delete Logs - Workspace Entries: " + lstCloudEntries.size());
-        // Make sure cloud knows about new workspace records
+        // UP: Make sure cloud knows about new workspace records
         Map<WildLogDataType, List<SyncAction>> mapActions = new HashMap<>();
         for (WildLogDeleteLog workspaceEntry : lstWorkspaceEntries) {
             boolean found = false;
@@ -741,6 +733,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     logIfFailed(inFeedback, new SyncAction("CLOUD_DELETE", 
                             dataType, lstRecordIDs.size(), Arrays.toString(lstRecordIDs.toArray()), null),
                             UtilsSync.deleteDataBatch(inSyncConnection, dataType, inWorkspaceID, lstRecordIDs));
+                    syncDeleteUp = syncDeleteUp + lstRecordIDs.size();
                 }
             }
             else {
@@ -749,10 +742,11 @@ public class WorkspaceSyncDialog extends JDialog {
                     logIfFailed(inFeedback, syncAction, UtilsSync.uploadData(inSyncConnection, WildLogDataType.DELETE_LOG, inWorkspaceID, inDBVersion, syncAction.data));
                     syncAction.command = "CLOUD_DELETE";
                     logIfFailed(inFeedback, syncAction, UtilsSync.deleteData(inSyncConnection, dataType, inWorkspaceID, syncAction.recordID));
+                    syncDeleteUp++;
                 }
             }
         }
-        // Make sure the workspace knows about new cloud records
+        // DOWN: Make sure the workspace knows about new cloud records
         for (SyncTableEntry cloudEntry : lstCloudEntries) {
             boolean found = false;
             for (WildLogDeleteLog workspaceEntry : lstWorkspaceEntries) {
@@ -794,6 +788,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 else {
                     logIfFailed(inFeedback, syncAction, false);
                 }
+                syncDeleteDown++;
             }
         }
     }
@@ -825,7 +820,7 @@ public class WorkspaceSyncDialog extends JDialog {
             lstWorkspaceEntries = null;
         }
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + inDataType.getDescription() + " - Workspace Entries: " + lstWorkspaceEntries.size());
-        // Make sure cloud knows about new workspace records
+        // UP: Make sure cloud knows about new workspace records
         List<SyncAction> lstSyncActions = new ArrayList<>();
         for (DataObjectWithAudit workspaceEntry : lstWorkspaceEntries) {
             boolean found = false;
@@ -853,44 +848,84 @@ public class WorkspaceSyncDialog extends JDialog {
                     }
                 logIfFailed(inFeedback, new SyncAction("CLOUD_UPLOAD", inDataType, lstRecords.size(), Arrays.toString(lstRecordIDs.toArray()), null), 
                         UtilsSync.uploadDataBatch(inSyncConnection, inDataType, inWorkspaceID, inDBVersion, lstRecords));
+                syncDataUp = syncDataUp + lstRecords.size();
             }
             else {
                 for (SyncAction syncAction : lstSyncActions) {
                     logIfFailed(inFeedback, syncAction, UtilsSync.uploadData(inSyncConnection, inDataType, inWorkspaceID, inDBVersion, syncAction.data));
+                    syncDataUp++;
                 }
             }
         }
-        // Make sure the workspace knows about new cloud records
+        // DOWN: Make sure the workspace knows about new cloud records
+        List<Long> lstWorkspaceCreateIDs = new ArrayList<>();
+        List<Long> lstWorkspaceUpdateIDs = new ArrayList<>();
         for (SyncTableEntry cloudEntry : lstCloudEntries) {
             boolean found = false;
-            boolean shouldBeSynced = false;
+            boolean shouldBeUpdated = false;
             for (DataObjectWithAudit workspaceEntry : lstWorkspaceEntries) {
                 if (workspaceEntry.getID() == cloudEntry.getRecordID()) {
                     found = true;
                     if (workspaceEntry.getAuditTime() < cloudEntry.getData().getAuditTime()) {
-                        shouldBeSynced = true;
+                        shouldBeUpdated = true;
                     }
                     break;
                 }
             }
-            // Create if not found
             if (!found) {
-                SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD ", cloudEntry.getWildLogDataType(), 
-                        cloudEntry.getRecordID(), "NEW", null);
+                lstWorkspaceCreateIDs.add(cloudEntry.getRecordID());
+            }
+            if (shouldBeUpdated) {
+                lstWorkspaceUpdateIDs.add(cloudEntry.getRecordID());
+            }
+        }
+        // For the new or out of sync records, load the full record from the cloud
+        List<SyncTableEntry> lstWorkspaceCreateEntries = null;
+        List<SyncTableEntry> lstWorkspaceUpdateEntries = null;
+        if (rdbModeBatch.isSelected()) {
+            if (!lstWorkspaceCreateIDs.isEmpty()) {
+                lstWorkspaceCreateEntries = UtilsSync.downloadDataBatch(inSyncConnection, inDataType, inWorkspaceID, 0, lstWorkspaceCreateIDs);
+            }
+            if (!lstWorkspaceUpdateIDs.isEmpty()) {
+                lstWorkspaceUpdateEntries = UtilsSync.downloadDataBatch(inSyncConnection, inDataType, inWorkspaceID, 0, lstWorkspaceUpdateIDs);
+            }
+        }
+        else {
+            lstWorkspaceCreateEntries = new ArrayList<>(lstWorkspaceCreateIDs.size());
+            for (long recordId : lstWorkspaceCreateIDs) {
+                lstWorkspaceCreateEntries.add(UtilsSync.downloadData(inSyncConnection, inDataType, inWorkspaceID, recordId));
+            }
+            lstWorkspaceUpdateEntries = new ArrayList<>(lstWorkspaceUpdateIDs.size());
+            for (long recordId : lstWorkspaceUpdateIDs) {
+                lstWorkspaceUpdateEntries.add(UtilsSync.downloadData(inSyncConnection, inDataType, inWorkspaceID, recordId));
+            }
+        }
+        // Check the the downloads were successful
+        if (!lstWorkspaceCreateIDs.isEmpty() && (lstWorkspaceCreateEntries == null || lstWorkspaceCreateEntries.size() != lstWorkspaceCreateIDs.size())) {
+            logIfFailed(inFeedback, new SyncAction("CLOUD_DOWNLOAD", inDataType, lstWorkspaceCreateIDs.size(), Arrays.toString(lstWorkspaceCreateIDs.toArray()), null), false);
+        }
+        if (!lstWorkspaceUpdateIDs.isEmpty() && (lstWorkspaceUpdateEntries == null || lstWorkspaceUpdateEntries.size() != lstWorkspaceUpdateIDs.size())) {
+            logIfFailed(inFeedback, new SyncAction("CLOUD_DOWNLOAD", inDataType, lstWorkspaceUpdateIDs.size(), Arrays.toString(lstWorkspaceUpdateIDs.toArray()), null), false);
+        }
+        // Create if not found
+        if (lstWorkspaceCreateEntries != null) {
+            for (SyncTableEntry cloudEntry : lstWorkspaceCreateEntries) {
+                SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", cloudEntry.getWildLogDataType(), 
+                        cloudEntry.getRecordID(), "NEW", cloudEntry.getData());
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.ELEMENT) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createElement((Element) syncAction.data, true));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createElement((ElementCore) syncAction.data, true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.LOCATION) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createLocation((Location) syncAction.data, true));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createLocation((LocationCore) syncAction.data, true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.VISIT) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createVisit((Visit) syncAction.data, true));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createVisit((VisitCore) syncAction.data, true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.SIGHTING) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createSighting((Sighting) syncAction.data, true));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createSighting((SightingCore) syncAction.data, true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.WILDLOG_USER) {
@@ -899,28 +934,31 @@ public class WorkspaceSyncDialog extends JDialog {
                 else {
                     logIfFailed(inFeedback, syncAction, false);
                 }
+                syncDataDown++;
             }
-            // Update if outdated
-            if (shouldBeSynced) {
-                SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD ", cloudEntry.getWildLogDataType(), 
-                        cloudEntry.getRecordID(), "UPDATE", null);
+        }
+        // Update if outdated
+        if (lstWorkspaceUpdateEntries != null) {
+            for (SyncTableEntry cloudEntry : lstWorkspaceUpdateEntries) {
+                SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", cloudEntry.getWildLogDataType(), 
+                        cloudEntry.getRecordID(), "UPDATE", cloudEntry.getData());
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.ELEMENT) {
                     Element oldElement = WildLogApp.getApplication().getDBI().findElement(syncAction.recordID, null, Element.class);
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateElement((Element) syncAction.data, oldElement.getPrimaryName(), true));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateElement((ElementCore) syncAction.data, oldElement.getPrimaryName(), true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.LOCATION) {
                     Location oldLocation = WildLogApp.getApplication().getDBI().findLocation(syncAction.recordID, null, Location.class);
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateLocation((Location) syncAction.data, oldLocation.getName(), true));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateLocation((LocationCore) syncAction.data, oldLocation.getName(), true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.VISIT) {
                     Visit oldVisit = WildLogApp.getApplication().getDBI().findVisit(syncAction.recordID, null, false, Visit.class);
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateVisit((Visit) syncAction.data, oldVisit.getName(), true));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateVisit((VisitCore) syncAction.data, oldVisit.getName(), true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.SIGHTING) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateSighting((Sighting) syncAction.data, true));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateSighting((SightingCore) syncAction.data, true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.WILDLOG_USER) {
@@ -929,6 +967,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 else {
                     logIfFailed(inFeedback, syncAction, false);
                 }
+                syncDataDown++;
             }
         }
     }
@@ -951,7 +990,6 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCheckConflicts;
     private javax.swing.JButton btnConfirm;
     private javax.swing.JButton btnConfirmSyncToken;
     private javax.swing.JComboBox<WildLogThumbnailSizes> cmbThumbnailSize;
