@@ -42,16 +42,19 @@ import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogDeleteLog;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.encryption.TokenEncryptor;
 import wildlog.sync.azure.UtilsSync;
+import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -77,8 +80,12 @@ public class WorkspaceSyncDialog extends JDialog {
         // Setup the glasspane on this dialog as well for the JOptionPane's
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
+        // Attache copy-paste right-clicks
+        UtilsUI.attachClipboardPopup(txaSyncToken);
         // Default to the free token's configuration
         configureFreeToken();
+        // Prevent the Azure Blob library from spamming the logs
+// TODO: vind uit hoe (of dalk doen ek iets verkeerd met die calls???)
     }
     
     private void configureFreeToken() {
@@ -552,7 +559,7 @@ public class WorkspaceSyncDialog extends JDialog {
                             syncDataRecords(feedback, syncConnection, workspaceID, dbVersion, WildLogDataType.SIGHTING);
                             syncDataRecords(feedback, syncConnection, workspaceID, dbVersion, WildLogDataType.WILDLOG_USER);
                             // SYNC - Files
-// TODO: Files
+                            syncFileRecords(feedback, syncConnection, syncAccount, syncKey, workspaceID, dbVersion);
                         }
                         // Finish the report
                         catch (Exception ex) {
@@ -842,10 +849,10 @@ public class WorkspaceSyncDialog extends JDialog {
             if (rdbModeBatch.isSelected()) {
                 List<DataObjectWithAudit> lstRecords = new ArrayList<>(lstSyncActions.size());
                 List<Long> lstRecordIDs = new ArrayList<>(lstSyncActions.size());
-                    for (SyncAction syncAction : lstSyncActions) {
-                        lstRecords.add(syncAction.data);
-                        lstRecordIDs.add(syncAction.recordID);
-                    }
+                for (SyncAction syncAction : lstSyncActions) {
+                    lstRecords.add(syncAction.data);
+                    lstRecordIDs.add(syncAction.recordID);
+                }
                 logIfFailed(inFeedback, new SyncAction("CLOUD_UPLOAD", inDataType, lstRecords.size(), Arrays.toString(lstRecordIDs.toArray()), null), 
                         UtilsSync.uploadDataBatch(inSyncConnection, inDataType, inWorkspaceID, inDBVersion, lstRecords));
                 syncDataUp = syncDataUp + lstRecords.size();
@@ -968,6 +975,172 @@ public class WorkspaceSyncDialog extends JDialog {
                     logIfFailed(inFeedback, syncAction, false);
                 }
                 syncDataDown++;
+            }
+        }
+    }
+    
+    private void syncFileRecords(PrintWriter inFeedback, String inSyncConnection, String inSyncAccount, String inSyncKey, long inWorkspaceID, int inDBVersion) {
+        List<SyncTableEntry> lstCloudEntries  = UtilsSync.getSyncListDataBatch(inSyncConnection, WildLogDataType.FILE, inWorkspaceID);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Cloud File Entries: " + lstCloudEntries.size());
+        List<WildLogFile> lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listWildLogFiles(-1, null, WildLogFile.class);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Workspace File Entries: " + lstWorkspaceEntries.size());
+        // VERIFY: Make sure that the entries in the cloud table match with the cloud blobs
+        List<SyncBlobEntry> lstCloudElementBlobs  = UtilsSync.getSyncListFileBatch(inSyncAccount, inSyncKey, WildLogDataType.ELEMENT, inWorkspaceID);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - Element Cloud Blobs: " + lstCloudElementBlobs.size());
+        List<SyncBlobEntry> lstCloudLocationBlobs  = UtilsSync.getSyncListFileBatch(inSyncAccount, inSyncKey, WildLogDataType.LOCATION, inWorkspaceID);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - Location Cloud Blobs: " + lstCloudLocationBlobs.size());
+        List<SyncBlobEntry> lstCloudVisitBlobs  = UtilsSync.getSyncListFileBatch(inSyncAccount, inSyncKey, WildLogDataType.VISIT, inWorkspaceID);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - Visit Cloud Blobs: " + lstCloudVisitBlobs.size());
+        List<SyncBlobEntry> lstCloudSightingBlobs  = UtilsSync.getSyncListFileBatch(inSyncAccount, inSyncKey, WildLogDataType.SIGHTING, inWorkspaceID);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - Sighting Cloud Blobs: " + lstCloudSightingBlobs.size());
+        Map<WildLogDataType, List<SyncBlobEntry>> mapCloudBlobs = new HashMap<>();
+        mapCloudBlobs.put(WildLogDataType.ELEMENT, lstCloudElementBlobs);
+        mapCloudBlobs.put(WildLogDataType.LOCATION, lstCloudVisitBlobs);
+        mapCloudBlobs.put(WildLogDataType.VISIT, lstCloudElementBlobs);
+        mapCloudBlobs.put(WildLogDataType.SIGHTING, lstCloudSightingBlobs);
+        boolean reloadData = false;
+        for (SyncTableEntry cloudEntry : lstCloudEntries) {
+            boolean found = false;
+            for (SyncBlobEntry blobEntry : mapCloudBlobs.getOrDefault(cloudEntry.getWildLogDataType(), new ArrayList<>(0))) {
+                if (cloudEntry.getRecordID() == blobEntry.getRecordID()) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                logIfFailed(inFeedback, new SyncAction("SYNC_FIX CLOUD_DELETE", WildLogDataType.FILE, 
+                        cloudEntry.getRecordID(), cloudEntry.getWildLogDataType().getDescription(), null), 
+                        UtilsSync.deleteData(inSyncConnection, WildLogDataType.FILE, inWorkspaceID, cloudEntry.getRecordID()));
+                reloadData = true;
+            }
+        }
+        if (reloadData) {
+            lstCloudEntries  = UtilsSync.getSyncListDataBatch(inSyncConnection, WildLogDataType.FILE, inWorkspaceID);
+            WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Cloud File Entries: " + lstCloudEntries.size());
+        }
+        for (Map.Entry<WildLogDataType, List<SyncBlobEntry>> entry : mapCloudBlobs.entrySet()) {
+            for (SyncBlobEntry blobEntry : entry.getValue()) {
+                boolean found = false;
+                for (SyncTableEntry cloudEntry : lstCloudEntries) {
+                    if (cloudEntry.getRecordID() == blobEntry.getRecordID()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    logIfFailed(inFeedback, new SyncAction("SYNC_FIX CLOUD_DELETE_FILE", WildLogDataType.FILE, 
+                            blobEntry.getRecordID(), blobEntry.getDataType().getDescription(), null), 
+                            UtilsSync.deleteFile(inSyncAccount, inSyncKey, blobEntry.getDataType(), blobEntry.getFullBlobID()));
+                }
+            }
+        }
+        // UP: Make sure cloud knows about new workspace records
+        List<SyncAction> lstSyncActions = new ArrayList<>();
+        for (WildLogFile workspaceEntry : lstWorkspaceEntries) {
+            boolean found = false;
+            boolean shouldBeSynced = false;
+            for (SyncTableEntry cloudEntry : lstCloudEntries) {
+                if (workspaceEntry.getID() == cloudEntry.getRecordID()) {
+                    found = true;
+// FIXME: Will this check always work?
+                    if (workspaceEntry.getAuditTime() > cloudEntry.getData().getAuditTime()) {
+                        shouldBeSynced = true;
+                    }
+                    break;
+                }
+            }
+            if (!found || shouldBeSynced) {
+                lstSyncActions.add(new SyncAction("CLOUD_UPLOAD", WildLogDataType.FILE, workspaceEntry.getID(), workspaceEntry.getLinkType().getDescription(), workspaceEntry));
+            }
+        }
+        if (!lstSyncActions.isEmpty()) {
+            // Note: Files are always uplaoded one at a time
+            for (SyncAction syncAction : lstSyncActions) {
+                logIfFailed(inFeedback, syncAction, UtilsSync.uploadData(inSyncConnection, WildLogDataType.FILE, inWorkspaceID, inDBVersion, syncAction.data));
+                syncAction.details = syncAction.details + "_FILE";
+// FIXME: Use thumbnails here...
+                logIfFailed(inFeedback, syncAction, UtilsSync.uploadFile(inSyncAccount, inSyncKey, inWorkspaceID, 
+                        WildLogPaths.getFullWorkspacePrefix(), (WildLogFile) syncAction.data));
+                syncFileUp++;
+            }
+        }
+        // DOWN: Make sure the workspace knows about new cloud records
+        List<Long> lstWorkspaceCreateIDs = new ArrayList<>();
+        List<Long> lstWorkspaceUpdateIDs = new ArrayList<>();
+        for (SyncTableEntry cloudEntry : lstCloudEntries) {
+            boolean found = false;
+            boolean shouldBeUpdated = false;
+            for (DataObjectWithAudit workspaceEntry : lstWorkspaceEntries) {
+                if (workspaceEntry.getID() == cloudEntry.getRecordID()) {
+                    found = true;
+// FIXME: Will this check always work?
+                    if (workspaceEntry.getAuditTime() < cloudEntry.getData().getAuditTime()) {
+                        shouldBeUpdated = true;
+                    }
+                    break;
+                }
+            }
+            if (!found) {
+                lstWorkspaceCreateIDs.add(cloudEntry.getRecordID());
+            }
+            if (shouldBeUpdated) {
+                lstWorkspaceUpdateIDs.add(cloudEntry.getRecordID());
+            }
+        }
+        // For the new or out of sync records, load the full record from the cloud
+        List<SyncTableEntry> lstWorkspaceCreateEntries = null;
+        List<SyncTableEntry> lstWorkspaceUpdateEntries = null;
+        if (rdbModeBatch.isSelected()) {
+            if (!lstWorkspaceCreateIDs.isEmpty()) {
+                lstWorkspaceCreateEntries = UtilsSync.downloadDataBatch(inSyncConnection, WildLogDataType.FILE, inWorkspaceID, 0, lstWorkspaceCreateIDs);
+            }
+            if (!lstWorkspaceUpdateIDs.isEmpty()) {
+                lstWorkspaceUpdateEntries = UtilsSync.downloadDataBatch(inSyncConnection, WildLogDataType.FILE, inWorkspaceID, 0, lstWorkspaceUpdateIDs);
+            }
+        }
+        else {
+            lstWorkspaceCreateEntries = new ArrayList<>(lstWorkspaceCreateIDs.size());
+            for (long recordId : lstWorkspaceCreateIDs) {
+                lstWorkspaceCreateEntries.add(UtilsSync.downloadData(inSyncConnection, WildLogDataType.FILE, inWorkspaceID, recordId));
+            }
+            lstWorkspaceUpdateEntries = new ArrayList<>(lstWorkspaceUpdateIDs.size());
+            for (long recordId : lstWorkspaceUpdateIDs) {
+                lstWorkspaceUpdateEntries.add(UtilsSync.downloadData(inSyncConnection, WildLogDataType.FILE, inWorkspaceID, recordId));
+            }
+        }
+        // Check the the downloads were successful
+        if (!lstWorkspaceCreateIDs.isEmpty() && (lstWorkspaceCreateEntries == null || lstWorkspaceCreateEntries.size() != lstWorkspaceCreateIDs.size())) {
+            logIfFailed(inFeedback, new SyncAction("CLOUD_DOWNLOAD", WildLogDataType.FILE, lstWorkspaceCreateIDs.size(), Arrays.toString(lstWorkspaceCreateIDs.toArray()), null), false);
+        }
+        if (!lstWorkspaceUpdateIDs.isEmpty() && (lstWorkspaceUpdateEntries == null || lstWorkspaceUpdateEntries.size() != lstWorkspaceUpdateIDs.size())) {
+            logIfFailed(inFeedback, new SyncAction("CLOUD_DOWNLOAD", WildLogDataType.FILE, lstWorkspaceUpdateIDs.size(), Arrays.toString(lstWorkspaceUpdateIDs.toArray()), null), false);
+        }
+        // Create if not found
+        if (lstWorkspaceCreateEntries != null) {
+            for (SyncTableEntry cloudEntry : lstWorkspaceCreateEntries) {
+                SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", cloudEntry.getWildLogDataType(), 
+                        cloudEntry.getRecordID(), cloudEntry.getWildLogDataType().getDescription() + "_NEW", cloudEntry.getData());
+                logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createWildLogFile((WildLogFile) syncAction.data, true));
+                syncAction.details = syncAction.details + "_FILE";
+// FIXME: Use thumbnails here...
+// FIXME: Make sure it doesn't overwrite an existing file
+                logIfFailed(inFeedback, syncAction, UtilsSync.downloadFile(inSyncAccount, inSyncKey, inWorkspaceID, 
+                        WildLogPaths.getFullWorkspacePrefix(), (WildLogFile) syncAction.data));
+                syncFileDown++;
+            }
+        }
+        // Update if outdated
+        if (lstWorkspaceUpdateEntries != null) {
+            for (SyncTableEntry cloudEntry : lstWorkspaceUpdateEntries) {
+                SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", cloudEntry.getWildLogDataType(), 
+                        cloudEntry.getRecordID(), cloudEntry.getWildLogDataType().getDescription() + "_UPDATE", cloudEntry.getData());
+                logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateWildLogFile((WildLogFile) syncAction.data, true));
+                syncAction.details = syncAction.details + "_FILE";
+// FIXME: Use thumbnails here...
+// FIXME: What to do with the old file?
+                logIfFailed(inFeedback, syncAction, UtilsSync.downloadFile(inSyncAccount, inSyncKey, inWorkspaceID, 
+                        WildLogPaths.getFullWorkspacePrefix(), (WildLogFile) syncAction.data));
+                syncFileDown++;
             }
         }
     }

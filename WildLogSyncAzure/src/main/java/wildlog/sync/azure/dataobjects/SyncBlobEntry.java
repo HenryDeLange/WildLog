@@ -8,16 +8,18 @@ public class SyncBlobEntry {
     private long workspaceID;
     private long parentID;
     private long recordID;
+    private String fullBlobID;
 
     public SyncBlobEntry() {
     }
 
-    public SyncBlobEntry(WildLogDataType inDataType, long inWorkspaceID, long inParentID, long inRecordID) {
+    public SyncBlobEntry(WildLogDataType inDataType, long inWorkspaceID, long inParentID, long inRecordID, String inFullBlobID) {
         super();
         dataType = inDataType;
         workspaceID = inWorkspaceID;
         parentID = inParentID;
         recordID = inRecordID;
+        fullBlobID = inFullBlobID;
     }
     
     public WildLogDataType getDataType() {
@@ -50,6 +52,14 @@ public class SyncBlobEntry {
 
     public void setRecordID(long inRecordID) {
         recordID = inRecordID;
+    }
+
+    public String getFullBlobID() {
+        return fullBlobID;
+    }
+
+    public void setFullBlobID(String inFllBlobID) {
+        fullBlobID = inFllBlobID;
     }
     
     @Override

@@ -482,10 +482,10 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("linkType", new EntityProperty(UtilsData.stringFromObject(inData.getLinkType())));
         inProperties.put("filename", new EntityProperty(inData.getFilename()));
         inProperties.put("originalFileLocation", new EntityProperty(inData.getDBFilePath()));
-        inProperties.put("uploadDate", new EntityProperty(UtilsData.stringFromObject(inData.getUploadDate())));
+        inProperties.put("uploadDate", new EntityProperty(inData.getUploadDate()));
         inProperties.put("fileType", new EntityProperty(UtilsData.stringFromObject(inData.getFileType())));
         inProperties.put("defaultFile", new EntityProperty(inData.isDefaultFile()));
-        inProperties.put("fileDate", new EntityProperty(UtilsData.stringFromObject(inData.getFileDate())));
+        inProperties.put("fileDate", new EntityProperty(inData.getFileDate()));
         inProperties.put("fileSize", new EntityProperty(inData.getFileSize()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));

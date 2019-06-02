@@ -139,13 +139,8 @@ public class BlobTest extends JFrame {
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        WildLogFileCore wildLogFile = new WildLogFileCore();
-        wildLogFile.setID(222L);
-        wildLogFile.setLinkID(777L);
-        wildLogFile.setLinkType(WildLogDataType.ELEMENT);
-        wildLogFile.setDBFilePath("bbb.jpg");
         UtilsSync.deleteFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                321L, new File("C:\\temp").toPath(), wildLogFile);
+                WildLogDataType.ELEMENT, Long.toString(321L) + "/" + Long.toString(777L) + "/" + Long.toString(222L) + ".jpg");
         System.out.println("DELETED");
     }//GEN-LAST:event_btnDeleteActionPerformed
 

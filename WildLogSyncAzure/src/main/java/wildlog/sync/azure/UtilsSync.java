@@ -38,6 +38,7 @@ import wildlog.sync.azure.dataobjects.SyncTableEntry;
 public final class UtilsSync {
     private static final int BATCH_LIMIT = 50;
     private static final int URL_LIMIT = 30000;
+// TODO: Figure out whether I need to set this dynamically (its much too big for small thumbnails)
     private static final int MAX_BLOB_BLOCK_SIZE = 8*1024*1024;
     
     private UtilsSync() {
@@ -199,7 +200,7 @@ public final class UtilsSync {
                     }
                 }
             }
-            if (batchCounter >= MAX_RETRY_LIMIT) {
+            if (MAX_RETRY_LIMIT != 0 && batchCounter >= MAX_RETRY_LIMIT) {
                 System.err.println("The delete batch max retry limit was reached!!!");
                 return false;
             }
@@ -387,13 +388,10 @@ public final class UtilsSync {
         return false;
     }
     
-    public static boolean deleteFile(String inAccountName, String inAccountKey, long inWorkspaceID, Path inWorkspacePrefix, WildLogFileCore inWildLogFile) {
+    public static boolean deleteFile(String inAccountName, String inAccountKey, WildLogDataType inDataType, String inFullBlobName) {
         try {
-            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inWildLogFile.getLinkType());
-            BlockBlobURL blockBlob = container.createBlockBlobURL(
-                    Long.toString(inWorkspaceID) + "/"
-                    + Long.toString(inWildLogFile.getLinkID()) + "/"
-                    + Long.toString(inWildLogFile.getID()) + inWildLogFile.getDBFilePath().substring(inWildLogFile.getDBFilePath().lastIndexOf('.')));
+            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inDataType);
+            BlockBlobURL blockBlob = container.createBlockBlobURL(inFullBlobName);
             blockBlob.delete(null, null, null).blockingGet();
             return true;
         }
@@ -430,7 +428,8 @@ public final class UtilsSync {
                         inDataType, 
                         Long.parseLong(namePieces[0]),
                         Long.parseLong(namePieces[1]), 
-                        Long.parseLong(namePieces[2].substring(0, namePieces[2].lastIndexOf('.')))));
+                        Long.parseLong(namePieces[2].substring(0, namePieces[2].lastIndexOf('.'))),
+                        blobItem.name()));
             }
         }
         // If there is not another segment, return this response as the final response.
