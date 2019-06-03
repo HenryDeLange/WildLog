@@ -12,12 +12,15 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogDataType;
-import wildlog.sync.azure.UtilsSync;
+import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
 public class DataTest extends JFrame {
     private static long upCounter = 0L;
     private static long downCounter = 0L;
+    private SyncAzure syncAzure = new SyncAzure(
+            "DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
+            "", "", 123L, 12);
 
     public DataTest() {
         initComponents();
@@ -167,14 +170,12 @@ public class DataTest extends JFrame {
         temp.setGameViewingRating(GameViewRating.MEDIUM);
         temp.setLongitude(Longitudes.EAST);
 //        temp.setRating(LocationRating.DECENT);
-        UtilsSync.uploadData("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, 12, temp);
+        syncAzure.uploadData(WildLogDataType.LOCATION, temp);
         System.out.println("UPLOADED");
     }//GEN-LAST:event_btnUploadActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        SyncTableEntry syncTableEntry = UtilsSync.downloadData("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, 246L + downCounter++);
+        SyncTableEntry syncTableEntry = syncAzure.downloadData(WildLogDataType.LOCATION, 246L + downCounter++);
         System.out.println("DOWNLOADED: ");
         System.out.println(syncTableEntry);
     }//GEN-LAST:event_btnDownloadActionPerformed
@@ -184,8 +185,7 @@ public class DataTest extends JFrame {
         for (long t = 1000001000L; t < 1000005000L; t++) {
             lstIDs.add(t);
         }
-        List<SyncTableEntry> lstSyncTableEntry = UtilsSync.downloadDataBatch("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, 0, lstIDs);
+        List<SyncTableEntry> lstSyncTableEntry = syncAzure.downloadDataBatch(WildLogDataType.LOCATION, 0, lstIDs);
         System.out.println("DOWNLOADED BATCH: ");
         System.out.println(lstSyncTableEntry.size());
         for (SyncTableEntry entry : lstSyncTableEntry) {
@@ -194,8 +194,7 @@ public class DataTest extends JFrame {
     }//GEN-LAST:event_btnDownloadBatchActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        UtilsSync.deleteData("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, 246L);
+        syncAzure.deleteData(WildLogDataType.LOCATION, 246L);
         System.out.println("DELETED");
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -211,8 +210,7 @@ public class DataTest extends JFrame {
 //            }
             lstData.add(temp);
         }
-        UtilsSync.uploadDataBatch("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, 12, lstData);
+        syncAzure.uploadDataBatch(WildLogDataType.LOCATION, lstData);
         System.out.println("UPLOADED BATCH");
     }//GEN-LAST:event_btnUploadBatchActionPerformed
 
@@ -221,14 +219,12 @@ public class DataTest extends JFrame {
         for (long t = 1000000500L; t < 1000004500L; t++) {
             lstIDs.add(t);
         }
-        UtilsSync.deleteDataBatch("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, lstIDs);
+        syncAzure.deleteDataBatch(WildLogDataType.LOCATION, lstIDs);
         System.out.println("DELETED BATCH");
     }//GEN-LAST:event_btnDeleteBatchActionPerformed
 
     private void btnSyncListBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListBatchActionPerformed
-        List<SyncTableEntry> lstSyncTableEntry = UtilsSync.getSyncListDataBatch("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L, 0L);
+        List<SyncTableEntry> lstSyncTableEntry = syncAzure.getSyncListDataBatch(WildLogDataType.LOCATION, 0L);
         System.out.println("SYNCLIST BATCH: ");
         System.out.println(lstSyncTableEntry.size());
         for (SyncTableEntry entry : lstSyncTableEntry) {

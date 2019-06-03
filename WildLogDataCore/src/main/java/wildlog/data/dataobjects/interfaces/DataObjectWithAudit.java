@@ -5,6 +5,7 @@ public abstract class DataObjectWithAudit {
     protected long id;
     protected long auditTime;
     protected String auditUser;
+    protected long syncIndicator;
 
     
     public long getID() {
@@ -29,6 +30,14 @@ public abstract class DataObjectWithAudit {
 
     public void setAuditUser(String inAuditUser) {
         auditUser = inAuditUser;
+    }
+
+    public long getSyncIndicator() {
+        return syncIndicator;
+    }
+
+    public void setSyncIndicator(long inSyncIndicator) {
+        syncIndicator = inSyncIndicator;
     }
 
 }

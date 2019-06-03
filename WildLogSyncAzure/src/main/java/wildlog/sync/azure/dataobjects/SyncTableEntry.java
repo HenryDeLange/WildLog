@@ -50,7 +50,6 @@ public class SyncTableEntry extends TableServiceEntity {
     private static final EntityProperty EMPTY_DOUBLE = new EntityProperty(0.0);
     private static final EntityProperty EMPTY_BOOLEAN = new EntityProperty(false);
     private String dataType;
-    private long syncIndicator;
     private int dbVersion;
     private DataObjectWithAudit data;
 
@@ -59,12 +58,11 @@ public class SyncTableEntry extends TableServiceEntity {
         super();
     }
 
-    public SyncTableEntry(WildLogDataType inDataType, long inWorkspaceID, long inRecordID, long inSyncIndicator, int inDBVersion, DataObjectWithAudit inData) {
+    public SyncTableEntry(WildLogDataType inDataType, long inWorkspaceID, long inRecordID, int inDBVersion, DataObjectWithAudit inData) {
         super();
         if (inDataType != null) {
             dataType = inDataType.toString();
         }
-        syncIndicator = inSyncIndicator;
         dbVersion = inDBVersion;
         data = inData;
         // Set the Azure table key fields
@@ -113,14 +111,6 @@ public class SyncTableEntry extends TableServiceEntity {
         rowKey = Long.toString(inRecordID);
     }
 
-    public long getSyncIndicator() {
-        return syncIndicator;
-    }
-
-    public void setSyncIndicator(long inSyncIndicator) {
-        syncIndicator = inSyncIndicator;
-    }
-
     public int getDBVersion() {
         return dbVersion;
     }
@@ -141,7 +131,7 @@ public class SyncTableEntry extends TableServiceEntity {
 
     @Override
     public String toString() {
-        return "[" + dataType + "] (" + dbVersion + ") " + partitionKey + "/" + rowKey + " <" + syncIndicator + "> : " + data;
+        return "[" + dataType + "] (" + dbVersion + ") " + partitionKey + "/" + rowKey + " : " + data;
     }
 
     // READ PROPERTIES:
@@ -217,6 +207,7 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setReferenceID(inProperties.getOrDefault("referenceID", EMPTY_STRING).getValueAsString());
         tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
         tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
         return tempData;
     }
     
@@ -240,6 +231,7 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setGPSAccuracyValue(inProperties.getOrDefault("gpsAccuracyValue", EMPTY_DOUBLE).getValueAsDouble());
         tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
         tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
         return tempData;
     }
     
@@ -255,6 +247,7 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setLocationID(inProperties.getOrDefault("locationID", EMPTY_LONG).getValueAsLong());
         tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
         tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
         return tempData;
     }
     
@@ -295,6 +288,7 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setAge(Age.getEnumFromText(inProperties.getOrDefault("age", EMPTY_STRING).getValueAsString()));
         tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
         tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
         return tempData;
     }
     
@@ -312,6 +306,7 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setFileSize(inProperties.getOrDefault("fileSize", EMPTY_LONG).getValueAsLong());
         tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
         tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
         return tempData;
     }
     
@@ -323,6 +318,7 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setType(WildLogUserTypes.getEnumFromText(inProperties.getOrDefault("type", EMPTY_STRING).getValueAsString()));
         tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
         tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
         return tempData;
     }
     
@@ -332,6 +328,7 @@ public class SyncTableEntry extends TableServiceEntity {
         tempData.setType(WildLogDataType.getEnumFromText(inProperties.getOrDefault("type", EMPTY_STRING).getValueAsString()));
         tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
         tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
         return tempData;
     }
     
@@ -406,6 +403,7 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("referenceID", new EntityProperty(inData.getReferenceID()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
     
     private void writeLocationV12(LocationCore inData, HashMap<String, EntityProperty> inProperties) {
@@ -426,6 +424,7 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("gpsAccuracyValue", new EntityProperty(inData.getGPSAccuracyValue()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
     
     private void writeVisitV12(VisitCore inData, HashMap<String, EntityProperty> inProperties) {
@@ -438,6 +437,7 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("locationID", new EntityProperty(inData.getLocationID()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
     
     private void writeSightingV12(SightingCore inData, HashMap<String, EntityProperty> inProperties) {
@@ -475,6 +475,7 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("age", new EntityProperty(UtilsData.stringFromObject(inData.getAge())));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
     
     private void writeFileV12(WildLogFileCore inData, HashMap<String, EntityProperty> inProperties) {
@@ -489,6 +490,7 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("fileSize", new EntityProperty(inData.getFileSize()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
     
     private void writeUserV12(WildLogUser inData, HashMap<String, EntityProperty> inProperties) {
@@ -497,12 +499,14 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
     
     private void writeDeleteLogV12(WildLogDeleteLog inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
 
 }

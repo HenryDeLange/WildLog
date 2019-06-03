@@ -8,12 +8,11 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import wildlog.data.enums.WildLogDataType;
-import wildlog.sync.azure.UtilsSync;
+import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 
 public class BlobTest extends JFrame {
-    private static long upCounter = 0L;
-    private static long downCounter = 0L;
+    private SyncAzure syncAzure = new SyncAzure("", "wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 123L, 12);
 
     public BlobTest() {
         initComponents();
@@ -116,26 +115,22 @@ public class BlobTest extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        UtilsSync.uploadFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                WildLogDataType.ELEMENT, new File("C:\\tempbbb.jpg").toPath(), 321L, 222L, 777L);
+        syncAzure.uploadFile(WildLogDataType.ELEMENT, new File("C:\\temp\\bbb.jpg").toPath(), 777L, 222L);
         System.out.println("UPLOADED");
     }//GEN-LAST:event_btnUploadActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        UtilsSync.downloadFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                WildLogDataType.ELEMENT, new File("C:\\tempbbb.jpg").toPath(), 321L, 222L, 777L);
+        syncAzure.downloadFile(WildLogDataType.ELEMENT, new File("C:\\temp\\bbb.jpg").toPath(), 777L, 222L);
         System.out.println("DOWNLOADED");
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        UtilsSync.deleteFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                WildLogDataType.ELEMENT, Long.toString(321L) + "/" + Long.toString(777L) + "/" + Long.toString(222L) + ".jpg");
+        syncAzure.deleteFile(WildLogDataType.ELEMENT, Long.toString(123L) + "/" + Long.toString(777L) + "/" + Long.toString(222L) + ".jpg");
         System.out.println("DELETED");
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSyncListBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListBatchActionPerformed
-        List<SyncBlobEntry> lstSyncBlobEntry = UtilsSync.getSyncListFileBatch("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                WildLogDataType.ELEMENT, 321L);
+        List<SyncBlobEntry> lstSyncBlobEntry = syncAzure.getSyncListFileBatch(WildLogDataType.ELEMENT);
         System.out.println("SYNCLIST BATCH: ");
         System.out.println(lstSyncBlobEntry.size());
         for (SyncBlobEntry entry : lstSyncBlobEntry) {

@@ -378,7 +378,7 @@ public class CropDialog extends JDialog {
                     else {
                         // An iNat crop, so the image can be resized to 2048px 
                         // (to make uploads faster because iNat will just resize anything bigger on their side)
-                        UtilsImageProcessing.resizeImage(newWildLogFile, WildLogThumbnailSizes.INAT_LIMIT.getSize());
+                        UtilsImageProcessing.resizeImage(newWildLogFile, WildLogThumbnailSizes.SYNC_LIMIT.getSize());
                     }
                 }
                 catch (IOException | LLJTranException ex) {

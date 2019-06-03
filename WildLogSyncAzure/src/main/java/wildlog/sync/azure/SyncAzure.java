@@ -29,30 +29,43 @@ import java.nio.file.StandardOpenOption;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.WildLogDataType;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
-// TODO: Verander van static na instance class (kan dan die connection strings en workspce net een keer stuur. Kan dalk ook die tables net een keer create?
 
-public final class UtilsSync {
+public final class SyncAzure {
     private static final int BATCH_LIMIT = 50;
     private static final int URL_LIMIT = 30000;
 // TODO: Figure out whether I need to set this dynamically (its much too big for small thumbnails)
     private static final int MAX_BLOB_BLOCK_SIZE = 8*1024*1024;
+    private String storageConnectionString;
+    private String accountName;
+    private String accountKey;
+    private long workspaceID;
+    private int dbVersion;
+    private Map<WildLogDataType, CloudTable> mapTables = new HashMap<>();
+    private Map<WildLogDataType, ContainerURL> mapContainers = new HashMap<>();
     
-    private UtilsSync() {
+    public SyncAzure(String inStorageConnectionString, String inAccountName, String inAccountKey, long inWorkspaceID, int inDBVersion) {
+        storageConnectionString = inStorageConnectionString;
+        accountName = inAccountName;
+        accountKey = inAccountKey;
+        workspaceID = inWorkspaceID;
+        dbVersion = inDBVersion;
     }
     
     // DATA:
     
-    private static CloudTableClient getTableClient(String inStorageConnectionString) 
+    private CloudTableClient getTableClient() 
             throws InvalidKeyException, URISyntaxException {
         CloudStorageAccount storageAccount;
         try {
-            storageAccount = CloudStorageAccount.parse(inStorageConnectionString);
+            storageAccount = CloudStorageAccount.parse(storageConnectionString);
         }
         catch (URISyntaxException e) {
             System.err.println("Connection string specifies an invalid URI.");
@@ -67,20 +80,26 @@ public final class UtilsSync {
         return storageAccount.createCloudTableClient();
     }
     
-    private static CloudTable getTable(CloudTableClient inTableClient, WildLogDataType inDataType)
+    private CloudTable getTable(WildLogDataType inDataType)
             throws StorageException, IOException, InvalidKeyException, IllegalArgumentException, URISyntaxException, IllegalStateException {
-        CloudTable table = inTableClient.getTableReference(inDataType.getDescription().toLowerCase());
-        if (table.createIfNotExists()) {
-            System.out.println("Storage Table [" + inDataType.getDescription().toLowerCase() + "] was created.");
+        CloudTable table = mapTables.get(inDataType);
+        if (table == null) {
+            table = getTableClient().getTableReference(inDataType.getDescription().toLowerCase());
+            if (table.createIfNotExists()) {
+                System.out.println("Storage Table [" + inDataType.getDescription().toLowerCase() + "] was created.");
+            }
+            mapTables.put(inDataType, table);
         }
         return table;
     }
     
-    public static boolean uploadData(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, int inDBVersion, DataObjectWithAudit inData) {
+    public boolean uploadData(WildLogDataType inDataType, DataObjectWithAudit inData) {
         try {
-            CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
-            CloudTable cloudTable = getTable(cloudTableClient, inType);
-            SyncTableEntry syncTableEntry = new SyncTableEntry(inType, inWorkspaceID, inData.getID(), System.currentTimeMillis(), inDBVersion, inData);
+            CloudTable cloudTable = getTable(inDataType);
+            if (inData.getSyncIndicator() == 0) {
+                inData.setSyncIndicator(System.currentTimeMillis());
+            }
+            SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, inData.getID(), dbVersion, inData);
             cloudTable.execute(TableOperation.insertOrReplace(syncTableEntry));
             return true;
         }
@@ -90,10 +109,9 @@ public final class UtilsSync {
         return false;
     }
     
-    public static boolean uploadDataBatch(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, int inDBVersion, List<DataObjectWithAudit> inLstData) {
+    public boolean uploadDataBatch(WildLogDataType inDataType, List<DataObjectWithAudit> inLstData) {
         try {
-            CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
-            CloudTable cloudTable = getTable(cloudTableClient, inType);
+            CloudTable cloudTable = getTable(inDataType);
             // Batches are limited to less than 100 operations and must have under 4 MB total payload.
             // If the batch fails, then try again with a smaller number of operations.
             List<List<DataObjectWithAudit>> lstAllBatchDataChunks = new ArrayList<>((inLstData.size() / 95) + 1);
@@ -112,7 +130,10 @@ public final class UtilsSync {
                 try {
                     TableBatchOperation batchOperation = new TableBatchOperation();
                     for (DataObjectWithAudit data : lstAllBatchDataChunks.get(batchCounter)) {
-                        SyncTableEntry syncTableEntry = new SyncTableEntry(inType, inWorkspaceID, data.getID(), System.currentTimeMillis(), inDBVersion, data);
+                        if (data.getSyncIndicator() == 0) {
+                            data.setSyncIndicator(System.currentTimeMillis());
+                        }
+                        SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, data.getID(), dbVersion, data);
                         batchOperation.insertOrReplace(syncTableEntry);
                     }
                     cloudTable.execute(batchOperation);
@@ -144,13 +165,12 @@ public final class UtilsSync {
         return false;
     }
     
-    public static boolean deleteData(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, long inRecordID) {
+    public boolean deleteData(WildLogDataType inDataType, long inRecordID) {
         try {
-            CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
-            CloudTable cloudTable = getTable(cloudTableClient, inType);
+            CloudTable cloudTable = getTable(inDataType);
             // Dis jammer, maar dit lyk my ek moet eers die waarde laai voor ek kan delete.
             // (Dit soek die "etag" waarde, so ek kan nie self 'n nuwe SyncTableEntry skep nie...)
-            cloudTable.execute(TableOperation.delete(downloadData(inStorageConnectionString, inType, inWorkspaceID, inRecordID)));
+            cloudTable.execute(TableOperation.delete(downloadData(inDataType, inRecordID)));
             return true;
         }
         catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
@@ -159,12 +179,11 @@ public final class UtilsSync {
         return false;
     }
     
-    public static boolean deleteDataBatch(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, List<Long> inLstRecordIDs) {
+    public boolean deleteDataBatch(WildLogDataType inDataType, List<Long> inLstRecordIDs) {
         try {
-            CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
-            CloudTable cloudTable = getTable(cloudTableClient, inType);
+            CloudTable cloudTable = getTable(inDataType);
             // First load the data objects (can't delete on only the ID)
-            List<SyncTableEntry> lstData = downloadDataBatch(inStorageConnectionString, inType, inWorkspaceID, 0, inLstRecordIDs);
+            List<SyncTableEntry> lstData = downloadDataBatch(inDataType, 0, inLstRecordIDs);
             // Batches are limited to less than 100 operations and must have under 4 MB total payload.
             // If the batch fails, then try again with a smaller number of operations.
             List<List<SyncTableEntry>> lstAllBatchDataChunks = new ArrayList<>((lstData.size() / 95) + 1);
@@ -214,12 +233,11 @@ public final class UtilsSync {
         return false;
     }
     
-    public static SyncTableEntry downloadData(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, long inRecordID) {
+    public SyncTableEntry downloadData(WildLogDataType inDataType, long inRecordID) {
         try {
-            CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
-            CloudTable cloudTable = getTable(cloudTableClient, inType);
+            CloudTable cloudTable = getTable(inDataType);
             return cloudTable.execute(TableOperation.retrieve(
-                    Long.toString(inWorkspaceID), Long.toString(inRecordID), SyncTableEntry.class)).getResultAsType();
+                    Long.toString(workspaceID), Long.toString(inRecordID), SyncTableEntry.class)).getResultAsType();
         }
         catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
             ex.printStackTrace(System.err);
@@ -227,8 +245,7 @@ public final class UtilsSync {
         return null;
     }
     
-    public static List<SyncTableEntry> downloadDataBatch(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, 
-            long inAfterTimestamp, List<Long> inLstRecordIDs) {
+    public List<SyncTableEntry> downloadDataBatch(WildLogDataType inDataType, long inAfterTimestamp, List<Long> inLstRecordIDs) {
         // Limit the URL length to max 32684 characters by splitting long URLs into multiple calls
         List<List<Long>> lstAllBatchDataChunks = new ArrayList<>();
         if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
@@ -245,20 +262,18 @@ public final class UtilsSync {
             }
             List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
             for (List<Long> lstRecordIDs : lstAllBatchDataChunks) {
-                lstSyncTableEntries.addAll(downloadDataPerBatch(inStorageConnectionString, inType, inWorkspaceID, inAfterTimestamp, lstRecordIDs));
+                lstSyncTableEntries.addAll(downloadDataPerBatch(inDataType, inAfterTimestamp, lstRecordIDs));
             }
             return lstSyncTableEntries;
         }
         else {
-            return downloadDataPerBatch(inStorageConnectionString, inType, inWorkspaceID, inAfterTimestamp, null);
+            return downloadDataPerBatch(inDataType, inAfterTimestamp, null);
         }
     }
 
-    private static List<SyncTableEntry> downloadDataPerBatch(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, 
-            long inAfterTimestamp, List<Long> inLstRecordIDs) {
+    private List<SyncTableEntry> downloadDataPerBatch(WildLogDataType inDataType, long inAfterTimestamp, List<Long> inLstRecordIDs) {
         try {
-            CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
-            CloudTable cloudTable = getTable(cloudTableClient, inType);
+            CloudTable cloudTable = getTable(inDataType);
             TableQuery<SyncTableEntry> query = TableQuery.from(SyncTableEntry.class);
             // Create the id filter (if present)
             String idFilter = null;
@@ -276,7 +291,7 @@ public final class UtilsSync {
             // Build the combined filters
             if (inAfterTimestamp > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
                 String baseFilter = TableQuery.combineFilters(
-                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)),
+                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)),
                         TableQuery.Operators.AND,
                         TableQuery.generateFilterCondition("Timestamp", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, new Date(inAfterTimestamp)));
                 query = query.where(TableQuery.combineFilters(baseFilter, TableQuery.Operators.AND, idFilter));
@@ -284,17 +299,17 @@ public final class UtilsSync {
             else
             if (inAfterTimestamp > 0) {
                 query = query.where(TableQuery.combineFilters(
-                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)),
+                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)),
                         TableQuery.Operators.AND,
                         TableQuery.generateFilterCondition("Timestamp", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, new Date(inAfterTimestamp))));
             }
             else
             if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
-                String baseFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID));
+                String baseFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID));
                 query = query.where(TableQuery.combineFilters(baseFilter, TableQuery.Operators.AND, idFilter));
             }
             else {
-                query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)));
+                query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)));
             }
             // Run the query
             List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
@@ -309,19 +324,18 @@ public final class UtilsSync {
         return null;
     }
     
-    public static List<SyncTableEntry> getSyncListDataBatch(String inStorageConnectionString, WildLogDataType inType, long inWorkspaceID, long inAfterTimestamp) {
+    public List<SyncTableEntry> getSyncListDataBatch(WildLogDataType inDataType, long inAfterTimestamp) {
         try {
-            CloudTableClient cloudTableClient = getTableClient(inStorageConnectionString);
-            CloudTable cloudTable = getTable(cloudTableClient, inType);
+            CloudTable cloudTable = getTable(inDataType);
             TableQuery<SyncTableEntry> query = TableQuery.from(SyncTableEntry.class);
             if (inAfterTimestamp > 0) {
                 query = query.where(TableQuery.combineFilters(
-                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)),
+                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)),
                         TableQuery.Operators.AND,
                         TableQuery.generateFilterCondition("Timestamp", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, new Date(inAfterTimestamp))));
             }
             else {
-                query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(inWorkspaceID)));
+                query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)));
             }
             query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime"});
             List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
@@ -338,30 +352,33 @@ public final class UtilsSync {
     
     // FILES:
     
-    private static ContainerURL getContainerURL(String inAccountName, String inAccountKey, WildLogDataType inDataType) 
+    private ContainerURL getContainerURL(WildLogDataType inDataType) 
             throws InvalidKeyException, MalformedURLException {
-        SharedKeyCredentials sharedKeyCredentials = new SharedKeyCredentials(inAccountName, inAccountKey);
-        ServiceURL serviceURL = new ServiceURL(new URL("https://" + inAccountName + ".blob.core.windows.net"), 
-                StorageURL.createPipeline(sharedKeyCredentials, new PipelineOptions()));
-        ContainerURL containerURL = serviceURL.createContainerURL(inDataType.getDescription().toLowerCase());
-        try {
-            containerURL.create(null, null, null).blockingGet();
-            System.out.println("Blob Container [" + inDataType.getDescription().toLowerCase() + "] was created.");
-        }
-        catch (RestException ex){
-            if (ex instanceof RestException && ((RestException)ex).response().statusCode() != 409) {
-                throw ex;
+        ContainerURL containerURL = mapContainers.get(inDataType);
+        if (containerURL == null) {
+            SharedKeyCredentials sharedKeyCredentials = new SharedKeyCredentials(accountName, accountKey);
+            ServiceURL serviceURL = new ServiceURL(new URL("https://" + accountName + ".blob.core.windows.net"), 
+                    StorageURL.createPipeline(sharedKeyCredentials, new PipelineOptions()));
+            containerURL = serviceURL.createContainerURL(inDataType.getDescription().toLowerCase());
+            try {
+                containerURL.create(null, null, null).blockingGet();
+                System.out.println("Blob Container [" + inDataType.getDescription().toLowerCase() + "] was created.");
             }
+            catch (RestException ex){
+                if (ex instanceof RestException && ((RestException)ex).response().statusCode() != 409) {
+                    throw ex;
+                }
+            }
+            mapContainers.put(inDataType, containerURL);
         }
         return containerURL;
     }
     
-    public static boolean uploadFile(String inAccountName, String inAccountKey, WildLogDataType inDataType, 
-            Path inFilePath, long inWorkspaceID, long inRecordID, long inParentID) {
+    public boolean uploadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID) {
         try {
-            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inDataType);
+            ContainerURL container = getContainerURL(inDataType);
             BlockBlobURL blockBlob = container.createBlockBlobURL(
-                    Long.toString(inWorkspaceID) + "/"
+                    Long.toString(workspaceID) + "/"
                     + Long.toString(inParentID) + "/"
                     + Long.toString(inRecordID) + inFilePath.getFileName().toString().substring(inFilePath.getFileName().toString().lastIndexOf('.')));
             AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath);
@@ -379,12 +396,11 @@ public final class UtilsSync {
         return false;
     }
     
-    public static boolean downloadFile(String inAccountName, String inAccountKey, WildLogDataType inDataType, 
-            Path inFilePath, long inWorkspaceID, long inRecordID, long inParentID) {
+    public boolean downloadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID) {
         try {
-            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inDataType);
+            ContainerURL container = getContainerURL(inDataType);
             BlockBlobURL blockBlob = container.createBlockBlobURL(
-                    Long.toString(inWorkspaceID) + "/"
+                    Long.toString(workspaceID) + "/"
                     + Long.toString(inParentID) + "/"
                     + Long.toString(inRecordID) + inFilePath.getFileName().toString().substring(inFilePath.getFileName().toString().lastIndexOf('.')));
             AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
@@ -402,9 +418,9 @@ public final class UtilsSync {
         return false;
     }
     
-    public static boolean deleteFile(String inAccountName, String inAccountKey, WildLogDataType inDataType, String inFullBlobName) {
+    public boolean deleteFile(WildLogDataType inDataType, String inFullBlobName) {
         try {
-            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inDataType);
+            ContainerURL container = getContainerURL(inDataType);
             BlockBlobURL blockBlob = container.createBlockBlobURL(inFullBlobName);
             blockBlob.delete(null, null, null).blockingGet();
             return true;
@@ -415,16 +431,16 @@ public final class UtilsSync {
         return false;
     }
     
-    public static List<SyncBlobEntry> getSyncListFileBatch(String inAccountName, String inAccountKey, WildLogDataType inDataType, long inWorkspaceID) {
+    public List<SyncBlobEntry> getSyncListFileBatch(WildLogDataType inDataType) {
         try {
             List<SyncBlobEntry> lstSyncBlobEntries = new ArrayList<>();
-            ContainerURL container = getContainerURL(inAccountName, inAccountKey, inDataType);
+            ContainerURL container = getContainerURL(inDataType);
             ListBlobsOptions options = new ListBlobsOptions();
             options.withMaxResults(10);
-            options.withPrefix(Long.toString(inWorkspaceID));
+            options.withPrefix(Long.toString(workspaceID));
             container.listBlobsFlatSegment(null, options, null)
                     .flatMap(containerListBlobFlatSegmentResponse ->
-                            listAllBlobs(container, containerListBlobFlatSegmentResponse, options, inDataType, inWorkspaceID, lstSyncBlobEntries)).blockingGet();
+                            listAllBlobs(container, containerListBlobFlatSegmentResponse, options, inDataType, lstSyncBlobEntries)).blockingGet();
             return lstSyncBlobEntries;
         }
         catch (InvalidKeyException | IOException ex) {
@@ -433,8 +449,8 @@ public final class UtilsSync {
         return null;
     }
 
-    private static Single<ContainerListBlobFlatSegmentResponse> listAllBlobs(ContainerURL inContainer, ContainerListBlobFlatSegmentResponse inResponse, 
-            ListBlobsOptions inOptions, WildLogDataType inDataType, long inWorkspaceID, List<SyncBlobEntry> inLstSyncBlobEntries) {
+    private Single<ContainerListBlobFlatSegmentResponse> listAllBlobs(ContainerURL inContainer, ContainerListBlobFlatSegmentResponse inResponse, 
+            ListBlobsOptions inOptions, WildLogDataType inDataType, List<SyncBlobEntry> inLstSyncBlobEntries) {
         if (inResponse.body().segment() != null) {
             for (BlobItem blobItem : inResponse.body().segment().blobItems()) {
                 String[] namePieces = blobItem.name().split("/");
@@ -455,7 +471,7 @@ public final class UtilsSync {
             String nextMarker = inResponse.body().nextMarker();
             return inContainer.listBlobsFlatSegment(nextMarker, inOptions, null)
                     .flatMap(containersListBlobFlatSegmentResponse ->
-                            listAllBlobs(inContainer, containersListBlobFlatSegmentResponse, inOptions, inDataType, inWorkspaceID, inLstSyncBlobEntries));
+                            listAllBlobs(inContainer, containersListBlobFlatSegmentResponse, inOptions, inDataType, inLstSyncBlobEntries));
         }
     }
     
