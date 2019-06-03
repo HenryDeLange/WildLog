@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,6 +45,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogDeleteLog;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.WildLogDataType;
@@ -1021,11 +1023,11 @@ public class WorkspaceSyncDialog extends JDialog {
         mapCloudBlobs.put(WildLogDataType.SIGHTING, lstCloudSightingBlobs);
         boolean reloadData = false;
         for (SyncTableEntry cloudEntry : lstCloudEntries) {
+            WildLogFileCore cloudWildLogFile = (WildLogFileCore) cloudEntry.getData();
             boolean found = false;
-            for (SyncBlobEntry blobEntry : mapCloudBlobs.getOrDefault(cloudEntry.getWildLogDataType(), new ArrayList<>(0))) {
-                WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
+            for (SyncBlobEntry blobEntry : mapCloudBlobs.getOrDefault(cloudWildLogFile.getLinkType(), new ArrayList<>(0))) {
                 if (cloudEntry.getRecordID() == blobEntry.getRecordID()
-                        && inSyncAzure.calculateFullBlobID(cloudWildLogFile.getLinkID(), cloudWildLogFile.getID(), cloudWildLogFile.getAbsolutePath())
+                        && inSyncAzure.calculateFullBlobID(cloudWildLogFile.getLinkID(), cloudWildLogFile.getID(), Paths.get(cloudWildLogFile.getDBFilePath()))
                                 .equals(blobEntry.getFullBlobID())) {
                     found = true;
                     break;
@@ -1033,7 +1035,7 @@ public class WorkspaceSyncDialog extends JDialog {
             }
             if (!found) {
                 logIfFailed(inFeedback, new SyncAction("SYNC_FIX CLOUD_DELETE", WildLogDataType.FILE, 
-                        cloudEntry.getRecordID(), ((WildLogFile) cloudEntry.getData()).getLinkType().getDescription(), null), 
+                        cloudEntry.getRecordID(), cloudWildLogFile.getLinkType().getDescription(), null), 
                         inSyncAzure.deleteData(WildLogDataType.FILE, cloudEntry.getRecordID()));
                 reloadData = true;
             }
@@ -1046,9 +1048,9 @@ public class WorkspaceSyncDialog extends JDialog {
             for (SyncBlobEntry blobEntry : entry.getValue()) {
                 boolean found = false;
                 for (SyncTableEntry cloudEntry : lstCloudEntries) {
-                    WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
+                    WildLogFileCore cloudWildLogFile = (WildLogFileCore) cloudEntry.getData();
                     if (cloudEntry.getRecordID() == blobEntry.getRecordID()
-                            && inSyncAzure.calculateFullBlobID(cloudWildLogFile.getLinkID(), cloudWildLogFile.getID(), cloudWildLogFile.getAbsolutePath())
+                            && inSyncAzure.calculateFullBlobID(cloudWildLogFile.getLinkID(), cloudWildLogFile.getID(), Paths.get(cloudWildLogFile.getDBFilePath()))
                                     .equals(blobEntry.getFullBlobID())) {
                         found = true;
                         break;
@@ -1155,9 +1157,9 @@ public class WorkspaceSyncDialog extends JDialog {
         // Create if not found
         if (lstWorkspaceCreateEntries != null) {
             for (SyncTableEntry cloudEntry : lstWorkspaceCreateEntries) {
+                WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) cloudEntry.getData());
                 if (rdbSyncAllFiles.isSelected() || (rdbSyncImagesOnly.isSelected() 
-                        && WildLogFileExtentions.Images.isKnownExtention(((WildLogFile) cloudEntry.getData()).getAbsolutePath()))) {
-                    WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
+                        && WildLogFileExtentions.Images.isKnownExtention(cloudWildLogFile.getAbsolutePath()))) {
                     // Don't overwrite existing files
                     if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
                         // There is already a file on the disk with the same path, thus we need to rename this one
@@ -1189,9 +1191,9 @@ public class WorkspaceSyncDialog extends JDialog {
         // Update if outdated
         if (lstWorkspaceUpdateEntries != null) {
             for (SyncTableEntry cloudEntry : lstWorkspaceUpdateEntries) {
+                WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) cloudEntry.getData());
                 if (rdbSyncAllFiles.isSelected() || (rdbSyncImagesOnly.isSelected() 
-                        && WildLogFileExtentions.Images.isKnownExtention(((WildLogFile) cloudEntry.getData()).getAbsolutePath()))) {
-                    WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
+                        && WildLogFileExtentions.Images.isKnownExtention(cloudWildLogFile.getAbsolutePath()))) {
                     // Don't overwrite existing files, unless it is the same file that is being replaced
                     Path oldPathToDelete = null;
                     if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
@@ -1262,15 +1264,16 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private int areWorkspaceAndCloudFilesInSync(WildLogFile inWorkspaceFile, SyncTableEntry inCloudFile) {
+        WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) inCloudFile.getData());
         // Note: Thumbnails will always be JPG files
         if (WildLogFileExtentions.Images.isJPG(inWorkspaceFile.getAbsolutePath())
-                && WildLogFileExtentions.Images.isJPG(((WildLogFile) inCloudFile.getData()).getAbsolutePath())) {
+                && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath())) {
             // Both are JPGs, so now compare the workspace file's size (or its previosuly calculated thumbnail size) to the cloud file's size
             return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator());
         }
         else {
             // If both files aren't JPGs, then the cloud file might still be a JPG (for example a thumbnail of a PNG)
-            if (WildLogFileExtentions.Images.isJPG(((WildLogFile) inCloudFile.getData()).getAbsolutePath())
+            if (WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath())
                     && WildLogFileExtentions.Images.isKnownExtention(inWorkspaceFile.getAbsolutePath())) {
                 // If the thumbnail option is selected then compare on thumbnail sizes
                 if (rdbSyncThumbnails.isSelected()) {
@@ -1284,7 +1287,7 @@ public class WorkspaceSyncDialog extends JDialog {
             }
             // Note: It should not be possible to have the case where the cloud is not JPG, but the workspace is, however I'll code for it...
             else if (WildLogFileExtentions.Images.isJPG(inWorkspaceFile.getAbsolutePath())
-                    && WildLogFileExtentions.Images.isKnownExtention(((WildLogFile) inCloudFile.getData()).getAbsolutePath())) {
+                    && WildLogFileExtentions.Images.isKnownExtention(cloudWildLogFile.getAbsolutePath())) {
                 // Choose the bigger file (since I don't know enough to determine which to use)
                 return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator());
             }

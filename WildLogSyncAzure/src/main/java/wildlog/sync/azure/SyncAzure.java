@@ -337,7 +337,12 @@ public final class SyncAzure {
             else {
                 query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)));
             }
-            query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime"});
+            if (inDataType == WildLogDataType.FILE) {
+                query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime", "linkType", "linkID", "originalFileLocation"});
+            }
+            else {
+                query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime"});
+            }
             List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
             for (SyncTableEntry syncTableEntry : cloudTable.execute(query)) {
                 lstSyncTableEntries.add(syncTableEntry);

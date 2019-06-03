@@ -24,6 +24,25 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
             WildLogFileType inFileType, Date inUploadDate, Date inFileDate, long inFileSize) {
         super(inID, inLinkID, inLinkType, inFilename, inOriginalFileLocation, inFileType, inUploadDate, inFileDate, inFileSize);
     }
+    
+    /**
+     * Word gebruik deur die Sync omdat die cloud WildLogFileCore objects maak (library dependencies) 
+     * maar ek wil bv. getAbsolutePath() kan gebruik op die objects.
+     */
+    public WildLogFile(WildLogFileCore inWildLogFileCore) {
+        setID(inWildLogFileCore.getID());
+        setLinkID(inWildLogFileCore.getLinkID());
+        setLinkType(inWildLogFileCore.getLinkType());
+        setFilename(inWildLogFileCore.getFilename());
+        setDBFilePath(inWildLogFileCore.getDBFilePath());
+        setFileType(inWildLogFileCore.getFileType());
+        setUploadDate(inWildLogFileCore.getUploadDate());
+        setDefaultFile(inWildLogFileCore.isDefaultFile());
+        setFileDate(inWildLogFileCore.getFileDate());
+        setFileSize(inWildLogFileCore.getFileSize());
+        setAuditTime(inWildLogFileCore.getAuditTime());
+        setAuditUser(inWildLogFileCore.getAuditUser());
+    }
 
     
     @Override
