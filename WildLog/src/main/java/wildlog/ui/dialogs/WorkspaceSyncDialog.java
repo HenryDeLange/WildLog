@@ -58,6 +58,7 @@ import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
 
@@ -92,43 +93,43 @@ public class WorkspaceSyncDialog extends JDialog {
     private void configureFreeToken() {
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(false);
-        rdbImportThumbnails.setSelected(true);
-        rdbImportThumbnails.setEnabled(false);
-        rdbImportOriginalImages.setEnabled(false);
+        rdbSyncThumbnails.setSelected(true);
+        rdbSyncThumbnails.setEnabled(false);
+        rdbSyncOriginalImages.setEnabled(false);
         cmbThumbnailSize.setEnabled(false);
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_TINY);
         cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT);
-        rdbImportNoFiles.setSelected(true);
-        rdbImportAllFiles.setEnabled(false);
-        rdbImportImagesOnly.setEnabled(false);
+        rdbSyncNoFiles.setSelected(true);
+        rdbSyncAllFiles.setEnabled(false);
+        rdbSyncImagesOnly.setEnabled(false);
     }
     
     private void configureBasicToken() {
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(true);
-        rdbImportThumbnails.setSelected(true);
-        rdbImportThumbnails.setEnabled(true);
-        rdbImportOriginalImages.setEnabled(false);
+        rdbSyncThumbnails.setSelected(true);
+        rdbSyncThumbnails.setEnabled(true);
+        rdbSyncOriginalImages.setEnabled(false);
         cmbThumbnailSize.setEnabled(true);
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.LARGE);
         cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT);
-        rdbImportImagesOnly.setSelected(true);
-        rdbImportAllFiles.setEnabled(false);
-        rdbImportImagesOnly.setEnabled(true);
+        rdbSyncImagesOnly.setSelected(true);
+        rdbSyncAllFiles.setEnabled(false);
+        rdbSyncImagesOnly.setEnabled(true);
     }
     
     private void configureFullToken() {
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(true);
-        rdbImportThumbnails.setSelected(true);
-        rdbImportThumbnails.setEnabled(true);
-        rdbImportOriginalImages.setEnabled(true);
+        rdbSyncThumbnails.setSelected(true);
+        rdbSyncThumbnails.setEnabled(true);
+        rdbSyncOriginalImages.setEnabled(true);
         cmbThumbnailSize.setEnabled(true);
         cmbThumbnailSize.addItem(WildLogThumbnailSizes.SYNC_LIMIT);
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.SYNC_LIMIT);
-        rdbImportImagesOnly.setSelected(true);
-        rdbImportAllFiles.setEnabled(true);
-        rdbImportImagesOnly.setEnabled(true);
+        rdbSyncImagesOnly.setSelected(true);
+        rdbSyncAllFiles.setEnabled(true);
+        rdbSyncImagesOnly.setEnabled(true);
     }
 
     /**
@@ -141,7 +142,6 @@ public class WorkspaceSyncDialog extends JDialog {
         grpFiles = new javax.swing.ButtonGroup();
         grpImages = new javax.swing.ButtonGroup();
         grpMode = new javax.swing.ButtonGroup();
-        grpConflicts = new javax.swing.ButtonGroup();
         jLabel4 = new javax.swing.JLabel();
         btnConfirm = new javax.swing.JButton();
         pnlSyncToken = new javax.swing.JPanel();
@@ -153,12 +153,12 @@ public class WorkspaceSyncDialog extends JDialog {
         btnConfirmSyncToken = new javax.swing.JButton();
         pnlSyncOptions = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        rdbImportAllFiles = new javax.swing.JRadioButton();
-        rdbImportImagesOnly = new javax.swing.JRadioButton();
-        rdbImportNoFiles = new javax.swing.JRadioButton();
+        rdbSyncAllFiles = new javax.swing.JRadioButton();
+        rdbSyncImagesOnly = new javax.swing.JRadioButton();
+        rdbSyncNoFiles = new javax.swing.JRadioButton();
         jSeparator1 = new javax.swing.JSeparator();
-        rdbImportOriginalImages = new javax.swing.JRadioButton();
-        rdbImportThumbnails = new javax.swing.JRadioButton();
+        rdbSyncOriginalImages = new javax.swing.JRadioButton();
+        rdbSyncThumbnails = new javax.swing.JRadioButton();
         cmbThumbnailSize = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
@@ -248,62 +248,62 @@ public class WorkspaceSyncDialog extends JDialog {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Files:");
 
-        grpFiles.add(rdbImportAllFiles);
-        rdbImportAllFiles.setText("All Files");
-        rdbImportAllFiles.setToolTipText("Sync all files between the current Workspace and the cloud.");
-        rdbImportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportAllFiles.setFocusPainted(false);
-        rdbImportAllFiles.addActionListener(new java.awt.event.ActionListener() {
+        grpFiles.add(rdbSyncAllFiles);
+        rdbSyncAllFiles.setText("All Files");
+        rdbSyncAllFiles.setToolTipText("Sync all files between the current Workspace and the cloud.");
+        rdbSyncAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbSyncAllFiles.setFocusPainted(false);
+        rdbSyncAllFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportAllFilesActionPerformed(evt);
+                rdbSyncAllFilesActionPerformed(evt);
             }
         });
 
-        grpFiles.add(rdbImportImagesOnly);
-        rdbImportImagesOnly.setText("Images Only");
-        rdbImportImagesOnly.setToolTipText("Sync only images between the current Workspace and the cloud.");
-        rdbImportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportImagesOnly.setFocusPainted(false);
-        rdbImportImagesOnly.addActionListener(new java.awt.event.ActionListener() {
+        grpFiles.add(rdbSyncImagesOnly);
+        rdbSyncImagesOnly.setText("Images Only");
+        rdbSyncImagesOnly.setToolTipText("Sync only images between the current Workspace and the cloud.");
+        rdbSyncImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbSyncImagesOnly.setFocusPainted(false);
+        rdbSyncImagesOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportImagesOnlyActionPerformed(evt);
+                rdbSyncImagesOnlyActionPerformed(evt);
             }
         });
 
-        grpFiles.add(rdbImportNoFiles);
-        rdbImportNoFiles.setSelected(true);
-        rdbImportNoFiles.setText("No Files");
-        rdbImportNoFiles.setToolTipText("Don't sync any files between the current Workspace and the cloud.");
-        rdbImportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportNoFiles.setFocusPainted(false);
-        rdbImportNoFiles.addActionListener(new java.awt.event.ActionListener() {
+        grpFiles.add(rdbSyncNoFiles);
+        rdbSyncNoFiles.setSelected(true);
+        rdbSyncNoFiles.setText("No Files");
+        rdbSyncNoFiles.setToolTipText("Don't sync any files between the current Workspace and the cloud.");
+        rdbSyncNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbSyncNoFiles.setFocusPainted(false);
+        rdbSyncNoFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportNoFilesActionPerformed(evt);
+                rdbSyncNoFilesActionPerformed(evt);
             }
         });
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        grpImages.add(rdbImportOriginalImages);
-        rdbImportOriginalImages.setText("Original Images");
-        rdbImportOriginalImages.setToolTipText("Sync a copy of the original linked images between the current Workspace and the cloud.");
-        rdbImportOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportOriginalImages.setFocusPainted(false);
-        rdbImportOriginalImages.addActionListener(new java.awt.event.ActionListener() {
+        grpImages.add(rdbSyncOriginalImages);
+        rdbSyncOriginalImages.setText("Original Images");
+        rdbSyncOriginalImages.setToolTipText("Sync a copy of the original linked images between the current Workspace and the cloud.");
+        rdbSyncOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbSyncOriginalImages.setFocusPainted(false);
+        rdbSyncOriginalImages.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportOriginalImagesActionPerformed(evt);
+                rdbSyncOriginalImagesActionPerformed(evt);
             }
         });
 
-        grpImages.add(rdbImportThumbnails);
-        rdbImportThumbnails.setSelected(true);
-        rdbImportThumbnails.setText("Thumbnail Images");
-        rdbImportThumbnails.setToolTipText("The images that are synced will be reduced in size, the original images will not be synced.");
-        rdbImportThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportThumbnails.setFocusPainted(false);
-        rdbImportThumbnails.addActionListener(new java.awt.event.ActionListener() {
+        grpImages.add(rdbSyncThumbnails);
+        rdbSyncThumbnails.setSelected(true);
+        rdbSyncThumbnails.setText("Thumbnail Images");
+        rdbSyncThumbnails.setToolTipText("The images that are synced will be reduced in size, the original images will not be synced.");
+        rdbSyncThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbSyncThumbnails.setFocusPainted(false);
+        rdbSyncThumbnails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbImportThumbnailsActionPerformed(evt);
+                rdbSyncThumbnailsActionPerformed(evt);
             }
         });
 
@@ -354,17 +354,17 @@ public class WorkspaceSyncDialog extends JDialog {
                             .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(10, 10, 10)
-                                .addComponent(rdbImportAllFiles)
+                                .addComponent(rdbSyncAllFiles)
                                 .addGap(5, 5, 5)
-                                .addComponent(rdbImportImagesOnly)
+                                .addComponent(rdbSyncImagesOnly)
                                 .addGap(5, 5, 5)
-                                .addComponent(rdbImportNoFiles)
+                                .addComponent(rdbSyncNoFiles)
                                 .addGap(10, 10, 10)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
-                                .addComponent(rdbImportOriginalImages)
+                                .addComponent(rdbSyncOriginalImages)
                                 .addGap(5, 5, 5)
-                                .addComponent(rdbImportThumbnails)
+                                .addComponent(rdbSyncThumbnails)
                                 .addGap(5, 5, 5)
                                 .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
@@ -383,11 +383,11 @@ public class WorkspaceSyncDialog extends JDialog {
                             .addComponent(jLabel7)
                             .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rdbImportOriginalImages)
-                            .addComponent(rdbImportThumbnails)
-                            .addComponent(rdbImportImagesOnly)
-                            .addComponent(rdbImportAllFiles)
-                            .addComponent(rdbImportNoFiles))))
+                            .addComponent(rdbSyncOriginalImages)
+                            .addComponent(rdbSyncThumbnails)
+                            .addComponent(rdbSyncImagesOnly)
+                            .addComponent(rdbSyncAllFiles)
+                            .addComponent(rdbSyncNoFiles))))
                 .addGap(5, 5, 5)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -471,6 +471,7 @@ public class WorkspaceSyncDialog extends JDialog {
         // Parse the token to get the necessary values
         String[] syncTokenValues = syncToken.split(" ");
         WildLogApp.LOGGER.log(Level.INFO, "Sync Mode: {}", syncTokenValues[0]);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync Account: {}", syncTokenValues[1]);
         if (syncTokenValues[0].equals("FREE")) {
             WLOptionPane.showMessageDialog(this,
                     "<html>You are currently using the limited free <i>WildLog Cloud Sync Token</i>. "
@@ -533,11 +534,6 @@ public class WorkspaceSyncDialog extends JDialog {
                     }
                 });
                 UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
-                    
-                    
-// TODO: Sit later beter progressbar by
-                    
-                    
                     @Override
                     protected Object doInBackground() throws Exception {
                         long startTime = System.currentTimeMillis();
@@ -547,35 +543,44 @@ public class WorkspaceSyncDialog extends JDialog {
                         Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("CloudSyncWorkspaceReport.txt");
                         PrintWriter feedback = null;
                         try {
+                            double adjustForNoFiles = 1;
+                            if (rdbSyncNoFiles.isSelected()) {
+                                adjustForNoFiles = 1.5;
+                            }
                             feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                             feedback.println("-------------------------------------------------");
                             feedback.println("---------- Cloud Sync Workspace Report ----------");
                             feedback.println("-------------------------------------------------");
                             feedback.println("");
+
+// TODO: Sit later beter progressbar by
+
                             // SYNC - Delete Logs
-                            setProgress(1);
+                            setProgress((int) (1 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync Workspace - Syncing DeleteLogs ..." + getProgress() + "%");
                             syncDeleteLogs(feedback, syncAzure);
                             // SYNC - Data
-                            setProgress(10);
+                            setProgress((int) (10 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync Workspace - Syncing Creatures ..." + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.ELEMENT);
-                            setProgress(20);
+                            setProgress((int) (20 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync Workspace - Syncing Places ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.LOCATION);
-                            setProgress(30);
+                            setProgress((int) (30 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync Workspace - Syncing Periods ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.VISIT);
-                            setProgress(40);
+                            setProgress((int) (40 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync Workspace - Syncing Observations ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.SIGHTING);
-                            setProgress(50);
+                            setProgress((int) (50 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync Workspace - Syncing Users ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_USER);
                             // SYNC - Files
-                            setProgress(60);
-                            setMessage("Busy with the Cloud Sync Workspace - Syncing Files ... " + getProgress() + "%");
-                            syncFileRecords(feedback, syncAzure);
+                            if (!rdbSyncNoFiles.isSelected()) {
+                                setProgress(60);
+                                setMessage("Busy with the Cloud Sync Workspace - Syncing Files ... " + getProgress() + "%");
+                                syncFileRecords(feedback, syncAzure);
+                            }
                         }
                         // Finish the report
                         catch (Exception ex) {
@@ -646,38 +651,38 @@ public class WorkspaceSyncDialog extends JDialog {
         });
     }//GEN-LAST:event_btnConfirmActionPerformed
 
-    private void rdbImportAllFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbImportAllFilesActionPerformed
-       if (rdbImportAllFiles.isSelected()) {
-           rdbImportOriginalImages.setEnabled(true);
-           rdbImportThumbnails.setEnabled(true);
+    private void rdbSyncAllFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSyncAllFilesActionPerformed
+       if (rdbSyncAllFiles.isSelected()) {
+           rdbSyncOriginalImages.setEnabled(true);
+           rdbSyncThumbnails.setEnabled(true);
        }
-    }//GEN-LAST:event_rdbImportAllFilesActionPerformed
+    }//GEN-LAST:event_rdbSyncAllFilesActionPerformed
 
-    private void rdbImportImagesOnlyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbImportImagesOnlyActionPerformed
-        if (rdbImportImagesOnly.isSelected()) {
-           rdbImportOriginalImages.setEnabled(true);
-           rdbImportThumbnails.setEnabled(true);
+    private void rdbSyncImagesOnlyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSyncImagesOnlyActionPerformed
+        if (rdbSyncImagesOnly.isSelected()) {
+           rdbSyncOriginalImages.setEnabled(true);
+           rdbSyncThumbnails.setEnabled(true);
        }
-    }//GEN-LAST:event_rdbImportImagesOnlyActionPerformed
+    }//GEN-LAST:event_rdbSyncImagesOnlyActionPerformed
 
-    private void rdbImportNoFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbImportNoFilesActionPerformed
-        if (rdbImportNoFiles.isSelected()) {
-           rdbImportOriginalImages.setEnabled(false);
-           rdbImportThumbnails.setEnabled(false);
+    private void rdbSyncNoFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSyncNoFilesActionPerformed
+        if (rdbSyncNoFiles.isSelected()) {
+           rdbSyncOriginalImages.setEnabled(false);
+           rdbSyncThumbnails.setEnabled(false);
        }
-    }//GEN-LAST:event_rdbImportNoFilesActionPerformed
+    }//GEN-LAST:event_rdbSyncNoFilesActionPerformed
 
-    private void rdbImportOriginalImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbImportOriginalImagesActionPerformed
-        if (rdbImportOriginalImages.isSelected()) {
+    private void rdbSyncOriginalImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSyncOriginalImagesActionPerformed
+        if (rdbSyncOriginalImages.isSelected()) {
             cmbThumbnailSize.setEnabled(false);
         }
-    }//GEN-LAST:event_rdbImportOriginalImagesActionPerformed
+    }//GEN-LAST:event_rdbSyncOriginalImagesActionPerformed
 
-    private void rdbImportThumbnailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbImportThumbnailsActionPerformed
-        if (rdbImportThumbnails.isSelected()) {
+    private void rdbSyncThumbnailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSyncThumbnailsActionPerformed
+        if (rdbSyncThumbnails.isSelected()) {
             cmbThumbnailSize.setEnabled(true);
         }
-    }//GEN-LAST:event_rdbImportThumbnailsActionPerformed
+    }//GEN-LAST:event_rdbSyncThumbnailsActionPerformed
 
     private void btnConfirmSyncTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSyncTokenActionPerformed
         if (txaSyncToken.getText() == null || txaSyncToken.getText().isEmpty()) {
@@ -996,9 +1001,6 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void syncFileRecords(PrintWriter inFeedback, SyncAzure inSyncAzure) {
-        
-// TODO: Handle the "images only" vs "all files" options
-        
         List<SyncTableEntry> lstCloudEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.FILE, 0);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Cloud File Entries: " + lstCloudEntries.size());
         List<WildLogFile> lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listWildLogFiles(-1, null, WildLogFile.class);
@@ -1021,27 +1023,33 @@ public class WorkspaceSyncDialog extends JDialog {
         for (SyncTableEntry cloudEntry : lstCloudEntries) {
             boolean found = false;
             for (SyncBlobEntry blobEntry : mapCloudBlobs.getOrDefault(cloudEntry.getWildLogDataType(), new ArrayList<>(0))) {
-                if (cloudEntry.getRecordID() == blobEntry.getRecordID()) {
+                WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
+                if (cloudEntry.getRecordID() == blobEntry.getRecordID()
+                        && inSyncAzure.calculateFullBlobID(cloudWildLogFile.getLinkID(), cloudWildLogFile.getID(), cloudWildLogFile.getAbsolutePath())
+                                .equals(blobEntry.getFullBlobID())) {
                     found = true;
                     break;
                 }
             }
             if (!found) {
                 logIfFailed(inFeedback, new SyncAction("SYNC_FIX CLOUD_DELETE", WildLogDataType.FILE, 
-                        cloudEntry.getRecordID(), cloudEntry.getWildLogDataType().getDescription(), null), 
+                        cloudEntry.getRecordID(), ((WildLogFile) cloudEntry.getData()).getLinkType().getDescription(), null), 
                         inSyncAzure.deleteData(WildLogDataType.FILE, cloudEntry.getRecordID()));
                 reloadData = true;
             }
         }
         if (reloadData) {
             lstCloudEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.FILE, 0);
-            WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Cloud File Entries: " + lstCloudEntries.size());
+            WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Cloud File Entries (Reloaded): " + lstCloudEntries.size());
         }
         for (Map.Entry<WildLogDataType, List<SyncBlobEntry>> entry : mapCloudBlobs.entrySet()) {
             for (SyncBlobEntry blobEntry : entry.getValue()) {
                 boolean found = false;
                 for (SyncTableEntry cloudEntry : lstCloudEntries) {
-                    if (cloudEntry.getRecordID() == blobEntry.getRecordID()) {
+                    WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
+                    if (cloudEntry.getRecordID() == blobEntry.getRecordID()
+                            && inSyncAzure.calculateFullBlobID(cloudWildLogFile.getLinkID(), cloudWildLogFile.getID(), cloudWildLogFile.getAbsolutePath())
+                                    .equals(blobEntry.getFullBlobID())) {
                         found = true;
                         break;
                     }
@@ -1053,39 +1061,43 @@ public class WorkspaceSyncDialog extends JDialog {
                 }
             }
         }
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Verify Files");
         // UP: Make sure cloud knows about new workspace records
         List<SyncAction> lstSyncActions = new ArrayList<>();
         for (WildLogFile workspaceEntry : lstWorkspaceEntries) {
-            if (setSyncIndicatorForFiles(workspaceEntry, inFeedback)) {
-                continue;
-            }
-            boolean found = false;
-            boolean shouldBeSynced = false;
-            for (SyncTableEntry cloudEntry : lstCloudEntries) {
-                if (workspaceEntry.getID() == cloudEntry.getRecordID()) {
-                    found = true;
-                    if (workspaceEntry.getSyncIndicator() > cloudEntry.getData().getSyncIndicator()) {
-                        shouldBeSynced = true;
-                    }
-                    break;
+            if (rdbSyncAllFiles.isSelected() || (rdbSyncImagesOnly.isSelected() && WildLogFileExtentions.Images.isKnownExtention(workspaceEntry.getAbsolutePath()))) {
+                if (!calculateFileSizeAsSyncIndicator(inFeedback, workspaceEntry)) {
+                    continue;
                 }
-            }
-            if (!found || shouldBeSynced) {
-                lstSyncActions.add(new SyncAction("CLOUD_UPLOAD", WildLogDataType.FILE, workspaceEntry.getID(), 
-                        workspaceEntry.getLinkType().getDescription(), workspaceEntry));
+                boolean found = false;
+                boolean shouldBeSynced = false;
+                for (SyncTableEntry cloudEntry : lstCloudEntries) {
+                    if (workspaceEntry.getID() == cloudEntry.getRecordID()) {
+                        found = true;
+                        if (areWorkspaceAndCloudFilesInSync(workspaceEntry, cloudEntry) > 0) {
+                            shouldBeSynced = true;
+                        }
+                        break;
+                    }
+                }
+                if (!found || shouldBeSynced) {
+                    lstSyncActions.add(new SyncAction("CLOUD_UPLOAD", WildLogDataType.FILE, workspaceEntry.getID(), 
+                            workspaceEntry.getLinkType().getDescription(), workspaceEntry));
+                }
             }
         }
         if (!lstSyncActions.isEmpty()) {
             // Note: Files are always uploaded one at a time
             for (SyncAction syncAction : lstSyncActions) {
                 WildLogFile wildLogFile = (WildLogFile) syncAction.data;
-                syncAction.details = syncAction.type + "_FILE";
+                syncAction.details = wildLogFile.getLinkType().getDescription() + "_FILE";
                 logIfFailed(inFeedback, syncAction, inSyncAzure.uploadFile(wildLogFile.getLinkType(), getResizedFile(wildLogFile), wildLogFile.getLinkID(), wildLogFile.getID()));
-                syncAction.details = syncAction.type + "_DATA";
+                syncAction.details = wildLogFile.getLinkType().getDescription() + "_DATA";
                 logIfFailed(inFeedback, syncAction, inSyncAzure.uploadData(WildLogDataType.FILE, syncAction.data));
                 syncFileUp++;
             }
         }
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Upload Files");
         // DOWN: Make sure the workspace knows about new cloud records
         List<Long> lstWorkspaceCreateIDs = new ArrayList<>();
         List<Long> lstWorkspaceUpdateIDs = new ArrayList<>();
@@ -1094,11 +1106,11 @@ public class WorkspaceSyncDialog extends JDialog {
             boolean shouldBeUpdated = false;
             for (WildLogFile workspaceEntry : lstWorkspaceEntries) {
                 if (workspaceEntry.getID() == cloudEntry.getRecordID()) {
-                    if (setSyncIndicatorForFiles(workspaceEntry, inFeedback)) {
+                    if (!calculateFileSizeAsSyncIndicator(inFeedback, workspaceEntry)) {
                         continue;
                     }
                     found = true;
-                    if (workspaceEntry.getSyncIndicator() < cloudEntry.getData().getSyncIndicator()) {
+                    if (areWorkspaceAndCloudFilesInSync(workspaceEntry, cloudEntry) < 0) {
                         shouldBeUpdated = true;
                     }
                     break;
@@ -1139,104 +1151,146 @@ public class WorkspaceSyncDialog extends JDialog {
         if (!lstWorkspaceUpdateIDs.isEmpty() && (lstWorkspaceUpdateEntries == null || lstWorkspaceUpdateEntries.size() != lstWorkspaceUpdateIDs.size())) {
             logIfFailed(inFeedback, new SyncAction("CLOUD_DOWNLOAD", WildLogDataType.FILE, lstWorkspaceUpdateIDs.size(), Arrays.toString(lstWorkspaceUpdateIDs.toArray()), null), false);
         }
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Files Preperation");
         // Create if not found
         if (lstWorkspaceCreateEntries != null) {
             for (SyncTableEntry cloudEntry : lstWorkspaceCreateEntries) {
-                WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
-                // Don't overwrite existing files
-                if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
-                    // There is already a file on the disk with the same path, thus we need to rename this one
-                    while (Files.exists(cloudWildLogFile.getAbsolutePath())) {
-                        cloudWildLogFile.setDBFilePath(cloudWildLogFile.getRelativePath().getParent().resolve("wlsync_" + cloudWildLogFile.getRelativePath().getFileName()).toString());
-                        WildLogApp.LOGGER.log(Level.INFO, "Renaming sync file before downloading: " + cloudWildLogFile.getAbsolutePath().toString());
-                    }
-                }
-                // Download the file
-                SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
-                syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_FILE";
-                logIfFailed(inFeedback, syncAction, inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()));
-                // Check the file size
-                long cloudFileSize = cloudWildLogFile.getSyncIndicator();
-                setSyncIndicatorForFiles(cloudWildLogFile, inFeedback); // Get the new file size
-                if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
-                    logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, cloudWildLogFile.getID(), 
-                            "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
-                    continue;
-                }
-                // Download and save the workspace data record if all seems correct
-                syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_DATA";
-                logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createWildLogFile(cloudWildLogFile, true));
-                syncFileDown++;
-            }
-        }
-        // Update if outdated
-        if (lstWorkspaceUpdateEntries != null) {
-            for (SyncTableEntry cloudEntry : lstWorkspaceUpdateEntries) {
-                WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
-                // Don't overwrite existing files, unless it is the same file that is being replaced
-                Path oldPathToDelete = null;
-                if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
-                    if (cloudWildLogFile.getID() != WildLogApp.getApplication().getDBI().findWildLogFile(0, 0, null, cloudWildLogFile.getDBFilePath(), WildLogFile.class).getID()) {
-                        // There is already a different file on the disk with the same path, thus we need to rename this one
+                if (rdbSyncAllFiles.isSelected() || (rdbSyncImagesOnly.isSelected() 
+                        && WildLogFileExtentions.Images.isKnownExtention(((WildLogFile) cloudEntry.getData()).getAbsolutePath()))) {
+                    WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
+                    // Don't overwrite existing files
+                    if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
+                        // There is already a file on the disk with the same path, thus we need to rename this one
                         while (Files.exists(cloudWildLogFile.getAbsolutePath())) {
                             cloudWildLogFile.setDBFilePath(cloudWildLogFile.getRelativePath().getParent().resolve("wlsync_" + cloudWildLogFile.getRelativePath().getFileName()).toString());
                             WildLogApp.LOGGER.log(Level.INFO, "Renaming sync file before downloading: " + cloudWildLogFile.getAbsolutePath().toString());
                         }
+                    }
+                    // Download the file
+                    SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
+                    syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_FILE";
+                    logIfFailed(inFeedback, syncAction, inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()));
+                    // Check the file size
+                    long cloudFileSize = cloudWildLogFile.getSyncIndicator();
+                    calculateFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
+                    if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
+                        logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, cloudWildLogFile.getID(), 
+                                "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
+                        continue;
+                    }
+                    // Download and save the workspace data record if all seems correct
+                    syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_DATA";
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createWildLogFile(cloudWildLogFile, true));
+                    syncFileDown++;
+                }
+            }
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Files Create");
+        // Update if outdated
+        if (lstWorkspaceUpdateEntries != null) {
+            for (SyncTableEntry cloudEntry : lstWorkspaceUpdateEntries) {
+                if (rdbSyncAllFiles.isSelected() || (rdbSyncImagesOnly.isSelected() 
+                        && WildLogFileExtentions.Images.isKnownExtention(((WildLogFile) cloudEntry.getData()).getAbsolutePath()))) {
+                    WildLogFile cloudWildLogFile = (WildLogFile) cloudEntry.getData();
+                    // Don't overwrite existing files, unless it is the same file that is being replaced
+                    Path oldPathToDelete = null;
+                    if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
+                        if (cloudWildLogFile.getID() != WildLogApp.getApplication().getDBI().findWildLogFile(0, 0, null, cloudWildLogFile.getDBFilePath(), WildLogFile.class).getID()) {
+                            // There is already a different file on the disk with the same path, thus we need to rename this one
+                            while (Files.exists(cloudWildLogFile.getAbsolutePath())) {
+                                cloudWildLogFile.setDBFilePath(cloudWildLogFile.getRelativePath().getParent().resolve("wlsync_" + cloudWildLogFile.getRelativePath().getFileName()).toString());
+                                WildLogApp.LOGGER.log(Level.INFO, "Renaming sync file before downloading: " + cloudWildLogFile.getAbsolutePath().toString());
+                            }
+                            // Get the path of the exisitng file that will be synced (to delete it afterwards, because the downloaded file will end up in a different path)
+                            oldPathToDelete = WildLogApp.getApplication().getDBI().findWildLogFile(cloudWildLogFile.getID(), 0, null, null, WildLogFile.class).getAbsolutePath();
+                        }
+                    }
+                    else {
                         // Get the path of the exisitng file that will be synced (to delete it afterwards, because the downloaded file will end up in a different path)
                         oldPathToDelete = WildLogApp.getApplication().getDBI().findWildLogFile(cloudWildLogFile.getID(), 0, null, null, WildLogFile.class).getAbsolutePath();
                     }
-                }
-                else {
-                    // Get the path of the exisitng file that will be synced (to delete it afterwards, because the downloaded file will end up in a different path)
-                    oldPathToDelete = WildLogApp.getApplication().getDBI().findWildLogFile(cloudWildLogFile.getID(), 0, null, null, WildLogFile.class).getAbsolutePath();
-                }
-                // Download the file
-                SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
-                syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_UPDATE_FILE";
-                logIfFailed(inFeedback, syncAction, inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()));
-                // Check the file size
-                long cloudFileSize = cloudWildLogFile.getSyncIndicator();
-                setSyncIndicatorForFiles(cloudWildLogFile, inFeedback); // Get the new file size
-                if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
-                    logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, cloudWildLogFile.getID(), 
-                            "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
-                    continue;
-                }
-                // Download and save the workspace data record if all seems correct
-                syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_UPDATE_DATA";
-                logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateWildLogFile(cloudWildLogFile, true));
-                // Delete the old file (if is wasn't replaced)
-                if (oldPathToDelete != null) {
-                    try {
-                        Files.delete(oldPathToDelete);
+                    // Download the file
+                    SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
+                    syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_UPDATE_FILE";
+                    logIfFailed(inFeedback, syncAction, inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()));
+                    // Check the file size
+                    long cloudFileSize = cloudWildLogFile.getSyncIndicator();
+                    calculateFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
+                    if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
+                        logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, cloudWildLogFile.getID(), 
+                                "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
+                        continue;
                     }
-                    catch (IOException ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    // Download and save the workspace data record if all seems correct
+                    syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_UPDATE_DATA";
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateWildLogFile(cloudWildLogFile, true));
+                    // Delete the old file (if is wasn't replaced)
+                    if (oldPathToDelete != null) {
+                        try {
+                            Files.delete(oldPathToDelete);
+                        }
+                        catch (IOException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        }
                     }
+                    syncFileDown++;
                 }
-                syncFileDown++;
             }
         }
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Files Update");
     }
 
-    private boolean setSyncIndicatorForFiles(WildLogFile workspaceEntry, PrintWriter inFeedback) {
+    private Path getResizedFile(WildLogFile inWildLogFile) {
+        if (rdbSyncThumbnails.isSelected()) {
+            if (WildLogFileExtentions.Images.isKnownExtention(inWildLogFile.getAbsolutePath())) {
+                return inWildLogFile.getAbsoluteThumbnailPath((WildLogThumbnailSizes) cmbThumbnailSize.getSelectedItem());
+            }
+        }
+        return inWildLogFile.getAbsolutePath();
+    }
+    
+    private boolean calculateFileSizeAsSyncIndicator(PrintWriter inFeedback, WildLogFile inWorkspaceFile) {
         try {
-// FIXME: Passop vir die geval waar 'n PNG image se thumbnaiuls JPG is, so die size mag confusing raak... 
-//        Compare dus net size tussen thumbnail-vs-thumbnail or orgiinal-vs-original (en nie thumb-vs-orig nie)
-            workspaceEntry.setSyncIndicator(Files.size(getResizedFile(workspaceEntry)));
+            inWorkspaceFile.setSyncIndicator(Files.size(getResizedFile(inWorkspaceFile)));
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, workspaceEntry.getID(), Long.toString(workspaceEntry.getLinkID()), workspaceEntry), false);
-            return true;
+            logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, inWorkspaceFile.getID(), Long.toString(inWorkspaceFile.getLinkID()), inWorkspaceFile), false);
+            return false;
         }
-        return false;
+        return true;
     }
     
-    private Path getResizedFile(WildLogFile inWildLogFile) {
-// TODO: implement this (using radio button values)
-
-        return inWildLogFile.getAbsolutePath();
+    private int areWorkspaceAndCloudFilesInSync(WildLogFile inWorkspaceFile, SyncTableEntry inCloudFile) {
+        // Note: Thumbnails will always be JPG files
+        if (WildLogFileExtentions.Images.isJPG(inWorkspaceFile.getAbsolutePath())
+                && WildLogFileExtentions.Images.isJPG(((WildLogFile) inCloudFile.getData()).getAbsolutePath())) {
+            // Both are JPGs, so now compare the workspace file's size (or its previosuly calculated thumbnail size) to the cloud file's size
+            return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator());
+        }
+        else {
+            // If both files aren't JPGs, then the cloud file might still be a JPG (for example a thumbnail of a PNG)
+            if (WildLogFileExtentions.Images.isJPG(((WildLogFile) inCloudFile.getData()).getAbsolutePath())
+                    && WildLogFileExtentions.Images.isKnownExtention(inWorkspaceFile.getAbsolutePath())) {
+                // If the thumbnail option is selected then compare on thumbnail sizes
+                if (rdbSyncThumbnails.isSelected()) {
+                    // Compare the workspace file's size (it should have been previosuly calculated as a JPG thumbnail size) to the cloud file's size
+                    return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator());
+                }
+                // Otherwise assume that the workspace file is the original, so it takes priority
+                else {
+                    return -1;
+                }
+            }
+            // Note: It should not be possible to have the case where the cloud is not JPG, but the workspace is, however I'll code for it...
+            else if (WildLogFileExtentions.Images.isJPG(inWorkspaceFile.getAbsolutePath())
+                    && WildLogFileExtentions.Images.isKnownExtention(((WildLogFile) inCloudFile.getData()).getAbsolutePath())) {
+                // Choose the bigger file (since I don't know enough to determine which to use)
+                return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator());
+            }
+        }
+        // If none of the special above conditions were triggered, then assume these are other binary files and simply compare the size
+        return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator());
     }
     
     private class SyncAction {
@@ -1260,7 +1314,6 @@ public class WorkspaceSyncDialog extends JDialog {
     private javax.swing.JButton btnConfirm;
     private javax.swing.JButton btnConfirmSyncToken;
     private javax.swing.JComboBox<WildLogThumbnailSizes> cmbThumbnailSize;
-    private javax.swing.ButtonGroup grpConflicts;
     private javax.swing.ButtonGroup grpFiles;
     private javax.swing.ButtonGroup grpImages;
     private javax.swing.ButtonGroup grpMode;
@@ -1276,13 +1329,13 @@ public class WorkspaceSyncDialog extends JDialog {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JPanel pnlSyncOptions;
     private javax.swing.JPanel pnlSyncToken;
-    private javax.swing.JRadioButton rdbImportAllFiles;
-    private javax.swing.JRadioButton rdbImportImagesOnly;
-    private javax.swing.JRadioButton rdbImportNoFiles;
-    private javax.swing.JRadioButton rdbImportOriginalImages;
-    private javax.swing.JRadioButton rdbImportThumbnails;
     private javax.swing.JRadioButton rdbModeBatch;
     private javax.swing.JRadioButton rdbModeSingle;
+    private javax.swing.JRadioButton rdbSyncAllFiles;
+    private javax.swing.JRadioButton rdbSyncImagesOnly;
+    private javax.swing.JRadioButton rdbSyncNoFiles;
+    private javax.swing.JRadioButton rdbSyncOriginalImages;
+    private javax.swing.JRadioButton rdbSyncThumbnails;
     private javax.swing.JTextArea txaSyncToken;
     // End of variables declaration//GEN-END:variables
 }

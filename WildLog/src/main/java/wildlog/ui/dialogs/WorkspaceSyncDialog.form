@@ -8,8 +8,6 @@
     </Component>
     <Component class="javax.swing.ButtonGroup" name="grpMode">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="grpConflicts">
-    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
@@ -251,17 +249,17 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Component id="rdbImportAllFiles" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rdbSyncAllFiles" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="rdbImportImagesOnly" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rdbSyncImagesOnly" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="rdbImportNoFiles" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rdbSyncNoFiles" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                   <Component id="jSeparator1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Component id="rdbImportOriginalImages" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rdbSyncOriginalImages" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="rdbImportThumbnails" min="-2" max="-2" attributes="0"/>
+                                  <Component id="rdbSyncThumbnails" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Component id="cmbThumbnailSize" min="-2" pref="80" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -287,11 +285,11 @@
                               <Component id="cmbThumbnailSize" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="rdbImportOriginalImages" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rdbImportThumbnails" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rdbImportImagesOnly" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rdbImportAllFiles" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="rdbImportNoFiles" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rdbSyncOriginalImages" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rdbSyncThumbnails" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rdbSyncImagesOnly" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rdbSyncAllFiles" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="rdbSyncNoFiles" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -317,7 +315,7 @@
             <Property name="text" type="java.lang.String" value="Files:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="rdbImportAllFiles">
+        <Component class="javax.swing.JRadioButton" name="rdbSyncAllFiles">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="grpFiles"/>
@@ -330,10 +328,10 @@
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbImportAllFilesActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbSyncAllFilesActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="rdbImportImagesOnly">
+        <Component class="javax.swing.JRadioButton" name="rdbSyncImagesOnly">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="grpFiles"/>
@@ -346,10 +344,10 @@
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbImportImagesOnlyActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbSyncImagesOnlyActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="rdbImportNoFiles">
+        <Component class="javax.swing.JRadioButton" name="rdbSyncNoFiles">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="grpFiles"/>
@@ -363,7 +361,7 @@
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbImportNoFilesActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbSyncNoFilesActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator1">
@@ -371,7 +369,7 @@
             <Property name="orientation" type="int" value="1"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="rdbImportOriginalImages">
+        <Component class="javax.swing.JRadioButton" name="rdbSyncOriginalImages">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="grpImages"/>
@@ -384,10 +382,10 @@
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbImportOriginalImagesActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbSyncOriginalImagesActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JRadioButton" name="rdbImportThumbnails">
+        <Component class="javax.swing.JRadioButton" name="rdbSyncThumbnails">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="grpImages"/>
@@ -401,7 +399,7 @@
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbImportThumbnailsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbSyncThumbnailsActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="cmbThumbnailSize">

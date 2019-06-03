@@ -377,10 +377,7 @@ public final class SyncAzure {
     public boolean uploadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID) {
         try {
             ContainerURL container = getContainerURL(inDataType);
-            BlockBlobURL blockBlob = container.createBlockBlobURL(
-                    Long.toString(workspaceID) + "/"
-                    + Long.toString(inParentID) + "/"
-                    + Long.toString(inRecordID) + inFilePath.getFileName().toString().substring(inFilePath.getFileName().toString().lastIndexOf('.')));
+            BlockBlobURL blockBlob = container.createBlockBlobURL(calculateFullBlobID(inParentID, inRecordID, inFilePath));
             AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath);
             try {
                 TransferManager.uploadFileToBlockBlob(fileChannel, blockBlob, MAX_BLOB_BLOCK_SIZE, null, null).blockingGet();
@@ -399,10 +396,7 @@ public final class SyncAzure {
     public boolean downloadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID) {
         try {
             ContainerURL container = getContainerURL(inDataType);
-            BlockBlobURL blockBlob = container.createBlockBlobURL(
-                    Long.toString(workspaceID) + "/"
-                    + Long.toString(inParentID) + "/"
-                    + Long.toString(inRecordID) + inFilePath.getFileName().toString().substring(inFilePath.getFileName().toString().lastIndexOf('.')));
+            BlockBlobURL blockBlob = container.createBlockBlobURL(calculateFullBlobID(inParentID, inRecordID, inFilePath));
             AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
             try {
                 TransferManager.downloadBlobToFile(fileChannel, blockBlob, null, null).blockingGet();
@@ -416,6 +410,12 @@ public final class SyncAzure {
             ex.printStackTrace(System.err);
         }
         return false;
+    }
+    
+    public String calculateFullBlobID(long inParentID, long inRecordID, Path inFilePath) {
+        return Long.toString(workspaceID) + "/"
+                + Long.toString(inParentID) + "/"
+                + Long.toString(inRecordID) + inFilePath.getFileName().toString().substring(inFilePath.getFileName().toString().lastIndexOf('.'));
     }
     
     public boolean deleteFile(WildLogDataType inDataType, String inFullBlobName) {
