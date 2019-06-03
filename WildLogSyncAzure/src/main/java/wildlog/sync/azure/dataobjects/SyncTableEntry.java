@@ -50,7 +50,7 @@ public class SyncTableEntry extends TableServiceEntity {
     private static final EntityProperty EMPTY_DOUBLE = new EntityProperty(0.0);
     private static final EntityProperty EMPTY_BOOLEAN = new EntityProperty(false);
     private String dataType;
-    private long syncTime;
+    private long syncIndicator;
     private int dbVersion;
     private DataObjectWithAudit data;
 
@@ -59,12 +59,12 @@ public class SyncTableEntry extends TableServiceEntity {
         super();
     }
 
-    public SyncTableEntry(WildLogDataType inDataType, long inWorkspaceID, long inRecordID, long inSyncTime, int inDBVersion, DataObjectWithAudit inData) {
+    public SyncTableEntry(WildLogDataType inDataType, long inWorkspaceID, long inRecordID, long inSyncIndicator, int inDBVersion, DataObjectWithAudit inData) {
         super();
         if (inDataType != null) {
             dataType = inDataType.toString();
         }
-        syncTime = inSyncTime;
+        syncIndicator = inSyncIndicator;
         dbVersion = inDBVersion;
         data = inData;
         // Set the Azure table key fields
@@ -113,12 +113,12 @@ public class SyncTableEntry extends TableServiceEntity {
         rowKey = Long.toString(inRecordID);
     }
 
-    public long getSyncTime() {
-        return syncTime;
+    public long getSyncIndicator() {
+        return syncIndicator;
     }
 
-    public void setSyncTime(long inSyncTime) {
-        syncTime = inSyncTime;
+    public void setSyncIndicator(long inSyncIndicator) {
+        syncIndicator = inSyncIndicator;
     }
 
     public int getDBVersion() {
@@ -141,7 +141,7 @@ public class SyncTableEntry extends TableServiceEntity {
 
     @Override
     public String toString() {
-        return "[" + dataType + "] (" + dbVersion + ") " + partitionKey + "/" + rowKey + " <" + syncTime + "> : " + data;
+        return "[" + dataType + "] (" + dbVersion + ") " + partitionKey + "/" + rowKey + " <" + syncIndicator + "> : " + data;
     }
 
     // READ PROPERTIES:

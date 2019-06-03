@@ -228,7 +228,7 @@ public class DataTest extends JFrame {
 
     private void btnSyncListBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListBatchActionPerformed
         List<SyncTableEntry> lstSyncTableEntry = UtilsSync.getSyncListDataBatch("DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
-                WildLogDataType.LOCATION, 123L);
+                WildLogDataType.LOCATION, 123L, 0L);
         System.out.println("SYNCLIST BATCH: ");
         System.out.println(lstSyncTableEntry.size());
         for (SyncTableEntry entry : lstSyncTableEntry) {

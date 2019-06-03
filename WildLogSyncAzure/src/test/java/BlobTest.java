@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
-import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.enums.WildLogDataType;
 import wildlog.sync.azure.UtilsSync;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
@@ -117,24 +116,14 @@ public class BlobTest extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        WildLogFileCore wildLogFile = new WildLogFileCore();
-        wildLogFile.setID(222L);
-        wildLogFile.setLinkID(777L);
-        wildLogFile.setLinkType(WildLogDataType.ELEMENT);
-        wildLogFile.setDBFilePath("bbb.jpg");
         UtilsSync.uploadFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                321L, new File("C:\\temp").toPath(), wildLogFile);
+                WildLogDataType.ELEMENT, new File("C:\\tempbbb.jpg").toPath(), 321L, 222L, 777L);
         System.out.println("UPLOADED");
     }//GEN-LAST:event_btnUploadActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        WildLogFileCore wildLogFile = new WildLogFileCore();
-        wildLogFile.setID(222L);
-        wildLogFile.setLinkID(777L);
-        wildLogFile.setLinkType(WildLogDataType.ELEMENT);
-        wildLogFile.setDBFilePath("bbb_download.jpg");
         UtilsSync.downloadFile("wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
-                321L, new File("C:\\temp").toPath(), wildLogFile);
+                WildLogDataType.ELEMENT, new File("C:\\tempbbb.jpg").toPath(), 321L, 222L, 777L);
         System.out.println("DOWNLOADED");
     }//GEN-LAST:event_btnDownloadActionPerformed
 
