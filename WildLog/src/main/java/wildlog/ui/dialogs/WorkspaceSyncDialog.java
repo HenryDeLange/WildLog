@@ -19,8 +19,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -63,6 +67,8 @@ import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
 
+// TODO: Try to handle non-JPG thumbnails also. (For now I'm only supporting JPG, because the whole PNG to JPG renaming thing gets to complicated to code for...)
+
 public class WorkspaceSyncDialog extends JDialog {
     private int syncDeleteUp = 0;
     private int syncDeleteDown = 0;
@@ -100,7 +106,7 @@ public class WorkspaceSyncDialog extends JDialog {
         cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT);
         rdbSyncNoFiles.setSelected(true);
         rdbSyncAllFiles.setEnabled(false);
-        rdbSyncImagesOnly.setEnabled(false);
+        rdbSyncJpegOnly.setEnabled(false);
     }
     
     private void configureBasicToken() {
@@ -112,9 +118,9 @@ public class WorkspaceSyncDialog extends JDialog {
         cmbThumbnailSize.setEnabled(true);
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.LARGE);
         cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT);
-        rdbSyncImagesOnly.setSelected(true);
+        rdbSyncJpegOnly.setSelected(true);
         rdbSyncAllFiles.setEnabled(false);
-        rdbSyncImagesOnly.setEnabled(true);
+        rdbSyncJpegOnly.setEnabled(true);
     }
     
     private void configureFullToken() {
@@ -126,9 +132,9 @@ public class WorkspaceSyncDialog extends JDialog {
         cmbThumbnailSize.setEnabled(true);
         cmbThumbnailSize.addItem(WildLogThumbnailSizes.SYNC_LIMIT);
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.SYNC_LIMIT);
-        rdbSyncImagesOnly.setSelected(true);
+        rdbSyncJpegOnly.setSelected(true);
         rdbSyncAllFiles.setEnabled(true);
-        rdbSyncImagesOnly.setEnabled(true);
+        rdbSyncJpegOnly.setEnabled(true);
     }
 
     /**
@@ -153,9 +159,8 @@ public class WorkspaceSyncDialog extends JDialog {
         pnlSyncOptions = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         rdbSyncAllFiles = new javax.swing.JRadioButton();
-        rdbSyncImagesOnly = new javax.swing.JRadioButton();
+        rdbSyncJpegOnly = new javax.swing.JRadioButton();
         rdbSyncNoFiles = new javax.swing.JRadioButton();
-        jSeparator1 = new javax.swing.JSeparator();
         rdbSyncOriginalImages = new javax.swing.JRadioButton();
         rdbSyncThumbnails = new javax.swing.JRadioButton();
         cmbThumbnailSize = new javax.swing.JComboBox<>();
@@ -164,6 +169,7 @@ public class WorkspaceSyncDialog extends JDialog {
         jLabel1 = new javax.swing.JLabel();
         rdbModeBatch = new javax.swing.JRadioButton();
         rdbModeSingle = new javax.swing.JRadioButton();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cloud Sync Workspace");
@@ -245,10 +251,10 @@ public class WorkspaceSyncDialog extends JDialog {
         pnlSyncOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Sync Options", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Files:");
+        jLabel2.setText("Content:");
 
         grpFiles.add(rdbSyncAllFiles);
-        rdbSyncAllFiles.setText("All Files");
+        rdbSyncAllFiles.setText("Data and Files (all files)");
         rdbSyncAllFiles.setToolTipText("Sync all files between the current Workspace and the cloud.");
         rdbSyncAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbSyncAllFiles.setFocusPainted(false);
@@ -258,20 +264,20 @@ public class WorkspaceSyncDialog extends JDialog {
             }
         });
 
-        grpFiles.add(rdbSyncImagesOnly);
-        rdbSyncImagesOnly.setText("JPEGs Only");
-        rdbSyncImagesOnly.setToolTipText("Sync only images between the current Workspace and the cloud.");
-        rdbSyncImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbSyncImagesOnly.setFocusPainted(false);
-        rdbSyncImagesOnly.addActionListener(new java.awt.event.ActionListener() {
+        grpFiles.add(rdbSyncJpegOnly);
+        rdbSyncJpegOnly.setText("Data and Images (JPEG only)");
+        rdbSyncJpegOnly.setToolTipText("Sync only images between the current Workspace and the cloud.");
+        rdbSyncJpegOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbSyncJpegOnly.setFocusPainted(false);
+        rdbSyncJpegOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbSyncImagesOnlyActionPerformed(evt);
+                rdbSyncJpegOnlyActionPerformed(evt);
             }
         });
 
         grpFiles.add(rdbSyncNoFiles);
         rdbSyncNoFiles.setSelected(true);
-        rdbSyncNoFiles.setText("No Files");
+        rdbSyncNoFiles.setText("Only Data (no files)");
         rdbSyncNoFiles.setToolTipText("Don't sync any files between the current Workspace and the cloud.");
         rdbSyncNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbSyncNoFiles.setFocusPainted(false);
@@ -280,8 +286,6 @@ public class WorkspaceSyncDialog extends JDialog {
                 rdbSyncNoFilesActionPerformed(evt);
             }
         });
-
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         grpImages.add(rdbSyncOriginalImages);
         rdbSyncOriginalImages.setText("Original Images");
@@ -296,7 +300,7 @@ public class WorkspaceSyncDialog extends JDialog {
 
         grpImages.add(rdbSyncThumbnails);
         rdbSyncThumbnails.setSelected(true);
-        rdbSyncThumbnails.setText("Thumbnail JPEGs");
+        rdbSyncThumbnails.setText("Thumbnail Images");
         rdbSyncThumbnails.setToolTipText("The images that are synced will be reduced in size, the original images will not be synced.");
         rdbSyncThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbSyncThumbnails.setFocusPainted(false);
@@ -316,7 +320,7 @@ public class WorkspaceSyncDialog extends JDialog {
         jLabel7.setText("px");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("Mode:");
+        jLabel1.setText("Sync Mode:");
 
         grpMode.add(rdbModeBatch);
         rdbModeBatch.setSelected(true);
@@ -331,6 +335,9 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeSingle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbModeSingle.setFocusPainted(false);
 
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Image Upload Size:");
+
         javax.swing.GroupLayout pnlSyncOptionsLayout = new javax.swing.GroupLayout(pnlSyncOptions);
         pnlSyncOptions.setLayout(pnlSyncOptionsLayout);
         pnlSyncOptionsLayout.setHorizontalGroup(
@@ -338,6 +345,17 @@ public class WorkspaceSyncDialog extends JDialog {
             .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(rdbSyncOriginalImages)
+                        .addGap(5, 5, 5)
+                        .addComponent(rdbSyncThumbnails)
+                        .addGap(5, 5, 5)
+                        .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSyncOptionsLayout.createSequentialGroup()
                         .addComponent(jSeparator3)
                         .addGap(11, 11, 11))
@@ -355,38 +373,31 @@ public class WorkspaceSyncDialog extends JDialog {
                                 .addGap(10, 10, 10)
                                 .addComponent(rdbSyncAllFiles)
                                 .addGap(5, 5, 5)
-                                .addComponent(rdbSyncImagesOnly)
+                                .addComponent(rdbSyncJpegOnly)
                                 .addGap(5, 5, 5)
-                                .addComponent(rdbSyncNoFiles)
-                                .addGap(10, 10, 10)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
-                                .addComponent(rdbSyncOriginalImages)
-                                .addGap(5, 5, 5)
-                                .addComponent(rdbSyncThumbnails)
-                                .addGap(5, 5, 5)
-                                .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jLabel7)))
-                        .addContainerGap())))
+                                .addComponent(rdbSyncNoFiles)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         pnlSyncOptionsLayout.setVerticalGroup(
             pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(rdbSyncJpegOnly)
+                        .addComponent(rdbSyncAllFiles)
+                        .addComponent(rdbSyncNoFiles)))
+                .addGap(5, 5, 5)
+                .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbThumbnailSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(rdbSyncOriginalImages)
-                            .addComponent(rdbSyncThumbnails)
-                            .addComponent(rdbSyncImagesOnly)
-                            .addComponent(rdbSyncAllFiles)
-                            .addComponent(rdbSyncNoFiles))))
+                            .addComponent(rdbSyncThumbnails))))
                 .addGap(5, 5, 5)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -656,12 +667,12 @@ public class WorkspaceSyncDialog extends JDialog {
        }
     }//GEN-LAST:event_rdbSyncAllFilesActionPerformed
 
-    private void rdbSyncImagesOnlyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSyncImagesOnlyActionPerformed
-        if (rdbSyncImagesOnly.isSelected()) {
+    private void rdbSyncJpegOnlyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSyncJpegOnlyActionPerformed
+        if (rdbSyncJpegOnly.isSelected()) {
            rdbSyncOriginalImages.setEnabled(true);
            rdbSyncThumbnails.setEnabled(true);
        }
-    }//GEN-LAST:event_rdbSyncImagesOnlyActionPerformed
+    }//GEN-LAST:event_rdbSyncJpegOnlyActionPerformed
 
     private void rdbSyncNoFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbSyncNoFilesActionPerformed
         if (rdbSyncNoFiles.isSelected()) {
@@ -1106,7 +1117,7 @@ public class WorkspaceSyncDialog extends JDialog {
         // UP: Make sure cloud knows about new workspace records
         List<SyncAction> lstSyncActions = new ArrayList<>();
         for (WildLogFile workspaceEntry : lstWorkspaceEntries) {
-            if (rdbSyncAllFiles.isSelected() || (rdbSyncImagesOnly.isSelected() && WildLogFileExtentions.Images.isKnownExtention(workspaceEntry.getAbsolutePath()))) {
+            if (rdbSyncAllFiles.isSelected() || (rdbSyncJpegOnly.isSelected() && WildLogFileExtentions.Images.isJPG(workspaceEntry.getAbsolutePath()))) {
                 if (!calculateResizedFileSizeAsSyncIndicator(inFeedback, workspaceEntry)) {
                     continue;
                 }
@@ -1204,8 +1215,7 @@ public class WorkspaceSyncDialog extends JDialog {
             loopCount = 0.0;
             for (SyncTableEntry cloudEntry : lstWorkspaceCreateEntries) {
                 WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) cloudEntry.getData());
-                if (rdbSyncAllFiles.isSelected() || (rdbSyncImagesOnly.isSelected() 
-                        && WildLogFileExtentions.Images.isKnownExtention(cloudWildLogFile.getAbsolutePath()))) {
+                if (rdbSyncAllFiles.isSelected() || (rdbSyncJpegOnly.isSelected() && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath()))) {
                     // Don't overwrite existing files
                     if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
                         // There is already a file on the disk with the same path, thus we need to rename this one
@@ -1245,8 +1255,7 @@ public class WorkspaceSyncDialog extends JDialog {
             loopCount = 0.0;
             for (SyncTableEntry cloudEntry : lstWorkspaceUpdateEntries) {
                 WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) cloudEntry.getData());
-                if (rdbSyncAllFiles.isSelected() || (rdbSyncImagesOnly.isSelected() 
-                        && WildLogFileExtentions.Images.isKnownExtention(cloudWildLogFile.getAbsolutePath()))) {
+                if (rdbSyncAllFiles.isSelected() || (rdbSyncJpegOnly.isSelected() && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath()))) {
                     // Don't overwrite existing files, unless it is the same file that is being replaced
                     Path oldPathToDelete = null;
                     if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
@@ -1299,8 +1308,40 @@ public class WorkspaceSyncDialog extends JDialog {
     }
 
     private Path getResizedFilePath(WildLogFile inWildLogFile) {
-        if (rdbSyncThumbnails.isSelected() && WildLogFileExtentions.Images.isKnownExtention(inWildLogFile.getAbsolutePath())) {
-            return inWildLogFile.getAbsoluteThumbnailPath((WildLogThumbnailSizes) cmbThumbnailSize.getSelectedItem());
+        if (rdbSyncThumbnails.isSelected() && WildLogFileExtentions.Images.isJPG(inWildLogFile.getAbsolutePath())) {
+            // Don't use a thumbnail if the original is smaller than the thumbnail
+            WildLogThumbnailSizes thumbnailSizes = (WildLogThumbnailSizes) cmbThumbnailSize.getSelectedItem();
+            int imageWidth = 0;
+            int imageHeight = 0;
+            ImageReader imageReader = null;
+            FileImageInputStream inputStream = null;
+            try {
+                inputStream = new FileImageInputStream(inWildLogFile.getAbsolutePath().toFile());
+                Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
+                imageReader = imageReaderList.next();
+                imageReader.setInput(inputStream);
+                imageWidth = imageReader.getWidth(imageReader.getMinIndex());
+                imageHeight = imageReader.getHeight(imageReader.getMinIndex());
+            }
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            finally {
+                if (imageReader != null) {
+                    imageReader.dispose();
+                }
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                }
+            }
+            if (thumbnailSizes.getSize() < Math.max(imageWidth, imageHeight)) {
+                return inWildLogFile.getAbsoluteThumbnailPath(thumbnailSizes);
+            }
         }
         return inWildLogFile.getAbsolutePath();
     }
@@ -1337,27 +1378,6 @@ public class WorkspaceSyncDialog extends JDialog {
             // Both are JPGs, so now compare the workspace file's size (or its previosuly calculated thumbnail size) to the cloud file's size
             return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator()) > 0;
         }
-        else {
-            // If only the cloud is a JPG (for example a thumbnail of a PNG)
-            if (WildLogFileExtentions.Images.isKnownExtention(inWorkspaceFile.getAbsolutePath())
-                    && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath())) {
-                // If the thumbnail option is selected then compare on thumbnail sizes
-                if (rdbSyncThumbnails.isSelected()) {
-                    // Compare the workspace file's size (it should have been previosuly calculated as a JPG thumbnail size) to the cloud file's size
-                    return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator()) > 0;
-                }
-                // Otherwise assume that the workspace file is the original, so it takes priority
-                else {
-                    return true;
-                }
-            }
-            // Note: It should not be possible to have the case where the cloud is not JPG, but the workspace is, however I'll code for it...
-            else if (WildLogFileExtentions.Images.isJPG(inWorkspaceFile.getAbsolutePath())
-                    && WildLogFileExtentions.Images.isKnownExtention(cloudWildLogFile.getAbsolutePath())) {
-                // Choose the bigger file (since I don't know enough to determine which to use)
-                return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator()) > 0;
-            }
-        }
         // If none of the special conditions above were triggered, then assume these are other binary files and simply compare the size
         return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator()) > 0;
     }
@@ -1369,20 +1389,6 @@ public class WorkspaceSyncDialog extends JDialog {
                 && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath())) {
             // Both are JPGs, so now compare the workspace file's size (or its previosuly calculated thumbnail size) to the cloud file's size
             return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator()) < 0;
-        }
-        else {
-            // If only the cloud is a JPG (for example a thumbnail of a PNG)
-            if (WildLogFileExtentions.Images.isKnownExtention(inWorkspaceFile.getAbsolutePath())
-                    && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath())) {
-                // Assume that the workspace file is the original, so it takes priority
-                return false;
-            }
-            // Note: It should not be possible to have the case where the cloud is not JPG, but the workspace is, however I'll code for it...
-            else if (WildLogFileExtentions.Images.isJPG(inWorkspaceFile.getAbsolutePath())
-                    && WildLogFileExtentions.Images.isKnownExtention(cloudWildLogFile.getAbsolutePath())) {
-                // Choose the bigger file (since I don't know enough to determine which to use)
-                return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator()) < 0;
-            }
         }
         // If none of the special conditions above were triggered, then assume these are other binary files and simply compare the size
         return Long.compare(inWorkspaceFile.getSyncIndicator(), inCloudFile.getData().getSyncIndicator()) < 0;
@@ -1416,10 +1422,10 @@ public class WorkspaceSyncDialog extends JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JPanel pnlSyncOptions;
@@ -1427,7 +1433,7 @@ public class WorkspaceSyncDialog extends JDialog {
     private javax.swing.JRadioButton rdbModeBatch;
     private javax.swing.JRadioButton rdbModeSingle;
     private javax.swing.JRadioButton rdbSyncAllFiles;
-    private javax.swing.JRadioButton rdbSyncImagesOnly;
+    private javax.swing.JRadioButton rdbSyncJpegOnly;
     private javax.swing.JRadioButton rdbSyncNoFiles;
     private javax.swing.JRadioButton rdbSyncOriginalImages;
     private javax.swing.JRadioButton rdbSyncThumbnails;
