@@ -595,7 +595,9 @@ public class WorkspaceSyncDialog extends JDialog {
                             if (feedback != null) {
                                 feedback.println("");
                                 feedback.println("--------------- SUMMARY ----------------");
+                                feedback.println("");
                                 feedback.println("Failed Sync Actions        : " + syncFail);
+                                feedback.println("");
                                 feedback.println("Synced DeleteLog Uploads   : " + syncDeleteUp);
                                 feedback.println("Synced DeleteLog Downloads : " + syncDeleteDown);
                                 feedback.println("Synced Data Uploads        : " + syncDataUp);
@@ -716,9 +718,6 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void syncDeleteLogs(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize) {
-        
-// FIXME: Klein probleem met die logging waar dit lyk soos flase positive errors wanneer 'n rekord geskep en dan delete was tussen twee sync aksies
-        
         int baseProgress = inProgressbar.getProgress();
         List<SyncTableEntry> lstCloudEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.DELETE_LOG, 0);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Delete Logs - Cloud Entries: " + lstCloudEntries.size());
@@ -1202,7 +1201,7 @@ public class WorkspaceSyncDialog extends JDialog {
         if (!lstWorkspaceUpdateIDs.isEmpty() && (lstWorkspaceUpdateEntries == null || lstWorkspaceUpdateEntries.size() != lstWorkspaceUpdateIDs.size())) {
             logIfFailed(inFeedback, new SyncAction("CLOUD_DOWNLOAD", WildLogDataType.FILE, lstWorkspaceUpdateIDs.size(), Arrays.toString(lstWorkspaceUpdateIDs.toArray()), null), false);
         }
-        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Files Preperation");
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Full Files Record");
         // Create if not found
         if (lstWorkspaceCreateEntries != null) {
             loopCount = 0.0;
@@ -1322,6 +1321,9 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private int areWorkspaceAndCloudFilesInSync(WildLogFile inWorkspaceFile, SyncTableEntry inCloudFile) {
+        
+// FIXME: Toets hierdie, want ek dink dit werk nog nie reg nie (veral as mens begin thumbnail sizes verander...)
+        
         WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) inCloudFile.getData());
         // Note: Thumbnails will always be JPG files
         if (WildLogFileExtentions.Images.isJPG(inWorkspaceFile.getAbsolutePath())

@@ -170,7 +170,10 @@ public final class SyncAzure {
             CloudTable cloudTable = getTable(inDataType);
             // Dis jammer, maar dit lyk my ek moet eers die waarde laai voor ek kan delete.
             // (Dit soek die "etag" waarde, so ek kan nie self 'n nuwe SyncTableEntry skep nie...)
-            cloudTable.execute(TableOperation.delete(downloadData(inDataType, inRecordID)));
+            SyncTableEntry syncTableEntry = downloadData(inDataType, inRecordID);
+            if (syncTableEntry != null) {
+                cloudTable.execute(TableOperation.delete(syncTableEntry));
+            }
             return true;
         }
         catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
