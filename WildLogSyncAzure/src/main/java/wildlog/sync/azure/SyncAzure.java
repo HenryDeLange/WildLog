@@ -103,7 +103,7 @@ public final class SyncAzure {
             cloudTable.execute(TableOperation.insertOrReplace(syncTableEntry));
             return true;
         }
-        catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return false;
@@ -159,7 +159,7 @@ public final class SyncAzure {
             }
             return true;
         }
-        catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return false;
@@ -176,7 +176,7 @@ public final class SyncAzure {
             }
             return true;
         }
-        catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return false;
@@ -230,7 +230,7 @@ public final class SyncAzure {
             }
             return true;
         }
-        catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return false;
@@ -242,7 +242,7 @@ public final class SyncAzure {
             return cloudTable.execute(TableOperation.retrieve(
                     Long.toString(workspaceID), Long.toString(inRecordID), SyncTableEntry.class)).getResultAsType();
         }
-        catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return null;
@@ -321,7 +321,7 @@ public final class SyncAzure {
             }
             return lstSyncTableEntries;
         }
-        catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return null;
@@ -352,7 +352,7 @@ public final class SyncAzure {
             }
             return lstSyncTableEntries;
         }
-        catch (StorageException | IOException | InvalidKeyException | IllegalArgumentException | URISyntaxException | IllegalStateException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return null;
@@ -372,7 +372,7 @@ public final class SyncAzure {
                 containerURL.create(null, null, null).blockingGet();
                 System.out.println("Blob Container [" + inDataType.getDescription().toLowerCase() + "] was created.");
             }
-            catch (RestException ex){
+            catch (Exception ex){
                 if (ex instanceof RestException && ((RestException)ex).response().statusCode() != 409) {
                     throw ex;
                 }
@@ -395,7 +395,7 @@ public final class SyncAzure {
             }
             return true;
         }
-        catch (InvalidKeyException | IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return false;
@@ -414,7 +414,7 @@ public final class SyncAzure {
             }
             return true;
         }
-        catch (InvalidKeyException | IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return false;
@@ -433,7 +433,7 @@ public final class SyncAzure {
             blockBlob.delete(null, null, null).blockingGet();
             return true;
         }
-        catch (InvalidKeyException | IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return false;
@@ -451,7 +451,7 @@ public final class SyncAzure {
                             listAllBlobs(container, containerListBlobFlatSegmentResponse, options, inDataType, lstSyncBlobEntries)).blockingGet();
             return lstSyncBlobEntries;
         }
-        catch (InvalidKeyException | IOException ex) {
+        catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
         return null;

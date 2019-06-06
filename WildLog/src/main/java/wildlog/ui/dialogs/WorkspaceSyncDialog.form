@@ -336,7 +336,7 @@
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="grpFiles"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Images Only"/>
+            <Property name="text" type="java.lang.String" value="JPEGs Only"/>
             <Property name="toolTipText" type="java.lang.String" value="Sync only images between the current Workspace and the cloud."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
@@ -391,7 +391,7 @@
               <ComponentRef name="grpImages"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Thumbnail Images"/>
+            <Property name="text" type="java.lang.String" value="Thumbnail JPEGs"/>
             <Property name="toolTipText" type="java.lang.String" value="The images that are synced will be reduced in size, the original images will not be synced."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>

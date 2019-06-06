@@ -42,6 +42,7 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
         setFileSize(inWildLogFileCore.getFileSize());
         setAuditTime(inWildLogFileCore.getAuditTime());
         setAuditUser(inWildLogFileCore.getAuditUser());
+        setSyncIndicator(inWildLogFileCore.getSyncIndicator());
     }
 
     
