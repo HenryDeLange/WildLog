@@ -1067,8 +1067,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addGroup(pnlSightingsLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
+                        .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
                 .addGap(5, 5, 5))
             .addComponent(jSeparator5)
         );
@@ -1229,7 +1229,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGap(5, 5, 5)
                         .addComponent(lblElements)
                         .addGap(0, 0, 0)
-                        .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator3)
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1274,7 +1274,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         lblSightingImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
-        if (visit.getName() != null) {
+        if (visit.getID() > 0) {
             UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, visit.getID());
             List<Sighting> sightings = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
             lblNumberOfSightings.setText(Integer.toString(sightings.size()));

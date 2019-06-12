@@ -557,37 +557,45 @@ public class CheckAndClean {
             allFiles = inApp.getDBI().listWildLogFiles(0, null, WildLogFile.class);
             fileProcessCounter = 0;
             for (WildLogFile wildLogFile : allFiles) {
-                LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
-                long actualFileSize = Files.size(wildLogFile.getAbsolutePath());
-                if (actualFileDate != null) {
-                    if (wildLogFile.getFileDate() == null || !actualFileDate.isEqual(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()))) {
-                        finalHandleFeedback.println("PROBLEM:     The Modified Date of the file on disk is not the same as the value stored in the database. "
-                                + "FilePath: " + wildLogFile.getAbsolutePath());
-                        String oldDate;
-                        if (wildLogFile.getFileDate() == null) {
-                            oldDate = "null";
+                try {
+                    LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
+                    long actualFileSize = Files.size(wildLogFile.getAbsolutePath());
+                    if (actualFileDate != null) {
+                        if (wildLogFile.getFileDate() == null || !actualFileDate.isEqual(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()))) {
+                            finalHandleFeedback.println("PROBLEM:     The Modified Date of the file on disk is not the same as the value stored in the database. "
+                                    + "FilePath: " + wildLogFile.getAbsolutePath());
+                            String oldDate;
+                            if (wildLogFile.getFileDate() == null) {
+                                oldDate = "null";
+                            }
+                            else {
+                                oldDate = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()));
+                            }
+                            finalHandleFeedback.println("  +RESOLVED: Updated the database Modified Date value of the file record. "
+                                    + "Changed " + oldDate
+                                    + " to " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(actualFileDate));
+                            wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
+                            inApp.getDBI().updateWildLogFile(wildLogFile, false);
+                            filesWithIncorrectDate++;
                         }
-                        else {
-                            oldDate = UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(UtilsTime.getLocalDateTimeFromDate(wildLogFile.getFileDate()));
+                    }
+                    if (actualFileSize > 0) {
+                        if (actualFileSize != wildLogFile.getFileSize()) {
+                            finalHandleFeedback.println("PROBLEM:     The File Size of the file on disk is not the same as the value stored in the database. "
+                                    + "FilePath: " + wildLogFile.getAbsolutePath());
+                            finalHandleFeedback.println("  +RESOLVED: Updated the database File Size value of the file record. "
+                                    + "Changed " + wildLogFile.getFileSize() + " to " + actualFileSize);
+                            wildLogFile.setFileSize(actualFileSize);
+                            inApp.getDBI().updateWildLogFile(wildLogFile, false);
+                            filesWithIncorrectSize++;
                         }
-                        finalHandleFeedback.println("  +RESOLVED: Updated the database Modified Date value of the file record. "
-                                + "Changed " + oldDate
-                                + " to " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(actualFileDate));
-                        wildLogFile.setFileDate(UtilsTime.getDateFromLocalDateTime(actualFileDate));
-                        inApp.getDBI().updateWildLogFile(wildLogFile, false);
-                        filesWithIncorrectDate++;
                     }
                 }
-                if (actualFileSize > 0) {
-                    if (actualFileSize != wildLogFile.getFileSize()) {
-                        finalHandleFeedback.println("PROBLEM:     The File Size of the file on disk is not the same as the value stored in the database. "
-                                + "FilePath: " + wildLogFile.getAbsolutePath());
-                        finalHandleFeedback.println("  +RESOLVED: Updated the database File Size value of the file record. "
-                                + "Changed " + wildLogFile.getFileSize() + " to " + actualFileSize);
-                        wildLogFile.setFileSize(actualFileSize);
-                        inApp.getDBI().updateWildLogFile(wildLogFile, false);
-                        filesWithIncorrectSize++;
-                    }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, "Could not check the file size and date.");
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    finalHandleFeedback.println("PROBLEM:       Could not check the file size and date.");
+                    finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                 }
                 inProgressbarTask.setTaskProgress(47 + (int)(fileProcessCounter++/(double)allFiles.size()*12));
                 inProgressbarTask.setMessage("Cleanup Step 4: Check the file size and dates... " + inProgressbarTask.getProgress() + "%");

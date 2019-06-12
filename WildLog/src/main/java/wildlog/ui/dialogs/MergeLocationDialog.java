@@ -160,7 +160,7 @@ public class MergeLocationDialog extends JDialog {
                 sighting.setLocationID(tempToLocation.getID());
                 app.getDBI().updateSighting(sighting, false);
             }
-            app.getDBI().deleteLocation(tempToLocation.getID());
+            app.getDBI().deleteLocation(tempFromLocation.getID());
             setVisible(false);
             dispose();
         }

@@ -253,14 +253,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     uploadImage(inFiles);
                 }
             });
-            // Attach clipboard
-            UtilsUI.attachClipboardPopup(txtSearchLocation);
-            // Setup searcher
-            UtilsUI.attachKeyListernerToFilterTableRows(txtSearchLocation, tblLocation);
         }
         if (!disableEditing) {
             // Attach clipboard
             UtilsUI.attachClipboardPopup(txtSearch);
+            UtilsUI.attachClipboardPopup(txtSearchLocation);
             UtilsUI.attachClipboardPopup(txtDetails);
             UtilsUI.attachClipboardPopup(txtTag);
             UtilsUI.attachClipboardPopup((JTextComponent)spnHours.getEditor().getComponent(0));
@@ -273,6 +270,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             UtilsUI.attachClipboardPopup((JTextComponent)spnDurationSeconds.getEditor().getComponent(0));
             // Setup searcher
             UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
+            UtilsUI.attachKeyListernerToFilterTableRows(txtSearchLocation, tblLocation);
         }
         // Setup the image count label
         setupNumberOfImages();

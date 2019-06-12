@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
@@ -82,6 +83,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             btnUploadImage.setEnabled(false);
             rdbLocation.setEnabled(false);
             rdbVisit.setEnabled(false);
+            btnApplyGPSToVisit.setEnabled(false);
         }
     }
 
@@ -170,6 +172,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnReport.setVisible(false);
             }
         }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+            btnApplyGPSToVisit.setEnabled(false);
+            btnApplyGPSToVisit.setVisible(false);
+        }
     }
 
     private void uploadFiles(List<File> inFiles) {
@@ -254,7 +260,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnPreviousImage = new javax.swing.JButton();
         btnDeleteImage = new javax.swing.JButton();
         pnlInfo = new javax.swing.JPanel();
-        btnGPS = new javax.swing.JButton();
         jLabel41 = new javax.swing.JLabel();
         cmbRating = new javax.swing.JComboBox();
         jLabel42 = new javax.swing.JLabel();
@@ -262,14 +267,17 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtDescription = new javax.swing.JTextArea();
         cmbGameRating = new javax.swing.JComboBox();
         jLabel48 = new javax.swing.JLabel();
-        txtLongitude = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         jLabel36 = new javax.swing.JLabel();
         jLabel40 = new javax.swing.JLabel();
-        txtLatitude = new javax.swing.JTextField();
         jScrollPane13 = new javax.swing.JScrollPane();
         txtHabitatType = new javax.swing.JTextArea();
+        pnlGPS = new javax.swing.JPanel();
+        txtLongitude = new javax.swing.JTextField();
+        txtLatitude = new javax.swing.JTextField();
+        btnApplyGPSToVisit = new javax.swing.JButton();
+        btnGPS = new javax.swing.JButton();
         pnlButtons = new javax.swing.JPanel();
         btnMap = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
@@ -465,22 +473,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         pnlInfo.setBackground(new java.awt.Color(233, 239, 244));
         pnlInfo.setName("pnlInfo"); // NOI18N
 
-        btnGPS.setBackground(new java.awt.Color(233, 239, 244));
-        btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnGPS.setText("Change GPS");
-        btnGPS.setToolTipText("Select a new GPS value for this Place.");
-        btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGPS.setFocusPainted(false);
-        btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnGPS.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnGPS.setName("btnGPS"); // NOI18N
-        btnGPS.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGPSActionPerformed(evt);
-            }
-        });
-
-        jLabel41.setText("General Rating:");
+        jLabel41.setText("Rating:");
         jLabel41.setName("jLabel41"); // NOI18N
 
         cmbRating.setModel(new DefaultComboBoxModel(LocationRating.values()));
@@ -488,7 +481,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         cmbRating.setFocusable(false);
         cmbRating.setName("cmbRating"); // NOI18N
 
-        jLabel42.setText("Wildlife Rating:");
+        jLabel42.setText("Wildlife:");
         jLabel42.setName("jLabel42"); // NOI18N
 
         jScrollPane10.setName("jScrollPane10"); // NOI18N
@@ -510,11 +503,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         jLabel48.setText("Place Name:");
         jLabel48.setName("jLabel48"); // NOI18N
 
-        txtLongitude.setBackground(new java.awt.Color(212, 222, 230));
-        txtLongitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
-        txtLongitude.setEnabled(false);
-        txtLongitude.setName("txtLongitude"); // NOI18N
-
         jLabel10.setText("GPS:");
         jLabel10.setName("jLabel10"); // NOI18N
 
@@ -528,11 +516,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         jLabel40.setText("Habitat Type:");
         jLabel40.setName("jLabel40"); // NOI18N
 
-        txtLatitude.setBackground(new java.awt.Color(212, 222, 230));
-        txtLatitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
-        txtLatitude.setEnabled(false);
-        txtLatitude.setName("txtLatitude"); // NOI18N
-
         jScrollPane13.setName("jScrollPane13"); // NOI18N
 
         txtHabitatType.setColumns(20);
@@ -543,6 +526,78 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtHabitatType.setWrapStyleWord(true);
         txtHabitatType.setName("txtHabitatType"); // NOI18N
         jScrollPane13.setViewportView(txtHabitatType);
+
+        pnlGPS.setBackground(new java.awt.Color(233, 239, 244));
+        pnlGPS.setMaximumSize(new java.awt.Dimension(320, 40));
+        pnlGPS.setName("pnlGPS"); // NOI18N
+
+        txtLongitude.setBackground(new java.awt.Color(212, 222, 230));
+        txtLongitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
+        txtLongitude.setEnabled(false);
+        txtLongitude.setName("txtLongitude"); // NOI18N
+
+        txtLatitude.setBackground(new java.awt.Color(212, 222, 230));
+        txtLatitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
+        txtLatitude.setEnabled(false);
+        txtLatitude.setName("txtLatitude"); // NOI18N
+
+        btnApplyGPSToVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS_Small.png"))); // NOI18N
+        btnApplyGPSToVisit.setText("<html>Apply GPS to Periods</html>");
+        btnApplyGPSToVisit.setToolTipText("Set the GPS coordinates of the related Observations to be the same as this Place's.");
+        btnApplyGPSToVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnApplyGPSToVisit.setFocusPainted(false);
+        btnApplyGPSToVisit.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnApplyGPSToVisit.setName("btnApplyGPSToVisit"); // NOI18N
+        btnApplyGPSToVisit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApplyGPSToVisitActionPerformed(evt);
+            }
+        });
+
+        btnGPS.setBackground(new java.awt.Color(233, 239, 244));
+        btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        btnGPS.setText("Change GPS");
+        btnGPS.setToolTipText("Select a new GPS value for this Place.");
+        btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGPS.setFocusPainted(false);
+        btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGPS.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnGPS.setName("btnGPS"); // NOI18N
+        btnGPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGPSActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlGPSLayout = new javax.swing.GroupLayout(pnlGPS);
+        pnlGPS.setLayout(pnlGPSLayout);
+        pnlGPSLayout.setHorizontalGroup(
+            pnlGPSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGPSLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(pnlGPSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addComponent(btnGPS)
+                .addGap(3, 3, 3)
+                .addComponent(btnApplyGPSToVisit, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                .addGap(5, 5, 5))
+        );
+        pnlGPSLayout.setVerticalGroup(
+            pnlGPSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGPSLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(pnlGPSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlGPSLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnApplyGPSToVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
+        );
 
         javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
         pnlInfo.setLayout(pnlInfoLayout);
@@ -569,20 +624,16 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pnlGPS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(btnGPS)
-                        .addGap(10, 10, 10)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel41))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(5, 5, 5)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cmbGameRating, 0, 100, Short.MAX_VALUE)
-                            .addComponent(cmbRating, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(43, Short.MAX_VALUE))))
+                            .addComponent(cmbGameRating, 0, 90, Short.MAX_VALUE)
+                            .addComponent(cmbRating, 0, 90, Short.MAX_VALUE))
+                        .addContainerGap(24, Short.MAX_VALUE))))
         );
         pnlInfoLayout.setVerticalGroup(
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -594,13 +645,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addGap(20, 20, 20)
-                                .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtLatitude, javax.swing.GroupLayout.Alignment.LEADING))))
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -610,26 +655,21 @@ public class PanelLocation extends PanelCanSetupHeader {
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addGap(3, 3, 3)
                                         .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(5, 5, 5)
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel42)
                                     .addComponent(cmbGameRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(btnGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(11, 11, 11)
+                            .addComponent(pnlGPS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(10, 10, 10)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addComponent(jLabel36)
-                        .addGap(108, 108, 108))
+                    .addComponent(jLabel36)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel40)
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addComponent(jScrollPane13)
-                                .addGap(5, 5, 5))))))
+                            .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(10, 10, 10))
         );
 
         pnlButtons.setBackground(new java.awt.Color(233, 239, 244));
@@ -817,7 +857,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                                 .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                                 .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
                                 .addComponent(btnBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                .addComponent(pnlSubButtons1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                                .addComponent(pnlSubButtons1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -933,7 +973,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                             .addGroup(pnlVisitLayout.createSequentialGroup()
                                 .addComponent(jLabel45)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE))))
                 .addGap(5, 5, 5))
         );
@@ -953,7 +993,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
                         .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
+                    .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
 
@@ -1069,7 +1109,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addGap(5, 5, 5)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pnlVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1105,10 +1145,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addGap(3, 3, 3)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(2, 2, 2)
-                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pnlButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(5, 5, 5)
+                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, 0)
                         .addComponent(pnlVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
@@ -1464,6 +1504,18 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
+    private void btnApplyGPSToVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApplyGPSToVisitActionPerformed
+        List<Sighting> lstSightings = getListOfSelectedSightings();
+        app.getMainFrame().getGlassPane().setVisible(true);
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        for (Sighting sighting : lstSightings) {
+            UtilsGPS.copyGpsBetweenDOs(sighting, locationWL);
+            app.getDBI().updateSighting(sighting, false);
+        }
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+        app.getMainFrame().getGlassPane().setVisible(false);
+    }//GEN-LAST:event_btnApplyGPSToVisitActionPerformed
+
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
@@ -1474,9 +1526,40 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
         lblNumberOfImages.setToolTipText(lblNumberOfImages.getText());
     }
+    
+    private List<Sighting> getListOfSelectedSightings() {
+        List<Sighting> lstSelectedSightings = new ArrayList<>();
+        int result = WLOptionPane.showOptionDialog(app.getMainFrame(),
+                "Please select which subset of Observations should be used.",
+                "Which Observations to use?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                null, new String[]{
+                    "Observations from all Periods", 
+                    "Only Observations from selected Periods"}, 
+                null);
+        if (result != JOptionPane.CLOSED_OPTION) {
+            if (result == 0) {
+                // Use all Sightings
+                for (int row = 0; row < tblVisit.getModel().getRowCount(); row++) {
+                    long visitID = (long) tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(row), 7);
+                    lstSelectedSightings.addAll(app.getDBI().listSightings(0, locationWL.getID(), visitID, false, Sighting.class));
+                }
+            }
+            else {
+                // Use selected Sightings
+                lstSelectedSightings = new ArrayList<>();
+                int[] selectedRows = tblVisit.getSelectedRows();
+                for (int t = 0; t < selectedRows.length; t++) {
+                    long visitID = (long) tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 7);
+                    lstSelectedSightings.addAll(app.getDBI().listSightings(0, locationWL.getID(), visitID, false, Sighting.class));
+                }
+            }
+        }
+        return lstSelectedSightings;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddVisit;
+    private javax.swing.JButton btnApplyGPSToVisit;
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnBulkImport;
     private javax.swing.JButton btnDeleteImage;
@@ -1522,6 +1605,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JPanel locationIncludes;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlFiles;
+    private javax.swing.JPanel pnlGPS;
     private javax.swing.JPanel pnlInfo;
     private javax.swing.JPanel pnlSubButtons1;
     private javax.swing.JPanel pnlSubButtons2;
