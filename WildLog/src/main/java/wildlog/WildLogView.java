@@ -2270,7 +2270,7 @@ public final class WildLogView extends JFrame {
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the Database Backup");
                 app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath()
-                        .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(LocalDateTime.now()) + ")"));
+                        .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ")"));
                 setMessage("Done with the Database Backup");
                 WLOptionPane.showMessageDialog(app.getMainFrame(),
                         "<html>The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. <br>(Note: This only backed up the database entries, the images and other files have to be backed up manually.)</html>",

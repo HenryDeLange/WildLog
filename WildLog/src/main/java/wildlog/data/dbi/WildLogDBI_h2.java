@@ -1669,7 +1669,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         + "concat(\n"
                         + "'\n\n"
                         + "----- WildLog v6 Upgrade -----', \n"
-                        + "case when (ACCOMMODATIONTYPE is null or length(ACCOMMODATIONTYPE) = 0) then '' else concat('\n"
+                        + "case when (ACCOMMODATIONTYPE is null or length(ACCOMMODATIONTYPE) < 5) then '' else concat('\n"
                         + "ACCOMMODATIONTYPE: ', ACCOMMODATIONTYPE) end, \n"
                         + "case when (CATERING is null or length(CATERING) = 0) then '' else concat('\n"
                         + "CATERING: ', CATERING) end, \n"

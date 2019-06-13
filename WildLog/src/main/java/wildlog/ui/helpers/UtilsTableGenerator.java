@@ -57,8 +57,8 @@ import wildlog.ui.helpers.renderers.WildLogTableModel;
 import wildlog.ui.helpers.renderers.WildLogTableModelDataWrapper;
 import wildlog.ui.helpers.renderers.editors.ButtonTableEditor;
 import wildlog.ui.maps.implementations.helpers.DistributionLayerCellRenderer;
-import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
@@ -827,9 +827,9 @@ public final class UtilsTableGenerator {
                         UtilsTime.getDateFromLocalDateTime(startDateTime), UtilsTime.getDateFromLocalDateTime(endDateTime), 
                         inActiveLocations, inActiveVisits, inActiveElements, true, Sighting.class);
                 if (!listSightings.isEmpty()) {
-                    Collection<Callable<Object>> listCallables = Collections.synchronizedList(new ArrayList<>(listSightings.size()));
+                    List<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
                     // Setup new table data
-                    final List<Object[]> data = new ArrayList<>(listSightings.size());
+                    final List<Object[]> data = Collections.synchronizedList(new ArrayList<>(listSightings.size()));
                     for (int t = 0; t < listSightings.size(); t++) {
                         final int finalT = t;
                         listCallables.add(new Callable<Object>() {

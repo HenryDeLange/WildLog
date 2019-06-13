@@ -857,7 +857,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             app.getMainFrame().getGlassPane().setVisible(true);
             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             for (Sighting sighting : lstSelectedSightings) {
-                UtilsPanelGenerator.openPanelAsTab(app, sighting.getVisitID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, null);
+                UtilsPanelGenerator.openPanelAsTab(app, sighting.getVisitID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, 
+                        app.getDBI().findLocation(sighting.getLocationID(), null, Location.class));
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
             app.getMainFrame().getGlassPane().setVisible(false);
@@ -1164,6 +1165,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         // Reload the UI
         if (rdbLayoutTable.isSelected()) {
             pnlImage.setVisible(true);
+            lblFilterDetails.setVisible(true);
             pnlLayoutView.removeAll();
             pnlLayoutView.revalidate();
             pnlLayoutView.repaint();
@@ -1178,6 +1180,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         else
         if (rdbLayoutGridSightings.isSelected() || rdbLayoutGridFiles.isSelected()) {
             pnlImage.setVisible(false);
+            lblFilterDetails.setVisible(false);
             // Clear the old table (to hopefully free up its resources)
             tblSightings.setModel(new DefaultTableModel(new String[]{"inactive"}, 0));
             pnlLayoutView.removeAll();
