@@ -20,6 +20,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Font;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.VisitType;
 import wildlog.data.utils.UtilsData;
@@ -122,6 +123,28 @@ public class ReportVisitDates {
                         reportData.isMissing = false;
                         reportData.isOverlapping = false;
                     }
+                    List<Sighting> lstSightings = WildLogApp.getApplication().getDBI().listSightings(0, visit.getLocationID(), visit.getID(), false, Sighting.class);
+                    boolean outsideRange = false;
+                    int startGap = Integer.MAX_VALUE;
+                    int endGap = Integer.MAX_VALUE;
+                    for (Sighting sighting : lstSightings) {
+                        LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+                        if (sightingDate.isBefore(reportData.startDate) || sightingDate.isAfter(reportData.endDate)) {
+                            outsideRange = true;
+                        }
+                        startGap = Math.min(startGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.startDate)));
+                        endGap = Math.min(endGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.endDate)));
+                    }
+                    reportData.observationsDateRange = "";
+                    if (outsideRange) {
+                        reportData.observationsDateRange = "OBSERVATION DATE OUTSIDE PERIOD DATE. ";
+                    }
+                    if (startGap > 2) {
+                        reportData.observationsDateRange = "LATE OBSERVATION START DATE. ";
+                    }
+                    if (endGap > 2) {
+                        reportData.observationsDateRange = "EARLY OBSERVATION END DATE.";
+                    }
                     // If there was a missing period, then add a row for it
                     if (reportData.isMissing) {
                         reportData.isMissing = false;
@@ -167,6 +190,7 @@ public class ReportVisitDates {
                     row.createCell(5).setCellValue("Days");
                     row.createCell(6).setCellValue("Observations");
                     row.createCell(7).setCellValue("Has Overlap");
+                    row.createCell(8).setCellValue("Incorrect Observation Dates");
                     row.getCell(0).setCellStyle(styleHeader);
                     row.getCell(1).setCellStyle(styleHeader);
                     row.getCell(2).setCellStyle(styleHeader);
@@ -175,6 +199,7 @@ public class ReportVisitDates {
                     row.getCell(5).setCellStyle(styleHeader);
                     row.getCell(6).setCellStyle(styleHeader);
                     row.getCell(7).setCellStyle(styleHeader);
+                    row.getCell(8).setCellStyle(styleHeader);
                     List<ReportData> lstReportData = mapReportData.get(key);
                     for (int r = 0; r < lstReportData.size(); r++) {
                         ReportData reportData = lstReportData.get(r);
@@ -197,6 +222,10 @@ public class ReportVisitDates {
                             row.createCell(7).setCellValue("OVERLAPPING");
                             row.getCell(7).setCellStyle(styleWarning);
                         }
+                        if (reportData.observationsDateRange != null && !reportData.observationsDateRange.isEmpty()) {
+                            row.createCell(8).setCellValue(reportData.observationsDateRange.trim());
+                            row.getCell(8).setCellStyle(styleWarning);
+                        }
                     }
                     sheet.autoSizeColumn(0);
                     sheet.autoSizeColumn(1);
@@ -206,6 +235,7 @@ public class ReportVisitDates {
                     sheet.autoSizeColumn(5);
                     sheet.autoSizeColumn(6);
                     sheet.autoSizeColumn(7);
+                    sheet.autoSizeColumn(8);
                 }
                 try (FileOutputStream out = new FileOutputStream(path.toFile())) {
                     workbook.write(out);
@@ -236,6 +266,7 @@ public class ReportVisitDates {
         private int sigtingCount;
         private boolean isMissing;
         private boolean isOverlapping;
+        private String observationsDateRange;
     }
     
 }
