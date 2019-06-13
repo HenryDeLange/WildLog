@@ -549,6 +549,53 @@ public class UtilsImageProcessing {
         }
         return null;
     }
+    
+    public static String getExifCameraNameFromJpeg(Metadata inMeta) {
+        String cameraName = "";
+        if (inMeta != null) {
+            Iterator<Directory> directories = inMeta.getDirectories().iterator();
+            while (directories.hasNext()) {
+                Directory directory = directories.next();
+                Collection<Tag> tags = directory.getTags();
+                for (Tag tag : tags) {
+                    try {
+                        if (tag.getTagName().equalsIgnoreCase("User Comment")) {
+                            String[] dataFields = tag.getDescription().split(",");
+                            for (String dataField : dataFields) {
+                                if (dataField.startsWith("ID=")) {
+                                    cameraName = dataField.substring(3);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    catch (NumberFormatException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, "Could not parse camera name info from image EXIF data: {} = {}", new Object[]{tag.getTagName(), tag.getDescription()});
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                }
+            }
+        }
+        return cameraName;
+     }
+
+    public static String getExifCameraNameFromJpeg(Path inPath) {
+        try {
+            return getExifCameraNameFromJpeg(JpegMetadataReader.readMetadata(inPath.toFile()));
+        }
+        catch (JpegProcessingException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, "Error reading EXIF data for non-JPG file: {}", inPath);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        catch (IOException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, "Error reading GPS EXIF data for: {}", inPath);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        return null;
+    }
 
     /**
      * Creates a thumbnail for the provided original absolute path at the give absolute path.

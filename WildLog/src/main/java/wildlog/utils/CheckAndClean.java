@@ -327,6 +327,38 @@ public class CheckAndClean {
                     checkSightingVisit.setLocationID(newLocation.getID());
                     inApp.getDBI().updateVisit(checkSightingVisit, checkSightingVisit.getName(), false);
                 }
+                // For WEI, set the camera model as a tag
+                if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                    try {
+                        String oldTag = sighting.getTag();
+                        if (oldTag == null || oldTag.trim().isEmpty()) {
+                            oldTag = "";
+                        }
+                        sighting.setTag("");
+                        List<WildLogFile> lstFiles = inApp.getDBI().listWildLogFiles(sighting.getID(), WildLogFileType.IMAGE, WildLogFile.class);
+                        Set<String> setCameraNames = new HashSet<>();
+                        for (WildLogFile wildLogFile : lstFiles) {
+                            setCameraNames.add(UtilsImageProcessing.getExifCameraNameFromJpeg(wildLogFile.getAbsolutePath()));
+                        }
+                        for (String cameraName : setCameraNames) {
+                            sighting.setTag((sighting.getTag() + " " + cameraName).trim());
+                        }
+                        if (!oldTag.equals(sighting.getTag())) {
+                            inApp.getDBI().updateSighting(sighting, false);
+                            badDataLinks++;
+                            finalHandleFeedback.println("PROBLEM:     The Observation's Tag field did not show the correct camera name. "
+                                    + "Observation: " + sighting.getID() + ", Old Tag: " + oldTag);
+                            finalHandleFeedback.println("  +RESOLVED: Changed the value to: " + sighting.getTag());
+                        }
+                    }
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, "Could not get the camera model for the Sighting.");
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        finalHandleFeedback.println("PROBLEM:       Could not get the camera model for the Observation.");
+                        finalHandleFeedback.println("  -UNRESOLVED: Unexpected error...");
+                    }
+                }
                 countSightings++;
                 inProgressbarTask.setTaskProgress(4 + (int)(countSightings/(double)allSightings.size()*4));
                 inProgressbarTask.setMessage("Cleanup Step 1: Check links between records in the database... " + inProgressbarTask.getProgress() + "%");
@@ -812,6 +844,7 @@ public class CheckAndClean {
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
                             // Not going to bother with synchornization here, since it's just the progress bar
                             countThumbnails.counter++;
@@ -839,7 +872,7 @@ public class CheckAndClean {
                 inProgressbarTask.setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... " + inProgressbarTask.getProgress() + "%");
                 finalHandleFeedback.println("");
                 finalHandleFeedback.println("9) Recreate the default thumbnails for all images.");
-                List<WildLogFile> listFiles =inApp.getDBI().listWildLogFiles(0, WildLogFileType.IMAGE, WildLogFile.class);
+                List<WildLogFile> listFiles =inApp.getDBI().listWildLogFiles(-1, WildLogFileType.IMAGE, WildLogFile.class);
                 // Sort the files by name to put the related location, element, visit and sighting images close to one another, 
                 // otherwise the loading from disk actually gets worse because the files are all over the place.
                 // This way the read-ahead will get more hits and be faster.
@@ -868,6 +901,7 @@ public class CheckAndClean {
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
                             // Not going to bother with synchornization here, since it's just the progress bar
                             countThumbnails.counter++;

@@ -12,7 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -1069,6 +1071,20 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         double seconds = difference - minutes*60.0;
                                         sightingWrapper.setDurationMinutes(minutes);
                                         sightingWrapper.setDurationSeconds(seconds);
+                                    }
+                                }
+                                // For WEI, set the camera model as a tag
+                                if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                                    if (sightingWrapper.getTag() == null) {
+                                        sightingWrapper.setTag("");
+                                    }
+                                    Set<String> setCameraNames = new HashSet<>();
+                                    for (File file : files) {
+                                        setCameraNames.add(UtilsImageProcessing.getExifCameraNameFromJpeg(file.toPath()));
+                                    }
+                                    for (String cameraName : setCameraNames) {
+                                        sightingWrapper.setTag((sightingWrapper.getTag() + " " + cameraName).trim());
                                     }
                                 }
                                 // Save the sigting

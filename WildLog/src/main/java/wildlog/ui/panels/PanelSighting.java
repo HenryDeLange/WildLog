@@ -13,7 +13,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -352,6 +354,18 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         // Calculate duration
                         if ((int)spnDurationMinutes.getValue() == 0 && (double)spnDurationSeconds.getValue() == 0.0) {
                             btnCalculateDurationActionPerformed(null);
+                        }
+                        // For WEI, set the camera model as a tag
+                        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                            Set<String> setCameraNames = new HashSet<>();
+                            for (File file : inFiles) {
+                                setCameraNames.add(UtilsImageProcessing.getExifCameraNameFromJpeg(file.toPath()));
+                            }
+                            for (String cameraName : setCameraNames) {
+                                sighting.setTag((sighting.getTag() + " " + cameraName).trim());
+                                txtTag.setText(sighting.getTag());
+                            }
                         }
                         // Save all the changes and auto populated fields
                         btnUpdateSightingActionPerformed(null);
