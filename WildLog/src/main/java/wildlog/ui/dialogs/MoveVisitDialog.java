@@ -28,6 +28,7 @@ public class MoveVisitDialog extends JDialog {
         loadLists();
         // If a visit was specified, select and lock the UI
         if (inVisit != null) {
+            // Select the location
             for (int t = 0; t < lstFromLocation.getModel().getSize(); t++) {
                 if (((Location) lstFromLocation.getModel().getElementAt(t)).getID() == inVisit.getLocationID()) {
                     lstFromLocation.setSelectedValue(lstFromLocation.getModel().getElementAt(t), true);
@@ -35,9 +36,15 @@ public class MoveVisitDialog extends JDialog {
                     break;
                 }
             }
+            // Select the visit
             lstFromLocationValueChanged(null);
-            lstVisit.setSelectedValue(inVisit, true);
-            lstVisit.setEnabled(false);
+            for (int t = 0; t < lstVisit.getModel().getSize(); t++) {
+                if (((Visit) lstVisit.getModel().getElementAt(t)).getID() == inVisit.getID()) {
+                    lstVisit.setSelectedValue(lstVisit.getModel().getElementAt(t), true);
+                    lstVisit.setEnabled(false);
+                    break;
+                }
+            }
         }
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
