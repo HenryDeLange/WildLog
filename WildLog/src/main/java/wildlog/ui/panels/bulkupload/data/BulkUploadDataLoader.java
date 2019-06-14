@@ -31,6 +31,7 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
+import wildlog.ui.panels.bulkupload.ImageBox;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
@@ -47,7 +48,7 @@ public class BulkUploadDataLoader {
     
     public static BulkUploadDataWrapper genenrateTableData(List<Path> inLstFolderPaths, boolean inIsRecuresive, 
             int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp, 
-            boolean inForceLocationGPS, Location inLocation) {
+            boolean inForceLocationGPS, Location inLocation, int inImageBoxSize) {
         long time = System.currentTimeMillis();
         WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadDataWrapper.genenrateTableData() - The files will be read and prepared for the table to display.");
         inProgressbarTask.setMessage("Bulk Import Preparation: Configuring...");
@@ -85,7 +86,7 @@ public class BulkUploadDataLoader {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    loadFileData(tempFile, imageList);
+                    loadFileData(tempFile, imageList, inImageBoxSize - ImageBox.BUTTON_AND_PADDING_BUFFER);
                     try {
                         inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, lstAllFiles.size() + 1); // Prevent the progress bar from reaching 100%
                         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files... " + inProgressbarTask.getProgress() + "%");
@@ -119,7 +120,7 @@ public class BulkUploadDataLoader {
                     // Set other defaults for the sighting
                     setDefaultsForNewBulkUploadSightings(sightingKey, inForceLocationGPS, inLocation);
                     // Update the map
-                    finalMap.put(sightingKey, new BulkUploadImageListWrapper());
+                    finalMap.put(sightingKey, new BulkUploadImageListWrapper(inImageBoxSize));
                     // Set the date for this sighting
                     currentSightingDate = temp.getDate();
                     sightingKey.setDate(currentSightingDate);
@@ -170,7 +171,7 @@ public class BulkUploadDataLoader {
         }
     }
 
-    private static void loadFileData(Path inFile, List<BulkUploadImageFileWrapper> inImageList) {
+    private static void loadFileData(Path inFile, List<BulkUploadImageFileWrapper> inImageList, int inImageIconSize) {
         // Note: Ek load die file meer as een keer (HDD+OS cache), maar dis steeds redelik vinnig, 
         //       en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
         Metadata metadata = null;
@@ -190,18 +191,16 @@ public class BulkUploadDataLoader {
         if (date != null) {
             ImageIcon imageIcon;
             if (WildLogFileExtentions.Images.isKnownExtention(inFile)) {
-                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, WildLogThumbnailSizes.MEDIUM.getSize(), true, metadata);
+                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, inImageIconSize, true, metadata);
             }
             else 
             if (WildLogFileExtentions.Movies.isKnownExtention(inFile)) {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM),
-                        WildLogThumbnailSizes.MEDIUM.getSize(), false);
+                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), inImageIconSize, false);
             }
             else {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM),
-                        WildLogThumbnailSizes.MEDIUM.getSize(), false);
+                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), inImageIconSize, false);
             }
             BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(inFile, imageIcon, date, UtilsImageProcessing.getExifGpsFromJpeg(metadata));
             inImageList.add(wrapper);

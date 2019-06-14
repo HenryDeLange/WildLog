@@ -5,9 +5,11 @@ import java.util.List;
 
 public class BulkUploadImageListWrapper {
     private List<BulkUploadImageFileWrapper> imageList;
+    private int imageBoxSize;
 
-    public BulkUploadImageListWrapper() {
+    public BulkUploadImageListWrapper(int inImageBoxSize) {
         imageList = new ArrayList<BulkUploadImageFileWrapper>();
+        imageBoxSize = inImageBoxSize;
     }
 
     public List<BulkUploadImageFileWrapper> getImageList() {
@@ -16,6 +18,14 @@ public class BulkUploadImageListWrapper {
 
     public void setImageList(List<BulkUploadImageFileWrapper> inImageList) {
         imageList = inImageList;
+    }
+
+    public int getImageBoxSize() {
+        return imageBoxSize;
+    }
+
+    public void setImageBoxSize(int inImageBoxSize) {
+        imageBoxSize = inImageBoxSize;
     }
 
 }

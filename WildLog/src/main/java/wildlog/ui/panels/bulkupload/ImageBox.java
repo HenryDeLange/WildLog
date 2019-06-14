@@ -27,15 +27,18 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public class ImageBox extends JPanel {
+    public static int BUTTON_AND_PADDING_BUFFER = 40;
     private final BulkUploadPanel bulkUploadPanel;
     private final BulkUploadImageFileWrapper imageWrapper;
     private final JTable table;
+    private final int imageBoxSize;
 
 
-    public ImageBox(final BulkUploadImageFileWrapper inBulkUploadImageFileWrapper, final JTable inTable) {
+    public ImageBox(final BulkUploadImageFileWrapper inBulkUploadImageFileWrapper, final JTable inTable, int inImageBoxSize) {
         initComponents();
         imageWrapper = inBulkUploadImageFileWrapper;
         table = inTable;
+        imageBoxSize = inImageBoxSize;
         bulkUploadPanel = (BulkUploadPanel) table.getParent().getParent().getParent();
         populateUI();
     }
@@ -70,7 +73,6 @@ public class ImageBox extends JPanel {
 
         setBackground(new java.awt.Color(235, 246, 220));
         setName("Form"); // NOI18N
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblImage.setBackground(new java.awt.Color(0, 0, 0));
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -83,7 +85,6 @@ public class ImageBox extends JPanel {
                 lblImageMouseReleased(evt);
             }
         });
-        add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 200, 200));
 
         btnUp.setBackground(new java.awt.Color(235, 246, 220));
         btnUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/up.png"))); // NOI18N
@@ -98,7 +99,6 @@ public class ImageBox extends JPanel {
                 btnUpActionPerformed(evt);
             }
         });
-        add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 30, 60));
 
         btnDown.setBackground(new java.awt.Color(235, 246, 220));
         btnDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/down.png"))); // NOI18N
@@ -113,7 +113,6 @@ public class ImageBox extends JPanel {
                 btnDownActionPerformed(evt);
             }
         });
-        add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 65, 30, 60));
 
         btnRemove.setBackground(new java.awt.Color(235, 246, 220));
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -136,7 +135,6 @@ public class ImageBox extends JPanel {
                 btnRemoveActionPerformed(evt);
             }
         });
-        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
 
         btnNewSighting.setBackground(new java.awt.Color(235, 246, 220));
         btnNewSighting.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -154,7 +152,6 @@ public class ImageBox extends JPanel {
                 btnNewSightingActionPerformed(evt);
             }
         });
-        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 90, 30));
 
         btnClone.setBackground(new java.awt.Color(235, 246, 220));
         btnClone.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
@@ -177,7 +174,6 @@ public class ImageBox extends JPanel {
                 btnCloneActionPerformed(evt);
             }
         });
-        add(btnClone, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 205, 70, 30));
 
         btnZoom.setBackground(new java.awt.Color(235, 246, 220));
         btnZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ZoomIn.png"))); // NOI18N
@@ -192,7 +188,46 @@ public class ImageBox extends JPanel {
                 btnZoomActionPerformed(evt);
             }
         });
-        add(btnZoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 125, 30, 80));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnUp, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDown, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnZoom, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnNewSighting, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btnClone, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btnRemove, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)))
+                .addGap(5, 5, 5))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnUp, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btnDown, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btnZoom, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNewSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClone, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
@@ -232,7 +267,7 @@ public class ImageBox extends JPanel {
         else {
             model.fireTableCellUpdated(row, col);
         }
-        BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper();
+        BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper(imageBoxSize);
         newListWrapper.getImageList().add(imageWrapper);
         if (imageWrapper.getDate().before(currentSightingWrapper.getDate())) {
             model.insertRow(row, new Object[]{newSightingWrapper, newListWrapper});
@@ -297,7 +332,7 @@ public class ImageBox extends JPanel {
                             bulkUploadPanel.getChkForceLocationGPSCoordinates().isSelected(), bulkUploadPanel.getSelectedLocation());
                     newSightingWrapper.setDate(imageWrapper.getDate());
                     UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
-                    BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper();
+                    BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper(imageBoxSize);
                     newListWrapper.getImageList().add(imageWrapper.getClone());
                     if (imageWrapper.getDate().before(currentSightingWrapper.getDate())) {
                         model.insertRow(row, new Object[]{newSightingWrapper, newListWrapper});

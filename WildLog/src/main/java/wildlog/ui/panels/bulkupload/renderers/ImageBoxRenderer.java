@@ -1,6 +1,7 @@
 package wildlog.ui.panels.bulkupload.renderers;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
@@ -13,9 +14,7 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 
 
 public class ImageBoxRenderer implements TableCellRenderer {
-    private static final int imageBoxSizeWidth = 235;
-    private static final int imageBoxSizeHeight = 240;
-    
+
     @Override
     public Component getTableCellRendererComponent(JTable inTable, Object inValue, boolean inIsSelected, boolean inHasFocus, int inRow, int inColumn) {
         return drawImageBoxes(inValue, inTable, inRow, inColumn);
@@ -31,7 +30,8 @@ public class ImageBoxRenderer implements TableCellRenderer {
         else {
             panel.setBackground(BulkUploadPanel.tableBackgroundColor2);
         }
-        final int imagesPerRow = (int)((inTable.getColumnModel().getColumn(inColumn).getWidth()) / imageBoxSizeWidth);
+        final int boxSize = imageListWrapper.getImageBoxSize();
+        final int imagesPerRow = (int)((inTable.getColumnModel().getColumn(inColumn).getWidth()) / boxSize);
         int posX = 0;
         int posY = -1;
 // FIXME: Die storie is miskien performance heavy as daar baie images in een sighting is...
@@ -39,15 +39,21 @@ public class ImageBoxRenderer implements TableCellRenderer {
             if (posX == 0) {
                 posY++;
             }
-            ImageBox imageBox = new ImageBox(imageWrapper, inTable);
+            ImageBox imageBox = new ImageBox(imageWrapper, inTable, boxSize);
             imageBox.setRowBackground(panel.getBackground());
-            panel.add(imageBox, new AbsoluteConstraints(imageBoxSizeWidth*posX++, imageBoxSizeHeight*posY, imageBoxSizeWidth, imageBoxSizeHeight));
+            imageBox.setPreferredSize(new Dimension(boxSize, boxSize));
+            panel.add(imageBox, new AbsoluteConstraints(boxSize*posX++, boxSize*posY, boxSize, boxSize));
             if (posX == imagesPerRow) {
                 posX = 0;
             }
         }
-        if (inTable.getRowHeight(inRow) != imageBoxSizeHeight*(posY+1)) {
-            inTable.setRowHeight(inRow, imageBoxSizeHeight*(posY+1));
+        int rowHeight = boxSize*(posY+1);
+        // Make sure the row isn't smaller than the Info Box
+        if (rowHeight < 240) {
+            rowHeight = 240;
+        }
+        if (inTable.getRowHeight(inRow) != rowHeight) {
+            inTable.setRowHeight(inRow, rowHeight);
         }
         return panel;
     }
