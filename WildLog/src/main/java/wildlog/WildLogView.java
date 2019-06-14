@@ -2348,7 +2348,8 @@ public final class WildLogView extends JFrame {
                             null, new String[] {
                                 "Recreate only essential thumbnails (Recommended)",
                                 "Recreate all thumbnails", 
-                                "Don't recreate any thumbnails"
+                                "Delete all thumbnails, but don't recreate any", 
+                                "Don't delete nor recreate any thumbnails"
                             }, null);
                     // Ja... Ek moet STUPID baie SwingUtilities.invokeLater calls gebruik...
                     SwingUtilities.invokeLater(new Runnable() {

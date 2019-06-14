@@ -39,7 +39,7 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
 
-// Skuif die kode na sy eie klas want WildLogView raak te groot.
+
 public class CheckAndClean {
 
     private CheckAndClean() {
@@ -666,14 +666,17 @@ public class CheckAndClean {
             }
             inProgressbarTask.setTaskProgress(72);
             inProgressbarTask.setMessage("Cleanup Step 6: Delete exports and thumbnails... " + inProgressbarTask.getProgress() + "%");
-            try {
-                UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
-            }
-            catch (final IOException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, "Could not delete thumbnail folders.");
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                finalHandleFeedback.println("PROBLEM:       Could not delete thumbnail folders.");
-                finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
+            if (inRecreateThumbnailsResult >= 0 && inRecreateThumbnailsResult <= 3) {
+                try {
+                
+                    UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
+                }
+                catch (final IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, "Could not delete thumbnail folders.");
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    finalHandleFeedback.println("PROBLEM:       Could not delete thumbnail folders.");
+                    finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
+                }
             }
             inProgressbarTask.setTaskProgress(79);
 
