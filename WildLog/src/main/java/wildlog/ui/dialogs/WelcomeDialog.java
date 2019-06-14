@@ -150,15 +150,17 @@ public class WelcomeDialog extends JDialog {
             public void run() {
                 LocationSelectionDialog locationDialog = new LocationSelectionDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 0);
                 locationDialog.setVisible(true);
-                UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
-                    @Override
-                    protected Object doInBackground() throws Exception {
-                        UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(WildLogApp.getApplication(), this, 
-                                WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class), 
-                                null, null, null), WildLogApp.getApplication().getMainFrame().getTabbedPane());
-                        return null;
-                    }
-                });
+                if (locationDialog.isSelectionMade()) {
+                    UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(WildLogApp.getApplication(), this, 
+                                    WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class), 
+                                    null, null, null), WildLogApp.getApplication().getMainFrame().getTabbedPane());
+                            return null;
+                        }
+                    });
+                }
             }
         });
     }//GEN-LAST:event_btnBulkImportActionPerformed

@@ -626,6 +626,13 @@ public final class UtilsFileProcessing {
                 if (locationDialog.isSelectionMade()) {
                     // Get the folder to import
                     WLFileChooser fileChooser = new WLFileChooser();
+                    try {
+                        fileChooser.setCurrentDirectory(File.listRoots()[0]);
+                        fileChooser.changeToParentDirectory();
+                    }
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
                     fileChooser.setDialogTitle("Select files or folders to stash");
                     fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
                     fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

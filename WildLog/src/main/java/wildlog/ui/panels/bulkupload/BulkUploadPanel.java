@@ -179,6 +179,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             chkForceLocationGPSCoordinates.setSelected(false);
             chkForceLocationGPSCoordinates.setVisible(false);
         }
+        // Do WEI volunteer specific stuff
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            // Set the image box size to the largest
+            cmbImageBoxSize.setSelectedIndex(2);
+        }
         // Setup the tab's content
         setupTab(inProgressbarTask);
         // Setup the initial visit name
@@ -197,15 +202,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Do WEI volunteer specific stuff
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             // For WEI show a tips popup
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    BulkUploadTipsDialog dialog = new BulkUploadTipsDialog();
-                    dialog.setVisible(true);
-                }
-            });
-            // Set the image box size to the largest
-            cmbImageBoxSize.setSelectedIndex(2);
+            if (showAsTab) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        BulkUploadTipsDialog dialog = new BulkUploadTipsDialog();
+                        dialog.setVisible(true);
+                    }
+                });
+            }
         }
     }
 
@@ -313,11 +318,18 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private List<Path> showFileChooser() {
         WLFileChooser fileChooser;
-        if (lastFilePath != null && lastFilePath.length() > 0) {
+        if (lastFilePath != null && !lastFilePath.isEmpty()) {
             fileChooser = new WLFileChooser(lastFilePath);
         }
         else {
-            fileChooser = new WLFileChooser();
+            fileChooser = new WLFileChooser(lastFilePath);
+            try {
+                fileChooser.setCurrentDirectory(File.listRoots()[0]);
+                fileChooser.changeToParentDirectory();
+            }
+            catch (Exception ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
         }
         fileChooser.setDialogTitle("Select a folder to import");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);

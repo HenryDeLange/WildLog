@@ -18,6 +18,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 public class WLFileChooser extends JFileChooser {
 
     public WLFileChooser() {
+        super();
     }
 
     public WLFileChooser(String currentDirectoryPath) {
