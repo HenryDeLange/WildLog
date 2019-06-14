@@ -43,7 +43,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Start Date:</b><br/>", UtilsHTML.formatDateAsString(startDate, false), true);
         UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>End Date:</b><br/>", UtilsHTML.formatDateAsString(endDate, false), true);
         UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Type of Visit:</b><br/>", type, true);
-        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Description:</b><br/>", description, true);
+        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Notes:</b><br/>", description, true);
         if (!inIsSummary) {
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Game Watching:</b><br/>", gameWatchingIntensity, true);
         }
@@ -100,7 +100,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         builder.append("<name><![CDATA[").append(name).append("]]></name>");
         builder.append("<startDate>").append(UtilsHTML.formatDateAsString(startDate, false)).append("</startDate>");
         builder.append("<endDate>").append(UtilsHTML.formatDateAsString(endDate, false)).append("</endDate>");
-        builder.append("<description><![CDATA[").append(description).append("]]></description>");
+        builder.append("<notes><![CDATA[").append(description).append("]]></notes>");
         builder.append("<gameWatchingIntensity>").append(gameWatchingIntensity).append("</gameWatchingIntensity>");
         builder.append("<type>").append(type).append("</type>");
         builder.append("<locationName>").append(cachedLocationName).append("</locationName>");

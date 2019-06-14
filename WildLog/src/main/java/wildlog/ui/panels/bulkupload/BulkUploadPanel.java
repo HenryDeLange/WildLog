@@ -97,6 +97,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     
 // TODO: Om ding vinniger te maak kan ek 'n HashMap hou van elke file se metadata (exif - basies net die gps + date?) wanneer ek dit die eerste keer lees, dan later as ek safe kan dit die cache gebruik in plaas van weer die files lees
 
+// FIXME: As mens tabs wissel en met die nuwe groter rye, dan is die boonste ry te klein
+    
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, Location inLocation, Visit inExistingVisit, 
             List<Path> inlstImportPaths, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         WildLogApp.LOGGER.log(Level.INFO, "[BulkUploadPanel]");

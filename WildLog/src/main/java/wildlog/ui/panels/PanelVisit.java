@@ -874,7 +874,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         cmbGameWatchIntensity.setFocusable(false);
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
 
-        jLabel53.setText("Description:");
+        jLabel53.setText("Notes:");
         jLabel53.setName("jLabel53"); // NOI18N
 
         dtpEndDate.setDate(visit.getEndDate());
@@ -925,11 +925,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlInfoLayout.createSequentialGroup()
+                            .addGroup(pnlInfoLayout.createSequentialGroup()
                                 .addComponent(jLabel53)
-                                .addGap(12, 12, 12)
+                                .addGap(40, 40, 40)
                                 .addComponent(jScrollPane14))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlInfoLayout.createSequentialGroup()
+                            .addGroup(pnlInfoLayout.createSequentialGroup()
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addGap(71, 71, 71)

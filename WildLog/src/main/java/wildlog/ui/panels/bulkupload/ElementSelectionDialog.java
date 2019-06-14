@@ -86,6 +86,13 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
             }
         });
         UtilsImageProcessing.setupFoto(inSelectedElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        if (inSelectedElementID > 0) {
+            Element element = app.getDBI().findElement(inSelectedElementID, null, Element.class);
+            if (element != null) {
+                txtIdentification.setText(element.getDiagnosticDescription());
+                txtIdentification.setCaretPosition(0);
+            }
+        }
     }
 
     /** This method is called from within the constructor to
@@ -107,6 +114,8 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         jScrollPane2 = new javax.swing.JScrollPane();
         tblElement = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
+        jScrollPane21 = new javax.swing.JScrollPane();
+        txtIdentification = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a Creature");
@@ -154,7 +163,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 lblElementImageMouseReleased(evt);
             }
         });
-        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 140, 125, 125));
+        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 185, 125, 125));
 
         btnSelect.setBackground(new java.awt.Color(230, 237, 220));
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
@@ -234,7 +243,19 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 btnAddActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 275, 125, 30));
+        jPanel1.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 140, 125, 30));
+
+        jScrollPane21.setName("jScrollPane21"); // NOI18N
+
+        txtIdentification.setColumns(20);
+        txtIdentification.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtIdentification.setLineWrap(true);
+        txtIdentification.setRows(5);
+        txtIdentification.setWrapStyleWord(true);
+        txtIdentification.setName("txtIdentification"); // NOI18N
+        jScrollPane21.setViewportView(txtIdentification);
+
+        jPanel1.add(jScrollPane21, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 320, 125, 240));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 570));
 
@@ -295,6 +316,11 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 }
                 // Update the icon
                 UtilsImageProcessing.setupFoto(previousElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+                Element element = app.getDBI().findElement(previousElementID, null, Element.class);
+                if (element != null) {
+                    txtIdentification.setText(element.getDiagnosticDescription());
+                    txtIdentification.setCaretPosition(0);
+                }
                 // Do the select action
                 btnSelectActionPerformed(null);
             }
@@ -310,9 +336,15 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
             long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
             // Change the image
             UtilsImageProcessing.setupFoto(selectedID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+            Element element = app.getDBI().findElement(selectedID, null, Element.class);
+            if (element != null) {
+                txtIdentification.setText(element.getDiagnosticDescription());
+                txtIdentification.setCaretPosition(0);
+            }
         }
         else {
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
+            txtIdentification.setText("");
         }
     }//GEN-LAST:event_tblElementMouseReleased
 
@@ -339,6 +371,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         txtSearch.setText("");
         // Clear Images
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+        txtIdentification.setText("");
     }//GEN-LAST:event_cmbElementTypeActionPerformed
 
     private void tblElementKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyReleased
@@ -381,6 +414,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         txtSearch.setText("");
         cmbElementType.setSelectedItem(ElementType.NONE);
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+        txtIdentification.setText("");
         setupUI(selectedElementID);
     }
     
@@ -416,8 +450,10 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane21;
     private javax.swing.JLabel lblElementImage;
     private javax.swing.JTable tblElement;
+    private javax.swing.JTextArea txtIdentification;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }
