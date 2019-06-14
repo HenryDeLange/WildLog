@@ -127,18 +127,23 @@ public class BulkUploadTipsDialog extends JDialog {
             index = 1;
             btnPrevious.setEnabled(false);
         }
-        btnNext.setEnabled(true);
+        btnNext.setText("Next");
         setupTip();
     }//GEN-LAST:event_btnPreviousActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
         index++;
-        if (index >= 6) {
-            index = 6;
-            btnNext.setEnabled(false);
+        if (index == 7) {
+            setVisible(false);
+            dispose();
         }
-        btnPrevious.setEnabled(true);
-        setupTip();
+        else {
+            if (index == 6) {
+                btnNext.setText("Finish");
+            }
+            btnPrevious.setEnabled(true);
+            setupTip();
+        }
     }//GEN-LAST:event_btnNextActionPerformed
 
     private void setupTip() {

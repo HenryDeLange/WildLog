@@ -121,7 +121,6 @@ import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
-import wildlog.ui.panels.bulkupload.LocationSelectionDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -234,10 +233,6 @@ public final class WildLogView extends JFrame {
             sprWorkspaceUsers.setVisible(false);
             mnuAboutWEI.setEnabled(false);
             mnuAboutWEI.setVisible(false);
-            btnStashFiles.setEnabled(false);
-            btnStashFiles.setVisible(false);
-            btnBulkImport.setEnabled(false);
-            btnBulkImport.setVisible(false);
             reportsMenu.setEnabled(false);
             reportsMenu.setVisible(false);
         }
@@ -249,10 +244,6 @@ public final class WildLogView extends JFrame {
             setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
             setTitle("WEI WildLog Admin v" + WildLogApp.WILDLOG_VERSION + " -- " + app.getWildLogOptions().getWorkspaceName());
             lblWildLogName.setText("WEI WildLog");
-            btnStashFiles.setEnabled(true);
-            btnStashFiles.setVisible(true);
-            btnBulkImport.setEnabled(true);
-            btnBulkImport.setVisible(true);
         }
         else
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
@@ -262,10 +253,6 @@ public final class WildLogView extends JFrame {
             setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
             setTitle("WEI WildLog Volunteer v" + WildLogApp.WILDLOG_VERSION + " -- " + app.getWildLogOptions().getWorkspaceName());
             lblWildLogName.setText("WEI WildLog");
-            btnStashFiles.setEnabled(true);
-            btnStashFiles.setVisible(true);
-            btnBulkImport.setEnabled(true);
-            btnBulkImport.setVisible(true);
         }
         // Enforce user access
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
@@ -320,16 +307,8 @@ public final class WildLogView extends JFrame {
             syncMenu.setEnabled(false);
             syncMenu.setVisible(false);
             // Show the WEI welcome popup
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    WelcomeDialog dialog = new WelcomeDialog();
-                    dialog.setVisible(true);
-                }
-            });
+            showWelcomeDialog();
         }
-        btnStashFiles.setBackground(tabHome.getBackground());
-        btnBulkImport.setBackground(tabHome.getBackground());
     }
 
     private void setupTabHeaderHome() {
@@ -433,8 +412,6 @@ public final class WildLogView extends JFrame {
         lblEdition = new javax.swing.JLabel();
         lblWorkspaceUser = new javax.swing.JLabel();
         jSeparator26 = new javax.swing.JSeparator();
-        btnStashFiles = new javax.swing.JButton();
-        btnBulkImport = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         tabElement = new javax.swing.JPanel();
         tabSightings = new javax.swing.JPanel();
@@ -704,40 +681,6 @@ public final class WildLogView extends JFrame {
         jSeparator26.setForeground(new java.awt.Color(105, 123, 79));
         jSeparator26.setName("jSeparator26"); // NOI18N
 
-        btnStashFiles.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnStashFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Stash Icon.png"))); // NOI18N
-        btnStashFiles.setText("Stash Files");
-        btnStashFiles.setToolTipText("Stash files in the WildLog Workspace for later processing.");
-        btnStashFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnStashFiles.setEnabled(false);
-        btnStashFiles.setFocusPainted(false);
-        btnStashFiles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnStashFiles.setIconTextGap(10);
-        btnStashFiles.setMargin(new java.awt.Insets(2, 40, 2, 14));
-        btnStashFiles.setName("btnStashFiles"); // NOI18N
-        btnStashFiles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnStashFilesActionPerformed(evt);
-            }
-        });
-
-        btnBulkImport.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Impor Large.png"))); // NOI18N
-        btnBulkImport.setText("Bulk Import");
-        btnBulkImport.setToolTipText("Import multiple files at once using the Bulk Import feature.");
-        btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBulkImport.setEnabled(false);
-        btnBulkImport.setFocusPainted(false);
-        btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnBulkImport.setIconTextGap(10);
-        btnBulkImport.setMargin(new java.awt.Insets(2, 40, 2, 14));
-        btnBulkImport.setName("btnBulkImport"); // NOI18N
-        btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBulkImportActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
         tabHome.setLayout(tabHomeLayout);
         tabHomeLayout.setHorizontalGroup(
@@ -795,9 +738,7 @@ public final class WildLogView extends JFrame {
                                         .addComponent(jSeparator26, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                                         .addComponent(lblWorkspaceUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(lblWorkspaceName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
-                                        .addComponent(lblEdition, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
-                                        .addComponent(btnStashFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(lblEdition, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addComponent(lblFooterLogo)))
                 .addGap(10, 10, 10))
@@ -842,10 +783,6 @@ public final class WildLogView extends JFrame {
                         .addComponent(jSeparator26, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(lblEdition)
-                        .addGap(20, 20, 20)
-                        .addComponent(btnStashFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
-                        .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -2346,10 +2283,11 @@ public final class WildLogView extends JFrame {
                                     + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
                             "Recreate Thumbnails?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
                             null, new String[] {
-                                "Recreate only essential thumbnails (Recommended)",
-                                "Recreate all thumbnails", 
-                                "Delete all thumbnails, but don't recreate any", 
-                                "Don't delete nor recreate any thumbnails"
+                                "Delete all, recreate essential",
+                                "Delete all, recreate all", 
+                                "Delete all, don't recreate any", 
+                                "Don't delete, create missing", 
+                                "Don't delete, don't create any"
                             }, null);
                     // Ja... Ek moet STUPID baie SwingUtilities.invokeLater calls gebruik...
                     SwingUtilities.invokeLater(new Runnable() {
@@ -3638,24 +3576,6 @@ public final class WildLogView extends JFrame {
         aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutWEIActionPerformed
 
-    private void btnStashFilesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStashFilesActionPerformed
-        UtilsFileProcessing.doStashFiles();
-    }//GEN-LAST:event_btnStashFilesActionPerformed
-
-    private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
-        LocationSelectionDialog locationDialog = new LocationSelectionDialog(this, app, 0);
-        locationDialog.setVisible(true);
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, 
-                        app.getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class), 
-                        null, null, null), tabbedPanel);
-                return null;
-            }
-        });
-    }//GEN-LAST:event_btnBulkImportActionPerformed
-
     private void mnuEchoWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEchoWorkspaceActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[EchoWorkspace]");
         WLOptionPane.showMessageDialog(app.getMainFrame(),
@@ -3983,12 +3903,20 @@ public final class WildLogView extends JFrame {
     public JTabbedPane getTabbedPane() {
         return tabbedPanel;
     }
+    
+    public void showWelcomeDialog() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                WelcomeDialog dialog = new WelcomeDialog();
+                dialog.setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenu backupMenu;
-    private javax.swing.JButton btnBulkImport;
-    private javax.swing.JButton btnStashFiles;
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
     private javax.swing.JCheckBoxMenuItem chkMnuIncludeCountInSightingPath;

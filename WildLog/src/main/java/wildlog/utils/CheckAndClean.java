@@ -870,8 +870,8 @@ public class CheckAndClean {
                 inProgressbarTask.setTaskProgress(99);
             }
             else 
-            if (inRecreateThumbnailsResult == 1) {
-                // Recreate all thumbnails
+            if (inRecreateThumbnailsResult == 1 || inRecreateThumbnailsResult == 3) {
+                // Recreate all thumbnails or create missing thumbnails
                 inProgressbarTask.setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... " + inProgressbarTask.getProgress() + "%");
                 finalHandleFeedback.println("");
                 finalHandleFeedback.println("9) Recreate the default thumbnails for all images.");

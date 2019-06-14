@@ -979,6 +979,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     this.setTaskProgress(0);
                     this.setMessage("Saving the Bulk Import: Starting...");
                     closeTab();
+                    // For volunteers redirect to the home tab and then show the welcome dialog again
+                    if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                        WildLogApp.getApplication().getMainFrame().getTabbedPane().setSelectedIndex(0);
+                        WildLogApp.getApplication().getMainFrame().showWelcomeDialog();
+                    }
                     // Save the Visit (before saving the sightings, because the Visit's ID is needed)
                     if (existingVisit == null || existingVisit.getID() == 0) {
                         app.getDBI().createVisit(visit, false);
@@ -1130,8 +1135,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     }
                     // Saving is done, now open the visits's tab
                     if (existingVisit == null || existingVisit.getID() == 0) {
-                        // Open the new tab
-                        UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, selectedLocation);
+                        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                            // Open the new tab
+                            UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, selectedLocation);
+                        }
                     }
                     else {
                         if (panelToRefresh != null) {
