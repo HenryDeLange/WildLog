@@ -30,6 +30,7 @@ import wildlog.ui.panels.bulkupload.helpers.WideComboBox;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class InfoBox extends JPanel {
@@ -58,6 +59,20 @@ public class InfoBox extends JPanel {
             JSpinner.DefaultEditor spinnerEditor = (JSpinner.DefaultEditor) spinEditor;
             spinnerEditor.getTextField().setHorizontalAlignment(JTextField.CENTER);
             spinnerEditor.getTextField().setBackground(new Color(225, 230, 215));
+        }
+        // Do WEI volunteer specific stuff
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            // For camera trap bulk imports, hide the GPS button because it the GPS will come from the location
+            if (inLocation.getName().startsWith("CT")) {
+                btnGPS.setVisible(false);
+                btnGPS.setEnabled(false);
+            }
+        }
+        else {
+            btnEmpty.setVisible(false);
+            btnEmpty.setEnabled(false);
+            btnVehicle.setVisible(false);
+            btnVehicle.setEnabled(false);
         }
     }
 
@@ -111,6 +126,8 @@ public class InfoBox extends JPanel {
         jLabel6 = new javax.swing.JLabel();
         cmbCertainty = new WideComboBox<>();
         jLabel7 = new javax.swing.JLabel();
+        btnEmpty = new javax.swing.JButton();
+        btnVehicle = new javax.swing.JButton();
 
         jSeparator3.setName("jSeparator3"); // NOI18N
 
@@ -309,6 +326,38 @@ public class InfoBox extends JPanel {
         jLabel7.setToolTipText("Observation Certainty.");
         jLabel7.setName("jLabel7"); // NOI18N
         add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 166, 20, 20));
+
+        btnEmpty.setBackground(new java.awt.Color(229, 241, 212));
+        btnEmpty.setText("Empty");
+        btnEmpty.setToolTipText("Set the Creature to Empty Landscape.");
+        btnEmpty.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEmpty.setFocusPainted(false);
+        btnEmpty.setFocusable(false);
+        btnEmpty.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnEmpty.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnEmpty.setName("btnEmpty"); // NOI18N
+        btnEmpty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEmptyActionPerformed(evt);
+            }
+        });
+        add(btnEmpty, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 130, 50, 34));
+
+        btnVehicle.setBackground(new java.awt.Color(229, 241, 212));
+        btnVehicle.setText("Vehicle");
+        btnVehicle.setToolTipText("Set the Creature to a Vehicle.");
+        btnVehicle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVehicle.setFocusPainted(false);
+        btnVehicle.setFocusable(false);
+        btnVehicle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnVehicle.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnVehicle.setName("btnVehicle"); // NOI18N
+        btnVehicle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVehicleActionPerformed(evt);
+            }
+        });
+        add(btnVehicle, new org.netbeans.lib.awtextra.AbsoluteConstraints(185, 130, 50, 34));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -421,11 +470,41 @@ public class InfoBox extends JPanel {
         sightingWrapper.setCertainty((Certainty) cmbCertainty.getSelectedItem());
     }//GEN-LAST:event_cmbCertaintyActionPerformed
 
+    private void btnEmptyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmptyActionPerformed
+        Element emptyElement = app.getDBI().findElement(0, "Empty Landscape", Element.class);
+        if (emptyElement == null) {
+            emptyElement = new Element(0, "Empty Landscape");
+            app.getDBI().createElement(emptyElement, false);
+        }
+        // Set the label to the selected text
+        table.getCellEditor().stopCellEditing();
+        sightingWrapper.setElementID(emptyElement.getID());
+        sightingWrapper.setCachedElementName(emptyElement.getPrimaryName());
+        UtilsImageProcessing.setupFoto(emptyElement.getID(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        sightingWrapper.setIcon(lblImage.getIcon());
+    }//GEN-LAST:event_btnEmptyActionPerformed
+
+    private void btnVehicleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehicleActionPerformed
+        Element vehicleElement = app.getDBI().findElement(0, "Vehicle", Element.class);
+        if (vehicleElement == null) {
+            vehicleElement = new Element(0, "Vehicle");
+            app.getDBI().createElement(vehicleElement, false);
+        }
+        // Set the label to the selected text
+        table.getCellEditor().stopCellEditing();
+        sightingWrapper.setElementID(vehicleElement.getID());
+        sightingWrapper.setCachedElementName(vehicleElement.getPrimaryName());
+        UtilsImageProcessing.setupFoto(vehicleElement.getID(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        sightingWrapper.setIcon(lblImage.getIcon());
+    }//GEN-LAST:event_btnVehicleActionPerformed
+
     public void setRowBackground(Color inColor) {
         this.setBackground(inColor);
         btnChooseCreature.setBackground(inColor);
         btnEdit.setBackground(inColor);
         btnGPS.setBackground(inColor);
+        btnEmpty.setBackground(inColor);
+        btnVehicle.setBackground(inColor);
     }
 
     public JLabel getLblCount() {
@@ -435,7 +514,9 @@ public class InfoBox extends JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChooseCreature;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnEmpty;
     private javax.swing.JButton btnGPS;
+    private javax.swing.JButton btnVehicle;
     private javax.swing.JComboBox<String> cmbCertainty;
     private javax.swing.JComboBox<String> cmbSex;
     private javax.swing.JLabel jLabel10;

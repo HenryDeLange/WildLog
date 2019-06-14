@@ -112,11 +112,11 @@ public class BulkUploadDataLoader {
             // Start off with a value that is garuanteed to be updated for the first record, to get things started...
             Date currentSightingDate = new Date(imageList.get(0).getDate().getTime() - timeDiffInMiliseconds*2);
             // If no image has any date, then all will be in this initial SightingWrapper.
-            BulkUploadSightingWrapper sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
+            BulkUploadSightingWrapper sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
             for (BulkUploadImageFileWrapper temp : imageList) {
                 if (!temp.isInSameSighting(currentSightingDate, timeDiffInMiliseconds)) {
                     // Start a new sighting and image list for the linked images
-                    sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
+                    sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
                     // Set other defaults for the sighting
                     setDefaultsForNewBulkUploadSightings(sightingKey, inForceLocationGPS, inLocation);
                     // Update the map
