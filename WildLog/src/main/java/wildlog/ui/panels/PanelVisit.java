@@ -207,6 +207,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnBulkImport.setBackground(getBackground().darker());
             btnGoLocation.setBackground(getBackground().darker());
             btnBrowse.setBackground(getBackground().darker());
+            btnAutoName.setBackground(getBackground().darker());
             cmbType.setEnabled(false);
             cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
             cmbType.setSelectedItem(visit.getType());
@@ -887,6 +888,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel52.setText("Period Name:");
         jLabel52.setName("jLabel52"); // NOI18N
 
+        btnAutoName.setBackground(new java.awt.Color(230, 228, 240));
         btnAutoName.setText("Auto Name");
         btnAutoName.setToolTipText("Automatically set the name based on the Place and dates.");
         btnAutoName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

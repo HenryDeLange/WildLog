@@ -952,6 +952,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="btnAutoName">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="f0" green="e4" red="e6" type="rgb"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Auto Name"/>
                 <Property name="toolTipText" type="java.lang.String" value="Automatically set the name based on the Place and dates."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">

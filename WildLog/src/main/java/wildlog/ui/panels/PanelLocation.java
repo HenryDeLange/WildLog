@@ -541,6 +541,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLatitude.setEnabled(false);
         txtLatitude.setName("txtLatitude"); // NOI18N
 
+        btnApplyGPSToVisit.setBackground(new java.awt.Color(233, 239, 244));
         btnApplyGPSToVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS_Small.png"))); // NOI18N
         btnApplyGPSToVisit.setText("<html>Apply GPS to Periods</html>");
         btnApplyGPSToVisit.setToolTipText("Set the GPS coordinates of the related Observations to be the same as this Place's.");

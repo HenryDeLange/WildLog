@@ -666,7 +666,7 @@ public class CheckAndClean {
             }
             inProgressbarTask.setTaskProgress(72);
             inProgressbarTask.setMessage("Cleanup Step 6: Delete exports and thumbnails... " + inProgressbarTask.getProgress() + "%");
-            if (inRecreateThumbnailsResult >= 0 && inRecreateThumbnailsResult <= 3) {
+            if (inRecreateThumbnailsResult >= 0 && inRecreateThumbnailsResult <= 2) {
                 try {
                 
                     UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());

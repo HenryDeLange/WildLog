@@ -593,6 +593,12 @@ public class WildLogApp extends Application {
         }
     }
 
+    /**
+     * Note: This can be a folder path or even a network URL
+     *       - C:\WildLogToets\WildLog
+     *       - W:\
+     *       - \\weimaster\WildLogDinokeng
+     */
     private static void configureWildLogHomeBasedOnSettingsFile() throws IOException {
         BufferedReader reader = null;
         try {

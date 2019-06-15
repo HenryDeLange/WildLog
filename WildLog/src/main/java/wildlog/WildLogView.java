@@ -235,6 +235,8 @@ public final class WildLogView extends JFrame {
             mnuAboutWEI.setVisible(false);
             reportsMenu.setEnabled(false);
             reportsMenu.setVisible(false);
+            mnuStash.setEnabled(false);
+            mnuStash.setVisible(false);
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
@@ -469,6 +471,7 @@ public final class WildLogView extends JFrame {
         sprImport4 = new javax.swing.JPopupMenu.Separator();
         mnuImportWorkspace = new javax.swing.JMenuItem();
         sprImport5 = new javax.swing.JPopupMenu.Separator();
+        mnuStash = new javax.swing.JMenuItem();
         mnuBulkImport = new javax.swing.JMenuItem();
         syncMenu = new javax.swing.JMenu();
         mnuSyncWorkspace = new javax.swing.JMenuItem();
@@ -1247,8 +1250,19 @@ public final class WildLogView extends JFrame {
         sprImport5.setName("sprImport5"); // NOI18N
         importMenu.add(sprImport5);
 
+        mnuStash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Stash Icon Small.png"))); // NOI18N
+        mnuStash.setText("Stash Files");
+        mnuStash.setToolTipText("Stash files in the Workspace for later processing.");
+        mnuStash.setName("mnuStash"); // NOI18N
+        mnuStash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuStashActionPerformed(evt);
+            }
+        });
+        importMenu.add(mnuStash);
+
         mnuBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
-        mnuBulkImport.setText("Open a New Bulk Import Tab");
+        mnuBulkImport.setText("Bulk Import Files");
         mnuBulkImport.setToolTipText("Import multiple files at once using the Bulk Import feature.");
         mnuBulkImport.setName("mnuBulkImport"); // NOI18N
         mnuBulkImport.addActionListener(new java.awt.event.ActionListener() {
@@ -3870,6 +3884,10 @@ public final class WildLogView extends JFrame {
         WildLogApp.LOGGER.log(Level.INFO, "[SyncMenu]");
     }//GEN-LAST:event_syncMenuMenuSelected
 
+    private void mnuStashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuStashActionPerformed
+        UtilsFileProcessing.doStashFiles();
+    }//GEN-LAST:event_mnuStashActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4013,6 +4031,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuReportVisitDates;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
+    private javax.swing.JMenuItem mnuStash;
     private javax.swing.JMenuItem mnuSunAndMoon;
     private javax.swing.JMenuItem mnuSwitchElementNames;
     private javax.swing.JMenuItem mnuSyncWorkspace;
