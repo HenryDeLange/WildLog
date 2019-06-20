@@ -15,15 +15,15 @@
   <manifest></manifest>
   <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WEI-Volunteer.ico</icon>
   <jre>
-    <path>jre_1_8_0_212</path>
-    <bundledJre64Bit>false</bundledJre64Bit>
+    <path>jre_1_8_0_212_bit64</path>
+    <bundledJre64Bit>true</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
     <minVersion>1.8.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
     <initialHeapSize>512</initialHeapSize>
-    <maxHeapSize>1024</maxHeapSize>
+    <maxHeapSize>3072</maxHeapSize>
     <maxHeapPercent>80</maxHeapPercent>
   </jre>
   <splash>
@@ -33,12 +33,12 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>6.0.0.0</fileVersion>
-    <txtFileVersion>WildLog v6.0.0 Launcher</txtFileVersion>
+    <fileVersion>6.0.4.0</fileVersion>
+    <txtFileVersion>WildLog v6.0.4 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
     <copyright>2019</copyright>
-    <productVersion>6.0.0.0</productVersion>
-    <txtProductVersion>WildLog v6.0.0</txtProductVersion>
+    <productVersion>6.0.4.0</productVersion>
+    <txtProductVersion>WildLog v6.0.4</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>
