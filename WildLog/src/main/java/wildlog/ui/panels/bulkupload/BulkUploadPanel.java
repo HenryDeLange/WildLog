@@ -217,8 +217,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     public final void setupTab(ProgressbarTask inProgressbarTask) {
-        inProgressbarTask.setMessage("Preparing the Bulk Import process...");
         inProgressbarTask.setTaskProgress(0);
+        inProgressbarTask.setMessage("Preparing the Bulk Import process...");
         // Load the images
         loadImages(inProgressbarTask);
         inProgressbarTask.setTaskProgress(100);
@@ -738,7 +738,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             .addComponent(chkForceLocationGPSCoordinates)
                             .addComponent(cmbImageBoxSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9)))
-                    .addComponent(btnReload))
+                    .addComponent(btnReload, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
         );
 

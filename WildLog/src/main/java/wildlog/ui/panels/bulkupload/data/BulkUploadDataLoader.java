@@ -74,6 +74,16 @@ public class BulkUploadDataLoader {
                 return null;
             }
         }
+        if (lstAllFiles.size() > 3000) {
+            int result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
+                    "<html>A very large number of files have been selected for processing. WildLog might become unresponsive if you continue. "
+                            + "<br/>It is recommended to select a smaller subset of files."
+                            + "<br/>Would you like to cancel the Bulk Import process?", 
+                    "Too Many Files", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+                return null;
+            }
+        }
         // Update the UI to show the numebr of files found
         inLblFilesRead.setText(inLblFilesRead.getText().substring(0, inLblFilesRead.getText().lastIndexOf(':') + 1) + " " + lstAllFiles.size());
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory

@@ -65,6 +65,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
+import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.inaturalist.helpers.INatProgressbarTask;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.LoggingPrintStream;
@@ -79,7 +80,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    public static String WILDLOG_VERSION = "6.0.3";
+    public static String WILDLOG_VERSION = "6.0.4";
     public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
     public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
@@ -379,6 +380,23 @@ public class WildLogApp extends Application {
             public boolean canExit(EventObject event) {
                 boolean doShutdown = true;
                 try {
+                    // Waarsku as daar 'n Bulk Import tab oop is (bang mens druk die close van die image viewer twee keer en maak dan per ongeluk WildLog toe...)
+                    boolean foundBulkImport = false;
+                    for (int t = 0; t < getMainFrame().getTabbedPane().getTabCount(); t++) {
+                        if (getMainFrame().getTabbedPane().getComponentAt(t) instanceof BulkUploadPanel) {
+                            foundBulkImport = true;
+                            break;
+                        }
+                    }
+                    if (foundBulkImport) {
+                        int result = WLOptionPane.showConfirmDialog(getMainFrame(),
+                                "<html>There is an unsaved Bulk Import tab. Unsaved changes will be lost."
+                                        + "<br><b>Continue to exit WildLog?</b></html>",
+                                "Warning! Unsaved Bulk Import...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                        if (result != JOptionPane.YES_OPTION) {
+                            return false;
+                        }
+                    }
                     // Waarsku as daar tabs is wat nie gesave is nie
                     if (!view.closeAllTabs()) {
                         return false;

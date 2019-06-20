@@ -41,8 +41,10 @@ import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
@@ -58,6 +60,8 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import net.java.balloontip.BalloonTip;
+import net.java.balloontip.styles.EdgedBalloonStyle;
 import org.apache.logging.log4j.Level;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -121,6 +125,7 @@ import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
+import wildlog.ui.panels.bulkupload.LocationSelectionDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatAuthTokenDialog;
 import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -150,6 +155,7 @@ public final class WildLogView extends JFrame {
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
+    private final BalloonTip balloonTip;
     private PanelTabBrowse panelTabBrowse;
 
     public WildLogView() {
@@ -158,11 +164,23 @@ public final class WildLogView extends JFrame {
         // Maximise the window
         setExtendedState(Frame.MAXIMIZED_BOTH);
         // status bar initialization - message timeout, idle icon and busy animation, etc
+        balloonTip = new BalloonTip(progressPanel, "");
+        balloonTip.setVisible(false);
+        JButton btnCloseBallonTip = new JButton();
+		btnCloseBallonTip.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		btnCloseBallonTip.setContentAreaFilled(false);
+		btnCloseBallonTip.setIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_default.png")));
+		btnCloseBallonTip.setRolloverIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_rollover.png")));
+		btnCloseBallonTip.setPressedIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_pressed.png")));
+        btnCloseBallonTip.setFocusPainted(false);
+        btnCloseBallonTip.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        balloonTip.setCloseButton(btnCloseBallonTip, false);
         int messageTimeout = 10000;
         messageTimer = new Timer(messageTimeout, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 statusMessageLabel.setText("");
+                balloonTip.setVisible(false);
             }
         });
         messageTimer.setRepeats(false);
@@ -196,6 +214,9 @@ public final class WildLogView extends JFrame {
                         progressBar.setVisible(true);
                         progressBar.setIndeterminate(true);
                         messageTimer.stop();
+                        balloonTip.setStyle(new EdgedBalloonStyle(new Color(245, 195, 135), Color.RED));
+                        balloonTip.setTextContents("  Starting background task ...  ");
+                        balloonTip.setVisible(true);
                         break;
                     case "done":
                         busyIconTimer.stop();
@@ -203,10 +224,18 @@ public final class WildLogView extends JFrame {
                         progressBar.setVisible(false);
                         progressBar.setValue(0);
                         messageTimer.restart();
+                        balloonTip.setStyle(new EdgedBalloonStyle(new Color(200, 230, 185), Color.GREEN.darker()));
+                        balloonTip.setTextContents("  Finished background task  ");
+                        balloonTip.setVisible(true);
                         break;
                     case "message":
                         String text = (String)(evt.getNewValue());
-                        statusMessageLabel.setText((text == null) ? "" : text);
+                        if (text == null) {
+                            statusMessageLabel.setText("");
+                        }
+                        else {
+                            statusMessageLabel.setText(text);
+                        }
                         messageTimer.stop();
                         break;
                     case "progress":
@@ -237,6 +266,7 @@ public final class WildLogView extends JFrame {
             reportsMenu.setVisible(false);
             mnuStash.setEnabled(false);
             mnuStash.setVisible(false);
+            btnGettingStarted.setVisible(false);
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
@@ -414,13 +444,14 @@ public final class WildLogView extends JFrame {
         lblEdition = new javax.swing.JLabel();
         lblWorkspaceUser = new javax.swing.JLabel();
         jSeparator26 = new javax.swing.JSeparator();
+        btnGettingStarted = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         tabElement = new javax.swing.JPanel();
         tabSightings = new javax.swing.JPanel();
         tabBrowse = new javax.swing.JPanel();
         statusPanel = new javax.swing.JPanel();
         statusMessageLabel = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        progressPanel = new javax.swing.JPanel();
         progressBar = new javax.swing.JProgressBar();
         statusAnimationLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
@@ -684,6 +715,19 @@ public final class WildLogView extends JFrame {
         jSeparator26.setForeground(new java.awt.Color(105, 123, 79));
         jSeparator26.setName("jSeparator26"); // NOI18N
 
+        btnGettingStarted.setBackground(new java.awt.Color(5, 26, 5));
+        btnGettingStarted.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        btnGettingStarted.setText("Getting Started");
+        btnGettingStarted.setToolTipText("Re-open the Getting Started popup.");
+        btnGettingStarted.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGettingStarted.setFocusPainted(false);
+        btnGettingStarted.setName("btnGettingStarted"); // NOI18N
+        btnGettingStarted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGettingStartedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
         tabHome.setLayout(tabHomeLayout);
         tabHomeLayout.setHorizontalGroup(
@@ -724,6 +768,7 @@ public final class WildLogView extends JFrame {
                                 .addGap(40, 40, 40))
                             .addGroup(tabHomeLayout.createSequentialGroup()
                                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnGettingStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(tabHomeLayout.createSequentialGroup()
                                             .addGap(134, 134, 134)
@@ -786,6 +831,8 @@ public final class WildLogView extends JFrame {
                         .addComponent(jSeparator26, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(lblEdition)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnGettingStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -839,27 +886,27 @@ public final class WildLogView extends JFrame {
         statusMessageLabel.setPreferredSize(new java.awt.Dimension(500, 20));
         statusPanel.add(statusMessageLabel, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setBackground(new java.awt.Color(212, 217, 201));
-        jPanel1.setMaximumSize(new java.awt.Dimension(400, 20));
-        jPanel1.setMinimumSize(new java.awt.Dimension(50, 16));
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setLayout(new java.awt.BorderLayout(5, 0));
+        progressPanel.setBackground(new java.awt.Color(212, 217, 201));
+        progressPanel.setMaximumSize(new java.awt.Dimension(400, 20));
+        progressPanel.setMinimumSize(new java.awt.Dimension(50, 16));
+        progressPanel.setName("progressPanel"); // NOI18N
+        progressPanel.setLayout(new java.awt.BorderLayout(5, 0));
 
         progressBar.setBackground(new java.awt.Color(204, 213, 186));
         progressBar.setMaximumSize(new java.awt.Dimension(400, 20));
         progressBar.setMinimumSize(new java.awt.Dimension(50, 14));
         progressBar.setName("progressBar"); // NOI18N
         progressBar.setPreferredSize(new java.awt.Dimension(320, 14));
-        jPanel1.add(progressBar, java.awt.BorderLayout.CENTER);
+        progressPanel.add(progressBar, java.awt.BorderLayout.CENTER);
 
         statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         statusAnimationLabel.setMaximumSize(new java.awt.Dimension(20, 20));
         statusAnimationLabel.setMinimumSize(new java.awt.Dimension(20, 20));
         statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
         statusAnimationLabel.setPreferredSize(new java.awt.Dimension(20, 20));
-        jPanel1.add(statusAnimationLabel, java.awt.BorderLayout.EAST);
+        progressPanel.add(statusAnimationLabel, java.awt.BorderLayout.EAST);
 
-        statusPanel.add(jPanel1, java.awt.BorderLayout.EAST);
+        statusPanel.add(progressPanel, java.awt.BorderLayout.EAST);
 
         getContentPane().add(statusPanel, java.awt.BorderLayout.PAGE_END);
 
@@ -1990,13 +2037,35 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuCalcSunMoonActionPerformed
 
     private void mnuBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBulkImportActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, null, null, null, null), tabbedPanel);
-                return null;
-            }
-        });
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    LocationSelectionDialog locationDialog = new LocationSelectionDialog(WildLogApp.getApplication().getMainFrame(), WildLogApp.getApplication(), 0);
+                    locationDialog.setVisible(true);
+                    if (locationDialog.isSelectionMade()) {
+                        UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
+                            @Override
+                            protected Object doInBackground() throws Exception {
+                                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(WildLogApp.getApplication(), this, 
+                                        WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class), 
+                                        null, null, null), WildLogApp.getApplication().getMainFrame().getTabbedPane());
+                                return null;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, null, null, null, null), tabbedPanel);
+                    return null;
+                }
+            });
+        }
     }//GEN-LAST:event_mnuBulkImportActionPerformed
 
     private void mnuImportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportCSVActionPerformed
@@ -3602,6 +3671,13 @@ public final class WildLogView extends JFrame {
             @Override
             public void run() {
                 WLFileChooser fileChooser = new WLFileChooser();
+                try {
+                    fileChooser.setCurrentDirectory(File.listRoots()[0]);
+                    fileChooser.changeToParentDirectory();
+                }
+                catch (Exception ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
                 fileChooser.setDialogTitle("Select the target folder");
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fileChooser.setMultiSelectionEnabled(false);
@@ -3888,6 +3964,10 @@ public final class WildLogView extends JFrame {
         UtilsFileProcessing.doStashFiles();
     }//GEN-LAST:event_mnuStashActionPerformed
 
+    private void btnGettingStartedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGettingStartedActionPerformed
+        showWelcomeDialog();
+    }//GEN-LAST:event_btnGettingStartedActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3922,6 +4002,10 @@ public final class WildLogView extends JFrame {
         return tabbedPanel;
     }
     
+    public JPanel getProgressPanel() {
+        return progressPanel;
+    }
+    
     public void showWelcomeDialog() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -3935,6 +4019,7 @@ public final class WildLogView extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenu backupMenu;
+    private javax.swing.JButton btnGettingStarted;
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
     private javax.swing.JCheckBoxMenuItem chkMnuIncludeCountInSightingPath;
@@ -3950,7 +4035,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel23;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator17;
@@ -4039,6 +4123,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuUserGuide;
     private javax.swing.JMenuItem mnuWorkspaceUsers;
     private javax.swing.JProgressBar progressBar;
+    private javax.swing.JPanel progressPanel;
     private javax.swing.JMenu reportsMenu;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu slideshowMenu;

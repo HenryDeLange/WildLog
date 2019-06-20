@@ -72,7 +72,7 @@ public class WildLogAboutBox extends JDialog {
         lblActiveVersion.setText(WildLogApp.WILDLOG_VERSION);
         lblActiveVersion.setName("lblActiveVersion"); // NOI18N
 
-        lblDescription.setText("<html>Use at own risk. WildLog is developed by Henry de Lange.<br/>WildLog is a Java application and makes use of third party libraries to help with some of the functionality: \n<br/>H2, SwingX, JMF, MetadataExtractor, MediaUtil, GeoTools, PDFBox and Apache POI. See the application folder for license details.\n<br/>(Note: The media applications JPEGView and Media Player Classic - Home Cinema can be used if bundled with WildLog.)</html>");
+        lblDescription.setText("<html>Use at own risk. WildLog is developed by Henry de Lange.<br/>WildLog is a Java application and makes use of third party libraries to help with some of the functionality:  <br/>H2, SwingX, JMF, MetadataExtractor, MediaUtil, GeoTools, PDFBox, Apache POI and BalloonTip.<br/> See the application folder for license details. <br/>(Note: The media applications JPEGView and Media Player Classic - Home Cinema can be used if bundled with WildLog.)</html>");
         lblDescription.setName("lblDescription"); // NOI18N
 
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/About.gif"))); // NOI18N
