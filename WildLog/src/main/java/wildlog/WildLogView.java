@@ -63,8 +63,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.styles.EdgedBalloonStyle;
 import org.apache.logging.log4j.Level;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.jdesktop.application.TaskMonitor;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
@@ -1062,7 +1063,7 @@ public final class WildLogView extends JFrame {
         backupMenu.add(sprBackup);
 
         mnuBackupWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuBackupWorkspace.setText("Backup Workspace");
+        mnuBackupWorkspace.setText("Export Workspace");
         mnuBackupWorkspace.setToolTipText("Makes a backup of the Workspace using the Workspace Export feature.");
         mnuBackupWorkspace.setName("mnuBackupWorkspace"); // NOI18N
         mnuBackupWorkspace.addActionListener(new java.awt.event.ActionListener() {
@@ -3597,32 +3598,40 @@ public final class WildLogView extends JFrame {
                 List<Sighting> lstSightingsToUse = app.getDBI().listSightings(0, 0, 0, true, Sighting.class);
                 setTaskProgress(3);
                 setMessage("Busy with the Excel Export... " + getProgress() + "%");
-                path = WildLogPaths.WILDLOG_EXPORT_XLS_ALL.getAbsoluteFullPath().resolve("WildLog_Observations.xls");
+                path = WildLogPaths.WILDLOG_EXPORT_XLS_ALL.getAbsoluteFullPath().resolve("WildLog_Observations.xlsx");
                 Files.createDirectories(path.getParent());
                 // Create workbook and sheet
-                HSSFWorkbook workbook = new HSSFWorkbook();
-                HSSFSheet sheet = workbook.createSheet("WildLog - All Observations");
-                // Setup header row
-                int rowCount = 0;
-                UtilsExcel.exportSightingToExcelHeader(sheet, rowCount++);
-                setTaskProgress(5);
-                setMessage("Busy with the Excel Export... " + getProgress() + "%");
-                // Add the Sightings
-                int counter = 0;
-                for (Sighting tempSighting : lstSightingsToUse) {
-                    UtilsExcel.exportSightingToExcel(sheet, rowCount++, tempSighting, app);
-                    // Update progress
-                    setTaskProgress(5 + (int)((counter++/(double)lstSightingsToUse.size())*90));
+                Workbook workbook = null;
+                try {
+                    workbook = new SXSSFWorkbook(); // Needed to use more than 65535 rows
+                    Sheet sheet = workbook.createSheet("WildLog - All Observations");
+                    // Setup header row
+                    int rowCount = 0;
+                    UtilsExcel.exportSightingToExcelHeader(sheet, rowCount++);
+                    setTaskProgress(5);
                     setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                    // Add the Sightings
+                    int counter = 0;
+                    for (Sighting tempSighting : lstSightingsToUse) {
+                        UtilsExcel.exportSightingToExcel(sheet, rowCount++, tempSighting, app);
+                        // Update progress
+                        setTaskProgress(5 + (int)((counter++/(double)lstSightingsToUse.size())*90));
+                        setMessage("Busy with the Excel Export... " + getProgress() + "%");
+                    }
+                    // Write the last visit's register file (sightings)
+                    setTaskProgress(95);
+                    setMessage("Busy with the Excel Export (writing the file)... " + getProgress() + "%");
+                    try (FileOutputStream out = new FileOutputStream(path.toFile())) {
+                        workbook.write(out);
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
                 }
-                // Write the last visit's register file (sightings)
-                setTaskProgress(95);
-                setMessage("Busy with the Excel Export (writing the file)... " + getProgress() + "%");
-                try (FileOutputStream out = new FileOutputStream(path.toFile())) {
-                    workbook.write(out);
-                }
-                catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                finally {
+                    if (workbook != null) {
+                        ((SXSSFWorkbook) workbook).dispose(); // Need to manually dispose the temp files
+                    }
                 }
                 // Open the folder
                 UtilsFileProcessing.openFile(path);
@@ -3661,6 +3670,11 @@ public final class WildLogView extends JFrame {
 
     private void mnuEchoWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEchoWorkspaceActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[EchoWorkspace]");
+        
+// TODO: Doen eers ook 'n DB backup voor die echo backup begin
+
+// TODO: Wys 'n boodskap (en maak seker deur connection count te kyk) dat alle ander instances van WildLog vir die workspace toe is voordat die echo begin
+        
         WLOptionPane.showMessageDialog(app.getMainFrame(),
                 "<html>The <i>Echo Backup Workspace</i> process will delete all files from the target folder that aren't in the active Workspace "
                 + "<br>and copy all files from the active Workspace to the target folder that aren't already present (files will be replaced if their size differ)."

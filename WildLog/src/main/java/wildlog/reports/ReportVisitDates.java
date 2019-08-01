@@ -13,12 +13,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.Level;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -167,12 +169,12 @@ public class ReportVisitDates {
                 setTaskProgress(50);
                 setMessage("Busy with the Report: " + inTitle + "... " + getProgress() + "%");
                 // Write the report
-                HSSFWorkbook workbook = new HSSFWorkbook();
-                HSSFCellStyle styleHeader = workbook.createCellStyle();
+                Workbook workbook = new SXSSFWorkbook();
+                CellStyle styleHeader = workbook.createCellStyle();
                 Font font = workbook.createFont();
                 font.setBold(true);
                 styleHeader.setFont(font);
-                HSSFCellStyle styleWarning = workbook.createCellStyle();
+                CellStyle styleWarning = workbook.createCellStyle();
                 font = workbook.createFont();
                 font.setColor(HSSFColor.HSSFColorPredefined.RED.getIndex());
                 font.setBold(true);
@@ -180,8 +182,9 @@ public class ReportVisitDates {
                 List<String> lstKeys = new ArrayList<>(mapReportData.keySet());
                 Collections.sort(lstKeys);
                 for (String key : lstKeys) {
-                    HSSFSheet sheet = workbook.createSheet(key);
-                    HSSFRow row = sheet.createRow(0);
+                    Sheet sheet = workbook.createSheet(key);
+                    ((SXSSFSheet) sheet).trackAllColumnsForAutoSizing();
+                    Row row = sheet.createRow(0);
                     row.createCell(0).setCellValue("Place Name");
                     row.createCell(1).setCellValue("Period Name");
                     row.createCell(2).setCellValue("Start Date");

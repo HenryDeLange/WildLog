@@ -16,9 +16,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -972,8 +973,8 @@ public class ExportDialog extends JDialog {
                 // Add content rows
                 Map<Long, Element> mapElements = new HashMap<>();
                 Map<String, Visit> mapVisits = new LinkedHashMap<>(); // Using LinkedHashMap to keep the GPS points from the same visit together
-                HSSFWorkbook workbook = null;
-                HSSFSheet sheet = null;
+                Workbook workbook = null;
+                Sheet sheet = null;
                 Row row;
                 int rowCount = 0;
                 int col;
@@ -985,7 +986,7 @@ public class ExportDialog extends JDialog {
                         Files.createDirectories(path.resolve(tempSighting.getCachedVisitName()));
                         // Write the previous visit's register file (sightings)
                         if (currentVisit != null) {
-                            try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Register.xls").toFile())) {
+                            try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Register.xlsx").toFile())) {
                                 workbook.write(out);
                             }
                             catch (IOException ex) {
@@ -995,7 +996,7 @@ public class ExportDialog extends JDialog {
                         // Stel die huidige visit se naam
                         currentVisit = tempSighting.getCachedVisitName();
                         // Create workbook and sheet
-                        workbook = new HSSFWorkbook();
+                        workbook = new SXSSFWorkbook();
                         sheet = workbook.createSheet(currentVisit);
                         // Setup header row
                         rowCount = 0;
@@ -1104,7 +1105,7 @@ public class ExportDialog extends JDialog {
                             }
                         }
                         currentVisit = tempVisit.getName();
-                        workbook = new HSSFWorkbook();
+                        workbook = new SXSSFWorkbook();
                         sheet = workbook.createSheet(currentVisit);
                         rowCount = 0;
                     }
@@ -1161,17 +1162,17 @@ public class ExportDialog extends JDialog {
                 String name;
                 if (location != null) {
                     name = location.getDisplayName();
-                    lstSightingsToUse = app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(0, location.getID(), 0, true, Sighting.class);
                 }
                 else
                 if (visit != null) {
                     name = visit.getDisplayName();
-                    lstSightingsToUse = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class);
                 }
                 else
                 if (element != null) {
                     name = element.getDisplayName();
-                    lstSightingsToUse = app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class);
                 }
                 else
                 if (sighting != null) {
@@ -1194,8 +1195,8 @@ public class ExportDialog extends JDialog {
                 path = WildLogPaths.WILDLOG_EXPORT_XLS.getAbsoluteFullPath().resolve(name + ".xls");
                 Files.createDirectories(path.getParent());
                 // Create workbook and sheet
-                HSSFWorkbook workbook = new HSSFWorkbook();
-                HSSFSheet sheet = workbook.createSheet("WildLog - " + name);
+                Workbook workbook = new SXSSFWorkbook();
+                Sheet sheet = workbook.createSheet("WildLog - " + name);
                 // Setup header row
                 int rowCount = 0;
                 UtilsExcel.exportSightingToExcelHeader(sheet, rowCount++);

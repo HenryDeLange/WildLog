@@ -316,6 +316,7 @@ public class ImageResizeDialog extends JDialog {
             }
         }
         // Do the resize
+// TODO: Background task progressbar etc.
         for (WildLogFile wildLogFile : lstWildLogFiles) {
             UtilsImageProcessing.resizeImage(wildLogFile, (int) spnSize.getValue());
         }

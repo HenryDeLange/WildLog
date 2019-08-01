@@ -1,7 +1,7 @@
 package wildlog.utils;
 
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -15,7 +15,7 @@ public final class UtilsExcel {
     private UtilsExcel() {
     }
     
-    public static void exportSightingToExcelHeader(HSSFSheet sheet, int rowCount) {
+    public static void exportSightingToExcelHeader(Sheet sheet, int rowCount) {
         Row row = sheet.createRow(rowCount);
         int col = 0;
         row.createCell(col++).setCellValue("CREATURE");
@@ -48,7 +48,7 @@ public final class UtilsExcel {
         row.createCell(col++).setCellValue("DETAILS");
     }
 
-    public static void exportSightingToExcel(HSSFSheet sheet, int rowCount, Sighting tempSighting, WildLogApp inApp) {
+    public static void exportSightingToExcel(Sheet sheet, int rowCount, Sighting tempSighting, WildLogApp inApp) {
         Row row = sheet.createRow(rowCount);
         int col = 0;
         row.createCell(col++).setCellValue(tempSighting.getCachedElementName());
