@@ -685,6 +685,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkForceLocationGPSCoordinates.setName("chkForceLocationGPSCoordinates"); // NOI18N
 
         cmbImageBoxSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Small", "Medium", "Large" }));
+        cmbImageBoxSize.setSelectedIndex(1);
         cmbImageBoxSize.setToolTipText("The size of the box that is used to display a file.");
         cmbImageBoxSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbImageBoxSize.setFocusable(false);
