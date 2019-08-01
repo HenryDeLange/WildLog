@@ -3458,11 +3458,17 @@ public final class WildLogView extends JFrame {
 
     private void mnuReduceImagesSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReduceImagesSizeActionPerformed
         int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
+                "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. "
+                        + "<br>Do you want to resize the images now?</html>",
                 "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            ImageResizeDialog dialog = new ImageResizeDialog(app.getMainFrame());
-            dialog.setVisible(true);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    ImageResizeDialog dialog = new ImageResizeDialog(app.getMainFrame());
+                    dialog.setVisible(true);
+                }
+            });
         }
     }//GEN-LAST:event_mnuReduceImagesSizeActionPerformed
 

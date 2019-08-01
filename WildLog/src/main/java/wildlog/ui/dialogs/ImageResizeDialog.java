@@ -20,6 +20,8 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
 
@@ -96,7 +98,7 @@ public class ImageResizeDialog extends JDialog {
         jLabel2.setText("Resize images with a rating of ");
 
         cmbRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
-        cmbRating.setSelectedItem(ViewRating.NORMAL);
+        cmbRating.setSelectedItem(ViewRating.VERY_GOOD);
         cmbRating.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbRating.setFocusable(false);
 
@@ -155,7 +157,7 @@ public class ImageResizeDialog extends JDialog {
 
         jLabel5.setText("Resize to ");
 
-        spnSize.setModel(new javax.swing.SpinnerNumberModel(700, 100, 2000, 50));
+        spnSize.setModel(new javax.swing.SpinnerNumberModel(850, 128, 3072, 50));
         spnSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel6.setText("px");
@@ -267,8 +269,6 @@ public class ImageResizeDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        this.getGlassPane().setVisible(true);
-        this.getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         List<WildLogFile> lstWildLogFiles = new ArrayList<>();
         List<Sighting> lstSightings = new ArrayList<>();
         if (rdbElements.isSelected() && !lstPrimary.getSelectionModel().isSelectionEmpty()) {
@@ -316,12 +316,29 @@ public class ImageResizeDialog extends JDialog {
             }
         }
         // Do the resize
-// TODO: Background task progressbar etc.
-        for (WildLogFile wildLogFile : lstWildLogFiles) {
-            UtilsImageProcessing.resizeImage(wildLogFile, (int) spnSize.getValue());
-        }
-        this.getGlassPane().setCursor(Cursor.getDefaultCursor());
-        this.getGlassPane().setVisible(false);
+        UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                WildLogApp.getApplication().getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                setProgress(1);
+                setMessage("Starting resizing the images");
+                double counter = 0.0;
+                for (WildLogFile wildLogFile : lstWildLogFiles) {
+                    try {
+                        UtilsImageProcessing.resizeImage(wildLogFile, (int) spnSize.getValue());
+                    }
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                    setProgress(1 + (int) (counter++ / (double) lstWildLogFiles.size() * 98.0));
+                    setMessage("Resize Images: " + getProgress() + "%");
+                }
+                setProgress(100);
+                setMessage("Done resizing the images");
+                WildLogApp.getApplication().getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+                return null;
+            }
+        });
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnConfirmActionPerformed
@@ -337,18 +354,18 @@ public class ImageResizeDialog extends JDialog {
         else {
             viewRating = inSighting.getViewRating();
         }
-        boolean found = false;
+        boolean valid = false;
         for (ViewRating rating : ViewRating.values()) {
             if (rating.equals(viewRating)) {
-                found = true;
+                valid = true;
                 break;
             }
             if (rating.equals((ViewRating) cmbRating.getSelectedItem())) {
-                found = false;
+                valid = false;
                 break;
             }
         }
-        return found;
+        return valid;
     }
     
     private void rdbElementsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbElementsItemStateChanged
