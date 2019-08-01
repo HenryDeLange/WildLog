@@ -35,7 +35,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         UtilsTableGenerator.setupColumnResizingListener(tblLocation, 1);
         UtilsTableGenerator.setupColumnResizingListener(tblElement, 1);
         // Add key listener for textfields to auto search the tables
-        UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
+        UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement, 1, 2);
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtSearch);
         // Enforce user access
