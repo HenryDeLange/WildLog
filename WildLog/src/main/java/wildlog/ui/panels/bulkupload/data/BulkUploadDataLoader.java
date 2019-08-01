@@ -116,13 +116,13 @@ public class BulkUploadDataLoader {
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files... " + inProgressbarTask.getProgress() + "%");
         long timeDiffInMiliseconds = inSightingDurationInSeconds*1000;
         // Next calculate the sightings and build the Object[][]
-        Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> finalMap =
-                new LinkedHashMap<BulkUploadSightingWrapper, BulkUploadImageListWrapper>(imageList.size());
+        Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> finalMap = new LinkedHashMap<>(imageList.size());
         if (imageList.size() > 0) {
             // Start off with a value that is garuanteed to be updated for the first record, to get things started...
             Date currentSightingDate = new Date(imageList.get(0).getDate().getTime() - timeDiffInMiliseconds*2);
             // If no image has any date, then all will be in this initial SightingWrapper.
             BulkUploadSightingWrapper sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
+            setDefaultsForNewBulkUploadSightings(sightingKey, inForceLocationGPS, inLocation);
             for (BulkUploadImageFileWrapper temp : imageList) {
                 if (!temp.isInSameSighting(currentSightingDate, timeDiffInMiliseconds)) {
                     // Start a new sighting and image list for the linked images
@@ -172,6 +172,9 @@ public class BulkUploadDataLoader {
         inBulkUploadSightingWrapper.setSightingEvidence(SightingEvidence.SEEN);
         inBulkUploadSightingWrapper.setLifeStatus(LifeStatus.ALIVE);
         inBulkUploadSightingWrapper.setTimeAccuracy(TimeAccuracy.GOOD);
+        if (inLocation != null) {
+            inBulkUploadSightingWrapper.setLocationID(inLocation.getID());
+        }
         // For WEI default to the GPS of the location
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {

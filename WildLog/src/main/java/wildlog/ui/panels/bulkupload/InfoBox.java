@@ -37,9 +37,9 @@ public class InfoBox extends JPanel {
     private static final SimpleDateFormat timeFormater = new SimpleDateFormat("HH:mm:ss");
     private final WildLogApp app;
     private final BulkUploadSightingWrapper sightingWrapper;
-    private final Location location;
     private final Visit visit;
     private final JTable table;
+    private Location location;
 
 
     public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, Location inLocation, Visit inVisit, JTable inTable) {
@@ -509,6 +509,11 @@ public class InfoBox extends JPanel {
 
     public JLabel getLblCount() {
         return lblCount;
+    }
+    
+    public void setSelectedLocation(Location inLocation) {
+        location = inLocation;
+        sightingWrapper.setLocationID(inLocation.getID());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

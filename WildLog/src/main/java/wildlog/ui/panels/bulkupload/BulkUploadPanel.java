@@ -1281,6 +1281,12 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             lblLocation.setText(selectedLocation.getName());
             UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
             setupVisitName();
+            // Update the InfoBoxes
+            DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
+            for (int row = 0; row < model.getRowCount(); row++) {
+                BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
+                sightingWrapper.getInfoBox().setSelectedLocation(selectedLocation);
+            }
         }
     }//GEN-LAST:event_btnSelectLocationActionPerformed
 

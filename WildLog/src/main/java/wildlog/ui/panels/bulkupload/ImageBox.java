@@ -255,6 +255,7 @@ public class ImageBox extends JPanel {
         DefaultTableModel model = ((DefaultTableModel)table.getModel());
         BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
         BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
+        newSightingWrapper.setLocationID(currentSightingWrapper.getLocationID());
         newSightingWrapper.setDate(imageWrapper.getDate());
         UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
         BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper, 
