@@ -72,6 +72,7 @@ import wildlog.utils.LoggingPrintStream;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.UtilsRestore;
 import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogPaths;
 
@@ -80,7 +81,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    public static String WILDLOG_VERSION = "6.0.4";
+    public static String WILDLOG_VERSION = "6.0.5";
     public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
     public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
@@ -149,17 +150,31 @@ public class WildLogApp extends Application {
         // Open the database
         // If this fails then it might be corrupt or already open. Ask the user to select a new workspace folder.
         boolean openedWorkspace;
+        boolean busyWithRestore = false;
         do {
-            openedWorkspace = openWorkspace();
-            if (openedWorkspace == false) {
-                int choice = WLOptionPane.showConfirmDialog(getMainFrame(),
+            openedWorkspace = !busyWithRestore && openWorkspace();
+            if (!busyWithRestore && openedWorkspace == false) {
+                int choice = WLOptionPane.showOptionDialog(getMainFrame(),
                         "<html>The WildLog Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> could not be opened. "
-                                + "<br/>A database upgrade might be in progress, or the Workspace is no longer accessible, or the Workspace might been corrupted."
-                                + "<br/>If the problem persists please consult the manual to restore a previous backup or contact support@mywild.co.za for help."
-                                + "<br/><br/>You can <b>press OK to select another Workspace</b>, or press Cancel to close this instance of WildLog.</html>",
-                        "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-                if (choice == JOptionPane.OK_OPTION) {
+                                + "<br/>A database upgrade might be in progress, or the Workspace is no longer accessible, or another workspace is open, or the Workspace might been corrupted."
+                                + "<br/>If the problem persists please consult the manual to restore a previous backup or contact support@mywild.co.za for help.</html>",
+                        "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, 
+                        new String[] { "Open another Workspace", "Restore a Database Backup", "Exit" }, null);
+                if (choice == 0) {
                     configureWildLogHomeBasedOnFileBrowser(null, true);
+                }
+                else
+                if (choice == 1) {
+                    if (busyWithRestore) {
+                        try {
+                            Thread.sleep(30 * 1000);
+                        }
+                        catch (InterruptedException ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        }
+                    }
+                    busyWithRestore = true;
+                    UtilsRestore.doDatabaseRestore();
                 }
                 else {
                     quit(null);
