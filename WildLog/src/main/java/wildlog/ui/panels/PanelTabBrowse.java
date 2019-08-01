@@ -11,6 +11,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -390,6 +391,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 treBrowsePhotoTreeWillExpand(evt);
             }
         });
+        treBrowsePhoto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                treBrowsePhotoKeyPressed(evt);
+            }
+        });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
         btnSetDefaultElementImage.setBackground(new java.awt.Color(204, 213, 186));
@@ -505,7 +511,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnBrowseNext.setBackground(new java.awt.Color(204, 213, 186));
         btnBrowseNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
-        btnBrowseNext.setToolTipText("Load the next file.");
+        btnBrowseNext.setToolTipText("Load the next file. (CTRL + RIGHT while navigating the tree.)");
         btnBrowseNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowseNext.setFocusPainted(false);
         btnBrowseNext.setFocusable(false);
@@ -533,7 +539,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnBrowsePrev.setBackground(new java.awt.Color(204, 213, 186));
         btnBrowsePrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
-        btnBrowsePrev.setToolTipText("Load the previous file.");
+        btnBrowsePrev.setToolTipText("Load the previous file. (CTRL + LEFT while navigating the tree.)");
         btnBrowsePrev.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowsePrev.setFocusPainted(false);
         btnBrowsePrev.setFocusable(false);
@@ -1847,6 +1853,16 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private void btnRotateLeftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotateLeftActionPerformed
         doRotate(true);
     }//GEN-LAST:event_btnRotateLeftActionPerformed
+
+    private void treBrowsePhotoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_treBrowsePhotoKeyPressed
+        if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_RIGHT) {
+            btnBrowseNextActionPerformed(null);
+        }
+        else
+        if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_LEFT) {
+            btnBrowsePrevActionPerformed(null);
+        }
+    }//GEN-LAST:event_treBrowsePhotoKeyPressed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");

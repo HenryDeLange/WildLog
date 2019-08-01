@@ -479,6 +479,7 @@
             <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="treBrowsePhotoMouseReleased"/>
             <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="treBrowsePhotoValueChanged"/>
             <EventHandler event="treeWillExpand" listener="javax.swing.event.TreeWillExpandListener" parameters="javax.swing.event.TreeExpansionEvent" handler="treBrowsePhotoTreeWillExpand"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="treBrowsePhotoKeyPressed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -726,7 +727,7 @@
             <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Next.gif"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Load the next file."/>
+            <Property name="toolTipText" type="java.lang.String" value="Load the next file. (CTRL + RIGHT while navigating the tree.)"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -772,7 +773,7 @@
             <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Previous.gif"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Load the previous file."/>
+            <Property name="toolTipText" type="java.lang.String" value="Load the previous file. (CTRL + LEFT while navigating the tree.)"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
