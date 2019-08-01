@@ -40,9 +40,9 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
 
 
-public class CheckAndClean {
+public class UtilsCheckAndClean {
 
-    private CheckAndClean() {
+    private UtilsCheckAndClean() {
     }
     
     public static void doCheckAndClean(WildLogApp inApp, ProgressbarTask inProgressbarTask, int inRecreateThumbnailsResult) throws InterruptedException {

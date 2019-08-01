@@ -71,7 +71,7 @@ public final class UtilsCompression {
         return inFileList;
     }
     
-    public static void unzipFile(Path inSourceZIP, Path inDestinationFolder) {
+    public static void unzipFile(Path inSourceZIP, Path inDestinationFolder) throws IOException {
 // NOTE: Ek het hierdie nog net getoets met die backups se ZIPs wat net een file in het...
         ZipInputStream zipInputStream = null;
         try {
@@ -104,6 +104,7 @@ public final class UtilsCompression {
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            throw ex;
         }
         finally {
             if (zipInputStream != null) {

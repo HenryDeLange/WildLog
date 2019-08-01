@@ -132,13 +132,14 @@ import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
-import wildlog.utils.CheckAndClean;
+import wildlog.utils.UtilsCheckAndClean;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsExcel;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.UtilsRestore;
 import wildlog.utils.WildLogApplicationTypes;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
@@ -1024,7 +1025,7 @@ public final class WildLogView extends JFrame {
         });
 
         mnuBackupDatabase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
-        mnuBackupDatabase.setText("Backup Database");
+        mnuBackupDatabase.setText("Database Backup");
         mnuBackupDatabase.setToolTipText("<html>This makes a backup of the database. <br/><b>Note: This does not backup the files, only the database is backed up.</b> <br/>To backup the data and files it is recommended to make a manual copy of the entire Workspace folder, or use the Workspace Backup feature.</html>");
         mnuBackupDatabase.setName("mnuBackupDatabase"); // NOI18N
         mnuBackupDatabase.addActionListener(new java.awt.event.ActionListener() {
@@ -1035,7 +1036,7 @@ public final class WildLogView extends JFrame {
         backupMenu.add(mnuBackupDatabase);
 
         mnuBackupRestore.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
-        mnuBackupRestore.setText("Restore Database");
+        mnuBackupRestore.setText("Database Restore");
         mnuBackupRestore.setToolTipText("Restore a previously backed-up database.");
         mnuBackupRestore.setName("mnuBackupRestore"); // NOI18N
         mnuBackupRestore.addActionListener(new java.awt.event.ActionListener() {
@@ -1049,8 +1050,8 @@ public final class WildLogView extends JFrame {
         backupMenu.add(sprEcho);
 
         mnuEchoWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Echo.gif"))); // NOI18N
-        mnuEchoWorkspace.setText("Echo Backup Workspace");
-        mnuEchoWorkspace.setToolTipText("Makes a backup of the Workspace by making a target folder reflect the active Workspace's files.");
+        mnuEchoWorkspace.setText("Workspace Backup (Echo)");
+        mnuEchoWorkspace.setToolTipText("Makes a backup of the Workspace by making the content of the target folder reflect that of the active Workspace.");
         mnuEchoWorkspace.setName("mnuEchoWorkspace"); // NOI18N
         mnuEchoWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1063,7 +1064,7 @@ public final class WildLogView extends JFrame {
         backupMenu.add(sprBackup);
 
         mnuBackupWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuBackupWorkspace.setText("Export Workspace");
+        mnuBackupWorkspace.setText("Partial Workspace Backup (Export)");
         mnuBackupWorkspace.setToolTipText("Makes a backup of the Workspace using the Workspace Export feature.");
         mnuBackupWorkspace.setName("mnuBackupWorkspace"); // NOI18N
         mnuBackupWorkspace.addActionListener(new java.awt.event.ActionListener() {
@@ -2413,7 +2414,7 @@ public final class WildLogView extends JFrame {
                             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                                 @Override
                                 protected Object doInBackground() throws Exception {
-                                    CheckAndClean.doCheckAndClean(app, this, recreateThumbnailsResult);
+                                    UtilsCheckAndClean.doCheckAndClean(app, this, recreateThumbnailsResult);
                                     return null;
                                 }
 
@@ -3478,113 +3479,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuConvertCoordinatesActionPerformed
 
     private void mnuBackupRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupRestoreActionPerformed
-        int option = WLOptionPane.showOptionDialog(app.getMainFrame(), 
-                "<html>Select the type of backup you want to restore form."
-                + "<br/><b>Warning:</b>Restoring a database backup will overwrite recent changes.</html>", 
-                "Restore Database", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                null, new String[] {
-                    "H2 Database File (Recommended)", 
-                    "SQL Script File"
-                }, null);
-        if (option != JOptionPane.CLOSED_OPTION) {
-            WLFileChooser fileChooser = new WLFileChooser(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath().toFile());
-            fileChooser.setAcceptAllFileFilterUsed(false);
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            if (option == 0) {
-                // Use H2
-                fileChooser.setDialogTitle("Select the H2 Database file to restore");
-                fileChooser.setFileFilter(new FileFilter() {
-                    @Override
-                    public boolean accept(File inFile) {
-                        if (inFile.isDirectory()) {
-                            return true;
-                        }
-                        return inFile.getName().equalsIgnoreCase(WildLogDBI.BACKUP_H2);
-                    }
-
-                    @Override
-                    public String getDescription() {
-                        return "WildLog Backup H2 Database File";
-                    }
-                });
-            }
-            else {
-                // Use SQL
-                fileChooser.setDialogTitle("Select the SQL Script File to restore");
-                fileChooser.setFileFilter(new FileFilter() {
-                    @Override
-                    public boolean accept(File inFile) {
-                        if (inFile.isDirectory()) {
-                            return true;
-                        }
-                        return inFile.getName().equalsIgnoreCase(WildLogDBI.BACKUP_SQL);
-                    }
-
-                    @Override
-                    public String getDescription() {
-                        return "WildLog Backup SQL Script File";
-                    }
-                });
-            }
-            int result = fileChooser.showOpenDialog(app.getMainFrame());
-            if (result == JFileChooser.APPROVE_OPTION) {
-                // Close all tabs and go to the home tab
-                tabbedPanel.setSelectedIndex(0);
-                while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
-                    tabbedPanel.remove(STATIC_TAB_COUNT);
-                }
-                // Lock the input/display and show busy message
-                // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        JPanel panel = new JPanel(new AbsoluteLayout());
-                        panel.setPreferredSize(new Dimension(400, 50));
-                        panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
-                        JLabel label = new JLabel("<html>Busy restoring the database....</html>");
-                        label.setFont(new Font("Tahoma", Font.BOLD, 12));
-                        label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
-                        panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-                        panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
-                        panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
-                        JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
-                        glassPane.removeAll();
-                        glassPane.setLayout(new BorderLayout(100, 100));
-                        glassPane.add(panel, BorderLayout.CENTER);
-                        glassPane.addMouseListener(new MouseAdapter() {});
-                        glassPane.addKeyListener(new KeyAdapter() {});
-                        app.getMainFrame().setGlassPane(glassPane);
-                        app.getMainFrame().getGlassPane().setVisible(true);
-                        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    }
-                });
-                // Start the process in another thread to allow the UI to update correctly and use the progressbar for feedback
-                UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                    @Override
-                    protected Object doInBackground() throws Exception {
-                        app.getDBI().doRestore(fileChooser.getSelectedFile().toPath());
-                        return null;
-                    }
-
-                    @Override
-                    protected void finished() {
-                        super.finished();
-                        // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
-                        // that asks whether you want to close the application or not, and it's best to rather restart afterwards.
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                        "The active database was restored to a previous state. Please restart the application.",
-                                        "Backup Restored", JOptionPane.INFORMATION_MESSAGE);
-                                app.quit(null);
-                            }
-                        });
-                    }
-                });
-            }
-        }
+        UtilsRestore.doDatabaseRestore();
     }//GEN-LAST:event_mnuBackupRestoreActionPerformed
 
     private void chkMnuIncludeCountInSightingPathItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuIncludeCountInSightingPathItemStateChanged

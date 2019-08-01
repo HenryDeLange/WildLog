@@ -198,10 +198,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
     
     @Override
-    public void doRestore(Path inSourceFolder) {
+    public void doRestore(Path inSourceFolder) throws Exception {
         if (inSourceFolder.getFileName().toString().equalsIgnoreCase(BACKUP_H2)) {
             // Restore a database file backup
             // Maak eers die DB toe
+            conn.createStatement().execute("SHUTDOWN"); // Die close call werk nie altyd vinnig genoeg nie, so ek stuur ook die command
             close();
             // Copy dan die nuwe file
             UtilsCompression.unzipFile(inSourceFolder, WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath());
@@ -217,6 +218,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             }
             catch (SQLException ex) {
                 printSQLException(ex);
+                throw ex;
             }
             finally {
                 // Statement
@@ -228,6 +230,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 }
                 catch (SQLException sqle) {
                     printSQLException(sqle);
+                    throw sqle;
                 }
             }
         }
