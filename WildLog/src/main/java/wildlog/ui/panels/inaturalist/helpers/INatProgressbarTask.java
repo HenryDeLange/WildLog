@@ -18,6 +18,7 @@ public class INatProgressbarTask extends ProgressbarTask {
 
     public INatProgressbarTask(Application inApplication) {
         super(inApplication);
+        WildLogApp.LOGGER.log(Level.INFO, "Creating new INatProgressbarTask"); // Kan later uit haal, dis net vir debugging ingesit
     }
     
     public void submitTask(long inINatID, Path inFile, String inINatToken, boolean inDeleteFile) {
@@ -47,6 +48,7 @@ public class INatProgressbarTask extends ProgressbarTask {
                 }
                 catch (Exception ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    WildLogApp.LOGGER.log(Level.ERROR, "INATQUEUE size = {}", INATQUEUE.size());
                     WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
                             "<html>There was an unexpected problem uploading the WildLog Image to iNaturalist."
                             + "<br>iNaturalist Observation ID: " + taskEntry.getINatID() + "</html>",

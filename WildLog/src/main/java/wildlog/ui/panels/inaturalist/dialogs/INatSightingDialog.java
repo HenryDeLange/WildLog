@@ -60,10 +60,10 @@ public class INatSightingDialog extends JDialog {
     private final WildLogApp app = WildLogApp.getApplication();
     private final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private final Sighting sighting;
+    private static INatProgressbarTask iNatTask = null;
     private INaturalistLinkedData linkedData = null;
     private int imageCounterWL = 0;
     private int imageCounterINat = 0;
-    private INatProgressbarTask iNatTask = null;
     
     
     public INatSightingDialog(JFrame inParent, Sighting inSighting) {
