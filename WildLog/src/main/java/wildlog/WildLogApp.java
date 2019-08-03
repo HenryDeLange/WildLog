@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.EventObject;
 import java.util.List;
 import java.util.Properties;
@@ -63,6 +64,7 @@ import wildlog.data.enums.WildLogUserTypes;
 import wildlog.ui.dialogs.UserLoginDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
+import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.filters.WorkspaceFilter;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
@@ -91,6 +93,7 @@ public class WildLogApp extends Application {
     private static String iNaturalistToken;
     private static boolean useNimbusLF = false;
     private static boolean useH2AutoServer = true;
+    private static ScheduledExecutorService dailyBackupExecutorService = Executors.newScheduledThreadPool(1, new NamedThreadFactory("WL_DailyBackup"));
     private WildLogView view;
     private WildLogOptions wildLogOptions;
     private int threadCount;
@@ -165,14 +168,6 @@ public class WildLogApp extends Application {
                 }
                 else
                 if (choice == 1) {
-                    if (busyWithRestore) {
-                        try {
-                            Thread.sleep(30 * 1000);
-                        }
-                        catch (InterruptedException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        }
-                    }
                     busyWithRestore = true;
                     UtilsRestore.doDatabaseRestore();
                 }
@@ -180,17 +175,14 @@ public class WildLogApp extends Application {
                     quit(null);
                 }
             }
-        }
-        while (openedWorkspace == false);
+        } while (openedWorkspace == false);
         // Load the WildLogOptions
         wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
         WildLogApp.LOGGER.log(Level.INFO, "Workspace opened with ID: {} [{}]", new Object[]{wildLogOptions.getWorkspaceName(), Long.toString(wildLogOptions.getWorkspaceID())});
-        // Check to do monthly backup and try to upload the logs and user data to the MyWild DB
-        Path folderPath = WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath()
-                .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_BACKUP_MONTHLY.format(LocalDateTime.now()) + ")");
+        // Upload the logs and user data to the MyWild DB once a week (using the existance of the auto backup folder as indicator)
+        Path folderPath = WildLogPaths.WILDLOG_BACKUPS_AUTO.getAbsoluteFullPath()
+                .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_AUTO_BACKUP.format(LocalDateTime.now()) + ")");
         if (!Files.exists(folderPath)) {
-            // Do the backup
-            dbi.doBackup(folderPath.toAbsolutePath());
             // Do some online calls
             ScheduledExecutorService executor = Executors.newScheduledThreadPool(1, new NamedThreadFactory("WL_MyWildCalls"));
             // Try to check the latest version
@@ -388,7 +380,70 @@ public class WildLogApp extends Application {
         });
         view.setLocationRelativeTo(null);
         view.setVisible(true);
+        // Setup the glasspane
         UtilsDialog.setupGlassPaneOnMainFrame(view);
+        // Do the auto backup (after the view has been shown because it uses the progressbar
+        Path folderPath = WildLogPaths.WILDLOG_BACKUPS_AUTO.getAbsoluteFullPath()
+                .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_AUTO_BACKUP.format(LocalDateTime.now()) + ")");
+        if (!Files.exists(folderPath)) {
+            // Do the backup
+            UtilsConcurency.kickoffProgressbarTask(this, new ProgressbarTask(this) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setMessage("Starting the Database Backup (Auto)");
+                    // First clean out empty folders (for example failed backups)
+                    try {
+                        UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath().toFile());
+                    }
+                    catch (IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                    setMessage("Busy with the Database Backup (Auto)");
+                    dbi.doBackup(folderPath.toAbsolutePath());
+                    setMessage("Done with the Database Backup (Auto)");
+                    return null;
+                }
+            });
+        }
+        // For WEI added a scheduled task to kick off daily auto backups
+        dailyBackupExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                Path folderPath = WildLogPaths.WILDLOG_BACKUPS_DAILY.getAbsoluteFullPath()
+                        .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_DAILY_BACKUP.format(LocalDateTime.now()) + ")");
+                if (!Files.exists(folderPath)) {
+                    // Do the backup
+                    UtilsConcurency.kickoffProgressbarTask(WildLogApp.this, new ProgressbarTask(WildLogApp.this) {
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            setMessage("Starting the Database Backup (Daily)");
+                            // First clean out empty folders (for example failed backups)
+                            try {
+                                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath().toFile());
+                            }
+                            catch (IOException ex) {
+                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            }
+                            setMessage("Busy with the Database Backup (Daily)");
+                            dbi.doBackup(folderPath.toAbsolutePath());
+                            // If there are more than 7 backups then delete the oldest one
+                            List<String> lstDailyBackups = new ArrayList<>(Arrays.asList(WildLogPaths.WILDLOG_BACKUPS_DAILY.getAbsoluteFullPath().toFile().list()));
+                            if (lstDailyBackups.size() > 7) {
+                                Collections.sort(lstDailyBackups);
+                                for (int t = 0; t < lstDailyBackups.size() - 7; t++) {
+                                    Path oldBackupToDelete = WildLogPaths.WILDLOG_BACKUPS_DAILY.getAbsoluteFullPath().resolve(lstDailyBackups.get(t));
+                                    WildLogApp.LOGGER.log(Level.INFO, "Deleting old daily backup: {}", oldBackupToDelete.toString());
+                                    UtilsFileProcessing.deleteRecursive(oldBackupToDelete.toFile());
+                                }
+                            }
+                            setMessage("Done with the Database Backup (Daily)");
+                            return null;
+                        }
+                    });
+                }
+            }
+        }, 3, 60 * 12, TimeUnit.MINUTES);
+        // Add the exit listener
         addExitListener(new ExitListener() {
             
             @Override
@@ -681,6 +736,7 @@ public class WildLogApp extends Application {
 
     @Override
     protected void shutdown() {
+        dailyBackupExecutorService.shutdown();
         super.shutdown();
         WildLogApp.LOGGER.log(Level.INFO, "SHUTTING DOWN WildLog - {}", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         WildLogApp.LOGGER.log(Level.INFO, "");

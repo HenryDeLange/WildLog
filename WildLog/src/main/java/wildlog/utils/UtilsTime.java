@@ -36,7 +36,8 @@ public final class UtilsTime {
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_FILES = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_FILES_CAMERATRAP_TIMESTAMP = DateTimeFormatter.ofPattern("yyyy MM dd HH mm ss");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH'h'mm'm'ss's'");
-    public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_BACKUP_MONTHLY = DateTimeFormatter.ofPattern("yyyy-MM, MMM 'week' W");
+    public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_AUTO_BACKUP = DateTimeFormatter.ofPattern("yyyy-MM, MMM 'week' W");
+    public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_DAILY_BACKUP = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_VISITS_WEI = DateTimeFormatter.ofPattern("yyyy_MM_dd");
 
     

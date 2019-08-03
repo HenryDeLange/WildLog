@@ -2291,12 +2291,26 @@ public final class WildLogView extends JFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the Database Backup");
+                // First clean out empty folders (for example failed backups)
+                try {
+                    UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath().toFile());
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+                setMessage("Busy with the Database Backup");
                 app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath()
                         .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ")"));
                 setMessage("Done with the Database Backup");
-                WLOptionPane.showMessageDialog(app.getMainFrame(),
-                        "<html>The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. <br>(Note: This only backed up the database entries, the images and other files have to be backed up manually.)</html>",
-                        "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                "<html>The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. "
+                                        + "<br>(Note: This only backed up the database entries, the images and other files have to be backed up manually.)</html>",
+                                "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                });
                 return null;
             }
         });
