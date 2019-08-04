@@ -1064,6 +1064,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void rdbLayoutGridSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbLayoutGridSightingsActionPerformed
         reloadUI(activeLayout);
+        
+// TODO: Wys 'n droplist waar mens kan kies tussen 100, 200 of 300px images
+        
         activeLayout = LayoutType.GRID;
     }//GEN-LAST:event_rdbLayoutGridSightingsActionPerformed
 
