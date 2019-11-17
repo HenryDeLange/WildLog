@@ -1134,6 +1134,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                     upgradeSuccess = doUpdate12();
                                     wasMajorUpgrade = true; // Omdat die GUIDs by gekom het en baie koelomme verwyder was
                                 }
+                                else
+                                if (currentDBVersion == 12) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v12 (before upgrade to 13)"));
+                                    upgradeSuccess = doUpdate13();
+                                }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
                             }
@@ -1982,6 +1987,31 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 12");
+        return true;
+    }
+    
+    private boolean doUpdate13() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 13");
+        // This update fixes the column type of the foreign keys on the Sightings table
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Change from varchar to bigint
+            state.execute("ALTER TABLE SIGHTINGS ALTER COLUMN ELEMENTID SET DATA TYPE BIGINT");
+            state.execute("ALTER TABLE SIGHTINGS ALTER COLUMN LOCATIONID SET DATA TYPE BIGINT");
+            state.execute("ALTER TABLE SIGHTINGS ALTER COLUMN VISITID SET DATA TYPE BIGINT");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=13");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 13");
         return true;
     }
 

@@ -1857,10 +1857,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private void treBrowsePhotoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_treBrowsePhotoKeyPressed
         if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_RIGHT) {
             btnBrowseNextActionPerformed(null);
+            evt.consume();
         }
         else
         if (evt.isControlDown() && evt.getKeyCode() == KeyEvent.VK_LEFT) {
             btnBrowsePrevActionPerformed(null);
+            evt.consume();
         }
     }//GEN-LAST:event_treBrowsePhotoKeyPressed
 

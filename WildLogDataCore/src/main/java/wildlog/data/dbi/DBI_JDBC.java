@@ -53,7 +53,7 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected SecureRandom randomGenerator;
     // Version
-    protected static final int WILDLOG_DB_VERSION = 12;
+    protected static final int WILDLOG_DB_VERSION = 13;
     // Tables
     protected static final String tableElements = "CREATE TABLE ELEMENTS ("
             + "ID bigint PRIMARY KEY NOT NULL, "
@@ -104,9 +104,9 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String tableSightings = "CREATE TABLE SIGHTINGS ("
             + "ID bigint PRIMARY KEY NOT NULL, "
             + "SIGHTINGDATE timestamp NOT NULL, "
-            + "ELEMENTID varchar(150) NOT NULL, "
-            + "LOCATIONID varchar(150) NOT NULL, "
-            + "VISITID varchar(150) NOT NULL, "
+            + "ELEMENTID bigint NOT NULL, "
+            + "LOCATIONID bigint NOT NULL, "
+            + "VISITID bigint NOT NULL, "
             + "TIMEOFDAY varchar(50), "
             + "WEATHER varchar(50), "
             + "VIEWRATING varchar(50), "
