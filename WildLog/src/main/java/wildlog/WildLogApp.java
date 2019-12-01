@@ -172,7 +172,7 @@ public class WildLogApp extends Application {
                     UtilsRestore.doDatabaseRestore();
                 }
                 else {
-                    quit(null);
+                    exit(); // Lyk of dit beter werk as quit(null) om een of ander rede...
                 }
             }
         } while (openedWorkspace == false);

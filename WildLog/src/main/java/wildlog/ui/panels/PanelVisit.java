@@ -1464,7 +1464,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_btnNextImageSightingActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        UtilsFileProcessing.openFile(visit.getWildLogFileID(), imageIndex, app);
+        if (VisitType.STASHED != visit.getType()) {
+            UtilsFileProcessing.openFile(visit.getWildLogFileID(), imageIndex, app);
+        }
+        else {
+            Path stashPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
+            String[] files = stashPath.toFile().list();
+            UtilsFileProcessing.openFile(stashPath.resolve(files[imageIndex]));
+        }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
@@ -1725,6 +1732,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 imageIndex = 0;
             }
             if (files.length > 0) {
+// FIXME: Wierd error as mens previous button druk vanaf die eerste foto (so as hy roll over doen)
                 lblImage.setIcon(UtilsImageProcessing.getScaledIcon(stashPath.resolve(files[imageIndex]), WildLogThumbnailSizes.NORMAL.getSize(), true));
                 lblNumberOfImages.setText((imageIndex + 1) + " of " + files.length);
             }
