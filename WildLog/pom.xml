@@ -3,13 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>mywild</groupId>
     <artifactId>WildLog</artifactId>
-    <version>6.0.6</version>
+    <version>6.1.0.beta</version>
     <packaging>jar</packaging>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>13</maven.compiler.source>
+        <maven.compiler.target>13</maven.compiler.target>
+        <maven.compiler.release>13</maven.compiler.release>
+        <javafx.version>13.0.1</javafx.version>
     </properties>
     
     <repositories>
@@ -61,6 +63,43 @@
             <groupId>mywild</groupId>
             <artifactId>WildLogSyncAzure</artifactId>
             <version>1.0</version>
+        </dependency>
+        <!--Java: JavaFX-->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <!--Java: JAXB-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.0.1</version>
         </dependency>
         <!--Third Party-->
         <dependency>
@@ -131,12 +170,12 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.5</version>
+            <version>2.8.6</version>
         </dependency>
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-dist</artifactId>
-            <version>3.13.0</version>
+            <version>3.13.4</version>
             <type>pom</type>
         </dependency>
         <dependency>
@@ -152,7 +191,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -169,6 +208,7 @@
             <!--Copy dependencies to target/lib folder-->
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <phase>install</phase>
@@ -185,7 +225,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>2.4</version>
+                <version>2.5.0</version>
                 <executions>
                     <execution>
                         <id>xjc</id>
@@ -194,6 +234,28 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <!--JavaFX plugins-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+            <!--See https://github.com/openjfx/javafx-maven-plugin-->
+            <!--To run add a new Maven Action with command "mvn javafx:run"-->
+            <plugin>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.3</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                    <mainClass>com.stuff.teststuff.App</mainClass>
+                    <!--See https://openjfx.io/openjfx-docs/#IDE-NetBeans-->
+                    <executable>C:\_dev\jdk-13.0.1\bin\java</executable>
+                </configuration>
             </plugin>
         </plugins>
     </build>
