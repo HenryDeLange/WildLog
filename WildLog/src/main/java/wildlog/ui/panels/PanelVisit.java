@@ -1732,7 +1732,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 imageIndex = 0;
             }
             if (files.length > 0) {
-// FIXME: Wierd error as mens previous button druk vanaf die eerste foto (so as hy roll over doen)
                 lblImage.setIcon(UtilsImageProcessing.getScaledIcon(stashPath.resolve(files[imageIndex]), WildLogThumbnailSizes.NORMAL.getSize(), true));
                 lblNumberOfImages.setText((imageIndex + 1) + " of " + files.length);
             }

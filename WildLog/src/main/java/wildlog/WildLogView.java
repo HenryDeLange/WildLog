@@ -434,6 +434,7 @@ public final class WildLogView extends JFrame {
         lblVisits = new javax.swing.JLabel();
         lblSightings = new javax.swing.JLabel();
         lblCreatures = new javax.swing.JLabel();
+        lblFiles = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         lblMyWild = new javax.swing.JLabel();
         lblWorkspaceName = new javax.swing.JLabel();
@@ -634,6 +635,10 @@ public final class WildLogView extends JFrame {
         lblCreatures.setText("Creatures:");
         lblCreatures.setName("lblCreatures"); // NOI18N
 
+        lblFiles.setForeground(new java.awt.Color(183, 195, 166));
+        lblFiles.setText("Files:");
+        lblFiles.setName("lblFiles"); // NOI18N
+
         jSeparator5.setBackground(new java.awt.Color(57, 68, 43));
         jSeparator5.setForeground(new java.awt.Color(105, 123, 79));
         jSeparator5.setName("jSeparator5"); // NOI18N
@@ -773,14 +778,16 @@ public final class WildLogView extends JFrame {
                                     .addComponent(btnGettingStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(tabHomeLayout.createSequentialGroup()
-                                            .addGap(134, 134, 134)
+                                            .addGap(75, 75, 75)
                                             .addComponent(lblLocations)
-                                            .addGap(18, 18, 18)
+                                            .addGap(20, 20, 20)
                                             .addComponent(lblVisits)
-                                            .addGap(18, 18, 18)
+                                            .addGap(20, 20, 20)
                                             .addComponent(lblCreatures)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(lblSightings))
+                                            .addGap(20, 20, 20)
+                                            .addComponent(lblSightings)
+                                            .addGap(20, 20, 20)
+                                            .addComponent(lblFiles))
                                         .addGroup(tabHomeLayout.createSequentialGroup()
                                             .addGap(58, 58, 58)
                                             .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -817,7 +824,8 @@ public final class WildLogView extends JFrame {
                     .addComponent(lblLocations)
                     .addComponent(lblVisits)
                     .addComponent(lblSightings)
-                    .addComponent(lblCreatures))
+                    .addComponent(lblCreatures)
+                    .addComponent(lblFiles))
                 .addGap(10, 10, 10)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1826,8 +1834,9 @@ public final class WildLogView extends JFrame {
     private void tabHomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabHomeComponentShown
         lblLocations.setText("Places: " + app.getDBI().countLocations(null));
         lblVisits.setText("Periods: " + app.getDBI().countVisits(null, 0));
-        lblSightings.setText("Observations: " + app.getDBI().countSightings(0, 0, 0, 0));
         lblCreatures.setText("Creatures: " + app.getDBI().countElements(null, null));
+        lblSightings.setText("Observations: " + app.getDBI().countSightings(0, 0, 0, 0));
+        lblFiles.setText("Files: " + app.getDBI().countWildLogFiles(0, -1));
         lblWorkspaceName.setText(app.getWildLogOptions().getWorkspaceName());
     }//GEN-LAST:event_tabHomeComponentShown
 
@@ -4020,6 +4029,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JLabel lblCreatures;
     private javax.swing.JLabel lblEdition;
     private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblFiles;
     private javax.swing.JLabel lblFooterLogo;
     private javax.swing.JLabel lblLocations;
     private javax.swing.JLabel lblMyWild;
