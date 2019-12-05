@@ -21,6 +21,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -36,6 +37,7 @@ public class ImageResizeDialog extends JDialog {
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
+        SpinnerFixer.configureSpinners(spnSize);
         // Setup the glasspane on this dialog as well for the JOptionPane's
         UtilsDialog.addModalBackgroundPanel(this, null);
         // Setup initial state
@@ -157,7 +159,7 @@ public class ImageResizeDialog extends JDialog {
 
         jLabel5.setText("Resize to ");
 
-        spnSize.setModel(new javax.swing.SpinnerNumberModel(850, 128, 3072, 50));
+        spnSize.setModel(new javax.swing.SpinnerNumberModel(850, 0, 3072, 50));
         spnSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel6.setText("px");

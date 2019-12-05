@@ -1608,8 +1608,8 @@ public class GPSDialog extends JDialog {
                 tempAccuracy = (double) ((GPSAccuracy) cmbAccuracy.getSelectedItem()).getMaxMeters();
             }
         }
-        if (tempAccuracy >= (double)((SpinnerNumberModel) spnAccuracy.getModel()).getMaximum()) {
-            tempAccuracy = ((int) (double)((SpinnerNumberModel) spnAccuracy.getModel()).getMaximum());
+        if (tempAccuracy >= (Double)((SpinnerNumberModel) spnAccuracy.getModel()).getMaximum()) {
+            tempAccuracy = ((int) ((Double)((SpinnerNumberModel) spnAccuracy.getModel()).getMaximum()).doubleValue());
         }
         spnAccuracy.setValue(tempAccuracy);
     }//GEN-LAST:event_cmbAccuracyActionPerformed

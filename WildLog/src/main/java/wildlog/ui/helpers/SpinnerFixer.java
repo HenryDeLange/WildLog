@@ -5,6 +5,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import org.apache.logging.log4j.Level;
 import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
@@ -24,6 +27,11 @@ public class SpinnerFixer {
     }
 
     public static void configureSpinners(final JSpinner inSpinner) {
+        // Make sure the spinner uses '.' instead of ',' (workaround for functionality that changed during Java 8 to Java 13 upgrade)
+        JSpinner.NumberEditor editor = (JSpinner.NumberEditor) inSpinner.getEditor();
+        editor.setLocale(Locale.US);
+        DecimalFormat format = editor.getFormat();
+        format.setDecimalFormatSymbols(new DecimalFormatSymbols(editor.getLocale()));
         // Fix die issue met spinners se selection all
         ((JSpinner.NumberEditor)inSpinner.getEditor()).getTextField().addFocusListener(new FocusAdapter() {
                 @Override
@@ -55,12 +63,12 @@ public class SpinnerFixer {
                 double minValue;
                 double maxValue;
                 if (((SpinnerNumberModel) inSpinner.getModel()).getMinimum() instanceof Integer) {
-                    minValue = (int)((SpinnerNumberModel) inSpinner.getModel()).getMinimum();
-                    maxValue = (int)((SpinnerNumberModel) inSpinner.getModel()).getMaximum();
+                    minValue = (Integer)((SpinnerNumberModel) inSpinner.getModel()).getMinimum();
+                    maxValue = (Integer)((SpinnerNumberModel) inSpinner.getModel()).getMaximum();
                 }
                 else {
-                    minValue = (double)((SpinnerNumberModel)inSpinner.getModel()).getMinimum();
-                    maxValue = (double)((SpinnerNumberModel)inSpinner.getModel()).getMaximum();
+                    minValue = (Double)((SpinnerNumberModel)inSpinner.getModel()).getMinimum();
+                    maxValue = (Double)((SpinnerNumberModel)inSpinner.getModel()).getMaximum();
                 }
                 if (inEvent.getKeyChar() == KeyEvent.VK_BACK_SPACE || inEvent.getKeyChar() == KeyEvent.VK_DELETE
                         || (inEvent.getKeyChar() >= '0' && inEvent.getKeyChar() <= '9')

@@ -2,6 +2,7 @@ package wildlog.ui.dialogs;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.data.enums.Latitudes;
@@ -11,7 +12,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.utils.UtilsUI;
 
-public class GPSGridConversionDialog extends javax.swing.JFrame {
+public class GPSGridConversionDialog extends JFrame {
 
     
     public GPSGridConversionDialog() {
