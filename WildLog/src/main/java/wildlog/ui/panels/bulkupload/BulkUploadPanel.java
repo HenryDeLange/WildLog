@@ -890,9 +890,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 this.setTaskProgress(0);
                 this.setMessage("Saving the Bulk Import: Validating...");
                 // Make sure the location is OK
-                if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
+                if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().trim().isEmpty()) {
                     // Validate the visit is OK
-                    Visit visit = app.getDBI().findVisit(0, txtVisitName.getText(), false, Visit.class);
+                    if (UtilsData.checkCharacters(txtVisitName.getText().trim())) {
+                        WLOptionPane.showMessageDialog(this, 
+                                "The Period Name contains unsupported characters.", 
+                                "Can't Save", JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    }
+                    Visit visit = app.getDBI().findVisit(0, txtVisitName.getText().trim(), false, Visit.class);
                     if ((existingVisit == null || existingVisit.getID() == 0) && visit != null) {
                         WLOptionPane.showMessageDialog(app.getMainFrame(),
                                 "The Period name is not unique, please specify another one.",
@@ -900,13 +906,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         return null;
                     }
                     if (visit != null && existingVisit != null && existingVisit.getID() != visit.getID()) {
-                            WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "The existing Period could not be saved.",
-                                    "Can't Save", JOptionPane.ERROR_MESSAGE);
-                            return null;
-                        }
+                        WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                "The existing Period could not be saved. Another Period aldready has the same name.",
+                                "Can't Save", JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    }
                     if (visit == null) {
-                        visit = new Visit(0, txtVisitName.getText());
+                        visit = new Visit(0, txtVisitName.getText().trim());
                         if (existingVisit != null && existingVisit.getID() > 0) {
                             visit.setID(existingVisit.getID());
                         }
