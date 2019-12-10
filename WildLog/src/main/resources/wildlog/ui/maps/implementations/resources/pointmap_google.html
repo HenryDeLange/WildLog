@@ -36,8 +36,17 @@
     </script>
     <script type="text/javascript">
             function initializeMap() {
+//___MAP_CONTROLS_START___
+                var showMapControls = true;
+//___MAP_CONTROLS_END___
                 // Inititalize map, spiderfier and bounds
-                var map = new google.maps.Map(document.getElementById('map-canvas'), {mapTypeId: google.maps.MapTypeId.SATELLITE});
+                var map = new google.maps.Map(document.getElementById('map-canvas'), {
+                    mapTypeId: google.maps.MapTypeId.SATELLITE,
+                    disableDefaultUI: true,
+                    zoomControl: showMapControls,
+                    mapTypeControl: showMapControls,
+                    scaleControl: showMapControls
+                });
                 var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true, nearbyDistance: 5});
                 var bounds = new google.maps.LatLngBounds();
                 // Create the single info window that will display the content

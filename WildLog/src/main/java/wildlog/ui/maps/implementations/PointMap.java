@@ -39,13 +39,14 @@ public class PointMap extends AbstractMap<Sighting> {
     private MapType activeMapType = MapType.POINT_MAP_GOOGLE;
     private Parent displayedMap;
     private String displayedTemplate;
+    private boolean showMapControls = true;
     private boolean showDetails;
     private boolean showThumbnails;
 
     
     public PointMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         super("Satellite Imagery Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(6);
+        lstCustomButtons = new ArrayList<>(7);
         // Maps
         ToggleButton btnPointMapGoogle = new ToggleButton("Markers on Google Maps");
         btnPointMapGoogle.setToggleGroup(BUTTON_GROUP);
@@ -69,6 +70,18 @@ public class PointMap extends AbstractMap<Sighting> {
         lstCustomButtons.add(btnPointMapBing);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
+        // Show/Hide map controls
+        CheckBox chkHideControls = new CheckBox("Show Map Controls");
+        chkHideControls.setSelected(showMapControls);
+        chkHideControls.setCursor(Cursor.HAND);
+        chkHideControls.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                showMapControls = chkHideControls.isSelected();
+            }
+        });
+        lstCustomButtons.add(chkHideControls);
+        // View in browser
         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
             btnOpenInBrowser.setCursor(Cursor.HAND);
@@ -86,6 +99,7 @@ public class PointMap extends AbstractMap<Sighting> {
         }
         // Include sighting details (performance)
         CheckBox chkShowDetails = new CheckBox("Include Observation Details");
+        chkShowDetails.setSelected(showDetails);
         chkShowDetails.setCursor(Cursor.HAND);
         chkShowDetails.setOnAction(new EventHandler() {
             @Override
@@ -96,6 +110,7 @@ public class PointMap extends AbstractMap<Sighting> {
         lstCustomButtons.add(chkShowDetails);
         // Include Thumbnails (performance)
         CheckBox chkShowFileThumbnails = new CheckBox("Include Observation Thumbnails");
+        chkShowFileThumbnails.setSelected(showThumbnails);
         chkShowFileThumbnails.setCursor(Cursor.HAND);
         chkShowFileThumbnails.setOnAction(new EventHandler() {
             @Override
@@ -145,7 +160,13 @@ public class PointMap extends AbstractMap<Sighting> {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
-        // Edit the template
+        // Show/Hide map controls
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_START___", "");
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_END___", "");
+        if (!showMapControls) {
+            template = UtilsMaps.replace(template, "var showMapControls = true;", "var showMapControls = false;");
+        }
+        // Add the points
         int beginIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_START___") + "//___MAP_CLICKABLE_DATA_POINTS_START___".length();
         int endIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_END___");
         String gpsPointTemplate = template.substring(beginIndex, endIndex).trim();

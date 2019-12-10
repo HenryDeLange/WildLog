@@ -246,17 +246,17 @@
             </plugin>
             <!--See https://github.com/openjfx/javafx-maven-plugin-->
             <!--To run add a new Maven Action with command "mvn javafx:run"-->
-            <plugin>
+<!--            <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.3</version>
                 <configuration>
                     <release>${maven.compiler.release}</release>
                     <mainClass>com.stuff.teststuff.App</mainClass>
-                    <!--See https://openjfx.io/openjfx-docs/#IDE-NetBeans-->
-                    <executable>C:\_dev\jdk-13.0.1\bin\java</executable>
+                    See https://openjfx.io/openjfx-docs/#IDE-NetBeans
+                    <executable>C:\Program Files\AdoptOpenJDK\jdk-13.0.1.9-hotspot\bin\java</executable>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
     
