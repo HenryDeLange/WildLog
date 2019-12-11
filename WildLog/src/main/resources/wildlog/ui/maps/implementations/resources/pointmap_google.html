@@ -35,57 +35,68 @@
             /* Tue 7 May 2013 14:56:02 BST */
     </script>
     <script type="text/javascript">
-            function initializeMap() {
+        var map;
+        
+        function toggleMapControls(isShowMapControls) {
+            showMapControls = isShowMapControls;
+            map.setOptions({
+                zoomControl: showMapControls,
+                mapTypeControl: showMapControls,
+                scaleControl: showMapControls
+            });
+        }
+        
+        function initializeMap() {
 //___MAP_CONTROLS_START___
-                var showMapControls = true;
+            var showMapControls = true;
 //___MAP_CONTROLS_END___
-                // Inititalize map, spiderfier and bounds
-                var map = new google.maps.Map(document.getElementById('map-canvas'), {
-                    mapTypeId: google.maps.MapTypeId.SATELLITE,
-                    disableDefaultUI: true,
-                    zoomControl: showMapControls,
-                    mapTypeControl: showMapControls,
-                    scaleControl: showMapControls
-                });
-                var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true, nearbyDistance: 5});
-                var bounds = new google.maps.LatLngBounds();
-                // Create the single info window that will display the content
-                var infoWindow = new google.maps.InfoWindow();
-                oms.addListener('click', function(marker, event) {
-                    infoWindow.setContent(marker.desc);
-                    infoWindow.open(map, marker);
-                });
-                oms.addListener('spiderfy', function(markers) {
-                    infoWindow.close();
-                });
-                // Add markers
+            // Inititalize map, spiderfier and bounds
+            map = new google.maps.Map(document.getElementById('map-canvas'), {
+                mapTypeId: google.maps.MapTypeId.SATELLITE,
+                disableDefaultUI: true,
+                zoomControl: showMapControls,
+                mapTypeControl: showMapControls,
+                scaleControl: showMapControls
+            });
+            var oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true, markersWontHide: true, nearbyDistance: 5});
+            var bounds = new google.maps.LatLngBounds();
+            // Create the single info window that will display the content
+            var infoWindow = new google.maps.InfoWindow();
+            oms.addListener('click', function(marker, event) {
+                infoWindow.setContent(marker.desc);
+                infoWindow.open(map, marker);
+            });
+            oms.addListener('spiderfy', function(markers) {
+                infoWindow.close();
+            });
+            // Add markers
 //___MAP_CLICKABLE_DATA_POINTS_START___
-                var markerZZZ = new google.maps.Marker({
-                        position: new google.maps.LatLng(-31, 29),
-                        map: map,
-                        title: "ZZZ-title"
-                });
-                markerZZZ.desc = "ZZZ-content";
-                oms.addMarker(markerZZZ);
-                bounds.extend(markerZZZ.position);
+            var markerZZZ = new google.maps.Marker({
+                    position: new google.maps.LatLng(-31, 29),
+                    map: map,
+                    title: "ZZZ-title"
+            });
+            markerZZZ.desc = "ZZZ-content";
+            oms.addMarker(markerZZZ);
+            bounds.extend(markerZZZ.position);
 //___MAP_CLICKABLE_DATA_POINTS_END___
-                // Set the map location and zoom to fit all markers
-                map.fitBounds(bounds);
-                // Prevent the bounds from zooming in too much
-                var center = bounds.getCenter();
-                if (center.lat() === 0 && center.lng() === 0) {
-                    // For some reason the (0, 0) point doesn't seem to return a result from the MaxZoomService
-                    center = new google.maps.LatLng(0.1, 0.1);
-                }
-                maxZoomService = new google.maps.MaxZoomService();
-                maxZoomService.getMaxZoomAtLatLng(center, function(response) {
-                    if (map.getZoom() > response.zoom) {
-                        map.setZoom(response.zoom);
-                    }
-                });
+            // Set the map location and zoom to fit all markers
+            map.fitBounds(bounds);
+            // Prevent the bounds from zooming in too much
+            var center = bounds.getCenter();
+            if (center.lat() === 0 && center.lng() === 0) {
+                // For some reason the (0, 0) point doesn't seem to return a result from the MaxZoomService
+                center = new google.maps.LatLng(0.1, 0.1);
             }
-            google.maps.event.addDomListener(window, 'load', initializeMap);
-        </script>
+            maxZoomService = new google.maps.MaxZoomService();
+            maxZoomService.getMaxZoomAtLatLng(center, function(response) {
+                if (map.getZoom() > response.zoom) {
+                    map.setZoom(response.zoom);
+                }
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', initializeMap);
+    </script>
 </head>
 <body>
     <div id="map-canvas"></div>

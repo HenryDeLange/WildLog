@@ -88,11 +88,12 @@ public class HeatMap extends AbstractMap<Sighting> {
     private final CheckBox chkUseOneSplit;
     private final CheckBox chkExtendShortSplits;
     private List<HeatPoint> lstActiveHeatPoints;
+    private boolean showMapControls = true;
 
     
     public HeatMap(List<Sighting> inLstData, JLabel inChartDescLabel, MapsBaseDialog inMapsBaseDialog) {
         super("Distribution Heat Maps", inLstData, inChartDescLabel, inMapsBaseDialog);
-        lstCustomButtons = new ArrayList<>(15);
+        lstCustomButtons = new ArrayList<>(16);
         // Maps
         ToggleButton btnHeatMapClient = new ToggleButton("Observation Count Map");
         btnHeatMapClient.setToggleGroup(BUTTON_GROUP);
@@ -146,18 +147,36 @@ public class HeatMap extends AbstractMap<Sighting> {
         lstCustomButtons.add(btnRichnessMapClient);
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
+        // Show/Hide map controls
+        CheckBox chkShowControls = new CheckBox("Show Map Controls");
+        chkShowControls.setSelected(showMapControls);
+        chkShowControls.setCursor(Cursor.HAND);
+        chkShowControls.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                showMapControls = chkShowControls.isSelected();
+                if (displayedMap != null) {
+                    ((WebView) displayedMap).getEngine().executeScript("toggleMapControls(" + showMapControls + ")");
+                }
+            }
+        });
+        lstCustomButtons.add(chkShowControls);
+        // Visit Length
         cmbSplitIndicator = new ComboBox<>(FXCollections.observableArrayList(HeatMap.SplitIndicator.values()));
         cmbSplitIndicator.setVisibleRowCount(10);
         cmbSplitIndicator.setCursor(Cursor.HAND);
         lstCustomButtons.add(cmbSplitIndicator);
+        // Use One Visit
         chkUseOneSplit = new CheckBox("Use only one interval per Period");
         chkUseOneSplit.setCursor(Cursor.HAND);
         chkUseOneSplit.setSelected(true);
         lstCustomButtons.add(chkUseOneSplit);
+        // Extend Visits
         chkExtendShortSplits = new CheckBox("Extend short Periods to interval length");
         chkExtendShortSplits.setCursor(Cursor.HAND);
         chkExtendShortSplits.setSelected(true);
         lstCustomButtons.add(chkExtendShortSplits);
+        // Semi-Transparent
         cmbSplitIndicator.getSelectionModel().select(HeatMap.SplitIndicator.NORMAL);
         CheckBox chkTransparent = new CheckBox("Semi-Transparent");
         chkTransparent.setCursor(Cursor.HAND);
@@ -168,6 +187,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(chkTransparent);
+        // Small Radius
         ToggleGroup toggleGroup = new ToggleGroup();
         RadioButton rdbSmall = new RadioButton("Small Radius");
         rdbSmall.setToggleGroup(toggleGroup);
@@ -180,6 +200,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(rdbSmall);
+        // Medium Radius
         RadioButton rdbMedium = new RadioButton("Medium Radius");
         rdbMedium.setToggleGroup(toggleGroup);
         rdbMedium.setSelected(false);
@@ -191,6 +212,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(rdbMedium);
+        // Large Radius
         RadioButton rdbLarge = new RadioButton("Large Radius");
         rdbLarge.setToggleGroup(toggleGroup);
         rdbLarge.setSelected(true);
@@ -202,6 +224,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(rdbLarge);
+        // Very Large Radius
         RadioButton rdbVeryLarge = new RadioButton("Very Large Radius");
         rdbVeryLarge.setToggleGroup(toggleGroup);
         rdbVeryLarge.setSelected(false);
@@ -213,6 +236,7 @@ public class HeatMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(rdbVeryLarge);
+        // View in browser
         Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
         btnOpenInBrowser.setCursor(Cursor.HAND);
         btnOpenInBrowser.setOnAction(new EventHandler() {
@@ -297,6 +321,12 @@ public class HeatMap extends AbstractMap<Sighting> {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
+        // Show/Hide map controls
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_START___", "");
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_END___", "");
+        if (!showMapControls) {
+            template = UtilsMaps.replace(template, "var showMapControls = true;", "var showMapControls = false;");
+        }
         // Edit the template
         int beginIndex = template.indexOf("//___POINTS_START___") + "//___POINTS_START___".length();
         int endIndex = template.indexOf("//___POINTS_END___");
@@ -381,6 +411,12 @@ public class HeatMap extends AbstractMap<Sighting> {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
+        // Show/Hide map controls
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_START___", "");
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_END___", "");
+        if (!showMapControls) {
+            template = UtilsMaps.replace(template, "var showMapControls = true;", "var showMapControls = false;");
+        }
         // Edit the template
         int beginIndex = template.indexOf("//___POINTS_START___") + "//___POINTS_START___".length();
         int endIndex = template.indexOf("//___POINTS_END___");
@@ -466,6 +502,12 @@ public class HeatMap extends AbstractMap<Sighting> {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
+        // Show/Hide map controls
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_START___", "");
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_END___", "");
+        if (!showMapControls) {
+            template = UtilsMaps.replace(template, "var showMapControls = true;", "var showMapControls = false;");
+        }
         // Edit the template
         int beginIndex = template.indexOf("//___POINTS_START___") + "//___POINTS_START___".length();
         int endIndex = template.indexOf("//___POINTS_END___");
@@ -597,6 +639,12 @@ public class HeatMap extends AbstractMap<Sighting> {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
+        // Show/Hide map controls
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_START___", "");
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_END___", "");
+        if (!showMapControls) {
+            template = UtilsMaps.replace(template, "var showMapControls = true;", "var showMapControls = false;");
+        }
         // Edit the template
         int beginIndex = template.indexOf("//___POINTS_START___") + "//___POINTS_START___".length();
         int endIndex = template.indexOf("//___POINTS_END___");
@@ -728,6 +776,12 @@ public class HeatMap extends AbstractMap<Sighting> {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         String template = builder.toString();
+        // Show/Hide map controls
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_START___", "");
+        template = UtilsMaps.replace(template, "//___MAP_CONTROLS_END___", "");
+        if (!showMapControls) {
+            template = UtilsMaps.replace(template, "var showMapControls = true;", "var showMapControls = false;");
+        }
         // Edit the template
         int beginIndex = template.indexOf("//___POINTS_START___") + "//___POINTS_START___".length();
         int endIndex = template.indexOf("//___POINTS_END___");

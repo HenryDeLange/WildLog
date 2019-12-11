@@ -11,18 +11,36 @@
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyD7qkkj7grAHta_s5EmALVl_JsGFaXtSj8&libraries=visualization"></script>
     <script>
+        var map;
+        
+        function toggleMapControls(isShowMapControls) {
+            showMapControls = isShowMapControls;
+            map.setOptions({
+                zoomControl: showMapControls,
+                mapTypeControl: showMapControls,
+                scaleControl: showMapControls
+            });
+        }
+        
         // Adding Data Points
         var lstGPSPoints = [
 //___POINTS_START___
             {location: new google.maps.LatLng(-32, 22), weight: 1.0},
 //___POINTS_END___
         ];
+        
         function initialize() {
+//___MAP_CONTROLS_START___
+            var showMapControls = true;
+//___MAP_CONTROLS_END___
             // Inititalize map
-            var map_options = {
-                mapTypeId: google.maps.MapTypeId.SATELLITE
-            }
-            var map = new google.maps.Map(document.getElementById('map-canvas'), map_options)
+            map = new google.maps.Map(document.getElementById('map-canvas'), {
+                mapTypeId: google.maps.MapTypeId.SATELLITE,
+                disableDefaultUI: true,
+                zoomControl: showMapControls,
+                mapTypeControl: showMapControls,
+                scaleControl: showMapControls
+            })
             var pointArray = new google.maps.MVCArray(lstGPSPoints);
             var heatmap = new google.maps.visualization.HeatmapLayer({
                 data: pointArray

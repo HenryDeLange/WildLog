@@ -71,32 +71,19 @@ public class PointMap extends AbstractMap<Sighting> {
         // Options
         lstCustomButtons.add(new Label("Map Options:"));
         // Show/Hide map controls
-        CheckBox chkHideControls = new CheckBox("Show Map Controls");
-        chkHideControls.setSelected(showMapControls);
-        chkHideControls.setCursor(Cursor.HAND);
-        chkHideControls.setOnAction(new EventHandler() {
+        CheckBox chkShowControls = new CheckBox("Show Map Controls");
+        chkShowControls.setSelected(showMapControls);
+        chkShowControls.setCursor(Cursor.HAND);
+        chkShowControls.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                showMapControls = chkHideControls.isSelected();
+                showMapControls = chkShowControls.isSelected();
+                if (displayedMap != null && activeMapType.equals(MapType.POINT_MAP_GOOGLE)) {
+                    ((WebView) displayedMap).getEngine().executeScript("toggleMapControls(" + showMapControls + ")");
+                }
             }
         });
-        lstCustomButtons.add(chkHideControls);
-        // View in browser
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-            Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
-            btnOpenInBrowser.setCursor(Cursor.HAND);
-            btnOpenInBrowser.setOnAction(new EventHandler() {
-                @Override
-                public void handle(Event event) {
-                    if (displayedTemplate != null && !displayedTemplate.isEmpty()) {
-                        Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_TEMPORARY.getAbsoluteFullPath().resolve("TempMap_" + System.currentTimeMillis() + ".html");
-                        UtilsFileProcessing.createFileFromBytes(displayedTemplate.getBytes(), toFile);
-                        UtilsFileProcessing.openFile(toFile);
-                    }
-                }
-            });
-            lstCustomButtons.add(btnOpenInBrowser);
-        }
+        lstCustomButtons.add(chkShowControls);
         // Include sighting details (performance)
         CheckBox chkShowDetails = new CheckBox("Include Observation Details");
         chkShowDetails.setSelected(showDetails);
@@ -119,6 +106,22 @@ public class PointMap extends AbstractMap<Sighting> {
             }
         });
         lstCustomButtons.add(chkShowFileThumbnails);
+        // View in browser
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
+            btnOpenInBrowser.setCursor(Cursor.HAND);
+            btnOpenInBrowser.setOnAction(new EventHandler() {
+                @Override
+                public void handle(Event event) {
+                    if (displayedTemplate != null && !displayedTemplate.isEmpty()) {
+                        Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML_TEMPORARY.getAbsoluteFullPath().resolve("TempMap_" + System.currentTimeMillis() + ".html");
+                        UtilsFileProcessing.createFileFromBytes(displayedTemplate.getBytes(), toFile);
+                        UtilsFileProcessing.openFile(toFile);
+                    }
+                }
+            });
+            lstCustomButtons.add(btnOpenInBrowser);
+        }
     }
 
     @Override
