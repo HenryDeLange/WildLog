@@ -753,6 +753,7 @@ public class WildLogApp extends Application {
         WildLogApp.LOGGER.log(Level.INFO, "SHUTTING DOWN WildLog - {}", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         WildLogApp.LOGGER.log(Level.INFO, "");
         Platform.exit();
+        //FIXME: Soms shutdown dit nie reg nie... Java 13 upgrade issue?
     }
 
     public WildLogDBI getDBI() {

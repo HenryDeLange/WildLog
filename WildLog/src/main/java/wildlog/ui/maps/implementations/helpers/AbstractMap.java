@@ -82,12 +82,11 @@ public abstract class AbstractMap<T extends DataObjectWithGPS> {
                 mapsBaseDialog.getGlassPane().setVisible(false);
             }
         });
-        
     }
     
     protected void applyWatermark() {
         StackPane stackPane = new StackPane();
-        stackPane.setStyle("-fx-padding: 3;");
+        stackPane.setStyle("-fx-padding: 0;");
         stackPane.setBackground(Background.EMPTY);
         stackPane.getChildren().add(mapsBaseDialog.getJFXMapPanel().getScene().getRoot());
         ImageView watermark;
@@ -98,9 +97,13 @@ public abstract class AbstractMap<T extends DataObjectWithGPS> {
         else {
             watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/icons/WildLog Map Icon.gif")));
         }
-        watermark.setOpacity(0.7);
-        stackPane.getChildren().add(watermark);
-        StackPane.setAlignment(watermark, Pos.TOP_LEFT);
+        watermark.setOpacity(0.8);
+        StackPane watermarkPositionWrapper = new StackPane();
+        watermarkPositionWrapper.setStyle("-fx-padding: 10;");
+        watermarkPositionWrapper.setMaxSize(watermark.getFitWidth(), watermark.getFitHeight());
+        watermarkPositionWrapper.getChildren().add(watermark);
+        stackPane.getChildren().add(watermarkPositionWrapper);
+        StackPane.setAlignment(watermarkPositionWrapper, Pos.TOP_RIGHT);
         mapsBaseDialog.getJFXMapPanel().getScene().setRoot(stackPane);
     }
     

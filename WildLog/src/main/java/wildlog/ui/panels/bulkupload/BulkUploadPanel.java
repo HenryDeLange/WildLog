@@ -44,6 +44,7 @@ import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogDataType;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.utils.UtilsData;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.ZoomDialog;
@@ -893,7 +894,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().trim().isEmpty()) {
                     // Validate the visit is OK
                     if (UtilsData.checkCharacters(txtVisitName.getText().trim())) {
-                        WLOptionPane.showMessageDialog(this, 
+                        WLOptionPane.showMessageDialog(app.getMainFrame(),
                                 "The Period Name contains unsupported characters.", 
                                 "Can't Save", JOptionPane.ERROR_MESSAGE);
                         return null;

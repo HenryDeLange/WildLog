@@ -219,7 +219,7 @@ public class ChartsBaseDialog extends JFrame {
     
     public void applyWatermark() {
         StackPane stackPane = new StackPane();
-        stackPane.setStyle("-fx-padding: 3;");
+        stackPane.setStyle("-fx-padding: 2;");
         stackPane.setBackground(Background.EMPTY);
         stackPane.getChildren().add(jfxReportChartPanel.getScene().getRoot());
         ImageView watermark;
@@ -230,9 +230,9 @@ public class ChartsBaseDialog extends JFrame {
         else {
             watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/icons/WildLog Report Icon.gif")));
         }
-        watermark.setOpacity(0.7);
+        watermark.setOpacity(0.8);
         stackPane.getChildren().add(watermark);
-        StackPane.setAlignment(watermark, Pos.TOP_LEFT);
+        StackPane.setAlignment(watermark, Pos.TOP_RIGHT);
         jfxReportChartPanel.getScene().setRoot(stackPane);
     }
 
