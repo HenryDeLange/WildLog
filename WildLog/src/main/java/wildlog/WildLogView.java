@@ -50,8 +50,10 @@ import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -132,6 +134,7 @@ import wildlog.ui.panels.inaturalist.dialogs.INatImportDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
+import static wildlog.ui.utils.UtilsUI.doClipboardCopy;
 import wildlog.utils.UtilsCheckAndClean;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
@@ -438,6 +441,7 @@ public final class WildLogView extends JFrame {
         jSeparator5 = new javax.swing.JSeparator();
         lblMyWild = new javax.swing.JLabel();
         lblWorkspaceName = new javax.swing.JLabel();
+        lblWorkspaceID = new javax.swing.JLabel();
         lblWorkspacePath = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         lblEmail = new javax.swing.JLabel();
@@ -660,8 +664,20 @@ public final class WildLogView extends JFrame {
         lblWorkspaceName.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblWorkspaceName.setText("...workspace...");
-        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Active Workspace", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
+        lblWorkspaceName.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Workspace Name", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceName.setName("lblWorkspaceName"); // NOI18N
+
+        lblWorkspaceID.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        lblWorkspaceID.setForeground(new java.awt.Color(181, 204, 153));
+        lblWorkspaceID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblWorkspaceID.setText("...workspace id...");
+        lblWorkspaceID.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Workspace ID", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
+        lblWorkspaceID.setName("lblWorkspaceID"); // NOI18N
+        lblWorkspaceID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblWorkspaceIDMouseReleased(evt);
+            }
+        });
 
         lblWorkspacePath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         lblWorkspacePath.setForeground(new java.awt.Color(163, 179, 144));
@@ -708,7 +724,6 @@ public final class WildLogView extends JFrame {
         lblEdition.setForeground(new java.awt.Color(185, 230, 161));
         lblEdition.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblEdition.setText(WildLogApp.WILDLOG_APPLICATION_TYPE.getEdition());
-        lblEdition.setToolTipText("");
         lblEdition.setName("lblEdition"); // NOI18N
 
         lblWorkspaceUser.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -795,7 +810,8 @@ public final class WildLogView extends JFrame {
                                         .addComponent(jSeparator26, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                                         .addComponent(lblWorkspaceUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(lblWorkspaceName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
-                                        .addComponent(lblEdition, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)))
+                                        .addComponent(lblEdition, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                                        .addComponent(lblWorkspaceID, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addComponent(lblFooterLogo)))
                 .addGap(10, 10, 10))
@@ -830,20 +846,22 @@ public final class WildLogView extends JFrame {
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 164, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblFooterLogo))
                     .addGroup(tabHomeLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
-                        .addComponent(lblWorkspaceUser, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblWorkspaceUser, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addComponent(lblWorkspaceID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
                         .addComponent(jSeparator26, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(lblEdition)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGettingStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(15, 15, 15)
+                        .addComponent(btnGettingStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblWorkspacePath)
@@ -1838,6 +1856,7 @@ public final class WildLogView extends JFrame {
         lblSightings.setText("Observations: " + app.getDBI().countSightings(0, 0, 0, 0));
         lblFiles.setText("Files: " + app.getDBI().countWildLogFiles(0, -1));
         lblWorkspaceName.setText(app.getWildLogOptions().getWorkspaceName());
+        lblWorkspaceID.setText(Long.toString(app.getWildLogOptions().getWorkspaceID()));
     }//GEN-LAST:event_tabHomeComponentShown
 
     private void mnuMapStartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMapStartMenuItemActionPerformed
@@ -3942,6 +3961,25 @@ public final class WildLogView extends JFrame {
         showWelcomeDialog();
     }//GEN-LAST:event_btnGettingStartedActionPerformed
 
+    private void lblWorkspaceIDMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblWorkspaceIDMouseReleased
+        if ((evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt))) {
+            JPopupMenu clipboardPopup = new JPopupMenu();
+            // Build the copy popup
+            JMenuItem copyItem = new JMenuItem("Copy Workspace ID", new ImageIcon(WildLogApp.class.getResource("resources/icons/copy.png")));
+            copyItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    doClipboardCopy(Long.toString(app.getWildLogOptions().getWorkspaceID()));
+                }
+            });
+            clipboardPopup.add(copyItem);
+            // Wrap up and show up the popup
+            clipboardPopup.pack();
+            clipboardPopup.show(evt.getComponent(), evt.getPoint().x, evt.getPoint().y);
+            clipboardPopup.setVisible(true);
+        }
+    }//GEN-LAST:event_lblWorkspaceIDMouseReleased
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4037,6 +4075,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JLabel lblSightings;
     private javax.swing.JLabel lblVisits;
     private javax.swing.JLabel lblWildLogName;
+    private javax.swing.JLabel lblWorkspaceID;
     private javax.swing.JLabel lblWorkspaceName;
     private javax.swing.JLabel lblWorkspacePath;
     private javax.swing.JLabel lblWorkspaceUser;

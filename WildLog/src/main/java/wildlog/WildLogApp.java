@@ -62,6 +62,7 @@ import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.ui.dialogs.UserLoginDialog;
+import wildlog.ui.dialogs.WorkspacePicker;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -106,8 +107,39 @@ public class WildLogApp extends Application {
     
     @Override
     protected void initialize(String[] arg0) {
-        WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");
         super.initialize(arg0);
+        // Setup the Look and Feel
+        if (useNimbusLF) {
+            // Try to set the Nimbus look and feel
+            // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
+            // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
+            try {
+                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        // Make the global button margins smaller, because Nimbus ignores the setting on the buttons
+                        UIManager.getLookAndFeelDefaults().put("Button.contentMargins", new InsetsUIResource(2,2,2,2));
+                        UIManager.getLookAndFeelDefaults().put("ToggleButton.contentMargins", new InsetsUIResource(2,2,2,2));
+                        UIManager.getLookAndFeelDefaults().put("OptionPane.sameSizeButtons", true);
+                        break;
+                    }
+                }
+            }
+            catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                // We'll try to go ahead without the Nimbus LookAndFeel
+                WildLogApp.LOGGER.log(Level.INFO, "Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
+            }
+        }
+        else {
+            
+        }
+        // Select the workspace to use
+        WildLogApp.LOGGER.log(Level.INFO, "Choosing workspace...");
+        WorkspacePicker workspacePicker = new WorkspacePicker();
+        workspacePicker.setVisible(true);
+        
+        // Proceed to open the selected workspace
+        WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");
         // Get the threadcount
         threadCount = Runtime.getRuntime().availableProcessors();
         if (threadCount < 3) {
@@ -321,28 +353,8 @@ public class WildLogApp extends Application {
      */
     @Override
     protected void startup() {
+        // JavaFX setting to make it faster to start 
         Platform.setImplicitExit(false);
-        if (useNimbusLF) {
-            // Try to set the Nimbus look and feel
-            // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
-            // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
-            try {
-                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        UIManager.setLookAndFeel(info.getClassName());
-                        // Make the global button margins smaller, because Nimbus ignores the setting on the buttons
-                        UIManager.getLookAndFeelDefaults().put("Button.contentMargins", new InsetsUIResource(2,2,2,2));
-                        UIManager.getLookAndFeelDefaults().put("ToggleButton.contentMargins", new InsetsUIResource(2,2,2,2));
-                        UIManager.getLookAndFeelDefaults().put("OptionPane.sameSizeButtons", true);
-                        break;
-                    }
-                }
-            }
-            catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-                // We'll try to go ahead without the Nimbus LookAndFeel
-                WildLogApp.LOGGER.log(Level.INFO, "Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
-            }
-        }
         // Perform login (optional)
         if (dbi.countUsers() > 0) {
             UserLoginDialog dialog = new UserLoginDialog();
