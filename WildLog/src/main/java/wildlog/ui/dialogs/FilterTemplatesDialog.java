@@ -70,7 +70,6 @@ public class FilterTemplatesDialog extends JDialog {
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnSelect.setToolTipText("Apply the selected Filter Template.");
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelect.setFocusPainted(false);
         btnSelect.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnSelect.setName("btnSelect"); // NOI18N
         btnSelect.addActionListener(new java.awt.event.ActionListener() {
@@ -82,7 +81,6 @@ public class FilterTemplatesDialog extends JDialog {
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         btnAdd.setToolTipText("Add the applied Filter as a Template.");
         btnAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAdd.setFocusPainted(false);
         btnAdd.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAdd.setName("btnAdd"); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -94,7 +92,6 @@ public class FilterTemplatesDialog extends JDialog {
         btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnDelete.setToolTipText("Delete the selected Filter Template.");
         btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDelete.setFocusPainted(false);
         btnDelete.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnDelete.setName("btnDelete"); // NOI18N
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -107,7 +104,6 @@ public class FilterTemplatesDialog extends JDialog {
 
         lstTemplates.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lstTemplates.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstTemplates.setFocusable(false);
         lstTemplates.setName("lstTemplates"); // NOI18N
         lstTemplates.setSelectionBackground(new java.awt.Color(143, 159, 129));
         lstTemplates.addMouseListener(new java.awt.event.MouseAdapter() {

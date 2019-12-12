@@ -247,7 +247,6 @@ public class CropDialog extends JDialog {
         btnCrop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnCrop.setToolTipText("Save the cropped image as one of the linked images in the Worskspace.");
         btnCrop.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCrop.setFocusPainted(false);
         btnCrop.setMargin(new java.awt.Insets(5, 5, 5, 5));
         btnCrop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

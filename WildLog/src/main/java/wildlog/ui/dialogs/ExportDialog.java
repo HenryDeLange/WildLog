@@ -116,7 +116,6 @@ public class ExportDialog extends JDialog {
         btnExportFiles.setText("Export Files");
         btnExportFiles.setToolTipText("Save copies of all relevant files in the Export folder.");
         btnExportFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportFiles.setFocusPainted(false);
         btnExportFiles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportFiles.setIconTextGap(10);
         btnExportFiles.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -135,7 +134,6 @@ public class ExportDialog extends JDialog {
         btnExportFilesObservations.setText("Export Files - All Observations");
         btnExportFilesObservations.setToolTipText("Save copies of all relevant files in the Export folder.");
         btnExportFilesObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportFilesObservations.setFocusPainted(false);
         btnExportFilesObservations.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportFilesObservations.setIconTextGap(10);
         btnExportFilesObservations.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -154,7 +152,6 @@ public class ExportDialog extends JDialog {
         btnExportFilesSelectedObservations.setText("Export Files - Selected Observations");
         btnExportFilesSelectedObservations.setToolTipText("Save copies of the selected Observations' files in the Export folder.");
         btnExportFilesSelectedObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportFilesSelectedObservations.setFocusPainted(false);
         btnExportFilesSelectedObservations.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportFilesSelectedObservations.setIconTextGap(10);
         btnExportFilesSelectedObservations.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -173,7 +170,6 @@ public class ExportDialog extends JDialog {
         btnExportTXTList.setText("Export as Text File - Data Summary");
         btnExportTXTList.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
         btnExportTXTList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportTXTList.setFocusPainted(false);
         btnExportTXTList.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportTXTList.setIconTextGap(10);
         btnExportTXTList.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -192,7 +188,6 @@ public class ExportDialog extends JDialog {
         btnExportExcelBasic.setText("Export as Excel - Basic format");
         btnExportExcelBasic.setToolTipText("Export an Excel file for all relevant Observations.");
         btnExportExcelBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportExcelBasic.setFocusPainted(false);
         btnExportExcelBasic.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportExcelBasic.setIconTextGap(10);
         btnExportExcelBasic.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -211,7 +206,6 @@ public class ExportDialog extends JDialog {
         btnExportCSVBasic.setText("Export as CSV - Basic format");
         btnExportCSVBasic.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
         btnExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportCSVBasic.setFocusPainted(false);
         btnExportCSVBasic.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportCSVBasic.setIconTextGap(10);
         btnExportCSVBasic.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -230,7 +224,6 @@ public class ExportDialog extends JDialog {
         btnExportCSV.setText("Export as CSV - WildLog format");
         btnExportCSV.setToolTipText("Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc.");
         btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportCSV.setFocusPainted(false);
         btnExportCSV.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportCSV.setIconTextGap(10);
         btnExportCSV.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -249,7 +242,6 @@ public class ExportDialog extends JDialog {
         btnExportXML.setText("Export as XML");
         btnExportXML.setToolTipText("Export a XML file for all relevant Observations and linked records.");
         btnExportXML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportXML.setFocusPainted(false);
         btnExportXML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportXML.setIconTextGap(10);
         btnExportXML.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -268,7 +260,6 @@ public class ExportDialog extends JDialog {
         btnExportHTML.setText("Export as Web Page - Basic");
         btnExportHTML.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportHTML.setFocusPainted(false);
         btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTML.setIconTextGap(10);
         btnExportHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -287,7 +278,6 @@ public class ExportDialog extends JDialog {
         btnExportHTMLAdvanced.setText("Export as Web Page - Advanced");
         btnExportHTMLAdvanced.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportHTMLAdvanced.setFocusPainted(false);
         btnExportHTMLAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTMLAdvanced.setIconTextGap(10);
         btnExportHTMLAdvanced.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -306,7 +296,6 @@ public class ExportDialog extends JDialog {
         btnExportKML.setText("Export as KML");
         btnExportKML.setToolTipText("Export a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc.");
         btnExportKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportKML.setFocusPainted(false);
         btnExportKML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportKML.setIconTextGap(11);
         btnExportKML.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -325,7 +314,6 @@ public class ExportDialog extends JDialog {
         btnPaarlFormat.setText("Export as Paarl Reserve Format");
         btnPaarlFormat.setToolTipText("Export the data to the format specified by the Paarl Nature Reserve.");
         btnPaarlFormat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPaarlFormat.setFocusPainted(false);
         btnPaarlFormat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPaarlFormat.setIconTextGap(10);
         btnPaarlFormat.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -344,7 +332,6 @@ public class ExportDialog extends JDialog {
         btnExportWorkspace.setText("Export to New Workspace");
         btnExportWorkspace.setToolTipText("Create a new Workspace containing only relevant data and linked records.");
         btnExportWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportWorkspace.setFocusPainted(false);
         btnExportWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportWorkspace.setIconTextGap(10);
         btnExportWorkspace.setMargin(new java.awt.Insets(2, 8, 2, 8));

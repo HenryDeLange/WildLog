@@ -103,12 +103,12 @@
                                   <Component id="jLabel3" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                                   <Component id="btnUpdateEndangeredStatus" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="10" max="32767" attributes="0"/>
+                              <EmptySpace pref="9" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="lblYear" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                                   <Component id="jLabel4" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="10" max="32767" attributes="0"/>
+                              <EmptySpace pref="9" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="lblResults" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                                   <Component id="jLabel6" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
@@ -148,7 +148,6 @@
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="focusPainted" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOKActionPerformed"/>
@@ -189,7 +188,6 @@
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 4, 2, 4]"/>
         </Property>
@@ -214,7 +212,6 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
-        <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 4, 2, 4]"/>
         </Property>
@@ -239,7 +236,6 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
-        <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 4, 2, 4]"/>
         </Property>

@@ -57,7 +57,6 @@ public class GPSGridConversionDialog extends JFrame {
         btnFromGPS.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnFromGPS.setText("<html>Calculate using GPS</html>");
         btnFromGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFromGPS.setFocusPainted(false);
         btnFromGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFromGPSActionPerformed(evt);
@@ -68,7 +67,6 @@ public class GPSGridConversionDialog extends JFrame {
         btnFromPentad.setText("<html>Calculate using Pentad</html>");
         btnFromPentad.setToolTipText("A Pentad is a block of 5 minutes latitude and 5 minutes longitude.");
         btnFromPentad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFromPentad.setFocusPainted(false);
         btnFromPentad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFromPentadActionPerformed(evt);
@@ -79,7 +77,6 @@ public class GPSGridConversionDialog extends JFrame {
         btnFromQDS.setText("<html>Calculate using QDGC</html>");
         btnFromQDS.setToolTipText("A QDS splits each block of 1 degree latitude and 1 degree longitude into 4 quarters.");
         btnFromQDS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFromQDS.setFocusPainted(false);
         btnFromQDS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFromQDSActionPerformed(evt);

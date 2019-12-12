@@ -96,7 +96,6 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportImage.setText("Export as an Image (Recommended)");
         btnExportImage.setToolTipText("Create a PNG image file of the active report or map. This is the recommened way to export a chart or map.");
         btnExportImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportImage.setFocusPainted(false);
         btnExportImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportImage.setIconTextGap(10);
         btnExportImage.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -115,7 +114,6 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportCSVInputData.setText("Export Input Data as a Spreadsheet");
         btnExportCSVInputData.setToolTipText("Create a CSV file of all relevant Observations used by this chart or map. Can be opened in Excel, etc.");
         btnExportCSVInputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportCSVInputData.setFocusPainted(false);
         btnExportCSVInputData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportCSVInputData.setIconTextGap(10);
         btnExportCSVInputData.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -134,7 +132,6 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportCSVOutputData.setText("Export Output Data as a Spreadsheet");
         btnExportCSVOutputData.setToolTipText("Create a CSV file of the final processed data used by this chart or map. Can be opened in Excel, etc.");
         btnExportCSVOutputData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportCSVOutputData.setFocusPainted(false);
         btnExportCSVOutputData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportCSVOutputData.setIconTextGap(10);
         btnExportCSVOutputData.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -153,7 +150,6 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportPDF.setText("Export as a PDF");
         btnExportPDF.setToolTipText("Create a PDF file of the active chart or map.");
         btnExportPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportPDF.setFocusPainted(false);
         btnExportPDF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportPDF.setIconTextGap(10);
         btnExportPDF.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -172,7 +168,6 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportHTML.setText("Export as an Offline Webpage");
         btnExportHTML.setToolTipText("Create a basic HTML web page that can be viewed offline to show theObservations used by the active chart or map.");
         btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportHTML.setFocusPainted(false);
         btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTML.setIconTextGap(10);
         btnExportHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -191,7 +186,6 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnExportKML.setText("Export as a KML");
         btnExportKML.setToolTipText("Export a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc.");
         btnExportKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportKML.setFocusPainted(false);
         btnExportKML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportKML.setIconTextGap(11);
         btnExportKML.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -210,7 +204,6 @@ public class ExportDialogForReportsAndMaps extends JDialog {
         btnPrint.setText("Print the Chart");
         btnPrint.setToolTipText("Try to print the chart or map using your default installed printer.");
         btnPrint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPrint.setFocusPainted(false);
         btnPrint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPrint.setIconTextGap(10);
         btnPrint.setMargin(new java.awt.Insets(2, 8, 2, 8));

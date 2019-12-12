@@ -1,5 +1,6 @@
 package wildlog;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
@@ -40,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javafx.application.Platform;
+import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -49,6 +51,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.InsetsUIResource;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -62,7 +65,6 @@ import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.ui.dialogs.UserLoginDialog;
-import wildlog.ui.dialogs.WorkspacePicker;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -130,13 +132,25 @@ public class WildLogApp extends Application {
                 WildLogApp.LOGGER.log(Level.INFO, "Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
             }
         }
-        else {
-            
+        try {
+            // Remove the dotted border around controls which is not consistent with Windows
+            UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+            UIManager.put("ToggleButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+            UIManager.put("CheckBox.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+            UIManager.put("TabbedPane.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+            UIManager.put("RadioButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+            UIManager.put("Slider.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+            UIManager.put("List.focusCellHighlightBorder", BorderFactory.createEmptyBorder());
+            // NOTE: JComboBox kan nie so werk nie, vir dit moet ek 'n nuwe Renderer gebruik. (Sien ComboBoxFixer.java)
         }
-        // Select the workspace to use
-        WildLogApp.LOGGER.log(Level.INFO, "Choosing workspace...");
-        WorkspacePicker workspacePicker = new WorkspacePicker();
-        workspacePicker.setVisible(true);
+        catch (Exception e) {
+            WildLogApp.LOGGER.log(Level.INFO, "Could not remove dotted border from focus controls. The application will continue to launch, but there may be some display problems...");
+        }
+//        // Select the workspace to use
+//        WildLogApp.LOGGER.log(Level.INFO, "Choosing workspace...");
+//        WorkspacePicker workspacePicker = new WorkspacePicker();
+//        workspacePicker.setVisible(true);
+//// TODO: Implement this...
         
         // Proceed to open the selected workspace
         WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");

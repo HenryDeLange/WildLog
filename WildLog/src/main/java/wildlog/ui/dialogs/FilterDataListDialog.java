@@ -255,7 +255,6 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSelect.setToolTipText("Confirm the selection.");
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelect.setFocusPainted(false);
         btnSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSelectActionPerformed(evt);
@@ -291,7 +290,6 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         btnSelectAll.setText("Select All");
         btnSelectAll.setToolTipText("Select all the entries in the table.");
         btnSelectAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelectAll.setFocusPainted(false);
         btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSelectAllActionPerformed(evt);
@@ -302,7 +300,6 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         btnClearAll.setText("Clear All");
         btnClearAll.setToolTipText("Unselect all the entries in the table.");
         btnClearAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnClearAll.setFocusPainted(false);
         btnClearAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearAllActionPerformed(evt);

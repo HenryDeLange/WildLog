@@ -89,7 +89,6 @@ public class IUCNInformationDialog extends JDialog {
         btnOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnOK.setToolTipText("Close the dialog.");
         btnOK.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnOK.setFocusPainted(false);
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
@@ -110,7 +109,6 @@ public class IUCNInformationDialog extends JDialog {
         btnViewWebpage.setText("View Website");
         btnViewWebpage.setToolTipText("Open the IUCN website for this species.");
         btnViewWebpage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewWebpage.setFocusPainted(false);
         btnViewWebpage.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnViewWebpage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,7 +123,6 @@ public class IUCNInformationDialog extends JDialog {
         btnUpdateName.setToolTipText("Use the Common Name as the Creature's Other Name.");
         btnUpdateName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateName.setEnabled(false);
-        btnUpdateName.setFocusPainted(false);
         btnUpdateName.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnUpdateName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,7 +137,6 @@ public class IUCNInformationDialog extends JDialog {
         btnUpdateEndangeredStatus.setToolTipText("Use the Threat Category as the Creature's Endangered Status.");
         btnUpdateEndangeredStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateEndangeredStatus.setEnabled(false);
-        btnUpdateEndangeredStatus.setFocusPainted(false);
         btnUpdateEndangeredStatus.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnUpdateEndangeredStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -219,11 +215,11 @@ public class IUCNInformationDialog extends JDialog {
                                     .addComponent(lblEndangeredStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(btnUpdateEndangeredStatus))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(lblYear, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(lblResults, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))))

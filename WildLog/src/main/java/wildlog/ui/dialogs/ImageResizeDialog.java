@@ -20,6 +20,7 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.utils.UtilsConcurency;
@@ -33,6 +34,7 @@ public class ImageResizeDialog extends JDialog {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[ImageResizeDialog]");
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbRating);
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
@@ -87,7 +89,6 @@ public class ImageResizeDialog extends JDialog {
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnConfirm.setToolTipText("Move the Observations from the selected Period to the new Period and then delete the initial Period.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
@@ -102,7 +103,6 @@ public class ImageResizeDialog extends JDialog {
         cmbRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbRating.setSelectedItem(ViewRating.VERY_GOOD);
         cmbRating.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbRating.setFocusable(false);
 
         lstSecondary.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lstSecondary.setFocusable(false);
@@ -111,7 +111,6 @@ public class ImageResizeDialog extends JDialog {
         buttonGroup1.add(rdbElements);
         rdbElements.setText("Creatures");
         rdbElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbElements.setFocusPainted(false);
         rdbElements.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbElementsItemStateChanged(evt);
@@ -121,7 +120,6 @@ public class ImageResizeDialog extends JDialog {
         buttonGroup1.add(rdbLocations);
         rdbLocations.setText("Places");
         rdbLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLocations.setFocusPainted(false);
         rdbLocations.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbLocationsItemStateChanged(evt);
@@ -131,7 +129,6 @@ public class ImageResizeDialog extends JDialog {
         buttonGroup1.add(rdbVisits);
         rdbVisits.setText("Periods");
         rdbVisits.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbVisits.setFocusPainted(false);
         rdbVisits.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbVisitsItemStateChanged(evt);
@@ -258,12 +255,12 @@ public class ImageResizeDialog extends JDialog {
                         .addGap(31, 31, 31)
                         .addComponent(lblSecondary)
                         .addGap(3, 3, 3)
-                        .addComponent(scrSecondary, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE))
+                        .addComponent(scrSecondary, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblPrimary)
                         .addGap(3, 3, 3)
-                        .addComponent(scrPrimary, javax.swing.GroupLayout.DEFAULT_SIZE, 357, Short.MAX_VALUE)))
+                        .addComponent(scrPrimary, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
 

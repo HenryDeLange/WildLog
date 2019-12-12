@@ -25,6 +25,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -42,17 +43,15 @@ public class ChecklistDialog extends JDialog {
         WildLogApp.LOGGER.log(Level.INFO, "[ChecklistDialog]");
         app = inApp;
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbElementType);
         loadElementList();
         location = inLocation;
         visit = inVisit;
         panelToRefresh = inPanelToRefresh;
-
         DefaultListModel sightedModel = new DefaultListModel();
         lstSightedCreatures.setModel(sightedModel);
-
         // Setup search button
         UtilsUI.attachClipboardPopup(txtSearch);
-
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(inParent, this);
         ActionListener escListiner = UtilsDialog.addEscapeKeyListener(this);
@@ -94,13 +93,10 @@ public class ChecklistDialog extends JDialog {
         setMinimumSize(new java.awt.Dimension(760, 550));
         setModal(true);
         setName("Form"); // NOI18N
-        setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Dubble click the Creature to be added as an Observation:");
         jLabel1.setName("jLabel1"); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -122,8 +118,6 @@ public class ChecklistDialog extends JDialog {
         });
         jScrollPane1.setViewportView(lstFromCreatures);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 340, 450));
-
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         lstSightedCreatures.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
@@ -143,37 +137,30 @@ public class ChecklistDialog extends JDialog {
         });
         jScrollPane2.setViewportView(lstSightedCreatures);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, 350, 370));
-
         btnConfirm.setBackground(new java.awt.Color(0, 204, 51));
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnConfirm.setToolTipText("Save the Observations of the selected Creatures for this date.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
             }
         });
-        getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, 110, 60));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Dubble click to remove the Creature from the Observations.");
         jLabel3.setName("jLabel3"); // NOI18N
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, -1, -1));
 
         cmbElementType.setMaximumRowCount(10);
         cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
         cmbElementType.setSelectedItem(ElementType.NONE);
-        cmbElementType.setFocusable(false);
         cmbElementType.setName("cmbElementType"); // NOI18N
         cmbElementType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbElementTypeActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 120, -1));
 
         txtSearch.setName("txtSearch"); // NOI18N
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -181,17 +168,66 @@ public class ChecklistDialog extends JDialog {
                 txtSearchKeyReleased(evt);
             }
         });
-        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 210, -1));
 
         dtpDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
         dtpDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpDate.setName("dtpDate"); // NOI18N
-        getContentPane().add(dtpDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, 140, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("The date to use for all Observations:");
         jLabel2.setName("jLabel2"); // NOI18N
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, -1, 20));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtSearch)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(40, 40, 40)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(240, 240, 240)
+                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(6, 6, 6)
+                        .addComponent(dtpDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
+                .addGap(10, 10, 10))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addComponent(jScrollPane1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel3)
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dtpDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)))
+                .addGap(10, 10, 10))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed

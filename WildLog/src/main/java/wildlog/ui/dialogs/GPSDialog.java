@@ -67,6 +67,7 @@ import wildlog.maps.geotools.GeoToolsMapJavaFX;
 import wildlog.maps.gpx.UtilsGPX;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.WLFileChooser;
@@ -145,6 +146,7 @@ public class GPSDialog extends JDialog {
         }
         // Initialize the auto generated code
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbAccuracy);
         // Hide stuff
         spnLatDecimal.setVisible(false);
         spnLonDecimal.setVisible(false);
@@ -455,8 +457,6 @@ public class GPSDialog extends JDialog {
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSave.setToolTipText("Confirm the GPS value.");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSave.setFocusPainted(false);
-        btnSave.setFocusable(false);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -468,8 +468,6 @@ public class GPSDialog extends JDialog {
         btnUsePrevious.setText("Use Previous");
         btnUsePrevious.setToolTipText("Use the previously saved GPS point.");
         btnUsePrevious.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUsePrevious.setFocusPainted(false);
-        btnUsePrevious.setFocusable(false);
         btnUsePrevious.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUsePrevious.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUsePrevious.setName("btnUsePrevious"); // NOI18N
@@ -483,8 +481,6 @@ public class GPSDialog extends JDialog {
         btnUseRelated.setText("Find Related");
         btnUseRelated.setToolTipText("Try to find a GPS point using the related Images or linked Place.");
         btnUseRelated.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUseRelated.setFocusPainted(false);
-        btnUseRelated.setFocusable(false);
         btnUseRelated.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseRelated.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUseRelated.setName("btnUseRelated"); // NOI18N
@@ -498,8 +494,6 @@ public class GPSDialog extends JDialog {
         btnUseImage.setText("<html><u>From Image</u></html>");
         btnUseImage.setToolTipText("Browse to an image with GPS data, or drag-and-drop the image onto this button.");
         btnUseImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUseImage.setFocusPainted(false);
-        btnUseImage.setFocusable(false);
         btnUseImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseImage.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUseImage.setName("btnUseImage"); // NOI18N
@@ -513,8 +507,6 @@ public class GPSDialog extends JDialog {
         btnUseGPX.setText("<html><u>From GPX</u></html>");
         btnUseGPX.setToolTipText("Browse to a GPX file, or drag-and-drop the file onto the button.");
         btnUseGPX.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUseGPX.setFocusPainted(false);
-        btnUseGPX.setFocusable(false);
         btnUseGPX.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseGPX.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUseGPX.setName("btnUseGPX"); // NOI18N
@@ -528,8 +520,6 @@ public class GPSDialog extends JDialog {
         tglDecimalDegrees.setText("Decimal-Degrees");
         tglDecimalDegrees.setToolTipText("Use the Decimal-Degrees format.");
         tglDecimalDegrees.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tglDecimalDegrees.setFocusPainted(false);
-        tglDecimalDegrees.setFocusable(false);
         tglDecimalDegrees.setMinimumSize(new java.awt.Dimension(160, 30));
         tglDecimalDegrees.setName("tglDecimalDegrees"); // NOI18N
         tglDecimalDegrees.setPreferredSize(new java.awt.Dimension(160, 30));
@@ -543,8 +533,6 @@ public class GPSDialog extends JDialog {
         tglDegMinSec.setText("Degrees-Minutes-Seconds");
         tglDegMinSec.setToolTipText("Use the Degrees, Minutes and Decimal-Seconds format.");
         tglDegMinSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tglDegMinSec.setFocusPainted(false);
-        tglDegMinSec.setFocusable(false);
         tglDegMinSec.setMinimumSize(new java.awt.Dimension(160, 30));
         tglDegMinSec.setName("tglDegMinSec"); // NOI18N
         tglDegMinSec.setPreferredSize(new java.awt.Dimension(160, 30));
@@ -558,7 +546,6 @@ public class GPSDialog extends JDialog {
         btnRemoveGPS.setText("Remove GPS");
         btnRemoveGPS.setToolTipText("Remove the GPS value.");
         btnRemoveGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRemoveGPS.setFocusable(false);
         btnRemoveGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveGPS.setIconTextGap(6);
         btnRemoveGPS.setMargin(new java.awt.Insets(2, 8, 2, 4));
@@ -573,8 +560,6 @@ public class GPSDialog extends JDialog {
         btnUseOnlineMap.setText("Show on Map (Online)");
         btnUseOnlineMap.setToolTipText("Show the GPS point on an online map. Dragging the marker on the map will update the GPS value.");
         btnUseOnlineMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUseOnlineMap.setFocusPainted(false);
-        btnUseOnlineMap.setFocusable(false);
         btnUseOnlineMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUseOnlineMap.setName("btnUseOnlineMap"); // NOI18N
         btnUseOnlineMap.addActionListener(new java.awt.event.ActionListener() {
@@ -587,8 +572,6 @@ public class GPSDialog extends JDialog {
         btnUseOfflineMap.setText("Show on Map (Offline)");
         btnUseOfflineMap.setToolTipText("Show the GPS point on an offline map.");
         btnUseOfflineMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUseOfflineMap.setFocusPainted(false);
-        btnUseOfflineMap.setFocusable(false);
         btnUseOfflineMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUseOfflineMap.setName("btnUseOfflineMap"); // NOI18N
         btnUseOfflineMap.addActionListener(new java.awt.event.ActionListener() {
@@ -607,8 +590,6 @@ public class GPSDialog extends JDialog {
         btnUpdateGPSOnMap.setText("Show GPS coordinates on map");
         btnUpdateGPSOnMap.setToolTipText("Show the current GPS point as a marker on the map.");
         btnUpdateGPSOnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdateGPSOnMap.setFocusPainted(false);
-        btnUpdateGPSOnMap.setFocusable(false);
         btnUpdateGPSOnMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUpdateGPSOnMap.setName("btnUpdateGPSOnMap"); // NOI18N
         btnUpdateGPSOnMap.addActionListener(new java.awt.event.ActionListener() {
@@ -621,8 +602,6 @@ public class GPSDialog extends JDialog {
         btnUpdateGPSFromMap.setText("Use GPS coordinates from map");
         btnUpdateGPSFromMap.setToolTipText("Set the current GPS point to the same coordinates as the marker on the map.");
         btnUpdateGPSFromMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdateGPSFromMap.setFocusPainted(false);
-        btnUpdateGPSFromMap.setFocusable(false);
         btnUpdateGPSFromMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUpdateGPSFromMap.setName("btnUpdateGPSFromMap"); // NOI18N
         btnUpdateGPSFromMap.addActionListener(new java.awt.event.ActionListener() {
@@ -665,7 +644,6 @@ public class GPSDialog extends JDialog {
 
         cmbAccuracy.setModel(new DefaultComboBoxModel(GPSAccuracy.values()));
         cmbAccuracy.setSelectedItem(GPSAccuracy.AVERAGE);
-        cmbAccuracy.setFocusable(false);
         cmbAccuracy.setName("cmbAccuracy"); // NOI18N
         cmbAccuracy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -704,8 +682,6 @@ public class GPSDialog extends JDialog {
         buttonGroupLongitude.add(tglWest);
         tglWest.setText(Longitudes.WEST.getText());
         tglWest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tglWest.setFocusPainted(false);
-        tglWest.setFocusable(false);
         tglWest.setMargin(new java.awt.Insets(2, 2, 2, 2));
         tglWest.setName("tglWest"); // NOI18N
         tglWest.addActionListener(new java.awt.event.ActionListener() {
@@ -717,8 +693,6 @@ public class GPSDialog extends JDialog {
         buttonGroupLatitude.add(tglSouth);
         tglSouth.setText(Latitudes.SOUTH.getText());
         tglSouth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tglSouth.setFocusPainted(false);
-        tglSouth.setFocusable(false);
         tglSouth.setMargin(new java.awt.Insets(2, 2, 2, 2));
         tglSouth.setName("tglSouth"); // NOI18N
         tglSouth.addActionListener(new java.awt.event.ActionListener() {
@@ -746,8 +720,6 @@ public class GPSDialog extends JDialog {
         buttonGroupLongitude.add(tglEast);
         tglEast.setText(Longitudes.EAST.getText());
         tglEast.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tglEast.setFocusPainted(false);
-        tglEast.setFocusable(false);
         tglEast.setMargin(new java.awt.Insets(2, 2, 2, 2));
         tglEast.setName("tglEast"); // NOI18N
         tglEast.addActionListener(new java.awt.event.ActionListener() {
@@ -767,8 +739,6 @@ public class GPSDialog extends JDialog {
         buttonGroupLatitude.add(tglNorth);
         tglNorth.setText(Latitudes.NORTH.getText());
         tglNorth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tglNorth.setFocusPainted(false);
-        tglNorth.setFocusable(false);
         tglNorth.setMargin(new java.awt.Insets(2, 2, 2, 2));
         tglNorth.setName("tglNorth"); // NOI18N
         tglNorth.addActionListener(new java.awt.event.ActionListener() {

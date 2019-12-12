@@ -90,7 +90,6 @@ public class AdvancedDialog extends JDialog {
         btnCorrectTime.setText("Adjust the Date and Time for all Observations");
         btnCorrectTime.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
         btnCorrectTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCorrectTime.setFocusPainted(false);
         btnCorrectTime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCorrectTime.setIconTextGap(8);
         btnCorrectTime.setMargin(new java.awt.Insets(2, 10, 2, 8));
@@ -109,7 +108,6 @@ public class AdvancedDialog extends JDialog {
         btnSetAllGPS.setText("Set one GPS Point for all Observations (also recalculates Sun and Moon)");
         btnSetAllGPS.setToolTipText("All Observations for this Period will be assigned the specified GPS value. This will also update the Sun and Moon Phase.");
         btnSetAllGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetAllGPS.setFocusPainted(false);
         btnSetAllGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetAllGPS.setIconTextGap(6);
         btnSetAllGPS.setMargin(new java.awt.Insets(2, 10, 2, 8));
@@ -128,7 +126,6 @@ public class AdvancedDialog extends JDialog {
         btnSetSunAndMoon.setText("Recalculate the Sun (Time of Day) and Moon Phase");
         btnSetSunAndMoon.setToolTipText("Automatically calculate the Sun and Moon Phase for all Observations based on the date and GPS position.");
         btnSetSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetSunAndMoon.setFocusPainted(false);
         btnSetSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetSunAndMoon.setIconTextGap(6);
         btnSetSunAndMoon.setMargin(new java.awt.Insets(2, 10, 2, 8));
@@ -147,7 +144,6 @@ public class AdvancedDialog extends JDialog {
         btnSetDuration.setText("Recalculate the Duration");
         btnSetDuration.setToolTipText("Automatically calculate the duration for all Observations based on the dates of the uploaded files.");
         btnSetDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetDuration.setFocusPainted(false);
         btnSetDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetDuration.setIconTextGap(8);
         btnSetDuration.setMargin(new java.awt.Insets(2, 10, 2, 8));
@@ -166,7 +162,6 @@ public class AdvancedDialog extends JDialog {
         btnMergeSightings.setText("Move Files from one Observation to another Observation");
         btnMergeSightings.setToolTipText("Move the Files from one Observation to another Observation. Optionally deleting the original Observation in the process.");
         btnMergeSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMergeSightings.setFocusPainted(false);
         btnMergeSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMergeSightings.setIconTextGap(8);
         btnMergeSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
@@ -185,7 +180,6 @@ public class AdvancedDialog extends JDialog {
         btnMoveVisit.setText("Move this Period to a different Place");
         btnMoveVisit.setToolTipText("Move this Period to a different Place.");
         btnMoveVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMoveVisit.setFocusPainted(false);
         btnMoveVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMoveVisit.setIconTextGap(6);
         btnMoveVisit.setMargin(new java.awt.Insets(2, 10, 2, 8));
@@ -204,7 +198,6 @@ public class AdvancedDialog extends JDialog {
         btnDuplicateSightings.setText("Find possible duplicate Observations");
         btnDuplicateSightings.setToolTipText("Indentify possible duplicate Observations for for this Period.");
         btnDuplicateSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDuplicateSightings.setFocusPainted(false);
         btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDuplicateSightings.setIconTextGap(8);
         btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
@@ -223,7 +216,6 @@ public class AdvancedDialog extends JDialog {
         btnChecklist.setText("Add Observations using a Checklist");
         btnChecklist.setToolTipText("Open a popup box to add Observations in a checklist format.");
         btnChecklist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnChecklist.setFocusPainted(false);
         btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnChecklist.setIconTextGap(8);
         btnChecklist.setMargin(new java.awt.Insets(2, 10, 2, 8));

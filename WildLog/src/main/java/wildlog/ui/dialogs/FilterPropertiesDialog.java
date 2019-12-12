@@ -40,7 +40,6 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.CtrlClickSelectionModel;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.WLOptionPane;
-import wildlog.ui.charts.utils.UtilsCharts;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 
@@ -200,7 +199,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSelect.setToolTipText("Confirm the selection.");
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelect.setFocusPainted(false);
         btnSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSelectActionPerformed(evt);
@@ -343,7 +341,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         lsbMonths.setBackground(new java.awt.Color(230, 226, 224));
         lsbMonths.setForeground(new java.awt.Color(176, 153, 145));
         lsbMonths.setModel(new DefaultComboBoxModel(FilterProperties.MONTHS));
-        lsbMonths.setFocusable(false);
         lsbMonths.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbMonths.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbMonths.setSelectionModel(new CtrlClickSelectionModel());
@@ -379,8 +376,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbCertainty.setBackground(new java.awt.Color(230, 226, 224));
         lsbCertainty.setForeground(new java.awt.Color(176, 153, 145));
-        lsbCertainty.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(Certainty.values())));
-        lsbCertainty.setFocusable(false);
+        lsbCertainty.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(Certainty.values())));
         lsbCertainty.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbCertainty.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbCertainty.setSelectionModel(new CtrlClickSelectionModel());
@@ -392,8 +388,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbGPSAccuracy.setBackground(new java.awt.Color(230, 226, 224));
         lsbGPSAccuracy.setForeground(new java.awt.Color(176, 153, 145));
-        lsbGPSAccuracy.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(GPSAccuracy.values())));
-        lsbGPSAccuracy.setFocusable(false);
+        lsbGPSAccuracy.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(GPSAccuracy.values())));
         lsbGPSAccuracy.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbGPSAccuracy.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbGPSAccuracy.setSelectionModel(new CtrlClickSelectionModel());
@@ -403,8 +398,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbTimeAccuracy.setBackground(new java.awt.Color(230, 226, 224));
         lsbTimeAccuracy.setForeground(new java.awt.Color(176, 153, 145));
-        lsbTimeAccuracy.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(TimeAccuracy.values())));
-        lsbTimeAccuracy.setFocusable(false);
+        lsbTimeAccuracy.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(TimeAccuracy.values())));
         lsbTimeAccuracy.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbTimeAccuracy.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbTimeAccuracy.setSelectionModel(new CtrlClickSelectionModel());
@@ -460,8 +454,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbEvidence.setBackground(new java.awt.Color(230, 226, 224));
         lsbEvidence.setForeground(new java.awt.Color(176, 153, 145));
-        lsbEvidence.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(SightingEvidence.values())));
-        lsbEvidence.setFocusable(false);
+        lsbEvidence.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(SightingEvidence.values())));
         lsbEvidence.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbEvidence.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbEvidence.setSelectionModel(new CtrlClickSelectionModel());
@@ -469,8 +462,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbLifeStatus.setBackground(new java.awt.Color(230, 226, 224));
         lsbLifeStatus.setForeground(new java.awt.Color(176, 153, 145));
-        lsbLifeStatus.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(LifeStatus.values())));
-        lsbLifeStatus.setFocusable(false);
+        lsbLifeStatus.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(LifeStatus.values())));
         lsbLifeStatus.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbLifeStatus.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbLifeStatus.setSelectionModel(new CtrlClickSelectionModel());
@@ -480,8 +472,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbVisitType.setBackground(new java.awt.Color(230, 226, 224));
         lsbVisitType.setForeground(new java.awt.Color(176, 153, 145));
-        lsbVisitType.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(VisitType.valuesForDroplist())));
-        lsbVisitType.setFocusable(false);
+        lsbVisitType.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(VisitType.valuesForDroplist())));
         lsbVisitType.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbVisitType.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbVisitType.setSelectionModel(new CtrlClickSelectionModel());
@@ -493,8 +484,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbElementType.setBackground(new java.awt.Color(230, 226, 224));
         lsbElementType.setForeground(new java.awt.Color(176, 153, 145));
-        lsbElementType.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(ElementType.values())));
-        lsbElementType.setFocusable(false);
+        lsbElementType.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(ElementType.values())));
         lsbElementType.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbElementType.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbElementType.setSelectionModel(new CtrlClickSelectionModel());
@@ -553,8 +543,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbTimeOfDay.setBackground(new java.awt.Color(230, 226, 224));
         lsbTimeOfDay.setForeground(new java.awt.Color(176, 153, 145));
-        lsbTimeOfDay.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(ActiveTimeSpesific.values())));
-        lsbTimeOfDay.setFocusable(false);
+        lsbTimeOfDay.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(ActiveTimeSpesific.values())));
         lsbTimeOfDay.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbTimeOfDay.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbTimeOfDay.setSelectionModel(new CtrlClickSelectionModel());
@@ -565,8 +554,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbMoonlight.setBackground(new java.awt.Color(230, 226, 224));
         lsbMoonlight.setForeground(new java.awt.Color(176, 153, 145));
-        lsbMoonlight.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(Moonlight.values())));
-        lsbMoonlight.setFocusable(false);
+        lsbMoonlight.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(Moonlight.values())));
         lsbMoonlight.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbMoonlight.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbMoonlight.setSelectionModel(new CtrlClickSelectionModel());
@@ -592,11 +580,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         chkMoonlightMore.setText("and more");
         chkMoonlightMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkMoonlightMore.setFocusPainted(false);
 
         chkMoonlightLess.setText("and less");
         chkMoonlightLess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkMoonlightLess.setFocusPainted(false);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -678,8 +664,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbSex.setBackground(new java.awt.Color(230, 226, 224));
         lsbSex.setForeground(new java.awt.Color(176, 153, 145));
-        lsbSex.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(Sex.values())));
-        lsbSex.setFocusable(false);
+        lsbSex.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(Sex.values())));
         lsbSex.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbSex.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbSex.setSelectionModel(new CtrlClickSelectionModel());
@@ -687,8 +672,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         lsbAge.setBackground(new java.awt.Color(230, 226, 224));
         lsbAge.setForeground(new java.awt.Color(176, 153, 145));
-        lsbAge.setModel(new DefaultComboBoxModel(UtilsCharts.removeEmptyEntries(Age.values())));
-        lsbAge.setFocusable(false);
+        lsbAge.setModel(new DefaultComboBoxModel(wildlog.ui.charts.utils.UtilsCharts.removeEmptyEntries(Age.values())));
         lsbAge.setSelectionBackground(new java.awt.Color(193, 209, 179));
         lsbAge.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbAge.setSelectionModel(new CtrlClickSelectionModel());
@@ -698,15 +682,12 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         chkIndividualsLess.setText("and less");
         chkIndividualsLess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkIndividualsLess.setFocusPainted(false);
 
         chkIndividualsMore.setText("and more");
         chkIndividualsMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkIndividualsMore.setFocusPainted(false);
 
         chkIncludeEmptyTags.setText("Include empty tags");
         chkIncludeEmptyTags.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkIncludeEmptyTags.setFocusPainted(false);
 
         jLabel24.setText("Duration:");
 
@@ -715,11 +696,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         chkDurationLess.setText("and less");
         chkDurationLess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkDurationLess.setFocusPainted(false);
 
         chkDurationMore.setText("and more");
         chkDurationMore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkDurationMore.setFocusPainted(false);
 
         spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnDurationSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -736,11 +715,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         chkINaturalistUploaded.setText("Uploaded");
         chkINaturalistUploaded.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkINaturalistUploaded.setFocusPainted(false);
 
         chkINaturalistNotUploaded.setText("Not uploaded");
         chkINaturalistNotUploaded.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkINaturalistNotUploaded.setFocusPainted(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -858,8 +835,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         btnTemplates.setText("Templates");
         btnTemplates.setToolTipText("Select or manage saved templates.");
         btnTemplates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnTemplates.setFocusPainted(false);
-        btnTemplates.setFocusable(false);
         btnTemplates.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnTemplates.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -871,8 +846,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         btnSelectAll.setText("Select All");
         btnSelectAll.setToolTipText("Select all of the filters.");
         btnSelectAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelectAll.setFocusPainted(false);
-        btnSelectAll.setFocusable(false);
         btnSelectAll.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -884,8 +857,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         btnClearAll.setText("Clear All");
         btnClearAll.setToolTipText("Clear all of the filters.");
         btnClearAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnClearAll.setFocusPainted(false);
-        btnClearAll.setFocusable(false);
         btnClearAll.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnClearAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

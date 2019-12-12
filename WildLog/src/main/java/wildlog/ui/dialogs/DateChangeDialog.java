@@ -50,8 +50,6 @@ public class DateChangeDialog extends JDialog {
 
     private void doSetup(WildLogApp inApp) {
         app = inApp;
-        // Need to set a few settings on the content pane before continuing (for example size, background color, etc.)
-        getContentPane().setPreferredSize(getPreferredSize());
         // Initialize the auto generated code
         initComponents();
         // Setup the defualt start dates
@@ -115,13 +113,9 @@ public class DateChangeDialog extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Adjust Date and Time");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
-        setMaximumSize(new java.awt.Dimension(410, 200));
-        setMinimumSize(new java.awt.Dimension(410, 200));
+        setMinimumSize(new java.awt.Dimension(420, 200));
         setModal(true);
         setName("Form"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(410, 200));
-        setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnSave.setToolTipText("Perform the date and time change on the Observations.");
@@ -133,111 +127,167 @@ public class DateChangeDialog extends JDialog {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 110, 60));
 
         jLabel1.setText("<html><b>Specify an Incorrect Date and Correct Date.</b><br />The time difference between the Incorrect and Correct dates will be applied to Observations linked to the currently active Period.</html>");
         jLabel1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel1.setName("jLabel1"); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 270, 60));
 
         jSeparator2.setName("jSeparator2"); // NOI18N
-        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 78, 390, 10));
 
         jLabel6.setText("Incorrect Date:");
         jLabel6.setName("jLabel6"); // NOI18N
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, 20));
 
         jLabel7.setText("Correct Date:");
         jLabel7.setName("jLabel7"); // NOI18N
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 20));
 
         dtpBadDate.setToolTipText("Date");
-        dtpBadDate.setFocusable(false);
         dtpBadDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpBadDate.setName("dtpBadDate"); // NOI18N
-        getContentPane().add(dtpBadDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, 130, -1));
 
         dtpGoodDate.setToolTipText("Date");
-        dtpGoodDate.setFocusable(false);
         dtpGoodDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpGoodDate.setName("dtpGoodDate"); // NOI18N
-        getContentPane().add(dtpGoodDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, 130, -1));
 
         spnBadHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
         spnBadHours.setToolTipText("Hours");
         spnBadHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnBadHours.setFocusable(false);
         spnBadHours.setName("spnBadHours"); // NOI18N
         spnBadHours.setPreferredSize(new java.awt.Dimension(35, 20));
-        getContentPane().add(spnBadHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText(":");
         jLabel8.setFocusable(false);
         jLabel8.setName("jLabel8"); // NOI18N
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 90, -1, -1));
 
         spnBadMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnBadMinutes.setToolTipText("Minutes");
         spnBadMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnBadMinutes.setFocusable(false);
         spnBadMinutes.setName("spnBadMinutes"); // NOI18N
         spnBadMinutes.setPreferredSize(new java.awt.Dimension(35, 20));
-        getContentPane().add(spnBadMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, -1, -1));
 
         spnBadSeconds.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnBadSeconds.setToolTipText("Seconds");
         spnBadSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnBadSeconds.setFocusable(false);
         spnBadSeconds.setName("spnBadSeconds"); // NOI18N
         spnBadSeconds.setPreferredSize(new java.awt.Dimension(35, 20));
-        getContentPane().add(spnBadSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 90, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText(":");
         jLabel9.setFocusable(false);
         jLabel9.setName("jLabel9"); // NOI18N
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, -1, -1));
 
         spnGoodHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
         spnGoodHours.setToolTipText("Hours");
         spnGoodHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnGoodHours.setFocusable(false);
         spnGoodHours.setName("spnGoodHours"); // NOI18N
         spnGoodHours.setPreferredSize(new java.awt.Dimension(35, 20));
-        getContentPane().add(spnGoodHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 130, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText(":");
         jLabel10.setFocusable(false);
         jLabel10.setName("jLabel10"); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 130, -1, -1));
 
         spnGoodMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnGoodMinutes.setToolTipText("Minutes");
         spnGoodMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnGoodMinutes.setFocusable(false);
         spnGoodMinutes.setName("spnGoodMinutes"); // NOI18N
         spnGoodMinutes.setPreferredSize(new java.awt.Dimension(35, 20));
-        getContentPane().add(spnGoodMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 130, -1, -1));
 
         spnGoodSeconds.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnGoodSeconds.setToolTipText("Seconds");
         spnGoodSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnGoodSeconds.setFocusable(false);
         spnGoodSeconds.setName("spnGoodSeconds"); // NOI18N
         spnGoodSeconds.setPreferredSize(new java.awt.Dimension(35, 20));
-        getContentPane().add(spnGoodSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText(":");
         jLabel11.setFocusable(false);
         jLabel11.setName("jLabel11"); // NOI18N
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, -1, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(6, 6, 6)
+                                .addComponent(dtpBadDate, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addGap(14, 14, 14)
+                                .addComponent(dtpGoodDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(20, 20, 20)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spnGoodHours, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                            .addComponent(spnBadHours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel8)
+                                .addGap(5, 5, 5)
+                                .addComponent(spnBadMinutes, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel9)
+                                .addGap(5, 5, 5)
+                                .addComponent(spnBadSeconds, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel10)
+                                .addGap(5, 5, 5)
+                                .addComponent(spnGoodMinutes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel11)
+                                .addGap(5, 5, 5)
+                                .addComponent(spnGoodSeconds, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(10, 10, 10)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                .addGap(2, 2, 2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dtpBadDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spnBadHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(spnBadMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel9)
+                        .addComponent(spnBadSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dtpGoodDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel10)
+                        .addComponent(spnGoodHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnGoodMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel11)
+                        .addComponent(spnGoodSeconds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
