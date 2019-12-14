@@ -100,7 +100,6 @@ public class WorkspaceImportConflictDialog extends JDialog {
         btnUseImport.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnUseImport.setText("Choose the record being imported");
         btnUseImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUseImport.setFocusPainted(false);
         btnUseImport.setName("btnUseImport"); // NOI18N
         btnUseImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,7 +163,6 @@ public class WorkspaceImportConflictDialog extends JDialog {
         btnUseWorkspace.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnUseWorkspace.setText("Keep the record already in the Workspace");
         btnUseWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUseWorkspace.setFocusPainted(false);
         btnUseWorkspace.setName("btnUseWorkspace"); // NOI18N
         btnUseWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

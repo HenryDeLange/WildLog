@@ -116,7 +116,6 @@ public class SlideshowDialog extends JDialog {
         btnGIF.setText("Animated GIF");
         btnGIF.setToolTipText("Create a Animated GIF using the Images from this entity.");
         btnGIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGIF.setFocusPainted(false);
         btnGIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGIF.setIconTextGap(10);
         btnGIF.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -135,7 +134,6 @@ public class SlideshowDialog extends JDialog {
         btnGIFAllSightings.setText("Animated GIF - All Observations");
         btnGIFAllSightings.setToolTipText("Create an Animated GIF using the Images from all the linked Observations.");
         btnGIFAllSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGIFAllSightings.setFocusPainted(false);
         btnGIFAllSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGIFAllSightings.setIconTextGap(10);
         btnGIFAllSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -154,7 +152,6 @@ public class SlideshowDialog extends JDialog {
         btnGIFSelectedSightings.setText("Animated GIF - Selected Observations");
         btnGIFSelectedSightings.setToolTipText("Create an Animated GIF using the Images from the selected Observations.");
         btnGIFSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGIFSelectedSightings.setFocusPainted(false);
         btnGIFSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGIFSelectedSightings.setIconTextGap(10);
         btnGIFSelectedSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -173,7 +170,6 @@ public class SlideshowDialog extends JDialog {
         btnPDF.setText("PDF");
         btnPDF.setToolTipText("Create a PDF using the Images from this entity.");
         btnPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPDF.setFocusPainted(false);
         btnPDF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPDF.setIconTextGap(10);
         btnPDF.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -192,7 +188,6 @@ public class SlideshowDialog extends JDialog {
         btnPDFAllSightings.setText("PDF - All Observations");
         btnPDFAllSightings.setToolTipText("Create a PDF using the Images from all the linked Observations.");
         btnPDFAllSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPDFAllSightings.setFocusPainted(false);
         btnPDFAllSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPDFAllSightings.setIconTextGap(10);
         btnPDFAllSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -211,7 +206,6 @@ public class SlideshowDialog extends JDialog {
         btnPDFSelectedSightings.setText("PDF - Selected Observations");
         btnPDFSelectedSightings.setToolTipText("Create a PDF using the Images from the selected Observations.");
         btnPDFSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPDFSelectedSightings.setFocusPainted(false);
         btnPDFSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPDFSelectedSightings.setIconTextGap(10);
         btnPDFSelectedSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -230,7 +224,6 @@ public class SlideshowDialog extends JDialog {
         btnPowerPoint.setText("PowerPoint");
         btnPowerPoint.setToolTipText("Create a PowerPoint Presentation using the Images from this entity.");
         btnPowerPoint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPowerPoint.setFocusPainted(false);
         btnPowerPoint.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPowerPoint.setIconTextGap(10);
         btnPowerPoint.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -249,7 +242,6 @@ public class SlideshowDialog extends JDialog {
         btnPowerPointAllSightings.setText("PowerPoint - All Observations");
         btnPowerPointAllSightings.setToolTipText("Create a PowerPoint Presentation using the Images from all the linked Observations.");
         btnPowerPointAllSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPowerPointAllSightings.setFocusPainted(false);
         btnPowerPointAllSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPowerPointAllSightings.setIconTextGap(10);
         btnPowerPointAllSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -268,7 +260,6 @@ public class SlideshowDialog extends JDialog {
         btnPowerPointSelectedSightings.setText("PowerPoint - Selected Observations");
         btnPowerPointSelectedSightings.setToolTipText("Create a PowerPoint Presentation using the Images from the selected Observations.");
         btnPowerPointSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPowerPointSelectedSightings.setFocusPainted(false);
         btnPowerPointSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnPowerPointSelectedSightings.setIconTextGap(10);
         btnPowerPointSelectedSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -287,7 +278,6 @@ public class SlideshowDialog extends JDialog {
         btnSlideshow.setText("JPEG Movie");
         btnSlideshow.setToolTipText("Create a MJPEG Movie using the Images from this entity.");
         btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshow.setIconTextGap(10);
         btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -306,7 +296,6 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowAllSightings.setText("JPEG Movie - All Observations");
         btnSlideshowAllSightings.setToolTipText("Create a MJPEG Video using the Images from all the linked Observations.");
         btnSlideshowAllSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshowAllSightings.setFocusPainted(false);
         btnSlideshowAllSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshowAllSightings.setIconTextGap(10);
         btnSlideshowAllSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -325,7 +314,6 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowSelectedSightings.setText("JPEG Movie - Selected Observations");
         btnSlideshowSelectedSightings.setToolTipText("Create a MJPEG Video using the Images from the selected Observations.");
         btnSlideshowSelectedSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshowSelectedSightings.setFocusPainted(false);
         btnSlideshowSelectedSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshowSelectedSightings.setIconTextGap(10);
         btnSlideshowSelectedSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));

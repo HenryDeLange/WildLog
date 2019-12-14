@@ -48,6 +48,7 @@ import wildlog.data.utils.UtilsData;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.ZoomDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.CustomMouseWheelScroller;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.SpinnerFixer;
@@ -118,6 +119,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         lstVisitFiles = new ArrayList<Path>(3);
         // Init auto generated code
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbImageBoxSize);
+        ComboBoxFixer.configureComboBoxes(cmbVisitType);
         // Set table scroling to only one row at a time
         mouseWheel = new CustomMouseWheelScroller(scrTable);
         mouseWheel.install();
@@ -421,8 +424,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnSelectLocation.setText("Choose Place");
         btnSelectLocation.setToolTipText("Select a Place to use for all Observation.");
         btnSelectLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelectLocation.setFocusPainted(false);
-        btnSelectLocation.setFocusable(false);
         btnSelectLocation.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnSelectLocation.setName("btnSelectLocation"); // NOI18N
         btnSelectLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -557,7 +558,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         cmbVisitType.setMaximumRowCount(15);
         cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.valuesForDroplist()));
         cmbVisitType.setSelectedItem(VisitType.OTHER);
-        cmbVisitType.setFocusable(false);
         cmbVisitType.setName("cmbVisitType"); // NOI18N
 
         txtVisitName.setBackground(new java.awt.Color(204, 255, 204));
@@ -660,8 +660,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnReload.setText("<html>Reload Settings</html>");
         btnReload.setToolTipText("<html>Reload the Bulk Import using the provided settings. <br/>Warning: All changes will be lost.</html>");
         btnReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnReload.setFocusPainted(false);
-        btnReload.setFocusable(false);
         btnReload.setIconTextGap(6);
         btnReload.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnReload.setName("btnReload"); // NOI18N
@@ -675,21 +673,18 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkIncludeSubfolders.setText("Include Subfolders");
         chkIncludeSubfolders.setToolTipText("Select this checkbox and press the Reload button to also look in subfolder for files to include in the Bulk Import.");
         chkIncludeSubfolders.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkIncludeSubfolders.setFocusable(false);
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
 
         chkForceLocationGPSCoordinates.setBackground(new java.awt.Color(153, 180, 115));
         chkForceLocationGPSCoordinates.setText("Always use the Place's GPS");
         chkForceLocationGPSCoordinates.setToolTipText("Select this checkbox if all new Observations should always use the Place's GPS coordinates (if present).");
         chkForceLocationGPSCoordinates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkForceLocationGPSCoordinates.setFocusable(false);
         chkForceLocationGPSCoordinates.setName("chkForceLocationGPSCoordinates"); // NOI18N
 
         cmbImageBoxSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Small", "Medium", "Large" }));
         cmbImageBoxSize.setSelectedIndex(1);
         cmbImageBoxSize.setToolTipText("The size of the box that is used to display a file.");
         cmbImageBoxSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbImageBoxSize.setFocusable(false);
         cmbImageBoxSize.setName("cmbImageBoxSize"); // NOI18N
 
         jLabel9.setText("File box size:");
@@ -748,7 +743,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnUpdate.setToolTipText("Save the defined Observations for the specified Period and Place.");
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -761,8 +755,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnGPSForAll.setText("<html>Set one GPS point for all Observations</html>");
         btnGPSForAll.setToolTipText("The specified GPS point will be applied to all currently defined Observations.");
         btnGPSForAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGPSForAll.setFocusPainted(false);
-        btnGPSForAll.setFocusable(false);
         btnGPSForAll.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPSForAll.setMargin(new java.awt.Insets(2, 4, 2, 1));
         btnGPSForAll.setName("btnGPSForAll"); // NOI18N
@@ -826,7 +818,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         ));
         tblBulkImport.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblBulkImport.setFillsViewportHeight(true);
-        tblBulkImport.setFocusable(false);
         tblBulkImport.setGridColor(new java.awt.Color(134, 123, 78));
         tblBulkImport.setName("tblBulkImport"); // NOI18N
         tblBulkImport.setRowHeight(250);

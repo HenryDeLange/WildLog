@@ -19,6 +19,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.PanelElement;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
@@ -41,6 +42,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         WildLogApp.LOGGER.log(Level.INFO, "[ElementSelectionDialog]");
         app = inApp;
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbElementType);
         // Setup the escape key
         final ElementSelectionDialog thisHandler = this;
         thisHandler.getRootPane().registerKeyboardAction(new ActionListener() {
@@ -169,7 +171,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSelect.setToolTipText("Confirm the selected Creature.");
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSelect.setFocusPainted(false);
         btnSelect.setName("btnSelect"); // NOI18N
         btnSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -182,7 +183,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
         cmbElementType.setSelectedItem(ElementType.NONE);
         cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbElementType.setFocusable(false);
         cmbElementType.setName("cmbElementType"); // NOI18N
         cmbElementType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -194,8 +194,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         btnPreviousElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         btnPreviousElement.setText("Previous Creature");
         btnPreviousElement.setToolTipText("This will set the Creature to the previously selected Creature.");
-        btnPreviousElement.setFocusPainted(false);
-        btnPreviousElement.setFocusable(false);
         btnPreviousElement.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnPreviousElement.setName("btnPreviousElement"); // NOI18N
         btnPreviousElement.addActionListener(new java.awt.event.ActionListener() {
@@ -234,8 +232,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAdd.setText("New Creature");
         btnAdd.setToolTipText("Create a new Creature.");
-        btnAdd.setFocusPainted(false);
-        btnAdd.setFocusable(false);
         btnAdd.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnAdd.setName("btnAdd"); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {

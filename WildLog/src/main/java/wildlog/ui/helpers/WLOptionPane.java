@@ -3,7 +3,6 @@ package wildlog.ui.helpers;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.HeadlessException;
@@ -16,7 +15,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Locale;
 import javax.swing.Icon;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.CLOSED_OPTION;
@@ -37,6 +35,11 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 /**
  * The intention of this class is to work the same as the JOptionPane, but with some added features for WildLog. 
  * These dialogs will not paint the focus on their buttons and will show/hide the glasspane on their parent.
+ * 
+ * UPDATE:
+ * This class now only adds the gray background, the focus problem is now handled by the UIManager instead.
+ * Keeping the class for possible future use and avoid refactoring the other code again.
+ * 
  */
 public class WLOptionPane extends JOptionPane {
 
@@ -118,11 +121,10 @@ public class WLOptionPane extends JOptionPane {
             JDialog dialog = pane.createDialog(parentComponent, title, style);
             pane.selectInitialValue();
             // BEGIN WildLog custom code
-            processAllButtons(dialog);
             if (parentComponent != null && parentComponent instanceof RootPaneContainer) {
                 UtilsDialog.addModalBackgroundPanel((RootPaneContainer) parentComponent, dialog);
             }
-//            dialog.show(); // JDK code used show(), but since it is depricated I'm using setVisible() instead...
+            //dialog.show(); // JDK code used show(), but since it is depricated I'm using setVisible() instead...
             dialog.setVisible(true);
             // END WildLog custom code
             dialog.dispose();
@@ -145,21 +147,6 @@ public class WLOptionPane extends JOptionPane {
             WildLogApp.LOGGER.log(Level.ERROR, "There was a problem showing the custom WLOptionPane dialog...");
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             return JOptionPane.showOptionDialog(parentComponent, message, title, optionType, messageType, icon, options, initialValue);
-        }
-    }
-    
-    /**
-     * WildLog specific method to hide the focus on the buttons.
-     */
-    private static void processAllButtons(Container inContainer) {
-        for (Component component : inContainer.getComponents()) {
-            if (component instanceof Container) {
-                processAllButtons((Container) component);
-            }
-            if (component instanceof JButton) {
-                ((JButton) component).setFocusPainted(false);
-                ((JButton) component).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            }
         }
     }
     
@@ -310,11 +297,10 @@ public class WLOptionPane extends JOptionPane {
             JDialog dialog = pane.createDialog(parentComponent, title, style);
             pane.selectInitialValue();
             // BEGIN WildLog custom code
-            processAllButtons(dialog);
             if (parentComponent != null && parentComponent instanceof RootPaneContainer) {
                 UtilsDialog.addModalBackgroundPanel((RootPaneContainer) parentComponent, dialog);
             }
-//            dialog.show(); // JDK code used show(), but since it is depricated I'm using setVisible() instead...
+            //dialog.show(); // JDK code used show(), but since it is depricated I'm using setVisible() instead...
             dialog.setVisible(true);
             // END WildLog custom code
             dialog.dispose();

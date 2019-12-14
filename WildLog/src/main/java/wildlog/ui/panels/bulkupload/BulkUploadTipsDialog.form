@@ -136,7 +136,6 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
-        <Property name="focusable" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="btnPrevious" noResource="true"/>
       </Properties>
       <Events>
@@ -152,7 +151,6 @@
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="focusable" type="boolean" value="false"/>
         <Property name="horizontalTextPosition" type="int" value="2"/>
         <Property name="name" type="java.lang.String" value="btnNext" noResource="true"/>
       </Properties>

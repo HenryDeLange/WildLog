@@ -90,8 +90,6 @@ public class ImageBox extends JPanel {
         btnUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/up.png"))); // NOI18N
         btnUp.setToolTipText("Move the file UP to the Observation above.");
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUp.setFocusPainted(false);
-        btnUp.setFocusable(false);
         btnUp.setMargin(new java.awt.Insets(1, 1, 1, 1));
         btnUp.setName("btnUp"); // NOI18N
         btnUp.addActionListener(new java.awt.event.ActionListener() {
@@ -104,8 +102,6 @@ public class ImageBox extends JPanel {
         btnDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/down.png"))); // NOI18N
         btnDown.setToolTipText("Move the file DOWN to the Observation below.");
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDown.setFocusPainted(false);
-        btnDown.setFocusable(false);
         btnDown.setMargin(new java.awt.Insets(1, 1, 1, 1));
         btnDown.setName("btnDown"); // NOI18N
         btnDown.addActionListener(new java.awt.event.ActionListener() {
@@ -120,8 +116,6 @@ public class ImageBox extends JPanel {
         btnRemove.setText("<html><u>Remove</u></html>");
         btnRemove.setToolTipText("Remove the file from this Observation. RIGHT-CLICK to remove the file from the Observation, but move it to the Period.");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRemove.setFocusPainted(false);
-        btnRemove.setFocusable(false);
         btnRemove.setIconTextGap(2);
         btnRemove.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnRemove.setName("btnRemove"); // NOI18N
@@ -142,8 +136,6 @@ public class ImageBox extends JPanel {
         btnNewSighting.setText("Observation");
         btnNewSighting.setToolTipText("Move the file into its own NEW Observation.");
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNewSighting.setFocusPainted(false);
-        btnNewSighting.setFocusable(false);
         btnNewSighting.setIconTextGap(2);
         btnNewSighting.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnNewSighting.setName("btnNewSighting"); // NOI18N
@@ -159,8 +151,6 @@ public class ImageBox extends JPanel {
         btnClone.setText("<html><u>Duplicate</u></html>");
         btnClone.setToolTipText("Duplicate the file for this Observation. You can RIGHT-CLICK to duplicate and move the file.");
         btnClone.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnClone.setFocusPainted(false);
-        btnClone.setFocusable(false);
         btnClone.setIconTextGap(2);
         btnClone.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnClone.setName("btnClone"); // NOI18N
@@ -179,8 +169,6 @@ public class ImageBox extends JPanel {
         btnZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ZoomIn.png"))); // NOI18N
         btnZoom.setToolTipText("Show zoom popup for the image.");
         btnZoom.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnZoom.setFocusPainted(false);
-        btnZoom.setFocusable(false);
         btnZoom.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnZoom.setName("btnZoom"); // NOI18N
         btnZoom.addActionListener(new java.awt.event.ActionListener() {

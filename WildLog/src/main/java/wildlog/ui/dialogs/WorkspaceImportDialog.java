@@ -36,6 +36,7 @@ import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.helpers.renderers.WorkspaceTreeCellRenderer;
@@ -73,6 +74,7 @@ public class WorkspaceImportDialog extends JDialog {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbThumbnailSize);
         // Setup the tree
         treWorkspace.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treWorkspace.setCellRenderer(new WorkspaceTreeCellRenderer());
@@ -141,7 +143,6 @@ public class WorkspaceImportDialog extends JDialog {
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnConfirm.setToolTipText("Import the selected records to the active Workspace.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
@@ -150,7 +151,6 @@ public class WorkspaceImportDialog extends JDialog {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         treWorkspace.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        treWorkspace.setFocusable(false);
         treWorkspace.setRequestFocusEnabled(false);
         treWorkspace.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -167,7 +167,6 @@ public class WorkspaceImportDialog extends JDialog {
         rdbImportAllFiles.setText("All Files");
         rdbImportAllFiles.setToolTipText("Import all files into the current Workspace.");
         rdbImportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportAllFiles.setFocusPainted(false);
         rdbImportAllFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbImportAllFilesActionPerformed(evt);
@@ -178,7 +177,6 @@ public class WorkspaceImportDialog extends JDialog {
         rdbImportImagesOnly.setText("Images Only");
         rdbImportImagesOnly.setToolTipText("Import only image files into the current Workspace.");
         rdbImportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportImagesOnly.setFocusPainted(false);
         rdbImportImagesOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbImportImagesOnlyActionPerformed(evt);
@@ -189,7 +187,6 @@ public class WorkspaceImportDialog extends JDialog {
         rdbImportNoFiles.setText("No Files");
         rdbImportNoFiles.setToolTipText("Don't import any files into the current Workspace.");
         rdbImportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportNoFiles.setFocusPainted(false);
         rdbImportNoFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbImportNoFilesActionPerformed(evt);
@@ -203,7 +200,6 @@ public class WorkspaceImportDialog extends JDialog {
         rdbImportOriginalImages.setText("Original Images");
         rdbImportOriginalImages.setToolTipText("Import a copy of the original linked images into the current Workspace.");
         rdbImportOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportOriginalImages.setFocusPainted(false);
         rdbImportOriginalImages.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbImportOriginalImagesActionPerformed(evt);
@@ -214,7 +210,6 @@ public class WorkspaceImportDialog extends JDialog {
         rdbImportThumbnails.setText("Thumbnail Images");
         rdbImportThumbnails.setToolTipText("The images that are imported will be reduced in size, the original images will not be imported.");
         rdbImportThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbImportThumbnails.setFocusPainted(false);
         rdbImportThumbnails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbImportThumbnailsActionPerformed(evt);
@@ -229,7 +224,6 @@ public class WorkspaceImportDialog extends JDialog {
         rdbOrderByLocation.setText("Order by Place");
         rdbOrderByLocation.setToolTipText("Order the tree nodes by Places, then Periods and lastly Creatures.");
         rdbOrderByLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbOrderByLocation.setFocusPainted(false);
         rdbOrderByLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbOrderByLocationActionPerformed(evt);
@@ -240,7 +234,6 @@ public class WorkspaceImportDialog extends JDialog {
         rdbOrderByElement.setText("Order by Creature");
         rdbOrderByElement.setToolTipText("Order the tree nodes by Creatures, then Places and lastly Periods.");
         rdbOrderByElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbOrderByElement.setFocusPainted(false);
         rdbOrderByElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbOrderByElementActionPerformed(evt);
@@ -257,18 +250,15 @@ public class WorkspaceImportDialog extends JDialog {
         rdbConflictAutoResolve.setText("Automatically choose the most recently edited record and largest file");
         rdbConflictAutoResolve.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the most recently edited record will automatically be used in the active Workspace.</html>");
         rdbConflictAutoResolve.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbConflictAutoResolve.setFocusPainted(false);
 
         grpConflicts.add(rdbConflictAsk);
         rdbConflictAsk.setText("Ask what to do for each conflict");
         rdbConflictAsk.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same IDs but different data fields then the user will be asked which record to use in the active Workspace.</html>");
         rdbConflictAsk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbConflictAsk.setFocusPainted(false);
 
         btnCheckConflicts.setText("<html>Check for Conflicts</html>");
         btnCheckConflicts.setToolTipText("Checks how many conflicts there will be when importing using the selected records.");
         btnCheckConflicts.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCheckConflicts.setFocusPainted(false);
         btnCheckConflicts.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnCheckConflicts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -281,7 +271,6 @@ public class WorkspaceImportDialog extends JDialog {
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_LARGE);
         cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbThumbnailSize.setEnabled(false);
-        cmbThumbnailSize.setFocusable(false);
 
         jLabel7.setText("px");
 
@@ -383,7 +372,7 @@ public class WorkspaceImportDialog extends JDialog {
                         .addGap(5, 5, 5)
                         .addComponent(btnCheckConflicts, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 

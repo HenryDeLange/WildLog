@@ -265,7 +265,6 @@ public class MapsBaseDialog extends JFrame {
         btnZoomIn.setToolTipText("Zoom into the Offline Map.");
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setEnabled(false);
-        btnZoomIn.setFocusPainted(false);
         btnZoomIn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnZoomIn.setIconTextGap(10);
         btnZoomIn.setMargin(new java.awt.Insets(2, 4, 2, 4));
@@ -281,7 +280,6 @@ public class MapsBaseDialog extends JFrame {
         btnZoomOut.setToolTipText("Zoom out of the Offline Map.");
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setEnabled(false);
-        btnZoomOut.setFocusPainted(false);
         btnZoomOut.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnZoomOut.setIconTextGap(10);
         btnZoomOut.setMargin(new java.awt.Insets(2, 4, 2, 4));
@@ -297,7 +295,6 @@ public class MapsBaseDialog extends JFrame {
         btnIdentify.setToolTipText("Select an area on the Offline Map to identify the features on the map. (Or simply CTRL + CLICK on the map.)");
         btnIdentify.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnIdentify.setEnabled(false);
-        btnIdentify.setFocusPainted(false);
         btnIdentify.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnIdentify.setIconTextGap(10);
         btnIdentify.setMargin(new java.awt.Insets(2, 4, 2, 4));
@@ -339,7 +336,6 @@ public class MapsBaseDialog extends JFrame {
         btnExport.setText("Export Map");
         btnExport.setToolTipText("Export the shown map.");
         btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExport.setFocusPainted(false);
         btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExport.setIconTextGap(10);
         btnExport.addActionListener(new java.awt.event.ActionListener() {
@@ -373,7 +369,6 @@ public class MapsBaseDialog extends JFrame {
         btnFilterProperties.setText("Filter on Properties");
         btnFilterProperties.setToolTipText("Filter the Observations according to the value of its data fields.");
         btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterProperties.setFocusPainted(false);
         btnFilterProperties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterProperties.setIconTextGap(10);
         btnFilterProperties.addActionListener(new java.awt.event.ActionListener() {
@@ -387,7 +382,6 @@ public class MapsBaseDialog extends JFrame {
         btnFilterElement.setText("Filter by Creature");
         btnFilterElement.setToolTipText("Filter the Observations according to its Creature.");
         btnFilterElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterElement.setFocusPainted(false);
         btnFilterElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterElement.setIconTextGap(10);
         btnFilterElement.addActionListener(new java.awt.event.ActionListener() {
@@ -401,7 +395,6 @@ public class MapsBaseDialog extends JFrame {
         btnFilterLocation.setText("Filter by Place");
         btnFilterLocation.setToolTipText("Filter the Observations according to its Place.");
         btnFilterLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterLocation.setFocusPainted(false);
         btnFilterLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterLocation.setIconTextGap(10);
         btnFilterLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -415,7 +408,6 @@ public class MapsBaseDialog extends JFrame {
         btnFilterVisit.setText("Filter by Period");
         btnFilterVisit.setToolTipText("Filter the Observations according to its Period.");
         btnFilterVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterVisit.setFocusPainted(false);
         btnFilterVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterVisit.setIconTextGap(10);
         btnFilterVisit.addActionListener(new java.awt.event.ActionListener() {
@@ -429,7 +421,6 @@ public class MapsBaseDialog extends JFrame {
         btnResetFilters.setText("Reset Active Data Filters");
         btnResetFilters.setToolTipText("Remove all the active filters.");
         btnResetFilters.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnResetFilters.setFocusPainted(false);
         btnResetFilters.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnResetFilters.setIconTextGap(10);
         btnResetFilters.addActionListener(new java.awt.event.ActionListener() {

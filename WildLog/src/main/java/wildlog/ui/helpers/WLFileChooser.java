@@ -1,10 +1,8 @@
 package wildlog.ui.helpers;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.HeadlessException;
 import java.io.File;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.RootPaneContainer;
@@ -14,6 +12,11 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 /**
  * The intention of this class is to work the same as the JFileChooser, but with some added features for WildLog. 
  * These dialogs will not paint the focus on their buttons and will show/hide the glasspane on their parent.
+ * 
+ * UPDATE:
+ * This class now only adds the gray background, the focus problem is now handled by the UIManager instead.
+ * Keeping the class for possible future use and avoid refactoring the other code again.
+ * 
  */
 public class WLFileChooser extends JFileChooser {
 
@@ -45,26 +48,11 @@ public class WLFileChooser extends JFileChooser {
     protected JDialog createDialog(Component parent) throws HeadlessException {
         JDialog dialog = super.createDialog(parent);
         // BEGIN WildLog custom code
-        processAllButtons(dialog);
         if (parent != null && parent instanceof RootPaneContainer) {
             UtilsDialog.addModalBackgroundPanel((RootPaneContainer) parent, dialog);
         }
         // END WildLog custom code
         return dialog;
-    }
-    
-    /**
-     * WildLog specific method to hide the focus on the buttons.
-     */
-    private static void processAllButtons(Container inContainer) {
-        for (Component component : inContainer.getComponents()) {
-            if (component instanceof Container) {
-                processAllButtons((Container) component);
-            }
-            if (component instanceof JButton) {
-                ((JButton) component).setFocusPainted(false);
-            }
-        }
     }
     
 }

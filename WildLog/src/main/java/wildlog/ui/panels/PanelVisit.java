@@ -43,6 +43,7 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
@@ -127,6 +128,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void setupUI() {
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbGameWatchIntensity);
+        ComboBoxFixer.configureComboBoxes(cmbType);
         // Setup images
         imageIndex = 0;
         if (VisitType.STASHED != visit.getType()) {
@@ -481,7 +484,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Period. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUploadImage.setFocusPainted(false);
         btnUploadImage.setIconTextGap(2);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
@@ -494,7 +496,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnNextImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImage.setToolTipText("Load the next file.");
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -527,7 +528,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnDeleteImage.setText("Delete File");
         btnDeleteImage.setToolTipText("Delete the current file.");
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteImage.setFocusPainted(false);
         btnDeleteImage.setIconTextGap(2);
         btnDeleteImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
@@ -542,7 +542,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnSetMainImage.setText("Set as First");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Period.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetMainImage.setFocusPainted(false);
         btnSetMainImage.setIconTextGap(2);
         btnSetMainImage.setMargin(new java.awt.Insets(2, 1, 2, 1));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
@@ -556,7 +555,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnPreviousImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImage.setToolTipText("Load the previous file.");
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -626,7 +624,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnBrowse.setText("Browse");
         btnBrowse.setToolTipText("Open the Browse tab and automatically select this Period in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBrowse.setFocusPainted(false);
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnBrowse.setName("btnBrowse"); // NOI18N
@@ -641,7 +638,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnGoLocation.setText("View Place");
         btnGoLocation.setToolTipText("Open the tab of the the Place linked to this Period.");
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoLocation.setFocusPainted(false);
         btnGoLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGoLocation.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnGoLocation.setName("btnGoLocation"); // NOI18N
@@ -656,7 +652,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnBulkImport.setText("<html><u>Bulk Import</u></html>");
         btnBulkImport.setToolTipText("Open a Bulk Import tab for this Period. You can drag-and-drop a folder on the button to quickly start the Bulk Import process.");
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBulkImport.setFocusPainted(false);
         btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBulkImport.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnBulkImport.setName("btnBulkImport"); // NOI18N
@@ -670,7 +665,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnUpdate.setToolTipText("Save and update the Period.");
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -713,7 +707,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnSlideshow.setText("Slideshows");
         btnSlideshow.setToolTipText("View slideshow videos of linked images for this Period.");
         btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnSlideshow.setName("btnSlideshow"); // NOI18N
@@ -728,7 +721,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnReport.setText("Charts");
         btnReport.setToolTipText("View charts for this Period.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnReport.setMargin(new java.awt.Insets(2, 8, 2, 4));
         btnReport.setName("btnReport"); // NOI18N
@@ -743,7 +735,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnAdvanced.setText("Advanced");
         btnAdvanced.setToolTipText("View available advanced features.");
         btnAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAdvanced.setFocusPainted(false);
         btnAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAdvanced.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnAdvanced.setName("btnAdvanced"); // NOI18N
@@ -758,7 +749,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnMapSighting.setText("Maps");
         btnMapSighting.setToolTipText("Show maps for this Period.");
         btnMapSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMapSighting.setFocusPainted(false);
         btnMapSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMapSighting.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnMapSighting.setName("btnMapSighting"); // NOI18N
@@ -773,7 +763,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnExport.setText("Export");
         btnExport.setToolTipText("Show available exports for this Period.");
         btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExport.setFocusPainted(false);
         btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExport.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnExport.setName("btnExport"); // NOI18N
@@ -867,12 +856,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         cmbType.setMaximumRowCount(15);
         cmbType.setModel(new DefaultComboBoxModel(VisitType.valuesForDroplist()));
         cmbType.setSelectedItem(visit.getType());
-        cmbType.setFocusable(false);
         cmbType.setName("cmbType"); // NOI18N
 
         cmbGameWatchIntensity.setModel(new DefaultComboBoxModel(GameWatchIntensity.values()));
         cmbGameWatchIntensity.setSelectedItem(visit.getGameWatchingIntensity());
-        cmbGameWatchIntensity.setFocusable(false);
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
 
         jLabel53.setText("Notes:");
@@ -892,7 +879,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnAutoName.setText("Auto Name");
         btnAutoName.setToolTipText("Automatically set the name based on the Place and dates.");
         btnAutoName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAutoName.setFocusPainted(false);
         btnAutoName.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAutoName.setName("btnAutoName"); // NOI18N
         btnAutoName.addActionListener(new java.awt.event.ActionListener() {
@@ -988,7 +974,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnEditSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnEditSighting.setToolTipText("Open a popup box to edit the selected Observation.");
         btnEditSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnEditSighting.setFocusPainted(false);
         btnEditSighting.setName("btnEditSighting"); // NOI18N
         btnEditSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1023,7 +1008,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnDeleteSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnDeleteSighting.setToolTipText("<html>Delete the selected Observation. <br/>This will delete all linked files as well.</html>");
         btnDeleteSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteSighting.setFocusPainted(false);
         btnDeleteSighting.setName("btnDeleteSighting"); // NOI18N
         btnDeleteSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1044,7 +1028,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnAddSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         btnAddSighting.setToolTipText("Open a popup box to add a new Observation.");
         btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddSighting.setFocusPainted(false);
         btnAddSighting.setName("btnAddSighting"); // NOI18N
         btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1120,7 +1103,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnGoElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoElement.setToolTipText("Open a tab for the Creature recorded during the selected Observation.");
         btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoElement.setFocusPainted(false);
         btnGoElement.setName("btnGoElement"); // NOI18N
         btnGoElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1134,7 +1116,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnNextImageSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImageSighting.setToolTipText("Load the next file for the selected Observation.");
         btnNextImageSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNextImageSighting.setFocusPainted(false);
         btnNextImageSighting.setName("btnNextImageSighting"); // NOI18N
         btnNextImageSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1151,7 +1132,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnPreviousImageSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImageSighting.setToolTipText("Load the previous file for the selected Observation.");
         btnPreviousImageSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPreviousImageSighting.setFocusPainted(false);
         btnPreviousImageSighting.setName("btnPreviousImageSighting"); // NOI18N
         btnPreviousImageSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -82,8 +82,9 @@ public class UserCreateDialog extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Create Workspace User");
         setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
+        setMinimumSize(new java.awt.Dimension(365, 290));
         setModal(true);
-        setResizable(false);
+        setPreferredSize(new java.awt.Dimension(365, 305));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Username:");
@@ -98,7 +99,6 @@ public class UserCreateDialog extends JDialog {
         cmbUserType.setModel(new DefaultComboBoxModel(WildLogUserTypes.values()));
         cmbUserType.setSelectedItem(WildLogUserTypes.VOLUNTEER);
         cmbUserType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbUserType.setFocusable(false);
 
         txtUsername.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
@@ -110,7 +110,6 @@ public class UserCreateDialog extends JDialog {
         btnCreateUser.setText("Create User");
         btnCreateUser.setToolTipText("Create the Workspace User.");
         btnCreateUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCreateUser.setFocusPainted(false);
         btnCreateUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCreateUserActionPerformed(evt);

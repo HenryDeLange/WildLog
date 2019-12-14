@@ -179,8 +179,6 @@
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="focusable" type="boolean" value="false"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 4, 2, 4]"/>
                 </Property>
@@ -417,7 +415,6 @@
                 <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="VisitType.OTHER" type="code"/>
                 </Property>
-                <Property name="focusable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="cmbVisitType" noResource="true"/>
               </Properties>
             </Component>
@@ -589,8 +586,6 @@
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
-                <Property name="focusPainted" type="boolean" value="false"/>
-                <Property name="focusable" type="boolean" value="false"/>
                 <Property name="iconTextGap" type="int" value="6"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 4, 2, 4]"/>
@@ -611,7 +606,6 @@
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
-                <Property name="focusable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="chkIncludeSubfolders" noResource="true"/>
               </Properties>
             </Component>
@@ -625,7 +619,6 @@
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
-                <Property name="focusable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="chkForceLocationGPSCoordinates" noResource="true"/>
               </Properties>
             </Component>
@@ -643,7 +636,6 @@
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
-                <Property name="focusable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="cmbImageBoxSize" noResource="true"/>
               </Properties>
               <AuxValues>
@@ -670,7 +662,6 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
-            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUpdate" noResource="true"/>
           </Properties>
           <Events>
@@ -690,8 +681,6 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
-            <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 4, 2, 1]"/>
@@ -756,7 +745,6 @@
               </TableColumnModel>
             </Property>
             <Property name="fillsViewportHeight" type="boolean" value="true"/>
-            <Property name="focusable" type="boolean" value="false"/>
             <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="4e" green="7b" red="86" type="rgb"/>
             </Property>

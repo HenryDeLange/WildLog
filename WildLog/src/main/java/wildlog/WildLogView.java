@@ -177,7 +177,6 @@ public final class WildLogView extends JFrame {
 		btnCloseBallonTip.setIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_default.png")));
 		btnCloseBallonTip.setRolloverIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_rollover.png")));
 		btnCloseBallonTip.setPressedIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_pressed.png")));
-        btnCloseBallonTip.setFocusPainted(false);
         btnCloseBallonTip.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         balloonTip.setCloseButton(btnCloseBallonTip, false);
         int messageTimeout = 10000;
@@ -576,7 +575,6 @@ public final class WildLogView extends JFrame {
 
         tabbedPanel.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         tabbedPanel.setToolTipText("");
-        tabbedPanel.setFocusable(false);
         tabbedPanel.setMaximumSize(new java.awt.Dimension(3500, 1800));
         tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabbedPanel.setName("tabbedPanel"); // NOI18N
@@ -742,7 +740,6 @@ public final class WildLogView extends JFrame {
         btnGettingStarted.setText("Getting Started");
         btnGettingStarted.setToolTipText("Re-open the Getting Started popup.");
         btnGettingStarted.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGettingStarted.setFocusPainted(false);
         btnGettingStarted.setName("btnGettingStarted"); // NOI18N
         btnGettingStarted.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

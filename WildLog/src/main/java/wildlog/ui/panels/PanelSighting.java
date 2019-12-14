@@ -59,6 +59,7 @@ import wildlog.data.enums.WildLogUserTypes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.UtilsTableGenerator;
@@ -129,6 +130,19 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         imageIndex = 0;
         // Auto-generated code
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbAge);
+        ComboBoxFixer.configureComboBoxes(cmbCertainty);
+        ComboBoxFixer.configureComboBoxes(cmbElementType);
+        ComboBoxFixer.configureComboBoxes(cmbEvidence);
+        ComboBoxFixer.configureComboBoxes(cmbLifeStatus);
+        ComboBoxFixer.configureComboBoxes(cmbMoonlight);
+        ComboBoxFixer.configureComboBoxes(cmbSex);
+        ComboBoxFixer.configureComboBoxes(cmbTemperatureUnits);
+        ComboBoxFixer.configureComboBoxes(cmbTimeAccuracy);
+        ComboBoxFixer.configureComboBoxes(cmbTimeFormat);
+        ComboBoxFixer.configureComboBoxes(cmbTimeOfDay);
+        ComboBoxFixer.configureComboBoxes(cmbViewRating);
+        ComboBoxFixer.configureComboBoxes(cmbWeather);
         // Setup Location and Element tables
         UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
         UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, null);
@@ -592,7 +606,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnDeleteImage.setToolTipText("Delete the current file.");
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
-        btnDeleteImage.setFocusPainted(false);
         btnDeleteImage.setIconTextGap(2);
         btnDeleteImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
@@ -608,7 +621,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Observation.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
-        btnSetMainImage.setFocusPainted(false);
         btnSetMainImage.setIconTextGap(2);
         btnSetMainImage.setMargin(new java.awt.Insets(2, 1, 2, 1));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
@@ -623,7 +635,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnPreviousImage.setToolTipText("Load previous file.");
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPreviousImage.setEnabled( !bulkEditMode && !bulkUploadMode);
-        btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -636,7 +647,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnNextImage.setToolTipText("Load next file.");
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNextImage.setEnabled( !bulkEditMode && !bulkUploadMode);
-        btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -651,7 +661,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnUploadImage.setToolTipText("<html>Upload a file for this Observation. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
-        btnUploadImage.setFocusPainted(false);
         btnUploadImage.setIconTextGap(2);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
@@ -745,7 +754,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbElementType.setSelectedItem(ElementType.NONE);
         cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbElementType.setEnabled(!disableEditing);
-        cmbElementType.setFocusable(false);
         cmbElementType.setName("cmbElementType"); // NOI18N
         cmbElementType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -758,8 +766,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewElement.setToolTipText("Add new Creature.");
         btnAddNewElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddNewElement.setEnabled(!disableEditing);
-        btnAddNewElement.setFocusPainted(false);
-        btnAddNewElement.setFocusable(false);
         btnAddNewElement.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewElement.setName("btnAddNewElement"); // NOI18N
         btnAddNewElement.addActionListener(new java.awt.event.ActionListener() {
@@ -774,7 +780,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnSetDefaultElementImage.setText("Set Creature File");
         btnSetDefaultElementImage.setToolTipText("Set the active file as the default image for the selected Creature.");
         btnSetDefaultElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetDefaultElementImage.setFocusPainted(false);
         btnSetDefaultElementImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetDefaultElementImage.setName("btnSetDefaultElementImage"); // NOI18N
         btnSetDefaultElementImage.addActionListener(new java.awt.event.ActionListener() {
@@ -862,8 +867,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewLocation.setToolTipText("Add new Place.");
         btnAddNewLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddNewLocation.setEnabled(!disableEditing && !bulkUploadMode);
-        btnAddNewLocation.setFocusPainted(false);
-        btnAddNewLocation.setFocusable(false);
         btnAddNewLocation.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewLocation.setName("btnAddNewLocation"); // NOI18N
         btnAddNewLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -936,8 +939,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewVisit.setToolTipText("Add new Period.");
         btnAddNewVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddNewVisit.setEnabled(!disableEditing && !bulkUploadMode);
-        btnAddNewVisit.setFocusPainted(false);
-        btnAddNewVisit.setFocusable(false);
         btnAddNewVisit.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewVisit.setName("btnAddNewVisit"); // NOI18N
         btnAddNewVisit.addActionListener(new java.awt.event.ActionListener() {
@@ -1011,7 +1012,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbMoonlight.setModel(new DefaultComboBoxModel(Moonlight.values()));
         cmbMoonlight.setSelectedItem(sighting.getMoonlight());
         cmbMoonlight.setEnabled(!disableEditing);
-        cmbMoonlight.setFocusable(false);
         cmbMoonlight.setName("cmbMoonlight"); // NOI18N
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -1024,7 +1024,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "0"));
         spnHours.setEnabled(!disableEditing);
-        spnHours.setFocusable(false);
         spnHours.setName("spnHours"); // NOI18N
         spnHours.setPreferredSize(new java.awt.Dimension(35, 20));
         spnHours.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -1039,7 +1038,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "0"));
         spnMinutes.setEnabled(!disableEditing);
-        spnMinutes.setFocusable(false);
         spnMinutes.setName("spnMinutes"); // NOI18N
         spnMinutes.setPreferredSize(new java.awt.Dimension(35, 20));
         spnMinutes.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -1055,7 +1053,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbEvidence.setModel(new DefaultComboBoxModel(SightingEvidence.values()));
         cmbEvidence.setSelectedItem(sighting.getSightingEvidence());
         cmbEvidence.setEnabled(!disableEditing);
-        cmbEvidence.setFocusable(false);
         cmbEvidence.setName("cmbEvidence"); // NOI18N
 
         spnMoonPhase.setModel(new javax.swing.SpinnerNumberModel(0, -1, 100, 1));
@@ -1080,7 +1077,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnGPS.setToolTipText("Select a new GPS value for this Observation.");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setEnabled(!disableEditing);
-        btnGPS.setFocusPainted(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPS.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnGPS.setName("btnGPS"); // NOI18N
@@ -1107,7 +1103,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTemperatureUnits.setModel(new DefaultComboBoxModel(UnitsTemperature.values()));
         cmbTemperatureUnits.setSelectedItem(sighting.getUnitsTemperature());
         cmbTemperatureUnits.setEnabled(!disableEditing);
-        cmbTemperatureUnits.setFocusable(false);
         cmbTemperatureUnits.setName("cmbTemperatureUnits"); // NOI18N
 
         jLabel14.setText("Time of Day:");
@@ -1119,7 +1114,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
         cmbSex.setSelectedItem(sighting.getSex());
         cmbSex.setEnabled(!disableEditing);
-        cmbSex.setFocusable(false);
         cmbSex.setName("cmbSex"); // NOI18N
 
         jLabel16.setText("Life Status:");
@@ -1128,7 +1122,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbLifeStatus.setModel(new DefaultComboBoxModel(LifeStatus.values()));
         cmbLifeStatus.setSelectedItem(sighting.getLifeStatus());
         cmbLifeStatus.setEnabled(!disableEditing);
-        cmbLifeStatus.setFocusable(false);
         cmbLifeStatus.setName("cmbLifeStatus"); // NOI18N
 
         jLabel17.setText("Info Tag:");
@@ -1159,7 +1152,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         dtpSightingDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
         dtpSightingDate.setDate(sighting.getDate());
         dtpSightingDate.setEnabled(!disableEditing);
-        dtpSightingDate.setFocusable(false);
         dtpSightingDate.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         dtpSightingDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpSightingDate.setName("dtpSightingDate"); // NOI18N
@@ -1192,7 +1184,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbTimeAccuracy.setModel(new DefaultComboBoxModel(TimeAccuracy.values()));
         cmbTimeAccuracy.setSelectedItem(sighting.getTimeAccuracy());
-        cmbTimeAccuracy.setFocusable(false);
         cmbTimeAccuracy.setName("cmbTimeAccuracy"); // NOI18N
 
         jLabel23.setText("Age:");
@@ -1201,7 +1192,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbAge.setMaximumRowCount(10);
         cmbAge.setModel(new DefaultComboBoxModel(Age.values()));
         cmbAge.setSelectedItem(sighting.getAge());
-        cmbAge.setFocusable(false);
         cmbAge.setName("cmbAge"); // NOI18N
 
         jLabel12.setText("Certainty:");
@@ -1218,7 +1208,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeFormat.setModel(new DefaultComboBoxModel(TimeFormat.values()));
         cmbTimeFormat.setSelectedIndex(0);
         cmbTimeFormat.setEnabled(!disableEditing);
-        cmbTimeFormat.setFocusable(false);
         cmbTimeFormat.setName("cmbTimeFormat"); // NOI18N
         cmbTimeFormat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1243,26 +1232,22 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
         cmbWeather.setSelectedItem(sighting.getWeather());
         cmbWeather.setEnabled(!disableEditing);
-        cmbWeather.setFocusable(false);
         cmbWeather.setName("cmbWeather"); // NOI18N
 
         cmbTimeOfDay.setMaximumRowCount(15);
         cmbTimeOfDay.setModel(new DefaultComboBoxModel(ActiveTimeSpesific.values()));
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
         cmbTimeOfDay.setEnabled(!disableEditing);
-        cmbTimeOfDay.setFocusable(false);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
         cmbViewRating.setEnabled(!disableEditing);
-        cmbViewRating.setFocusable(false);
         cmbViewRating.setName("cmbViewRating"); // NOI18N
 
         cmbCertainty.setModel(new DefaultComboBoxModel(Certainty.values()));
         cmbCertainty.setSelectedItem(sighting.getCertainty());
         cmbCertainty.setEnabled(!disableEditing);
-        cmbCertainty.setFocusable(false);
         cmbCertainty.setName("cmbCertainty"); // NOI18N
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1276,7 +1261,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnSeconds, "0"));
         spnSeconds.setEnabled(!disableEditing);
-        spnSeconds.setFocusable(false);
         spnSeconds.setName("spnSeconds"); // NOI18N
         spnSeconds.setPreferredSize(new java.awt.Dimension(35, 20));
         spnSeconds.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -1375,7 +1359,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     .addComponent(cmbAge, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbSex, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane2)
-                    .addComponent(spnNumberOfElements, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+                    .addComponent(spnNumberOfElements))
                 .addGap(5, 5, 5))
         );
         pnlSightingFieldsLayout.setVerticalGroup(
@@ -1496,7 +1480,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnCalculateDuration.setToolTipText("Attempt to calculate the Duration of the Observation based on times specified on the uploaded images.");
         btnCalculateDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
-        btnCalculateDuration.setFocusPainted(false);
         btnCalculateDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCalculateDuration.setIconTextGap(8);
         btnCalculateDuration.setMargin(new java.awt.Insets(2, 4, 2, 2));
@@ -1513,7 +1496,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnCalculateSunAndMoon.setToolTipText("Automatically calculate the Sun and Moon phase based on the date and GPS co-ordinates.");
         btnCalculateSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateSunAndMoon.setEnabled(!disableEditing && !bulkEditMode);
-        btnCalculateSunAndMoon.setFocusPainted(false);
         btnCalculateSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCalculateSunAndMoon.setIconTextGap(8);
         btnCalculateSunAndMoon.setMargin(new java.awt.Insets(2, 4, 2, 2));
@@ -1529,9 +1511,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnGetGPSFromImage.setText("<html>Use GPS from Images</html>");
         btnGetGPSFromImage.setToolTipText("Attempt to load the GPS from the image's EXIF data.");
         btnGetGPSFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGetGPSFromImage.setDoubleBuffered(true);
         btnGetGPSFromImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
-        btnGetGPSFromImage.setFocusPainted(false);
         btnGetGPSFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGetGPSFromImage.setIconTextGap(8);
         btnGetGPSFromImage.setMargin(new java.awt.Insets(2, 4, 2, 2));
@@ -1548,7 +1528,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnGetDateFromImage.setToolTipText("Attempt to load the date and time from the image's EXIF data.");
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
-        btnGetDateFromImage.setFocusPainted(false);
         btnGetDateFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGetDateFromImage.setIconTextGap(8);
         btnGetDateFromImage.setMargin(new java.awt.Insets(2, 4, 2, 2));
@@ -1563,8 +1542,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnUpdateSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnUpdateSighting.setToolTipText("Save and update the Observation.");
         btnUpdateSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdateSighting.setEnabled(!disableEditing);
-        btnUpdateSighting.setFocusPainted(false);
         btnUpdateSighting.setName("btnUpdateSighting"); // NOI18N
         btnUpdateSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1578,7 +1555,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnINaturalist.setToolTipText("Link this Observatin with an iNaturalist account.");
         btnINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnINaturalist.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
-        btnINaturalist.setFocusPainted(false);
         btnINaturalist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnINaturalist.setIconTextGap(8);
         btnINaturalist.setMargin(new java.awt.Insets(2, 4, 2, 2));

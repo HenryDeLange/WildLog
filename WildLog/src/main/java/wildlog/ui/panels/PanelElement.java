@@ -42,6 +42,7 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -91,6 +92,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void setupUI() {
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbEndangeredStatus);
+        ComboBoxFixer.configureComboBoxes(cmbFeedingClass);
+        ComboBoxFixer.configureComboBoxes(cmbType);
         // Setup images
         imageIndex = 0;
         int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
@@ -328,7 +332,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnSetMainImage.setText("Set as First");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Creature.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetMainImage.setFocusPainted(false);
         btnSetMainImage.setIconTextGap(2);
         btnSetMainImage.setMargin(new java.awt.Insets(2, 1, 2, 1));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
@@ -342,7 +345,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnNextImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImage.setToolTipText("Load the next file.");
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -356,7 +358,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Creature. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUploadImage.setFocusPainted(false);
         btnUploadImage.setIconTextGap(2);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
@@ -373,7 +374,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnPreviousImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImage.setToolTipText("Load the previous file.");
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -401,7 +401,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnDeleteImage.setText("Delete File");
         btnDeleteImage.setToolTipText("Delete the current image.");
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteImage.setFocusPainted(false);
         btnDeleteImage.setIconTextGap(2);
         btnDeleteImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
@@ -464,7 +463,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnAddSighting.setText("Observation");
         btnAddSighting.setToolTipText("Add an Observation of this Creature.");
         btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddSighting.setFocusPainted(false);
         btnAddSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAddSighting.setIconTextGap(5);
         btnAddSighting.setMargin(new java.awt.Insets(2, 8, 2, 4));
@@ -479,7 +477,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnUpdate.setToolTipText("Save and update the Creature.");
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -492,7 +489,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnSlideshow.setText("Slideshows");
         btnSlideshow.setToolTipText("View slideshow videos of linked images for this Creature.");
         btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnSlideshow.setName("btnSlideshow"); // NOI18N
@@ -507,7 +503,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnReport.setText("Charts");
         btnReport.setToolTipText("View charts for this Creature.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnReport.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnReport.setName("btnReport"); // NOI18N
@@ -522,7 +517,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnMap.setText("Maps");
         btnMap.setToolTipText("Show maps for this Creature.");
         btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMap.setFocusPainted(false);
         btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMap.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnMap.setName("btnMap"); // NOI18N
@@ -537,7 +531,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnBrowse.setText("Browse");
         btnBrowse.setToolTipText("Open the Browse tab and automatically select this Creature in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBrowse.setFocusPainted(false);
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnBrowse.setName("btnBrowse"); // NOI18N
@@ -552,7 +545,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnExport.setText("Export");
         btnExport.setToolTipText("Show available exports for this Creature.");
         btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExport.setFocusPainted(false);
         btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExport.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnExport.setName("btnExport"); // NOI18N
@@ -635,7 +627,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnCheckIUCNOtherName.setToolTipText("Try to load the main common name and threat category for this Creature from the IUCN web services.");
         btnCheckIUCNOtherName.setBorder(null);
         btnCheckIUCNOtherName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCheckIUCNOtherName.setFocusPainted(false);
         btnCheckIUCNOtherName.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnCheckIUCNOtherName.setName("btnCheckIUCNOtherName"); // NOI18N
         btnCheckIUCNOtherName.addActionListener(new java.awt.event.ActionListener() {
@@ -649,7 +640,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnINaturalist.setToolTipText("Try to view this Creature on the iNaturalist website.");
         btnINaturalist.setBorder(null);
         btnINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnINaturalist.setFocusPainted(false);
         btnINaturalist.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnINaturalist.setName("btnINaturalist"); // NOI18N
         btnINaturalist.addActionListener(new java.awt.event.ActionListener() {
@@ -712,12 +702,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         cmbFeedingClass.setModel(new DefaultComboBoxModel(FeedingClass.values()));
         cmbFeedingClass.setSelectedItem(element.getFeedingClass());
-        cmbFeedingClass.setFocusable(false);
         cmbFeedingClass.setName("cmbFeedingClass"); // NOI18N
 
         cmbEndangeredStatus.setModel(new DefaultComboBoxModel(EndangeredStatus.values()));
         cmbEndangeredStatus.setSelectedItem(element.getEndangeredStatus());
-        cmbEndangeredStatus.setFocusable(false);
         cmbEndangeredStatus.setName("cmbEndangeredStatus"); // NOI18N
 
         jLabel1.setText("Feeding Class:");
@@ -732,7 +720,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbType.setMaximumRowCount(11);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(element.getType());
-        cmbType.setFocusable(false);
         cmbType.setName("cmbType"); // NOI18N
 
         jLabel60.setText("Creature Type:");
@@ -929,14 +916,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         rdbLocations.setText("Place");
         rdbLocations.setToolTipText("View all Places where this Creature has been observed.");
         rdbLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLocations.setFocusPainted(false);
         rdbLocations.setName("rdbLocations"); // NOI18N
 
         btnGoLocation.setBackground(new java.awt.Color(227, 240, 227));
         btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoLocation.setToolTipText("Open a tab for the selected Place or view the selected Observation.");
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoLocation.setFocusPainted(false);
         btnGoLocation.setName("btnGoLocation"); // NOI18N
         btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -954,7 +939,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         rdbSightings.setText("Observations");
         rdbSightings.setToolTipText("View all Observations of this Creature.");
         rdbSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbSightings.setFocusPainted(false);
         rdbSightings.setName("rdbSightings"); // NOI18N
         rdbSightings.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {

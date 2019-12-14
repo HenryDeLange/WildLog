@@ -105,7 +105,6 @@ public class ImageResizeDialog extends JDialog {
         cmbRating.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         lstSecondary.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lstSecondary.setFocusable(false);
         scrSecondary.setViewportView(lstSecondary);
 
         buttonGroup1.add(rdbElements);
@@ -140,7 +139,6 @@ public class ImageResizeDialog extends JDialog {
         jLabel4.setText("Select the category to be resized:");
 
         lstPrimary.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lstPrimary.setFocusable(false);
         lstPrimary.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstPrimaryValueChanged(evt);

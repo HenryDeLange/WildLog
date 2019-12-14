@@ -77,7 +77,7 @@ public class UserManagementDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Workspace User Management");
-        setResizable(false);
+        setMinimumSize(new java.awt.Dimension(420, 320));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -87,7 +87,6 @@ public class UserManagementDialog extends JDialog {
         btnAddUser.setToolTipText("Add a new user to the Workspace.");
         btnAddUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddUser.setEnabled(WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER);
-        btnAddUser.setFocusPainted(false);
         btnAddUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddUserActionPerformed(evt);
@@ -98,7 +97,6 @@ public class UserManagementDialog extends JDialog {
         btnDeleteUser.setToolTipText("Delete the selected user from the Workspace.");
         btnDeleteUser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteUser.setEnabled(WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER);
-        btnDeleteUser.setFocusPainted(false);
         btnDeleteUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteUserActionPerformed(evt);
@@ -115,7 +113,6 @@ public class UserManagementDialog extends JDialog {
 
             }
         ));
-        tblUsers.setFocusable(false);
         tblUsers.setRowHeight(20);
         tblUsers.setSelectionBackground(new java.awt.Color(116, 171, 89));
         tblUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -136,7 +133,7 @@ public class UserManagementDialog extends JDialog {
                             .addComponent(btnDeleteUser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGap(10, 10, 10))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -148,8 +145,9 @@ public class UserManagementDialog extends JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnDeleteUser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE))
+                        .addComponent(btnDeleteUser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 165, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
 

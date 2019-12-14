@@ -20,6 +20,7 @@ import wildlog.data.enums.Sex;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.HorizontalSpinner;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.panels.PanelSighting;
@@ -48,6 +49,8 @@ public class InfoBox extends JPanel {
         visit = inVisit;
         table = inTable;
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbCertainty);
+        ComboBoxFixer.configureComboBoxes(cmbSex);
         sightingWrapper = inBulkUploadSightingWrapper;
         populateUI();
         sightingWrapper.setInfoBox(this);
@@ -208,8 +211,6 @@ public class InfoBox extends JPanel {
         btnChooseCreature.setText("<html><u>Creature</u></html>");
         btnChooseCreature.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature.");
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnChooseCreature.setFocusPainted(false);
-        btnChooseCreature.setFocusable(false);
         btnChooseCreature.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnChooseCreature.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnChooseCreature.setName("btnChooseCreature"); // NOI18N
@@ -230,8 +231,6 @@ public class InfoBox extends JPanel {
         btnGPS.setText("<html><u>GPS</u></html>");
         btnGPS.setToolTipText("Select a GPS point for this Observation. You can RIGHT-CLICK to select the previously saved GPS point or MIDDLE-CLICK to load the GPS point from the images (if present).");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGPS.setFocusPainted(false);
-        btnGPS.setFocusable(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPS.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnGPS.setName("btnGPS"); // NOI18N
@@ -252,8 +251,6 @@ public class InfoBox extends JPanel {
         btnEdit.setText("Edit Observation");
         btnEdit.setToolTipText("Edit this Observation's details.");
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnEdit.setFocusPainted(false);
-        btnEdit.setFocusable(false);
         btnEdit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEdit.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnEdit.setName("btnEdit"); // NOI18N
@@ -271,7 +268,6 @@ public class InfoBox extends JPanel {
         spnNumber.setModel(new javax.swing.SpinnerNumberModel(0, 0, 2147483642, 1));
         spnNumber.setToolTipText("Number of individuals.");
         spnNumber.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnNumber.setFocusable(false);
         spnNumber.setName("spnNumber"); // NOI18N
         spnNumber.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -284,7 +280,6 @@ public class InfoBox extends JPanel {
         cmbSex.setSelectedItem(Sex.NONE);
         cmbSex.setToolTipText("Gender of the creature.");
         cmbSex.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbSex.setFocusable(false);
         cmbSex.setName("cmbSex"); // NOI18N
         cmbSex.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -311,7 +306,6 @@ public class InfoBox extends JPanel {
         cmbCertainty.setModel(new DefaultComboBoxModel(Certainty.values()));
         cmbCertainty.setToolTipText("Observation certainty.");
         cmbCertainty.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbCertainty.setFocusable(false);
         cmbCertainty.setName("cmbCertainty"); // NOI18N
         cmbCertainty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -331,8 +325,6 @@ public class InfoBox extends JPanel {
         btnEmpty.setText("Empty");
         btnEmpty.setToolTipText("Set the Creature to Empty Landscape.");
         btnEmpty.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnEmpty.setFocusPainted(false);
-        btnEmpty.setFocusable(false);
         btnEmpty.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEmpty.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnEmpty.setName("btnEmpty"); // NOI18N
@@ -347,8 +339,6 @@ public class InfoBox extends JPanel {
         btnVehicle.setText("Vehicle");
         btnVehicle.setToolTipText("Set the Creature to a Vehicle.");
         btnVehicle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnVehicle.setFocusPainted(false);
-        btnVehicle.setFocusable(false);
         btnVehicle.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnVehicle.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnVehicle.setName("btnVehicle"); // NOI18N

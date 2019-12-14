@@ -33,9 +33,9 @@ public class WildLogWEIAboutBox extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About WEI");
+        setMinimumSize(new java.awt.Dimension(835, 150));
         setModal(true);
         setName("aboutBox"); // NOI18N
-        setResizable(false);
 
         lblTitle.setFont(lblTitle.getFont().deriveFont(lblTitle.getFont().getStyle() | java.awt.Font.BOLD, lblTitle.getFont().getSize()+3));
         lblTitle.setText("About WildLog for WEI");

@@ -81,6 +81,7 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
@@ -117,6 +118,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         app = inApp;
         tabbedPanel = inTabbedPanel;
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbElementTypesBrowseTab);
         imageView.setCursor(new Cursor(Cursor.MOVE_CURSOR));
         // Set some configuration for the tree browser
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -214,8 +216,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         rdbBrowseLocation.setText("By Places");
         rdbBrowseLocation.setToolTipText("Sort the tree according to Places.");
         rdbBrowseLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbBrowseLocation.setFocusPainted(false);
-        rdbBrowseLocation.setFocusable(false);
         rdbBrowseLocation.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbBrowseLocationItemStateChanged(evt);
@@ -226,7 +226,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnRefreshBrowseTree.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnRefreshBrowseTree.setText("Reload Tree");
         btnRefreshBrowseTree.setToolTipText("This will collapse all tree nodes and reload the tree.");
-        btnRefreshBrowseTree.setFocusPainted(false);
         btnRefreshBrowseTree.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnRefreshBrowseTree.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -239,8 +238,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         rdbBrowseElement.setText("By Creatures");
         rdbBrowseElement.setToolTipText("Sort the tree according to Creatures.");
         rdbBrowseElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbBrowseElement.setFocusPainted(false);
-        rdbBrowseElement.setFocusable(false);
         rdbBrowseElement.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbBrowseElementItemStateChanged(evt);
@@ -251,14 +248,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementTypesBrowseTab.setSelectedItem(ElementType.NONE);
         cmbElementTypesBrowseTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbElementTypesBrowseTab.setFocusable(false);
         cmbElementTypesBrowseTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbElementTypesBrowseTabActionPerformed(evt);
             }
         });
 
-        dtpStartDate.setFocusable(false);
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
         rdbBrowseDate.setBackground(new java.awt.Color(204, 213, 186));
@@ -266,8 +261,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         rdbBrowseDate.setText("By Date");
         rdbBrowseDate.setToolTipText("Sort the tree based on the Observations Dates.");
         rdbBrowseDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbBrowseDate.setFocusPainted(false);
-        rdbBrowseDate.setFocusable(false);
         rdbBrowseDate.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbBrowseDateItemStateChanged(evt);
@@ -279,8 +272,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnRotateRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/RotateR.png"))); // NOI18N
         btnRotateRight.setToolTipText("Rotate the image clockwise.");
         btnRotateRight.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRotateRight.setFocusPainted(false);
-        btnRotateRight.setFocusable(false);
         btnRotateRight.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnRotateRight.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -294,8 +285,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnViewImage.setText("Open");
         btnViewImage.setToolTipText("Ask the opperating system to open the original file (outside of WildLog).");
         btnViewImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewImage.setFocusPainted(false);
-        btnViewImage.setFocusable(false);
         btnViewImage.setIconTextGap(2);
         btnViewImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnViewImage.addActionListener(new java.awt.event.ActionListener() {
@@ -308,8 +297,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnRefreshDates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnRefreshDates.setToolTipText("Refresh the tree based on the provided values.");
         btnRefreshDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRefreshDates.setFocusPainted(false);
-        btnRefreshDates.setFocusable(false);
         btnRefreshDates.setIconTextGap(0);
         btnRefreshDates.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnRefreshDates.addActionListener(new java.awt.event.ActionListener() {
@@ -333,8 +320,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnDefault.setText("Set as First");
         btnDefault.setToolTipText("Set the current file as the default (first) file for the selected node in the tree.");
         btnDefault.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDefault.setFocusPainted(false);
-        btnDefault.setFocusable(false);
         btnDefault.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDefault.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -357,15 +342,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        dtpEndDate.setFocusable(false);
         dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
         btnGoBrowseSelection.setBackground(new java.awt.Color(204, 213, 186));
         btnGoBrowseSelection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoBrowseSelection.setToolTipText("Open the selected tree node for editing.");
         btnGoBrowseSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoBrowseSelection.setFocusPainted(false);
-        btnGoBrowseSelection.setFocusable(false);
         btnGoBrowseSelection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoBrowseSelectionActionPerformed(evt);
@@ -404,7 +386,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultElementImage.setText("Set Creature File");
         btnSetDefaultElementImage.setToolTipText("Set this file as the default for the related Creature.");
         btnSetDefaultElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetDefaultElementImage.setFocusPainted(false);
         btnSetDefaultElementImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetDefaultElementImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -418,7 +399,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultLocationImage.setText("Set Place File");
         btnSetDefaultLocationImage.setToolTipText("Set this file as the default for the related Place.");
         btnSetDefaultLocationImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetDefaultLocationImage.setFocusPainted(false);
         btnSetDefaultLocationImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetDefaultLocationImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -432,7 +412,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultVisitImage.setText("Set Period File");
         btnSetDefaultVisitImage.setToolTipText("Set this file as the default for the related Period.");
         btnSetDefaultVisitImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetDefaultVisitImage.setFocusPainted(false);
         btnSetDefaultVisitImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSetDefaultVisitImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -445,8 +424,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnViewEXIF.setText("EXIF");
         btnViewEXIF.setToolTipText("View the EXIF metadata for the image.");
         btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewEXIF.setFocusPainted(false);
-        btnViewEXIF.setFocusable(false);
         btnViewEXIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewEXIF.setIconTextGap(2);
         btnViewEXIF.setMargin(new java.awt.Insets(2, 2, 2, 2));
@@ -462,8 +439,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnCopyImage.setText("Copy");
         btnCopyImage.setToolTipText("Copy the original file to the opperating system's clipboard (can be pasted outside of WildLog).");
         btnCopyImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCopyImage.setFocusPainted(false);
-        btnCopyImage.setFocusable(false);
         btnCopyImage.setIconTextGap(2);
         btnCopyImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnCopyImage.addActionListener(new java.awt.event.ActionListener() {
@@ -478,8 +453,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnAddFile.setText("Add");
         btnAddFile.setToolTipText("Upload a new file.");
         btnAddFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddFile.setFocusPainted(false);
-        btnAddFile.setFocusable(false);
         btnAddFile.setIconTextGap(2);
         btnAddFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnAddFile.addActionListener(new java.awt.event.ActionListener() {
@@ -494,8 +467,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnDeleteFile.setText("Delete");
         btnDeleteFile.setToolTipText("Delete the current file.");
         btnDeleteFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteFile.setFocusPainted(false);
-        btnDeleteFile.setFocusable(false);
         btnDeleteFile.setIconTextGap(2);
         btnDeleteFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDeleteFile.addActionListener(new java.awt.event.ActionListener() {
@@ -513,8 +484,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnBrowseNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnBrowseNext.setToolTipText("Load the next file. (CTRL + RIGHT while navigating the tree.)");
         btnBrowseNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBrowseNext.setFocusPainted(false);
-        btnBrowseNext.setFocusable(false);
         btnBrowseNext.setMargin(new java.awt.Insets(2, 10, 2, 10));
         btnBrowseNext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -527,8 +496,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnZoomOut.setText("Zoom");
         btnZoomOut.setToolTipText("Zoom the image out.");
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnZoomOut.setFocusPainted(false);
-        btnZoomOut.setFocusable(false);
         btnZoomOut.setIconTextGap(2);
         btnZoomOut.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnZoomOut.addActionListener(new java.awt.event.ActionListener() {
@@ -541,8 +508,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnBrowsePrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnBrowsePrev.setToolTipText("Load the previous file. (CTRL + LEFT while navigating the tree.)");
         btnBrowsePrev.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBrowsePrev.setFocusPainted(false);
-        btnBrowsePrev.setFocusable(false);
         btnBrowsePrev.setMargin(new java.awt.Insets(2, 10, 2, 10));
         btnBrowsePrev.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -555,8 +520,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnZoomIn.setText("Zoom");
         btnZoomIn.setToolTipText("Zoom the image in.");
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnZoomIn.setFocusPainted(false);
-        btnZoomIn.setFocusable(false);
         btnZoomIn.setIconTextGap(2);
         btnZoomIn.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnZoomIn.addActionListener(new java.awt.event.ActionListener() {
@@ -602,8 +565,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnCrop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Crop.png"))); // NOI18N
         btnCrop.setToolTipText("Rotate the image clockwise.");
         btnCrop.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCrop.setFocusPainted(false);
-        btnCrop.setFocusable(false);
         btnCrop.setIconTextGap(0);
         btnCrop.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnCrop.addActionListener(new java.awt.event.ActionListener() {
@@ -617,8 +578,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnRotateLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/RotateL.png"))); // NOI18N
         btnRotateLeft.setToolTipText("Rotate the image anti-clockwise.");
         btnRotateLeft.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRotateLeft.setFocusPainted(false);
-        btnRotateLeft.setFocusable(false);
         btnRotateLeft.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnRotateLeft.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -729,7 +688,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         .addGap(4, 4, 4)
                                         .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(3, 3, 3)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
                                 .addGap(3, 3, 3))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(25, 25, 25)

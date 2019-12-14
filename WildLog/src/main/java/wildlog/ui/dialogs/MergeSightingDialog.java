@@ -65,7 +65,6 @@ public class MergeSightingDialog extends JDialog {
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(900, 500));
         setModal(true);
-        setPreferredSize(new java.awt.Dimension(900, 500));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Select the Observation(s) to move the Files from:");
@@ -87,7 +86,6 @@ public class MergeSightingDialog extends JDialog {
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnConfirm.setToolTipText("Move the selected Period to the new Place.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

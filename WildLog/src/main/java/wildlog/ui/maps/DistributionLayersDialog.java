@@ -211,8 +211,6 @@ public class DistributionLayersDialog extends JDialog {
         bntAddSpeciesLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         bntAddSpeciesLayer.setToolTipText("Add a new layer to the WorkSpace.");
         bntAddSpeciesLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        bntAddSpeciesLayer.setFocusPainted(false);
-        bntAddSpeciesLayer.setFocusable(false);
         bntAddSpeciesLayer.setMargin(new java.awt.Insets(2, 4, 2, 4));
         bntAddSpeciesLayer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,8 +221,6 @@ public class DistributionLayersDialog extends JDialog {
         btnRemoveSpeciesLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnRemoveSpeciesLayer.setToolTipText("Remove the selected layer from the WorkSpace.");
         btnRemoveSpeciesLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRemoveSpeciesLayer.setFocusPainted(false);
-        btnRemoveSpeciesLayer.setFocusable(false);
         btnRemoveSpeciesLayer.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnRemoveSpeciesLayer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,7 +233,6 @@ public class DistributionLayersDialog extends JDialog {
 
         tblSpeciesLayers.setAutoCreateRowSorter(true);
         tblSpeciesLayers.setBackground(new java.awt.Color(248, 244, 244));
-        tblSpeciesLayers.setFocusable(false);
         tblSpeciesLayers.setSelectionBackground(new java.awt.Color(66, 81, 43));
         jScrollPane12.setViewportView(tblSpeciesLayers);
 
@@ -280,8 +275,6 @@ public class DistributionLayersDialog extends JDialog {
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSave.setToolTipText("Close this dialog and confirm the active layers to be displayed on the map.");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSave.setFocusPainted(false);
-        btnSave.setFocusable(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -294,7 +287,6 @@ public class DistributionLayersDialog extends JDialog {
         chkOnlyLinkedLayers.setText("Show only linked layers");
         chkOnlyLinkedLayers.setToolTipText("Show only the Distribution Layers that can be linked to Creatures.");
         chkOnlyLinkedLayers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkOnlyLinkedLayers.setFocusPainted(false);
         chkOnlyLinkedLayers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkOnlyLinkedLayersActionPerformed(evt);
@@ -305,7 +297,6 @@ public class DistributionLayersDialog extends JDialog {
         chkOnlyActiveCreatures.setText("Show only active Creatures");
         chkOnlyActiveCreatures.setToolTipText("Show only the Distribution Layers of the active Creatures.");
         chkOnlyActiveCreatures.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkOnlyActiveCreatures.setFocusPainted(false);
         chkOnlyActiveCreatures.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkOnlyActiveCreaturesActionPerformed(evt);

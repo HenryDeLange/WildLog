@@ -269,8 +269,6 @@ public class INatSightingDialog extends JDialog {
         btnOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnOK.setToolTipText("Close the dialog.");
         btnOK.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnOK.setFocusPainted(false);
-        btnOK.setMaximumSize(null);
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
@@ -281,7 +279,6 @@ public class INatSightingDialog extends JDialog {
         btnViewWebsite.setText("View Website");
         btnViewWebsite.setToolTipText("View this Observation on the iNaturalist website.");
         btnViewWebsite.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewWebsite.setFocusPainted(false);
         btnViewWebsite.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewWebsite.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnViewWebsite.addActionListener(new java.awt.event.ActionListener() {
@@ -294,7 +291,6 @@ public class INatSightingDialog extends JDialog {
         btnRemoveFromINat.setText("<html>Delete from iNaturalist</html>");
         btnRemoveFromINat.setToolTipText("Delete this Observation from iNaturalist.");
         btnRemoveFromINat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRemoveFromINat.setFocusPainted(false);
         btnRemoveFromINat.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRemoveFromINat.setMargin(new java.awt.Insets(2, 6, 2, 2));
         btnRemoveFromINat.addActionListener(new java.awt.event.ActionListener() {
@@ -308,25 +304,21 @@ public class INatSightingDialog extends JDialog {
         rdbGPSOpen.setText("Open GPS");
         rdbGPSOpen.setToolTipText("Upload the GPS position with open access in iNaturalist.");
         rdbGPSOpen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbGPSOpen.setFocusPainted(false);
 
         buttonGroupGPS.add(rdbGPSObscured);
         rdbGPSObscured.setText("Obscured GPS");
         rdbGPSObscured.setToolTipText("Upload the GPS position with obscured access in iNaturalist.");
         rdbGPSObscured.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbGPSObscured.setFocusPainted(false);
 
         buttonGroupGPS.add(rdbGPSPrivate);
         rdbGPSPrivate.setText("Private GPS");
         rdbGPSPrivate.setToolTipText("Upload the GPS position with private access in iNaturalist.");
         rdbGPSPrivate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbGPSPrivate.setFocusPainted(false);
 
         btnUnlinkFromWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnUnlinkFromWildLog.setText("<html>Unlink from WildLog</html>");
         btnUnlinkFromWildLog.setToolTipText("Unlink this Observation from iNaturalist.");
         btnUnlinkFromWildLog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUnlinkFromWildLog.setFocusPainted(false);
         btnUnlinkFromWildLog.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUnlinkFromWildLog.setMargin(new java.awt.Insets(2, 6, 2, 2));
         btnUnlinkFromWildLog.addActionListener(new java.awt.event.ActionListener() {
@@ -433,7 +425,6 @@ public class INatSightingDialog extends JDialog {
         btnDownload.setText("Download Data");
         btnDownload.setToolTipText("Download the latest data for this Observation from iNaturalist.");
         btnDownload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDownload.setFocusPainted(false);
         btnDownload.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnDownload.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnDownload.addActionListener(new java.awt.event.ActionListener() {
@@ -446,7 +437,6 @@ public class INatSightingDialog extends JDialog {
         btnUploadData.setText("Upload Data");
         btnUploadData.setToolTipText("Upload this Observation's data to iNaturalist.");
         btnUploadData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUploadData.setFocusPainted(false);
         btnUploadData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUploadData.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnUploadData.addActionListener(new java.awt.event.ActionListener() {
@@ -460,7 +450,6 @@ public class INatSightingDialog extends JDialog {
         rdbSummary.setText("Show Summary");
         rdbSummary.setToolTipText("Show a summary of the iNaturalist data.");
         rdbSummary.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbSummary.setFocusPainted(false);
         rdbSummary.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 rdbSummaryItemStateChanged(evt);
@@ -471,7 +460,6 @@ public class INatSightingDialog extends JDialog {
         rdbAllInfo.setText("Show All Data");
         rdbAllInfo.setToolTipText("Show all the data recieved from iNaturalist.");
         rdbAllInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbAllInfo.setFocusPainted(false);
 
         javax.swing.GroupLayout pnlDataLayout = new javax.swing.GroupLayout(pnlData);
         pnlData.setLayout(pnlDataLayout);
@@ -516,7 +504,6 @@ public class INatSightingDialog extends JDialog {
         btnPreviousImageWL.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImageWL.setToolTipText("Load previous WildLog Image.");
         btnPreviousImageWL.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPreviousImageWL.setFocusPainted(false);
         btnPreviousImageWL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPreviousImageWLActionPerformed(evt);
@@ -527,7 +514,6 @@ public class INatSightingDialog extends JDialog {
         btnUploadImage.setText("Upload Original");
         btnUploadImage.setToolTipText("Upload this image to iNaturalist.");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUploadImage.setFocusPainted(false);
         btnUploadImage.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -556,7 +542,6 @@ public class INatSightingDialog extends JDialog {
         btnNextImageWL.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImageWL.setToolTipText("Load next WildLog Image.");
         btnNextImageWL.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNextImageWL.setFocusPainted(false);
         btnNextImageWL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNextImageWLActionPerformed(evt);
@@ -567,7 +552,6 @@ public class INatSightingDialog extends JDialog {
         btnUploadCroppedImage.setText("Upload Cropped");
         btnUploadCroppedImage.setToolTipText("Opens a popup to select a crop of this image which will then be uploaded to iNaturalist.");
         btnUploadCroppedImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUploadCroppedImage.setFocusPainted(false);
         btnUploadCroppedImage.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnUploadCroppedImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -617,7 +601,6 @@ public class INatSightingDialog extends JDialog {
         btnNextImageINat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImageINat.setToolTipText("Load next iNaturalist Image.");
         btnNextImageINat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNextImageINat.setFocusPainted(false);
         btnNextImageINat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNextImageINatActionPerformed(evt);
@@ -633,7 +616,6 @@ public class INatSightingDialog extends JDialog {
         btnDownloadImage.setText("Download Image");
         btnDownloadImage.setToolTipText("Download the displayed image from iNaturalist and add it to the WildLog Observation as a Workspace file.");
         btnDownloadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDownloadImage.setFocusPainted(false);
         btnDownloadImage.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnDownloadImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -652,7 +634,6 @@ public class INatSightingDialog extends JDialog {
         btnPreviousImageINat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImageINat.setToolTipText("Load previous iNaturalist Image.");
         btnPreviousImageINat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPreviousImageINat.setFocusPainted(false);
         btnPreviousImageINat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPreviousImageINatActionPerformed(evt);
@@ -663,7 +644,6 @@ public class INatSightingDialog extends JDialog {
         btnRefreshImages.setText("Refresh Images");
         btnRefreshImages.setToolTipText("Download the latest details for this Observation from iNaturalist.");
         btnRefreshImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRefreshImages.setFocusPainted(false);
         btnRefreshImages.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnRefreshImages.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

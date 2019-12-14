@@ -58,6 +58,7 @@ import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsUI;
@@ -83,6 +84,7 @@ public class WorkspaceSyncDialog extends JDialog {
         super();
         WildLogApp.LOGGER.log(Level.INFO, "[WorkspaceSyncDialog]");
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbThumbnailSize);
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
@@ -174,8 +176,8 @@ public class WorkspaceSyncDialog extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cloud Sync Workspace");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Sync.png")).getImage());
+        setMinimumSize(new java.awt.Dimension(800, 490));
         setModal(true);
-        setResizable(false);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -184,7 +186,6 @@ public class WorkspaceSyncDialog extends JDialog {
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnConfirm.setToolTipText("Sync the active Workspace with the data stored in the cloud.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
@@ -208,7 +209,6 @@ public class WorkspaceSyncDialog extends JDialog {
         btnConfirmSyncToken.setText("Confirm Token");
         btnConfirmSyncToken.setToolTipText("Validates the token and then enables the available features.");
         btnConfirmSyncToken.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConfirmSyncToken.setFocusPainted(false);
         btnConfirmSyncToken.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnConfirmSyncToken.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,7 +242,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 .addGap(3, 3, 3)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
                 .addGap(3, 3, 3)
                 .addComponent(btnConfirmSyncToken, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -257,7 +257,6 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncAllFiles.setText("Data and Files (all files)");
         rdbSyncAllFiles.setToolTipText("Sync all files between the current Workspace and the cloud.");
         rdbSyncAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbSyncAllFiles.setFocusPainted(false);
         rdbSyncAllFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbSyncAllFilesActionPerformed(evt);
@@ -268,7 +267,6 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncJpegOnly.setText("Data and Images (JPEG only)");
         rdbSyncJpegOnly.setToolTipText("Sync only images between the current Workspace and the cloud.");
         rdbSyncJpegOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbSyncJpegOnly.setFocusPainted(false);
         rdbSyncJpegOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbSyncJpegOnlyActionPerformed(evt);
@@ -280,7 +278,6 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncNoFiles.setText("Only Data (no files)");
         rdbSyncNoFiles.setToolTipText("Don't sync any files between the current Workspace and the cloud.");
         rdbSyncNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbSyncNoFiles.setFocusPainted(false);
         rdbSyncNoFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbSyncNoFilesActionPerformed(evt);
@@ -291,7 +288,6 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncOriginalImages.setText("Original Images");
         rdbSyncOriginalImages.setToolTipText("Sync a copy of the original linked images between the current Workspace and the cloud.");
         rdbSyncOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbSyncOriginalImages.setFocusPainted(false);
         rdbSyncOriginalImages.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbSyncOriginalImagesActionPerformed(evt);
@@ -303,7 +299,6 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncThumbnails.setText("Thumbnail Images");
         rdbSyncThumbnails.setToolTipText("The images that are synced will be reduced in size, the original images will not be synced.");
         rdbSyncThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbSyncThumbnails.setFocusPainted(false);
         rdbSyncThumbnails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbSyncThumbnailsActionPerformed(evt);
@@ -315,7 +310,6 @@ public class WorkspaceSyncDialog extends JDialog {
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_LARGE);
         cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbThumbnailSize.setEnabled(false);
-        cmbThumbnailSize.setFocusable(false);
 
         jLabel7.setText("px");
 
@@ -327,13 +321,11 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeBatch.setText("Batch Mode");
         rdbModeBatch.setToolTipText("Perform the sync using batch operations.");
         rdbModeBatch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbModeBatch.setFocusPainted(false);
 
         grpMode.add(rdbModeSingle);
         rdbModeSingle.setText("Single Mode");
         rdbModeSingle.setToolTipText("Perform the sync using single operations for each record.");
         rdbModeSingle.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbModeSingle.setFocusPainted(false);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Image Upload Size:");

@@ -106,7 +106,6 @@ public class PanelTabLocations extends JPanel {
         btnGoLocation_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoLocation_LocTab.setToolTipText("Open a tab for the selected Place.");
         btnGoLocation_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoLocation_LocTab.setFocusPainted(false);
         btnGoLocation_LocTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoLocation_LocTabActionPerformed(evt);
@@ -117,7 +116,6 @@ public class PanelTabLocations extends JPanel {
         btnAddLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         btnAddLocation.setToolTipText("Open a tab for a new Place to be added.");
         btnAddLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddLocation.setFocusPainted(false);
         btnAddLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddLocationActionPerformed(evt);
@@ -128,7 +126,6 @@ public class PanelTabLocations extends JPanel {
         btnDeleteLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnDeleteLocation.setToolTipText("<html>Delete the selected Place. <br/>This will delete all linked Periods, Observations and files as well.</html>");
         btnDeleteLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteLocation.setFocusPainted(false);
         btnDeleteLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteLocationActionPerformed(evt);
@@ -177,7 +174,6 @@ public class PanelTabLocations extends JPanel {
         btnGoVisit_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoVisit_LocTab.setToolTipText("Open a tab for the selected Period.");
         btnGoVisit_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoVisit_LocTab.setFocusPainted(false);
         btnGoVisit_LocTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoVisit_LocTabActionPerformed(evt);
@@ -202,7 +198,6 @@ public class PanelTabLocations extends JPanel {
         btnGoElement_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoElement_LocTab.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoElement_LocTab.setFocusPainted(false);
         btnGoElement_LocTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoElement_LocTabActionPerformed(evt);

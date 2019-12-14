@@ -162,7 +162,6 @@ public class CustomLayersDialog extends JDialog {
 
         lsbAllLayers.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lsbAllLayers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lsbAllLayers.setFocusable(false);
         lsbAllLayers.setSelectionBackground(new java.awt.Color(94, 130, 59));
         lsbAllLayers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -174,8 +173,6 @@ public class CustomLayersDialog extends JDialog {
         bntAddToAllLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         bntAddToAllLayer.setToolTipText("Add a new layer to the WorkSpace.");
         bntAddToAllLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        bntAddToAllLayer.setFocusPainted(false);
-        bntAddToAllLayer.setFocusable(false);
         bntAddToAllLayer.setMargin(new java.awt.Insets(2, 4, 2, 4));
         bntAddToAllLayer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,8 +183,6 @@ public class CustomLayersDialog extends JDialog {
         btnRemoveFromAllLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnRemoveFromAllLayer.setToolTipText("Remove the selected layer from the WorkSpace.");
         btnRemoveFromAllLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRemoveFromAllLayer.setFocusPainted(false);
-        btnRemoveFromAllLayer.setFocusable(false);
         btnRemoveFromAllLayer.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnRemoveFromAllLayer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,8 +196,6 @@ public class CustomLayersDialog extends JDialog {
         btnSetAsSelectedLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnSetAsSelectedLayer.setToolTipText("Add the selected layer to the list of active layers, to be displayed on the map.");
         btnSetAsSelectedLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetAsSelectedLayer.setFocusPainted(false);
-        btnSetAsSelectedLayer.setFocusable(false);
         btnSetAsSelectedLayer.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         btnSetAsSelectedLayer.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnSetAsSelectedLayer.addActionListener(new java.awt.event.ActionListener() {
@@ -255,8 +248,6 @@ public class CustomLayersDialog extends JDialog {
         btnMoveDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/down.png"))); // NOI18N
         btnMoveDown.setToolTipText("Move the selected layer down in the list.");
         btnMoveDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMoveDown.setFocusPainted(false);
-        btnMoveDown.setFocusable(false);
         btnMoveDown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMoveDownActionPerformed(evt);
@@ -265,7 +256,6 @@ public class CustomLayersDialog extends JDialog {
 
         lsbSelectedLayers.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lsbSelectedLayers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lsbSelectedLayers.setFocusable(false);
         lsbSelectedLayers.setSelectionBackground(new java.awt.Color(94, 130, 59));
         lsbSelectedLayers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -277,8 +267,6 @@ public class CustomLayersDialog extends JDialog {
         btnMoveUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/up.png"))); // NOI18N
         btnMoveUp.setToolTipText("Move the selected layer up in the list.");
         btnMoveUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMoveUp.setFocusPainted(false);
-        btnMoveUp.setFocusable(false);
         btnMoveUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMoveUpActionPerformed(evt);
@@ -291,8 +279,6 @@ public class CustomLayersDialog extends JDialog {
         btnRemoveFromSelectedLayer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnRemoveFromSelectedLayer.setToolTipText("Remove the selected layer from the list.");
         btnRemoveFromSelectedLayer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRemoveFromSelectedLayer.setFocusPainted(false);
-        btnRemoveFromSelectedLayer.setFocusable(false);
         btnRemoveFromSelectedLayer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveFromSelectedLayerActionPerformed(evt);
@@ -340,8 +326,6 @@ public class CustomLayersDialog extends JDialog {
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnSave.setToolTipText("Close this dialog and confirm the active layers to be displayed on the map.");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSave.setFocusPainted(false);
-        btnSave.setFocusable(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);

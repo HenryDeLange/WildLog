@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.WLOptionPane;
@@ -28,6 +29,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         app = inApp;
         tabbedPanel = inTabbedPanel;
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbType);
         // Add key listeners to table to allow the selection of rows based on key events.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
@@ -102,7 +104,6 @@ public class PanelTabElements extends javax.swing.JPanel {
         btnGoElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoElement.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoElement.setFocusPainted(false);
         btnGoElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoElementActionPerformed(evt);
@@ -113,7 +114,6 @@ public class PanelTabElements extends javax.swing.JPanel {
         btnAddElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         btnAddElement.setToolTipText("Open a tab for a new Creature to be added.");
         btnAddElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddElement.setFocusPainted(false);
         btnAddElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddElementActionPerformed(evt);
@@ -124,7 +124,6 @@ public class PanelTabElements extends javax.swing.JPanel {
         btnDeleteElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnDeleteElement.setToolTipText("<html>Delete the selected Creature. <br/>This will delete all linked Observations and files as well.</html>");
         btnDeleteElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteElement.setFocusPainted(false);
         btnDeleteElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteElementActionPerformed(evt);
@@ -156,7 +155,6 @@ public class PanelTabElements extends javax.swing.JPanel {
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(ElementType.NONE);
         cmbType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbType.setFocusable(false);
         cmbType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTypeActionPerformed(evt);
@@ -216,7 +214,6 @@ public class PanelTabElements extends javax.swing.JPanel {
         btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoLocation.setToolTipText("Open a new tab for the selected Location.");
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoLocation.setFocusPainted(false);
         btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoLocationActionPerformed(evt);

@@ -82,7 +82,6 @@ public abstract class PanelCanSetupHeader extends JPanel {
         HeaderPanel tempTabHeader = new HeaderPanel();
         tempTabHeader.setBackground(new Color(0, 0, 0, 0));
         tempTabHeader.setBorder(null);
-        tempTabHeader.setFocusable(false);
         tempTabHeader.setTabType(inTabType);
 // FIXME: Issue waar die mouse wheel scrolling nie werk as die mouse nie in die panel is nie (die panel moet die hele tab vol stretch...)
         tempTabHeader.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
@@ -105,7 +104,6 @@ public abstract class PanelCanSetupHeader extends JPanel {
         titleLabel.setPreferredSize(dimension);
         tempTabHeader.add(titleLabel);
         JLabel btnClose = new JLabel();
-        btnClose.setFocusable(false);
         btnClose.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnClose.setMinimumSize(new Dimension(12, 12));
         btnClose.setPreferredSize(new Dimension(12, 12));
@@ -117,7 +115,6 @@ public abstract class PanelCanSetupHeader extends JPanel {
         tempTabHeader.add(btnClose);
         JLabel btnCloseHover = new JLabel();
         btnCloseHover.setVisible(false);
-        btnCloseHover.setFocusable(false);
         btnCloseHover.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnCloseHover.setMinimumSize(new Dimension(12, 12));
         btnCloseHover.setPreferredSize(new Dimension(12, 12));

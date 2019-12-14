@@ -42,9 +42,9 @@ public class WelcomeDialog extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Getting Started");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-square-20px.png")).getImage());
+        setMinimumSize(new java.awt.Dimension(800, 250));
         setModal(true);
         setName("aboutBox"); // NOI18N
-        setResizable(false);
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -56,8 +56,6 @@ public class WelcomeDialog extends JDialog {
         btnBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Process.png"))); // NOI18N
         btnBulkImport.setText("<html>Process new files by starting a new <b>Bulk Import</b> process");
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBulkImport.setFocusPainted(false);
-        btnBulkImport.setFocusable(false);
         btnBulkImport.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBulkImport.setName("btnBulkImport"); // NOI18N
         btnBulkImport.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -71,8 +69,6 @@ public class WelcomeDialog extends JDialog {
         btnStash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/StashButton.png"))); // NOI18N
         btnStash.setText("<html>Quickly <b>Stash</b> the files to be processed later</html>");
         btnStash.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnStash.setFocusPainted(false);
-        btnStash.setFocusable(false);
         btnStash.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnStash.setName("btnStash"); // NOI18N
         btnStash.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -86,8 +82,6 @@ public class WelcomeDialog extends JDialog {
         btnBrowse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Explore.png"))); // NOI18N
         btnBrowse.setText("<html>Be free to explore WildLog on your own</html>");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBrowse.setFocusPainted(false);
-        btnBrowse.setFocusable(false);
         btnBrowse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnBrowse.setName("btnBrowse"); // NOI18N
         btnBrowse.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -108,9 +102,9 @@ public class WelcomeDialog extends JDialog {
                         .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(btnStash, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnStash, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                         .addGap(15, 15, 15)
-                        .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
                         .addGap(15, 15, 15)
                         .addComponent(btnBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -122,9 +116,9 @@ public class WelcomeDialog extends JDialog {
                 .addComponent(lblTitle)
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnStash, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnBulkImport)
+                    .addComponent(btnBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                    .addComponent(btnStash))
                 .addGap(10, 10, 10))
         );
 

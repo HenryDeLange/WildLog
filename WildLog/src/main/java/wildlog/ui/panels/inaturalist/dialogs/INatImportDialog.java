@@ -122,8 +122,6 @@ public class INatImportDialog extends JDialog {
         btnOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnOK.setToolTipText("Close the dialog.");
         btnOK.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnOK.setFocusPainted(false);
-        btnOK.setMaximumSize(null);
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
@@ -134,7 +132,6 @@ public class INatImportDialog extends JDialog {
         btnViewWebsite.setText("View Website");
         btnViewWebsite.setToolTipText("View the authenticated user's account on the iNaturalist website.");
         btnViewWebsite.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewWebsite.setFocusPainted(false);
         btnViewWebsite.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewWebsite.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnViewWebsite.addActionListener(new java.awt.event.ActionListener() {
@@ -173,7 +170,6 @@ public class INatImportDialog extends JDialog {
         btnImport.setText("Download iNaturalist Observations");
         btnImport.setToolTipText("<html>Download the latest data for linked WildLog Observations and import iNaturalist Observations that are not yet present in WildLog.</html>");
         btnImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnImport.setFocusPainted(false);
         btnImport.setIconTextGap(8);
         btnImport.setMargin(new java.awt.Insets(6, 15, 6, 15));
         btnImport.addActionListener(new java.awt.event.ActionListener() {
@@ -186,7 +182,6 @@ public class INatImportDialog extends JDialog {
         btnCompareScientificNames.setText("Report: Compare Scientific Names used in WildLog and iNaturalist");
         btnCompareScientificNames.setToolTipText("List all observations where the Scientific Name in the WildLog Workspace does not match with iNaturalist.");
         btnCompareScientificNames.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCompareScientificNames.setFocusPainted(false);
         btnCompareScientificNames.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCompareScientificNames.setIconTextGap(8);
         btnCompareScientificNames.setMargin(new java.awt.Insets(6, 20, 6, 20));
@@ -200,7 +195,6 @@ public class INatImportDialog extends JDialog {
         btnFindMissingInWildLog.setText("Report: Find linked iNaturalist Observations not present in this WildLog Workspace");
         btnFindMissingInWildLog.setToolTipText("<html>List all iNaturalist Observations on the specified account which have a <i>WildLog_ID</i>, \n<br />but the matching WildLog Observation could not be found in this Workspace.</html>");
         btnFindMissingInWildLog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFindMissingInWildLog.setFocusPainted(false);
         btnFindMissingInWildLog.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFindMissingInWildLog.setIconTextGap(8);
         btnFindMissingInWildLog.setMargin(new java.awt.Insets(6, 20, 6, 20));
@@ -214,7 +208,6 @@ public class INatImportDialog extends JDialog {
         btnFindMissingInINaturalist.setText("Report: Find linked WildLog Observations not present on the iNaturalist Account");
         btnFindMissingInINaturalist.setToolTipText("<html>List all WildLog Observations in this Workspace which have a linked iNaturalist record, \n<br />but the iNaturalist Observation could not be found on the specified account.</html>");
         btnFindMissingInINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFindMissingInINaturalist.setFocusPainted(false);
         btnFindMissingInINaturalist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFindMissingInINaturalist.setIconTextGap(8);
         btnFindMissingInINaturalist.setMargin(new java.awt.Insets(6, 20, 6, 20));

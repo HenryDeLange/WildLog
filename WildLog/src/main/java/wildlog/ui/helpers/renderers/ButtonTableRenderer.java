@@ -27,7 +27,6 @@ public class ButtonTableRenderer implements TableCellRenderer {
         JButton button = new JButton(buttonText);
         button.setIcon(new ImageIcon(ButtonTableRenderer.class.getResource("/wildlog/resources/icons/FilterSightings.png")));
         button.setPreferredSize(new Dimension(350, 50));
-        button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent inEvent) {

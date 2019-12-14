@@ -66,7 +66,6 @@ public class BulkUploadTipsDialog extends JDialog {
         btnPrevious.setText("Previous");
         btnPrevious.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPrevious.setEnabled(false);
-        btnPrevious.setFocusable(false);
         btnPrevious.setName("btnPrevious"); // NOI18N
         btnPrevious.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -77,7 +76,6 @@ public class BulkUploadTipsDialog extends JDialog {
         btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNext.setText("Next");
         btnNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNext.setFocusable(false);
         btnNext.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         btnNext.setName("btnNext"); // NOI18N
         btnNext.addActionListener(new java.awt.event.ActionListener() {

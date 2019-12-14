@@ -190,7 +190,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoSighting.setToolTipText("Open a tab for the selected Observation.");
         btnGoSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoSighting.setFocusPainted(false);
         btnGoSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoSightingActionPerformed(evt);
@@ -201,7 +200,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnAddSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         btnAddSighting.setToolTipText("Open a popup box to add a new Observation.");
         btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddSighting.setFocusPainted(false);
         btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddSightingActionPerformed(evt);
@@ -212,7 +210,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnDeleteSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnDeleteSighting.setToolTipText("<html>Delete the selected Observation. <br/>This will delete all linked files as well.</html>");
         btnDeleteSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteSighting.setFocusPainted(false);
         btnDeleteSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteSightingActionPerformed(evt);
@@ -224,7 +221,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnBulkEditSighting.setText("Bulk Edit");
         btnBulkEditSighting.setToolTipText("Open a popup box to edit all of the selected Observations at once.");
         btnBulkEditSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBulkEditSighting.setFocusPainted(false);
         btnBulkEditSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBulkEditSightingActionPerformed(evt);
@@ -239,7 +235,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoLocation.setText("View  Place");
         btnGoLocation.setToolTipText("Open a tab for the selected Place.");
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoLocation.setFocusPainted(false);
         btnGoLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGoLocation.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -253,7 +248,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoVisit.setText("View Period");
         btnGoVisit.setToolTipText("Open a tab for the selected Period.");
         btnGoVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoVisit.setFocusPainted(false);
         btnGoVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGoVisit.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnGoVisit.addActionListener(new java.awt.event.ActionListener() {
@@ -267,7 +261,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoElement.setText("View Creature");
         btnGoElement.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoElement.setFocusPainted(false);
         btnGoElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGoElement.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnGoElement.addActionListener(new java.awt.event.ActionListener() {
@@ -281,7 +274,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnGoBrowse.setText("Browse");
         btnGoBrowse.setToolTipText("Open a tab for the selected Period.");
         btnGoBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoBrowse.setFocusPainted(false);
         btnGoBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGoBrowse.setIconTextGap(6);
         btnGoBrowse.setMargin(new java.awt.Insets(2, 4, 2, 8));
@@ -325,7 +317,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnMap.setText("Maps");
         btnMap.setToolTipText("Show available maps for these Observations.");
         btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMap.setFocusPainted(false);
         btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnMap.addActionListener(new java.awt.event.ActionListener() {
@@ -339,7 +330,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnExport.setText("Export");
         btnExport.setToolTipText("Show available exports for these Observations.");
         btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExport.setFocusPainted(false);
         btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExport.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnExport.addActionListener(new java.awt.event.ActionListener() {
@@ -353,7 +343,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnReport.setText("Charts");
         btnReport.setToolTipText("Show available charts for these Observations.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnReport.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnReport.addActionListener(new java.awt.event.ActionListener() {
@@ -394,7 +383,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterLocation.setText("Filter by Place");
         btnFilterLocation.setToolTipText("Filter the Observations according to its Place.");
         btnFilterLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterLocation.setFocusPainted(false);
         btnFilterLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterLocation.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnFilterLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -408,7 +396,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterVisit.setText("Filter by Period");
         btnFilterVisit.setToolTipText("Filter the Observations according to its Period.");
         btnFilterVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterVisit.setFocusPainted(false);
         btnFilterVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterVisit.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnFilterVisit.addActionListener(new java.awt.event.ActionListener() {
@@ -422,7 +409,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterElements.setText("Filter by Creature");
         btnFilterElements.setToolTipText("Filter the Observations according to its Creature.");
         btnFilterElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterElements.setFocusPainted(false);
         btnFilterElements.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterElements.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnFilterElements.addActionListener(new java.awt.event.ActionListener() {
@@ -436,7 +422,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterProperties.setText("Filter on Properties");
         btnFilterProperties.setToolTipText("Filter the Observations according to the value of its data fields.");
         btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterProperties.setFocusPainted(false);
         btnFilterProperties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterProperties.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnFilterProperties.addActionListener(new java.awt.event.ActionListener() {
@@ -450,7 +435,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterMap.setText("Filter by Map");
         btnFilterMap.setToolTipText("Filter the Observations according to an area on a map.");
         btnFilterMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterMap.setFocusPainted(false);
         btnFilterMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnFilterMap.addActionListener(new java.awt.event.ActionListener() {
@@ -464,7 +448,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnResetFilters.setText("Reset all filters");
         btnResetFilters.setToolTipText("Remove all the active filters.");
         btnResetFilters.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnResetFilters.setFocusPainted(false);
         btnResetFilters.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnResetFilters.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnResetFilters.addActionListener(new java.awt.event.ActionListener() {
@@ -520,8 +503,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnNextFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextFile.setToolTipText("Load next file.");
         btnNextFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNextFile.setFocusPainted(false);
-        btnNextFile.setFocusable(false);
         btnNextFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnNextFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -533,8 +514,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnPrevFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPrevFile.setToolTipText("Load previous file.");
         btnPrevFile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPrevFile.setFocusPainted(false);
-        btnPrevFile.setFocusable(false);
         btnPrevFile.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnPrevFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -546,7 +525,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblImage.setFocusable(false);
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
         lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
         lblImage.setOpaque(true);
@@ -588,7 +566,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         rdbLayoutTable.setText("Table View");
         rdbLayoutTable.setToolTipText("Show the results in as rows in a table.");
         rdbLayoutTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLayoutTable.setFocusable(false);
         rdbLayoutTable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbLayoutTableActionPerformed(evt);
@@ -601,7 +578,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         rdbLayoutGridSightings.setText("Grid View (Observations)");
         rdbLayoutGridSightings.setToolTipText("Show the results as images in a grid.");
         rdbLayoutGridSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLayoutGridSightings.setFocusable(false);
         rdbLayoutGridSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbLayoutGridSightingsActionPerformed(evt);
@@ -614,7 +590,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         rdbLayoutGridFiles.setText("Grid View (Files)");
         rdbLayoutGridFiles.setToolTipText("Show the results as images in a grid.");
         rdbLayoutGridFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLayoutGridFiles.setFocusable(false);
         rdbLayoutGridFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbLayoutGridFilesActionPerformed(evt);

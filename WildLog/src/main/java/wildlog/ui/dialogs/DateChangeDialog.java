@@ -120,7 +120,6 @@ public class DateChangeDialog extends JDialog {
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnSave.setToolTipText("Perform the date and time change on the Observations.");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSave.setFocusPainted(false);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,7 +156,6 @@ public class DateChangeDialog extends JDialog {
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText(":");
-        jLabel8.setFocusable(false);
         jLabel8.setName("jLabel8"); // NOI18N
 
         spnBadMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
@@ -175,7 +173,6 @@ public class DateChangeDialog extends JDialog {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText(":");
-        jLabel9.setFocusable(false);
         jLabel9.setName("jLabel9"); // NOI18N
 
         spnGoodHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
@@ -187,7 +184,6 @@ public class DateChangeDialog extends JDialog {
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText(":");
-        jLabel10.setFocusable(false);
         jLabel10.setName("jLabel10"); // NOI18N
 
         spnGoodMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
@@ -205,7 +201,6 @@ public class DateChangeDialog extends JDialog {
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel11.setText(":");
-        jLabel11.setFocusable(false);
         jLabel11.setName("jLabel11"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -234,9 +229,9 @@ public class DateChangeDialog extends JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(spnGoodHours, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
                             .addComponent(spnBadHours, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
                                 .addComponent(jLabel8)
                                 .addGap(5, 5, 5)
                                 .addComponent(spnBadMinutes, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
@@ -245,7 +240,6 @@ public class DateChangeDialog extends JDialog {
                                 .addGap(5, 5, 5)
                                 .addComponent(spnBadSeconds, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
                                 .addComponent(jLabel10)
                                 .addGap(5, 5, 5)
                                 .addComponent(spnGoodMinutes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

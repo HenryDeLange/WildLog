@@ -47,24 +47,20 @@ public class WorkspacePicker extends JFrame {
         cmbWorkspacePath.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cmbWorkspacePath.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cmbWorkspacePath.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        cmbWorkspacePath.setFocusable(false);
 
         btnChooseWorkspace.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         btnChooseWorkspace.setText("OPEN / CREATE");
         btnChooseWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnChooseWorkspace.setFocusPainted(false);
 
         btnCloudSync.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnCloudSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sync.png"))); // NOI18N
         btnCloudSync.setText("Cloud Download");
         btnCloudSync.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCloudSync.setFocusPainted(false);
         btnCloudSync.setMargin(new java.awt.Insets(2, 6, 2, 6));
 
         btnCloudSync1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnCloudSync1.setText("Browse");
         btnCloudSync1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCloudSync1.setFocusPainted(false);
         btnCloudSync1.setMargin(new java.awt.Insets(2, 12, 2, 12));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

@@ -77,7 +77,6 @@ public class INatAuthTokenDialog extends JDialog {
         btnOpenAuthLink.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnOpenAuthLink.setText("Get Authorization Token");
         btnOpenAuthLink.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnOpenAuthLink.setFocusPainted(false);
         btnOpenAuthLink.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOpenAuthLinkActionPerformed(evt);
@@ -87,7 +86,6 @@ public class INatAuthTokenDialog extends JDialog {
         btnOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnOK.setToolTipText("Close the dialog and use the specified iNaturalist Token.");
         btnOK.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnOK.setFocusPainted(false);
         btnOK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOKActionPerformed(evt);
@@ -101,7 +99,6 @@ public class INatAuthTokenDialog extends JDialog {
         btnHelpStep1.setText("Show URL");
         btnHelpStep1.setToolTipText("Show the URL that will be used to authorizae WildLog on iNaturalist.");
         btnHelpStep1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnHelpStep1.setFocusPainted(false);
         btnHelpStep1.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnHelpStep1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

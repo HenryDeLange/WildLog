@@ -50,6 +50,7 @@ import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.WLOptionPane;
@@ -75,6 +76,7 @@ public class WorkspaceExportDialog extends JDialog {
         defaultDestination = inDefaultDestination;
         lstSightings = inLimitedList;
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbThumbnailSize);
         // Setup the tree
         treWorkspace.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treWorkspace.setCellRenderer(new WorkspaceTreeCellRenderer());
@@ -146,7 +148,6 @@ public class WorkspaceExportDialog extends JDialog {
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnConfirm.setToolTipText("Export the selected records to a new Workspace.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
@@ -155,7 +156,6 @@ public class WorkspaceExportDialog extends JDialog {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         treWorkspace.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        treWorkspace.setFocusable(false);
         treWorkspace.setRequestFocusEnabled(false);
         treWorkspace.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -172,7 +172,6 @@ public class WorkspaceExportDialog extends JDialog {
         rdbExportAllFiles.setText("All Files");
         rdbExportAllFiles.setToolTipText("Include all files in the new Workspace.");
         rdbExportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbExportAllFiles.setFocusPainted(false);
         rdbExportAllFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbExportAllFilesActionPerformed(evt);
@@ -183,7 +182,6 @@ public class WorkspaceExportDialog extends JDialog {
         rdbExportImagesOnly.setText("Images Only");
         rdbExportImagesOnly.setToolTipText("Include only image files in the new Workspace.");
         rdbExportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbExportImagesOnly.setFocusPainted(false);
         rdbExportImagesOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbExportImagesOnlyActionPerformed(evt);
@@ -194,7 +192,6 @@ public class WorkspaceExportDialog extends JDialog {
         rdbExportNoFiles.setText("No Files");
         rdbExportNoFiles.setToolTipText("Don't include any files in the new Workspace.");
         rdbExportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbExportNoFiles.setFocusPainted(false);
         rdbExportNoFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbExportNoFilesActionPerformed(evt);
@@ -208,7 +205,6 @@ public class WorkspaceExportDialog extends JDialog {
         rdbExportOriginalImages.setText("Original Images");
         rdbExportOriginalImages.setToolTipText("The new Workspace will contain a copy of all the linked files.");
         rdbExportOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbExportOriginalImages.setFocusPainted(false);
         rdbExportOriginalImages.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbExportOriginalImagesActionPerformed(evt);
@@ -219,7 +215,6 @@ public class WorkspaceExportDialog extends JDialog {
         rdbExportThumbnails.setText("Thumbnail Images");
         rdbExportThumbnails.setToolTipText("The images in the new Workspace will be reduced in size, the originals images will not be exported.");
         rdbExportThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbExportThumbnails.setFocusPainted(false);
         rdbExportThumbnails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbExportThumbnailsActionPerformed(evt);
@@ -229,17 +224,14 @@ public class WorkspaceExportDialog extends JDialog {
         chkReduceGPS.setText("Reduce GPS Accuracy");
         chkReduceGPS.setToolTipText("If selected all GPS points accuracy will be reduced to degrees and minutes, no seconds.");
         chkReduceGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkReduceGPS.setFocusPainted(false);
 
         chkRemoveDescriptions.setText("Remove Descriptions");
         chkRemoveDescriptions.setToolTipText("If selected the description fields won't be exported.");
         chkRemoveDescriptions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkRemoveDescriptions.setFocusPainted(false);
 
         chkRemoveTime.setText("Remove Time");
         chkRemoveTime.setToolTipText("If selected Observations' Time won't be exported, but the Sun and Moon Phase data will still be exported.");
         chkRemoveTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkRemoveTime.setFocusPainted(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Sort Order:");
@@ -249,7 +241,6 @@ public class WorkspaceExportDialog extends JDialog {
         rdbOrderByLocation.setText("Order by Place");
         rdbOrderByLocation.setToolTipText("Order the tree nodes by Places, then Periods and then lastly Creatures.");
         rdbOrderByLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbOrderByLocation.setFocusPainted(false);
         rdbOrderByLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbOrderByLocationActionPerformed(evt);
@@ -260,7 +251,6 @@ public class WorkspaceExportDialog extends JDialog {
         rdbOrderByElement.setText("Order by Creature");
         rdbOrderByElement.setToolTipText("Order the tree nodes by Creatures, then Places and lastly Periods.");
         rdbOrderByElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbOrderByElement.setFocusPainted(false);
         rdbOrderByElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbOrderByElementActionPerformed(evt);
@@ -275,7 +265,6 @@ public class WorkspaceExportDialog extends JDialog {
         chkOnlyFirstSighting.setText("Only one Observation of a Creature per Period");
         chkOnlyFirstSighting.setToolTipText("Export only the first Observation of each Creature per Period.");
         chkOnlyFirstSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkOnlyFirstSighting.setFocusPainted(false);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Application:");
@@ -283,7 +272,6 @@ public class WorkspaceExportDialog extends JDialog {
         chkIncludeWildLogApp.setText("Include the WildLog Application with the Workspace");
         chkIncludeWildLogApp.setToolTipText("Include the WildLog application with the exported Workspace.");
         chkIncludeWildLogApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkIncludeWildLogApp.setFocusPainted(false);
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Destination:");
@@ -292,13 +280,11 @@ public class WorkspaceExportDialog extends JDialog {
         chkDefaultDestinationFolder.setText("Use default export folder");
         chkDefaultDestinationFolder.setToolTipText("If selected Export the new Workspace to the Export folder of the current Workspace.");
         chkDefaultDestinationFolder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkDefaultDestinationFolder.setFocusPainted(false);
 
         grpFiles.add(rdbExportDefaultImagesOnly);
         rdbExportDefaultImagesOnly.setText("First Files Only");
         rdbExportDefaultImagesOnly.setToolTipText("Include only the default (first) file in the new Workspace.");
         rdbExportDefaultImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbExportDefaultImagesOnly.setFocusPainted(false);
         rdbExportDefaultImagesOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rdbExportDefaultImagesOnlyActionPerformed(evt);
@@ -324,14 +310,12 @@ public class WorkspaceExportDialog extends JDialog {
         chkCreateZIP.setText("ZIP Workspace");
         chkCreateZIP.setToolTipText("If selected the exported Workspace will be compressed into one ZIP archive.");
         chkCreateZIP.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkCreateZIP.setFocusPainted(false);
 
         cmbThumbnailSize.setMaximumRowCount(15);
         cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_LARGE);
         cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbThumbnailSize.setEnabled(false);
-        cmbThumbnailSize.setFocusable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -478,7 +462,7 @@ public class WorkspaceExportDialog extends JDialog {
                 .addGap(5, 5, 5)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 

@@ -41,6 +41,7 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
@@ -116,6 +117,8 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void setupUI() {
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbGameRating);
+        ComboBoxFixer.configureComboBoxes(cmbRating);
         // Setup images
         imageIndex = 0;
         int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
@@ -348,7 +351,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnSetMainImage.setText("Set as First");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Place.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetMainImage.setFocusPainted(false);
         btnSetMainImage.setIconTextGap(2);
         btnSetMainImage.setMargin(new java.awt.Insets(2, 1, 2, 1));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
@@ -368,7 +370,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Place. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUploadImage.setFocusPainted(false);
         btnUploadImage.setIconTextGap(2);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
@@ -396,7 +397,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnNextImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnNextImage.setToolTipText("Load the next file.");
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -408,7 +408,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnPreviousImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnPreviousImage.setToolTipText("Load the previous file.");
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -421,7 +420,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnDeleteImage.setText("Delete File");
         btnDeleteImage.setToolTipText("Delete the current file.");
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteImage.setFocusPainted(false);
         btnDeleteImage.setIconTextGap(2);
         btnDeleteImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
@@ -478,7 +476,6 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         cmbRating.setModel(new DefaultComboBoxModel(LocationRating.values()));
         cmbRating.setSelectedItem(locationWL.getRating());
-        cmbRating.setFocusable(false);
         cmbRating.setName("cmbRating"); // NOI18N
 
         jLabel42.setText("Wildlife:");
@@ -497,7 +494,6 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         cmbGameRating.setModel(new DefaultComboBoxModel(GameViewRating.values()));
         cmbGameRating.setSelectedItem(locationWL.getGameViewingRating());
-        cmbGameRating.setFocusable(false);
         cmbGameRating.setName("cmbGameRating"); // NOI18N
 
         jLabel48.setText("Place Name:");
@@ -546,7 +542,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnApplyGPSToVisit.setText("<html>Apply GPS to Periods</html>");
         btnApplyGPSToVisit.setToolTipText("Set the GPS coordinates of the related Observations to be the same as this Place's.");
         btnApplyGPSToVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnApplyGPSToVisit.setFocusPainted(false);
         btnApplyGPSToVisit.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnApplyGPSToVisit.setName("btnApplyGPSToVisit"); // NOI18N
         btnApplyGPSToVisit.addActionListener(new java.awt.event.ActionListener() {
@@ -560,7 +555,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnGPS.setText("Change GPS");
         btnGPS.setToolTipText("Select a new GPS value for this Place.");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGPS.setFocusPainted(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPS.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnGPS.setName("btnGPS"); // NOI18N
@@ -684,7 +678,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnMap.setText("Maps");
         btnMap.setToolTipText("Show maps for this Place.");
         btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMap.setFocusPainted(false);
         btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMap.setMargin(new java.awt.Insets(2, 6, 2, 8));
         btnMap.setName("btnMap"); // NOI18N
@@ -699,7 +692,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnBrowse.setText("Browse");
         btnBrowse.setToolTipText("Open the Browse tab and automatically select this Place in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBrowse.setFocusPainted(false);
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnBrowse.setName("btnBrowse"); // NOI18N
@@ -714,7 +706,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnBulkImport.setText("<html><u>Bulk Import</u></html>");
         btnBulkImport.setToolTipText("Open a Bulk Import tab for this Place. You can drag-and-drop a folder on the button to quickly start the Bulk Import process.");
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBulkImport.setFocusPainted(false);
         btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBulkImport.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnBulkImport.setName("btnBulkImport"); // NOI18N
@@ -729,7 +720,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnSunAndMoon.setText("Sun / Moon");
         btnSunAndMoon.setToolTipText("Show the Sun and Moon information for this Place.");
         btnSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSunAndMoon.setFocusPainted(false);
         btnSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSunAndMoon.setMargin(new java.awt.Insets(2, 6, 2, 2));
         btnSunAndMoon.setName("btnSunAndMoon"); // NOI18N
@@ -743,7 +733,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnUpdate.setToolTipText("Save and update the Place.");
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -759,7 +748,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnReport.setText("Charts");
         btnReport.setToolTipText("View charts for this Place.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnReport.setMargin(new java.awt.Insets(2, 6, 2, 4));
         btnReport.setName("btnReport"); // NOI18N
@@ -796,7 +784,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnSlideshow.setText("Slideshows");
         btnSlideshow.setToolTipText("View slideshow videos of linked images for this Place.");
         btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 8));
         btnSlideshow.setName("btnSlideshow"); // NOI18N
@@ -811,7 +798,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnExport.setText("Export");
         btnExport.setToolTipText("Show available exports for this Place.");
         btnExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExport.setFocusPainted(false);
         btnExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExport.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnExport.setName("btnExport"); // NOI18N
@@ -892,7 +878,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnDeleteVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnDeleteVisit.setToolTipText("<html>Delete the selected Period. <br/>This will delete all linked Observations and files as well.</html>");
         btnDeleteVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteVisit.setFocusPainted(false);
         btnDeleteVisit.setName("btnDeleteVisit"); // NOI18N
         btnDeleteVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -927,7 +912,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnGoVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoVisit.setToolTipText("Open a tab for the selected Period.");
         btnGoVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoVisit.setFocusPainted(false);
         btnGoVisit.setName("btnGoVisit"); // NOI18N
         btnGoVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -939,7 +923,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnAddVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         btnAddVisit.setToolTipText("Open a tab to add a new Period.");
         btnAddVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddVisit.setFocusPainted(false);
         btnAddVisit.setName("btnAddVisit"); // NOI18N
         btnAddVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1006,7 +989,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         rdbVisit.setText("Period");
         rdbVisit.setToolTipText("View all Creatures observed during the selected Period.");
         rdbVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbVisit.setFocusPainted(false);
         rdbVisit.setName("rdbVisit"); // NOI18N
 
         rdbLocation.setBackground(new java.awt.Color(233, 239, 244));
@@ -1015,7 +997,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         rdbLocation.setText("Place");
         rdbLocation.setToolTipText("View all Creatures observed at this Place.");
         rdbLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLocation.setFocusPainted(false);
         rdbLocation.setName("rdbLocation"); // NOI18N
         rdbLocation.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1030,7 +1011,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnGoElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoElement.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoElement.setFocusPainted(false);
         btnGoElement.setName("btnGoElement"); // NOI18N
         btnGoElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

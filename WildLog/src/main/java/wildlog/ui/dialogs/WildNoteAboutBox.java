@@ -39,9 +39,9 @@ public class WildNoteAboutBox extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About WildNote");
+        setMinimumSize(new java.awt.Dimension(620, 240));
         setModal(true);
         setName("aboutBox"); // NOI18N
-        setResizable(false);
 
         appTitleLabel.setFont(appTitleLabel.getFont().deriveFont(appTitleLabel.getFont().getStyle() | java.awt.Font.BOLD, appTitleLabel.getFont().getSize()+3));
         appTitleLabel.setText("About WildNote");
