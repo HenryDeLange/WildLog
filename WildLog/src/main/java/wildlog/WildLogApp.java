@@ -9,10 +9,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -43,8 +41,6 @@ import java.util.zip.ZipOutputStream;
 import javafx.application.Platform;
 import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -65,11 +61,10 @@ import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.ui.dialogs.UserLoginDialog;
+import wildlog.ui.dialogs.WorkspacePickerDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.helpers.WLFileChooser;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
-import wildlog.ui.helpers.filters.WorkspaceFilter;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.inaturalist.helpers.INatProgressbarTask;
 import wildlog.utils.UtilsTime;
@@ -146,12 +141,34 @@ public class WildLogApp extends Application {
         catch (Exception e) {
             WildLogApp.LOGGER.log(Level.INFO, "Could not remove dotted border from focus controls. The application will continue to launch, but there may be some display problems...");
         }
-//        // Select the workspace to use
-//        WildLogApp.LOGGER.log(Level.INFO, "Choosing workspace...");
-//        WorkspacePicker workspacePicker = new WorkspacePicker();
-//        workspacePicker.setVisible(true);
-//// TODO: Implement this...
-        
+        // Select the workspace to use
+        WildLogApp.LOGGER.log(Level.INFO, "Choosing workspace...");
+        WorkspacePickerDialog workspacePicker = new WorkspacePickerDialog();
+        workspacePicker.setVisible(true);
+        if (!workspacePicker.isSelectionMade()) {
+            WildLogApp.LOGGER.log(Level.DEBUG, "No workspace was selected...");
+            exit();
+            return;
+        }
+        if (Files.notExists(WildLogPaths.getFullWorkspacePrefix()) 
+                || !Files.isWritable(WildLogPaths.getFullWorkspacePrefix()) || !Files.isReadable(WildLogPaths.getFullWorkspacePrefix())) {
+            WildLogApp.LOGGER.log(Level.WARN, "Workspace not valid: " + WildLogPaths.getFullWorkspacePrefix().toString());
+            WLOptionPane.showMessageDialog(null,
+                    "Unable to setup the Workspace at: " + WildLogPaths.getFullWorkspacePrefix().toString(),
+                    "Incorrect Workspace!", 
+                    JOptionPane.ERROR_MESSAGE);
+            exit();
+            return;
+        }
+//        if (Files.notExists(workspacePicker.getWorkspacePath().resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))
+//                    || Files.notExists(workspacePicker.getWorkspacePath().resolve(WildLogPaths.WILDLOG_FILES.getRelativePath()))) {
+//            WLOptionPane.showMessageDialog(null,
+//                    "Unable to open the Workspace at: " + workspacePicker.getWorkspacePath().toString(),
+//                    "Incorrect Workspace!", 
+//                    JOptionPane.ERROR_MESSAGE);
+//            exit();
+//            return;
+//        }
         // Proceed to open the selected workspace
         WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");
         // Get the threadcount
@@ -210,7 +227,7 @@ public class WildLogApp extends Application {
                         "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, 
                         new String[] { "Open another Workspace", "Restore a Database Backup", "Exit" }, null);
                 if (choice == 0) {
-                    configureWildLogHomeBasedOnFileBrowser(null, true);
+                    WorkspacePickerDialog.configureWildLogHomeBasedOnFileBrowser(null, true);
                 }
                 else
                 if (choice == 1) {
@@ -375,11 +392,6 @@ public class WildLogApp extends Application {
             dialog.setVisible(true);
             // Exit if login was incorrect
             if (!dialog.isLoginSuccess()) {
-                WildLogApp.LOGGER.log(Level.WARN, "Failed login attempt...");
-                WLOptionPane.showMessageDialog(null,
-                        "This Workspace can only be accessed using a valid username and password.",
-                        "Incorrect Login!", 
-                        JOptionPane.ERROR_MESSAGE);
                 exit();
                 return;
             }
@@ -643,29 +655,6 @@ public class WildLogApp extends Application {
         System.setErr(new LoggingPrintStream(System.err, Level.ERROR));
         // Add a new line between application startups
         WildLogApp.LOGGER.log(Level.INFO, "");
-        // Try to read the settings file containing the wildloghome (active workspace)
-        try {
-            // If the file does not exist create it before attempting to read it
-            if (!Files.exists(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildloghome"))) {
-                writeDefaultWildLogHome();
-            }
-            // Read the wildloghome file
-            configureWildLogHomeBasedOnSettingsFile();
-        }
-        catch (IOException ex) {
-            // Daar was 'n probleem om die wildloghome settings file te lees, probeer om 'n nuwe wildloghome file te maak
-            WildLogApp.LOGGER.log(Level.INFO, "Could not find the wildloghome file. Will try to create it...");
-            WildLogApp.LOGGER.log(Level.INFO, ex.toString(), ex);
-            writeDefaultWildLogHome();
-            // As ek steeds nie 'n wildloghome file kan gelees kry nie vra die user vir 'n wildloghome om te gebruik
-            try {
-                configureWildLogHomeBasedOnSettingsFile();
-            }
-            catch (IOException ioex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
-                configureWildLogHomeBasedOnFileBrowser(null, true);
-            }
-        }
         WildLogApp.LOGGER.log(Level.INFO, "STARTING UP WildLog - {}", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Setting Folder: {}", ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Application Folder: {}", ACTIVEWILDLOG_CODE_FOLDER.toAbsolutePath().toString());
@@ -674,90 +663,6 @@ public class WildLogApp extends Application {
         WildLogApp.LOGGER.log(Level.INFO, "Command Line Arguments: {}", Arrays.toString(args));
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
-    }
-
-    private static void writeDefaultWildLogHome() {
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildloghome").toFile());
-            Path defaultWorkspacePath = new File(File.separator).toPath().resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
-            String wildloghome = "";
-            if (defaultWorkspacePath.toFile().canWrite()) {
-                wildloghome = defaultWorkspacePath.toAbsolutePath().toString();
-            }
-            else {
-                wildloghome = System.getProperty("user.home") + File.separatorChar + WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath();
-            }
-            WildLogApp.LOGGER.log(Level.INFO, "Writing wildloghome: " + wildloghome);
-            writer.write(wildloghome);
-        }
-        catch (IOException ioex) {
-            WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
-        }
-        finally {
-            if (writer != null) {
-                try {
-                    writer.flush();
-                    writer.close();
-                }
-                catch (IOException ioex) {
-                    WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
-                }
-            }
-        }
-    }
-
-    /**
-     * Note: This can be a folder path or even a network URL
-     *       - C:\WildLogToets\WildLog
-     *       - W:\
-     *       - \\weimaster\WildLogDinokeng
-     */
-    private static void configureWildLogHomeBasedOnSettingsFile() throws IOException {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildloghome").toFile()));
-            WildLogPaths.setWorkspacePrefix(reader.readLine());
-        }
-        // No catch: The error should be thrown if something goes wrong
-        finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                }
-                catch (IOException ex) {
-                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                }
-            }
-        }
-    }
-
-    public static boolean configureWildLogHomeBasedOnFileBrowser(final JFrame inParent, boolean inTerminateIfNotSelected) {
-        WLFileChooser fileChooser = new WLFileChooser();
-        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        fileChooser.setDialogTitle("Please select the WildLog Workspace to use.");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        fileChooser.setFileFilter(new WorkspaceFilter());
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.setMultiSelectionEnabled(false);
-        int result = fileChooser.showOpenDialog(inParent);
-        if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
-            Path selectedPath;
-            if (fileChooser.getSelectedFile().isDirectory()) {
-                selectedPath = fileChooser.getSelectedFile().toPath();
-            }
-            else {
-                selectedPath = fileChooser.getSelectedFile().getParentFile().toPath();
-            }
-            WildLogPaths.setWorkspacePrefix(selectedPath.toAbsolutePath().toString());
-            return true;
-        }
-        else {
-            if (inTerminateIfNotSelected) {
-                Application.getInstance().exit();
-            }
-        }
-        return false;
     }
 
     @Override

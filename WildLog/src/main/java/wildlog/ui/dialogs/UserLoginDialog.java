@@ -1,9 +1,6 @@
 package wildlog.ui.dialogs;
 
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -15,7 +12,6 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.DummyTaskbarFrame;
 import wildlog.utils.WildLogApplicationTypes;
-import wildlog.utils.WildLogPaths;
 
 
 public class UserLoginDialog extends JDialog {
@@ -59,7 +55,6 @@ public class UserLoginDialog extends JDialog {
         lblWorkspaceName = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JPasswordField();
-        btnSwitchWorkspace = new javax.swing.JButton();
         btnLogin = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -122,16 +117,6 @@ public class UserLoginDialog extends JDialog {
             }
         });
 
-        btnSwitchWorkspace.setText("Switch");
-        btnSwitchWorkspace.setToolTipText("Switch to a different WildLog Workspace.");
-        btnSwitchWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSwitchWorkspace.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        btnSwitchWorkspace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSwitchWorkspaceActionPerformed(evt);
-            }
-        });
-
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.setToolTipText("Log into the Workspace.");
@@ -158,10 +143,8 @@ public class UserLoginDialog extends JDialog {
                     .addGroup(pnlBodyLayout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblWorkspaceName, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
-                        .addGap(6, 6, 6)
-                        .addComponent(btnSwitchWorkspace))
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(lblWorkspaceName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 466, Short.MAX_VALUE)
                     .addGroup(pnlBodyLayout.createSequentialGroup()
                         .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -179,9 +162,8 @@ public class UserLoginDialog extends JDialog {
                 .addContainerGap()
                 .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSwitchWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
+                    .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
                 .addGroup(pnlBodyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -213,6 +195,13 @@ public class UserLoginDialog extends JDialog {
                 loginSuccess = true;
             }
         }
+        if (!loginSuccess) {
+            WildLogApp.LOGGER.log(Level.WARN, "Failed login attempt...");
+            WLOptionPane.showMessageDialog(this,
+                    "This Workspace can only be accessed using a valid username and password.",
+                    "Incorrect Login!", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -223,42 +212,10 @@ public class UserLoginDialog extends JDialog {
         }
     }//GEN-LAST:event_txtPasswordKeyPressed
 
-    private void btnSwitchWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSwitchWorkspaceActionPerformed
-        if (WildLogApp.configureWildLogHomeBasedOnFileBrowser(null, false)) {
-            // Write first
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().resolve("wildloghome").toFile()));
-                writer.write(WildLogPaths.getFullWorkspacePrefix().toString());
-                writer.flush();
-            }
-            catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            }
-            finally {
-                if (writer != null) {
-                    try {
-                        writer.close();
-                    }
-                    catch (IOException ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    }
-                }
-            }
-            // Shutdown
-            WLOptionPane.showMessageDialog(app.getMainFrame(),
-                    "The WildLog Workspace has been changed to: " + System.lineSeparator() 
-                    + WildLogPaths.getFullWorkspacePrefix().toString() + System.lineSeparator()
-                    + "Please restart the application.",
-                    "Workspace Changed!", JOptionPane.INFORMATION_MESSAGE);
-            app.quit(evt);
-        }
-    }//GEN-LAST:event_btnSwitchWorkspaceActionPerformed
-
     public boolean isLoginSuccess() {
         return loginSuccess;
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
@@ -269,7 +226,6 @@ public class UserLoginDialog extends JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
-    private javax.swing.JButton btnSwitchWorkspace;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

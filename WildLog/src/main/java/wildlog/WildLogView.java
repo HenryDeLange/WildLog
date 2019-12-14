@@ -14,7 +14,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -292,7 +291,6 @@ public final class WildLogView extends JFrame {
         }
         // Enforce user access
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-            sprWorkspace1.setVisible(false);
             sprWorkspace2.setVisible(false);
             mnuCleanWorkspace.setEnabled(false);
             mnuCleanWorkspace.setVisible(false);
@@ -463,9 +461,6 @@ public final class WildLogView extends JFrame {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
-        mnuChangeWorkspace = new javax.swing.JMenuItem();
-        mnuCreateWorkspace = new javax.swing.JMenuItem();
-        sprWorkspace1 = new javax.swing.JPopupMenu.Separator();
         mnuChangeWorkspaceName = new javax.swing.JMenuItem();
         sprWorkspaceUsers = new javax.swing.JPopupMenu.Separator();
         mnuWorkspaceUsers = new javax.swing.JMenuItem();
@@ -952,31 +947,6 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         workspaceMenu.setText("Workspace");
         workspaceMenu.setName("workspaceMenu"); // NOI18N
-
-        mnuChangeWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuChangeWorkspace.setText("Switch Active Workspace");
-        mnuChangeWorkspace.setToolTipText("Select another Workspace to use.");
-        mnuChangeWorkspace.setName("mnuChangeWorkspace"); // NOI18N
-        mnuChangeWorkspace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuChangeWorkspaceActionPerformed(evt);
-            }
-        });
-        workspaceMenu.add(mnuChangeWorkspace);
-
-        mnuCreateWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuCreateWorkspace.setText("Create New Workspace");
-        mnuCreateWorkspace.setToolTipText("Select a folder where a new Workspace will be created.");
-        mnuCreateWorkspace.setName("mnuCreateWorkspace"); // NOI18N
-        mnuCreateWorkspace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuCreateWorkspaceActionPerformed(evt);
-            }
-        });
-        workspaceMenu.add(mnuCreateWorkspace);
-
-        sprWorkspace1.setName("sprWorkspace1"); // NOI18N
-        workspaceMenu.add(sprWorkspace1);
 
         mnuChangeWorkspaceName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuChangeWorkspaceName.setText("Rename Active Workspace");
@@ -2352,40 +2322,6 @@ public final class WildLogView extends JFrame {
         aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutWildLogActionPerformed
 
-    private void mnuChangeWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceActionPerformed
-        if (WildLogApp.configureWildLogHomeBasedOnFileBrowser(app.getMainFrame(), false)) {
-            // Write first
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().resolve("wildloghome").toFile()));
-                writer.write(WildLogPaths.getFullWorkspacePrefix().toString());
-                writer.flush();
-            }
-            catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            }
-            finally {
-                if (writer != null) {
-                    try {
-                        writer.close();
-                    }
-                    catch (IOException ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    }
-                }
-            }
-            // Shutdown
-            WLOptionPane.showMessageDialog(app.getMainFrame(),
-                    "The WildLog Workspace has been changed to: " + System.lineSeparator() 
-                    + WildLogPaths.getFullWorkspacePrefix().toString() + System.lineSeparator()
-                    + "Please restart the application.",
-                    "Workspace Changed!", JOptionPane.INFORMATION_MESSAGE);
-//            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
-//            this.setVisible(false);
-            app.quit(evt);
-        }
-    }//GEN-LAST:event_mnuChangeWorkspaceActionPerformed
-
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[CleanWorkspace]");
         // Popup 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
@@ -2919,38 +2855,6 @@ public final class WildLogView extends JFrame {
         JDialog aboutBox = new WildNoteAboutBox();
         aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutWildNoteActionPerformed
-
-    private void mnuCreateWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateWorkspaceActionPerformed
-        if (WildLogApp.configureWildLogHomeBasedOnFileBrowser(app.getMainFrame(), false)) {
-            // Write first
-            BufferedWriter writer = null;
-            try {
-                writer = new BufferedWriter(new FileWriter(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().resolve("wildloghome").toFile()));
-                writer.write(WildLogPaths.getFullWorkspacePrefix().toString());
-                writer.flush();
-            }
-            catch (IOException ex) {
-                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            }
-            finally {
-                if (writer != null) {
-                    try {
-                        writer.close();
-                    }
-                    catch (IOException ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    }
-                }
-            }
-            // Shutdown
-            WLOptionPane.showMessageDialog(app.getMainFrame(),
-                    "The WildLog Workspace has been created. Please restart the application.",
-                    "Workspace Created!", JOptionPane.INFORMATION_MESSAGE);
-//            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
-//            this.setVisible(false);
-            app.quit(evt);
-        }
-    }//GEN-LAST:event_mnuCreateWorkspaceActionPerformed
 
     private void mnuImportIUCNListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportIUCNListActionPerformed
         int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
@@ -4088,14 +3992,12 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuBulkImport;
     private javax.swing.JMenuItem mnuCalcDuration;
     private javax.swing.JMenuItem mnuCalcSunMoon;
-    private javax.swing.JMenuItem mnuChangeWorkspace;
     private javax.swing.JMenuItem mnuChangeWorkspaceName;
     private javax.swing.JMenuItem mnuCheckUpdates;
     private javax.swing.JMenuItem mnuCleanWorkspace;
     private javax.swing.JMenuItem mnuConvertCoordinates;
     private javax.swing.JMenuItem mnuCreateGIF;
     private javax.swing.JMenuItem mnuCreateSlideshow;
-    private javax.swing.JMenuItem mnuCreateWorkspace;
     private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem mnuEchoWorkspace;
     private javax.swing.JMenuItem mnuExifMenuItem;
@@ -4147,7 +4049,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator sprImport3;
     private javax.swing.JPopupMenu.Separator sprImport4;
     private javax.swing.JPopupMenu.Separator sprImport5;
-    private javax.swing.JPopupMenu.Separator sprWorkspace1;
     private javax.swing.JPopupMenu.Separator sprWorkspace2;
     private javax.swing.JPopupMenu.Separator sprWorkspaceUsers;
     private javax.swing.JLabel statusAnimationLabel;
