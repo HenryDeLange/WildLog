@@ -292,7 +292,7 @@ public final class SyncAzure {
                 }
             }
             // Build the combined filters
-            if (inAfterTimestamp > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
+            if (workspaceID > 0 && inAfterTimestamp > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
                 String baseFilter = TableQuery.combineFilters(
                         TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)),
                         TableQuery.Operators.AND,
@@ -300,19 +300,25 @@ public final class SyncAzure {
                 query = query.where(TableQuery.combineFilters(baseFilter, TableQuery.Operators.AND, idFilter));
             }
             else
-            if (inAfterTimestamp > 0) {
+            if (workspaceID > 0 && inAfterTimestamp > 0) {
                 query = query.where(TableQuery.combineFilters(
                         TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)),
                         TableQuery.Operators.AND,
                         TableQuery.generateFilterCondition("Timestamp", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, new Date(inAfterTimestamp))));
             }
             else
-            if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
+            if (workspaceID > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
                 String baseFilter = TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID));
                 query = query.where(TableQuery.combineFilters(baseFilter, TableQuery.Operators.AND, idFilter));
             }
-            else {
+            else 
+            if (workspaceID > 0) {
                 query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)));
+            }
+            else {
+                if (workspaceID == 0 && inDataType != WildLogDataType.WILDLOG_OPTIONS) {
+                    throw new Exception("ERROR: Only WildLog Options can be read without specifying the PartitionKey (WorkspaceID)!");
+                }
             }
             // Run the query
             List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();

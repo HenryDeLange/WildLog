@@ -13,6 +13,7 @@ import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.VisitCore;
 import wildlog.data.dataobjects.WildLogDeleteLog;
 import wildlog.data.dataobjects.WildLogFileCore;
+import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -143,44 +144,50 @@ public class SyncTableEntry extends TableServiceEntity {
         super.readEntity(inProperties, inOpContext);
         // Next read the fields for the data object
         if (dataType.equals(WildLogDataType.ELEMENT.getKey())) {
-            if (dbVersion == 12) {
+            if (dbVersion >= 12) {
                 data = readElementV12(inProperties);
             }
         }
         else
         if (dataType.equals(WildLogDataType.LOCATION.getKey())) {
-            if (dbVersion == 12) {
+            if (dbVersion >= 12) {
                 data = readLocationV12(inProperties);
             }
         }
         else
         if (dataType.equals(WildLogDataType.VISIT.getKey())) {
-            if (dbVersion == 12) {
+            if (dbVersion >= 12) {
                 data = readVisitV12(inProperties);
             }
         }
         else
         if (dataType.equals(WildLogDataType.SIGHTING.getKey())) {
-            if (dbVersion == 12) {
+            if (dbVersion >= 12) {
                 data = readSightingV12(inProperties);
             }
         }
         else
         if (dataType.equals(WildLogDataType.FILE.getKey())) {
-            if (dbVersion == 12) {
+            if (dbVersion >= 12) {
                 data = readFileV12(inProperties);
             }
         }
         else
         if (dataType.equals(WildLogDataType.WILDLOG_USER.getKey())) {
-            if (dbVersion == 12) {
+            if (dbVersion >= 12) {
                 data = readUserV12(inProperties);
             }
         }
         else
         if (dataType.equals(WildLogDataType.DELETE_LOG.getKey())) {
-            if (dbVersion == 12) {
+            if (dbVersion >= 12) {
                 data = readDeleteLogV12(inProperties);
+            }
+        }
+        else
+        if (dataType.equals(WildLogDataType.WILDLOG_OPTIONS.getKey())) {
+            if (dbVersion >= 12) {
+                data = readOptionsV12(inProperties);
             }
         }
         else {
@@ -332,6 +339,30 @@ public class SyncTableEntry extends TableServiceEntity {
         return tempData;
     }
     
+    private WildLogOptions readOptionsV12(HashMap<String, EntityProperty> inProperties) {
+        WildLogOptions tempData = new WildLogOptions();
+        tempData.setID(Long.parseLong(rowKey));
+        tempData.setWorkspaceID(inProperties.getOrDefault("workspaceID", EMPTY_LONG).getValueAsLong());
+        tempData.setWorkspaceName(inProperties.getOrDefault("workspaceName", EMPTY_STRING).getValueAsString());
+        tempData.setDatabaseVersion(inProperties.getOrDefault("databaseVersion", EMPTY_INT).getValueAsInteger());
+        tempData.setDefaultLatitude(inProperties.getOrDefault("defaultLatitude", EMPTY_DOUBLE).getValueAsDouble());
+        tempData.setDefaultLongitude(inProperties.getOrDefault("defaultLongitude", EMPTY_DOUBLE).getValueAsDouble());
+        tempData.setDefaultZoom(inProperties.getOrDefault("defaultZoom", EMPTY_DOUBLE).getValueAsDouble());
+        tempData.setDefaultSlideshowSpeed((float) inProperties.getOrDefault("defaultSlideshowSpeed", EMPTY_DOUBLE).getValueAsDouble());
+        tempData.setDefaultSlideshowSize(inProperties.getOrDefault("defaultSlideshowSize", EMPTY_INT).getValueAsInteger());
+        tempData.setBundledPlayers(inProperties.getOrDefault("bundledPlayers", EMPTY_BOOLEAN).getValueAsBoolean());
+        tempData.setEnableSounds(inProperties.getOrDefault("enableSounds", EMPTY_BOOLEAN).getValueAsBoolean());
+        tempData.setUploadLogs(inProperties.getOrDefault("uploadLogs", EMPTY_BOOLEAN).getValueAsBoolean());
+        tempData.setUseIndividualsInSightingPath(inProperties.getOrDefault("useIndividualsInSightingPath", EMPTY_BOOLEAN).getValueAsBoolean());
+        tempData.setUseScientificNames(inProperties.getOrDefault("useScientificNames", EMPTY_BOOLEAN).getValueAsBoolean());
+        tempData.setUseThumbnailTables(inProperties.getOrDefault("useThumbnailTables", EMPTY_BOOLEAN).getValueAsBoolean());
+        tempData.setUseThumnailBrowsing(inProperties.getOrDefault("useThumnailBrowsing", EMPTY_BOOLEAN).getValueAsBoolean());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
+        return tempData;
+    }
+    
     // WRITE PROPERTIES:
     
     @Override
@@ -342,44 +373,50 @@ public class SyncTableEntry extends TableServiceEntity {
         // Next write the fields from the data object
         if (data != null) {
             if (dataType.equals(WildLogDataType.ELEMENT.getKey())) {
-                if (dbVersion == 12) {
+                if (dbVersion >= 12) {
                     writeElementV12((ElementCore) data, properties);
                 }
             }
             else
             if (dataType.equals(WildLogDataType.LOCATION.getKey())) {
-                if (dbVersion == 12) {
+                if (dbVersion >= 12) {
                     writeLocationV12((LocationCore) data, properties);
                 }
             }
             else
             if (dataType.equals(WildLogDataType.VISIT.getKey())) {
-                if (dbVersion == 12) {
+                if (dbVersion >= 12) {
                     writeVisitV12((VisitCore) data, properties);
                 }
             }
             else
             if (dataType.equals(WildLogDataType.SIGHTING.getKey())) {
-                if (dbVersion == 12) {
+                if (dbVersion >= 12) {
                     writeSightingV12((SightingCore) data, properties);
                 }
             }
             else
             if (dataType.equals(WildLogDataType.FILE.getKey())) {
-                if (dbVersion == 12) {
+                if (dbVersion >= 12) {
                     writeFileV12((WildLogFileCore) data, properties);
                 }
             }
             else
             if (dataType.equals(WildLogDataType.WILDLOG_USER.getKey())) {
-                if (dbVersion == 12) {
+                if (dbVersion >= 12) {
                     writeUserV12((WildLogUser) data, properties);
                 }
             }
             else
             if (dataType.equals(WildLogDataType.DELETE_LOG.getKey())) {
-                if (dbVersion == 12) {
+                if (dbVersion >= 12) {
                     writeDeleteLogV12((WildLogDeleteLog) data, properties);
+                }
+            }
+            else
+            if (dataType.equals(WildLogDataType.WILDLOG_OPTIONS.getKey())) {
+                if (dbVersion >= 12) {
+                    writeOptionsV12((WildLogOptions) data, properties);
                 }
             }
         }
@@ -504,6 +541,27 @@ public class SyncTableEntry extends TableServiceEntity {
     
     private void writeDeleteLogV12(WildLogDeleteLog inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
+    }
+    
+    private void writeOptionsV12(WildLogOptions inData, HashMap<String, EntityProperty> inProperties) {
+        inProperties.put("workspaceID", new EntityProperty(inData.getWorkspaceID()));
+        inProperties.put("workspaceName", new EntityProperty(inData.getWorkspaceName()));
+        inProperties.put("databaseVersion", new EntityProperty(inData.getDatabaseVersion()));
+        inProperties.put("defaultLatitude", new EntityProperty(inData.getDefaultLatitude()));
+        inProperties.put("defaultLongitude", new EntityProperty(inData.getDefaultLongitude()));
+        inProperties.put("defaultZoom", new EntityProperty(inData.getDefaultZoom()));
+        inProperties.put("defaultSlideshowSpeed", new EntityProperty(inData.getDefaultSlideshowSpeed()));
+        inProperties.put("defaultSlideshowSize", new EntityProperty(inData.getDefaultSlideshowSize()));
+        inProperties.put("bundledPlayers", new EntityProperty(inData.isBundledPlayers()));
+        inProperties.put("enableSounds", new EntityProperty(inData.isEnableSounds()));
+        inProperties.put("uploadLogs", new EntityProperty(inData.isUploadLogs()));
+        inProperties.put("useIndividualsInSightingPath", new EntityProperty(inData.isUseIndividualsInSightingPath()));
+        inProperties.put("useScientificNames", new EntityProperty(inData.isUseScientificNames()));
+        inProperties.put("useThumbnailTables", new EntityProperty(inData.isUseThumbnailTables()));
+        inProperties.put("useThumnailBrowsing", new EntityProperty(inData.isUseThumnailBrowsing()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
         inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));

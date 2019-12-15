@@ -1,7 +1,9 @@
 package wildlog.data.dataobjects;
 
+import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 
-public class WildLogOptions {
+
+public class WildLogOptions extends DataObjectWithAudit{
     private int databaseVersion;
     private double defaultLatitude;
     private double defaultLongitude;

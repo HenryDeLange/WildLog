@@ -53,7 +53,7 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected SecureRandom randomGenerator;
     // Version
-    protected static final int WILDLOG_DB_VERSION = 13;
+    protected static final int WILDLOG_DB_VERSION = 14;
     // Tables
     protected static final String tableElements = "CREATE TABLE ELEMENTS ("
             + "ID bigint PRIMARY KEY NOT NULL, "
@@ -151,6 +151,7 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG ("
+            + "ID bigint PRIMARY KEY NOT NULL DEFAULT 1, "
             + "VERSION int DEFAULT " + WILDLOG_DB_VERSION + ", "
             + "DEFAULTLATITUDE double DEFAULT -28.2, "
             + "DEFAULTLONGITUDE double DEFAULT 24.7, "
@@ -165,7 +166,9 @@ public abstract class DBI_JDBC implements DBI {
             + "WORKSPACEID bigint DEFAULT 0, "
             + "UPLOADLOGS smallint DEFAULT true, "
             + "BUNDLEDPLAYERS smallint DEFAULT true, "
-            + "USEINDVCOUNTINPATH smallint DEFAULT false)";
+            + "USEINDVCOUNTINPATH smallint DEFAULT false, "
+            + "AUDITTIME bigint NOT NULL, "
+            + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableAdhocData = "CREATE TABLE ADHOC ("
             + "FIELDID varchar(150) NOT NULL, "
             + "DATAKEY varchar(150) NOT NULL, "
@@ -331,7 +334,7 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITUSER) "
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createWildLogOptions = "INSERT INTO WILDLOG VALUES ("
-            + "DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, ?, DEFAULT, DEFAULT, DEFAULT)";
+            + "?, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, ?, DEFAULT, DEFAULT, DEFAULT, ?, ?)";
     protected static final String createAdhocData = "INSERT INTO ADHOC ("
             + "FIELDID, "
             + "DATAKEY, "
@@ -458,6 +461,7 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITUSER = ? "
             + "WHERE ID = ?";
     protected static final String updateWildLogOptions = "UPDATE WILDLOG SET "
+            + "ID = ?, "
             + "DEFAULTLATITUDE = ?, "
             + "DEFAULTLONGITUDE = ?, "
             + "DEFAULTZOOM = ?, "
@@ -471,7 +475,10 @@ public abstract class DBI_JDBC implements DBI {
             + "WORKSPACEID = ?, "
             + "UPLOADLOGS = ?, "
             + "BUNDLEDPLAYERS = ?, "
-            + "USEINDVCOUNTINPATH = ?";
+            + "USEINDVCOUNTINPATH = ?, "
+            + "AUDITTIME = ?, "
+            + "AUDITUSER = ? "
+            + "WHERE ID = ?";
     protected static final String updateAdhocData = "UPDATE ADHOC SET "
             + "FIELDID = ?, "
             + "DATAKEY = ?, "
@@ -1322,6 +1329,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             if (results.next()) {
                 tempWildLogOptions = inReturnType.newInstance();
+                tempWildLogOptions.setID(results.getLong("ID"));
                 tempWildLogOptions.setDatabaseVersion(results.getInt("VERSION"));
                 tempWildLogOptions.setDefaultLatitude(results.getDouble("DEFAULTLATITUDE"));
                 tempWildLogOptions.setDefaultLongitude(results.getDouble("DEFAULTLONGITUDE"));
@@ -1337,6 +1345,8 @@ public abstract class DBI_JDBC implements DBI {
                 tempWildLogOptions.setUploadLogs(results.getBoolean("UPLOADLOGS"));
                 tempWildLogOptions.setBundledPlayers(results.getBoolean("BUNDLEDPLAYERS"));
                 tempWildLogOptions.setUseIndividualsInSightingPath(results.getBoolean("USEINDVCOUNTINPATH"));
+                tempWildLogOptions.setAuditTime(results.getLong("AUDITTIME"));
+                tempWildLogOptions.setAuditUser(results.getString("AUDITUSER"));
             }
         }
         catch (SQLException ex) {
@@ -2264,8 +2274,14 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Insert
             state = conn.prepareStatement(createWildLogOptions);
-            // Use default values (except for the WorkspaceID)
-            state.setLong(1, generateID());
+            // Use default values (except for the WorkspaceID and audit info)
+            long workspaceID = generateID();
+            state.setLong(1, workspaceID);
+            state.setLong(2, workspaceID);
+            WildLogOptions options = new WildLogOptions();
+            setupAuditInfo(options);
+            state.setLong(3, options.getAuditTime());
+            state.setString(4, UtilsData.limitLength(UtilsData.sanitizeString(options.getAuditUser()), 150));
             // Execute
             state.executeUpdate();
         }
@@ -2285,20 +2301,25 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Update
             state = conn.prepareStatement(updateWildLogOptions);
-            state.setDouble(1, inWildLogOptions.getDefaultLatitude());
-            state.setDouble(2, inWildLogOptions.getDefaultLongitude());
-            state.setDouble(3, inWildLogOptions.getDefaultZoom());
-            state.setFloat(4, inWildLogOptions.getDefaultSlideshowSpeed());
-            state.setInt(5, inWildLogOptions.getDefaultSlideshowSize());
-            state.setBoolean(6, inWildLogOptions.isUseThumbnailTables());
-            state.setBoolean(7, inWildLogOptions.isUseThumnailBrowsing());
-            state.setBoolean(8, inWildLogOptions.isEnableSounds());
-            state.setBoolean(9, inWildLogOptions.isUseScientificNames());
-            state.setString(10, inWildLogOptions.getWorkspaceName());
-            state.setLong(11, inWildLogOptions.getWorkspaceID());
-            state.setBoolean(12, inWildLogOptions.isUploadLogs());
-            state.setBoolean(13, inWildLogOptions.isBundledPlayers());
-            state.setBoolean(14, inWildLogOptions.isUseIndividualsInSightingPath());
+            state.setLong(1, inWildLogOptions.getID());
+            state.setDouble(2, inWildLogOptions.getDefaultLatitude());
+            state.setDouble(3, inWildLogOptions.getDefaultLongitude());
+            state.setDouble(4, inWildLogOptions.getDefaultZoom());
+            state.setFloat(5, inWildLogOptions.getDefaultSlideshowSpeed());
+            state.setInt(6, inWildLogOptions.getDefaultSlideshowSize());
+            state.setBoolean(7, inWildLogOptions.isUseThumbnailTables());
+            state.setBoolean(8, inWildLogOptions.isUseThumnailBrowsing());
+            state.setBoolean(9, inWildLogOptions.isEnableSounds());
+            state.setBoolean(10, inWildLogOptions.isUseScientificNames());
+            state.setString(11, inWildLogOptions.getWorkspaceName());
+            state.setLong(12, inWildLogOptions.getWorkspaceID());
+            state.setBoolean(13, inWildLogOptions.isUploadLogs());
+            state.setBoolean(14, inWildLogOptions.isBundledPlayers());
+            state.setBoolean(15, inWildLogOptions.isUseIndividualsInSightingPath());
+            setupAuditInfo(inWildLogOptions);
+            state.setLong(16, inWildLogOptions.getAuditTime());
+            state.setString(17, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogOptions.getAuditUser()), 150));
+            state.setLong(18, inWildLogOptions.getID());
             // Execute
             state.executeUpdate();
          }

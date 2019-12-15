@@ -227,7 +227,7 @@ public class WildLogApp extends Application {
                         "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, 
                         new String[] { "Open another Workspace", "Restore a Database Backup", "Exit" }, null);
                 if (choice == 0) {
-                    WorkspacePickerDialog.configureWildLogHomeBasedOnFileBrowser(null, true);
+                    WorkspacePickerDialog.configureWildLogHomeBasedOnFileBrowser(null, true, WildLogPaths.getFullWorkspacePrefix().toString());
                 }
                 else
                 if (choice == 1) {

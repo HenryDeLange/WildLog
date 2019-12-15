@@ -154,7 +154,6 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.close();
             WildLogApp.LOGGER.log(Level.INFO, "Database username and password updated.");
         }
-
     }
     
     
@@ -1139,6 +1138,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v12 (before upgrade to 13)"));
                                     upgradeSuccess = doUpdate13();
                                 }
+                                else
+                                if (currentDBVersion == 13) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v13 (before upgrade to 14)"));
+                                    upgradeSuccess = doUpdate14();
+                                }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
                             }
@@ -2012,6 +2016,34 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 13");
+        return true;
+    }
+    
+    private boolean doUpdate14() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 14");
+        // This update adds the audit columns to the WildLog Options table (for syncing)
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Change from varchar to bigint
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN ID bigint DEFAULT 1 PRIMARY KEY NOT NULL");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN AUDITTIME bigint DEFAULT 0 NOT NULL");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN AUDITUSER varchar(150) DEFAULT '' NOT NULL");
+            state.executeUpdate("UPDATE WILDLOG SET ID=WORKSPACEID");
+            state.executeUpdate("UPDATE WILDLOG SET AUDITTIME=0");
+            state.executeUpdate("UPDATE WILDLOG SET AUDITUSER='Update14'");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=14");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 14");
         return true;
     }
 
