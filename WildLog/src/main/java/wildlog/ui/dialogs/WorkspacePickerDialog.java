@@ -32,6 +32,8 @@ import wildlog.utils.WildLogPaths;
 public class WorkspacePickerDialog extends JDialog {
     private Path workspacePath = null;
     private boolean selectionMade = false;
+    private long workspaceID = 0;
+    private boolean triggerImmediateSync = false;
 
     public WorkspacePickerDialog() {
         super(new DummyTaskbarFrame("WildLog Workspace", new ImageIcon(
@@ -171,7 +173,7 @@ public class WorkspacePickerDialog extends JDialog {
         });
 
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SelectClear.png"))); // NOI18N
+        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnRemove.setText("Remove Workspace");
         btnRemove.setToolTipText("Remove the selected Workspace from the list.");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -189,19 +191,18 @@ public class WorkspacePickerDialog extends JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnCloudSync))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnChooseWorkspace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(cmbWorkspacePath, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(btnBrowse))
-                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCloudSync))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnChooseWorkspace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(cmbWorkspacePath, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnBrowse))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(15, 15, 15))
         );
@@ -269,13 +270,9 @@ public class WorkspacePickerDialog extends JDialog {
         WorkspaceListSyncDialog workspaceDialog = new WorkspaceListSyncDialog(this);
         workspaceDialog.setVisible(true);
         if (workspaceDialog.getWorkspaceID() > 0) {
-            // Setup the workspace based on the selected ID
-
-// TODO: Skep die folders en lee databasis wat net die wildlog options in het
-
-            // Open the sync popup to start the sync into the new workspace
-            WorkspaceSyncDialog syncDialog = new WorkspaceSyncDialog();
-            syncDialog.setVisible(true);
+            workspaceID = workspaceDialog.getWorkspaceID();
+            triggerImmediateSync = true;
+            btnChooseWorkspaceActionPerformed(evt);
         }
     }//GEN-LAST:event_btnCloudSyncActionPerformed
 
@@ -322,20 +319,20 @@ public class WorkspacePickerDialog extends JDialog {
             // Write the selected (active / default) workspace first
             String selectedWorkspace = ((String) cmbWorkspacePath.getSelectedItem()).trim();
             if (!selectedWorkspace.isEmpty()) {
-                WildLogApp.LOGGER.log(Level.DEBUG, "Writing wildloghome (selected): " + selectedWorkspace);
+                WildLogApp.LOGGER.log(Level.DEBUG, "Wildloghome: '" + selectedWorkspace + "' (selected)");
                 writer.write(selectedWorkspace + System.lineSeparator());
             }
             // Write the rest of the know workspaces
             for (int t = 0; t < cmbWorkspacePath.getItemCount(); t++) {
                 String workspace = (String) cmbWorkspacePath.getItemAt(t).trim();
                 if (!workspace.isEmpty() && !workspace.equals(selectedWorkspace)) {
-                    WildLogApp.LOGGER.log(Level.DEBUG, "Writing wildloghome: " + workspace);
+                    WildLogApp.LOGGER.log(Level.DEBUG, "Wildloghome: '" + workspace + "'");
                     writer.write(workspace + System.lineSeparator());
                 }
             }
         }
-        catch (IOException ioex) {
-            WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
+        catch (IOException ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         finally {
             if (writer != null) {
@@ -425,9 +422,17 @@ public class WorkspacePickerDialog extends JDialog {
         }
         return false;
     }
-
+    
     public boolean isSelectionMade() {
         return selectionMade;
+    }
+
+    public long getWorkspaceID() {
+        return workspaceID;
+    }
+
+    public boolean isTriggerImmediateSync() {
+        return triggerImmediateSync;
     }
     
     @Override

@@ -1329,7 +1329,7 @@ public final class WildLogView extends JFrame {
         });
 
         mnuSyncWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sync.png"))); // NOI18N
-        mnuSyncWorkspace.setText("Cloud Sync Workspace");
+        mnuSyncWorkspace.setText("Sync with Cloud Workspace");
         mnuSyncWorkspace.setToolTipText("Synchronise the content of this Workspace with that of a cloud backup.");
         mnuSyncWorkspace.setName("mnuSyncWorkspace"); // NOI18N
         mnuSyncWorkspace.addActionListener(new java.awt.event.ActionListener() {

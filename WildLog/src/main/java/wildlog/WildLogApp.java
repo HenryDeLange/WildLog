@@ -43,6 +43,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.HyperlinkEvent;
@@ -62,6 +63,7 @@ import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.WildLogUserTypes;
 import wildlog.ui.dialogs.UserLoginDialog;
 import wildlog.ui.dialogs.WorkspacePickerDialog;
+import wildlog.ui.dialogs.WorkspaceSyncDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
@@ -95,6 +97,8 @@ public class WildLogApp extends Application {
     private WildLogView view;
     private WildLogOptions wildLogOptions;
     private int threadCount;
+    private boolean triggerSync = false;
+    private long triggerSyncWorkspaceID = 0;
     /** 
     * Make sure the application uses the same WildLogDBI instance...
     * The WildLogDBI is initialized in startup() and closed in shutdown()
@@ -105,271 +109,160 @@ public class WildLogApp extends Application {
     @Override
     protected void initialize(String[] arg0) {
         super.initialize(arg0);
-        // Setup the Look and Feel
-        if (useNimbusLF) {
-            // Try to set the Nimbus look and feel
-            // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
-            // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
-            try {
-                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                    if ("Nimbus".equals(info.getName())) {
-                        UIManager.setLookAndFeel(info.getClassName());
-                        // Make the global button margins smaller, because Nimbus ignores the setting on the buttons
-                        UIManager.getLookAndFeelDefaults().put("Button.contentMargins", new InsetsUIResource(2,2,2,2));
-                        UIManager.getLookAndFeelDefaults().put("ToggleButton.contentMargins", new InsetsUIResource(2,2,2,2));
-                        UIManager.getLookAndFeelDefaults().put("OptionPane.sameSizeButtons", true);
-                        break;
+        try {
+            // Setup the Look and Feel
+            if (useNimbusLF) {
+                // Try to set the Nimbus look and feel
+                // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
+                // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
+                try {
+                    for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                        if ("Nimbus".equals(info.getName())) {
+                            UIManager.setLookAndFeel(info.getClassName());
+                            // Make the global button margins smaller, because Nimbus ignores the setting on the buttons
+                            UIManager.getLookAndFeelDefaults().put("Button.contentMargins", new InsetsUIResource(2,2,2,2));
+                            UIManager.getLookAndFeelDefaults().put("ToggleButton.contentMargins", new InsetsUIResource(2,2,2,2));
+                            UIManager.getLookAndFeelDefaults().put("OptionPane.sameSizeButtons", true);
+                            break;
+                        }
                     }
                 }
+                catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                    // We'll try to go ahead without the Nimbus LookAndFeel
+                    WildLogApp.LOGGER.log(Level.INFO, "Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
+                }
             }
-            catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-                // We'll try to go ahead without the Nimbus LookAndFeel
-                WildLogApp.LOGGER.log(Level.INFO, "Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
+            try {
+                // Remove the dotted border around controls which is not consistent with Windows
+                UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+                UIManager.put("ToggleButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+                UIManager.put("CheckBox.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+                UIManager.put("TabbedPane.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+                UIManager.put("RadioButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+                UIManager.put("Slider.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
+                UIManager.put("List.focusCellHighlightBorder", BorderFactory.createEmptyBorder());
+                // NOTE: JComboBox kan nie so werk nie, vir dit moet ek 'n nuwe Renderer gebruik. (Sien ComboBoxFixer.java)
+            }
+            catch (Exception e) {
+                WildLogApp.LOGGER.log(Level.INFO, "Could not remove dotted border from focus controls. The application will continue to launch, but there may be some display problems...");
+            }
+            // Select the workspace to use
+            WildLogApp.LOGGER.log(Level.INFO, "Choosing workspace...");
+            WorkspacePickerDialog workspacePicker = new WorkspacePickerDialog();
+            workspacePicker.setVisible(true);
+            if (!workspacePicker.isSelectionMade()) {
+                WildLogApp.LOGGER.log(Level.DEBUG, "No workspace was selected...");
+                exit();
+                return;
+            }
+            if (Files.notExists(WildLogPaths.getFullWorkspacePrefix()) 
+                    || !Files.isWritable(WildLogPaths.getFullWorkspacePrefix()) || !Files.isReadable(WildLogPaths.getFullWorkspacePrefix())) {
+                WildLogApp.LOGGER.log(Level.WARN, "Workspace not valid: " + WildLogPaths.getFullWorkspacePrefix().toString());
+                WLOptionPane.showMessageDialog(null,
+                        "Unable to setup the Workspace at: " + WildLogPaths.getFullWorkspacePrefix().toString(),
+                        "Incorrect Workspace!", 
+                        JOptionPane.ERROR_MESSAGE);
+                exit();
+                return;
+            }
+            triggerSync = workspacePicker.isTriggerImmediateSync();
+            triggerSyncWorkspaceID = workspacePicker.getWorkspaceID();
+            // Proceed to open the selected workspace
+            WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");
+            // Get the threadcount
+            threadCount = Runtime.getRuntime().availableProcessors();
+            if (threadCount < 3) {
+                threadCount = 3;
+            }
+            if (threadCount > 10) {
+                threadCount = 10;
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "ThreadPools will be created using {} threads for {} processors.", 
+                    threadCount, Runtime.getRuntime().availableProcessors());
+            // Make sure all the basic data/file folders are in place
+            try {
+                Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());
+                Files.createDirectories(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath());
+                Files.createDirectories(WildLogPaths.WILDLOG_FILES.getAbsoluteFullPath());
+                Files.createDirectories(WildLogPaths.WILDLOG_FILES_IMAGES.getAbsoluteFullPath());
+                Files.createDirectories(WildLogPaths.WILDLOG_FILES_MOVIES.getAbsoluteFullPath());
+                Files.createDirectories(WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath());
+                Files.createDirectories(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath());
+                Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
+                // Create the workspace indicator file
+                Files.write(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getAbsoluteFullPath(), 
+                        WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
+                // Create the workspace license file that applies to the actual data captured in the workspace
+                if (Files.notExists(WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getAbsoluteFullPath())) {
+                    UtilsFileProcessing.createFileFromStream(
+                            WildLogApp.class.getResourceAsStream("/" + WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getRelativePath().toString()), 
+                            WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getAbsoluteFullPath());
+                }
+                // Create the workspace read only folder indicators
+                if (Files.notExists(WildLogPaths.WILDLOG_DATA_READONLY_INDICATOR.getAbsoluteFullPath())) {
+                    UtilsFileProcessing.createFileFromBytes("The files in this folder are managed by WildLog. Never move or delete a file from this folder.".getBytes(),
+                            WildLogPaths.WILDLOG_DATA_READONLY_INDICATOR.getAbsoluteFullPath());
+                }
+                if (Files.notExists(WildLogPaths.WILDLOG_FILES_READONLY_INDICATOR.getAbsoluteFullPath())) {
+                    UtilsFileProcessing.createFileFromBytes("The files in this folder are managed by WildLog. Never move or delete a file from this folder.".getBytes(),
+                            WildLogPaths.WILDLOG_FILES_READONLY_INDICATOR.getAbsoluteFullPath());
+                }
+            }
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            // Open the database
+            // If this fails then it might be corrupt or already open. Ask the user to select a new workspace folder.
+            boolean openedWorkspace;
+            boolean busyWithRestore = false;
+            do {
+                openedWorkspace = !busyWithRestore && openWorkspace();
+                if (!busyWithRestore && openedWorkspace == false) {
+                    int choice = WLOptionPane.showOptionDialog(getMainFrame(),
+                            "<html>The WildLog Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> could not be opened. "
+                                    + "<br/>A database upgrade might be in progress, or the Workspace is no longer accessible, or another workspace is open, or the Workspace might been corrupted."
+                                    + "<br/>If the problem persists please consult the manual to restore a previous backup or contact support@mywild.co.za for help.</html>",
+                            "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, 
+                            new String[] { "Open another Workspace", "Restore a Database Backup", "Exit" }, null);
+                    if (choice == 0) {
+                        WorkspacePickerDialog.configureWildLogHomeBasedOnFileBrowser(null, true, WildLogPaths.getFullWorkspacePrefix().toString());
+                    }
+                    else
+                    if (choice == 1) {
+                        busyWithRestore = true;
+                        UtilsRestore.doDatabaseRestore();
+                    }
+                    else {
+                        exit(); // Lyk of dit beter werk as quit(null) om een of ander rede...
+                    }
+                }
+            } while (openedWorkspace == false);
+            // Load the WildLogOptions
+            wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
+            WildLogApp.LOGGER.log(Level.INFO, "Workspace opened with ID: {} [{}]", new Object[]{wildLogOptions.getWorkspaceName(), Long.toString(wildLogOptions.getWorkspaceID())});
+            // Check whether it is time to upload the logs
+            if (!triggerSync) {
+                uploadLogs();
             }
         }
-        try {
-            // Remove the dotted border around controls which is not consistent with Windows
-            UIManager.put("Button.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("ToggleButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("CheckBox.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("TabbedPane.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("RadioButton.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("Slider.focus", new ColorUIResource(new Color(0, 0, 0, 0)));
-            UIManager.put("List.focusCellHighlightBorder", BorderFactory.createEmptyBorder());
-            // NOTE: JComboBox kan nie so werk nie, vir dit moet ek 'n nuwe Renderer gebruik. (Sien ComboBoxFixer.java)
-        }
-        catch (Exception e) {
-            WildLogApp.LOGGER.log(Level.INFO, "Could not remove dotted border from focus controls. The application will continue to launch, but there may be some display problems...");
-        }
-        // Select the workspace to use
-        WildLogApp.LOGGER.log(Level.INFO, "Choosing workspace...");
-        WorkspacePickerDialog workspacePicker = new WorkspacePickerDialog();
-        workspacePicker.setVisible(true);
-        if (!workspacePicker.isSelectionMade()) {
-            WildLogApp.LOGGER.log(Level.DEBUG, "No workspace was selected...");
-            exit();
-            return;
-        }
-        if (Files.notExists(WildLogPaths.getFullWorkspacePrefix()) 
-                || !Files.isWritable(WildLogPaths.getFullWorkspacePrefix()) || !Files.isReadable(WildLogPaths.getFullWorkspacePrefix())) {
-            WildLogApp.LOGGER.log(Level.WARN, "Workspace not valid: " + WildLogPaths.getFullWorkspacePrefix().toString());
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             WLOptionPane.showMessageDialog(null,
-                    "Unable to setup the Workspace at: " + WildLogPaths.getFullWorkspacePrefix().toString(),
-                    "Incorrect Workspace!", 
+                    "Unable to initialse the Workspace...",
+                    "Startup Error!", 
                     JOptionPane.ERROR_MESSAGE);
             exit();
-            return;
-        }
-//        if (Files.notExists(workspacePicker.getWorkspacePath().resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))
-//                    || Files.notExists(workspacePicker.getWorkspacePath().resolve(WildLogPaths.WILDLOG_FILES.getRelativePath()))) {
-//            WLOptionPane.showMessageDialog(null,
-//                    "Unable to open the Workspace at: " + workspacePicker.getWorkspacePath().toString(),
-//                    "Incorrect Workspace!", 
-//                    JOptionPane.ERROR_MESSAGE);
-//            exit();
-//            return;
-//        }
-        // Proceed to open the selected workspace
-        WildLogApp.LOGGER.log(Level.INFO, "Initializing workspace...");
-        // Get the threadcount
-        threadCount = Runtime.getRuntime().availableProcessors();
-        if (threadCount < 3) {
-            threadCount = 3;
-        }
-        if (threadCount > 10) {
-            threadCount = 10;
-        }
-        WildLogApp.LOGGER.log(Level.INFO, "ThreadPools will be created using {} threads for {} processors.", 
-                threadCount, Runtime.getRuntime().availableProcessors());
-        // Make sure all the basic data/file folders are in place
-        try {
-            Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());
-            Files.createDirectories(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath());
-            Files.createDirectories(WildLogPaths.WILDLOG_FILES.getAbsoluteFullPath());
-            Files.createDirectories(WildLogPaths.WILDLOG_FILES_IMAGES.getAbsoluteFullPath());
-            Files.createDirectories(WildLogPaths.WILDLOG_FILES_MOVIES.getAbsoluteFullPath());
-            Files.createDirectories(WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath());
-            Files.createDirectories(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath());
-            Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
-            // Create the workspace indicator file
-            Files.write(WildLogPaths.WILDLOG_WORKSPACE_INDICATOR.getAbsoluteFullPath(), 
-                    WildLogApp.WILDLOG_VERSION.getBytes(), StandardOpenOption.CREATE);
-            // Create the workspace license file that applies to the actual data captured in the workspace
-            if (Files.notExists(WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getAbsoluteFullPath())) {
-                UtilsFileProcessing.createFileFromStream(
-                        WildLogApp.class.getResourceAsStream("/" + WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getRelativePath().toString()), 
-                        WildLogPaths.WILDLOG_WORKSPACE_DATA_LICENSE.getAbsoluteFullPath());
-            }
-            // Create the workspace read only folder indicators
-            if (Files.notExists(WildLogPaths.WILDLOG_DATA_READONLY_INDICATOR.getAbsoluteFullPath())) {
-                UtilsFileProcessing.createFileFromBytes("The files in this folder are managed by WildLog. Never move or delete a file from this folder.".getBytes(),
-                        WildLogPaths.WILDLOG_DATA_READONLY_INDICATOR.getAbsoluteFullPath());
-            }
-            if (Files.notExists(WildLogPaths.WILDLOG_FILES_READONLY_INDICATOR.getAbsoluteFullPath())) {
-                UtilsFileProcessing.createFileFromBytes("The files in this folder are managed by WildLog. Never move or delete a file from this folder.".getBytes(),
-                        WildLogPaths.WILDLOG_FILES_READONLY_INDICATOR.getAbsoluteFullPath());
-            }
-        }
-        catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-        }
-        // Open the database
-        // If this fails then it might be corrupt or already open. Ask the user to select a new workspace folder.
-        boolean openedWorkspace;
-        boolean busyWithRestore = false;
-        do {
-            openedWorkspace = !busyWithRestore && openWorkspace();
-            if (!busyWithRestore && openedWorkspace == false) {
-                int choice = WLOptionPane.showOptionDialog(getMainFrame(),
-                        "<html>The WildLog Workspace at <b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "</b> could not be opened. "
-                                + "<br/>A database upgrade might be in progress, or the Workspace is no longer accessible, or another workspace is open, or the Workspace might been corrupted."
-                                + "<br/>If the problem persists please consult the manual to restore a previous backup or contact support@mywild.co.za for help.</html>",
-                        "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, 
-                        new String[] { "Open another Workspace", "Restore a Database Backup", "Exit" }, null);
-                if (choice == 0) {
-                    WorkspacePickerDialog.configureWildLogHomeBasedOnFileBrowser(null, true, WildLogPaths.getFullWorkspacePrefix().toString());
-                }
-                else
-                if (choice == 1) {
-                    busyWithRestore = true;
-                    UtilsRestore.doDatabaseRestore();
-                }
-                else {
-                    exit(); // Lyk of dit beter werk as quit(null) om een of ander rede...
-                }
-            }
-        } while (openedWorkspace == false);
-        // Load the WildLogOptions
-        wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
-        WildLogApp.LOGGER.log(Level.INFO, "Workspace opened with ID: {} [{}]", new Object[]{wildLogOptions.getWorkspaceName(), Long.toString(wildLogOptions.getWorkspaceID())});
-        // Upload the logs and user data to the MyWild DB once a week (using the existance of the auto backup folder as indicator)
-        Path folderPath = WildLogPaths.WILDLOG_BACKUPS_AUTO.getAbsoluteFullPath()
-                .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_AUTO_BACKUP.format(LocalDateTime.now()) + ")");
-        if (!Files.exists(folderPath)) {
-            // Do some online calls
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1, new NamedThreadFactory("WL_MyWildCalls"));
-            // Try to check the latest version
-            executor.schedule(new Runnable() {
-                @Override
-                public void run() {
-                    WildLogApp.LOGGER.log(Level.INFO, "Latest WildLog version: {}", checkForUpdates());
-                }
-            }, 10, TimeUnit.SECONDS);
-            // Try to upload log data
-            if (wildLogOptions.isUploadLogs()) {
-                executor.schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        WildLogApp.LOGGER.log(Level.INFO, "WEB CALL: Start uploading log file...");
-                        try {
-                            // Open a connection to the site
-                            URL url = new URL("http://www.mywild.co.za/wildlog/uploadWildLogInfo.php");
-                            URLConnection con = url.openConnection();
-                            // Activate the output
-                            con.setDoOutput(true);
-                            try (PrintStream printStream = new PrintStream(con.getOutputStream())) {
-                                // Load some of the info needed
-                                long maxMemory = Runtime.getRuntime().maxMemory();
-                                GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-                                int width = graphicsDevice.getDisplayMode().getWidth();
-                                int height = graphicsDevice.getDisplayMode().getHeight();
-                                String info = "OS Name    : " + System.getProperty("os.name") + "\n"
-                                            + "OS version : " + System.getProperty("os.version") + "\n"
-                                            + "OS Arch    : " + System.getProperty("os.arch") + "\n"
-                                            + "Timezone   : " + TimeZone.getDefault().getDisplayName() + " [" + ZonedDateTime.now().format(DateTimeFormatter.ofPattern("(z) VV")) + "]\n"
-                                            + "JVM CPU cores   : " + Runtime.getRuntime().availableProcessors() + "\n"
-                                            + "JVM Used Memory : " + Math.round((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024.0*1024.0) * 100) / 100.0 + " MB" + "\n"
-                                            + "JVM Max Memory  : " + (maxMemory == Long.MAX_VALUE ? "no limit" : Math.round((maxMemory) / (1024.0*1024.0) * 100) / 100.0) + " MB" + "\n"
-                                            + "Screen Size : " + width + "x" + height + "\n"
-                                            + "Screen Count: " + GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
-                                String logFileSnippit = "";
-                                ByteArrayOutputStream logFileZip = new ByteArrayOutputStream();
-                                try {
-                                    byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildlog_errorlog.txt")); // The first (main) log file
-                                    String logInfo = new String(fileBytes, Charset.defaultCharset());
-                                    int errorCount = -1;
-                                    int startIndex = 0;
-                                    while (startIndex >= 0) {
-                                        startIndex = logInfo.indexOf("ERROR", startIndex + 1);
-                                        errorCount++;
-                                    }
-                                    logFileSnippit = "Recent Error Count = " + errorCount;
-                                }
-                                catch (IOException  ex) {
-                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                }
-                                // Get a Zipped archive of all the error logs
-                                List<String> fileList = new ArrayList<>(Arrays.asList(ACTIVE_WILDLOG_SETTINGS_FOLDER.toFile().list()));
-                                if (fileList != null && !fileList.isEmpty()) {
-                                    for (int t = fileList.size() - 1; t >= 0; t--) {
-                                        if (!fileList.get(t).startsWith("wildlog_errorlog")) {
-                                            fileList.remove(t);
-                                        }
-                                    }
-                                    if (!fileList.isEmpty()) {
-                                        byte[] buffer = new byte[1024];
-                                        try {
-                                            try (ZipOutputStream zipOutputStream = new ZipOutputStream(logFileZip)) {
-                                                for (String fileString : fileList) {
-                                                    ZipEntry zipEntry = new ZipEntry(fileString);
-                                                    zipOutputStream.putNextEntry(zipEntry);
-                                                    try (FileInputStream fileInputStream = new FileInputStream(ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().resolve(fileString).toString())) {
-                                                        int len;
-                                                        while ((len = fileInputStream.read(buffer)) > 0) {
-                                                            zipOutputStream.write(buffer, 0, len);
-                                                        }
-                                                    }
-                                                }
-                                                zipOutputStream.closeEntry();
-                                            }
-                                        }
-                                        catch (IOException ex) {
-                                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                        }
-                                    }
-                                }
-                                // Send the parameters to the site
-                                //printStream.print("DateAndTime=" + "set by server");
-                                printStream.print("&WildLogVersion=" + WILDLOG_VERSION);
-                                printStream.print("&WorkspaceDatabaseVersion=" + wildLogOptions.getDatabaseVersion());
-                                printStream.print("&WorkspaceID=" + wildLogOptions.getWorkspaceID());
-                                printStream.print("&WorkspaceName=" + wildLogOptions.getWorkspaceName());
-                                //printStream.print("&IP=" + "set by server");
-                                printStream.print("&SystemUsername=" + System.getProperty("user.name"));
-                                printStream.print("&SystemInfo=" + info);
-                                printStream.print("&NumberOfElements=" + dbi.countElements(null, null));
-                                printStream.print("&NumberOfLocations=" + dbi.countLocations(null));
-                                printStream.print("&NumberOfVisits=" + dbi.countVisits(null, 0));
-                                printStream.print("&NumberOfSightings=" + dbi.countSightings(0, 0, 0, 0));
-                                printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(0, -1));
-                                printStream.print("&PartialLog=" + logFileSnippit);
-                                printStream.print("&ZippedLog=" + Base64.getEncoder().encodeToString(logFileZip.toByteArray()).replaceAll("\\+", "%2B"));
-                                // Have to get the input stream in order to actually send the request
-                                try (InputStream inputStream = con.getInputStream()) {
-                                    StringBuilder response = new StringBuilder(35);
-                                    byte[] respBuffer = new byte[1096];
-                                    while (inputStream.read(respBuffer) >= 0) {
-                                        response.append(new String(respBuffer).trim());
-                                        respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
-                                    }
-                                    WildLogApp.LOGGER.log(Level.INFO, "WEB RESPONSE (uploadWildLogInfo): {}", response.toString());
-                                }
-                            }
-                        }
-                        catch (Exception ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        }
-                    }
-                }, 20, TimeUnit.SECONDS);
-                executor.shutdown();
-            }
         }
     }
 
     private boolean openWorkspace() {
         try {
-            WildLogApp.LOGGER.log(Level.INFO, "Opening Workspace at: {}", WildLogPaths.getFullWorkspacePrefix().toString());
-            dbi = new WildLogDBI_h2(useH2AutoServer);
+            WildLogApp.LOGGER.log(Level.INFO, "Opening Workspace database at: {}", WildLogPaths.getFullWorkspacePrefix().toString());
+            dbi = new WildLogDBI_h2(!triggerSync, useH2AutoServer);
+            if (triggerSync) {
+                // Only create the WildLog Options when setting up a sync workspace meant for downloading data from the cloud
+                dbi.createWildLogOptions();
+            }
         }
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, "Could not open the Workspace. Will try to ask the user to try a new Workspace folder.");
@@ -565,7 +458,28 @@ public class WildLogApp extends Application {
                     WildLogApp.LOGGER.log(Level.INFO, "Closing workspace...");
                 }
             }
-            
+        });
+    }
+    
+    protected void ready() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // Check whether the Sync Dialog should be shown on launch
+                if (triggerSync) {
+                    // Set the correct workspace ID
+                    wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
+                    wildLogOptions.setID(triggerSyncWorkspaceID);
+                    wildLogOptions.setWorkspaceID(triggerSyncWorkspaceID);
+                    wildLogOptions.setAuditTime(-1); // Default is 0, so -1 ensures an update
+                    dbi.updateWildLogOptions(wildLogOptions, true);
+                    // Refresh the home tab to show the correct workspace ID
+// FIXME: Vind 'n manier om dit te doen...
+                    // Show the sync popup
+                    WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
+                    dialog.setVisible(true);
+                }
+            }
         });
     }
     
@@ -621,9 +535,9 @@ public class WildLogApp extends Application {
         catch (IOException | URISyntaxException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             WLOptionPane.showMessageDialog(null,
-                        "Could not load the settings from the properties on startup. WildLog will continue to start using the default settings.",
-                        "Problem Starting WildLog", 
-                        JOptionPane.WARNING_MESSAGE);
+                    "Could not load the settings from the properties on startup. WildLog will continue to start using the default settings.",
+                    "Problem Starting WildLog", 
+                    JOptionPane.WARNING_MESSAGE);
         }
         finally {
             if (reader != null) {
@@ -685,7 +599,7 @@ public class WildLogApp extends Application {
 
     public void setWildLogOptionsAndSave(WildLogOptions inWildLogOptions) {
         wildLogOptions = inWildLogOptions;
-        dbi.updateWildLogOptions(wildLogOptions);
+        dbi.updateWildLogOptions(wildLogOptions, false);
     }
 
     public int getThreadCount() {
@@ -702,6 +616,14 @@ public class WildLogApp extends Application {
 
     public WildLogView getMainFrame() {
         return view;
+    }
+    
+    public static String getINaturalistToken() {
+        return iNaturalistToken;
+    }
+
+    public static void setINaturalistToken(String inINaturalistToken) {
+        iNaturalistToken = inINaturalistToken;
     }
     
     public String checkForUpdates() {
@@ -758,13 +680,130 @@ public class WildLogApp extends Application {
         }
         return "Unknown";
     }
-
-    public static String getINaturalistToken() {
-        return iNaturalistToken;
-    }
-
-    public static void setINaturalistToken(String inINaturalistToken) {
-        iNaturalistToken = inINaturalistToken;
+    
+    private void uploadLogs() {
+        // Upload the logs and user data to the MyWild DB once a week (using the existance of the auto backup folder as indicator)
+        Path folderPath = WildLogPaths.WILDLOG_BACKUPS_AUTO.getAbsoluteFullPath()
+                .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_AUTO_BACKUP.format(LocalDateTime.now()) + ")");
+        if (!Files.exists(folderPath)) {
+            // Do some online calls
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1, new NamedThreadFactory("WL_MyWildCalls"));
+            // Try to check the latest version
+            executor.schedule(new Runnable() {
+                @Override
+                public void run() {
+                    WildLogApp.LOGGER.log(Level.INFO, "Latest WildLog version: {}", checkForUpdates());
+                }
+            }, 10, TimeUnit.SECONDS);
+            // Try to upload log data
+            if (wildLogOptions.isUploadLogs()) {
+                executor.schedule(new Runnable() {
+                    @Override
+                    public void run() {
+                        WildLogApp.LOGGER.log(Level.INFO, "WEB CALL: Start uploading log file...");
+                        try {
+                            // Open a connection to the site
+                            URL url = new URL("http://www.mywild.co.za/wildlog/uploadWildLogInfo.php");
+                            URLConnection con = url.openConnection();
+                            // Activate the output
+                            con.setDoOutput(true);
+                            try (PrintStream printStream = new PrintStream(con.getOutputStream())) {
+                                // Load some of the info needed
+                                long maxMemory = Runtime.getRuntime().maxMemory();
+                                GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+                                int width = graphicsDevice.getDisplayMode().getWidth();
+                                int height = graphicsDevice.getDisplayMode().getHeight();
+                                String info = "OS Name    : " + System.getProperty("os.name") + "\n"
+                                        + "OS version : " + System.getProperty("os.version") + "\n"
+                                        + "OS Arch    : " + System.getProperty("os.arch") + "\n"
+                                        + "Timezone   : " + TimeZone.getDefault().getDisplayName() + " [" + ZonedDateTime.now().format(DateTimeFormatter.ofPattern("(z) VV")) + "]\n"
+                                        + "JVM CPU cores   : " + Runtime.getRuntime().availableProcessors() + "\n"
+                                        + "JVM Used Memory : " + Math.round((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024.0*1024.0) * 100) / 100.0 + " MB" + "\n"
+                                        + "JVM Max Memory  : " + (maxMemory == Long.MAX_VALUE ? "no limit" : Math.round((maxMemory) / (1024.0*1024.0) * 100) / 100.0) + " MB" + "\n"
+                                        + "Screen Size : " + width + "x" + height + "\n"
+                                        + "Screen Count: " + GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
+                                String logFileSnippit = "";
+                                ByteArrayOutputStream logFileZip = new ByteArrayOutputStream();
+                                try {
+                                    byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildlog_errorlog.txt")); // The first (main) log file
+                                    String logInfo = new String(fileBytes, Charset.defaultCharset());
+                                    int errorCount = -1;
+                                    int startIndex = 0;
+                                    while (startIndex >= 0) {
+                                        startIndex = logInfo.indexOf("ERROR", startIndex + 1);
+                                        errorCount++;
+                                    }
+                                    logFileSnippit = "Recent Error Count = " + errorCount;
+                                }
+                                catch (IOException  ex) {
+                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                }
+                                // Get a Zipped archive of all the error logs
+                                List<String> fileList = new ArrayList<>(Arrays.asList(ACTIVE_WILDLOG_SETTINGS_FOLDER.toFile().list()));
+                                if (fileList != null && !fileList.isEmpty()) {
+                                    for (int t = fileList.size() - 1; t >= 0; t--) {
+                                        if (!fileList.get(t).startsWith("wildlog_errorlog")) {
+                                            fileList.remove(t);
+                                        }
+                                    }
+                                    if (!fileList.isEmpty()) {
+                                        byte[] buffer = new byte[1024];
+                                        try {
+                                            try (ZipOutputStream zipOutputStream = new ZipOutputStream(logFileZip)) {
+                                                for (String fileString : fileList) {
+                                                    ZipEntry zipEntry = new ZipEntry(fileString);
+                                                    zipOutputStream.putNextEntry(zipEntry);
+                                                    try (FileInputStream fileInputStream = new FileInputStream(ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().resolve(fileString).toString())) {
+                                                        int len;
+                                                        while ((len = fileInputStream.read(buffer)) > 0) {
+                                                            zipOutputStream.write(buffer, 0, len);
+                                                        }
+                                                    }
+                                                }
+                                                zipOutputStream.closeEntry();
+                                            }
+                                        }
+                                        catch (IOException ex) {
+                                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                        }
+                                    }
+                                }
+                                // Send the parameters to the site
+                                //printStream.print("DateAndTime=" + "set by server");
+                                printStream.print("&WildLogVersion=" + WILDLOG_VERSION);
+                                printStream.print("&WorkspaceDatabaseVersion=" + wildLogOptions.getDatabaseVersion());
+                                printStream.print("&WorkspaceID=" + wildLogOptions.getWorkspaceID());
+                                printStream.print("&WorkspaceName=" + wildLogOptions.getWorkspaceName());
+                                //printStream.print("&IP=" + "set by server");
+                                printStream.print("&SystemUsername=" + System.getProperty("user.name"));
+                                printStream.print("&SystemInfo=" + info);
+                                printStream.print("&NumberOfElements=" + dbi.countElements(null, null));
+                                printStream.print("&NumberOfLocations=" + dbi.countLocations(null));
+                                printStream.print("&NumberOfVisits=" + dbi.countVisits(null, 0));
+                                printStream.print("&NumberOfSightings=" + dbi.countSightings(0, 0, 0, 0));
+                                printStream.print("&NumberOfFiles=" + dbi.countWildLogFiles(0, -1));
+                                printStream.print("&PartialLog=" + logFileSnippit);
+                                printStream.print("&ZippedLog=" + Base64.getEncoder().encodeToString(logFileZip.toByteArray()).replaceAll("\\+", "%2B"));
+                                // Have to get the input stream in order to actually send the request
+                                try (InputStream inputStream = con.getInputStream()) {
+                                    StringBuilder response = new StringBuilder(35);
+                                    byte[] respBuffer = new byte[1096];
+                                    while (inputStream.read(respBuffer) >= 0) {
+                                        response.append(new String(respBuffer).trim());
+                                        respBuffer = new byte[1096]; // Need to get rid of the old bytes that were read (if the last string is shorter)
+                                    }
+                                    WildLogApp.LOGGER.log(Level.INFO, "WEB RESPONSE (uploadWildLogInfo): {}", response.toString());
+                                }
+                            }
+                        }
+                        catch (Exception ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        }
+                    }
+                }, 20, TimeUnit.SECONDS);
+                executor.shutdown();
+            }
+        }
     }
 
 }

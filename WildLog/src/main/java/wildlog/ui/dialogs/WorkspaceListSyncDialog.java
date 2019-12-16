@@ -19,7 +19,7 @@ import wildlog.ui.utils.UtilsUI;
 
 
 public class WorkspaceListSyncDialog extends JDialog {
-    private int workspaceID = 0;
+    private long workspaceID = 0;
 
 
     public WorkspaceListSyncDialog(JDialog inParent) {
@@ -60,18 +60,19 @@ public class WorkspaceListSyncDialog extends JDialog {
         lstWorkspaces = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("List Cloud Sync Workspaces");
+        setTitle("List Synced Cloud Workspaces");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Sync.png")).getImage());
-        setMinimumSize(new java.awt.Dimension(840, 510));
+        setMinimumSize(new java.awt.Dimension(850, 510));
         setModal(true);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("List Cloud Sync Workspaces");
+        jLabel4.setText("List Synced Cloud Workspaces");
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnConfirm.setToolTipText("Sync the active Workspace with the data stored in the cloud.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnConfirm.setEnabled(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
@@ -114,7 +115,7 @@ public class WorkspaceListSyncDialog extends JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlSyncTokenLayout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel6)
                     .addComponent(jSeparator4))
                 .addGap(5, 5, 5))
         );
@@ -128,7 +129,7 @@ public class WorkspaceListSyncDialog extends JDialog {
                 .addGap(3, 3, 3)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
                 .addComponent(btnConfirmSyncToken, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -139,6 +140,11 @@ public class WorkspaceListSyncDialog extends JDialog {
         lstWorkspaces.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lstWorkspaces.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstWorkspaces.setSelectionBackground(new java.awt.Color(56, 87, 9));
+        lstWorkspaces.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstWorkspacesValueChanged(evt);
+            }
+        });
         jScrollPane2.setViewportView(lstWorkspaces);
 
         javax.swing.GroupLayout pnlSyncOptionsLayout = new javax.swing.GroupLayout(pnlSyncOptions);
@@ -154,7 +160,7 @@ public class WorkspaceListSyncDialog extends JDialog {
             pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 
@@ -176,7 +182,7 @@ public class WorkspaceListSyncDialog extends JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnlSyncOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(130, 130, 130))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,9 +192,9 @@ public class WorkspaceListSyncDialog extends JDialog {
                     .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(10, 10, 10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlSyncToken, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10)
+                .addGap(5, 5, 5)
                 .addComponent(pnlSyncOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
@@ -197,7 +203,13 @@ public class WorkspaceListSyncDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        
+        if (!lstWorkspaces.getSelectionModel().isSelectionEmpty()
+                && !lstWorkspaces.getSelectedValue().equals("Loading...")) {
+            workspaceID = Long.parseLong(lstWorkspaces.getSelectedValue().substring(0, lstWorkspaces.getSelectedValue().indexOf(" - ")).trim());
+        }
+        // Close this popup
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void btnConfirmSyncTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmSyncTokenActionPerformed
@@ -256,7 +268,11 @@ public class WorkspaceListSyncDialog extends JDialog {
         }
     }//GEN-LAST:event_btnConfirmSyncTokenActionPerformed
 
-    public int getWorkspaceID() {
+    private void lstWorkspacesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstWorkspacesValueChanged
+        btnConfirm.setEnabled(!lstWorkspaces.getSelectionModel().isSelectionEmpty());
+    }//GEN-LAST:event_lstWorkspacesValueChanged
+
+    public long getWorkspaceID() {
         return workspaceID;
     }
     

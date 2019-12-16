@@ -71,7 +71,7 @@ public interface DBI {
     public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName, boolean inUseOldAudit);
     public <T extends SightingCore> boolean updateSighting(T inSighting, boolean inUseOldAudit);
     public <T extends WildLogFileCore> boolean updateWildLogFile(T inWildLogFile, boolean inUseOldAudit);
-    public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions);
+    public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions, boolean inUseOldAudit);
     public <T extends AdhocData> boolean updateAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData);
     public <T extends WildLogUser> boolean updateUser(T inWildLogUser, boolean inUseOldAudit);

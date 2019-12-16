@@ -151,7 +151,7 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG ("
-            + "ID bigint PRIMARY KEY NOT NULL DEFAULT 1, "
+            + "ID bigint DEFAULT 1 PRIMARY KEY NOT NULL, "
             + "VERSION int DEFAULT " + WILDLOG_DB_VERSION + ", "
             + "DEFAULTLATITUDE double DEFAULT -28.2, "
             + "DEFAULTLONGITUDE double DEFAULT 24.7, "
@@ -167,8 +167,8 @@ public abstract class DBI_JDBC implements DBI {
             + "UPLOADLOGS smallint DEFAULT true, "
             + "BUNDLEDPLAYERS smallint DEFAULT true, "
             + "USEINDVCOUNTINPATH smallint DEFAULT false, "
-            + "AUDITTIME bigint NOT NULL, "
-            + "AUDITUSER varchar(150) NOT NULL)";
+            + "AUDITTIME bigint NOT NULL DEFAULT 0, "
+            + "AUDITUSER varchar(150) NOT NULL DEFAULT '')";
     protected static final String tableAdhocData = "CREATE TABLE ADHOC ("
             + "FIELDID varchar(150) NOT NULL, "
             + "DATAKEY varchar(150) NOT NULL, "
@@ -1887,6 +1887,9 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
+                
+// FIXME: Hierdie checks en die unique indexes moet dalk verwyder word, want dit gaan probleme gee as mens import/merge of sync... Met die nuwe IDs behoort hierdie nou OK te wees?
+                
                 if (countElements(inElement.getPrimaryName(), null) > 0) {
                     System.err.println("Trying to save an Element using a name that already exists.... (" + inElement.getPrimaryName() + " | " + inOldName + ")");
                     return false;
@@ -2296,7 +2299,7 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions) {
+    public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
             // Update
@@ -2316,7 +2319,9 @@ public abstract class DBI_JDBC implements DBI {
             state.setBoolean(13, inWildLogOptions.isUploadLogs());
             state.setBoolean(14, inWildLogOptions.isBundledPlayers());
             state.setBoolean(15, inWildLogOptions.isUseIndividualsInSightingPath());
-            setupAuditInfo(inWildLogOptions);
+            if (!inUseOldAudit) {
+                setupAuditInfo(inWildLogOptions);
+            }
             state.setLong(16, inWildLogOptions.getAuditTime());
             state.setString(17, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogOptions.getAuditUser()), 150));
             state.setLong(18, inWildLogOptions.getID());

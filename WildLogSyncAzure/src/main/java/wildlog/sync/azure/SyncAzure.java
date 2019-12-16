@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.AsynchronousFileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.security.InvalidKeyException;
@@ -411,6 +412,10 @@ public final class SyncAzure {
         try {
             ContainerURL container = getContainerURL(inDataType);
             BlockBlobURL blockBlob = container.createBlockBlobURL(calculateFullBlobID(inParentID, inRecordID, inFilePath));
+            if (!Files.exists(inFilePath)) {
+                Files.createDirectories(inFilePath.getParent());
+                Files.createFile(inFilePath);
+            }
             AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
             try {
                 TransferManager.downloadBlobToFile(fileChannel, blockBlob, null, null).blockingGet();

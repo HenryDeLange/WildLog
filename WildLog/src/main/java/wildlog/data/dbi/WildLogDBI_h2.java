@@ -71,8 +71,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
      * Use this constructor to connect to the default Workspace database.
      * @throws Exception 
      */
-    public WildLogDBI_h2(boolean inH2AutoServer) throws Exception {
-        this(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath()).toString(), true, inH2AutoServer);
+    public WildLogDBI_h2(boolean inCreateDefaultData, boolean inH2AutoServer) throws Exception {
+        this(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath()).toString(), 
+                inCreateDefaultData, inH2AutoServer);
     }
 
     /**

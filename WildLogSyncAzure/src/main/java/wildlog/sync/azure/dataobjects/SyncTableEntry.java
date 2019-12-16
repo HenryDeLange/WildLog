@@ -186,16 +186,14 @@ public class SyncTableEntry extends TableServiceEntity {
         }
         else
         if (dataType.equals(WildLogDataType.WILDLOG_OPTIONS.getKey())) {
-            if (dbVersion >= 12) {
-                data = readOptionsV12(inProperties);
+            if (dbVersion >= 14) {
+                data = readOptionsV14(inProperties);
             }
         }
         else {
             data = null;
         }
     }
-    
-    // READ PROPERTIES - V12:
     
     private ElementCore readElementV12(HashMap<String, EntityProperty> inProperties) {
         ElementCore tempData = new ElementCore();
@@ -339,7 +337,7 @@ public class SyncTableEntry extends TableServiceEntity {
         return tempData;
     }
     
-    private WildLogOptions readOptionsV12(HashMap<String, EntityProperty> inProperties) {
+    private WildLogOptions readOptionsV14(HashMap<String, EntityProperty> inProperties) {
         WildLogOptions tempData = new WildLogOptions();
         tempData.setID(Long.parseLong(rowKey));
         tempData.setWorkspaceID(inProperties.getOrDefault("workspaceID", EMPTY_LONG).getValueAsLong());
@@ -415,15 +413,13 @@ public class SyncTableEntry extends TableServiceEntity {
             }
             else
             if (dataType.equals(WildLogDataType.WILDLOG_OPTIONS.getKey())) {
-                if (dbVersion >= 12) {
-                    writeOptionsV12((WildLogOptions) data, properties);
+                if (dbVersion >= 14) {
+                    writeOptionsV14((WildLogOptions) data, properties);
                 }
             }
         }
         return properties;
     }
-    
-    // WRITE PROPERTIES - V12:
     
     private void writeElementV12(ElementCore inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("primaryName", new EntityProperty(inData.getPrimaryName()));
@@ -546,7 +542,7 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
     
-    private void writeOptionsV12(WildLogOptions inData, HashMap<String, EntityProperty> inProperties) {
+    private void writeOptionsV14(WildLogOptions inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("workspaceID", new EntityProperty(inData.getWorkspaceID()));
         inProperties.put("workspaceName", new EntityProperty(inData.getWorkspaceName()));
         inProperties.put("databaseVersion", new EntityProperty(inData.getDatabaseVersion()));

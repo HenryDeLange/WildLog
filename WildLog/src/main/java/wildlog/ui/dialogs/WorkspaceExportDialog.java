@@ -520,7 +520,7 @@ public class WorkspaceExportDialog extends JDialog {
                                 WildLogOptions options = app.getDBI().findWildLogOptions(WildLogOptions.class);
                                 options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
                                 options.setWorkspaceID(app.getDBI().generateID());
-                                newDBI.updateWildLogOptions(options);
+                                newDBI.updateWildLogOptions(options, false);
                                 setProgress(3);
                                 setMessage("Workspace Export: " + getProgress() + "%");
                                 // Save the selected nodes

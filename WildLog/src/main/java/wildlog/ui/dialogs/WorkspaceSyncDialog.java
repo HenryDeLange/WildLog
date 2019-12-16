@@ -196,14 +196,14 @@ public class WorkspaceSyncDialog extends JDialog {
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cloud Sync Workspace");
+        setTitle("Sync with Cloud Workspace");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Sync.png")).getImage());
         setMinimumSize(new java.awt.Dimension(800, 490));
         setModal(true);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Cloud Sync Workspace");
+        jLabel4.setText("Sync with Cloud Workspace");
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnConfirm.setToolTipText("Sync the active Workspace with the data stored in the cloud.");
@@ -956,7 +956,7 @@ public class WorkspaceSyncDialog extends JDialog {
             boolean found = false;
             boolean shouldBeUpdated = false;
             for (DataObjectWithAudit workspaceEntry : lstWorkspaceEntries) {
-                if (workspaceEntry.getID() == cloudEntry.getRecordID()) {
+                if (workspaceEntry.getID() == cloudEntry.getRecordID() || inDataType == WildLogDataType.WILDLOG_OPTIONS) {
                     found = true;
                     if (workspaceEntry.getAuditTime() < cloudEntry.getData().getAuditTime()) {
                         shouldBeUpdated = true;
@@ -1069,7 +1069,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.WILDLOG_OPTIONS) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateWildLogOptions((WildLogOptions) syncAction.data));
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateWildLogOptions((WildLogOptions) syncAction.data, false));
                 }
                 else {
                     logIfFailed(inFeedback, syncAction, false);
@@ -1273,7 +1273,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     long cloudFileSize = cloudWildLogFile.getSyncIndicator();
                     calculateOriginalFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
                     if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
-                        logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, cloudWildLogFile.getID(), 
+                        logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), 
                                 "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
                         continue;
                     }
@@ -1322,7 +1322,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     long cloudFileSize = cloudWildLogFile.getSyncIndicator();
                     calculateOriginalFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
                     if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
-                        logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, cloudWildLogFile.getID(), 
+                        logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), 
                                 "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
                         continue;
                     }
@@ -1392,7 +1392,7 @@ public class WorkspaceSyncDialog extends JDialog {
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, inWorkspaceFile.getID(), Long.toString(inWorkspaceFile.getLinkID()), inWorkspaceFile), false);
+            logIfFailed(inFeedback, new SyncAction("ERROR", WildLogDataType.FILE, inWorkspaceFile.getID(), Long.toString(inWorkspaceFile.getLinkID()), inWorkspaceFile), false);
             return false;
         }
         return true;
@@ -1404,7 +1404,7 @@ public class WorkspaceSyncDialog extends JDialog {
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            logIfFailed(inFeedback, new SyncAction("SYNC_FAIL", WildLogDataType.FILE, inWorkspaceFile.getID(), Long.toString(inWorkspaceFile.getLinkID()), inWorkspaceFile), false);
+            logIfFailed(inFeedback, new SyncAction("ERROR", WildLogDataType.FILE, inWorkspaceFile.getID(), Long.toString(inWorkspaceFile.getLinkID()), inWorkspaceFile), false);
             return false;
         }
         return true;
