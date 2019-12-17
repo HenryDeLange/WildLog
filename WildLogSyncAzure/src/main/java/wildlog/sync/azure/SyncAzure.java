@@ -98,7 +98,7 @@ public final class SyncAzure {
         try {
             CloudTable cloudTable = getTable(inDataType);
             if (inData.getSyncIndicator() == 0) {
-                inData.setSyncIndicator(System.currentTimeMillis());
+                inData.setSyncIndicator(new Date().getTime());
             }
             SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, inData.getID(), dbVersion, inData);
             cloudTable.execute(TableOperation.insertOrReplace(syncTableEntry));
@@ -132,7 +132,7 @@ public final class SyncAzure {
                     TableBatchOperation batchOperation = new TableBatchOperation();
                     for (DataObjectWithAudit data : lstAllBatchDataChunks.get(batchCounter)) {
                         if (data.getSyncIndicator() == 0) {
-                            data.setSyncIndicator(System.currentTimeMillis());
+                            data.setSyncIndicator(new Date().getTime());
                         }
                         SyncTableEntry syncTableEntry = new SyncTableEntry(inDataType, workspaceID, data.getID(), dbVersion, data);
                         batchOperation.insertOrReplace(syncTableEntry);

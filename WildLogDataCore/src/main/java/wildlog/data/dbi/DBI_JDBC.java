@@ -543,7 +543,7 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableElements);
                 // Create other indexes
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V12_ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
                 state.execute("CREATE INDEX IF NOT EXISTS V12_ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
                 state.execute("CREATE INDEX IF NOT EXISTS V12_ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
                 // Create default entry
@@ -557,7 +557,7 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableLocations);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V12_LOCATION_NAME ON LOCATIONS (NAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_LOCATION_NAME ON LOCATIONS (NAME)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
                     createLocation(new LocationCore(0, "Some Place"), false);
@@ -569,7 +569,7 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableVisits);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V12_VISIT_NAME ON VISITS (NAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_NAME ON VISITS (NAME)");
                 state.execute("CREATE INDEX IF NOT EXISTS V12_VISIT_LOCATION ON VISITS (LOCATIONID)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
@@ -1855,11 +1855,6 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement tempState = null;
         ResultSet results = null;
         try {
-            // Make sure the name isn't already used
-            if (countElements(inElement.getPrimaryName(), null) > 0) {
-                System.err.println("Trying to save an Element using a name that already exists.... (" + inElement.getPrimaryName() + ")");
-                return false;
-            }
             // Get the new ID
             if (!inNewButUseOldAuditAndID) {
                 inElement.setID(generateID());
@@ -1885,16 +1880,6 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends ElementCore> boolean updateElement(T inElement, String inOldName, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
-            // Make sure the name isn't already used
-            if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
-                
-// FIXME: Hierdie checks en die unique indexes moet dalk verwyder word, want dit gaan probleme gee as mens import/merge of sync... Met die nuwe IDs behoort hierdie nou OK te wees?
-                
-                if (countElements(inElement.getPrimaryName(), null) > 0) {
-                    System.err.println("Trying to save an Element using a name that already exists.... (" + inElement.getPrimaryName() + " | " + inOldName + ")");
-                    return false;
-                }
-            }
             // Update
             state = conn.prepareStatement(updateElement);
             maintainElement(state, inElement, inUseOldAudit);
@@ -1939,11 +1924,6 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement tempState = null;
         ResultSet results = null;
         try {
-            // Make sure the name isn't already used
-            if (countLocations(inLocation.getName()) > 0) {
-                System.err.println("Trying to save an Location using a name that already exists.... (" + inLocation.getName() + ")");
-                return false;
-            }
             // Get the new ID
             if (!inNewButUseOldAuditAndID) {
                 inLocation.setID(generateID());
@@ -1969,13 +1949,6 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
-            // Make sure the name isn't already used
-            if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
-                if (countLocations(inLocation.getName()) > 0) {
-                    System.err.println("Trying to save an Location using a name that already exists.... (" + inLocation.getName() + " | " + inOldName + ")");
-                    return false;
-                }
-            }
             // Update
             state = conn.prepareStatement(updateLocation);
             maintainLocation(state, inLocation, inUseOldAudit);
@@ -2023,11 +1996,6 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement tempState = null;
         ResultSet results = null;
         try {
-            // Make sure the name isn't already used
-            if (countVisits(inVisit.getName(), 0) > 0) {
-                System.err.println("Trying to save an Visit using a name that already exists.... (" + inVisit.getName() + ")");
-                return false;
-            }
             // Get the new ID
             if (!inNewButUseOldAuditAndID) {
                 inVisit.setID(generateID());
@@ -2053,13 +2021,6 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends VisitCore> boolean updateVisit(T inVisit, String inOldName, boolean inUseOldAudit) {
         PreparedStatement state = null;
         try {
-            // Make sure the name isn't already used
-            if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                if (countVisits(inVisit.getName(), 0) > 0) {
-                    System.err.println("Trying to save an Visit using a name that already exists.... (" + inVisit.getName() + " | " + inOldName + ")");
-                    return false;
-                }
-            }
             // Update
             state = conn.prepareStatement(updateVisit);
             maintainVisit(state, inVisit, inUseOldAudit);

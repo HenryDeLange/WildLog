@@ -468,6 +468,9 @@ public class WildLogApp extends Application {
                 // Check whether the Sync Dialog should be shown on launch
                 if (triggerSync) {
                     // Set the correct workspace ID
+                    
+// FIXME: Die WorkspaceID storie werk nog nie reg nie...
+                    
                     wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
                     wildLogOptions.setID(triggerSyncWorkspaceID);
                     wildLogOptions.setWorkspaceID(triggerSyncWorkspaceID);

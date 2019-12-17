@@ -160,7 +160,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     
     @Override
     protected void setupAuditInfo(DataObjectWithAudit inDataObjectWithAudit) {
-        inDataObjectWithAudit.setAuditTime(System.currentTimeMillis());
+        inDataObjectWithAudit.setAuditTime(new Date().getTime());
         inDataObjectWithAudit.setAuditUser(WildLogApp.WILDLOG_USER_NAME);
     }
 
@@ -2022,18 +2022,24 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     
     private boolean doUpdate14() {
         WildLogApp.LOGGER.log(Level.INFO, "Starting update 14");
-        // This update adds the audit columns to the WildLog Options table (for syncing)
         Statement state = null;
         ResultSet results = null;
         try {
             state = conn.createStatement();
-            // Change from varchar to bigint
+            // Add the audit columns to the WildLog Options table (for syncing)
             state.execute("ALTER TABLE WILDLOG ADD COLUMN ID bigint DEFAULT 1 PRIMARY KEY NOT NULL");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN AUDITTIME bigint DEFAULT 0 NOT NULL");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN AUDITUSER varchar(150) DEFAULT '' NOT NULL");
             state.executeUpdate("UPDATE WILDLOG SET ID=WORKSPACEID");
             state.executeUpdate("UPDATE WILDLOG SET AUDITTIME=0");
             state.executeUpdate("UPDATE WILDLOG SET AUDITUSER='Update14'");
+            // Get rid of the uniqueness of the indexes on the name columns
+            state.execute("DROP INDEX IF EXISTS V12_ELEMENT_PRINAME");
+            state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+            state.execute("DROP INDEX IF EXISTS V12_LOCATION_NAME");
+            state.execute("CREATE INDEX IF NOT EXISTS V14_LOCATION_NAME ON LOCATIONS (NAME)");
+            state.execute("DROP INDEX IF EXISTS V12_VISIT_NAME");
+            state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_NAME ON VISITS (NAME)");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=14");
         }
