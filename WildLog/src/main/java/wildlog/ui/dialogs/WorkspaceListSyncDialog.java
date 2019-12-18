@@ -43,10 +43,7 @@ public class WorkspaceListSyncDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        grpFiles = new javax.swing.ButtonGroup();
-        grpImages = new javax.swing.ButtonGroup();
-        grpMode = new javax.swing.ButtonGroup();
-        jLabel4 = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
         btnConfirm = new javax.swing.JButton();
         pnlSyncToken = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -65,9 +62,9 @@ public class WorkspaceListSyncDialog extends JDialog {
         setMinimumSize(new java.awt.Dimension(850, 510));
         setModal(true);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("List Synced Cloud Workspaces");
+        lblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitle.setText("List Synced Cloud Workspaces");
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
         btnConfirm.setToolTipText("Sync the active Workspace with the data stored in the cloud.");
@@ -172,7 +169,7 @@ public class WorkspaceListSyncDialog extends JDialog {
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(5, 5, 5))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(pnlSyncToken, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -191,7 +188,7 @@ public class WorkspaceListSyncDialog extends JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(lblTitle)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlSyncToken, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5)
@@ -279,15 +276,12 @@ public class WorkspaceListSyncDialog extends JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
     private javax.swing.JButton btnConfirmSyncToken;
-    private javax.swing.ButtonGroup grpFiles;
-    private javax.swing.ButtonGroup grpImages;
-    private javax.swing.ButtonGroup grpMode;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel lblTitle;
     private javax.swing.JList<String> lstWorkspaces;
     private javax.swing.JPanel pnlSyncOptions;
     private javax.swing.JPanel pnlSyncToken;

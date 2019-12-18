@@ -748,13 +748,13 @@ public class WorkspaceSyncDialog extends JDialog {
 
     private void logIfFailed(PrintWriter inFeedback, SyncAction inSyncAction, boolean inResult) {
         if (inResult) {
-            inFeedback.println(inSyncAction.command + " " + inSyncAction.type.getDescription() + " " + inSyncAction.recordID + " " + inSyncAction.details);
+            inFeedback.println(inSyncAction.command + " " + inSyncAction.type.getDescription() + " " + inSyncAction.details + " " + inSyncAction.recordID);
         }
         else {
-            inFeedback.println("SYNC_FAIL " + inSyncAction.command + " " + inSyncAction.type.getDescription() + " " + inSyncAction.recordID + " " + inSyncAction.details);
-            WildLogApp.LOGGER.log(Level.ERROR, "Sync - Failed: " + inSyncAction.command + " " + inSyncAction.type.getDescription() + " " + inSyncAction.recordID + " " + inSyncAction.details + " " + inSyncAction.data);
+            inFeedback.println("SYNC_FAIL " + inSyncAction.command + " " + inSyncAction.type.getDescription() + " " + inSyncAction.details + " " + inSyncAction.recordID);
+            WildLogApp.LOGGER.log(Level.ERROR, "Sync - Failed: " + inSyncAction.command + " " + inSyncAction.type.getDescription() + " " + inSyncAction.details + " " + inSyncAction.recordID + " " + inSyncAction.data);
             WildLogApp.LOGGER.log(Level.INFO, "Sync - Stacktrace:");
-            new Exception().printStackTrace(System.out);
+            new Exception("Sync Failure").printStackTrace(System.out);
             syncFail++;
         }
     }
@@ -801,7 +801,7 @@ public class WorkspaceSyncDialog extends JDialog {
                         lstRecords.add(syncAction.data);
                         lstRecordIDs.add(syncAction.recordID);
                     }
-                    logIfFailed(inFeedback, new SyncAction("CLOUD_UPLOAD " + WildLogDataType.DELETE_LOG.getDescription() + " ", 
+                    logIfFailed(inFeedback, new SyncAction("CLOUD_UPLOAD " + WildLogDataType.DELETE_LOG.getDescription(), 
                             dataType, lstRecords.size(), Arrays.toString(lstRecords.toArray()), null), 
                             inSyncAzure.uploadDataBatch(WildLogDataType.DELETE_LOG, lstRecords));
                     logIfFailed(inFeedback, new SyncAction("CLOUD_DELETE", 
@@ -843,7 +843,7 @@ public class WorkspaceSyncDialog extends JDialog {
                         cloudEntry.getRecordID(), "[" + cloudEntry.getWildLogDataType() + "]", null);
                 logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createDeleteLog(
                         new WildLogDeleteLog(cloudEntry.getWildLogDataType(), cloudEntry.getRecordID())));
-                syncAction.command = "WORKSPACE_DELETE" + WildLogDataType.DELETE_LOG.getDescription() + " ";
+                syncAction.command = "WORKSPACE_DELETE " + WildLogDataType.DELETE_LOG.getDescription();
                 syncAction.type = cloudEntry.getWildLogDataType();
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.ELEMENT) {
                     logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteElement(syncAction.recordID));

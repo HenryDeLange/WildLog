@@ -477,8 +477,7 @@ public abstract class DBI_JDBC implements DBI {
             + "BUNDLEDPLAYERS = ?, "
             + "USEINDVCOUNTINPATH = ?, "
             + "AUDITTIME = ?, "
-            + "AUDITUSER = ? "
-            + "WHERE ID = ?";
+            + "AUDITUSER = ?";
     protected static final String updateAdhocData = "UPDATE ADHOC SET "
             + "FIELDID = ?, "
             + "DATAKEY = ?, "
@@ -2285,7 +2284,6 @@ public abstract class DBI_JDBC implements DBI {
             }
             state.setLong(16, inWildLogOptions.getAuditTime());
             state.setString(17, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogOptions.getAuditUser()), 150));
-            state.setLong(18, inWildLogOptions.getID());
             // Execute
             state.executeUpdate();
          }

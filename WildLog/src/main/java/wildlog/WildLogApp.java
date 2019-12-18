@@ -259,10 +259,9 @@ public class WildLogApp extends Application {
         try {
             WildLogApp.LOGGER.log(Level.INFO, "Opening Workspace database at: {}", WildLogPaths.getFullWorkspacePrefix().toString());
             dbi = new WildLogDBI_h2(!triggerSync, useH2AutoServer);
-            if (triggerSync) {
-                // Only create the WildLog Options when setting up a sync workspace meant for downloading data from the cloud
-                dbi.createWildLogOptions();
-            }
+            // NOTE:
+            // The "!triggerSync" above won't prevent the WildLog Options from being created.
+            // It still happens in doUpdates() method.
         }
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, "Could not open the Workspace. Will try to ask the user to try a new Workspace folder.");
@@ -468,9 +467,6 @@ public class WildLogApp extends Application {
                 // Check whether the Sync Dialog should be shown on launch
                 if (triggerSync) {
                     // Set the correct workspace ID
-                    
-// FIXME: Die WorkspaceID storie werk nog nie reg nie...
-                    
                     wildLogOptions = dbi.findWildLogOptions(WildLogOptions.class);
                     wildLogOptions.setID(triggerSyncWorkspaceID);
                     wildLogOptions.setWorkspaceID(triggerSyncWorkspaceID);

@@ -95,7 +95,9 @@ public class WorkspacePickerDialog extends JDialog {
             cmbWorkspacePath.addItem(calculateInitialWorkspacePath().trim());
         }
         cmbWorkspacePath.addItem("");
-        updateActivePath((String) cmbWorkspacePath.getSelectedItem());
+        if (cmbWorkspacePath.getSelectedIndex() >= 0) {
+            updateActivePath((String) cmbWorkspacePath.getSelectedItem());
+        }
     }
 
     /**
@@ -313,14 +315,20 @@ public class WorkspacePickerDialog extends JDialog {
     }
     
     private void writeDefaultWildLogHome() {
+        
+// FIXME: New cloud sync workspace not written to file
+        
         FileWriter writer = null;
         try {
             writer = new FileWriter(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().resolve("wildloghome").toFile());
             // Write the selected (active / default) workspace first
-            String selectedWorkspace = ((String) cmbWorkspacePath.getSelectedItem()).trim();
-            if (!selectedWorkspace.isEmpty()) {
-                WildLogApp.LOGGER.log(Level.DEBUG, "Wildloghome: '" + selectedWorkspace + "' (selected)");
-                writer.write(selectedWorkspace + System.lineSeparator());
+            String selectedWorkspace = null;
+            if (cmbWorkspacePath.getSelectedIndex() >= 0) {
+                selectedWorkspace = ((String) cmbWorkspacePath.getSelectedItem()).trim();
+                if (!selectedWorkspace.isEmpty()) {
+                    WildLogApp.LOGGER.log(Level.DEBUG, "Wildloghome: '" + selectedWorkspace + "' (selected)");
+                    writer.write(selectedWorkspace + System.lineSeparator());
+                }
             }
             // Write the rest of the know workspaces
             for (int t = 0; t < cmbWorkspacePath.getItemCount(); t++) {

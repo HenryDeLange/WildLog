@@ -88,7 +88,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         connectionURL = inConnectionURL;
         try {
             setupConnection(inH2AutoServer);
-            // Create table, indexes, etc.
+            // Create table, indexes, default values, etc.
             started = super.initialize(inCreateDefaultRecords);
             // Check database version and perform updates if required.
             // This also creates the WildLogOptions row the first time
@@ -1019,6 +1019,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     state.execute("ALTER TABLE WILDLOG DROP COLUMN USESCIENTIFICNAMES");
                     state.execute("ALTER TABLE WILDLOG DROP COLUMN WORKSPACENAME");
                     state.execute("ALTER TABLE WILDLOG DROP COLUMN WORKSPACEID");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN UPLOADLOGS");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN BUNDLEDPLAYERS");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN USEINDVCOUNTINPATH");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN DEFAULTZOOM");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN ID");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN AUDITTIME");
+                    state.execute("ALTER TABLE WILDLOG DROP COLUMN AUDITUSER");
                     // Set the version number to trigger the updates
                     state.executeUpdate("UPDATE WILDLOG SET VERSION=1");
                 }
