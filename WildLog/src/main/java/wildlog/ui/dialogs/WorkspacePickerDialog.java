@@ -36,8 +36,8 @@ public class WorkspacePickerDialog extends JDialog {
     private boolean triggerImmediateSync = false;
 
     public WorkspacePickerDialog() {
-        super(new DummyTaskbarFrame("WildLog Workspace", new ImageIcon(
-                WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon.gif")).getImage()));
+        super(new DummyTaskbarFrame("WildLog Workspace", 
+                new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon.gif")).getImage()));
         WildLogApp.LOGGER.log(Level.INFO, "[WorkspacePickerDialog]");
         initComponents();
         pack();
