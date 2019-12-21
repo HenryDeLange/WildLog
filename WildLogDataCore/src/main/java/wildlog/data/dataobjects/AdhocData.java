@@ -7,7 +7,7 @@ package wildlog.data.dataobjects;
  * which isn't essential to the core WildLog functionality.
  */
 public class AdhocData {
-    public static enum ADHOC_FIELD_IDS {FILTER_TEMPLATES, MAP_SHAPEFILES_DISTRIBUTION, MAP_SHAPEFILES_BASE};
+    public static enum ADHOC_FIELD_IDS {FILTER_TEMPLATES, MAP_SHAPEFILES_DISTRIBUTION, MAP_SHAPEFILES_BASE, SYNC_TIMESTAMP};
     private String fieldID;
     private String dataKey;
     private String dataValue;

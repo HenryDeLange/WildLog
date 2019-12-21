@@ -340,15 +340,7 @@ public final class SyncAzure {
         try {
             CloudTable cloudTable = getTable(inDataType);
             TableQuery<SyncTableEntry> query = TableQuery.from(SyncTableEntry.class);
-            if (inAfterTimestamp > 0) {
-                query = query.where(TableQuery.combineFilters(
-                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)),
-                        TableQuery.Operators.AND,
-                        TableQuery.generateFilterCondition("Timestamp", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, new Date(inAfterTimestamp))));
-            }
-            else {
-                query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)));
-            }
+            // Select the columns to return
             if (inDataType == WildLogDataType.FILE) {
                 query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime", "linkType", "linkID", "originalFileLocation"});
             }
@@ -359,6 +351,18 @@ public final class SyncAzure {
             else {
                 query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime"});
             }
+            // Filter on the Workspace (PartitionKey) or last sync date (Timestamp)
+            // NOTE: Using Timestamp (default Azure field) instead of SyncIndicator because for files the SyncIndicator is the size, not time.
+            if (inAfterTimestamp > 0) {
+                query = query.where(TableQuery.combineFilters(
+                        TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)),
+                        TableQuery.Operators.AND,
+                        TableQuery.generateFilterCondition("Timestamp", TableQuery.QueryComparisons.GREATER_THAN_OR_EQUAL, new Date(inAfterTimestamp))));
+            }
+            else {
+                query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)));
+            }
+            // Get the list of results
             List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
             for (SyncTableEntry syncTableEntry : cloudTable.execute(query)) {
                 lstSyncTableEntries.add(syncTableEntry);

@@ -160,7 +160,7 @@ public final class UtilsDialog {
                     }
                     txtPane.setText(temp + "</html>");
                     txtPane.setCaretPosition(0);
-                    UtilsUI.attachClipboardPopup(txtPane, true);
+                    UtilsUI.attachClipboardPopup(txtPane, true, false);
                     JScrollPane scroll = new JScrollPane(txtPane);
                     scroll.setPreferredSize(new Dimension(580, 750));
                     frame.getContentPane().add(scroll);

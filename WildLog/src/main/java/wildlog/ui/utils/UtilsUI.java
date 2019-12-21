@@ -58,10 +58,10 @@ public final class UtilsUI {
     }
 
     public static void attachClipboardPopup(final JTextComponent inTextField) {
-        attachClipboardPopup(inTextField, false);
+        attachClipboardPopup(inTextField, true, true);
     }
 
-    public static void attachClipboardPopup(final JTextComponent inTextField, final boolean inCopyOnly) {
+    public static void attachClipboardPopup(final JTextComponent inTextField, final boolean inHasCopy, final boolean inHasPaste) {
         inTextField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -73,16 +73,18 @@ public final class UtilsUI {
                 if ((inEvent.isPopupTrigger() || SwingUtilities.isRightMouseButton(inEvent))) {
                     JPopupMenu clipboardPopup = new JPopupMenu();
                     // Build the copy popup
-                    JMenuItem copyItem = new JMenuItem("Copy Selected Text", new ImageIcon(WildLogApp.class.getResource("resources/icons/copy.png")));
-                    copyItem.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            doClipboardCopy(inTextField.getSelectedText());
-                        }
-                    });
-                    clipboardPopup.add(copyItem);
-                    if (!inCopyOnly) {
-                        // Build the paste popup
+                    if (inHasCopy) {
+                        JMenuItem copyItem = new JMenuItem("Copy Selected Text", new ImageIcon(WildLogApp.class.getResource("resources/icons/copy.png")));
+                        copyItem.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                doClipboardCopy(inTextField.getSelectedText());
+                            }
+                        });
+                        clipboardPopup.add(copyItem);
+                    }
+                    // Build the paste popup
+                    if (inHasPaste) {
                         JMenuItem pasteItem = new JMenuItem("Paste Selected Text", new ImageIcon(WildLogApp.class.getResource("resources/icons/paste.png")));
                         pasteItem.addActionListener(new ActionListener() {
                             @Override

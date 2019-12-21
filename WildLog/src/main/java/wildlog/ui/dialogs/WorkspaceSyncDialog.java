@@ -71,6 +71,8 @@ import wildlog.utils.WildLogPaths;
 
 // TODO: Try to handle non-JPG thumbnails also. (For now I'm only supporting JPG, because the whole PNG to JPG renaming thing gets to complicated to code for...)
 
+// TODO: Kyk of ek QuickSync kan laat werk... Die probleem is dat as ek net 'n halwe lys vanaf die cloud download dan weet ek nie of 'n workspace record moet upload of nie...
+
 public class WorkspaceSyncDialog extends JDialog {
     private int syncDeleteUp = 0;
     private int syncDeleteDown = 0;
@@ -93,7 +95,7 @@ public class WorkspaceSyncDialog extends JDialog {
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
         // Attache copy-paste right-clicks
-        UtilsUI.attachClipboardPopup(txaSyncToken);
+        UtilsUI.attachClipboardPopup(txaSyncToken, false, true);
         // Default to the free token's configuration
         configureFreeToken();
     }
@@ -117,9 +119,9 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(false);
         rdbModeBatch.setEnabled(false);
-        // Quick Sync
-        chkQuickSync.setSelected(true);
-        chkQuickSync.setEnabled(false);
+//        // Quick Sync
+//        chkQuickSync.setSelected(true);
+//        chkQuickSync.setEnabled(false);
     }
     
     private void configureBasicToken() {
@@ -141,9 +143,9 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(false);
         rdbModeBatch.setEnabled(true);
-        // Quick Sync
-        chkQuickSync.setSelected(true);
-        chkQuickSync.setEnabled(false);
+//        // Quick Sync
+//        chkQuickSync.setSelected(true);
+//        chkQuickSync.setEnabled(false);
     }
     
     private void configureFullToken() {
@@ -166,9 +168,9 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(true);
         rdbModeBatch.setEnabled(true);
-        // Quick Sync
-        chkQuickSync.setSelected(true);
-        chkQuickSync.setEnabled(true);
+//        // Quick Sync
+//        chkQuickSync.setSelected(true);
+//        chkQuickSync.setEnabled(true);
     }
 
     /**
@@ -204,7 +206,6 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeBatch = new javax.swing.JRadioButton();
         rdbModeSingle = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
-        chkQuickSync = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sync with Cloud Workspace");
@@ -363,10 +364,6 @@ public class WorkspaceSyncDialog extends JDialog {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Image Upload Size:");
 
-        chkQuickSync.setSelected(true);
-        chkQuickSync.setText("Quick Sync");
-        chkQuickSync.setToolTipText("When selected only data recent changes will be synced. Unselect to perform a full sync.");
-
         javax.swing.GroupLayout pnlSyncOptionsLayout = new javax.swing.GroupLayout(pnlSyncOptions);
         pnlSyncOptions.setLayout(pnlSyncOptionsLayout);
         pnlSyncOptionsLayout.setHorizontalGroup(
@@ -396,9 +393,7 @@ public class WorkspaceSyncDialog extends JDialog {
                                 .addGap(10, 10, 10)
                                 .addComponent(rdbModeBatch)
                                 .addGap(5, 5, 5)
-                                .addComponent(rdbModeSingle)
-                                .addGap(20, 20, 20)
-                                .addComponent(chkQuickSync))
+                                .addComponent(rdbModeSingle))
                             .addGroup(pnlSyncOptionsLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(10, 10, 10)
@@ -435,8 +430,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 .addGroup(pnlSyncOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(rdbModeBatch)
-                    .addComponent(rdbModeSingle)
-                    .addComponent(chkQuickSync))
+                    .addComponent(rdbModeSingle))
                 .addGap(5, 5, 5))
         );
 
@@ -770,13 +764,23 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void syncDeleteLogs(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize) {
-
-        
-// TODO: When chkQuickSync is selected use the syncIndicator to only select records that have been synced by another after the date stored in this workspace's Adhoc table
-
-
         int baseProgress = inProgressbar.getProgress();
-        List<SyncTableEntry> lstCloudEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.DELETE_LOG, 0);
+        long quickSyncTimestamp = 0L;
+//        if (chkQuickSync.isSelected()) {
+//            AdhocData lastSync = WildLogApp.getApplication().getDBI().findAdhocData(
+//                    AdhocData.ADHOC_FIELD_IDS.SYNC_TIMESTAMP.toString(), WildLogDataType.DELETE_LOG.getDescription(), AdhocData.class);
+//            if (lastSync == null) {
+//                lastSync = new AdhocData(AdhocData.ADHOC_FIELD_IDS.SYNC_TIMESTAMP.toString(), WildLogDataType.DELETE_LOG.getDescription(), 
+//                        Long.toString(new Date().getTime()));
+//                WildLogApp.getApplication().getDBI().createAdhocData(lastSync);
+//            }
+//            else {
+//                lastSync.setDataValue(Long.toString(new Date().getTime()));
+//                WildLogApp.getApplication().getDBI().updateAdhocData(lastSync);
+//            }
+//            quickSyncTimestamp = Long.parseLong(lastSync.getDataValue());
+//        }
+        List<SyncTableEntry> lstCloudEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.DELETE_LOG, quickSyncTimestamp);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Delete Logs - Cloud Entries: " + lstCloudEntries.size());
         List<WildLogDeleteLog> lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listDeleteLogs(null, 0, WildLogDeleteLog.class);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Delete Logs - Workspace Entries: " + lstCloudEntries.size());
@@ -895,11 +899,23 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void syncDataRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, WildLogDataType inDataType, ProgressbarTask inProgressbar, int inProgressStepSize) {
-        
-// TODO: When chkQuickSync is selected use the syncIndicator to only select records that have been synced by another after the date stored in this workspace's Adhoc table
-        
         int baseProgress = inProgressbar.getProgress();
-        List<SyncTableEntry> lstCloudEntries  = inSyncAzure.getSyncListDataBatch(inDataType, 0);
+        long quickSyncTimestamp = 0L;
+//        if (chkQuickSync.isSelected()) {
+//            AdhocData lastSync = WildLogApp.getApplication().getDBI().findAdhocData(
+//                    AdhocData.ADHOC_FIELD_IDS.SYNC_TIMESTAMP.toString(), inDataType.getDescription(), AdhocData.class);
+//            if (lastSync == null) {
+//                lastSync = new AdhocData(AdhocData.ADHOC_FIELD_IDS.SYNC_TIMESTAMP.toString(), inDataType.getDescription(), 
+//                        Long.toString(new Date().getTime()));
+//                WildLogApp.getApplication().getDBI().createAdhocData(lastSync);
+//            }
+//            else {
+//                lastSync.setDataValue(Long.toString(new Date().getTime()));
+//                WildLogApp.getApplication().getDBI().updateAdhocData(lastSync);
+//            }
+//            quickSyncTimestamp = Long.parseLong(lastSync.getDataValue());
+//        }
+        List<SyncTableEntry> lstCloudEntries  = inSyncAzure.getSyncListDataBatch(inDataType, quickSyncTimestamp);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + inDataType.getDescription() + " - Cloud Entries: " + lstCloudEntries.size());
         List<? extends DataObjectWithAudit> lstWorkspaceEntries;
         if(inDataType == WildLogDataType.ELEMENT) {
@@ -1108,11 +1124,23 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void syncFileRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize) {
-        
-// TODO: When chkQuickSync is selected use the syncIndicator to only select records that have been synced by another after the date stored in this workspace's Adhoc table
-        
         int baseProgress = inProgressbar.getProgress();
-        List<SyncTableEntry> lstCloudDataEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.FILE, 0);
+        long quickSyncTimestamp = 0L;
+//        if (chkQuickSync.isSelected()) {
+//            AdhocData lastSync = WildLogApp.getApplication().getDBI().findAdhocData(
+//                    AdhocData.ADHOC_FIELD_IDS.SYNC_TIMESTAMP.toString(), WildLogDataType.FILE.getDescription(), AdhocData.class);
+//            if (lastSync == null) {
+//                lastSync = new AdhocData(AdhocData.ADHOC_FIELD_IDS.SYNC_TIMESTAMP.toString(), WildLogDataType.FILE.getDescription(), 
+//                        Long.toString(new Date().getTime()));
+//                WildLogApp.getApplication().getDBI().createAdhocData(lastSync);
+//            }
+//            else {
+//                lastSync.setDataValue(Long.toString(new Date().getTime()));
+//                WildLogApp.getApplication().getDBI().updateAdhocData(lastSync);
+//            }
+//            quickSyncTimestamp = Long.parseLong(lastSync.getDataValue());
+//        }
+        List<SyncTableEntry> lstCloudDataEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.FILE, quickSyncTimestamp);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Cloud File Entries: " + lstCloudDataEntries.size());
         List<WildLogFile> lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listWildLogFiles(-1, null, WildLogFile.class);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Workspace File Entries: " + lstWorkspaceEntries.size());
@@ -1153,7 +1181,7 @@ public class WorkspaceSyncDialog extends JDialog {
             inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         }
         if (reloadData) {
-            lstCloudDataEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.FILE, 0);
+            lstCloudDataEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.FILE, quickSyncTimestamp);
             WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Cloud File Entries (Reloaded): " + lstCloudDataEntries.size());
         }
         inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 / 2.0)));
@@ -1483,7 +1511,6 @@ public class WorkspaceSyncDialog extends JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
     private javax.swing.JButton btnConfirmSyncToken;
-    private javax.swing.JCheckBox chkQuickSync;
     private javax.swing.JComboBox<WildLogThumbnailSizes> cmbThumbnailSize;
     private javax.swing.ButtonGroup grpFiles;
     private javax.swing.ButtonGroup grpImages;

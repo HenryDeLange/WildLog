@@ -28,7 +28,7 @@ public class INatAuthTokenDialog extends JDialog {
         originalTokenText = txtToken.getText();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
-        UtilsUI.attachClipboardPopup(txtToken);
+        UtilsUI.attachClipboardPopup(txtToken, false, true);
     }
     
     public INatAuthTokenDialog(JDialog inParent) {
@@ -38,7 +38,7 @@ public class INatAuthTokenDialog extends JDialog {
         originalTokenText = txtToken.getText();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
-        UtilsUI.attachClipboardPopup(txtToken);
+        UtilsUI.attachClipboardPopup(txtToken, false, true);
     }
 
     /**

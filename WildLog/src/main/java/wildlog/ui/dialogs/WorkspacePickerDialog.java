@@ -295,7 +295,11 @@ public class WorkspacePickerDialog extends JDialog {
         else {
             cmbWorkspacePath.getEditor().setItem("");
         }
-        cmbWorkspacePath.setSelectedIndex(selectedIndex - 1);
+        selectedIndex--;
+        if (selectedIndex < -1) {
+            selectedIndex = -1;
+        }
+        cmbWorkspacePath.setSelectedIndex(selectedIndex);
         writeWildLogHome();
     }//GEN-LAST:event_btnRemoveActionPerformed
 

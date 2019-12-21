@@ -257,8 +257,6 @@
                                   <Component id="rdbModeBatch" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Component id="rdbModeSingle" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                                  <Component id="chkQuickSync" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -309,7 +307,6 @@
                       <Component id="jLabel1" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                       <Component id="rdbModeBatch" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rdbModeSingle" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="chkQuickSync" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               </Group>
@@ -466,13 +463,6 @@
               <Font name="Tahoma" size="12" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Image Upload Size:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkQuickSync">
-          <Properties>
-            <Property name="selected" type="boolean" value="true"/>
-            <Property name="text" type="java.lang.String" value="Quick Sync"/>
-            <Property name="toolTipText" type="java.lang.String" value="When selected only data recent changes will be synced. Unselect to perform a full sync."/>
           </Properties>
         </Component>
       </SubComponents>

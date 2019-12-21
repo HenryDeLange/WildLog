@@ -124,7 +124,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer());
         // Attach clipboard
-        UtilsUI.attachClipboardPopup(txtBrowseInfo, true);
+        UtilsUI.attachClipboardPopup(txtBrowseInfo, true, false);
         // Add hyperlink listener
         txtBrowseInfo.addHyperlinkListener(new HyperlinkListener() {
             @Override

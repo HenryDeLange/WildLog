@@ -76,7 +76,7 @@ public class INatSightingDialog extends JDialog {
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
         UtilsDialog.addModalBackgroundPanel(this, null);
-        UtilsUI.attachClipboardPopup(txtInfo, true);
+        UtilsUI.attachClipboardPopup(txtInfo, true, false);
     }
     
     public INatSightingDialog(JDialog inParent, Sighting inSighting) {
@@ -89,7 +89,7 @@ public class INatSightingDialog extends JDialog {
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
         UtilsDialog.addModalBackgroundPanel(this, null);
-        UtilsUI.attachClipboardPopup(txtInfo, true);
+        UtilsUI.attachClipboardPopup(txtInfo, true, false);
     }
 
     private void setupUI() {
