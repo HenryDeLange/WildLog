@@ -3,9 +3,9 @@ package wildlog.data.dataobjects.interfaces;
 
 public abstract class DataObjectWithAudit {
     protected long id;
-    protected long auditTime; // In UTC. Note, "new Date().getTime()" and "Instant.now()" will be UTC, but "System.currentTimeMillis()" might apparently not.
+    protected long auditTime; // In UTC. NOTE: "new Date().getTime()" and "Instant.now()" will be UTC, but "System.currentTimeMillis()" might apparently not.
     protected String auditUser;
-    protected long syncIndicator; // Also in UTC
+    protected long syncIndicator; // Also in UTC for most data type, but for files this is the file size.
 
     
     public long getID() {

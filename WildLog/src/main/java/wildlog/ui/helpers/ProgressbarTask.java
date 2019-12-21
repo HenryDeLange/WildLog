@@ -1,7 +1,9 @@
 package wildlog.ui.helpers;
 
+import org.apache.logging.log4j.Level;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
+import wildlog.WildLogApp;
 
 
 public abstract class ProgressbarTask<T extends Object, V extends Object> extends Task<T, V> {
@@ -16,19 +18,43 @@ public abstract class ProgressbarTask<T extends Object, V extends Object> extend
     }
 
     public void setTaskProgress(int inProgress) {
-        super.setProgress(inProgress);
+        try {
+            super.setProgress(inProgress);
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, "Incorrect progress value: " + inProgress);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
     }
 
     public void setTaskProgress(int inProgress, int inMin, int inMax) {
-        super.setProgress(inProgress, inMin, inMax);
+        try {
+            super.setProgress(inProgress, inMin, inMax);
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, "Incorrect progress value: " + inProgress + ", " + inMin + ", " + inMax);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
     }
 
     public void setTaskProgress(float inProgress) {
-        super.setProgress(inProgress);
+        try {
+            super.setProgress(inProgress);
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, "Incorrect progress value: " + inProgress);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
     }
 
     public void setTaskProgress(float inProgress, float inMin, float inMax) {
-        super.setProgress(inProgress, inMin, inMax);
+        try {
+            super.setProgress(inProgress, inMin, inMax);
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, "Incorrect progress value: " + inProgress + ", " + inMin + ", " + inMax);
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
     }
 
 }

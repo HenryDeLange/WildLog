@@ -909,13 +909,26 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public int countDeleteLogs(WildLogDataType inDataType) {
+    public int countDeleteLogs(long inID, WildLogDataType inDataType) {
         PreparedStatement state = null;
         ResultSet results = null;
         int count = 0;
         try {
             String sql = countDeleteLog;
-            if (inDataType != null) {
+            if (inID > 0 && inDataType != null) {
+                sql = sql + " WHERE ID = ? AND TYPE = ?";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inID);
+                state.setString(2, UtilsData.stringFromObject(inDataType));
+            }
+            else
+            if (inID > 0 && inDataType == null) {
+                sql = sql + " WHERE ID = ?";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inID);
+            }
+            else
+            if (inID <= 0 && inDataType != null) {
                 sql = sql + " WHERE TYPE = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.stringFromObject(inDataType));
@@ -2352,7 +2365,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             // Create the DeleteLog record (to know about the delete when syncing)
-            createDeleteLog(new WildLogDeleteLog(WildLogDataType.ELEMENT, inID));
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.ELEMENT, inID), false);
             // Delete the ElementCore
             state = conn.prepareStatement(deleteElement);
             state.setLong(1, inID);
@@ -2383,7 +2396,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             // Create the DeleteLog record (to know about the delete when syncing)
-            createDeleteLog(new WildLogDeleteLog(WildLogDataType.LOCATION, inID));
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.LOCATION, inID), false);
             // Delete LocationCore
             state = conn.prepareStatement(deleteLocation);
             state.setLong(1, inID);
@@ -2415,7 +2428,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             // Create the DeleteLog record (to know about the delete when syncing)
-            createDeleteLog(new WildLogDeleteLog(WildLogDataType.VISIT, inID));
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.VISIT, inID), false);
             // Delete VisitCore
             state = conn.prepareStatement(deleteVisit);
             state.setLong(1, inID);
@@ -2446,7 +2459,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             // Create the DeleteLog record (to know about the delete when syncing)
-            createDeleteLog(new WildLogDeleteLog(WildLogDataType.SIGHTING, inID));
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.SIGHTING, inID), false);
             // Delete Sightings
             state = conn.prepareStatement(deleteSighting);
             state.setLong(1, inID);
@@ -2475,7 +2488,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             // Create the DeleteLog record (to know about the delete when syncing)
-            createDeleteLog(new WildLogDeleteLog(WildLogDataType.FILE, inID));
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.FILE, inID), false);
             // Delete File from database
             state = conn.prepareStatement(deleteFile);
             state.setLong(1, inID);
@@ -2945,19 +2958,24 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog) {
+    public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog, boolean inNewButUseOldAudit) {
         PreparedStatement state = null;
         try {
-            //Insert
-            state = conn.prepareStatement(createDeleteLog);
-            // Populate the values
+            // Don't add the delete log twice (might already been created by the cloud sync)
+            if (countDeleteLogs(inWildLogDeleteLog.getID(), inWildLogDeleteLog.getType()) == 0) {
+                //Insert
+                state = conn.prepareStatement(createDeleteLog);
+                // Populate the values
                 state.setLong(1, inWildLogDeleteLog.getID());
                 state.setString(2, UtilsData.stringFromObject(inWildLogDeleteLog.getType()));
-                setupAuditInfo(inWildLogDeleteLog);
+                if (!inNewButUseOldAudit) {
+                    setupAuditInfo(inWildLogDeleteLog);
+                }
                 state.setLong(3, inWildLogDeleteLog.getAuditTime());
                 state.setString(4, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogDeleteLog.getAuditUser()), 150));
-            // Execute
-            state.executeUpdate();
+                // Execute
+                state.executeUpdate();
+            }
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -3008,7 +3026,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             // Create the DeleteLog record (to know about the delete when syncing)
-            createDeleteLog(new WildLogDeleteLog(WildLogDataType.WILDLOG_USER, inID));
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.WILDLOG_USER, inID), false);
             // Delete the user
             state = conn.prepareStatement(deleteUser);
             state.setLong(1, inID);

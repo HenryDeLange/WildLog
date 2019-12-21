@@ -223,12 +223,8 @@ public class WildLogApp extends Application {
                                     + "<br/>A database upgrade might be in progress, or the Workspace is no longer accessible, or another workspace is open, or the Workspace might been corrupted."
                                     + "<br/>If the problem persists please consult the manual to restore a previous backup or contact support@mywild.co.za for help.</html>",
                             "WildLog Workspace Error", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, 
-                            new String[] { "Open another Workspace", "Restore a Database Backup", "Exit" }, null);
+                            new String[] { "Restore a Database Backup", "Exit" }, null);
                     if (choice == 0) {
-                        WorkspacePickerDialog.configureWildLogHomeBasedOnFileBrowser(null, true, WildLogPaths.getFullWorkspacePrefix().toString());
-                    }
-                    else
-                    if (choice == 1) {
                         busyWithRestore = true;
                         UtilsRestore.doDatabaseRestore();
                     }

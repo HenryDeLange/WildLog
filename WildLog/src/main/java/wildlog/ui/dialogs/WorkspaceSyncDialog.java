@@ -117,6 +117,9 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(false);
         rdbModeBatch.setEnabled(false);
+        // Quick Sync
+        chkQuickSync.setSelected(true);
+        chkQuickSync.setEnabled(false);
     }
     
     private void configureBasicToken() {
@@ -138,6 +141,9 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(false);
         rdbModeBatch.setEnabled(true);
+        // Quick Sync
+        chkQuickSync.setSelected(true);
+        chkQuickSync.setEnabled(false);
     }
     
     private void configureFullToken() {
@@ -154,11 +160,15 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncOriginalImages.setEnabled(true);
         cmbThumbnailSize.setEnabled(true);
         cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.LARGE);
-        cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT);
+        cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT); // Removing just to be sure it's not added twice (below)
+        cmbThumbnailSize.addItem(WildLogThumbnailSizes.SYNC_LIMIT);
         // Mode
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(true);
         rdbModeBatch.setEnabled(true);
+        // Quick Sync
+        chkQuickSync.setSelected(true);
+        chkQuickSync.setEnabled(true);
     }
 
     /**
@@ -511,7 +521,7 @@ public class WorkspaceSyncDialog extends JDialog {
                             + "<br>The token is subject to fair use and load restrictions."
                             + "<br>Contact <u>support@mywild.co.za</> for more details.</html>",
                     "Using Free Sync Token", JOptionPane.WARNING_MESSAGE);
-            if ((WildLogApp.getApplication().getDBI().countDeleteLogs(null) 
+            if ((WildLogApp.getApplication().getDBI().countDeleteLogs(0, null) 
                     + WildLogApp.getApplication().getDBI().countElements(null, null)
                     + WildLogApp.getApplication().getDBI().countLocations(null)
                     + WildLogApp.getApplication().getDBI().countSightings(0, 0, 0, 0)
@@ -760,9 +770,11 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void syncDeleteLogs(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize) {
+
         
 // TODO: When chkQuickSync is selected use the syncIndicator to only select records that have been synced by another after the date stored in this workspace's Adhoc table
-        
+
+
         int baseProgress = inProgressbar.getProgress();
         List<SyncTableEntry> lstCloudEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.DELETE_LOG, 0);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Delete Logs - Cloud Entries: " + lstCloudEntries.size());
@@ -841,36 +853,36 @@ public class WorkspaceSyncDialog extends JDialog {
             if (!found) {
                 SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.DELETE_LOG, 
                         cloudEntry.getRecordID(), "[" + cloudEntry.getWildLogDataType() + "]", null);
-                logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createDeleteLog(
-                        new WildLogDeleteLog(cloudEntry.getWildLogDataType(), cloudEntry.getRecordID())));
-                syncAction.command = "WORKSPACE_DELETE " + WildLogDataType.DELETE_LOG.getDescription();
-                syncAction.type = cloudEntry.getWildLogDataType();
-                if(cloudEntry.getWildLogDataType() == WildLogDataType.ELEMENT) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteElement(syncAction.recordID));
+                logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createDeleteLog((WildLogDeleteLog) cloudEntry.getData(), true));
+                WildLogDataType workspaceDataType = ((WildLogDeleteLog) cloudEntry.getData()).getType();
+                syncAction.command = "WORKSPACE_DELETE";
+                syncAction.type = workspaceDataType;
+                if(workspaceDataType == WildLogDataType.ELEMENT) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteElement(cloudEntry.getRecordID()));
                 }
                 else
-                if(cloudEntry.getWildLogDataType() == WildLogDataType.LOCATION) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteLocation(syncAction.recordID));
+                if(workspaceDataType == WildLogDataType.LOCATION) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteLocation(cloudEntry.getRecordID()));
                 }
                 else
-                if(cloudEntry.getWildLogDataType() == WildLogDataType.VISIT) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteVisit(syncAction.recordID));
+                if(workspaceDataType == WildLogDataType.VISIT) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteVisit(cloudEntry.getRecordID()));
                 }
                 else
-                if(cloudEntry.getWildLogDataType() == WildLogDataType.SIGHTING) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteSighting(syncAction.recordID));
+                if(workspaceDataType == WildLogDataType.SIGHTING) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteSighting(cloudEntry.getRecordID()));
                 }
                 else
-                if(cloudEntry.getWildLogDataType() == WildLogDataType.WILDLOG_USER) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteUser(syncAction.recordID));
+                if(workspaceDataType == WildLogDataType.WILDLOG_USER) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteUser(cloudEntry.getRecordID()));
                 }
                 else
-                if(cloudEntry.getWildLogDataType() == WildLogDataType.WILDLOG_OPTIONS) {
+                if(workspaceDataType == WildLogDataType.WILDLOG_OPTIONS) {
                     // Never deleted
                 }
                 else
-                if(cloudEntry.getWildLogDataType() == WildLogDataType.FILE) {
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteWildLogFile(syncAction.recordID));
+                if(workspaceDataType == WildLogDataType.FILE) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteWildLogFile(cloudEntry.getRecordID()));
                 }
                 else {
                     logIfFailed(inFeedback, syncAction, false);

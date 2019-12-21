@@ -954,13 +954,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     public boolean deleteVisit(long inID) {
         // First check if this was visit with stashed files, if it was then delete the files firts
         Visit visit = findVisit(inID, null, false, Visit.class);
-        try {
-            if (VisitType.STASHED == visit.getType()) {
-                UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).toFile());
+        if (visit != null) {
+            try {
+                if (VisitType.STASHED == visit.getType()) {
+                    UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).toFile());
+                }
             }
-        }
-        catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            catch (IOException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
         }
         return super.deleteVisit(inID);
     }
@@ -969,24 +971,27 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     public boolean deleteWildLogFile(long inID) {
         // Note: This method only deletes one file at a time, and all it's "default" thumbnails.
         // First, get the path of the original file (to delete it from the disk)
-        String dbFilePath = findWildLogFile(inID, 0, null, null, WildLogFile.class).getDBFilePath();
+        WildLogFile wildLogFile = findWildLogFile(inID, 0, null, null, WildLogFile.class);
         // Next, remove the database entry.
         super.deleteWildLogFile(inID);
         // Next, delete the original image
-        try {
-            Files.deleteIfExists(WildLogPaths.getFullWorkspacePrefix().resolve(dbFilePath).normalize().toAbsolutePath().normalize());
-        }
-        catch (IOException ex) {
-            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-        }
-        // Then, try to delete the "default/known" thumbnails.
-        for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+        if (wildLogFile != null) {
+            String dbFilePath = wildLogFile.getDBFilePath();
             try {
-                // Note: Ek wil hier net die path kry, nie die thumbnail generate nie (so ek gebruik nie WildLogFile.getAbsoluteThumbnailPath() nie).
-                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(dbFilePath, size));
+                Files.deleteIfExists(WildLogPaths.getFullWorkspacePrefix().resolve(dbFilePath).normalize().toAbsolutePath().normalize());
             }
             catch (IOException ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            // Then, try to delete the "default/known" thumbnails.
+            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                try {
+                    // Note: Ek wil hier net die path kry, nie die thumbnail generate nie (so ek gebruik nie WildLogFile.getAbsoluteThumbnailPath() nie).
+                    Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(dbFilePath, size));
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
             }
         }
         return true;

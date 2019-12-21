@@ -32,7 +32,7 @@ public interface DBI {
     public int countSightings(long inID, long inElementID, long inLocationID, long inVisitID);
     public int countWildLogFiles(long inID, long inLinkID);
     public int countUsers();
-    public int countDeleteLogs(WildLogDataType inDataType);
+    public int countDeleteLogs(long inID, WildLogDataType inDataType);
 
     public <T extends ElementCore> T findElement(long inID, String inPrimaryName, Class<T> inReturnType);
     public <T extends LocationCore> T findLocation(long inID, String inName, Class<T> inReturnType);
@@ -64,7 +64,7 @@ public interface DBI {
     public <T extends AdhocData> boolean createAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData);
     public <T extends WildLogUser> boolean createUser(T inWildLogUser, boolean inNewButUseOldAuditAndID);
-    public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog);
+    public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog, boolean inNewButUseOldAudit);
     
     public <T extends ElementCore> boolean updateElement(T inElement, String inOldName, boolean inUseOldAudit);
     public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName, boolean inUseOldAudit);

@@ -41,7 +41,7 @@
                           <Component id="btnCloudSync" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="btnChooseWorkspace" max="32767" attributes="0"/>
+                      <Component id="btnConfirmWorkspace" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="cmbWorkspacePath" max="32767" attributes="0"/>
@@ -71,7 +71,7 @@
               </Group>
               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Component id="btnChooseWorkspace" min="-2" pref="65" max="-2" attributes="0"/>
+                  <Component id="btnConfirmWorkspace" min="-2" pref="65" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="btnCloudSync" min="-2" pref="30" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
@@ -149,7 +149,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBrowseActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnChooseWorkspace">
+    <Component class="javax.swing.JButton" name="btnConfirmWorkspace">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="16" style="1"/>
@@ -160,7 +160,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnChooseWorkspaceActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConfirmWorkspaceActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCloudSync">

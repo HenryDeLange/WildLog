@@ -48,7 +48,7 @@ public class WorkspacePickerDialog extends JDialog {
         cmbWorkspacePath.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                updateActivePath((String) cmbWorkspacePath.getEditor().getItem());
+                activeWorkspacePathChanged((String) cmbWorkspacePath.getEditor().getItem());
             }
         });
         // Lees die wildloghome file vir die lys van workspaces, en laai dit dan in die combobox
@@ -60,23 +60,23 @@ public class WorkspacePickerDialog extends JDialog {
         try {
             // If the file does not exist create it before attempting to read it
             if (!Files.exists(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().resolve("wildloghome"))) {
-                writeDefaultWildLogHome();
+                writeWildLogHome();
             }
             // Read the wildloghome file
-            populateWorkspaceComboBox(configureWildLogHomeBasedOnSettingsFile());
+            populateWorkspaceComboBox(readAndConfigureWorkspacePathBasedOnWildLogHomeFile());
         }
         catch (IOException ex) {
             // Daar was 'n probleem om die wildloghome settings file te lees, probeer om 'n nuwe wildloghome file te maak
             WildLogApp.LOGGER.log(Level.ERROR, "Could not read the wildloghome file. Will try to create a new one...");
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            writeDefaultWildLogHome();
+            writeWildLogHome();
             try {
-                populateWorkspaceComboBox(configureWildLogHomeBasedOnSettingsFile());
+                populateWorkspaceComboBox(readAndConfigureWorkspacePathBasedOnWildLogHomeFile());
             }
             catch (IOException ioex) {
                 // As ek steeds nie 'n wildloghome file kan gelees kry nie vra die user vir 'n wildloghome om te gebruik
                 WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
-                configureWildLogHomeBasedOnFileBrowser(null, true, null);
+                configureWorkspacePathBasedOnFileBrowser(null, true, null);
             }
         }
     }
@@ -87,7 +87,10 @@ public class WorkspacePickerDialog extends JDialog {
             String selectedWorkspace = lstWorkspaces.get(0).toString().trim(); // will always be the first row
             Collections.sort(lstWorkspaces);
             for (Path worspace : lstWorkspaces) {
-                cmbWorkspacePath.addItem(worspace.toString().trim());
+                String workpacePath = worspace.toAbsolutePath().normalize().toString().trim();
+                if (!workpacePath.isEmpty()) {
+                    cmbWorkspacePath.addItem(workpacePath);
+                }
             }
             cmbWorkspacePath.setSelectedItem(selectedWorkspace);
         }
@@ -96,7 +99,7 @@ public class WorkspacePickerDialog extends JDialog {
         }
         cmbWorkspacePath.addItem("");
         if (cmbWorkspacePath.getSelectedIndex() >= 0) {
-            updateActivePath((String) cmbWorkspacePath.getSelectedItem());
+            activeWorkspacePathChanged((String) cmbWorkspacePath.getSelectedItem());
         }
     }
 
@@ -112,7 +115,7 @@ public class WorkspacePickerDialog extends JDialog {
         jLabel2 = new javax.swing.JLabel();
         cmbWorkspacePath = new javax.swing.JComboBox<>();
         btnBrowse = new javax.swing.JButton();
-        btnChooseWorkspace = new javax.swing.JButton();
+        btnConfirmWorkspace = new javax.swing.JButton();
         btnCloudSync = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
 
@@ -153,12 +156,12 @@ public class WorkspacePickerDialog extends JDialog {
             }
         });
 
-        btnChooseWorkspace.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        btnChooseWorkspace.setText("OPEN / CREATE");
-        btnChooseWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnChooseWorkspace.addActionListener(new java.awt.event.ActionListener() {
+        btnConfirmWorkspace.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        btnConfirmWorkspace.setText("OPEN / CREATE");
+        btnConfirmWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnConfirmWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChooseWorkspaceActionPerformed(evt);
+                btnConfirmWorkspaceActionPerformed(evt);
             }
         });
 
@@ -199,7 +202,7 @@ public class WorkspacePickerDialog extends JDialog {
                             .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnCloudSync))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnChooseWorkspace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnConfirmWorkspace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(cmbWorkspacePath, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -223,7 +226,7 @@ public class WorkspacePickerDialog extends JDialog {
                     .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnChooseWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnConfirmWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnCloudSync, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -234,10 +237,10 @@ public class WorkspacePickerDialog extends JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnChooseWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseWorkspaceActionPerformed
+    private void btnConfirmWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmWorkspaceActionPerformed
         if (workspacePath != null) {
             // Write the workspaces in the wildloghome file
-            writeDefaultWildLogHome();
+            writeWildLogHome();
             // Set the active workspace prefix
             WildLogPaths.setWorkspacePrefix(workspacePath.toString());
             // Create the workspace folder (if needed)
@@ -245,25 +248,25 @@ public class WorkspacePickerDialog extends JDialog {
                 try {
                     Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());
                 }
-                catch (IOException ioex) {
+                catch (IOException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, "Can't create new workspace folder!");
-                    WildLogApp.LOGGER.log(Level.ERROR, ioex.toString(), ioex);
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
             }
             selectionMade = true;
         }
         setVisible(false);
         dispose();
-    }//GEN-LAST:event_btnChooseWorkspaceActionPerformed
+    }//GEN-LAST:event_btnConfirmWorkspaceActionPerformed
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        if (configureWildLogHomeBasedOnFileBrowser((DummyTaskbarFrame) getParent(), false, (String) cmbWorkspacePath.getEditor().getItem())) {
+        if (configureWorkspacePathBasedOnFileBrowser((DummyTaskbarFrame) getParent(), false, (String) cmbWorkspacePath.getEditor().getItem())) {
             String workspace = WildLogPaths.getFullWorkspacePrefix().toString();
             if (((DefaultComboBoxModel) cmbWorkspacePath.getModel()).getIndexOf(workspace) < 0) {
                 cmbWorkspacePath.addItem(workspace);
             }
             cmbWorkspacePath.setSelectedItem(workspace);
-            updateActivePath(workspace);
+            activeWorkspacePathChanged(workspace);
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
@@ -274,66 +277,60 @@ public class WorkspacePickerDialog extends JDialog {
         if (workspaceDialog.getWorkspaceID() > 0) {
             workspaceID = workspaceDialog.getWorkspaceID();
             triggerImmediateSync = true;
-            btnChooseWorkspaceActionPerformed(evt);
+            btnConfirmWorkspaceActionPerformed(evt);
         }
     }//GEN-LAST:event_btnCloudSyncActionPerformed
 
     private void cmbWorkspacePathItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbWorkspacePathItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-            updateActivePath((String) evt.getItem());
+            activeWorkspacePathChanged((String) evt.getItem());
         }
     }//GEN-LAST:event_cmbWorkspacePathItemStateChanged
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
-        if (cmbWorkspacePath.getSelectedIndex() >= 0) {
+        int selectedIndex = cmbWorkspacePath.getSelectedIndex();
+        if (selectedIndex >= 0) {
             cmbWorkspacePath.removeItem(cmbWorkspacePath.getSelectedItem());
         }
         else {
             cmbWorkspacePath.getEditor().setItem("");
         }
-        cmbWorkspacePath.setSelectedIndex(0);
-        writeDefaultWildLogHome();
+        cmbWorkspacePath.setSelectedIndex(selectedIndex - 1);
+        writeWildLogHome();
     }//GEN-LAST:event_btnRemoveActionPerformed
 
-    private void updateActivePath(String inPath) {
+    private void activeWorkspacePathChanged(String inPath) {
         workspacePath = Path.of(inPath).toAbsolutePath().normalize();
         if (Files.notExists(workspacePath)) {
-            btnChooseWorkspace.setText("CREATE WORKSPACE");
+            btnConfirmWorkspace.setText("CREATE WORKSPACE");
             btnCloudSync.setEnabled(true);
         }
         else {
             if (Files.exists(workspacePath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))
                     && Files.exists(workspacePath.resolve(WildLogPaths.WILDLOG_FILES.getRelativePath()))) {
-                btnChooseWorkspace.setText("OPEN WORKSPACE");
+                btnConfirmWorkspace.setText("OPEN WORKSPACE");
                 btnCloudSync.setEnabled(false);
             }
             else {
-                btnChooseWorkspace.setText("CREATE WORKSPACE");
+                btnConfirmWorkspace.setText("CREATE WORKSPACE");
                 btnCloudSync.setEnabled(true);
             }
         }
     }
     
-    private void writeDefaultWildLogHome() {
-        
-// FIXME: New cloud sync workspace not written to file
-        
+    private void writeWildLogHome() {
         FileWriter writer = null;
         try {
             writer = new FileWriter(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().resolve("wildloghome").toFile());
             // Write the selected (active / default) workspace first
-            String selectedWorkspace = null;
-            if (cmbWorkspacePath.getSelectedIndex() >= 0) {
-                selectedWorkspace = ((String) cmbWorkspacePath.getSelectedItem()).trim();
-                if (!selectedWorkspace.isEmpty()) {
-                    WildLogApp.LOGGER.log(Level.DEBUG, "Wildloghome: '" + selectedWorkspace + "' (selected)");
-                    writer.write(selectedWorkspace + System.lineSeparator());
-                }
+            if (workspacePath != null) {
+                WildLogApp.LOGGER.log(Level.DEBUG, "Wildloghome: '" + workspacePath + "' (selected)");
+                writer.write(workspacePath.toString() + System.lineSeparator());
             }
             // Write the rest of the know workspaces
             for (int t = 0; t < cmbWorkspacePath.getItemCount(); t++) {
                 String workspace = (String) cmbWorkspacePath.getItemAt(t).trim();
-                if (!workspace.isEmpty() && !workspace.equals(selectedWorkspace)) {
+                if (!workspace.isEmpty() && !workspace.equals(workspacePath.toString())) {
                     WildLogApp.LOGGER.log(Level.DEBUG, "Wildloghome: '" + workspace + "'");
                     writer.write(workspace + System.lineSeparator());
                 }
@@ -375,7 +372,7 @@ public class WorkspacePickerDialog extends JDialog {
      *       - W:\
      *       - \\weimaster\WildLogDinokeng
      */
-    public List<Path> configureWildLogHomeBasedOnSettingsFile() throws IOException {
+    private List<Path> readAndConfigureWorkspacePathBasedOnWildLogHomeFile() throws IOException {
         List<Path> lstWorkspacePaths = new ArrayList<>();
         BufferedReader reader = null;
         try {
@@ -403,7 +400,7 @@ public class WorkspacePickerDialog extends JDialog {
         return lstWorkspacePaths;
     }
 
-    public static boolean configureWildLogHomeBasedOnFileBrowser(final JFrame inParent, boolean inTerminateIfNotSelected, String inStartFolder) {
+    private static boolean configureWorkspacePathBasedOnFileBrowser(final JFrame inParent, boolean inTerminateIfNotSelected, String inStartFolder) {
         WLFileChooser fileChooser = new WLFileChooser(inStartFolder);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setDialogTitle("Please select the WildLog Workspace to use.");
@@ -453,8 +450,8 @@ public class WorkspacePickerDialog extends JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
-    private javax.swing.JButton btnChooseWorkspace;
     private javax.swing.JButton btnCloudSync;
+    private javax.swing.JButton btnConfirmWorkspace;
     private javax.swing.JButton btnRemove;
     private javax.swing.JComboBox<String> cmbWorkspacePath;
     private javax.swing.JLabel jLabel2;

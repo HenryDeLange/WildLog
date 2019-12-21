@@ -60,7 +60,7 @@ public final class SyncAzure {
         dbVersion = inDBVersion;
     }
     
-    // DATA:
+    // DATA
     
     private CloudTableClient getTableClient() 
             throws InvalidKeyException, URISyntaxException {
@@ -334,6 +334,8 @@ public final class SyncAzure {
         return null;
     }
     
+    // SYNC LIST - DATA
+    
     public List<SyncTableEntry> getSyncListDataBatch(WildLogDataType inDataType, long inAfterTimestamp) {
         try {
             CloudTable cloudTable = getTable(inDataType);
@@ -350,6 +352,10 @@ public final class SyncAzure {
             if (inDataType == WildLogDataType.FILE) {
                 query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime", "linkType", "linkID", "originalFileLocation"});
             }
+            else
+            if (inDataType == WildLogDataType.DELETE_LOG) {
+                query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime", "AuditUser", "type"});
+            }
             else {
                 query = query.select(new String[] {"RowKey", "DBVersion", "DataType", "SyncIndicator", "AuditTime"});
             }
@@ -365,7 +371,7 @@ public final class SyncAzure {
         return null;
     }
     
-    // FILES:
+    // FILES
     
     private ContainerURL getContainerURL(WildLogDataType inDataType) 
             throws InvalidKeyException, MalformedURLException {
@@ -449,6 +455,8 @@ public final class SyncAzure {
         }
         return false;
     }
+    
+    // SYNC LIST - FILES
     
     public List<SyncBlobEntry> getSyncListFileBatch(WildLogDataType inDataType) {
         try {
