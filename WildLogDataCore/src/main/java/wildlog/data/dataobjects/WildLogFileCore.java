@@ -2,8 +2,8 @@ package wildlog.data.dataobjects;
 
 import java.util.Date;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
-import wildlog.data.enums.WildLogDataType;
-import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogFileType;
 
 
 public class WildLogFileCore extends DataObjectWithAudit {

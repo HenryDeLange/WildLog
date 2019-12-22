@@ -37,9 +37,9 @@ import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
-import wildlog.data.enums.WildLogDataType;
-import wildlog.data.enums.WildLogFileType;
-import wildlog.data.enums.WildLogUserTypes;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogFileType;
+import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
 
 

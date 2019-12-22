@@ -44,9 +44,9 @@ import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
-import wildlog.data.enums.WildLogDataType;
-import wildlog.data.enums.WildLogFileType;
-import wildlog.data.enums.WildLogUserTypes;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogFileType;
+import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
 
 
@@ -3013,7 +3013,12 @@ public abstract class DBI_JDBC implements DBI {
         state.setLong(1, inWildLogUser.getID());
         state.setString(2, UtilsData.limitLength(inWildLogUser.getUsername(), 150));
         state.setString(3, inWildLogUser.getPassword());
-        state.setString(4, UtilsData.stringFromObject(inWildLogUser.getType()));
+        if (inWildLogUser.getType() != null) {
+            state.setString(4, inWildLogUser.getType().getKey());
+        }
+        else {
+            state.setString(4, WildLogUserTypes.NONE.getKey());
+        }
         if (!inUseOldAudit) {
             setupAuditInfo(inWildLogUser);
         }

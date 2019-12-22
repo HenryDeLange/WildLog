@@ -43,7 +43,7 @@ import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.helpers.renderers.ButtonTableRenderer;

@@ -39,7 +39,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.adhoc.FilterProperties;
-import wildlog.data.enums.WildLogUserTypes;
+import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.ui.dialogs.ExportDialogForReportsAndMaps;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;

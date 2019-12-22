@@ -16,9 +16,9 @@ import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogDataType;
-import wildlog.data.enums.WildLogFileType;
-import wildlog.data.enums.WildLogUserTypes;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogFileType;
+import wildlog.data.enums.system.WildLogUserTypes;
 
 
 public interface DBI {

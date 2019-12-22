@@ -38,8 +38,8 @@ import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
 import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
-import wildlog.data.enums.WildLogFileType;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogFileType;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 
 
 public class UtilsImageProcessing {

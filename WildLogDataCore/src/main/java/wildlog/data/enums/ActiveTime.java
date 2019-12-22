@@ -1,20 +1,23 @@
 package wildlog.data.enums;
 
+import wildlog.data.enums.utils.EnumWithID;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public enum ActiveTime {
-    DAY("Day"),
-    NIGHT("Night"),
-    ALWAYS("Always"),
-    DAWN_OR_DUST("Twilight"),
-    UNKNOWN("Unknown"),
-    NONE("");
+public enum ActiveTime implements EnumWithID {
+    DAY         ((byte)  1, "Day"),
+    NIGHT       ((byte)  2, "Night"),
+    ALWAYS      ((byte)  3, "Always"),
+    DAWN_OR_DUST((byte)  4, "Twilight"),
+    UNKNOWN     ((byte) -1, "Unknown"),
+    NONE        ((byte)  0, "");
 
+    private final byte id;
     private final String text;
 
-    ActiveTime(String inText) {
+    ActiveTime(byte inID, String inText) {
+        id = inID;
         text = inText;
     }
 
@@ -22,7 +25,24 @@ public enum ActiveTime {
     public String toString() {
         return text;
     }
+    
+    @Override
+    public byte getID() {
+        return id;
+    }
 
+    public static ActiveTime getEnumFromID(byte inID) {
+        if (inID <= 0 || inID >= ActiveTime.values().length) {
+            return NONE;
+        }
+        for (ActiveTime theEnum : ActiveTime.values()) {
+            if (theEnum.id == inID) {
+                return theEnum;
+            }
+        }
+        return NONE;
+    }
+    
     public static ActiveTime getEnumFromText(String inText) {
         if (inText == null) {
             return NONE;

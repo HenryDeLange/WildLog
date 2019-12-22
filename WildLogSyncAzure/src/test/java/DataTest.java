@@ -11,7 +11,7 @@ import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.Longitudes;
-import wildlog.data.enums.WildLogDataType;
+import wildlog.data.enums.system.WildLogDataType;
 import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 

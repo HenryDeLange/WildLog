@@ -8,11 +8,12 @@ import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogUser;
-import wildlog.data.enums.WildLogUserTypes;
+import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.helpers.WLOptionPane;
 
+// FIXME: Hierdie table wys nog die dotted border as mens 'n cell kies... (ek dink want ek stel nie die TextCellRenderer in UtilsTableGenerator nie)
 
 public class UserManagementDialog extends JDialog {
     private final WildLogApp app = WildLogApp.getApplication();

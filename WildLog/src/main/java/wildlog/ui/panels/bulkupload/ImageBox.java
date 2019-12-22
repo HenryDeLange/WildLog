@@ -14,7 +14,7 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.ZoomDialog;
 import wildlog.ui.helpers.WLOptionPane;

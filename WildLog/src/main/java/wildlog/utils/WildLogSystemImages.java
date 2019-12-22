@@ -1,8 +1,8 @@
 package wildlog.utils;
 
 import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
-import wildlog.data.enums.WildLogDataType;
-import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogFileType;
 
 public enum WildLogSystemImages {
     BROKEN_FILES(new WildLogSystemFile(0, 0, WildLogDataType.NONE, "BrokenFile.png", "resources/icons/BrokenFile.png", WildLogFileType.IMAGE)),

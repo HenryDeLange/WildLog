@@ -1,7 +1,7 @@
 package wildlog.data.dataobjects;
 
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
-import wildlog.data.enums.WildLogUserTypes;
+import wildlog.data.enums.system.WildLogUserTypes;
 
 
 public class WildLogUser extends DataObjectWithAudit {

@@ -46,7 +46,7 @@ import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
-import wildlog.data.enums.WildLogDataType;
+import wildlog.data.enums.system.WildLogDataType;
 import wildlog.inaturalist.INatAPI;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.utils.UtilsDialog;

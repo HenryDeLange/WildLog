@@ -1,5 +1,6 @@
 package wildlog.data.enums;
 
+
 public enum Latitudes {
     /**
      * For (+) coordinates.
@@ -9,7 +10,7 @@ public enum Latitudes {
      * For (-) coordinates.
      */
     SOUTH("S", "South (-)", "-"),
-    NONE("", "None", "");
+    NONE ("",  "None",      "");
 
     private final String key;
     private final String text;
@@ -49,4 +50,5 @@ public enum Latitudes {
         }
         return NONE;
     }
+    
 }

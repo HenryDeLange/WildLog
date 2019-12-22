@@ -1,5 +1,6 @@
 package wildlog.data.enums;
 
+
 public enum Longitudes {
     /**
      * For (+) coordinates.
@@ -9,7 +10,7 @@ public enum Longitudes {
      * For (-) coordinates.
      */
     WEST("W", "West (-)", "-"),
-    NONE("", "None", "");
+    NONE("",  "None",     "");
 
     private final String key;
     private final String text;
@@ -37,7 +38,7 @@ public enum Longitudes {
     public String toString() {
         return text;
     }
-
+    
     public static Longitudes getEnumFromText(String inText) {
         if (inText == null) {
             return NONE;
@@ -49,4 +50,5 @@ public enum Longitudes {
         }
         return NONE;
     }
+    
 }

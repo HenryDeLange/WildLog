@@ -35,7 +35,7 @@ import mediautil.image.jpeg.LLJTranException;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.UtilsImageProcessing;

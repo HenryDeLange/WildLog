@@ -36,7 +36,7 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.system.WildLogFileType;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.utils.UtilsDialog;

@@ -86,9 +86,9 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.TimeAccuracy;
-import wildlog.data.enums.WildLogDataType;
-import wildlog.data.enums.WildLogFileType;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogFileType;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.data.utils.WildLogConstants;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.maps.kml.UtilsKML;
@@ -270,6 +270,7 @@ public final class WildLogView extends JFrame {
             mnuStash.setEnabled(false);
             mnuStash.setVisible(false);
             btnGettingStarted.setVisible(false);
+            lblWorkspaceUser.setVisible(false);
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
@@ -722,8 +723,8 @@ public final class WildLogView extends JFrame {
         lblWorkspaceUser.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lblWorkspaceUser.setForeground(new java.awt.Color(181, 204, 153));
         lblWorkspaceUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblWorkspaceUser.setText(WildLogApp.WILDLOG_USER_NAME);
-        lblWorkspaceUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "Active User", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
+        lblWorkspaceUser.setText(WildLogApp.WILDLOG_USER_NAME + " (" + WildLogApp.WILDLOG_USER_TYPE.getDescription() + ")");
+        lblWorkspaceUser.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(221, 229, 210)), "User", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(202, 217, 192))); // NOI18N
         lblWorkspaceUser.setName("lblWorkspaceUser"); // NOI18N
 
         jSeparator26.setBackground(new java.awt.Color(57, 68, 43));
@@ -835,7 +836,7 @@ public final class WildLogView extends JFrame {
                     .addComponent(lblCreatures)
                     .addComponent(lblFiles))
                 .addGap(10, 10, 10)
-                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabHomeLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -853,7 +854,7 @@ public final class WildLogView extends JFrame {
                         .addComponent(lblEdition)
                         .addGap(15, 15, 15)
                         .addComponent(btnGettingStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblWorkspacePath)

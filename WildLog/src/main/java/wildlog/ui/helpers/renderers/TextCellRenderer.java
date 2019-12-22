@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class TextCellRenderer extends DefaultTableCellRenderer {
     private int primaryColumn = -1;
-    private int[] leftAlignColumns;
+    private final int[] leftAlignColumns;
 
     public TextCellRenderer(int inPrimaryColumn, int... inLeftAlignColumns) {
         primaryColumn = inPrimaryColumn;

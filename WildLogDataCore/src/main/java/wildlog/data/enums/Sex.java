@@ -1,16 +1,20 @@
 package wildlog.data.enums;
 
+import wildlog.data.enums.utils.EnumWithID;
 
-public enum Sex {
-    MALE("Male"),
-    FEMALE("Female"),
-    MIXED("Mixed"),
-    UNKNOWN("Unknown"),
-    NONE("");
 
+public enum Sex implements EnumWithID {
+    MALE    ((byte)  1, "Male"),
+    FEMALE  ((byte)  2, "Female"),
+    MIXED   ((byte)  3, "Mixed"),
+    UNKNOWN ((byte) -1, "Unknown"),
+    NONE    ((byte)  0, "");
+
+    private final byte id;
     private final String text;
 
-    Sex(String inText) {
+    Sex(byte inID, String inText) {
+        id = inID;
         text = inText;
     }
 
@@ -18,7 +22,24 @@ public enum Sex {
     public String toString() {
         return text;
     }
+    
+    @Override
+    public byte getID() {
+        return id;
+    }
 
+    public static Sex getEnumFromID(byte inID) {
+        if (inID <= 0 || inID >= Sex.values().length) {
+            return NONE;
+        }
+        for (Sex theEnum : Sex.values()) {
+            if (theEnum.id == inID) {
+                return theEnum;
+            }
+        }
+        return NONE;
+    }
+    
     public static Sex getEnumFromText(String inText) {
         if (inText == null) {
             return NONE;
@@ -30,4 +51,5 @@ public enum Sex {
         }
         return NONE;
     }
+    
 }

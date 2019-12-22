@@ -34,9 +34,9 @@ import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogDataType;
-import wildlog.data.enums.WildLogFileType;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogFileType;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
 
 

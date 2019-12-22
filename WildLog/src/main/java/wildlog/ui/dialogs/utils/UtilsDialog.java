@@ -38,7 +38,7 @@ import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.system.WildLogFileType;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsUI;
 

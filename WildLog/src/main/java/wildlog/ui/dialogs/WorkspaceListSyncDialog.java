@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogOptions;
-import wildlog.data.enums.WildLogDataType;
+import wildlog.data.enums.system.WildLogDataType;
 import wildlog.encryption.TokenEncryptor;
 import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;

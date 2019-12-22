@@ -1,6 +1,6 @@
 package wildlog.sync.azure.dataobjects;
 
-import wildlog.data.enums.WildLogDataType;
+import wildlog.data.enums.system.WildLogDataType;
 
 
 public class SyncBlobEntry {

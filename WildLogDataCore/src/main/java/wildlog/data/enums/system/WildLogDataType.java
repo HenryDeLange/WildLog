@@ -1,18 +1,18 @@
-package wildlog.data.enums;
+package wildlog.data.enums.system;
 
 
 public enum WildLogDataType {
-    ELEMENT("E", "ELEMENTS"),
-    LOCATION("L", "LOCATIONS"),
-    VISIT("V", "VISITS"),
-    SIGHTING("S", "SIGHTINGS"),
-    FILE("F", "FILES"),
-    //EXTRA("X", "EXTRA"), // TODO: To be used for the planned custom key-value data that can be linked to the core DTOs
-    ADHOC("A", "ADHOC"),
-    WILDLOG_USER("U", "USERS"),
-    WILDLOG_OPTIONS("W", "OPTIONS"),
-    DELETE_LOG("D", "DELETELOG"),
-    NONE("", "");
+    ELEMENT         ("E", "ELEMENTS"),
+    LOCATION        ("L", "LOCATIONS"),
+    VISIT           ("V", "VISITS"),
+    SIGHTING        ("S", "SIGHTINGS"),
+    FILE            ("F", "FILES"),
+    //EXTRA           ("X", "EXTRA"), // TODO: To be used for the planned custom key-value data that can be linked to the core DTOs
+    ADHOC           ("A", "ADHOC"),
+    WILDLOG_USER    ("U", "USERS"),
+    WILDLOG_OPTIONS ("W", "OPTIONS"),
+    DELETE_LOG      ("D", "DELETELOG"),
+    NONE            ("",  "");
 
     private final String key;
     private final String description;

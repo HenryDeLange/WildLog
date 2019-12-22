@@ -60,7 +60,7 @@ import org.jdesktop.application.TaskService;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
-import wildlog.data.enums.WildLogUserTypes;
+import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.ui.dialogs.UserLoginDialog;
 import wildlog.ui.dialogs.WorkspacePickerDialog;
 import wildlog.ui.dialogs.WorkspaceSyncDialog;

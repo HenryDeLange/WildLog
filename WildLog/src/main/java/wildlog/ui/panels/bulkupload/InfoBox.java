@@ -17,7 +17,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Sex;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.helpers.ComboBoxFixer;

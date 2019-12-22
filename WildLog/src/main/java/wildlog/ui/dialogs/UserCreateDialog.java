@@ -9,9 +9,10 @@ import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogUser;
-import wildlog.data.enums.WildLogUserTypes;
+import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.encryption.PasswordEncryptor;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.WLOptionPane;
 
 
@@ -37,6 +38,7 @@ public class UserCreateDialog extends JDialog {
     
     private void doSetup(boolean inForceOwner) {
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbUserType);
         pack();
         UtilsDialog.addModalBackgroundPanel(this, null);
         UtilsDialog.addEscapeKeyListener(this);

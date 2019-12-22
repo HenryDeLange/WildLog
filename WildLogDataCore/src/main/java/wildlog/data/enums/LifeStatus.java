@@ -1,15 +1,19 @@
 package wildlog.data.enums;
 
+import wildlog.data.enums.utils.EnumWithID;
 
-public enum LifeStatus {
-    ALIVE("Alive"),
-    DEAD("Dead"),
-    UNKNOWN("Unknown"),
-    NONE("");
 
+public enum LifeStatus implements EnumWithID {
+    ALIVE   ((byte) 1, "Alive"),
+    DEAD    ((byte) 2, "Dead"),
+    UNKNOWN ((byte) 3, "Unknown"),
+    NONE    ((byte) 0, "");
+
+    private final byte id;
     private final String text;
 
-    LifeStatus(String inText) {
+    LifeStatus(byte inID, String inText) {
+        id = inID;
         text = inText;
     }
 
@@ -17,7 +21,24 @@ public enum LifeStatus {
     public String toString() {
         return text;
     }
+    
+    @Override
+    public byte getID() {
+        return id;
+    }
 
+    public static LifeStatus getEnumFromID(byte inID) {
+        if (inID <= 0 || inID >= LifeStatus.values().length) {
+            return NONE;
+        }
+        for (LifeStatus theEnum : LifeStatus.values()) {
+            if (theEnum.id == inID) {
+                return theEnum;
+            }
+        }
+        return NONE;
+    }
+    
     public static LifeStatus getEnumFromText(String inText) {
         if (inText == null) {
             return NONE;
@@ -29,4 +50,5 @@ public enum LifeStatus {
         }
         return NONE;
     }
+    
 }

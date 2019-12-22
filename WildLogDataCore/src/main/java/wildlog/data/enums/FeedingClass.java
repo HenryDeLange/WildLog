@@ -1,29 +1,23 @@
 package wildlog.data.enums;
 
+import wildlog.data.enums.utils.EnumWithID;
 
-public enum FeedingClass {
-    CARNIVORE("Carnivore"),
-//    CARNIVORE_MAMMAL("Carnivore - Mostly Mammals"),
-//    CARNIVORE_BIRD("Carnivore - Mostly Birds"),
-//    CARNIVORE_INSECT("Carnivore - Mostly Insects, etc."),
-//    CARNIVORE_FISH("Carnivore - Mostly Fish"),
-//    CARNIVORE_SCAVENGER("Carnivore - Mostly Scavenger"),
-    HERBIVORE("Herbivore"),
-//    HERBIVORE_BROWSER("Herbivore - Mostly Browser"),
-//    HERBIVORE_GRAZER("Herbivore - Mostly Grazer"),
-//    HERBIVORE_ROOTS("Herbivore - Mostly Roots, etc."),
-//    HERBIVORE_SEED("Herbivore - Mostly Seeds"),
-//    HERBIVORE_NECTAR("Herbivore - Mostly Nectar, etc."),
-    OMNIVORE("Omnivore"),
-    PARASITE("Parasite"),
-    PHOTOSYNTHESYS("Photo-Synthesis"),
-    OTHER("Other"),
-    UNKNOWN("Unknown"),
-    NONE("");
 
+public enum FeedingClass implements EnumWithID {
+    CARNIVORE     ((byte)  1, "Carnivore"),
+    HERBIVORE     ((byte)  2, "Herbivore"),
+    OMNIVORE      ((byte)  3, "Omnivore"),
+    PARASITE      ((byte)  4, "Parasite"),
+    PHOTOSYNTHESYS((byte)  5, "Photo-Synthesis"),
+    OTHER         ((byte)  6, "Other"),
+    UNKNOWN       ((byte) -1, "Unknown"),
+    NONE          ((byte)  0, "");
+
+    private final byte id;
     private final String text;
 
-    FeedingClass(String inText) {
+    FeedingClass(byte inID, String inText) {
+        id = inID;
         text = inText;
     }
 
@@ -31,7 +25,24 @@ public enum FeedingClass {
     public String toString() {
         return text;
     }
+    
+    @Override
+    public byte getID() {
+        return id;
+    }
 
+    public static FeedingClass getEnumFromID(byte inID) {
+        if (inID <= 0 || inID >= FeedingClass.values().length) {
+            return NONE;
+        }
+        for (FeedingClass theEnum : FeedingClass.values()) {
+            if (theEnum.id == inID) {
+                return theEnum;
+            }
+        }
+        return NONE;
+    }
+    
     public static FeedingClass getEnumFromText(String inText) {
         if (inText == null) {
             return NONE;

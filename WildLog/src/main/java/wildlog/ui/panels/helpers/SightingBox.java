@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 

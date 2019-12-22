@@ -18,7 +18,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ViewRating;
-import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.system.WildLogFileType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.ProgressbarTask;

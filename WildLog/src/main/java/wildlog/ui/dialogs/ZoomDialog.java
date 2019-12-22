@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
-import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
