@@ -28,7 +28,7 @@ public enum Moonlight implements EnumWithID {
     }
 
     public static Moonlight getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= Moonlight.values().length) {
+        if (inID == 0 || inID < -1 || inID >= Moonlight.values().length) {
             return NONE;
         }
         for (Moonlight theEnum : Moonlight.values()) {

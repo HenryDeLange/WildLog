@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.utils.EnumWithID;
 import wildlog.ui.charts.implementations.helpers.IntegerTickLabelFormatter;
 import wildlog.utils.UtilsTime;
 
@@ -331,6 +332,15 @@ public final class UtilsCharts {
             return "0" + inNumber;
         }
         return Integer.toString(inNumber);
+    }
+    
+    public static String stringFromEnum(EnumWithID inEnum) {
+        if (inEnum == null) {
+            return null;
+        }
+        else {
+            return inEnum.toString();
+        }
     }
     
 }

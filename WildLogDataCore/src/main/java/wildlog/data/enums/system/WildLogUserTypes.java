@@ -1,7 +1,9 @@
 package wildlog.data.enums.system;
 
+import wildlog.data.enums.utils.EnumWithKey;
 
-public enum WildLogUserTypes {
+
+public enum WildLogUserTypes implements EnumWithKey {
     WILDLOG_MASTER  ("M", "Master"),
     OWNER           ("O", "Owner"),
     ADMIN           ("A", "Admin"),
@@ -22,6 +24,7 @@ public enum WildLogUserTypes {
         return description;
     }
     
+    @Override
     public String getKey() {
         return key;
     }

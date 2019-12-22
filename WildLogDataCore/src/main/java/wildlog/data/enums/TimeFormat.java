@@ -29,7 +29,7 @@ public enum TimeFormat implements EnumWithID {
     }
 
     public static TimeFormat getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= TimeFormat.values().length) {
+        if (inID == 0 || inID < -1 || inID >= TimeFormat.values().length) {
             return NONE;
         }
         for (TimeFormat theEnum : TimeFormat.values()) {

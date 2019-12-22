@@ -29,7 +29,7 @@ public enum TimeAccuracy implements EnumWithID {
     }
 
     public static TimeAccuracy getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= TimeAccuracy.values().length) {
+        if (inID == 0 || inID < -1 || inID >= TimeAccuracy.values().length) {
             return NONE;
         }
         for (TimeAccuracy theEnum : TimeAccuracy.values()) {

@@ -429,10 +429,10 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("distribution", new EntityProperty(inData.getDistribution()));
         inProperties.put("nutrition", new EntityProperty(inData.getNutrition()));
         inProperties.put("diagnosticDescription", new EntityProperty(inData.getDiagnosticDescription()));
-        inProperties.put("endangeredStatus", new EntityProperty(UtilsData.stringFromObject(inData.getEndangeredStatus())));
+        inProperties.put("endangeredStatus", new EntityProperty(UtilsData.getIDFromEnum(inData.getEndangeredStatus())));
         inProperties.put("behaviourDescription", new EntityProperty(inData.getBehaviourDescription()));
-        inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
-        inProperties.put("feedingClass", new EntityProperty(UtilsData.stringFromObject(inData.getFeedingClass())));
+        inProperties.put("type", new EntityProperty(UtilsData.getIDFromEnum(inData.getType())));
+        inProperties.put("feedingClass", new EntityProperty(UtilsData.getIDFromEnum(inData.getFeedingClass())));
         inProperties.put("referenceID", new EntityProperty(inData.getReferenceID()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
@@ -442,18 +442,18 @@ public class SyncTableEntry extends TableServiceEntity {
     private void writeLocationV12(LocationCore inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("name", new EntityProperty(inData.getName()));
         inProperties.put("description", new EntityProperty(inData.getDescription()));
-        inProperties.put("rating", new EntityProperty(UtilsData.stringFromObject(inData.getRating())));
-        inProperties.put("gameViewingRating", new EntityProperty(UtilsData.stringFromObject(inData.getGameViewingRating())));
+        inProperties.put("rating", new EntityProperty(UtilsData.getIDFromEnum(inData.getRating())));
+        inProperties.put("gameViewingRating", new EntityProperty(UtilsData.getIDFromEnum(inData.getGameViewingRating())));
         inProperties.put("habitatType", new EntityProperty(inData.getHabitatType()));
-        inProperties.put("latitude", new EntityProperty(UtilsData.stringFromObject(inData.getLatitude())));
+        inProperties.put("latitude", new EntityProperty(UtilsData.getKeyFromEnum(inData.getLatitude())));
         inProperties.put("latDegrees", new EntityProperty(inData.getLatDegrees()));
         inProperties.put("latMinutes", new EntityProperty(inData.getLatMinutes()));
         inProperties.put("latSeconds", new EntityProperty(inData.getLatSeconds()));
-        inProperties.put("longitude", new EntityProperty(UtilsData.stringFromObject(inData.getLongitude())));
+        inProperties.put("longitude", new EntityProperty(UtilsData.getKeyFromEnum(inData.getLongitude())));
         inProperties.put("lonDegrees", new EntityProperty(inData.getLonDegrees()));
         inProperties.put("lonMinutes", new EntityProperty(inData.getLonMinutes()));
         inProperties.put("lonSeconds", new EntityProperty(inData.getLonSeconds()));
-        inProperties.put("gpsAccuracy", new EntityProperty(UtilsData.stringFromObject(inData.getGPSAccuracy())));
+        inProperties.put("gpsAccuracy", new EntityProperty(UtilsData.getIDFromEnum(inData.getGPSAccuracy())));
         inProperties.put("gpsAccuracyValue", new EntityProperty(inData.getGPSAccuracyValue()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
@@ -465,8 +465,8 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("startDate", new EntityProperty(inData.getStartDate()));
         inProperties.put("endDate", new EntityProperty(inData.getEndDate()));
         inProperties.put("description", new EntityProperty(inData.getDescription()));
-        inProperties.put("gameWatchingIntensity", new EntityProperty(UtilsData.stringFromObject(inData.getGameWatchingIntensity())));
-        inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
+        inProperties.put("gameWatchingIntensity", new EntityProperty(UtilsData.getIDFromEnum(inData.getGameWatchingIntensity())));
+        inProperties.put("type", new EntityProperty(UtilsData.getIDFromEnum(inData.getType())));
         inProperties.put("locationID", new EntityProperty(inData.getLocationID()));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
@@ -478,34 +478,34 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("elementID", new EntityProperty(inData.getElementID()));
         inProperties.put("locationID", new EntityProperty(inData.getLocationID()));
         inProperties.put("visitID", new EntityProperty(inData.getVisitID()));
-        inProperties.put("timeOfDay", new EntityProperty(UtilsData.stringFromObject(inData.getTimeOfDay())));
-        inProperties.put("weather", new EntityProperty(UtilsData.stringFromObject(inData.getWeather())));
-        inProperties.put("viewRating", new EntityProperty(UtilsData.stringFromObject(inData.getViewRating())));
-        inProperties.put("certainty", new EntityProperty(UtilsData.stringFromObject(inData.getCertainty())));
+        inProperties.put("timeOfDay", new EntityProperty(UtilsData.getIDFromEnum(inData.getTimeOfDay())));
+        inProperties.put("weather", new EntityProperty(UtilsData.getIDFromEnum(inData.getWeather())));
+        inProperties.put("viewRating", new EntityProperty(UtilsData.getIDFromEnum(inData.getViewRating())));
+        inProperties.put("certainty", new EntityProperty(UtilsData.getIDFromEnum(inData.getCertainty())));
         inProperties.put("numberOfElements", new EntityProperty(inData.getNumberOfElements()));
         inProperties.put("details", new EntityProperty(inData.getDetails()));
-        inProperties.put("latitude", new EntityProperty(UtilsData.stringFromObject(inData.getLatitude())));
+        inProperties.put("latitude", new EntityProperty(UtilsData.getKeyFromEnum(inData.getLatitude())));
         inProperties.put("latDegrees", new EntityProperty(inData.getLatDegrees()));
         inProperties.put("latMinutes", new EntityProperty(inData.getLatMinutes()));
         inProperties.put("latSeconds", new EntityProperty(inData.getLatSeconds()));
-        inProperties.put("longitude", new EntityProperty(UtilsData.stringFromObject(inData.getLongitude())));
+        inProperties.put("longitude", new EntityProperty(UtilsData.getKeyFromEnum(inData.getLongitude())));
         inProperties.put("lonDegrees", new EntityProperty(inData.getLonDegrees()));
         inProperties.put("lonMinutes", new EntityProperty(inData.getLonMinutes()));
         inProperties.put("lonSeconds", new EntityProperty(inData.getLonSeconds()));
-        inProperties.put("sightingEvidence", new EntityProperty(UtilsData.stringFromObject(inData.getSightingEvidence())));
-        inProperties.put("moonlight", new EntityProperty(UtilsData.stringFromObject(inData.getMoonlight())));
+        inProperties.put("sightingEvidence", new EntityProperty(UtilsData.getIDFromEnum(inData.getSightingEvidence())));
+        inProperties.put("moonlight", new EntityProperty(UtilsData.getIDFromEnum(inData.getMoonlight())));
         inProperties.put("moonPhase", new EntityProperty(inData.getMoonPhase()));
         inProperties.put("temperature", new EntityProperty(inData.getTemperature()));
-        inProperties.put("unitsTemperature", new EntityProperty(UtilsData.stringFromObject(inData.getUnitsTemperature())));
-        inProperties.put("lifeStatus", new EntityProperty(UtilsData.stringFromObject(inData.getLifeStatus())));
-        inProperties.put("sex", new EntityProperty(UtilsData.stringFromObject(inData.getSex())));
+        inProperties.put("unitsTemperature", new EntityProperty(UtilsData.getIDFromEnum(inData.getUnitsTemperature())));
+        inProperties.put("lifeStatus", new EntityProperty(UtilsData.getIDFromEnum(inData.getLifeStatus())));
+        inProperties.put("sex", new EntityProperty(UtilsData.getIDFromEnum(inData.getSex())));
         inProperties.put("tag", new EntityProperty(inData.getTag()));
         inProperties.put("durationMinutes", new EntityProperty(inData.getDurationMinutes()));
         inProperties.put("durationSeconds", new EntityProperty(inData.getDurationSeconds()));
-        inProperties.put("gpsAccuracy", new EntityProperty(UtilsData.stringFromObject(inData.getGPSAccuracy())));
+        inProperties.put("gpsAccuracy", new EntityProperty(UtilsData.getIDFromEnum(inData.getGPSAccuracy())));
         inProperties.put("gpsAccuracyValue", new EntityProperty(inData.getGPSAccuracyValue()));
-        inProperties.put("timeAccuracy", new EntityProperty(UtilsData.stringFromObject(inData.getTimeAccuracy())));
-        inProperties.put("age", new EntityProperty(UtilsData.stringFromObject(inData.getAge())));
+        inProperties.put("timeAccuracy", new EntityProperty(UtilsData.getIDFromEnum(inData.getTimeAccuracy())));
+        inProperties.put("age", new EntityProperty(UtilsData.getIDFromEnum(inData.getAge())));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
         inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
@@ -513,11 +513,11 @@ public class SyncTableEntry extends TableServiceEntity {
     
     private void writeFileV12(WildLogFileCore inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("linkID", new EntityProperty(inData.getLinkID()));
-        inProperties.put("linkType", new EntityProperty(UtilsData.stringFromObject(inData.getLinkType())));
+        inProperties.put("linkType", new EntityProperty(UtilsData.getKeyFromEnum(inData.getLinkType())));
         inProperties.put("filename", new EntityProperty(inData.getFilename()));
         inProperties.put("originalFileLocation", new EntityProperty(inData.getDBFilePath()));
         inProperties.put("uploadDate", new EntityProperty(inData.getUploadDate()));
-        inProperties.put("fileType", new EntityProperty(UtilsData.stringFromObject(inData.getFileType())));
+        inProperties.put("fileType", new EntityProperty(UtilsData.getKeyFromEnum(inData.getFileType())));
         inProperties.put("defaultFile", new EntityProperty(inData.isDefaultFile()));
         inProperties.put("fileDate", new EntityProperty(inData.getFileDate()));
         inProperties.put("fileSize", new EntityProperty(inData.getFileSize()));
@@ -529,14 +529,14 @@ public class SyncTableEntry extends TableServiceEntity {
     private void writeUserV12(WildLogUser inData, HashMap<String, EntityProperty> inProperties) {
         inProperties.put("username", new EntityProperty(inData.getUsername()));
         inProperties.put("password", new EntityProperty(inData.getPassword()));
-        inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
+        inProperties.put("type", new EntityProperty(UtilsData.getKeyFromEnum(inData.getType())));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
         inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
     
     private void writeDeleteLogV12(WildLogDeleteLog inData, HashMap<String, EntityProperty> inProperties) {
-        inProperties.put("type", new EntityProperty(UtilsData.stringFromObject(inData.getType())));
+        inProperties.put("type", new EntityProperty(UtilsData.getKeyFromEnum(inData.getType())));
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
         inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));

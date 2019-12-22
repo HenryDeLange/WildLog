@@ -25,7 +25,6 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.VisitType;
-import wildlog.data.utils.UtilsData;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.UtilsConcurency;
@@ -218,7 +217,12 @@ public class ReportVisitDates {
                         if (reportData.endDate != null) {
                             row.createCell(3).setCellValue(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(reportData.endDate));
                         }
-                        row.createCell(4).setCellValue(UtilsData.stringFromObject(reportData.visitType));
+                        if (reportData.visitType != null) {
+                            row.createCell(4).setCellValue(reportData.visitType.toString());
+                        }
+                        else {
+                            row.createCell(4).setCellValue("");
+                        }
                         row.createCell(5).setCellValue(reportData.days);
                         row.createCell(6).setCellValue(reportData.sigtingCount);
                         if (reportData.isOverlapping) {

@@ -33,7 +33,7 @@ public enum Weather implements EnumWithID {
     }
 
     public static Weather getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= Weather.values().length) {
+        if (inID == 0 || inID < -1 || inID >= Weather.values().length) {
             return NONE;
         }
         for (Weather theEnum : Weather.values()) {

@@ -28,7 +28,6 @@ import javax.swing.JLabel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.utils.UtilsData;
 import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.ui.charts.implementations.helpers.AbstractChart;
 import wildlog.ui.charts.implementations.helpers.BarChartChangeListener;
@@ -179,7 +178,7 @@ public class VisitChart extends AbstractChart<Sighting> {
         Map<String, ChartDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
             Visit visit = WildLogApp.getApplication().getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class);
-            String category = UtilsData.stringFromObject(visit.getType());
+            String category = UtilsCharts.stringFromEnum(visit.getType());
             if (category == null || category.isEmpty()) {
                 category = "Unknown";
             }

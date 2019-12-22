@@ -34,7 +34,7 @@ public enum Age implements EnumWithID {
     }
     
     public static Age getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= Age.values().length) {
+        if (inID == 0 || inID < -1 || inID >= Age.values().length) {
             return NONE;
         }
         for (Age theEnum : Age.values()) {

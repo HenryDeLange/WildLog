@@ -50,7 +50,7 @@ public enum GPSAccuracy implements EnumWithID {
     }
 
     public static GPSAccuracy getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= GPSAccuracy.values().length) {
+        if (inID == 0 || inID < -1 || inID >= GPSAccuracy.values().length) {
             return NONE;
         }
         for (GPSAccuracy theEnum : GPSAccuracy.values()) {

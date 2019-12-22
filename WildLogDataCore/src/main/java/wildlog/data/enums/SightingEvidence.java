@@ -34,7 +34,7 @@ public enum SightingEvidence implements EnumWithID {
     }
 
     public static SightingEvidence getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= SightingEvidence.values().length) {
+        if (inID == 0 || inID < -1 || inID >= SightingEvidence.values().length) {
             return NONE;
         }
         for (SightingEvidence theEnum : SightingEvidence.values()) {

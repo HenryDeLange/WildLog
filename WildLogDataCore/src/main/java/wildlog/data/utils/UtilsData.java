@@ -1,6 +1,8 @@
 package wildlog.data.utils;
 
 import java.util.Date;
+import wildlog.data.enums.utils.EnumWithID;
+import wildlog.data.enums.utils.EnumWithKey;
 
 public final class UtilsData {
 
@@ -30,12 +32,21 @@ public final class UtilsData {
         }
     }
 
-    public static String stringFromObject(Object inEnum) {
+    public static String getKeyFromEnum(EnumWithKey inEnum) {
         if (inEnum == null) {
             return null;
         }
         else {
-            return inEnum.toString();
+            return inEnum.getKey();
+        }
+    }
+    
+    public static byte getIDFromEnum(EnumWithID inEnum) {
+        if (inEnum == null) {
+            return (byte) 0;
+        }
+        else {
+            return inEnum.getID();
         }
     }
 

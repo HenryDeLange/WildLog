@@ -25,7 +25,6 @@ import javax.swing.JLabel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.data.utils.UtilsData;
 import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.ui.charts.implementations.helpers.AbstractChart;
 import wildlog.ui.charts.implementations.helpers.HorizontalBarChartChangeListener;
@@ -232,12 +231,15 @@ public class ElementsChart extends AbstractChart<Sighting> {
         Map<String, Set<String>> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
             Element element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementID(), null, Element.class);
-            Set<String> setElements = mapGroupedData.get(UtilsData.stringFromObject(element.getType()));
-            if (setElements == null) {
-                setElements = new HashSet<>();
-                mapGroupedData.put(UtilsData.stringFromObject(element.getType()), setElements);
+            if (element != null) {
+                String elementType = UtilsCharts.stringFromEnum(element.getType());
+                Set<String> setElements = mapGroupedData.get(elementType);
+                if (setElements == null) {
+                    setElements = new HashSet<>();
+                    mapGroupedData.put(elementType, setElements);
+                }
+                setElements.add(sighting.getCachedElementName());
             }
-            setElements.add(sighting.getCachedElementName());
         }
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapGroupedData.keySet());

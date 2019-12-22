@@ -1,7 +1,9 @@
 package wildlog.data.enums;
 
+import wildlog.data.enums.utils.EnumWithKey;
 
-public enum Latitudes {
+
+public enum Latitudes implements EnumWithKey {
     /**
      * For (+) coordinates.
      */
@@ -22,6 +24,7 @@ public enum Latitudes {
         sign = inSign;
     }
 
+    @Override
     public String getKey() {
         return key;
     }

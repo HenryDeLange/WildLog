@@ -35,7 +35,7 @@ public enum VisitType implements EnumWithID {
     }
 
     public static VisitType getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= VisitType.values().length) {
+        if (inID == 0 || inID < -1 || inID >= VisitType.values().length) {
             return NONE;
         }
         for (VisitType theEnum : VisitType.values()) {

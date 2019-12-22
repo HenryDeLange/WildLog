@@ -30,7 +30,7 @@ public enum Certainty implements EnumWithID {
     }
 
     public static Certainty getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= Certainty.values().length) {
+        if (inID == 0 || inID < -1 || inID >= Certainty.values().length) {
             return NONE;
         }
         for (Certainty theEnum : Certainty.values()) {

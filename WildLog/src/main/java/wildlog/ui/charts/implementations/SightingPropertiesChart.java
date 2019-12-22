@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.data.utils.UtilsData;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.ui.charts.implementations.helpers.AbstractChart;
@@ -147,36 +146,39 @@ public class SightingPropertiesChart extends AbstractChart<Sighting> {
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[1])) {
-                categoryValue = UtilsData.stringFromObject(sighting.getSex());
+                categoryValue = UtilsCharts.stringFromEnum(sighting.getSex());
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[2])) {
-                categoryValue = UtilsData.stringFromObject(sighting.getAge());
+                categoryValue = UtilsCharts.stringFromEnum(sighting.getAge());
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[3])) {
-                categoryValue = UtilsData.stringFromObject(sighting.getLifeStatus());
+                categoryValue = UtilsCharts.stringFromEnum(sighting.getLifeStatus());
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[4])) {
-                categoryValue = UtilsData.stringFromObject(sighting.getSightingEvidence());
+                categoryValue = UtilsCharts.stringFromEnum(sighting.getSightingEvidence());
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[5])) {
-                categoryValue = UtilsData.stringFromObject(sighting.getCertainty());
+                categoryValue = UtilsCharts.stringFromEnum(sighting.getCertainty());
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[6])) {
-                categoryValue = UtilsData.stringFromObject(sighting.getViewRating());
+                categoryValue = UtilsCharts.stringFromEnum(sighting.getViewRating());
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[7])) {
-                categoryValue = UtilsData.stringFromObject(sighting.getTag());
+                categoryValue = sighting.getTag();
+                if (categoryValue == null) {
+                    categoryValue = "";
+                }
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[8])) {
                 Element element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementID(), null, Element.class);
-                categoryValue = UtilsData.stringFromObject(element.getType());
+                categoryValue = UtilsCharts.stringFromEnum(element.getType());
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[9])) {

@@ -34,7 +34,7 @@ public enum ElementType implements EnumWithID {
     }
     
     public static ElementType getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= ElementType.values().length) {
+        if (inID == 0 || inID < -1 || inID >= ElementType.values().length) {
             return NONE;
         }
         for (ElementType theEnum : ElementType.values()) {

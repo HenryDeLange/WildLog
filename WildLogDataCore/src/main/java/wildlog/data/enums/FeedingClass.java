@@ -32,7 +32,7 @@ public enum FeedingClass implements EnumWithID {
     }
 
     public static FeedingClass getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= FeedingClass.values().length) {
+        if (inID == 0 || inID < -1 || inID >= FeedingClass.values().length) {
             return NONE;
         }
         for (FeedingClass theEnum : FeedingClass.values()) {

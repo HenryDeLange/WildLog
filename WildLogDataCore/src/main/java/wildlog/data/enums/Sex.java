@@ -29,7 +29,7 @@ public enum Sex implements EnumWithID {
     }
 
     public static Sex getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= Sex.values().length) {
+        if (inID == 0 || inID < -1 || inID >= Sex.values().length) {
             return NONE;
         }
         for (Sex theEnum : Sex.values()) {

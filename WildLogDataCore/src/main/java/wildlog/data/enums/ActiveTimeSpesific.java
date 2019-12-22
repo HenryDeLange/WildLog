@@ -50,7 +50,7 @@ public enum ActiveTimeSpesific implements EnumWithID {
     }
     
     public static ActiveTimeSpesific getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= ActiveTimeSpesific.values().length) {
+        if (inID == 0 || inID < -1 || inID >= ActiveTimeSpesific.values().length) {
             return NONE;
         }
         for (ActiveTimeSpesific theEnum : ActiveTimeSpesific.values()) {

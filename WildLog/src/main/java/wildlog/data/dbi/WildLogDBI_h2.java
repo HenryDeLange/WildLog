@@ -2052,6 +2052,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("CREATE INDEX IF NOT EXISTS V14_LOCATION_NAME ON LOCATIONS (NAME)");
             state.execute("DROP INDEX IF EXISTS V12_VISIT_NAME");
             state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_NAME ON VISITS (NAME)");
+            
+// TODO: Convert the tables into the new structure that uses the byte id from the enums
+// ELEMENTS = ENDANGEREDSTATUS ELEMENTTYPE FEEDINGCLASS
+// LOCATIONS = RATING GAMEVIEWINGRATING + LATITUDEINDICATOR varchar(1) + LONGITUDEINDICATOR varchar(1)
+// VISITS = GAMEWATCHINGINTENSITY VISITTYPE
+// SIGHTINGS = TIMEOFDAY WEATHER VIEWRATING CERTAINTY SIGHTINGEVIDENCE MOONLIGHT TEMPERATUREUNIT LIFESTATUS SEX TIMEACCURACY AGE + LATITUDEINDICATOR varchar(1) + LONGITUDEINDICATOR varchar(1)
+// FILES = FILETYPE varchar(1)
+// WILDLOGUSERS = TYPE varchar(1)
+            
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=14");
         }

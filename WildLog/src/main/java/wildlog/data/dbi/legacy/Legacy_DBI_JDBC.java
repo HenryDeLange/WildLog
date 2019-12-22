@@ -294,34 +294,34 @@ public class Legacy_DBI_JDBC {
         state.setString(3, UtilsData.sanitizeString(inSighting.getElementName()));
         state.setString(4, UtilsData.sanitizeString(inSighting.getLocationName()));
         state.setString(5, UtilsData.sanitizeString(inSighting.getVisitName()));
-        state.setString(6, UtilsData.stringFromObject(inSighting.getTimeOfDay()));
-        state.setString(7, UtilsData.stringFromObject(inSighting.getWeather()));
-        state.setString(8, UtilsData.stringFromObject(inSighting.getViewRating()));
-        state.setString(9, UtilsData.stringFromObject(inSighting.getCertainty()));
+        state.setString(6, stringFromObject(inSighting.getTimeOfDay()));
+        state.setString(7, stringFromObject(inSighting.getWeather()));
+        state.setString(8, stringFromObject(inSighting.getViewRating()));
+        state.setString(9, stringFromObject(inSighting.getCertainty()));
         state.setInt(10, inSighting.getNumberOfElements());
         state.setString(11, UtilsData.sanitizeString(inSighting.getDetails()));
-        state.setString(12, UtilsData.stringFromObject(inSighting.getLatitude()));
+        state.setString(12, stringFromObject(inSighting.getLatitude()));
         state.setInt(13, inSighting.getLatDegrees());
         state.setInt(14, inSighting.getLatMinutes());
         state.setDouble(15, inSighting.getLatSeconds());
-        state.setString(16, UtilsData.stringFromObject(inSighting.getLongitude()));
+        state.setString(16, stringFromObject(inSighting.getLongitude()));
         state.setInt(17, inSighting.getLonDegrees());
         state.setInt(18, inSighting.getLonMinutes());
         state.setDouble(19, inSighting.getLonSeconds());
-        state.setString(20, UtilsData.stringFromObject(inSighting.getSightingEvidence()));
+        state.setString(20, stringFromObject(inSighting.getSightingEvidence()));
         state.setInt(21, inSighting.getMoonPhase());
-        state.setString(22, UtilsData.stringFromObject(inSighting.getMoonlight()));
+        state.setString(22, stringFromObject(inSighting.getMoonlight()));
         state.setDouble(23, inSighting.getTemperature());
-        state.setString(24, UtilsData.stringFromObject(inSighting.getUnitsTemperature()));
-        state.setString(25, UtilsData.stringFromObject(inSighting.getLifeStatus()));
-        state.setString(26, UtilsData.stringFromObject(inSighting.getSex()));
-        state.setString(27, UtilsData.stringFromObject(inSighting.getTag()));
+        state.setString(24, stringFromObject(inSighting.getUnitsTemperature()));
+        state.setString(25, stringFromObject(inSighting.getLifeStatus()));
+        state.setString(26, stringFromObject(inSighting.getSex()));
+        state.setString(27, stringFromObject(inSighting.getTag()));
         state.setInt(28, inSighting.getDurationMinutes());
         state.setDouble(29, inSighting.getDurationSeconds());
-        state.setString(30, UtilsData.stringFromObject(inSighting.getGPSAccuracy()));
+        state.setString(30, stringFromObject(inSighting.getGPSAccuracy()));
         state.setDouble(31, inSighting.getGPSAccuracyValue());
-        state.setString(32, UtilsData.stringFromObject(inSighting.getTimeAccuracy()));
-        state.setString(33, UtilsData.stringFromObject(inSighting.getAge()));
+        state.setString(32, stringFromObject(inSighting.getTimeAccuracy()));
+        state.setString(33, stringFromObject(inSighting.getAge()));
     }
 
     public <T extends WildLogOptions> boolean updateWildLogOptions(T inWildLogOptions) {
@@ -407,6 +407,15 @@ public class Legacy_DBI_JDBC {
 
     public long generateID() {
         return System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
+    }
+    
+    public String stringFromObject(Object inEnum) {
+        if (inEnum == null) {
+            return null;
+        }
+        else {
+            return inEnum.toString();
+        }
     }
 
 }

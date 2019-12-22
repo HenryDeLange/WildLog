@@ -17,6 +17,7 @@ public class VisitCore extends DataObjectWithAudit implements DataObjectWithWild
     protected GameWatchIntensity gameWatchingIntensity;
     protected VisitType type;
     protected long locationID;
+    // Adding some extra fields that can optionally be cached for performance reasons
     protected String cachedLocationName;
 
 

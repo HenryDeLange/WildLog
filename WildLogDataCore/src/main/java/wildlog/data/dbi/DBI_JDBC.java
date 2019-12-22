@@ -64,10 +64,10 @@ public abstract class DBI_JDBC implements DBI {
             + "DISTRIBUTION longvarchar, "
             + "NUTRITION longvarchar, "
             + "DIAGNOSTICDESCRIPTION longvarchar, "
-            + "ENDANGEREDSTATUS varchar(35), "
+            + "ENDANGEREDSTATUS tinyint, "
             + "BEHAVIOURDESCRIPTION longvarchar, "
-            + "ELEMENTTYPE varchar(50), "
-            + "FEEDINGCLASS varchar(50), "
+            + "ELEMENTTYPE tinyint, "
+            + "FEEDINGCLASS tinyint, "
             + "REFERENCEID varchar(50), "
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
@@ -75,14 +75,14 @@ public abstract class DBI_JDBC implements DBI {
             + "ID bigint PRIMARY KEY NOT NULL, "
             + "NAME varchar(150) NOT NULL, "
             + "DESCRIPTION longvarchar, "
-            + "RATING varchar(50), "
-            + "GAMEVIEWINGRATING varchar(50), "
+            + "RATING tinyint, "
+            + "GAMEVIEWINGRATING tinyint, "
             + "HABITATTYPE longvarchar, "
-            + "LATITUDEINDICATOR varchar(10), "
+            + "LATITUDEINDICATOR varchar(1), "
             + "LATDEGREES int, "
             + "LATMINUTES int, "
             + "LATSECONDS double, "
-            + "LONGITUDEINDICATOR varchar(10), "
+            + "LONGITUDEINDICATOR varchar(1), "
             + "LONDEGREES int, "
             + "LONMINUTES int, "
             + "LONSECONDS double, "
@@ -96,8 +96,8 @@ public abstract class DBI_JDBC implements DBI {
             + "STARTDATE date, "
             + "ENDDATE date, "
             + "DESCRIPTION longvarchar, "
-            + "GAMEWATCHINGINTENSITY varchar(50), "
-            + "VISITTYPE varchar(50), "
+            + "GAMEWATCHINGINTENSITY tinyint, "
+            + "VISITTYPE tinyint, "
             + "LOCATIONID bigint NOT NULL, "
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
@@ -107,33 +107,33 @@ public abstract class DBI_JDBC implements DBI {
             + "ELEMENTID bigint NOT NULL, "
             + "LOCATIONID bigint NOT NULL, "
             + "VISITID bigint NOT NULL, "
-            + "TIMEOFDAY varchar(50), "
-            + "WEATHER varchar(50), "
-            + "VIEWRATING varchar(50), "
-            + "CERTAINTY varchar(50), "
+            + "TIMEOFDAY tinyint, "
+            + "WEATHER tinyint, "
+            + "VIEWRATING tinyint, "
+            + "CERTAINTY tinyint, "
             + "NUMBEROFELEMENTS int, "
             + "DETAILS longvarchar, "
-            + "LATITUDEINDICATOR varchar(10), "
+            + "LATITUDEINDICATOR varchar(1), "
             + "LATDEGREES int, "
             + "LATMINUTES int, "
             + "LATSECONDS double, "
-            + "LONGITUDEINDICATOR varchar(10), "
+            + "LONGITUDEINDICATOR varchar(1), "
             + "LONDEGREES int, "
             + "LONMINUTES int, "
             + "LONSECONDS double, "
-            + "SIGHTINGEVIDENCE varchar(50), "
-            + "MOONLIGHT varchar(50), "
+            + "SIGHTINGEVIDENCE tinyint, "
+            + "MOONLIGHT tinyint, "
             + "MOONPHASE int, "
             + "TEMPERATURE double, "
-            + "TEMPERATUREUNIT varchar(15), "
-            + "LIFESTATUS varchar(15), "
-            + "SEX varchar(15), "
+            + "TEMPERATUREUNIT tinyint, "
+            + "LIFESTATUS tinyint, "
+            + "SEX tinyint, "
             + "TAG longvarchar, "
             + "DURATIONMINUTES int, "
             + "DURATIONSECONDS double, "
             + "GPSACCURACY varchar(50), "
-            + "TIMEACCURACY varchar(50), "
-            + "AGE varchar(50), "
+            + "TIMEACCURACY tinyint, "
+            + "AGE tinyint, "
             + "GPSACCURACYVALUE double, "
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
@@ -143,7 +143,7 @@ public abstract class DBI_JDBC implements DBI {
             + "LINKTYPE varchar(1) NOT NULL, "
             + "FILENAME varchar(255), "
             + "ORIGINALPATH varchar(500) NOT NULL, "
-            + "FILETYPE varchar(50), "
+            + "FILETYPE varchar(1), "
             + "UPLOADDATE date, "
             + "ISDEFAULT smallint, "
             + "FILEDATE timestamp, "
@@ -181,7 +181,7 @@ public abstract class DBI_JDBC implements DBI {
             + "ID bigint PRIMARY KEY NOT NULL, "
             + "USERNAME varchar(150) UNIQUE NOT NULL, "
             + "PASSWORD varchar(512) NOT NULL, "
-            + "TYPE varchar(50) NOT NULL, "
+            + "TYPE varchar(1) NOT NULL, "
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableDeleteLog = "CREATE TABLE DELETELOGS ("
@@ -919,7 +919,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE ID = ? AND TYPE = ?";
                 state = conn.prepareStatement(sql);
                 state.setLong(1, inID);
-                state.setString(2, UtilsData.stringFromObject(inDataType));
+                state.setString(2, UtilsData.getKeyFromEnum(inDataType));
             }
             else
             if (inID > 0 && inDataType == null) {
@@ -931,7 +931,7 @@ public abstract class DBI_JDBC implements DBI {
             if (inID <= 0 && inDataType != null) {
                 sql = sql + " WHERE TYPE = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.stringFromObject(inDataType));
+                state.setString(1, UtilsData.getKeyFromEnum(inDataType));
             }
             else {
                 state = conn.prepareStatement(sql);
@@ -1001,10 +1001,10 @@ public abstract class DBI_JDBC implements DBI {
         inElement.setDistribution(inResults.getString("DISTRIBUTION"));
         inElement.setNutrition(inResults.getString("NUTRITION"));
         inElement.setDiagnosticDescription(inResults.getString("DIAGNOSTICDESCRIPTION"));
-        inElement.setEndangeredStatus(EndangeredStatus.getEnumFromText(inResults.getString("ENDANGEREDSTATUS")));
+        inElement.setEndangeredStatus(EndangeredStatus.getEnumFromID(inResults.getByte("ENDANGEREDSTATUS")));
         inElement.setBehaviourDescription(inResults.getString("BEHAVIOURDESCRIPTION"));
-        inElement.setType(ElementType.getEnumFromText(inResults.getString("ELEMENTTYPE")));
-        inElement.setFeedingClass(FeedingClass.getEnumFromText(inResults.getString("FEEDINGCLASS")));
+        inElement.setType(ElementType.getEnumFromID(inResults.getByte("ELEMENTTYPE")));
+        inElement.setFeedingClass(FeedingClass.getEnumFromID(inResults.getByte("FEEDINGCLASS")));
         inElement.setReferenceID(inResults.getString("REFERENCEID"));
         inElement.setAuditTime(inResults.getLong("AUDITTIME"));
         inElement.setAuditUser(inResults.getString("AUDITUSER"));
@@ -1056,8 +1056,8 @@ public abstract class DBI_JDBC implements DBI {
         inLocation.setID(inResults.getLong("ID"));
         inLocation.setName(inResults.getString("NAME"));
         inLocation.setDescription(inResults.getString("DESCRIPTION"));
-        inLocation.setRating(LocationRating.getEnumFromText(inResults.getString("RATING")));
-        inLocation.setGameViewingRating(GameViewRating.getEnumFromText(inResults.getString("GAMEVIEWINGRATING")));
+        inLocation.setRating(LocationRating.getEnumFromID(inResults.getByte("RATING")));
+        inLocation.setGameViewingRating(GameViewRating.getEnumFromID(inResults.getByte("GAMEVIEWINGRATING")));
         inLocation.setHabitatType(inResults.getString("HABITATTYPE"));
         inLocation.setLatitude(Latitudes.getEnumFromText(inResults.getString("LATITUDEINDICATOR")));
         inLocation.setLatDegrees(inResults.getInt("LATDEGREES"));
@@ -1067,7 +1067,7 @@ public abstract class DBI_JDBC implements DBI {
         inLocation.setLonDegrees(inResults.getInt("LONDEGREES"));
         inLocation.setLonMinutes(inResults.getInt("LONMINUTES"));
         inLocation.setLonSeconds(inResults.getDouble("LONSECONDS"));
-        inLocation.setGPSAccuracy(GPSAccuracy.getEnumFromText(inResults.getString("GPSACCURACY")));
+        inLocation.setGPSAccuracy(GPSAccuracy.getEnumFromID(inResults.getByte("GPSACCURACY")));
         inLocation.setGPSAccuracyValue(inResults.getDouble("GPSACCURACYVALUE"));
         inLocation.setAuditTime(inResults.getLong("AUDITTIME"));
         inLocation.setAuditUser(inResults.getString("AUDITUSER"));
@@ -1137,8 +1137,8 @@ public abstract class DBI_JDBC implements DBI {
             inVisit.setEndDate(null);
         }
         inVisit.setDescription(inResults.getString("DESCRIPTION"));
-        inVisit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(inResults.getString("GAMEWATCHINGINTENSITY")));
-        inVisit.setType(VisitType.getEnumFromText(inResults.getString("VISITTYPE")));
+        inVisit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromID(inResults.getByte("GAMEWATCHINGINTENSITY")));
+        inVisit.setType(VisitType.getEnumFromID(inResults.getByte("VISITTYPE")));
         inVisit.setLocationID(inResults.getLong("LOCATIONID"));
         inVisit.setAuditTime(inResults.getLong("AUDITTIME"));
         inVisit.setAuditUser(inResults.getString("AUDITUSER"));
@@ -1195,10 +1195,10 @@ public abstract class DBI_JDBC implements DBI {
         inSighting.setElementID(inResults.getLong("ELEMENTID"));
         inSighting.setLocationID(inResults.getLong("LOCATIONID"));
         inSighting.setVisitID(inResults.getLong("VISITID"));
-        inSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(inResults.getString("TIMEOFDAY")));
-        inSighting.setWeather(Weather.getEnumFromText(inResults.getString("WEATHER")));
-        inSighting.setViewRating(ViewRating.getEnumFromText(inResults.getString("VIEWRATING")));
-        inSighting.setCertainty(Certainty.getEnumFromText(inResults.getString("CERTAINTY")));
+        inSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromID(inResults.getByte("TIMEOFDAY")));
+        inSighting.setWeather(Weather.getEnumFromID(inResults.getByte("WEATHER")));
+        inSighting.setViewRating(ViewRating.getEnumFromID(inResults.getByte("VIEWRATING")));
+        inSighting.setCertainty(Certainty.getEnumFromID(inResults.getByte("CERTAINTY")));
         inSighting.setNumberOfElements(inResults.getInt("NUMBEROFELEMENTS"));
         inSighting.setDetails(inResults.getString("DETAILS"));
         inSighting.setLatitude(Latitudes.getEnumFromText(inResults.getString("LATITUDEINDICATOR")));
@@ -1209,28 +1209,28 @@ public abstract class DBI_JDBC implements DBI {
         inSighting.setLonDegrees(inResults.getInt("LONDEGREES"));
         inSighting.setLonMinutes(inResults.getInt("LONMINUTES"));
         inSighting.setLonSeconds(inResults.getDouble("LONSECONDS"));
-        inSighting.setSightingEvidence(SightingEvidence.getEnumFromText(inResults.getString("SIGHTINGEVIDENCE")));
-        inSighting.setMoonlight(Moonlight.getEnumFromText(inResults.getString("MOONLIGHT")));
+        inSighting.setSightingEvidence(SightingEvidence.getEnumFromID(inResults.getByte("SIGHTINGEVIDENCE")));
+        inSighting.setMoonlight(Moonlight.getEnumFromID(inResults.getByte("MOONLIGHT")));
         inSighting.setMoonPhase(inResults.getInt("MOONPHASE"));
         inSighting.setTemperature(inResults.getDouble("TEMPERATURE"));
-        inSighting.setUnitsTemperature(UnitsTemperature.getEnumFromText(inResults.getString("TEMPERATUREUNIT")));
-        inSighting.setLifeStatus(LifeStatus.getEnumFromText(inResults.getString("LIFESTATUS")));
-        inSighting.setSex(Sex.getEnumFromText(inResults.getString("SEX")));
+        inSighting.setUnitsTemperature(UnitsTemperature.getEnumFromID(inResults.getByte("TEMPERATUREUNIT")));
+        inSighting.setLifeStatus(LifeStatus.getEnumFromID(inResults.getByte("LIFESTATUS")));
+        inSighting.setSex(Sex.getEnumFromID(inResults.getByte("SEX")));
         inSighting.setTag(inResults.getString("TAG"));
         inSighting.setDurationMinutes(inResults.getInt("DURATIONMINUTES"));
         inSighting.setDurationSeconds(inResults.getDouble("DURATIONSECONDS"));
-        inSighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(inResults.getString("GPSACCURACY")));
+        inSighting.setGPSAccuracy(GPSAccuracy.getEnumFromID(inResults.getByte("GPSACCURACY")));
         inSighting.setGPSAccuracyValue(inResults.getDouble("GPSACCURACYVALUE"));
-        inSighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(inResults.getString("TIMEACCURACY")));
-        inSighting.setAge(Age.getEnumFromText(inResults.getString("AGE")));
+        inSighting.setTimeAccuracy(TimeAccuracy.getEnumFromID(inResults.getByte("TIMEACCURACY")));
+        inSighting.setAge(Age.getEnumFromID(inResults.getByte("AGE")));
         inSighting.setAuditTime(inResults.getLong("AUDITTIME"));
         inSighting.setAuditUser(inResults.getString("AUDITUSER"));
         if (inIncludeCachedValues) {
             inSighting.setCachedElementName(inResults.getString("ELEMENTNAME"));
             inSighting.setCachedLocationName(inResults.getString("LOCATIONNAME"));
             inSighting.setCachedVisitName(inResults.getString("VISITNAME"));
-            inSighting.setCachedElementType(ElementType.getEnumFromText(inResults.getString("ELEMENTTYPE")));
-            inSighting.setCachedVisitType(VisitType.getEnumFromText(inResults.getString("VISITTYPE")));
+            inSighting.setCachedElementType(ElementType.getEnumFromID(inResults.getByte("ELEMENTTYPE")));
+            inSighting.setCachedVisitType(VisitType.getEnumFromID(inResults.getByte("VISITTYPE")));
             if (inResults.getInt("INATCOUNT") == 0) {
                 inSighting.setCachedLinkedToINaturalist(false);
             }
@@ -1263,7 +1263,7 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.prepareStatement(sql);
                 state.setLong(1, inLinkID);
                 if (inWildLogFileType != null) {
-                    state.setString(2, UtilsData.stringFromObject(inWildLogFileType));
+                    state.setString(2, UtilsData.getKeyFromEnum(inWildLogFileType));
                 }
             }
             else
@@ -1271,7 +1271,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE FILETYPE = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH LIMIT 1";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.stringFromObject(inWildLogFileType));
+                state.setString(1, UtilsData.getKeyFromEnum(inWildLogFileType));
             }
             else
             if (inDBFilePath != null && !inDBFilePath.isEmpty()) {
@@ -1659,14 +1659,14 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
                 state.setLong(1, inLinkID);
-                state.setString(2, UtilsData.stringFromObject(inWildLogFileType));
+                state.setString(2, UtilsData.getKeyFromEnum(inWildLogFileType));
             }
             else
             if (inLinkID == -1 && !(inWildLogFileType == null || WildLogFileType.NONE.equals(inWildLogFileType))) {
                 sql = sql + " WHERE FILETYPE = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.stringFromObject(inWildLogFileType));
+                state.setString(1, UtilsData.getKeyFromEnum(inWildLogFileType));
             }
             else {
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
@@ -1776,7 +1776,7 @@ public abstract class DBI_JDBC implements DBI {
             if (inType != null) {
                 sql = sql + " WHERE TYPE = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.stringFromObject(inType));
+                state.setString(1, UtilsData.getKeyFromEnum(inType));
             }
             else {
                 state = conn.prepareStatement(sql);
@@ -1818,14 +1818,14 @@ public abstract class DBI_JDBC implements DBI {
             if (inDataType != null && inAfterAuditTime > 0) {
                 sql = sql + " WHERE TYPE = ? AND AUDITTIME >= ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.stringFromObject(inDataType));
+                state.setString(1, UtilsData.getKeyFromEnum(inDataType));
                 state.setLong(2, inAfterAuditTime);
             }
             else
             if (inDataType != null) {
                 sql = sql + " WHERE TYPE = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.stringFromObject(inDataType));
+                state.setString(1, UtilsData.getKeyFromEnum(inDataType));
             }
             else
             if (inAfterAuditTime > 0) {
@@ -1918,10 +1918,10 @@ public abstract class DBI_JDBC implements DBI {
         state.setString(6, UtilsData.sanitizeString(inElement.getDistribution()));
         state.setString(7, UtilsData.sanitizeString(inElement.getNutrition()));
         state.setString(8, UtilsData.sanitizeString(inElement.getDiagnosticDescription()));
-        state.setString(9, UtilsData.stringFromObject(inElement.getEndangeredStatus()));
+        state.setByte(9, UtilsData.getIDFromEnum(inElement.getEndangeredStatus()));
         state.setString(10, UtilsData.sanitizeString(inElement.getBehaviourDescription()));
-        state.setString(11, UtilsData.stringFromObject(inElement.getType()));
-        state.setString(12, UtilsData.stringFromObject(inElement.getFeedingClass()));
+        state.setByte(11, UtilsData.getIDFromEnum(inElement.getType()));
+        state.setByte(12, UtilsData.getIDFromEnum(inElement.getFeedingClass()));
         state.setString(13, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getReferenceID()), 50));
         if (!inUseOldAudit) {
             setupAuditInfo(inElement);
@@ -1982,18 +1982,18 @@ public abstract class DBI_JDBC implements DBI {
         state.setLong(1, inLocation.getID());
         state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
         state.setString(3, UtilsData.sanitizeString(inLocation.getDescription()));
-        state.setString(4, UtilsData.stringFromObject(inLocation.getRating()));
-        state.setString(5, UtilsData.stringFromObject(inLocation.getGameViewingRating()));
-        state.setString(6, UtilsData.stringFromObject(inLocation.getHabitatType()));
-        state.setString(7, UtilsData.stringFromObject(inLocation.getLatitude()));
+        state.setByte(4, UtilsData.getIDFromEnum(inLocation.getRating()));
+        state.setByte(5, UtilsData.getIDFromEnum(inLocation.getGameViewingRating()));
+        state.setString(6, UtilsData.sanitizeString(inLocation.getHabitatType()));
+        state.setString(7, UtilsData.getKeyFromEnum(inLocation.getLatitude()));
         state.setInt(8, inLocation.getLatDegrees());
         state.setInt(9, inLocation.getLatMinutes());
         state.setDouble(10, inLocation.getLatSeconds());
-        state.setString(11, UtilsData.stringFromObject(inLocation.getLongitude()));
+        state.setString(11, UtilsData.getKeyFromEnum(inLocation.getLongitude()));
         state.setInt(12, inLocation.getLonDegrees());
         state.setInt(13, inLocation.getLonMinutes());
         state.setDouble(14, inLocation.getLonSeconds());
-        state.setString(15, UtilsData.stringFromObject(inLocation.getGPSAccuracy()));
+        state.setByte(15, UtilsData.getIDFromEnum(inLocation.getGPSAccuracy()));
         state.setDouble(16, inLocation.getGPSAccuracyValue());
         if (!inUseOldAudit) {
             setupAuditInfo(inLocation);
@@ -2066,8 +2066,8 @@ public abstract class DBI_JDBC implements DBI {
             state.setDate(4, null);
         }
         state.setString(5, UtilsData.sanitizeString(inVisit.getDescription()));
-        state.setString(6, UtilsData.stringFromObject(inVisit.getGameWatchingIntensity()));
-        state.setString(7, UtilsData.stringFromObject(inVisit.getType()));
+        state.setByte(6, UtilsData.getIDFromEnum(inVisit.getGameWatchingIntensity()));
+        state.setByte(7, UtilsData.getIDFromEnum(inVisit.getType()));
         state.setLong(8, inVisit.getLocationID());
         if (!inUseOldAudit) {
             setupAuditInfo(inVisit);
@@ -2136,34 +2136,34 @@ public abstract class DBI_JDBC implements DBI {
         state.setLong(3, inSighting.getElementID());
         state.setLong(4, inSighting.getLocationID());
         state.setLong(5, inSighting.getVisitID());
-        state.setString(6, UtilsData.stringFromObject(inSighting.getTimeOfDay()));
-        state.setString(7, UtilsData.stringFromObject(inSighting.getWeather()));
-        state.setString(8, UtilsData.stringFromObject(inSighting.getViewRating()));
-        state.setString(9, UtilsData.stringFromObject(inSighting.getCertainty()));
+        state.setByte(6, UtilsData.getIDFromEnum(inSighting.getTimeOfDay()));
+        state.setByte(7, UtilsData.getIDFromEnum(inSighting.getWeather()));
+        state.setByte(8, UtilsData.getIDFromEnum(inSighting.getViewRating()));
+        state.setByte(9, UtilsData.getIDFromEnum(inSighting.getCertainty()));
         state.setInt(10, inSighting.getNumberOfElements());
         state.setString(11, UtilsData.sanitizeString(inSighting.getDetails()));
-        state.setString(12, UtilsData.stringFromObject(inSighting.getLatitude()));
+        state.setString(12, UtilsData.getKeyFromEnum(inSighting.getLatitude()));
         state.setInt(13, inSighting.getLatDegrees());
         state.setInt(14, inSighting.getLatMinutes());
         state.setDouble(15, inSighting.getLatSeconds());
-        state.setString(16, UtilsData.stringFromObject(inSighting.getLongitude()));
+        state.setString(16, UtilsData.getKeyFromEnum(inSighting.getLongitude()));
         state.setInt(17, inSighting.getLonDegrees());
         state.setInt(18, inSighting.getLonMinutes());
         state.setDouble(19, inSighting.getLonSeconds());
-        state.setString(20, UtilsData.stringFromObject(inSighting.getSightingEvidence()));
+        state.setByte(20, UtilsData.getIDFromEnum(inSighting.getSightingEvidence()));
         state.setInt(21, inSighting.getMoonPhase());
-        state.setString(22, UtilsData.stringFromObject(inSighting.getMoonlight()));
+        state.setByte(22, UtilsData.getIDFromEnum(inSighting.getMoonlight()));
         state.setDouble(23, inSighting.getTemperature());
-        state.setString(24, UtilsData.stringFromObject(inSighting.getUnitsTemperature()));
-        state.setString(25, UtilsData.stringFromObject(inSighting.getLifeStatus()));
-        state.setString(26, UtilsData.stringFromObject(inSighting.getSex()));
-        state.setString(27, UtilsData.stringFromObject(inSighting.getTag()));
+        state.setByte(24, UtilsData.getIDFromEnum(inSighting.getUnitsTemperature()));
+        state.setByte(25, UtilsData.getIDFromEnum(inSighting.getLifeStatus()));
+        state.setByte(26, UtilsData.getIDFromEnum(inSighting.getSex()));
+        state.setString(27, UtilsData.sanitizeString(inSighting.getTag()));
         state.setInt(28, inSighting.getDurationMinutes());
         state.setDouble(29, inSighting.getDurationSeconds());
-        state.setString(30, UtilsData.stringFromObject(inSighting.getGPSAccuracy()));
+        state.setByte(30, UtilsData.getIDFromEnum(inSighting.getGPSAccuracy()));
         state.setDouble(31, inSighting.getGPSAccuracyValue());
-        state.setString(32, UtilsData.stringFromObject(inSighting.getTimeAccuracy()));
-        state.setString(33, UtilsData.stringFromObject(inSighting.getAge()));
+        state.setByte(32, UtilsData.getIDFromEnum(inSighting.getTimeAccuracy()));
+        state.setByte(33, UtilsData.getIDFromEnum(inSighting.getAge()));
         if (!inUseOldAudit) {
             setupAuditInfo(inSighting);
         }
@@ -2219,10 +2219,10 @@ public abstract class DBI_JDBC implements DBI {
     private <T extends WildLogFileCore> void maintainWildLogFile(PreparedStatement state, T inWildLogFile, boolean inUseOldAudit) throws SQLException {
         state.setLong(1, inWildLogFile.getID());
         state.setLong(2, inWildLogFile.getLinkID());
-        state.setString(3, UtilsData.stringFromObject(inWildLogFile.getLinkType()));
+        state.setString(3, UtilsData.getKeyFromEnum(inWildLogFile.getLinkType()));
         state.setString(4, UtilsData.sanitizeString(inWildLogFile.getFilename()));
         state.setString(5, UtilsData.sanitizeString(inWildLogFile.getDBFilePath().replace("\\", "/")));
-        state.setString(6, UtilsData.stringFromObject(inWildLogFile.getFileType()));
+        state.setString(6, UtilsData.getKeyFromEnum(inWildLogFile.getFileType()));
         if (inWildLogFile.getUploadDate() != null) {
             state.setDate(7, new java.sql.Date(inWildLogFile.getUploadDate().getTime()));
         }
@@ -2967,7 +2967,7 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.prepareStatement(createDeleteLog);
                 // Populate the values
                 state.setLong(1, inWildLogDeleteLog.getID());
-                state.setString(2, UtilsData.stringFromObject(inWildLogDeleteLog.getType()));
+                state.setString(2, UtilsData.getKeyFromEnum(inWildLogDeleteLog.getType()));
                 if (!inNewButUseOldAudit) {
                     setupAuditInfo(inWildLogDeleteLog);
                 }

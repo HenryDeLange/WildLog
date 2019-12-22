@@ -32,7 +32,7 @@ public enum ActiveTime implements EnumWithID {
     }
 
     public static ActiveTime getEnumFromID(byte inID) {
-        if (inID <= 0 || inID >= ActiveTime.values().length) {
+        if (inID == 0 || inID < -1 || inID >= ActiveTime.values().length) {
             return NONE;
         }
         for (ActiveTime theEnum : ActiveTime.values()) {

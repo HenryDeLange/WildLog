@@ -1,7 +1,9 @@
 package wildlog.data.enums.system;
 
+import wildlog.data.enums.utils.EnumWithKey;
 
-public enum WildLogFileType {
+
+public enum WildLogFileType implements EnumWithKey {
     IMAGE("I", "Image"),
     MOVIE("M", "Movie"),
     OTHER("O", "Other"),
@@ -20,6 +22,7 @@ public enum WildLogFileType {
         return key;
     }
     
+    @Override
     public String getKey() {
         return key;
     }

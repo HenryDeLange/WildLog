@@ -1,7 +1,9 @@
 package wildlog.data.enums.system;
 
+import wildlog.data.enums.utils.EnumWithKey;
 
-public enum WildLogDataType {
+
+public enum WildLogDataType implements EnumWithKey {
     ELEMENT         ("E", "ELEMENTS"),
     LOCATION        ("L", "LOCATIONS"),
     VISIT           ("V", "VISITS"),
@@ -27,6 +29,7 @@ public enum WildLogDataType {
         return key;
     }
 
+    @Override
     public String getKey() {
         return key;
     }
