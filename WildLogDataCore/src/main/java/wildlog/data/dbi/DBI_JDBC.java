@@ -186,7 +186,7 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableDeleteLog = "CREATE TABLE DELETELOGS ("
             + "ID bigint PRIMARY KEY NOT NULL, "
-            + "TYPE varchar(25) NOT NULL, "
+            + "TYPE varchar(1) NOT NULL, "
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
     // Count
@@ -249,7 +249,7 @@ public abstract class DBI_JDBC implements DBI {
             + "LONMINUTES, "
             + "LONSECONDS, "
             + "GPSACCURACY, "
-            + "GPSACCURACYVALUE,"
+            + "GPSACCURACYVALUE, "
             + "AUDITTIME, "
             + "AUDITUSER) "
             + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -543,8 +543,8 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute(tableElements);
                 // Create other indexes
                 state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
                     createElement(new ElementCore(0, "Unknown Creature"), false);
@@ -569,7 +569,7 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableVisits);
                 state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_NAME ON VISITS (NAME)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_VISIT_LOCATION ON VISITS (LOCATIONID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_LOCATION ON VISITS (LOCATIONID)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
                     createVisit(new VisitCore(0, "Casual Observations", findLocation(0, "Some Place", LocationCore.class).getID()), false);
@@ -581,13 +581,13 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableSightings);
-                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTID)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_LOCATION ON SIGHTINGS (LOCATIONID)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_VISIT ON SIGHTINGS (VISITID)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTID, LOCATIONID)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTID, VISITID)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_LOCATION_VISIT ON SIGHTINGS (LOCATIONID, VISITID)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_LOCATION ON SIGHTINGS (LOCATIONID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_VISIT ON SIGHTINGS (VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTID, LOCATIONID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTID, VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_LOCATION_VISIT ON SIGHTINGS (LOCATIONID, VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -595,12 +595,12 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableFiles);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V12_FILE_ORGPATH ON FILES (ORIGINALPATH)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_LINKID ON FILES (LINKID)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_FILETYPE ON FILES (FILETYPE)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_ID_DEFAULT ON FILES (LINKID, ISDEFAULT)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_FILE_ID_TYPE_DEFAULT ON FILES (LINKID, FILETYPE, ISDEFAULT)");
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V14_FILE_ORGPATH ON FILES (ORIGINALPATH)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_LINKID ON FILES (LINKID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_FILETYPE ON FILES (FILETYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ID_DEFAULT ON FILES (LINKID, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ID_TYPE_DEFAULT ON FILES (LINKID, FILETYPE, ISDEFAULT)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -631,8 +631,6 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableDeleteLog);
-                state.execute("CREATE INDEX IF NOT EXISTS V12_DELETELOG_AUDITTIME ON DELETELOGS (AUDITTIME)");
-                state.execute("CREATE INDEX IF NOT EXISTS V12_DELETELOG_TYPE ON DELETELOGS (TYPE)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -647,7 +645,8 @@ public abstract class DBI_JDBC implements DBI {
                 // Since this is the first time the database is being created, also update the cache size for H2 (might fail on other DBs)
                 try {
                     state = conn.createStatement();
-                    state.execute("SET CACHE_SIZE 32768");
+                    // Increase the cache size to 75MB (in KB)
+                    state.execute("SET CACHE_SIZE 76800");
                     closeStatement(state);
                 }
                 catch (SQLException sqle) {

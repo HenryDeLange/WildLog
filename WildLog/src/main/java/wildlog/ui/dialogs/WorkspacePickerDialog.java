@@ -47,8 +47,12 @@ public class WorkspacePickerDialog extends JDialog {
         // Luister ook op die editor vir wanneer mens iets tik
         cmbWorkspacePath.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void keyReleased(KeyEvent inEvent) {
                 activeWorkspacePathChanged((String) cmbWorkspacePath.getEditor().getItem());
+                if (inEvent.getKeyCode() == KeyEvent.VK_ENTER) {
+                    btnConfirmWorkspaceActionPerformed(null);
+                    inEvent.consume();
+                }
             }
         });
         // Lees die wildloghome file vir die lys van workspaces, en laai dit dan in die combobox

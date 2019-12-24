@@ -295,6 +295,8 @@ public final class WildLogView extends JFrame {
             sprWorkspace2.setVisible(false);
             mnuCleanWorkspace.setEnabled(false);
             mnuCleanWorkspace.setVisible(false);
+            mnuOptimseDatabase.setEnabled(false);
+            mnuOptimseDatabase.setVisible(false);
             mnuChangeWorkspaceName.setEnabled(false);
             mnuChangeWorkspaceName.setVisible(false);
             sprWorkspaceUsers.setVisible(false);
@@ -467,6 +469,7 @@ public final class WildLogView extends JFrame {
         mnuWorkspaceUsers = new javax.swing.JMenuItem();
         sprWorkspace2 = new javax.swing.JPopupMenu.Separator();
         mnuCleanWorkspace = new javax.swing.JMenuItem();
+        mnuOptimseDatabase = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem mnuExitApp = new javax.swing.JMenuItem();
         backupMenu = new javax.swing.JMenu();
@@ -987,6 +990,17 @@ public final class WildLogView extends JFrame {
             }
         });
         workspaceMenu.add(mnuCleanWorkspace);
+
+        mnuOptimseDatabase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        mnuOptimseDatabase.setText("Optimise Database");
+        mnuOptimseDatabase.setToolTipText("This will attempt to compact and defragment the database.");
+        mnuOptimseDatabase.setName("mnuOptimseDatabase"); // NOI18N
+        mnuOptimseDatabase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuOptimseDatabaseActionPerformed(evt);
+            }
+        });
+        workspaceMenu.add(mnuOptimseDatabase);
 
         fileMenu.add(workspaceMenu);
 
@@ -2403,7 +2417,7 @@ public final class WildLogView extends JFrame {
                                         @Override
                                         public void run() {
                                             // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                            WLOptionPane.showMessageDialog(null, 
+                                            WLOptionPane.showMessageDialog(app.getMainFrame(), 
                                                     "The Check and Clean Workspace process has completed. Please restart the application.", 
                                                     "Completed Check and Clean Workspace", WLOptionPane.INFORMATION_MESSAGE);
                                             app.quit(null);
@@ -3793,7 +3807,7 @@ public final class WildLogView extends JFrame {
                                                                 @Override
                                                                 public void run() {
                                                                     // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                                                    WLOptionPane.showMessageDialog(null, 
+                                                                    WLOptionPane.showMessageDialog(app.getMainFrame(), 
                                                                             "The Echo Backup Workspace process has completed. Please restart the application.", 
                                                                             "Completed Echo Backup Workspace", WLOptionPane.INFORMATION_MESSAGE);
                                                                     app.quit(null);
@@ -3805,7 +3819,7 @@ public final class WildLogView extends JFrame {
                                                                 @Override
                                                                 public void run() {
                                                                     // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                                                    WLOptionPane.showMessageDialog(null, 
+                                                                    WLOptionPane.showMessageDialog(app.getMainFrame(), 
                                                                             "The Echo Backup Workspace process did NOT complete successfully.", 
                                                                             "ERROR - Echo Backup Workspace", WLOptionPane.ERROR_MESSAGE);
                                                                     app.quit(null);
@@ -3881,6 +3895,77 @@ public final class WildLogView extends JFrame {
             clipboardPopup.setVisible(true);
         }
     }//GEN-LAST:event_lblWorkspaceIDMouseReleased
+
+    private void mnuOptimseDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOptimseDatabaseActionPerformed
+        WildLogApp.LOGGER.log(Level.INFO, "[OptimiseDatabase]");
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // Close all tabs and go to the home tab
+                tabbedPanel.setSelectedIndex(0);
+                while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                    tabbedPanel.remove(STATIC_TAB_COUNT);
+                }
+                // Lock the input/display and show busy message
+                // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
+                tabbedPanel.setSelectedIndex(0);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        JPanel panel = new JPanel(new AbsoluteLayout());
+                        panel.setPreferredSize(new Dimension(400, 50));
+                        panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
+                        JLabel label = new JLabel("<html>Busy optimising the database. <br/>"
+                                + "Don't close the application until the process is finished.</html>");
+                        label.setFont(new Font("Tahoma", Font.BOLD, 12));
+                        label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
+                        panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+                        panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
+                        panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+                        JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
+                        glassPane.removeAll();
+                        glassPane.setLayout(new BorderLayout(100, 100));
+                        glassPane.add(panel, BorderLayout.CENTER);
+                        glassPane.addMouseListener(new MouseAdapter() {});
+                        glassPane.addKeyListener(new KeyAdapter() {});
+                        app.getMainFrame().setGlassPane(glassPane);
+                        app.getMainFrame().getGlassPane().setVisible(true);
+                        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                    }
+                });
+                UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                    @Override
+                    protected Object doInBackground() throws Exception {
+                        setMessage("Starting the Database Optimisation");
+                        setProgress(0);
+                        setMessage("Busy with the Database Optimisation");
+                        app.getDBI().doCompact();
+                        setProgress(100);
+                        setMessage("Done with the Database Optimisation");
+                        return null;
+                    }
+
+                    @Override
+                    protected void finished() {
+                        super.finished();
+                        try {
+                            WLOptionPane.showMessageDialog(app.getMainFrame(), 
+                                    "The databse was optimised successfully. Please restart the application.", 
+                                    "Database Optimisation Complete", WLOptionPane.INFORMATION_MESSAGE);
+                        }
+                        catch (Exception ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            WLOptionPane.showMessageDialog(app.getMainFrame(), 
+                                    "The databse could not be optimised successfully.", 
+                                    "Database Optimisation Failed!", WLOptionPane.ERROR_MESSAGE);
+                        }
+                        // Close the application (because the DB was shutdown)
+                        app.quit(null);
+                    }
+                });
+            }
+        });
+    }//GEN-LAST:event_mnuOptimseDatabaseActionPerformed
 
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
@@ -4023,6 +4108,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuMergeLocations;
     private javax.swing.JMenuItem mnuMergeVisit;
     private javax.swing.JMenuItem mnuMoveVisits;
+    private javax.swing.JMenuItem mnuOptimseDatabase;
     private javax.swing.JMenu mnuOther;
     private javax.swing.JMenu mnuPerformance;
     private javax.swing.JMenuItem mnuReduceImagesSize;

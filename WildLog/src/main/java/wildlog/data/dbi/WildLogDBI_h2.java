@@ -165,6 +165,18 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
+    public void doCompact() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        close();
+        setupConnection(false);
+        Statement state = conn.createStatement();
+        state.execute("SHUTDOWN COMPACT");
+        close();
+        setupConnection(false);
+        state = conn.createStatement();
+        state.execute("SHUTDOWN DEFRAG");
+    }
+
+    @Override
     public void doBackup(Path inDestinationFolder) {
         Statement state = null;
         try {
@@ -2039,6 +2051,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         try {
             state = conn.createStatement();
             // Add the audit columns to the WildLog Options table (for syncing)
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 1 ...");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN ID bigint DEFAULT 1 PRIMARY KEY NOT NULL");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN AUDITTIME bigint DEFAULT 0 NOT NULL");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN AUDITUSER varchar(150) DEFAULT '' NOT NULL");
@@ -2046,22 +2059,373 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.executeUpdate("UPDATE WILDLOG SET AUDITTIME=0");
             state.executeUpdate("UPDATE WILDLOG SET AUDITUSER='Update14'");
             // Get rid of the uniqueness of the indexes on the name columns
-            state.execute("DROP INDEX IF EXISTS V12_ELEMENT_PRINAME");
-            state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
-            state.execute("DROP INDEX IF EXISTS V12_LOCATION_NAME");
-            state.execute("CREATE INDEX IF NOT EXISTS V14_LOCATION_NAME ON LOCATIONS (NAME)");
-            state.execute("DROP INDEX IF EXISTS V12_VISIT_NAME");
-            state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_NAME ON VISITS (NAME)");
-            
-// TODO: Convert the tables into the new structure that uses the byte id from the enums
-// ELEMENTS = ENDANGEREDSTATUS ELEMENTTYPE FEEDINGCLASS
-// LOCATIONS = RATING GAMEVIEWINGRATING + LATITUDEINDICATOR varchar(1) + LONGITUDEINDICATOR varchar(1)
-// VISITS = GAMEWATCHINGINTENSITY VISITTYPE
-// SIGHTINGS = TIMEOFDAY WEATHER VIEWRATING CERTAINTY SIGHTINGEVIDENCE MOONLIGHT TEMPERATUREUNIT LIFESTATUS SEX TIMEACCURACY AGE + LATITUDEINDICATOR varchar(1) + LONGITUDEINDICATOR varchar(1)
-// FILES = FILETYPE varchar(1)
-// WILDLOGUSERS = TYPE varchar(1)
-            
+            // Note: Not needed because the tables are being recreated below
+            // state.execute("DROP INDEX IF EXISTS V12_ELEMENT_PRINAME");
+            // state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+            // state.execute("DROP INDEX IF EXISTS V12_LOCATION_NAME");
+            // state.execute("CREATE INDEX IF NOT EXISTS V14_LOCATION_NAME ON LOCATIONS (NAME)");
+            // state.execute("DROP INDEX IF EXISTS V12_VISIT_NAME");
+            // state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_NAME ON VISITS (NAME)");
+            // Convert the tables into the new structure that uses the byte id from the enums instead of strings
+            // Rename old tables
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.1 ...");
+            state.execute("ALTER TABLE ELEMENTS RENAME TO TEMP_ELEMENTS");
+            state.execute("ALTER TABLE LOCATIONS RENAME TO TEMP_LOCATIONS");
+            state.execute("ALTER TABLE VISITS RENAME TO TEMP_VISITS");
+            state.execute("ALTER TABLE SIGHTINGS RENAME TO TEMP_SIGHTINGS");
+            state.execute("ALTER TABLE FILES RENAME TO TEMP_FILES");
+            state.execute("ALTER TABLE WILDLOGUSERS RENAME TO TEMP_WILDLOGUSERS");
+            state.execute("ALTER TABLE DELETELOGS RENAME TO TEMP_DELETELOGS");
+            // Create tables using the new structure
+            // Note: This creates the indexes as well, however to make the upgrade faster 
+            //       I'm going to drop the indexes before the inserts and then recreate afterwards
+            initialize(false);
+            // Copy data accross from old tables
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.2 ...");
+            try {
+                state.execute("DROP INDEX IF EXISTS V14_ELEMENT_PRINAME");
+                state.execute("DROP INDEX IF EXISTS V14_ELEMENT_TYPE");
+                state.execute("DROP INDEX IF EXISTS V14_ELEMENT_PRINAME_TYPE");
+                state.execute("INSERT INTO ELEMENTS (\n" +
+                        "ID, PRIMARYNAME, OTHERNAME, SCIENTIFICNAME, DESCRIPTION, DISTRIBUTION, \n" +
+                        "NUTRITION, DIAGNOSTICDESCRIPTION, ENDANGEREDSTATUS, BEHAVIOURDESCRIPTION, \n" +
+                        "ELEMENTTYPE, FEEDINGCLASS, REFERENCEID, AUDITTIME, AUDITUSER) \n" +
+                        "SELECT ID, PRIMARYNAME, OTHERNAME, SCIENTIFICNAME, DESCRIPTION, DISTRIBUTION, \n" +
+                        "NUTRITION, DIAGNOSTICDESCRIPTION, \n" +
+                        "CASE ENDANGEREDSTATUS \n" +
+                        "WHEN 'Extinct'               THEN 1 \n" +
+                        "WHEN 'Extinct in Wild'       THEN 2 \n" +
+                        "WHEN 'Critically Endangered' THEN 3 \n" +
+                        "WHEN 'Endangered'            THEN 4 \n" +
+                        "WHEN 'Vunerable'             THEN 5 \n" +
+                        "WHEN 'Near Threatened'       THEN 6 \n" +
+                        "WHEN 'Least Concern'         THEN 7 \n" +
+                        "ELSE 0 END, \n" +
+                        "BEHAVIOURDESCRIPTION, \n" +
+                        "CASE ELEMENTTYPE \n" +
+                        "WHEN 'Mammal'    THEN 1 \n" +
+                        "WHEN 'Bird'      THEN 2 \n" +
+                        "WHEN 'Reptile'   THEN 3 \n" +
+                        "WHEN 'Amphibian' THEN 4 \n" +
+                        "WHEN 'Fish'      THEN 5 \n" +
+                        "WHEN 'Insect'    THEN 6 \n" +
+                        "WHEN 'Plant'     THEN 7 \n" +
+                        "WHEN 'Other'     THEN 8 \n" +
+                        "WHEN 'Unknown'   THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE FEEDINGCLASS \n" +
+                        "WHEN 'Carnivore'       THEN 1 \n" +
+                        "WHEN 'Herbivore'       THEN 2 \n" +
+                        "WHEN 'Omnivore'        THEN 3 \n" +
+                        "WHEN 'Parasite'        THEN 4 \n" +
+                        "WHEN 'Photo-Synthesis' THEN 5 \n" +
+                        "WHEN 'Other'           THEN 6 \n" +
+                        "WHEN 'Unknown'         THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "REFERENCEID, AUDITTIME, AUDITUSER \n" +
+                        "FROM TEMP_ELEMENTS");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.3 ...");
+            try {
+                state.execute("DROP INDEX IF EXISTS V14_LOCATION_NAME");
+                state.execute("INSERT INTO LOCATIONS (\n" +
+                        "ID, NAME, DESCRIPTION, RATING, GAMEVIEWINGRATING, HABITATTYPE, \n" +
+                        "LATITUDEINDICATOR, LATDEGREES, LATMINUTES, LATSECONDS, \n" +
+                        "LONGITUDEINDICATOR, LONDEGREES, LONMINUTES, LONSECONDS, \n" +
+                        "GPSACCURACY, GPSACCURACYVALUE, AUDITTIME, AUDITUSER) \n" +
+                        "SELECT ID, NAME, DESCRIPTION, \n" +
+                        "CASE RATING \n" +
+                        "WHEN 'Very Nice' THEN 1 \n" +
+                        "WHEN 'Nice'      THEN 2 \n" +
+                        "WHEN 'Decent'    THEN 3 \n" +
+                        "WHEN 'Bad'       THEN 4 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE GAMEVIEWINGRATING \n" +
+                        "WHEN 'Good'   THEN 1 \n" +
+                        "WHEN 'Medium' THEN 2 \n" +
+                        "WHEN 'Bad'    THEN 3 \n" +
+                        "ELSE 0 END, \n" +
+                        "HABITATTYPE, \n" +
+                        "CASE LATITUDEINDICATOR \n" +
+                        "WHEN 'North (+)' THEN 'N' \n" +
+                        "WHEN 'South (-)' THEN 'S' \n" +
+                        "ELSE '' END, \n" +
+                        "LATDEGREES, LATMINUTES, LATSECONDS, \n" +
+                        "CASE LONGITUDEINDICATOR \n" +
+                        "WHEN 'East (+)' THEN 'E' \n" +
+                        "WHEN 'West (-)' THEN 'W' \n" +
+                        "ELSE '' END, \n" +
+                        "LONDEGREES, LONMINUTES, LONSECONDS, \n" +
+                        "CASE GPSACCURACY \n" +
+                        "WHEN 'Very Good (1-5m)'         THEN 1 \n" +
+                        "WHEN 'Good (5-10m)'             THEN 2 \n" +
+                        "WHEN 'Average (10-100m)'        THEN 3 \n" +
+                        "WHEN 'Bad (100-500m)'           THEN 4 \n" +
+                        "WHEN 'Terrible (500m or more)'  THEN 5 \n" +
+                        "WHEN 'Educated Guess'           THEN 6 \n" +
+                        "WHEN 'Unknown'                  THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "GPSACCURACYVALUE, AUDITTIME, AUDITUSER \n" +
+                        "FROM TEMP_LOCATIONS");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_LOCATION_NAME ON LOCATIONS (NAME)");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.4 ...");
+            try {
+                state.execute("DROP INDEX IF EXISTS V14_VISIT_NAME");
+                state.execute("DROP INDEX IF EXISTS V14_VISIT_LOCATION");
+                state.execute("INSERT INTO VISITS (\n" +
+                        "ID, NAME, STARTDATE, ENDDATE, DESCRIPTION, GAMEWATCHINGINTENSITY, \n" +
+                        "VISITTYPE, LOCATIONID, AUDITTIME, AUDITUSER) \n" +
+                        "SELECT ID, NAME, STARTDATE, ENDDATE, DESCRIPTION, \n" +
+                        "CASE GAMEWATCHINGINTENSITY \n" +
+                        "WHEN 'Heavily Focused'   THEN 1 \n" +
+                        "WHEN 'Focused'           THEN 2 \n" +
+                        "WHEN 'Lightly Focused'   THEN 3 \n" +
+                        "WHEN 'Not Realy Focused' THEN 4 \n" +
+                        "WHEN 'No Focus'          THEN 5 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE VISITTYPE \n" +
+                        "WHEN 'Vacation'            THEN 1 \n" +
+                        "WHEN 'Camera Trap'         THEN 2 \n" +
+                        "WHEN 'Microscope'          THEN 3 \n" +
+                        "WHEN 'Moth Light'          THEN 4 \n" +
+                        "WHEN 'Day Visit'           THEN 5 \n" +
+                        "WHEN 'Incidental'          THEN 6 \n" +
+                        "WHEN 'Census, Atlas, etc.' THEN 7 \n" +
+                        "WHEN 'Other'               THEN 8 \n" +
+                        "WHEN 'Stashed Files'       THEN 9 \n" +
+                        "WHEN 'Unknown'             THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "LOCATIONID, AUDITTIME, AUDITUSER \n" +
+                        "FROM TEMP_VISITS");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_NAME ON VISITS (NAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_LOCATION ON VISITS (LOCATIONID)");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.5 ...");
+            try {
+                state.execute("DROP INDEX IF EXISTS V14_SIGHTING_ELEMENT");
+                state.execute("DROP INDEX IF EXISTS V14_SIGHTING_LOCATION");
+                state.execute("DROP INDEX IF EXISTS V14_SIGHTING_VISIT");
+                state.execute("DROP INDEX IF EXISTS V14_SIGHTING_ELEMENT_LOCATION");
+                state.execute("DROP INDEX IF EXISTS V14_SIGHTING_ELEMENT_VISIT");
+                state.execute("DROP INDEX IF EXISTS V14_SIGHTING_LOCATION_VISIT");
+                state.execute("DROP INDEX IF EXISTS V14_SIGHTING_DATE");
+                state.execute("INSERT INTO SIGHTINGS (\n" +
+                        "ID, SIGHTINGDATE, ELEMENTID, LOCATIONID, VISITID, \n" +
+                        "TIMEOFDAY, WEATHER, VIEWRATING, CERTAINTY, NUMBEROFELEMENTS, DETAILS, \n" +
+                        "LATITUDEINDICATOR, LATDEGREES, LATMINUTES, LATSECONDS, \n" +
+                        "LONGITUDEINDICATOR, LONDEGREES, LONMINUTES, LONSECONDS, \n" +
+                        "SIGHTINGEVIDENCE, MOONPHASE, MOONLIGHT, TEMPERATURE, TEMPERATUREUNIT, \n" +
+                        "LIFESTATUS, SEX, TAG, DURATIONMINUTES, DURATIONSECONDS, \n" +
+                        "GPSACCURACY, GPSACCURACYVALUE, TIMEACCURACY, AGE, AUDITTIME, AUDITUSER) \n" +
+                        "SELECT ID, SIGHTINGDATE, ELEMENTID, LOCATIONID, VISITID, \n" +
+                        "CASE TIMEOFDAY \n" +
+                        "WHEN 'Morning Twilight'   THEN 1 \n" +
+                        "WHEN 'Morning Sunrise'    THEN 2 \n" +
+                        "WHEN 'Early Morning'      THEN 3 \n" +
+                        "WHEN 'Mid Morning'        THEN 4 \n" +
+                        "WHEN 'Mid Day'            THEN 5 \n" +
+                        "WHEN 'Mid Afternoon'      THEN 6 \n" +
+                        "WHEN 'Late Afternoon'     THEN 7 \n" +
+                        "WHEN 'Afternoon Sunset'   THEN 8 \n" +
+                        "WHEN 'Afternoon Twilight' THEN 9 \n" +
+                        "WHEN 'Early Night'        THEN 10 \n" +
+                        "WHEN 'Mid Night'          THEN 11 \n" +
+                        "WHEN 'Late Night'         THEN 12 \n" +
+                        "WHEN 'Unknown'            THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE WEATHER \n" +
+                        "WHEN 'Sunny'                          THEN 1 \n" +
+                        "WHEN 'Few clouds - Not raining'       THEN 2 \n" +
+                        "WHEN 'Many clouds - Not raining'      THEN 3 \n" +
+                        "WHEN 'Mist'                           THEN 4 \n" +
+                        "WHEN 'Light rain'                     THEN 5 \n" +
+                        "WHEN 'Heavy rain'                     THEN 6 \n" +
+                        "WHEN 'Other (Can specify in details)' THEN 7 \n" +
+                        "WHEN 'Unknown'                        THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE VIEWRATING \n" +
+                        "WHEN 'Very good' THEN 1 \n" +
+                        "WHEN 'Good'      THEN 2 \n" +
+                        "WHEN 'Normal'    THEN 3 \n" +
+                        "WHEN 'Bad'       THEN 4 \n" +
+                        "WHEN 'Very bad'  THEN 5 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE CERTAINTY \n" +
+                        "WHEN '100%     (Sure)'   THEN 1 \n" +
+                        "WHEN '90 - 99% (Good)'   THEN 2 \n" +
+                        "WHEN '70 - 90% (Bad)'    THEN 3 \n" +
+                        "WHEN ' 0 - 70% (Unsure)' THEN 4 \n" +
+                        "WHEN 'Unknown' THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "NUMBEROFELEMENTS, DETAILS, \n" +
+                        "CASE LATITUDEINDICATOR \n" +
+                        "WHEN 'North (+)' THEN 'N' \n" +
+                        "WHEN 'South (-)' THEN 'S' \n" +
+                        "ELSE '' END, \n" +
+                        "LATDEGREES, LATMINUTES, LATSECONDS, \n" +
+                        "CASE LONGITUDEINDICATOR \n" +
+                        "WHEN 'East (+)' THEN 'E' \n" +
+                        "WHEN 'West (-)' THEN 'W' \n" +
+                        "ELSE '' END, \n" +
+                        "LONDEGREES, LONMINUTES, LONSECONDS, \n" +
+                        "CASE SIGHTINGEVIDENCE \n" +
+                        "WHEN 'Seen'           THEN 1 \n" +
+                        "WHEN 'Tracks'         THEN 2 \n" +
+                        "WHEN 'Scat'           THEN 3 \n" +
+                        "WHEN 'Body Covering'  THEN 4 \n" +
+                        "WHEN 'Marking'        THEN 5 \n" +
+                        "WHEN 'Heard'          THEN 6 \n" +
+                        "WHEN 'Smell'          THEN 7 \n" +
+                        "WHEN 'Other Evidence' THEN 8 \n" +
+                        "WHEN 'Unknown'        THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "MOONPHASE, \n" +
+                        "CASE MOONLIGHT \n" +
+                        "WHEN 'Moon Shining' THEN 1 \n" +
+                        "WHEN 'No Moon'      THEN 2 \n" +
+                        "WHEN 'Unknown'      THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "TEMPERATURE, \n" +
+                        "CASE TEMPERATUREUNIT \n" +
+                        "WHEN 'Celsius'    THEN 1 \n" +
+                        "WHEN 'Fahrenheit' THEN 2 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE LIFESTATUS \n" +
+                        "WHEN 'Alive'   THEN 1 \n" +
+                        "WHEN 'Dead'    THEN 2 \n" +
+                        "WHEN 'Unknown' THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE SEX \n" +
+                        "WHEN 'Male'    THEN 1 \n" +
+                        "WHEN 'Female'  THEN 2 \n" +
+                        "WHEN 'Mixed'   THEN 3 \n" +
+                        "WHEN 'Unknown' THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "TAG, \n" +
+                        "DURATIONMINUTES, DURATIONSECONDS, \n" +
+                        "CASE GPSACCURACY \n" +
+                        "WHEN 'Very Good (1-5m)'         THEN 1 \n" +
+                        "WHEN 'Good (5-10m)'             THEN 2 \n" +
+                        "WHEN 'Average (10-100m)'        THEN 3 \n" +
+                        "WHEN 'Bad (100-500m)'           THEN 4 \n" +
+                        "WHEN 'Terrible (500m or more)'  THEN 5 \n" +
+                        "WHEN 'Educated Guess'           THEN 6 \n" +
+                        "WHEN 'Unknown'                  THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "GPSACCURACYVALUE, \n" +
+                        "CASE TIMEACCURACY \n" +
+                        "WHEN 'Good'           THEN 1 \n" +
+                        "WHEN 'Educated Guess' THEN 2 \n" +
+                        "WHEN 'Bad'            THEN 3 \n" +
+                        "WHEN 'Unknown'        THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "CASE AGE \n" +
+                        "WHEN 'Parent with Offspring'  THEN 1 \n" +
+                        "WHEN 'Immature Offspring'     THEN 2 \n" +
+                        "WHEN 'Young Adult'            THEN 3 \n" +
+                        "WHEN 'Mature Adult'           THEN 4 \n" +
+                        "WHEN 'Old Adult'              THEN 5 \n" +
+                        "WHEN 'Egg, Seed, Spore, etc.' THEN 6 \n" +
+                        "WHEN 'Early Lifestage'        THEN 7 \n" +
+                        "WHEN 'Other'                  THEN 8 \n" +
+                        "WHEN ''                       THEN -1 \n" +
+                        "ELSE 0 END, \n" +
+                        "AUDITTIME, AUDITUSER \n" +
+                        "FROM TEMP_SIGHTINGS");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_LOCATION ON SIGHTINGS (LOCATIONID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_VISIT ON SIGHTINGS (VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTID, LOCATIONID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTID, VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_LOCATION_VISIT ON SIGHTINGS (LOCATIONID, VISITID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.6 ...");
+            try {
+                state.execute("DROP INDEX IF EXISTS V14_FILE_ORGPATH");
+                state.execute("DROP INDEX IF EXISTS V14_FILE_LINKID");
+                state.execute("DROP INDEX IF EXISTS V14_FILE_FILETYPE");
+                state.execute("DROP INDEX IF EXISTS V14_FILE_ID_DEFAULT");
+                state.execute("DROP INDEX IF EXISTS V14_FILE_ORGPATH_DEFAULT");
+                state.execute("DROP INDEX IF EXISTS V14_FILE_ID_TYPE_DEFAULT");
+                state.execute("INSERT INTO FILES (\n" +
+                        "ID, LINKID, LINKTYPE, FILENAME, ORIGINALPATH, FILETYPE, \n" +
+                        "UPLOADDATE, ISDEFAULT, FILEDATE, FILESIZE, AUDITTIME, AUDITUSER) \n" +
+                        "SELECT ID, LINKID, LINKTYPE, FILENAME, ORIGINALPATH, \n" +
+                        "CASE FILETYPE \n" +
+                        "WHEN 'Image' THEN 'I' \n" +
+                        "WHEN 'Movie' THEN 'M' \n" +
+                        "WHEN 'Other' THEN 'O' \n" +
+                        "ELSE '' END, \n" +
+                        "UPLOADDATE, ISDEFAULT, FILEDATE, FILESIZE, AUDITTIME, AUDITUSER \n" +
+                        "FROM TEMP_FILES");
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V14_FILE_ORGPATH ON FILES (ORIGINALPATH)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_LINKID ON FILES (LINKID)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_FILETYPE ON FILES (FILETYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ID_DEFAULT ON FILES (LINKID, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ID_TYPE_DEFAULT ON FILES (LINKID, FILETYPE, ISDEFAULT)");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.7 ...");
+            try {
+                state.execute("INSERT INTO WILDLOGUSERS (\n" +
+                        "ID, USERNAME, PASSWORD, \n" +
+                        "TYPE, \n" +
+                        "AUDITTIME, AUDITUSER) \n" +
+                        "SELECT ID, USERNAME, PASSWORD, \n" +
+                        "CASE TYPE \n" +
+                        "WHEN 'Master'    THEN 'M' \n" +
+                        "WHEN 'Owner'     THEN 'O' \n" +
+                        "WHEN 'Admin'     THEN 'A' \n" +
+                        "WHEN 'Student'   THEN 'S' \n" +
+                        "WHEN 'Volunteer' THEN 'V' \n" +
+                        "ELSE '' END, \n" +
+                        "AUDITTIME, AUDITUSER \n" +
+                        "FROM TEMP_WILDLOGUSERS");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.8 ...");
+            try {
+                state.execute("INSERT INTO DELETELOGS (\n" +
+                        "ID, TYPE, AUDITTIME, AUDITUSER) \n" +
+                        "SELECT ID, TYPE, AUDITTIME, AUDITUSER \n" +
+                        "FROM TEMP_DELETELOGS");
+            }
+            catch (SQLException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+            // Drop the old tables
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 2.9 ...");
+            state.execute("DROP TABLE TEMP_ELEMENTS");
+            state.execute("DROP TABLE TEMP_LOCATIONS");
+            state.execute("DROP TABLE TEMP_VISITS");
+            state.execute("DROP TABLE TEMP_SIGHTINGS");
+            state.execute("DROP TABLE TEMP_FILES");
+            state.execute("DROP TABLE TEMP_WILDLOGUSERS");
+            state.execute("DROP TABLE TEMP_DELETELOGS");
             // Update the version number
+            WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 3 ...");
             state.executeUpdate("UPDATE WILDLOG SET VERSION=14");
         }
         catch (SQLException ex) {
