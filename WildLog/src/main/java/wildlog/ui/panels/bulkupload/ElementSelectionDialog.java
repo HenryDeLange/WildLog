@@ -89,7 +89,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         });
         UtilsImageProcessing.setupFoto(inSelectedElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
         if (inSelectedElementID > 0) {
-            Element element = app.getDBI().findElement(inSelectedElementID, null, Element.class);
+            Element element = app.getDBI().findElement(inSelectedElementID, null, false, Element.class);
             if (element != null) {
                 txtIdentification.setText(element.getDiagnosticDescription());
                 txtIdentification.setCaretPosition(0);
@@ -312,7 +312,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 }
                 // Update the icon
                 UtilsImageProcessing.setupFoto(previousElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
-                Element element = app.getDBI().findElement(previousElementID, null, Element.class);
+                Element element = app.getDBI().findElement(previousElementID, null, false, Element.class);
                 if (element != null) {
                     txtIdentification.setText(element.getDiagnosticDescription());
                     txtIdentification.setCaretPosition(0);
@@ -332,7 +332,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
             long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
             // Change the image
             UtilsImageProcessing.setupFoto(selectedID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
-            Element element = app.getDBI().findElement(selectedID, null, Element.class);
+            Element element = app.getDBI().findElement(selectedID, null, false, Element.class);
             if (element != null) {
                 txtIdentification.setText(element.getDiagnosticDescription());
                 txtIdentification.setCaretPosition(0);

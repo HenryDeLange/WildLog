@@ -349,9 +349,9 @@ public final class UtilsHTML {
         }
         List<DataObjectWithHTML> lstRelatedData = new ArrayList<>(lstSightings);
         if (inDataObject instanceof Sighting) {
-            lstRelatedData.add(inApp.getDBI().findLocation(((Sighting) inDataObject).getLocationID(), null, Location.class));
+            lstRelatedData.add(inApp.getDBI().findLocation(((Sighting) inDataObject).getLocationID(), null, false, Location.class));
             lstRelatedData.add(inApp.getDBI().findVisit(((Sighting) inDataObject).getVisitID(), null, true, Visit.class));
-            lstRelatedData.add(inApp.getDBI().findElement(((Sighting) inDataObject).getElementID(), null, Element.class));
+            lstRelatedData.add(inApp.getDBI().findElement(((Sighting) inDataObject).getElementID(), null, false, Element.class));
         }
         int counter = 0;
         int mapBeginIndex = template.indexOf("//___MAP_CLICKABLE_DATA_POINTS_START___") + "//___MAP_CLICKABLE_DATA_POINTS_START___".length();

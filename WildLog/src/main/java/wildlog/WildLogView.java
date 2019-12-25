@@ -2060,7 +2060,7 @@ public final class WildLogView extends JFrame {
                             @Override
                             protected Object doInBackground() throws Exception {
                                 UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(WildLogApp.getApplication(), this, 
-                                        WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class), 
+                                        WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, false, Location.class), 
                                         null, null, null), WildLogApp.getApplication().getMainFrame().getTabbedPane());
                                 return null;
                             }
@@ -2196,7 +2196,7 @@ public final class WildLogView extends JFrame {
                 setMessage("Starting the HTML Basic Export for All Records");
                 setProgress(0);
                 // Elements
-                List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
+                List<Element> listElements = app.getDBI().listElements(null, null, null, false, Element.class);
                 for (int t = 0; t < listElements.size(); t++) {
                     UtilsHTML.exportHTML(listElements.get(t), app, null);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
@@ -2205,7 +2205,7 @@ public final class WildLogView extends JFrame {
                 setProgress(25);
                 // Locations
                 setMessage("Busy with the HTML Basic Export for All Records " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
+                List<Location> listLocations = app.getDBI().listLocations(null, false, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportHTML(listLocations.get(t), app, null);
                     setProgress(25 + (int)((t/(double)listLocations.size())*25));
@@ -2269,7 +2269,7 @@ public final class WildLogView extends JFrame {
                     setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 }
                 // Locations
-                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
+                List<Location> listLocations = app.getDBI().listLocations(null, false, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     String key = listLocations.get(t).getName();
                     if (!entries.containsKey(key)) {
@@ -2539,7 +2539,7 @@ public final class WildLogView extends JFrame {
                     setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                     syncDBI = new WildLogDBI_h2(syncDatabase.toAbsolutePath().toString(), false, false);
                     // Export the elements
-                    List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
+                    List<Element> listElements = app.getDBI().listElements(null, null, null, false, Element.class);
                     setTaskProgress(20);
                     setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                     int counter = 0;
@@ -2761,7 +2761,7 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(11);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Setup the Location
-                        Location wildNoteLocation = app.getDBI().findLocation(0, WildLogConstants.WILDNOTE_LOCATION_NAME, Location.class);
+                        Location wildNoteLocation = app.getDBI().findLocation(0, WildLogConstants.WILDNOTE_LOCATION_NAME, false, Location.class);
                         if (wildNoteLocation == null) {
                             wildNoteLocation = new Location(0, WildLogConstants.WILDNOTE_LOCATION_NAME);
                             app.getDBI().createLocation(wildNoteLocation, false);
@@ -2778,10 +2778,10 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(15);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Elements
-                        List<Element> listElements = syncDBI.listElements(null, null, null, Element.class);
+                        List<Element> listElements = syncDBI.listElements(null, null, null, false, Element.class);
                         for (int t = 0; t < listElements.size(); t++) {
                             Element element = listElements.get(t);
-                            if (app.getDBI().findElement(element.getID(), null, Element.class) == null) {
+                            if (app.getDBI().findElement(element.getID(), null, false, Element.class) == null) {
                                 app.getDBI().createElement(element, true);
                             }
                             setTaskProgress(15 + (int)(t/(double)listElements.size()*10));
@@ -2996,7 +2996,7 @@ public final class WildLogView extends JFrame {
                         "Scientific Name"
                     }, null);
             if (option != JOptionPane.CLOSED_OPTION) {
-                List<Element> lstElements = app.getDBI().listElements(null, null, null, Element.class);
+                List<Element> lstElements = app.getDBI().listElements(null, null, null, false, Element.class);
                 for (Element element : lstElements) {
                     String oldName = element.getPrimaryName();
                     if (option == 0) {
@@ -3026,7 +3026,7 @@ public final class WildLogView extends JFrame {
                 setProgress(0);
                 setMessage("Starting the XML Export for All Records");
                 // Elements
-                List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
+                List<Element> listElements = app.getDBI().listElements(null, null, null, false, Element.class);
                 for (int t = 0; t < listElements.size(); t++) {
                     UtilsXML.exportXML(listElements.get(t), app, null, false);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
@@ -3034,7 +3034,7 @@ public final class WildLogView extends JFrame {
                 }
                 // Locations
                 setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
+                List<Location> listLocations = app.getDBI().listLocations(null, false, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsXML.exportXML(listLocations.get(t), app, null, false);
                     setProgress(25 + (int)((t/(double)listLocations.size())*25));
@@ -3310,7 +3310,7 @@ public final class WildLogView extends JFrame {
                 setProgress(0);
                 setMessage("Busy with the CSV Basic Export");
                 // Elements
-                List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
+                List<Element> listElements = app.getDBI().listElements(null, null, null, false, Element.class);
                 for (int t = 0; t < listElements.size(); t++) {
                     Element element = listElements.get(t);
                     Path tempPath = path.resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName() + ".csv");
@@ -3322,7 +3322,7 @@ public final class WildLogView extends JFrame {
                 setProgress(25);
                 // Locations
                 setMessage("Busy with the CSV Basic Export for All Records " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
+                List<Location> listLocations = app.getDBI().listLocations(null, false, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     Location location = listLocations.get(t);
                     Path tempPath = path.resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName() + ".csv");
@@ -3363,7 +3363,7 @@ public final class WildLogView extends JFrame {
                 setMessage("Starting the HTML Advanced Export for All Records");
                 setProgress(0);
                 // Elements
-                List<Element> listElements = app.getDBI().listElements(null, null, null, Element.class);
+                List<Element> listElements = app.getDBI().listElements(null, null, null, false, Element.class);
                 for (int t = 0; t < listElements.size(); t++) {
                     UtilsHTML.exportFancyHTML(listElements.get(t), app, null);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
@@ -3372,7 +3372,7 @@ public final class WildLogView extends JFrame {
                 setProgress(25);
                 // Locations
                 setMessage("Busy with the HTML Advanced Export for All Records " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().listLocations(null, Location.class);
+                List<Location> listLocations = app.getDBI().listLocations(null, false, Location.class);
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportFancyHTML(listLocations.get(t), app, null);
                     setProgress(25 + (int)((t/(double)listLocations.size())*25));

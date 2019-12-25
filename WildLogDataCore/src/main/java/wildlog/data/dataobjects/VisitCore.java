@@ -10,7 +10,7 @@ import wildlog.data.utils.UtilsData;
 
 public class VisitCore extends DataObjectWithAudit implements DataObjectWithWildLogFile {
     public static final String WILDLOG_FOLDER_PREFIX = "Periods";
-    protected String name; // Must be unique
+    protected String name;
     protected Date startDate;
     protected Date endDate;
     protected String description;
@@ -19,6 +19,8 @@ public class VisitCore extends DataObjectWithAudit implements DataObjectWithWild
     protected long locationID;
     // Adding some extra fields that can optionally be cached for performance reasons
     protected String cachedLocationName;
+    protected int cachedSightingCount;
+    protected int cachedElementCount;
 
 
     public VisitCore() {
@@ -175,6 +177,22 @@ public class VisitCore extends DataObjectWithAudit implements DataObjectWithWild
 
     public void setCachedLocationName(String inCachedLocationName) {
         cachedLocationName = inCachedLocationName;
+    }
+
+    public int getCachedSightingCount() {
+        return cachedSightingCount;
+    }
+
+    public void setCachedSightingCount(int inCachedSightingCount) {
+        cachedSightingCount = inCachedSightingCount;
+    }
+
+    public int getCachedElementCount() {
+        return cachedElementCount;
+    }
+
+    public void setCachedElementCount(int inCachedElementCount) {
+        cachedElementCount = inCachedElementCount;
     }
 
 }

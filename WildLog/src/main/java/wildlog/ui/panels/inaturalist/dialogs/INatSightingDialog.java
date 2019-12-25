@@ -773,7 +773,7 @@ public class INatSightingDialog extends JDialog {
                     "Incompatible WildLog Observation", WLOptionPane.ERROR_MESSAGE);
             return;
         }
-        Element element = app.getDBI().findElement(sighting.getElementID(), null, Element.class);
+        Element element = app.getDBI().findElement(sighting.getElementID(), null, false, Element.class);
         if (element.getScientificName() == null || element.getScientificName().isEmpty()) {
             WLOptionPane.showMessageDialog(this,
                     "<html>WildLog Observation without a Scientific Name cannot be uploaded to iNaturalist.</html>",

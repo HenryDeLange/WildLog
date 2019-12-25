@@ -663,7 +663,7 @@ public class WorkspaceExportDialog extends JDialog {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
                 if (dataWrapper.getDataObject() instanceof Location) {
-                    Location location = app.getDBI().findLocation(((Location) dataWrapper.getDataObject()).getID(), null, Location.class);
+                    Location location = app.getDBI().findLocation(((Location) dataWrapper.getDataObject()).getID(), null, false, Location.class);
                     if (chkReduceGPS.isSelected()) {
                         location.setLatSeconds(0.0);
                         location.setLonSeconds(0.0);
@@ -673,7 +673,7 @@ public class WorkspaceExportDialog extends JDialog {
                     if (chkRemoveDescriptions.isSelected()) {
                         location.setDescription("");
                     }
-                    if (inNewDBI.findLocation(location.getID(), null, Location.class) == null) {
+                    if (inNewDBI.findLocation(location.getID(), null, false, Location.class) == null) {
                         inNewDBI.createLocation(location, true);
                         saveFiles(inNewDBI, inDestinationWorkspace, location);
                     }
@@ -691,8 +691,8 @@ public class WorkspaceExportDialog extends JDialog {
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Element) {
-                    Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getID(), null, Element.class);
-                    if (inNewDBI.findElement(element.getID(), null, Element.class) == null) {
+                    Element element = app.getDBI().findElement(((Element) dataWrapper.getDataObject()).getID(), null, false, Element.class);
+                    if (inNewDBI.findElement(element.getID(), null, false, Element.class) == null) {
                         inNewDBI.createElement(element, true);
                         saveFiles(inNewDBI, inDestinationWorkspace, element);
                     }
@@ -886,7 +886,7 @@ public class WorkspaceExportDialog extends JDialog {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
         List<Location> locations;
         if (lstSightings == null) {
-            locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
+            locations = new ArrayList<Location>(app.getDBI().listLocations(null, false, Location.class));
         }
         else {
             Set<Long> uniqueLocations = new HashSet<>();
@@ -894,7 +894,7 @@ public class WorkspaceExportDialog extends JDialog {
             for (Sighting sighting : lstSightings) {
                 if (!uniqueLocations.contains(sighting.getLocationID())) {
                     uniqueLocations.add(sighting.getLocationID());
-                    locations.add(app.getDBI().findLocation(sighting.getLocationID(), null, Location.class));
+                    locations.add(app.getDBI().findLocation(sighting.getLocationID(), null, false, Location.class));
                 }
             }
         }
@@ -944,7 +944,7 @@ public class WorkspaceExportDialog extends JDialog {
                     locationNode.add(visitNode);
                     DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementID());
                     if (elementNode == null) {
-                        elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(app.getDBI().findElement(sighting.getElementID(), null, Element.class), false));
+                        elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(app.getDBI().findElement(sighting.getElementID(), null, false, Element.class), false));
                         mapElements.put(sighting.getElementID(), elementNode);
                     }
                     visitNode.add(elementNode);
@@ -960,7 +960,7 @@ public class WorkspaceExportDialog extends JDialog {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
         List<Element> elements;
         if (lstSightings == null) {
-            elements = app.getDBI().listElements(null, null, null, Element.class);
+            elements = app.getDBI().listElements(null, null, null, false, Element.class);
         }
         else {
             Set<Long> uniqueElements = new HashSet<>();
@@ -968,7 +968,7 @@ public class WorkspaceExportDialog extends JDialog {
             for (Sighting sighting : lstSightings) {
                 if (!uniqueElements.contains(sighting.getElementID())) {
                     uniqueElements.add(sighting.getElementID());
-                    elements.add(app.getDBI().findElement(sighting.getElementID(), null, Element.class));
+                    elements.add(app.getDBI().findElement(sighting.getElementID(), null, false, Element.class));
                 }
             }
         }
@@ -1010,7 +1010,7 @@ public class WorkspaceExportDialog extends JDialog {
                 if (found) {
                     DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationID());
                     if (locationNode == null) {
-                        locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(app.getDBI().findLocation(sighting.getLocationID(), null, Location.class), false));
+                        locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(app.getDBI().findLocation(sighting.getLocationID(), null, false, Location.class), false));
                         mapLocations.put(sighting.getLocationID(), locationNode);
                     }
                     elementNode.add(locationNode);

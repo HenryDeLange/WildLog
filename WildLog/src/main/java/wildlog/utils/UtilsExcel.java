@@ -52,7 +52,7 @@ public final class UtilsExcel {
         Row row = sheet.createRow(rowCount);
         int col = 0;
         row.createCell(col++).setCellValue(tempSighting.getCachedElementName());
-        Element tempElement = inApp.getDBI().findElement(tempSighting.getElementID(), null, Element.class);
+        Element tempElement = inApp.getDBI().findElement(tempSighting.getElementID(), null, false, Element.class);
         if (tempElement != null) {
             row.createCell(col++).setCellValue(tempElement.getScientificName());
             row.createCell(col++).setCellValue(getStringValue(tempElement.getType()));
@@ -62,7 +62,7 @@ public final class UtilsExcel {
             row.createCell(col++).setCellValue("");
         }
         row.createCell(col++).setCellValue(tempSighting.getCachedLocationName());
-        Location tempLocation = inApp.getDBI().findLocation(tempSighting.getLocationID(), null, Location.class);
+        Location tempLocation = inApp.getDBI().findLocation(tempSighting.getLocationID(), null, false, Location.class);
         if (tempLocation != null) {
             row.createCell(col++).setCellValue(getStringValue(tempLocation.getGPSAccuracy()));
             row.createCell(col++).setCellValue(getStringValue(tempLocation.getGPSAccuracyValue()));

@@ -215,7 +215,7 @@ public class MoveVisitDialog extends JDialog {
     // Private Methods
     private void loadLists() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        List<Location> locations = new ArrayList<Location>(app.getDBI().listLocations(null, Location.class));
+        List<Location> locations = new ArrayList<Location>(app.getDBI().listLocations(null, false, Location.class));
         Collections.sort(locations);
         DefaultListModel<Location> fromLocationModel = new DefaultListModel<>();
         DefaultListModel<Location> toLocationModel = new DefaultListModel<>();

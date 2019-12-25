@@ -372,7 +372,7 @@ public class ImageResizeDialog extends JDialog {
         lstPrimary.setSelectionBackground(new Color(82, 115, 79));
         lblSecondary.setVisible(false);
         lstSecondary.setVisible(false);
-        List<Element> lstElements = WildLogApp.getApplication().getDBI().listElements(null, null, null, Element.class);
+        List<Element> lstElements = WildLogApp.getApplication().getDBI().listElements(null, null, null, false, Element.class);
         Collections.sort(lstElements);
         DefaultListModel model = new DefaultListModel();
         for (Element tempElement : lstElements) {
@@ -388,7 +388,7 @@ public class ImageResizeDialog extends JDialog {
         lstPrimary.setSelectionBackground(new Color(67, 97, 113));
         lblSecondary.setVisible(false);
         lstSecondary.setVisible(false);
-        List<Location> lstLocations = WildLogApp.getApplication().getDBI().listLocations(null, Location.class);
+        List<Location> lstLocations = WildLogApp.getApplication().getDBI().listLocations(null, false, Location.class);
         Collections.sort(lstLocations);
         DefaultListModel model = new DefaultListModel();
         for (Location tempLocation : lstLocations) {

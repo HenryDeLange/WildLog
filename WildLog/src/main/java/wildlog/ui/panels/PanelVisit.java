@@ -1355,7 +1355,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (sighting != null) {
                 PanelSighting dialog = new PanelSighting(
                         app, app.getMainFrame(), "Edit an Existing Observation",
-                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getElementID(), null, Element.class), 
+                        sighting, locationForVisit, visit, app.getDBI().findElement(sighting.getElementID(), null, false, Element.class), 
                         this, false, false, false, false);
                 dialog.setVisible(true);
                 // Reset Sighting on this panel
@@ -1457,7 +1457,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (sighting != null) {
             if (sighting.getElementID() > 0) {
-                UtilsFileProcessing.openFile(app.getDBI().findElement(sighting.getElementID(), null, Element.class).getWildLogFileID(), 0, app);
+                UtilsFileProcessing.openFile(app.getDBI().findElement(sighting.getElementID(), null, false, Element.class).getWildLogFileID(), 0, app);
             }
         }
     }//GEN-LAST:event_lblElementImageMouseReleased

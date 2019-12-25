@@ -910,7 +910,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         }
                     }
                     visit.setLocationID(selectedLocation.getID());
-                    visit.setCachedLocationName(app.getDBI().findLocation(visit.getLocationID(), null, Location.class).getName());
+                    visit.setCachedLocationName(app.getDBI().findLocation(visit.getLocationID(), null, false, Location.class).getName());
                     visit.setStartDate(dtpStartDate.getDate());
                     visit.setEndDate(dtpEndDate.getDate());
                     visit.setType((VisitType) cmbVisitType.getSelectedItem());
@@ -1219,7 +1219,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
             BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) model.getValueAt(rowCount, 0);
             if (sightingWrapper.getElementID() > 0) {
-                Element element = app.getDBI().findElement(sightingWrapper.getElementID(), null, Element.class);
+                Element element = app.getDBI().findElement(sightingWrapper.getElementID(), null, false, Element.class);
                 if (element != null) {
                     JLabel tempLabel = new JLabel();
                     UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
@@ -1275,7 +1275,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         LocationSelectionDialog dialog = new LocationSelectionDialog(app.getMainFrame(), app, locationID);
         dialog.setVisible(true);
         if (dialog.isSelectionMade() && dialog.getSelectedLocationID() > 0) {
-            selectedLocation = app.getDBI().findLocation(dialog.getSelectedLocationID(), null, Location.class);
+            selectedLocation = app.getDBI().findLocation(dialog.getSelectedLocationID(), null, false, Location.class);
             lblLocation.setText(selectedLocation.getName());
             UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
             setupVisitName();

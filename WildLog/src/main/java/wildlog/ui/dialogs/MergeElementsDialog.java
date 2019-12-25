@@ -164,7 +164,7 @@ public class MergeElementsDialog extends JDialog {
 
     // Private Methods
     private void loadLists() {
-        List<Element> elements = app.getDBI().listElements(null, null, null, Element.class);
+        List<Element> elements = app.getDBI().listElements(null, null, null, false, Element.class);
         Collections.sort(elements);
         DefaultListModel replaceModel = new DefaultListModel();
         DefaultListModel keepModel = new DefaultListModel();

@@ -105,7 +105,7 @@ public class DistributionLayersDialog extends JDialog {
         }
         String scientificName;
         if (elementID > 0) {
-            scientificName = WildLogApp.getApplication().getDBI().findElement(elementID, null, Element.class).getScientificName();
+            scientificName = WildLogApp.getApplication().getDBI().findElement(elementID, null, false, Element.class).getScientificName();
         }
         else {
             scientificName = null;
@@ -155,7 +155,7 @@ public class DistributionLayersDialog extends JDialog {
                             for (Sighting sighting : lstData) {
                                 Element element = mapLoadedElements.get(sighting.getElementID());
                                 if (element == null) {
-                                    element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementID(), null, Element.class);
+                                    element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementID(), null, false, Element.class);
                                     mapLoadedElements.put(sighting.getElementID(), element);
                                 }
                                 if (inEntry != null && element.getScientificName() != null && !element.getScientificName().trim().isEmpty() 

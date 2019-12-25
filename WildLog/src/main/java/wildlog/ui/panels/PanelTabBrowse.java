@@ -1000,7 +1000,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 UtilsPanelGenerator.openPanelAsTab(app, tempVisit.getID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel,
-                    app.getDBI().findLocation(tempVisit.getLocationID(), null, Location.class));
+                    app.getDBI().findLocation(tempVisit.getLocationID(), null, false, Location.class));
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
@@ -1008,9 +1008,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 PanelSighting dialog = new PanelSighting(
                     app, app.getMainFrame(), "Edit an Existing Sighting",
                     tempSighting,
-                    app.getDBI().findLocation(tempSighting.getLocationID(), null, Location.class),
+                    app.getDBI().findLocation(tempSighting.getLocationID(), null, false, Location.class),
                     app.getDBI().findVisit(tempSighting.getVisitID(), null, false, Visit.class),
-                    app.getDBI().findElement(tempSighting.getElementID(), null, Element.class),
+                    app.getDBI().findElement(tempSighting.getElementID(), null, false, Element.class),
                     this,
                     false, false, false, false);
                 dialog.setVisible(true);
@@ -1221,7 +1221,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 PanelSighting dialog = new PanelSighting(
                                         app, app.getMainFrame(), "Add a New Observation",
                                         new Sighting(), 
-                                        app.getDBI().findLocation(((Visit) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getLocationID(), null, Location.class), 
+                                        app.getDBI().findLocation(((Visit) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent())
+                                                .getUserObject()).getLocationID(), null, false, Location.class), 
                                         (Visit) ((DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent()).getUserObject(), 
                                         null, tabBrowseHandle, true, false, false, false);
                                 dialog.setVisible(true);
@@ -1487,7 +1488,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
-                        UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sightingWrapper.getSighting().getElementID(), null, Element.class),
+                        UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sightingWrapper.getSighting().getElementID(), null, false, Element.class),
                             Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedElementName() + uniqueIdentifier), WildLogDataType.ELEMENT, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
@@ -1528,7 +1529,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
-                        UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(sightingWrapper.getSighting().getLocationID(), null, Location.class),
+                        UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(sightingWrapper.getSighting().getLocationID(), null, false, Location.class),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getCachedLocationName() + uniqueIdentifier), WildLogDataType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
@@ -1565,7 +1566,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             app.getDBI().updateWildLogFile(tempFile, false);
                         }
                         String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
-                        UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(visit.getLocationID(), null, Location.class),
+                        UtilsFileProcessing.performFileUpload(app.getDBI().findLocation(visit.getLocationID(), null, false, Location.class),
                             Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getCachedLocationName() + uniqueIdentifier), WildLogDataType.LOCATION, 
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null, 
@@ -1670,18 +1671,18 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         else
         if (treeNode.getUserObject() instanceof SightingWrapper) {
             if (rdbBrowseLocation.isSelected()) {
-                treeNode.add(new LazyTreeNode(app.getDBI().findElement(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementID(), null, Element.class), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findElement(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementID(), null, false, Element.class), true));
             }
             else
             if (rdbBrowseElement.isSelected()) {
-                treeNode.add(new LazyTreeNode(app.getDBI().findLocation(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationID(), null, Location.class), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findLocation(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationID(), null, false, Location.class), true));
                 treeNode.add(new LazyTreeNode(app.getDBI().findVisit(((SightingWrapper) treeNode.getUserObject()).getSighting().getVisitID(), null, true, Visit.class), true));
             }
             else
             if (rdbBrowseDate.isSelected()) {
-                treeNode.add(new LazyTreeNode(app.getDBI().findLocation(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationID(), null, Location.class), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findLocation(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationID(), null, false, Location.class), true));
                 treeNode.add(new LazyTreeNode(app.getDBI().findVisit(((SightingWrapper) treeNode.getUserObject()).getSighting().getVisitID(), null, true, Visit.class), true));
-                treeNode.add(new LazyTreeNode(app.getDBI().findElement(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementID(), null, Element.class), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().findElement(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementID(), null, false, Element.class), true));
             }
         }
     }//GEN-LAST:event_treBrowsePhotoTreeWillExpand
@@ -1827,7 +1828,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
-        List<Location> locations = app.getDBI().listLocations(null, Location.class);
+        List<Location> locations = app.getDBI().listLocations(null, false, Location.class);
         Collections.sort(locations);
         for (Location tempLocation : locations) {
             LazyTreeNode lazyNode = new LazyTreeNode(tempLocation, (app.getDBI().countVisits(null, tempLocation.getID()) == 0));
@@ -1844,7 +1845,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (ElementType.NONE.equals(searchElementBrowseTab.getType())) {
             searchElementBrowseTab.setType(null);
         }
-        List<Element> elements = app.getDBI().listElements(searchElementBrowseTab.getPrimaryName(), null, searchElementBrowseTab.getType(), Element.class);
+        List<Element> elements = app.getDBI().listElements(searchElementBrowseTab.getPrimaryName(), null, searchElementBrowseTab.getType(), false, Element.class);
         Collections.sort(elements);
         for (Element tempElement : elements) {
             LazyTreeNode lazyNode = new LazyTreeNode(tempElement, (app.getDBI().countSightings(0, tempElement.getID(), 0, 0) == 0));

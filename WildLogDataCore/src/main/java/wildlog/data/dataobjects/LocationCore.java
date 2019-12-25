@@ -9,11 +9,13 @@ import wildlog.data.utils.UtilsData;
 
 public class LocationCore extends DataObjectWithGPS implements DataObjectWithWildLogFile {
     public static final String WILDLOG_FOLDER_PREFIX = "Places";
-    protected String name; // Must be unique
+    protected String name;
     protected String description;
     protected LocationRating rating;
     protected GameViewRating gameViewingRating;
     protected String habitatType;
+    // Adding some extra fields that can optionally be cached for performance reasons
+    protected int cachedSightingCount;
 
 
     public LocationCore() {
@@ -153,6 +155,14 @@ public class LocationCore extends DataObjectWithGPS implements DataObjectWithWil
 
     public void setHabitatType(String inHabitatType) {
         habitatType = inHabitatType;
+    }
+
+    public int getCachedSightingCount() {
+        return cachedSightingCount;
+    }
+
+    public void setCachedSightingCount(int inCachedSightingCount) {
+        cachedSightingCount = inCachedSightingCount;
     }
 
 }

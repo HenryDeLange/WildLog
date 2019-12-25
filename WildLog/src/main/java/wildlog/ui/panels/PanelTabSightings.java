@@ -720,8 +720,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         List<Sighting> lstSelectedSightings = getListOfSelectedSightings(activeLayout, true);
         if (lstSelectedSightings.size() == 1) {
             Sighting sighting = app.getDBI().findSighting(lstSelectedSightings.get(0).getID(), true, Sighting.class);
-            Element element = app.getDBI().findElement(lstSelectedSightings.get(0).getElementID(), null, Element.class);
-            Location location = app.getDBI().findLocation(lstSelectedSightings.get(0).getLocationID(), null, Location.class);
+            Element element = app.getDBI().findElement(lstSelectedSightings.get(0).getElementID(), null, false, Element.class);
+            Location location = app.getDBI().findLocation(lstSelectedSightings.get(0).getLocationID(), null, false, Location.class);
             Visit visit = app.getDBI().findVisit(lstSelectedSightings.get(0).getVisitID(), null, false, Visit.class);
             PanelSighting dialog = new PanelSighting(app, app.getMainFrame(), "Edit an Existing Observation",
                     sighting, location, visit, element, this, false, false, false, false);
@@ -809,13 +809,13 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
         // Setup full lists for the first time if they were null
         if (lstFilteredLocations == null) {
-            lstFilteredLocations = generateIDList(app.getDBI().listLocations(null, Location.class));
+            lstFilteredLocations = generateIDList(app.getDBI().listLocations(null, false, Location.class));
         }
         if (lstFilteredVisits == null) {
             lstFilteredVisits = generateIDList(app.getDBI().listVisits(null, 0, null, true, Visit.class));
         }
         if (lstFilteredElements == null) {
-            lstFilteredElements = generateIDList(app.getDBI().listElements(null, null, null, Element.class));
+            lstFilteredElements = generateIDList(app.getDBI().listElements(null, null, null, false, Element.class));
         }
         // Load the view
         reloadUI(activeLayout);
@@ -833,7 +833,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             for (Sighting sighting : lstSelectedSightings) {
                 UtilsPanelGenerator.openPanelAsTab(app, sighting.getVisitID(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, 
-                        app.getDBI().findLocation(sighting.getLocationID(), null, Location.class));
+                        app.getDBI().findLocation(sighting.getLocationID(), null, false, Location.class));
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
             app.getMainFrame().getGlassPane().setVisible(false);
@@ -856,7 +856,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     
     private void btnFilterElementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementsActionPerformed
         FilterDataListDialog<Element> dialog = new FilterDataListDialog<Element>(app.getMainFrame(), 
-                app.getDBI().listElements(null, null, null, Element.class), lstFilteredElements);
+                app.getDBI().listElements(null, null, null, false, Element.class), lstFilteredElements);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             lstFilteredElements = dialog.getSelectedData();
@@ -867,7 +867,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void btnFilterLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterLocationActionPerformed
         FilterDataListDialog<Location> dialog = new FilterDataListDialog<Location>(app.getMainFrame(), 
-                app.getDBI().listLocations(null, Location.class), lstFilteredLocations);
+                app.getDBI().listLocations(null, false, Location.class), lstFilteredLocations);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             lstFilteredLocations = dialog.getSelectedData();
@@ -1119,9 +1119,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         filterProperties = new FilterProperties();
         FilterPropertiesDialog.setDefaultValues(true, filterProperties);
         // Also reset the filter lists
-        lstFilteredLocations = generateIDList(app.getDBI().listLocations(null, Location.class));
+        lstFilteredLocations = generateIDList(app.getDBI().listLocations(null, false, Location.class));
         lstFilteredVisits = generateIDList(app.getDBI().listVisits(null, 0, null, true, Visit.class));
-        lstFilteredElements = generateIDList(app.getDBI().listElements(null, null, null, Element.class));
+        lstFilteredElements = generateIDList(app.getDBI().listElements(null, null, null, false, Element.class));
         // Reset the GPS box
         northEast_Latitude = 0.0;
         northEast_Longitude = 0.0;

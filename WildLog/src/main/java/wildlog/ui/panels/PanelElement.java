@@ -1161,7 +1161,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     Sighting sighting = app.getDBI().findSighting((Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 3), true, Sighting.class);
                     PanelSighting dialog = new PanelSighting(
                             app, app.getMainFrame(), "Edit an Existing Observation", sighting, 
-                            app.getDBI().findLocation(sighting.getLocationID(), null, Location.class), 
+                            app.getDBI().findLocation(sighting.getLocationID(), null, false, Location.class), 
                             app.getDBI().findVisit(sighting.getVisitID(), null, false, Visit.class), 
                             element, this, false, false, false, false);
                     dialog.setVisible(true);

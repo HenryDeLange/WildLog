@@ -424,7 +424,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("Creatures.csv").toAbsolutePath().toString() + "')");
                     while (results.next()) {
                         Element tempElement = new Element();
-                        populateElement(results, tempElement);
+                        populateElement(results, tempElement, false);
                         importDialog.importElementRecord(tempElement, inAutoResolve, feedback);
                     }
                     results.close();
@@ -434,7 +434,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     results = state.executeQuery("CALL CSVREAD('" + inCSVPath.resolve("Places.csv").toAbsolutePath().toString() + "')");
                     while (results.next()) {
                         Location tempLocation = new Location();
-                        populateLocation(results, tempLocation);
+                        populateLocation(results, tempLocation, false);
                         importDialog.importLocationRecord(tempLocation, inAutoResolve, feedback);
                     }
                     results.close();
@@ -558,7 +558,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 while (resultSet.next()) {
                     // Import Elements
                     boolean isNew = false;
-                    Element element = findElement(0, resultSet.getString("CREATURE").trim(), Element.class);
+                    Element element = findElement(0, resultSet.getString("CREATURE").trim(), false, Element.class);
                     if (element == null) {
                         element = new Element();
                         element.setPrimaryName(resultSet.getString("CREATURE").trim());
@@ -578,7 +578,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     }
                     // Import Locations
                     isNew = false;
-                    Location location = findLocation(0, resultSet.getString("PLACE").trim(), Location.class);
+                    Location location = findLocation(0, resultSet.getString("PLACE").trim(), false, Location.class);
                     if (location == null) {
                         location = new Location();
                         location.setName(resultSet.getString("PLACE").trim());
@@ -830,7 +830,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 String engName = getFirstPrimaryName(results.getString("EngName"));
                 String sciName = results.getString("SciName").trim();
                 // Twee verskillende Elements kan dieselfde spesie naam het (soos Blesbok en Bontebok)
-                List<Element> lstElements = listElements(null, sciName, null, Element.class);
+                List<Element> lstElements = listElements(null, sciName, null, false, Element.class);
                 Element elementToSave = null;
                 boolean isExisting = false;
                 String oldName = null;
@@ -1812,7 +1812,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 visit.setDescription(results.getString("DESCRIPTION"));
                 visit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(results.getString("GAMEWATCHINGINTENSITY")));
                 visit.setType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
-                Location location = findLocation(0, results.getString("LOCATIONNAME"), Location.class);
+                Location location = findLocation(0, results.getString("LOCATIONNAME"), false, Location.class);
                 if (location != null) {
                     visit.setLocationID(location.getID());
                 }
@@ -1843,7 +1843,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 else {
                     sighting.setDate(null);
                 }
-                Element element = findElement(0, results.getString("ELEMENTNAME"), Element.class);
+                Element element = findElement(0, results.getString("ELEMENTNAME"), false, Element.class);
                 if (element != null) {
                     sighting.setElementID(element.getID());
                 }
@@ -1852,7 +1852,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                             + "because the linked Element [" + results.getString("ELEMENTNAME") + "] could not be found.");
                     continue;
                 }
-                Location location = findLocation(0, results.getString("LOCATIONNAME"), Location.class);
+                Location location = findLocation(0, results.getString("LOCATIONNAME"), false, Location.class);
                 if (location != null) {
                     sighting.setLocationID(location.getID());
                 }
@@ -1916,7 +1916,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 WildLogFile wildLogFile = new WildLogFile();
                 String oldID = results.getString("ID");
                 if (oldID.startsWith("E")) {
-                    Element element = findElement(0, oldID.substring(oldID.indexOf('-') + 1), Element.class);
+                    Element element = findElement(0, oldID.substring(oldID.indexOf('-') + 1), false, Element.class);
                     if (element != null) {
                         wildLogFile.setLinkID(element.getWildLogFileID());
                         wildLogFile.setLinkType(WildLogDataType.ELEMENT);
@@ -1929,7 +1929,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 }
                 else
                 if (oldID.startsWith("L")) {
-                    Location location = findLocation(0, oldID.substring(oldID.indexOf('-') + 1), Location.class);
+                    Location location = findLocation(0, oldID.substring(oldID.indexOf('-') + 1), false, Location.class);
                     if (location != null) {
                         wildLogFile.setLinkID(location.getWildLogFileID());
                         wildLogFile.setLinkType(WildLogDataType.LOCATION);

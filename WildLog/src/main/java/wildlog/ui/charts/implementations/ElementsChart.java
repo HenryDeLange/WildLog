@@ -230,7 +230,7 @@ public class ElementsChart extends AbstractChart<Sighting> {
     private Chart createPieChartElementType(List<Sighting> inSightings) {
         Map<String, Set<String>> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Element element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementID(), null, Element.class);
+            Element element = WildLogApp.getApplication().getDBI().findElement(sighting.getElementID(), null, false, Element.class);
             if (element != null) {
                 String elementType = UtilsCharts.stringFromEnum(element.getType());
                 Set<String> setElements = mapGroupedData.get(elementType);

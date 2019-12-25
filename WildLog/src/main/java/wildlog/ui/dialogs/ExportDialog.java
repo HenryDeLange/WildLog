@@ -1026,7 +1026,7 @@ public class ExportDialog extends JDialog {
                     }
                     Element tempElement = mapElements.get(tempSighting.getElementID());
                     if (tempElement == null) {
-                        tempElement = app.getDBI().findElement(tempSighting.getElementID(), null, Element.class);
+                        tempElement = app.getDBI().findElement(tempSighting.getElementID(), null, false, Element.class);
                         if (tempElement.getScientificName() == null || tempElement.getScientificName().isEmpty()) {
                             tempElement.setScientificName(tempElement.getPrimaryName());
                         }

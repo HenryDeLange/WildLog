@@ -19,7 +19,7 @@ public final class UtilsPanelGenerator {
     }
 
     private static PanelElement getElementPanel(WildLogApp inApp, long inID) {
-        Element tempElement = inApp.getDBI().findElement(inID, null, Element.class);
+        Element tempElement = inApp.getDBI().findElement(inID, null, false, Element.class);
         return new PanelElement(inApp, tempElement);
     }
 
@@ -28,7 +28,7 @@ public final class UtilsPanelGenerator {
     }
 
     private static PanelLocation getLocationPanel(WildLogApp inApp, long inID) {
-        Location tempLocation = inApp.getDBI().findLocation(inID, null, Location.class);
+        Location tempLocation = inApp.getDBI().findLocation(inID, null, false, Location.class);
         return new PanelLocation(inApp, tempLocation);
     }
 

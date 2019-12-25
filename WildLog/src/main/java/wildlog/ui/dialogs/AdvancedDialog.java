@@ -251,7 +251,7 @@ public class AdvancedDialog extends JDialog {
             dialog.setVisible(true);
         }
         panelVisit.setVisit(app.getDBI().findVisit(visit.getID(), null, true, Visit.class));
-        panelVisit.setLocationForVisit(app.getDBI().findLocation(panelVisit.getVisit().getLocationID(), null, Location.class));
+        panelVisit.setLocationForVisit(app.getDBI().findLocation(panelVisit.getVisit().getLocationID(), null, false, Location.class));
         panelVisit.doTheRefresh(null);
         setVisible(false);
         dispose();
@@ -389,7 +389,7 @@ public class AdvancedDialog extends JDialog {
 
     private void btnChecklistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChecklistActionPerformed
         ChecklistDialog dialog = new ChecklistDialog(app, this,
-                app.getDBI().findLocation(panelVisit.getVisit().getLocationID(), null, Location.class),
+                app.getDBI().findLocation(panelVisit.getVisit().getLocationID(), null, false, Location.class),
                 visit, panelVisit);
         dialog.setVisible(true);
         setVisible(false);

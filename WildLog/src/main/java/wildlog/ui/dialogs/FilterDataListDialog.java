@@ -58,7 +58,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             }
             List<Element> originalData = new ArrayList<>(setOriginalData.size());
             for (long temp : setOriginalData) {
-                originalData.add(WildLogApp.getApplication().getDBI().findElement(temp, null, Element.class));
+                originalData.add(WildLogApp.getApplication().getDBI().findElement(temp, null, false, Element.class));
             }
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, originalData);
         }
@@ -71,7 +71,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             }
             List<Location> originalData = new ArrayList<>(setOriginalData.size());
             for (long temp : setOriginalData) {
-                originalData.add(WildLogApp.getApplication().getDBI().findLocation(temp, null, Location.class));
+                originalData.add(WildLogApp.getApplication().getDBI().findLocation(temp, null, false, Location.class));
             }
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, originalData);
         }

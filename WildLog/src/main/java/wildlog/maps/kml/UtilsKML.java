@@ -261,18 +261,18 @@ public final class UtilsKML {
             // Add Locations entries
             List<Location> listLocations;
             if (inDataObject instanceof Location) {
-                listLocations = inApp.getDBI().listLocations(inDataObject.getDisplayName(), Location.class);
+                listLocations = inApp.getDBI().listLocations(inDataObject.getDisplayName(), false, Location.class);
             }
             else
             if (inDataObject instanceof Visit) {
-                listLocations = inApp.getDBI().listLocations(((Visit) inDataObject).getCachedLocationName(), Location.class);
+                listLocations = inApp.getDBI().listLocations(((Visit) inDataObject).getCachedLocationName(), false, Location.class);
             }
             else
             if (inDataObject instanceof Sighting) {
-                listLocations = inApp.getDBI().listLocations(((Sighting) inDataObject).getCachedLocationName(), Location.class);
+                listLocations = inApp.getDBI().listLocations(((Sighting) inDataObject).getCachedLocationName(), false, Location.class);
             }
             else {
-                listLocations = inApp.getDBI().listLocations(null, Location.class);
+                listLocations = inApp.getDBI().listLocations(null, false, Location.class);
             }
             Collections.sort(listLocations);
             for (int t = 0; t < listLocations.size(); t++) {

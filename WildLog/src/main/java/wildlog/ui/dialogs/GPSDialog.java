@@ -1236,7 +1236,7 @@ public class GPSDialog extends JDialog {
                     else
                     if (option == 1) {
                         // Use the Location's GPS
-                        Location location = app.getDBI().findLocation(sighting.getLocationID(), null, Location.class);
+                        Location location = app.getDBI().findLocation(sighting.getLocationID(), null, false, Location.class);
                         if (location != null && UtilsGPS.hasGPSData(location)) {
                             showNothingFoundDialog = false;
                             loadUIValues(location);
@@ -1248,7 +1248,7 @@ public class GPSDialog extends JDialog {
                     else
                     if (option == 2) {
                         // Use the Location's Files
-                        Location location = app.getDBI().findLocation(sighting.getLocationID(), null, Location.class);
+                        Location location = app.getDBI().findLocation(sighting.getLocationID(), null, false, Location.class);
                         if (location != null) {
                             List<WildLogFile> lstFiles = app.getDBI().listWildLogFiles(location.getWildLogFileID(), null, WildLogFile.class);
                             for (WildLogFile wildLogFile : lstFiles) {

@@ -52,7 +52,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         String primaryName = cachedElementName;
         Element element = null;
         if (primaryName == null || inNameChoice > 0) {
-            element = WildLogApp.getApplication().getDBI().findElement(id, null, Element.class);
+            element = WildLogApp.getApplication().getDBI().findElement(id, null, false, Element.class);
             primaryName = element.getPrimaryName();
         }
         // Primary name
@@ -214,7 +214,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         entry.setId(inID);
         entry.setName(cachedElementName);
         entry.setDescription(toHTML(false, true, true, inApp, UtilsHTMLExportTypes.ForKML, null));
-        Element element = inApp.getDBI().findElement(elementID, null, Element.class);
+        Element element = inApp.getDBI().findElement(elementID, null, false, Element.class);
         if (element.getType() != null) {
             if (element.getType().equals(ElementType.MAMMAL)) {
                 if (element.getFeedingClass() == null) {
@@ -354,7 +354,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             entry.setStyle("otherStyle");
         }
         if (latitude == null || longitude == null) {
-            Location location = inApp.getDBI().findLocation(locationID, null, Location.class);
+            Location location = inApp.getDBI().findLocation(locationID, null, false, Location.class);
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
                     entry.setLatitude(UtilsGPS.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
@@ -368,7 +368,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         }
         else
         if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
-            Location location = inApp.getDBI().findLocation(locationID, null, Location.class);
+            Location location = inApp.getDBI().findLocation(locationID, null, false, Location.class);
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
                     entry.setLatitude(UtilsGPS.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));

@@ -319,7 +319,7 @@ public class ChecklistDialog extends JDialog {
         if (txtSearch.getText().length() > 0) {
             elementName = txtSearch.getText();
         }
-        List<Element> elements = new ArrayList<Element>(app.getDBI().listElements(elementName, null, elementType, Element.class));
+        List<Element> elements = new ArrayList<Element>(app.getDBI().listElements(elementName, null, elementType, false, Element.class));
         Collections.sort(elements);
         DefaultListModel model = (DefaultListModel)lstFromCreatures.getModel();
         model.clear();

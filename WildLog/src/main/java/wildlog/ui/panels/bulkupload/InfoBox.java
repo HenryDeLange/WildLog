@@ -357,7 +357,7 @@ public class InfoBox extends JPanel {
                 sightingWrapper,
                 location,
                 visit,
-                app.getDBI().findElement(sightingWrapper.getElementID(), null, Element.class),
+                app.getDBI().findElement(sightingWrapper.getElementID(), null, false, Element.class),
                 null,
                 false, false, true, false);
         dialog.setVisible(true);
@@ -461,7 +461,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_cmbCertaintyActionPerformed
 
     private void btnEmptyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmptyActionPerformed
-        Element emptyElement = app.getDBI().findElement(0, "Empty Landscape", Element.class);
+        Element emptyElement = app.getDBI().findElement(0, "Empty Landscape", false, Element.class);
         if (emptyElement == null) {
             emptyElement = new Element(0, "Empty Landscape");
             app.getDBI().createElement(emptyElement, false);
@@ -475,7 +475,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnEmptyActionPerformed
 
     private void btnVehicleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVehicleActionPerformed
-        Element vehicleElement = app.getDBI().findElement(0, "Vehicle", Element.class);
+        Element vehicleElement = app.getDBI().findElement(0, "Vehicle", false, Element.class);
         if (vehicleElement == null) {
             vehicleElement = new Element(0, "Vehicle");
             app.getDBI().createElement(vehicleElement, false);

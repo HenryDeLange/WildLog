@@ -192,7 +192,7 @@ public class UtilsCheckAndClean {
             finalHandleFeedback.println("1) Make sure Places, Periods, Creatures and Observations all have correct links to each other.");
             int badDataLinks = 0;
             // Check Elements
-            List<Element> allElements = inApp.getDBI().listElements(null, null, null, Element.class);
+            List<Element> allElements = inApp.getDBI().listElements(null, null, null, false, Element.class);
             for (Element element : allElements) {
                 // Validate the ID is larger than 0
                 if (element.getID() <= 0) {
@@ -205,7 +205,7 @@ public class UtilsCheckAndClean {
                 }
             }
             // Check Locations
-            List<Location> allLocations = inApp.getDBI().listLocations(null, Location.class);
+            List<Location> allLocations = inApp.getDBI().listLocations(null, false, Location.class);
             for (Location location : allLocations) {
                 // Validate the ID is larger than 0
                 if (location.getID() <= 0) {
@@ -231,13 +231,13 @@ public class UtilsCheckAndClean {
                     inApp.getDBI().updateVisit(visit, visit.getName(), false);
                 }
                 // Validate the Visit to Location link
-                Location temp = inApp.getDBI().findLocation(visit.getLocationID(), null, Location.class);
+                Location temp = inApp.getDBI().findLocation(visit.getLocationID(), null, false, Location.class);
                 if (temp == null) {
                     badDataLinks++;
                     finalHandleFeedback.println("PROBLEM:     Could not find link between Period and Place. "
                             + "Period: " + visit.getName() + ", Place: " + visit.getCachedLocationName());
                     finalHandleFeedback.println("  +RESOLVED: Moved Period to a new Place called 'WildLog_lost_and_found'.");
-                    Location newLocation = inApp.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
+                    Location newLocation = inApp.getDBI().findLocation(0, "WildLog_lost_and_found", false, Location.class);
                     if (newLocation == null) {
                         newLocation = new Location(0, "WildLog_lost_and_found");
                         inApp.getDBI().createLocation(newLocation, false);
@@ -255,13 +255,13 @@ public class UtilsCheckAndClean {
             int countSightings = 0;
             for (Sighting sighting : allSightings) {
                 // Validate the Sighting to Location link
-                Location tempLocation = inApp.getDBI().findLocation(sighting.getLocationID(), null, Location.class);
+                Location tempLocation = inApp.getDBI().findLocation(sighting.getLocationID(), null, false, Location.class);
                 if (tempLocation == null) {
                     badDataLinks++;
                     finalHandleFeedback.println("PROBLEM:     Could not find link between Observation and Place. "
                             + "Observation: " + sighting.getID() + ", Place: " + sighting.getCachedLocationName());
                     finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Place called 'WildLog_lost_and_found'.");
-                    Location newLocation = inApp.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
+                    Location newLocation = inApp.getDBI().findLocation(0, "WildLog_lost_and_found", false, Location.class);
                     if (newLocation == null) {
                         newLocation = new Location(0, "WildLog_lost_and_found");
                         inApp.getDBI().createLocation(newLocation, false);
@@ -270,13 +270,13 @@ public class UtilsCheckAndClean {
                     inApp.getDBI().updateSighting(sighting, false);
                 }
                 // Validate the Sighting to Element link
-                Element tempElement = inApp.getDBI().findElement(sighting.getElementID(), null, Element.class);
+                Element tempElement = inApp.getDBI().findElement(sighting.getElementID(), null, false, Element.class);
                 if (tempElement == null) {
                     badDataLinks++;
                     finalHandleFeedback.println("PROBLEM:     Could not find link between Observation and Creature. "
                             + "Observation: " + sighting.getID()+ ", Creature: " + sighting.getCachedElementName());
                     finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Creature called 'WildLog_lost_and_found'.");
-                    Element newElement = inApp.getDBI().findElement(0, "WildLog_lost_and_found", Element.class);
+                    Element newElement = inApp.getDBI().findElement(0, "WildLog_lost_and_found", false, Element.class);
                     if (newElement == null) {
                         newElement = new Element(0, "WildLog_lost_and_found");
                         inApp.getDBI().createElement(newElement, false);
@@ -292,7 +292,7 @@ public class UtilsCheckAndClean {
                             + "Observation: " + sighting.getID() + ", Period: " + sighting.getCachedVisitName());
                     finalHandleFeedback.println("  +RESOLVED: Moved Observation to a new Period called 'WildLog_lost_and_found'.");
                     // Location
-                    Location newLocation = inApp.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
+                    Location newLocation = inApp.getDBI().findLocation(0, "WildLog_lost_and_found", false, Location.class);
                     if (newLocation == null) {
                         newLocation = new Location(0, "WildLog_lost_and_found");
                         inApp.getDBI().createLocation(newLocation, false);
@@ -315,7 +315,7 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("PROBLEM:     The Observation and Period references different Places. "
                             + "Observation: " + sighting.getCachedLocationName() + ", Period: " + checkSightingVisit.getCachedLocationName());
                     finalHandleFeedback.println("  +RESOLVED: Moved Observation and Period to a new Place called 'WildLog_lost_and_found'.");
-                    Location newLocation = inApp.getDBI().findLocation(0, "WildLog_lost_and_found", Location.class);
+                    Location newLocation = inApp.getDBI().findLocation(0, "WildLog_lost_and_found", false, Location.class);
                     if (newLocation == null) {
                         newLocation = new Location(0, "WildLog_lost_and_found");
                         inApp.getDBI().createLocation(newLocation, false);
@@ -425,7 +425,7 @@ public class UtilsCheckAndClean {
                 // Check the WildLogFile's linkage
                 if (wildLogFile.getLinkType() == WildLogDataType.ELEMENT) {
                     // Make sure it is linked
-                    final Element temp = inApp.getDBI().findElement(wildLogFile.getLinkID(), null, Element.class);
+                    final Element temp = inApp.getDBI().findElement(wildLogFile.getLinkID(), null, false, Element.class);
                     if (temp == null) {
                         finalHandleFeedback.println("PROBLEM:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                 + ", ID: " + wildLogFile.getID()+ ", CreatureID Used: " + wildLogFile.getLinkID());
@@ -443,7 +443,7 @@ public class UtilsCheckAndClean {
                 else 
                 if (wildLogFile.getLinkType() == WildLogDataType.LOCATION) {
                     // Make sure it is linked
-                    final Location temp = inApp.getDBI().findLocation(wildLogFile.getLinkID(), null, Location.class);
+                    final Location temp = inApp.getDBI().findLocation(wildLogFile.getLinkID(), null, false, Location.class);
                     if (temp == null) {
                         finalHandleFeedback.println("PROBLEM:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
                                 + ", ID: " + wildLogFile.getID() + ", PlaceID Used: " + wildLogFile.getLinkID());
@@ -723,7 +723,7 @@ public class UtilsCheckAndClean {
                 inProgressbarTask.setTaskProgress(79 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
                 inProgressbarTask.setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + inProgressbarTask.getProgress() + "%");
             }
-            allLocations = inApp.getDBI().listLocations(null, Location.class);
+            allLocations = inApp.getDBI().listLocations(null, false, Location.class);
             countGPSAccuracy = 0;
             for (Location location : allLocations) {
                 if ((location.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
@@ -816,14 +816,14 @@ public class UtilsCheckAndClean {
                 finalHandleFeedback.println("");
                 finalHandleFeedback.println("9) Recreate the default thumbnails for essential images.");
                 List<WildLogFile> listFiles = new ArrayList<>(128);
-                List<Element> lstElements = inApp.getDBI().listElements(null, null, null, Element.class);
+                List<Element> lstElements = inApp.getDBI().listElements(null, null, null, false, Element.class);
                 for (Element element : lstElements) {
                     WildLogFile image = inApp.getDBI().findWildLogFile(0, element.getWildLogFileID(), WildLogFileType.IMAGE, null, WildLogFile.class);
                     if (image != null) {
                         listFiles.add(image);
                     }
                 }
-                List<Location> lstLocation = inApp.getDBI().listLocations(null, Location.class);
+                List<Location> lstLocation = inApp.getDBI().listLocations(null, false, Location.class);
                 for (Location location : lstLocation) {
                     WildLogFile image = inApp.getDBI().findWildLogFile(0, location.getWildLogFileID(), WildLogFileType.IMAGE, null, WildLogFile.class);
                     if (image != null) {

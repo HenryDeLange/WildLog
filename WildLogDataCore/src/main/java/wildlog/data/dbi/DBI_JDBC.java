@@ -22,6 +22,7 @@ import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
+import wildlog.data.dbi.queryobjects.ElementCount;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
@@ -199,8 +200,13 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String countDeleteLog = "SELECT count(*) FROM DELETELOGS";
     // Find
     protected static final String findLocation = "SELECT * FROM LOCATIONS";
+    protected static final String findLocationWithCached = "SELECT LOCATIONS.*,"
+            + " (SELECT COUNT(LOCATIONID) FROM SIGHTINGS WHERE LOCATIONID = LOCATIONS.ID) CNT"
+            + " FROM LOCATIONS";
     protected static final String findVisit = "SELECT * FROM VISITS";
-    protected static final String findVisitWithCached = "SELECT VISITS.*, LOCATIONS.NAME LOCATIONNAME"
+    protected static final String findVisitWithCached = "SELECT VISITS.*, LOCATIONS.NAME LOCATIONNAME,"
+            + " (SELECT COUNT(VISITID) FROM SIGHTINGS WHERE VISITID = VISITS.ID) CNT_S,"
+            + " (SELECT COUNT(DISTINCT ELEMENTID) FROM SIGHTINGS WHERE VISITID = VISITS.ID) CNT_E"
             + " FROM VISITS"
             + " LEFT JOIN LOCATIONS ON LOCATIONID = LOCATIONS.ID";
     protected static final String findSighting = "SELECT * FROM SIGHTINGS";
@@ -212,6 +218,9 @@ public abstract class DBI_JDBC implements DBI {
             + " LEFT JOIN LOCATIONS ON LOCATIONID = LOCATIONS.ID"
             + " LEFT JOIN VISITS ON VISITID = VISITS.ID";
     protected static final String findElement = "SELECT * FROM ELEMENTS";
+    protected static final String findElementWithCached = "SELECT ELEMENTS.*,"
+            + " (SELECT COUNT(ELEMENTID) FROM SIGHTINGS WHERE ELEMENTID = ELEMENTS.ID) CNT"
+            + " FROM ELEMENTS";
     protected static final String findFile = "SELECT * FROM FILES";
     protected static final String findWildLogOptions = "SELECT * FROM WILDLOG";
     protected static final String findAdhocData = "SELECT * FROM ADHOC "
@@ -222,11 +231,19 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String findDeleteLog = "SELECT * FROM DELETELOGS";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
+    protected static final String listLocationWithCached = "SELECT LOCATIONS.*,"
+            + " (SELECT COUNT(LOCATIONID) FROM SIGHTINGS WHERE LOCATIONID = LOCATIONS.ID) CNT"
+            + " FROM LOCATIONS";
     protected static final String listVisit = "SELECT * FROM VISITS";
-    protected static final String listVisitsWithCached = "SELECT VISITS.*, LOCATIONS.NAME LOCATIONNAME"
+    protected static final String listVisitsWithCached = "SELECT VISITS.*, LOCATIONS.NAME LOCATIONNAME,"
+            + " (SELECT COUNT(VISITID) FROM SIGHTINGS WHERE VISITID = VISITS.ID) CNT_S,"
+            + " (SELECT COUNT(DISTINCT ELEMENTID) FROM SIGHTINGS WHERE VISITID = VISITS.ID) CNT_E"
             + " FROM VISITS"
             + " LEFT JOIN LOCATIONS ON LOCATIONID = LOCATIONS.ID";
     protected static final String listElement = "SELECT * FROM ELEMENTS";
+    protected static final String listElementWithCached = "SELECT ELEMENTS.*,"
+            + " (SELECT COUNT(ELEMENTID) FROM SIGHTINGS WHERE ELEMENTID = ELEMENTS.ID) CNT"
+            + " FROM ELEMENTS";
     protected static final String listFile = "SELECT * FROM FILES";
     protected static final String listAdhocData = "SELECT * FROM ADHOC";
     protected static final String listINaturalistLinkedData = "SELECT * FROM INATURALIST";
@@ -514,8 +531,21 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteUser = "DELETE FROM WILDLOGUSERS "
             + "WHERE ID = ?";
     // Queries
-    protected static final String queryLocationCountForElement = "select SIGHTINGS.LOCATIONID, count(*) cnt "
-            + "from SIGHTINGS where SIGHTINGS.ELEMENTID = ? group by SIGHTINGS.LOCATIONID order by cnt desc";
+    protected static final String queryLocationCountForElement = "SELECT SIGHTINGS.LOCATIONID, COUNT(LOCATIONS.ID) CNT, LOCATIONS.NAME"
+            + " FROM SIGHTINGS"
+            + " LEFT JOIN LOCATIONS ON LOCATIONS.ID = SIGHTINGS.LOCATIONID"
+            + " WHERE SIGHTINGS.ELEMENTID = ?"
+            + " GROUP BY SIGHTINGS.LOCATIONID ORDER BY CNT DESC";
+    protected static final String queryElementCountForLocation = "SELECT SIGHTINGS.ELEMENTID, COUNT(ELEMENTS.ID) CNT, ELEMENTS.PRIMARYNAME, ELEMENTS.ELEMENTTYPE"
+            + " FROM SIGHTINGS"
+            + " LEFT JOIN ELEMENTS ON ELEMENTS.ID = SIGHTINGS.ELEMENTID"
+            + " WHERE SIGHTINGS.LOCATIONID = ?"
+            + " GROUP BY SIGHTINGS.ELEMENTID ORDER BY CNT DESC";
+    protected static final String queryElementCountForVisit = "SELECT SIGHTINGS.ELEMENTID, COUNT(ELEMENTS.ID) CNT, ELEMENTS.PRIMARYNAME, ELEMENTS.ELEMENTTYPE"
+            + " FROM SIGHTINGS"
+            + " LEFT JOIN ELEMENTS ON ELEMENTS.ID = SIGHTINGS.ELEMENTID"
+            + " WHERE SIGHTINGS.VISITID = ?"
+            + " GROUP BY SIGHTINGS.ELEMENTID ORDER BY CNT DESC";
     // Monitor
     protected static final String activeSessionsCount = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SESSIONS";
     // Variables
@@ -572,7 +602,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE INDEX IF NOT EXISTS V14_VISIT_LOCATION ON VISITS (LOCATIONID)");
                 // Create default entry
                 if (inCreateDefaultRecords) {
-                    createVisit(new VisitCore(0, "Casual Observations", findLocation(0, "Some Place", LocationCore.class).getID()), false);
+                    createVisit(new VisitCore(0, "Casual Observations", findLocation(0, "Some Place", false, LocationCore.class).getID()), false);
                 }
                 closeStatement(state);
             }
@@ -950,12 +980,18 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> T findElement(long inID, String inPrimaryName, Class<T> inReturnType) {
+    public <T extends ElementCore> T findElement(long inID, String inPrimaryName, boolean inIncludeCachedValues, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T tempElement = null;
         try {
-            String sql = findElement;
+            String sql;
+            if (inIncludeCachedValues) {
+                sql = findElementWithCached;
+            }
+            else {
+                sql = findElement;
+            }
             if (inID > 0) {
                 sql = sql + " WHERE ID = ?";
                 state = conn.prepareStatement(sql);
@@ -973,7 +1009,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             if (results.next()) {
                 tempElement = inReturnType.newInstance();
-                populateElement(results, tempElement);
+                populateElement(results, tempElement, inIncludeCachedValues);
             }
         }
         catch (SQLException ex) {
@@ -991,7 +1027,7 @@ public abstract class DBI_JDBC implements DBI {
         return tempElement;
     }
 
-    protected <T extends ElementCore> void populateElement(ResultSet inResults, T inElement) throws SQLException {
+    protected <T extends ElementCore> void populateElement(ResultSet inResults, T inElement, boolean inIncludeCachedValues) throws SQLException {
         inElement.setID(inResults.getLong("ID"));
         inElement.setPrimaryName(inResults.getString("PRIMARYNAME"));
         inElement.setOtherName(inResults.getString("OTHERNAME"));
@@ -1007,15 +1043,24 @@ public abstract class DBI_JDBC implements DBI {
         inElement.setReferenceID(inResults.getString("REFERENCEID"));
         inElement.setAuditTime(inResults.getLong("AUDITTIME"));
         inElement.setAuditUser(inResults.getString("AUDITUSER"));
+        if (inIncludeCachedValues) {
+            inElement.setCachedSightingCount(inResults.getInt("CNT"));
+        }
     }
 
     @Override
-    public <T extends LocationCore> T findLocation(long inID, String inName, Class<T> inReturnType) {
+    public <T extends LocationCore> T findLocation(long inID, String inName, boolean inIncludeCachedValues, Class<T> inReturnType) {
         T tempLocation = null;
         PreparedStatement state = null;
         ResultSet results = null;
         try {
-            String sql = findLocation;
+            String sql;
+            if (inIncludeCachedValues) {
+                sql = findLocationWithCached;
+            }
+            else {
+                sql = findLocation;
+            }
             if (inID > 0) {
                 sql = sql + " WHERE ID = ?";
                 state = conn.prepareStatement(sql);
@@ -1033,7 +1078,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             if (results.next()) {
                 tempLocation = inReturnType.newInstance();
-                populateLocation(results, tempLocation);
+                populateLocation(results, tempLocation, inIncludeCachedValues);
             }
         }
         catch (SQLException ex) {
@@ -1051,7 +1096,7 @@ public abstract class DBI_JDBC implements DBI {
         return tempLocation;
     }
 
-    protected <T extends LocationCore> void populateLocation(ResultSet inResults, T inLocation) throws SQLException {
+    protected <T extends LocationCore> void populateLocation(ResultSet inResults, T inLocation, boolean inIncludeCachedValues) throws SQLException {
         inLocation.setID(inResults.getLong("ID"));
         inLocation.setName(inResults.getString("NAME"));
         inLocation.setDescription(inResults.getString("DESCRIPTION"));
@@ -1070,6 +1115,9 @@ public abstract class DBI_JDBC implements DBI {
         inLocation.setGPSAccuracyValue(inResults.getDouble("GPSACCURACYVALUE"));
         inLocation.setAuditTime(inResults.getLong("AUDITTIME"));
         inLocation.setAuditUser(inResults.getString("AUDITUSER"));
+        if (inIncludeCachedValues) {
+            inLocation.setCachedSightingCount(inResults.getInt("CNT"));
+        }
     }
 
     @Override
@@ -1143,6 +1191,8 @@ public abstract class DBI_JDBC implements DBI {
         inVisit.setAuditUser(inResults.getString("AUDITUSER"));
         if (inIncludeCachedValues) {
             inVisit.setCachedLocationName(inResults.getString("LOCATIONNAME"));
+            inVisit.setCachedSightingCount(inResults.getInt("CNT_S"));
+            inVisit.setCachedElementCount(inResults.getInt("CNT_E"));
         }
     }
 
@@ -1408,12 +1458,18 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, Class<T> inReturnType) {
+    public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, boolean inIncludeCachedValues, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
-            String sql = listElement;
+            String sql;
+            if (inIncludeCachedValues) {
+                sql = listElementWithCached;
+            }
+            else {
+                sql = listElement;
+            }
             if (inPrimaryName != null && inPrimaryName.length() > 0 && inElementType == null) {
                 sql = sql + " WHERE PRIMARYNAME = ?";
                 state = conn.prepareStatement(sql);
@@ -1444,7 +1500,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             while (results.next()) {
                 T tempElement = inReturnType.newInstance();
-                populateElement(results, tempElement);
+                populateElement(results, tempElement, inIncludeCachedValues);
                 tempList.add(tempElement);
             }
         }
@@ -1464,12 +1520,18 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends LocationCore> List<T> listLocations(String inName, Class<T> inReturnType) {
+    public <T extends LocationCore> List<T> listLocations(String inName, boolean inIncludeCachedValues, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
-            String sql = listLocation;
+            String sql;
+            if (inIncludeCachedValues) {
+                sql = listLocationWithCached;
+            }
+            else {
+                sql = listLocation;
+            }
             if (inName != null) {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
@@ -1481,7 +1543,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             while (results.next()) {
                 T tempLocation = inReturnType.newInstance();
-                populateLocation(results, tempLocation);
+                populateLocation(results, tempLocation, inIncludeCachedValues);
                 tempList.add(tempLocation);
             }
         }
@@ -2699,9 +2761,87 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             while (results.next()) {
                 T tempLocationCount = inReturnType.newInstance();
-                tempLocationCount.setLocationID(results.getLong(1));
-                tempLocationCount.setCount(results.getInt(2));
+                tempLocationCount.setLocationID(results.getLong("LOCATIONID"));
+                tempLocationCount.setCount(results.getInt("CNT"));
+                tempLocationCount.setLocationName(results.getString("NAME"));
                 tempList.add(tempLocationCount);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+    @Override
+    public <T extends ElementCount> List<T> queryElementCountForLocation(long inLocationID, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<T> tempList = new ArrayList<T>();
+        try {
+            String sql = queryElementCountForLocation;
+            state = conn.prepareStatement(sql);
+            if (inLocationID > 0) {
+                state.setLong(1, inLocationID);
+            }
+            else {
+                state.setLong(1, 0);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                T tempElementCount = inReturnType.newInstance();
+                tempElementCount.setElementID(results.getLong("ELEMENTID"));
+                tempElementCount.setCount(results.getInt("CNT"));
+                tempElementCount.setElementName(results.getString("PRIMARYNAME"));
+                tempElementCount.setElementType(ElementType.getEnumFromID(results.getByte("ELEMENTTYPE")));
+                tempList.add(tempElementCount);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+    
+    @Override
+    public <T extends ElementCount> List<T> queryElementCountForVisit(long inVisitID, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<T> tempList = new ArrayList<T>();
+        try {
+            String sql = queryElementCountForVisit;
+            state = conn.prepareStatement(sql);
+            if (inVisitID > 0) {
+                state.setLong(1, inVisitID);
+            }
+            else {
+                state.setLong(1, 0);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                T tempElementCount = inReturnType.newInstance();
+                tempElementCount.setElementID(results.getLong("ELEMENTID"));
+                tempElementCount.setCount(results.getInt("CNT"));
+                tempElementCount.setElementName(results.getString("PRIMARYNAME"));
+                tempElementCount.setElementType(ElementType.getEnumFromID(results.getByte("ELEMENTTYPE")));
+                tempList.add(tempElementCount);
             }
         }
         catch (SQLException ex) {

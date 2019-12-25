@@ -2228,7 +2228,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (!bulkUploadMode) {
             if (tblLocation.getSelectedRowCount() == 1) {
                 locationWL = app.getDBI().findLocation((Long) tblLocation.getModel().getValueAt(
-                        tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2), null, Location.class);
+                        tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2), null, false, Location.class);
                 UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID());
                 btnAddNewVisit.setEnabled(true);
                 visit = null;
@@ -2280,7 +2280,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
             element = app.getDBI().findElement((Long) tblElement.getModel().getValueAt(
-                    tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3), null, Element.class);
+                    tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3), null, false, Element.class);
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
         }
         else {
@@ -2323,7 +2323,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     app.getDBI().updateWildLogFile(tempFile, false);
                 }
                 String uniqueIdentifier = "_" + Long.toString(System.currentTimeMillis()); // Om seker te maak die file word nie rename met die upload nie, sodat ek dit weer kan find om default te maak
-                UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sighting.getElementID(), null, Element.class),
+                UtilsFileProcessing.performFileUpload(app.getDBI().findElement(sighting.getElementID(), null, false, Element.class),
                     Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sighting.getCachedElementName() + uniqueIdentifier), WildLogDataType.ELEMENT,
                     new File[] {wildLogFile.getAbsolutePath().toFile()},
                     null,

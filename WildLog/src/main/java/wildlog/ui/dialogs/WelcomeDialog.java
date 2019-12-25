@@ -149,7 +149,7 @@ public class WelcomeDialog extends JDialog {
                         @Override
                         protected Object doInBackground() throws Exception {
                             UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(WildLogApp.getApplication(), this, 
-                                    WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class), 
+                                    WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, false, Location.class), 
                                     null, null, null), WildLogApp.getApplication().getMainFrame().getTabbedPane());
                             return null;
                         }

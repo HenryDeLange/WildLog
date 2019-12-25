@@ -368,7 +368,7 @@ public class INatImportDialog extends JDialog {
                     if (app.getDBI().countLocations(locationName) == 0) {
                         app.getDBI().createLocation(new Location(0, locationName), false);
                     }
-                    Location iNatLocation = app.getDBI().findLocation(0, locationName, Location.class);
+                    Location iNatLocation = app.getDBI().findLocation(0, locationName, false, Location.class);
                     String visitName = "iNaturalist Import " + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now());
                     if (app.getDBI().countVisits(visitName, iNatLocation.getID()) == 0) {
                         app.getDBI().createVisit(new Visit(0, visitName, iNatLocation.getID()), false);
@@ -562,14 +562,14 @@ public class INatImportDialog extends JDialog {
                 if (iNatFullObs.get("taxon") != null) {
                     scientificName = iNatFullObs.get("taxon").getAsJsonObject().get("name").getAsString();
                 }
-                List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
+                List<Element> lstElements = app.getDBI().listElements(null, scientificName, null, false, Element.class);
                 if (lstElements.isEmpty()) {
                     // Try at a higher level (subspecies might not be present)
                     String[] words = scientificName.split(" ");
                     if (words.length > 2) {
                         scientificName = words[0] + " " + words[1];
                     }
-                    lstElements = app.getDBI().listElements(null, scientificName, null, Element.class);
+                    lstElements = app.getDBI().listElements(null, scientificName, null, false, Element.class);
                 }
                 if (lstElements != null && lstElements.size() == 1) {
                     sighting.setElementID(lstElements.get(0).getID());
@@ -581,7 +581,7 @@ public class INatImportDialog extends JDialog {
                         element.setScientificName(scientificName);
                         app.getDBI().createElement(element, false);
                     }
-                    Element element = app.getDBI().findElement(0, scientificName, Element.class);
+                    Element element = app.getDBI().findElement(0, scientificName, false, Element.class);
                     sighting.setElementID(element.getID());
                 }
                 double latitude = iNatFullObs.get("latitude").getAsDouble();
@@ -962,7 +962,7 @@ public class INatImportDialog extends JDialog {
                         if (foundWildLogID > 0) {
                             Sighting sighting = app.getDBI().findSighting(foundWildLogID, false, Sighting.class);
                             if (sighting != null) {
-                                Element element = app.getDBI().findElement(sighting.getElementID(), null, Element.class);
+                                Element element = app.getDBI().findElement(sighting.getElementID(), null, false, Element.class);
                                 if (element != null) {
                                     if (element.getScientificName() != null && element.getScientificName().equalsIgnoreCase(iNatScientificName)) {
                                         namesMatch++;

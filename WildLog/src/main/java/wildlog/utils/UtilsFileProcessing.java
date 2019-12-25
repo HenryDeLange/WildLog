@@ -643,7 +643,7 @@ public final class UtilsFileProcessing {
                         setProgress(1);
                         setMessage("Busy with the Stash Files Process " + getProgress() + "%");
                         // Create the new visit of type Stash
-                        Location location = WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, Location.class);
+                        Location location = WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, false, Location.class);
                         Visit visit = new Visit();
                         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
                                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {

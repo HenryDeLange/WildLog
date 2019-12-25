@@ -919,11 +919,11 @@ public class WorkspaceSyncDialog extends JDialog {
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + inDataType.getDescription() + " - Cloud Entries: " + lstCloudEntries.size());
         List<? extends DataObjectWithAudit> lstWorkspaceEntries;
         if(inDataType == WildLogDataType.ELEMENT) {
-            lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listElements(null, null, null, Element.class);
+            lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listElements(null, null, null, false, Element.class);
         }
         else
         if(inDataType == WildLogDataType.LOCATION) {
-            lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listLocations(null, Location.class);
+            lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listLocations(null, false, Location.class);
         }
         else
         if(inDataType == WildLogDataType.VISIT) {
@@ -1088,12 +1088,12 @@ public class WorkspaceSyncDialog extends JDialog {
                 SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", cloudEntry.getWildLogDataType(), 
                         cloudEntry.getRecordID(), "UPDATE", cloudEntry.getData());
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.ELEMENT) {
-                    Element oldElement = WildLogApp.getApplication().getDBI().findElement(syncAction.recordID, null, Element.class);
+                    Element oldElement = WildLogApp.getApplication().getDBI().findElement(syncAction.recordID, null, false, Element.class);
                     logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateElement((ElementCore) syncAction.data, oldElement.getPrimaryName(), true));
                 }
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.LOCATION) {
-                    Location oldLocation = WildLogApp.getApplication().getDBI().findLocation(syncAction.recordID, null, Location.class);
+                    Location oldLocation = WildLogApp.getApplication().getDBI().findLocation(syncAction.recordID, null, false, Location.class);
                     logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateLocation((LocationCore) syncAction.data, oldLocation.getName(), true));
                 }
                 else

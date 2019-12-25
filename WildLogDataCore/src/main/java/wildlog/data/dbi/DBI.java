@@ -13,6 +13,7 @@ import wildlog.data.dataobjects.WildLogDeleteLog;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.WildLogUser;
+import wildlog.data.dbi.queryobjects.ElementCount;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
@@ -34,8 +35,8 @@ public interface DBI {
     public int countUsers();
     public int countDeleteLogs(long inID, WildLogDataType inDataType);
 
-    public <T extends ElementCore> T findElement(long inID, String inPrimaryName, Class<T> inReturnType);
-    public <T extends LocationCore> T findLocation(long inID, String inName, Class<T> inReturnType);
+    public <T extends ElementCore> T findElement(long inID, String inPrimaryName, boolean inIncludeCachedValues, Class<T> inReturnType);
+    public <T extends LocationCore> T findLocation(long inID, String inName, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends VisitCore> T findVisit(long inID, String inName, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends SightingCore> T findSighting(long inID, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends WildLogFileCore> T findWildLogFile(long inID, long inLinkID, WildLogFileType inWildLogFileType, String inDBFilePath, Class<T> inReturnType);
@@ -45,8 +46,8 @@ public interface DBI {
     public <T extends WildLogUser> T findUser(long inID, String inUsername, Class<T> inReturnType);
     public <T extends WildLogDeleteLog> T findDeleteLog(long inID, Class<T> inReturnType);
 
-    public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, Class<T> inReturnType);
-    public <T extends LocationCore> List<T> listLocations(String inName, Class<T> inReturnType);
+    public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, boolean inIncludeCachedValues, Class<T> inReturnType);
+    public <T extends LocationCore> List<T> listLocations(String inName, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends VisitCore> List<T> listVisits(String inName, long inLocationID, VisitType inVisitType, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends SightingCore> List<T> listSightings(long inElementID, long inLocationID, long inVisitID, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends WildLogFileCore> List<T> listWildLogFiles(long inLinkID, WildLogFileType inWildLogFileType, Class<T> inReturnType);
@@ -90,6 +91,8 @@ public interface DBI {
             boolean inIncludeCachedValues, Class<S> inReturnType);
     
     public <T extends LocationCount> List<T> queryLocationCountForElement(long inElementID, Class<T> inReturnType);
+    public <T extends ElementCount> List<T> queryElementCountForLocation(long inLocationID, Class<T> inReturnType);
+    public <T extends ElementCount> List<T> queryElementCountForVisit(long inVisitID, Class<T> inReturnType);
 
     public long generateID();
     

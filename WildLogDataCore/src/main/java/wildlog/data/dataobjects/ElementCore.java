@@ -10,7 +10,7 @@ import wildlog.data.utils.UtilsData;
 
 public class ElementCore extends DataObjectWithAudit implements DataObjectWithWildLogFile {
     public static final String WILDLOG_FOLDER_PREFIX = "Creatures";
-    protected String primaryName; // Must be unique
+    protected String primaryName;
     protected String otherName;
     protected String scientificName;
     protected String description;
@@ -22,6 +22,8 @@ public class ElementCore extends DataObjectWithAudit implements DataObjectWithWi
     protected FeedingClass feedingClass;
     protected String referenceID;
     protected String distribution;
+    // Adding some extra fields that can optionally be cached for performance reasons
+    protected int cachedSightingCount;
 
 
     public ElementCore() {
@@ -213,6 +215,14 @@ public class ElementCore extends DataObjectWithAudit implements DataObjectWithWi
 
     public void setDistribution(String inDistribution) {
         distribution = inDistribution;
+    }
+
+    public int getCachedSightingCount() {
+        return cachedSightingCount;
+    }
+
+    public void setCachedSightingCount(int inCachedSightingCount) {
+        cachedSightingCount = inCachedSightingCount;
     }
 
 }
