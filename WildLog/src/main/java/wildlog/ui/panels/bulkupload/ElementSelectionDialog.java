@@ -1,6 +1,7 @@
 package wildlog.ui.panels.bulkupload;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -35,6 +36,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     private boolean selectionMade = false;
     private long selectedElementID;
     private String selectedElementName;
+    private Dimension originalSize = null;
 
 
     public ElementSelectionDialog(JFrame inParent, WildLogApp inApp, final long inSelectedElementID) {
@@ -54,16 +56,15 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                     }
                 },
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-        // Position the dialog
-        UtilsDialog.setDialogToCenter(inParent, this);
-        UtilsDialog.addModalBackgroundPanel(inParent, this);
         // Attach listeners etc.
         UtilsUI.attachClipboardPopup(txtSearch);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
         // Load the UI
         setupUI(inSelectedElementID);
+        // Position the dialog
+        UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(inParent, this);
     }
 
     private void setupUI(final long inSelectedElementID) {
@@ -95,6 +96,10 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 txtIdentification.setCaretPosition(0);
             }
         }
+        // Hide the info panel
+        pnlInfo.setVisible(false);
+        pack();
+        originalSize = getPreferredSize();
     }
 
     /** This method is called from within the constructor to
@@ -106,7 +111,8 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        pnlWrapper = new javax.swing.JPanel();
+        pnlMain = new javax.swing.JPanel();
         txtSearch = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         lblElementImage = new javax.swing.JLabel();
@@ -116,25 +122,34 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         jScrollPane2 = new javax.swing.JScrollPane();
         tblElement = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
+        btnToggleInfo = new javax.swing.JButton();
+        pnlInfo = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane21 = new javax.swing.JScrollPane();
         txtIdentification = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a Creature");
+        setBackground(new java.awt.Color(230, 237, 220));
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Element.gif")).getImage());
+        setMinimumSize(new java.awt.Dimension(535, 650));
         setModal(true);
-        setName("Form"); // NOI18N
-        setResizable(false);
+        setPreferredSize(new java.awt.Dimension(535, 650));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(230, 237, 220));
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnlWrapper.setBackground(new java.awt.Color(230, 237, 220));
+        pnlWrapper.setMinimumSize(new java.awt.Dimension(500, 500));
+        pnlWrapper.setName("pnlWrapper"); // NOI18N
+        pnlWrapper.setPreferredSize(new java.awt.Dimension(945, 600));
+
+        pnlMain.setBackground(new java.awt.Color(230, 237, 220));
+        pnlMain.setName("pnlMain"); // NOI18N
 
         txtSearch.setName("txtSearch"); // NOI18N
         txtSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -147,12 +162,10 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 txtSearchKeyReleased(evt);
             }
         });
-        jPanel1.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 230, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Please choose a Creature:");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("Choose a Creature:");
         jLabel2.setName("jLabel2"); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         lblElementImage.setBackground(new java.awt.Color(0, 0, 0));
         lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -165,7 +178,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 lblElementImageMouseReleased(evt);
             }
         });
-        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 185, 125, 125));
 
         btnSelect.setBackground(new java.awt.Color(230, 237, 220));
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
@@ -177,7 +189,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 btnSelectActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 10, 125, 70));
 
         cmbElementType.setMaximumRowCount(11);
         cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
@@ -189,7 +200,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 cmbElementTypeActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 30, 135, -1));
 
         btnPreviousElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         btnPreviousElement.setText("Previous Creature");
@@ -201,7 +211,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 btnPreviousElementActionPerformed(evt);
             }
         });
-        jPanel1.add(btnPreviousElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 90, 125, 40));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
@@ -227,8 +236,6 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         });
         jScrollPane2.setViewportView(tblElement);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 365, 510));
-
         btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAdd.setText("New Creature");
         btnAdd.setToolTipText("Create a new Creature.");
@@ -239,7 +246,73 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 btnAddActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 140, 125, 30));
+
+        btnToggleInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
+        btnToggleInfo.setText("More Info");
+        btnToggleInfo.setToolTipText("Show more information about the selected Creature.");
+        btnToggleInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnToggleInfo.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnToggleInfo.setName("btnToggleInfo"); // NOI18N
+        btnToggleInfo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnToggleInfoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlMainLayout = new javax.swing.GroupLayout(pnlMain);
+        pnlMain.setLayout(pnlMainLayout);
+        pnlMainLayout.setHorizontalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addGap(230, 230, 230)
+                        .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPreviousElement, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        pnlMainLayout.setVerticalGroup(
+            pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlMainLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(5, 5, 5)
+                        .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlMainLayout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jScrollPane2))))
+                    .addGroup(pnlMainLayout.createSequentialGroup()
+                        .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnPreviousElement, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(lblElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10))
+        );
+
+        pnlInfo.setBackground(new java.awt.Color(230, 237, 220));
+        pnlInfo.setName("pnlInfo"); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Identification:");
+        jLabel1.setName("jLabel1"); // NOI18N
 
         jScrollPane21.setName("jScrollPane21"); // NOI18N
 
@@ -251,9 +324,72 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         txtIdentification.setName("txtIdentification"); // NOI18N
         jScrollPane21.setViewportView(txtIdentification);
 
-        jPanel1.add(jScrollPane21, new org.netbeans.lib.awtextra.AbsoluteConstraints(385, 320, 125, 240));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("Files:");
+        jLabel3.setName("jLabel3"); // NOI18N
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 570));
+        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel2.setName("jPanel2"); // NOI18N
+
+        javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
+        pnlInfo.setLayout(pnlInfoLayout);
+        pnlInfoLayout.setHorizontalGroup(
+            pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlInfoLayout.createSequentialGroup()
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(0, 0, 0))
+        );
+        pnlInfoLayout.setVerticalGroup(
+            pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel1)
+                .addGap(2, 2, 2)
+                .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
+        );
+
+        javax.swing.GroupLayout pnlWrapperLayout = new javax.swing.GroupLayout(pnlWrapper);
+        pnlWrapper.setLayout(pnlWrapperLayout);
+        pnlWrapperLayout.setHorizontalGroup(
+            pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlWrapperLayout.createSequentialGroup()
+                .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(10, 10, 10))
+        );
+        pnlWrapperLayout.setVerticalGroup(
+            pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlMain, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -405,6 +541,17 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         popup.dispose();
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void btnToggleInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleInfoActionPerformed
+        pnlInfo.setVisible(!pnlInfo.isVisible());
+        if (pnlInfo.isVisible()) {
+            setPreferredSize(new Dimension(950, (int) getPreferredSize().getHeight()));
+        }
+        else {
+            setPreferredSize(originalSize);
+        }
+        pack();
+    }//GEN-LAST:event_btnToggleInfoActionPerformed
+
     @Override
     public void doTheRefresh(Object inIndicator) {
         txtSearch.setText("");
@@ -442,12 +589,18 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnPreviousElement;
     private javax.swing.JButton btnSelect;
+    private javax.swing.JButton btnToggleInfo;
     private javax.swing.JComboBox cmbElementType;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane21;
     private javax.swing.JLabel lblElementImage;
+    private javax.swing.JPanel pnlInfo;
+    private javax.swing.JPanel pnlMain;
+    private javax.swing.JPanel pnlWrapper;
     private javax.swing.JTable tblElement;
     private javax.swing.JTextArea txtIdentification;
     private javax.swing.JTextField txtSearch;
