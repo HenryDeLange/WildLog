@@ -18,6 +18,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 import org.apache.logging.log4j.Level;
 import org.h2.jdbc.JdbcSQLException;
+import org.h2.jdbc.JdbcSQLNonTransientConnectionException;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
@@ -65,6 +66,7 @@ import wildlog.utils.WildLogPaths;
 
 
 public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
+    private static final int DEFAULT_PORT = 9229;
     private final String connectionURL;
     
     /**
@@ -87,15 +89,16 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         boolean started = true;
         connectionURL = inConnectionURL;
         try {
-            setupConnection(inH2AutoServer);
+            setupConnection(inH2AutoServer, DEFAULT_PORT);
             // Create table, indexes, default values, etc.
             started = super.initialize(inCreateDefaultRecords);
             // Check database version and perform updates if required.
             // This also creates the WildLogOptions row the first time
-            doUpdates();
-            // After the updates have completed, recreate the connection using the original inH2AutoServer value
-            close();
-            setupConnection(inH2AutoServer);
+            if (doUpdates()) {
+                // After the updates have completed, recreate the connection using the original inH2AutoServer value
+                close();
+                setupConnection(inH2AutoServer, DEFAULT_PORT);
+            }
         }
         catch (ClassNotFoundException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, "\nUnable to load the JDBC driver.");
@@ -129,12 +132,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         }
     }
     
-    private void setupConnection(boolean inH2AutoServer) 
+    private void setupConnection(boolean inH2AutoServer, int inPort) 
             throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        String connection = "jdbc:h2:" + connectionURL 
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=100";
+        String connection = "jdbc:h2:" + connectionURL + ";AUTOCOMMIT=ON;IGNORECASE=TRUE;QUERY_CACHE_SIZE=100";
         if (inH2AutoServer) {
-            connection = connection + ";AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9229";
+            connection = connection + ";AUTO_SERVER=TRUE";
+            if (inPort > 0) {
+                connection = connection + ";AUTO_SERVER_PORT=" + Integer.toString(inPort);
+            }
         }
         Class.forName("org.h2.Driver").newInstance();
         Properties props = new Properties();
@@ -155,6 +160,21 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.close();
             WildLogApp.LOGGER.log(Level.INFO, "Database username and password updated.");
         }
+        catch (JdbcSQLNonTransientConnectionException ex) {
+            if (inH2AutoServer) {
+                WildLogApp.LOGGER.log(Level.INFO, "Could not connect to database, this could be because a second workspace is being opened "
+                        + "and the port (" + inPort + ") is already in use...");
+                WildLogApp.LOGGER.log(Level.INFO, ex.toString());
+                // Only try to open using a random port once
+                if (inPort == DEFAULT_PORT) {
+                    WildLogApp.LOGGER.log(Level.INFO, "Will try to open the database connection using a random port...");
+                    setupConnection(inH2AutoServer, 0);
+                }
+            }
+            else {
+                throw ex;
+            }
+        }
     }
     
     
@@ -167,11 +187,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     @Override
     public void doCompact() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         close();
-        setupConnection(false);
+        setupConnection(false, DEFAULT_PORT);
         Statement state = conn.createStatement();
         state.execute("SHUTDOWN COMPACT");
         close();
-        setupConnection(false);
+        setupConnection(false, DEFAULT_PORT);
         state = conn.createStatement();
         state.execute("SHUTDOWN DEFRAG");
     }
@@ -1009,7 +1029,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         return true;
     }
 
-    private void doUpdates() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private boolean doUpdates() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        boolean upgradeWasDone = false;
         Statement state = null;
         ResultSet results = null;
         try {
@@ -1050,7 +1071,6 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Read the row
             boolean databaseAndApplicationInSync = false;
             boolean wasMajorUpgrade = false;
-            boolean upgradeWasDone = false;
             boolean upgradeSuccess = true;
             int choice = JOptionPane.CANCEL_OPTION;
             for (int t = 0; t <= WILDLOG_DB_VERSION; t++) {
@@ -1094,7 +1114,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 // If an upgrade is needed, then it may be best to close the server mode connection and reopen it in single mode instead, 
                                 // otherwise the upgrade might start twice if people launch the app twice...
                                 close();
-                                setupConnection(false);
+                                setupConnection(false, DEFAULT_PORT);
                                 // Procede with the needed updates
                                 if (currentDBVersion == 0) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
@@ -1214,6 +1234,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         finally {
             closeStatementAndResultset(state, results);
         }
+        return upgradeWasDone;
     }
 
     // Private update methods
