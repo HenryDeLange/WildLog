@@ -35,7 +35,6 @@ import javax.swing.Timer;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.factory.FactoryRegistryException;
 import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -48,6 +47,7 @@ import org.geotools.map.MapContent;
 import org.geotools.renderer.GTRenderer;
 import org.geotools.renderer.lite.StreamingRenderer;
 import org.geotools.styling.Style;
+import org.geotools.util.factory.FactoryRegistryException;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.Property;
@@ -122,6 +122,7 @@ public class GeoToolsMapJavaFX {
             }
         });
         // ZOOM - DOUBLE CLICK + INDENTIFY
+        jfxPanel.setFocusable(false); // HACK: Needed because for some reason JavaFX (13 bug?) counts the focussing of the Swing component as a JavaFX mouse click...
         imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             FilterFactory2 filterFactory = CommonFactoryFinder.getFilterFactory2();
             
@@ -162,7 +163,7 @@ public class GeoToolsMapJavaFX {
                     }
                 }
                 else
-                if (inMouseEvent.getClickCount() == 1 && (inMouseEvent.isControlDown() || identifyIsActive)) {
+                if (inMouseEvent.getClickCount() == 1 && (identifyIsActive || inMouseEvent.isControlDown() || inMouseEvent.isPopupTrigger() || inMouseEvent.isSecondaryButtonDown())) {
                     identifyIsActive = false;
                     imageView.getScene().getRoot().setCursor(Cursor.DEFAULT);
                     List<Map<String, String>> lstInfoForLayers = new ArrayList<>();

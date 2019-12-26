@@ -933,18 +933,6 @@ public class UtilsCheckAndClean {
             }
 
             // ---------------------?---------------------
-            // Recreate the database (to optimise file size and indexes)
-            // TODO: Recreate the database. See http://www.h2database.com/html/features.html#compacting
-//                        public static void compact(String dir, String dbName,
-//        String user, String password) throws Exception {
-//    String url = "jdbc:h2:" + dir + "/" + dbName;
-//    String file = "data/test.sql";
-//    Script.execute(url, user, password, file);
-//    DeleteDbFiles.execute(dir, dbName, true);
-//    RunScript.execute(url, user, password, file, null, false);
-//}
-
-            // ---------------------?---------------------
             // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
 // TODO: Maybe delete all non-wildlog files from the rest of the Workspace during cleanup?
 

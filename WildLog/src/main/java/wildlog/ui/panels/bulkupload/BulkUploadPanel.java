@@ -93,7 +93,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private VisitType originalVisitType = VisitType.UNKNOWN;
     private String originalVisitName = null;
 
-// TODO: Save bulk imports halfway, be stashing the files and then saving the sighting details to the adhoc table
+// TODO: Save bulk imports halfway, by stashing the files and then saving the sighting details to the adhoc table
     
 // TODO: Add a button that does the "adjust date and time" popup for all observations
     

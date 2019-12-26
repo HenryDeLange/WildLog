@@ -468,8 +468,6 @@ public class WildLogApp extends Application {
                     wildLogOptions.setWorkspaceID(triggerSyncWorkspaceID);
                     wildLogOptions.setAuditTime(-1); // Default is 0, so -1 ensures an update
                     dbi.updateWildLogOptions(wildLogOptions, true);
-                    // Refresh the home tab to show the correct workspace ID
-// FIXME: Vind 'n manier om dit te doen...
                     // Show the sync popup
                     WorkspaceSyncDialog dialog = new WorkspaceSyncDialog();
                     dialog.setVisible(true);

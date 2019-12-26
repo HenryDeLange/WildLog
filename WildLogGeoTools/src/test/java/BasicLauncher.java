@@ -1,5 +1,3 @@
-package wildlog.maps.geotools;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,7 +12,6 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
-import org.geotools.factory.FactoryRegistryException;
 import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -25,12 +22,15 @@ import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
 import org.geotools.styling.SLD;
 import org.geotools.styling.Style;
+import org.geotools.util.factory.FactoryRegistryException;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import wildlog.maps.geotools.GeoToolsLayerUtils;
+import wildlog.maps.geotools.GeoToolsMapJavaFX;
 
-// TODO: Move to test package?
+
 /**
  * Only used in the Maven project for easy launching and testing.
  */
@@ -43,8 +43,6 @@ public class BasicLauncher {
         frame.setLayout(new BorderLayout());
         frame.add(jfxPanel, BorderLayout.CENTER);
         frame.setSize(850, 600);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // CREATE MAP
         GeoToolsMapJavaFX map = new GeoToolsMapJavaFX(jfxPanel, false);
         // ADD BUTTONS
@@ -115,8 +113,11 @@ public class BasicLauncher {
         // Set the startup bounds
         map.setStartBounds(-28.2, 24.7, 20);
         // Enable the placing of points
-        map.setPlacePoint(true);
-        // RELOAD MAP (to display the added layers)
+        map.setPlacePoint(false); // TRUE needs a WildLogPointLayer before it will work
+        // Show the frame
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // RELOAD MAP (to display the added layers, after the frame has been shown so that the map size is known)
         map.reloadMap();
     }
 
