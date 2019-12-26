@@ -242,7 +242,7 @@ public class ImageBox extends JPanel {
         // Perform the add and remember to let the model know
         DefaultTableModel model = ((DefaultTableModel)table.getModel());
         BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
-        BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
+        BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
         newSightingWrapper.setLocationID(currentSightingWrapper.getLocationID());
         newSightingWrapper.setDate(imageWrapper.getDate());
         UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
@@ -316,7 +316,7 @@ public class ImageBox extends JPanel {
                     // Perform the add and remember to let the model know
                     DefaultTableModel model = ((DefaultTableModel)table.getModel());
                     BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
-                    BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
+                    BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
                     BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper, 
                             bulkUploadPanel.getChkForceLocationGPSCoordinates().isSelected(), bulkUploadPanel.getSelectedLocation());
                     newSightingWrapper.setDate(imageWrapper.getDate());

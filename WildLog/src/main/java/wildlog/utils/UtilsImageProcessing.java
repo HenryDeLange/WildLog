@@ -194,7 +194,7 @@ public class UtilsImageProcessing {
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-            WildLogThumbnailSizes thumbnailSize = WildLogThumbnailSizes.NORMAL;
+            WildLogThumbnailSizes thumbnailSize = WildLogThumbnailSizes.S0300_NORMAL;
             for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
                 if (inSize == size.getSize()) {
                     thumbnailSize = size;

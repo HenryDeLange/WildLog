@@ -303,16 +303,16 @@ public class PanelTabLocations extends JPanel {
             long tempLocationID = (Long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 7);
             int fotoCount = app.getDBI().countWildLogFiles(0, tempLocationID);
             if (fotoCount > 0) {
-                UtilsImageProcessing.setupFoto(tempLocationID, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(tempLocationID, 0, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
             }
             else {
-                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
             }
             UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, tempLocationID);
             UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, tempLocationID);
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
             UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, 0);
             UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, 0);
             if (tblLocation.getSelectedRowCount() == 0) {
@@ -464,7 +464,7 @@ public class PanelTabLocations extends JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         UtilsTableGenerator.setupLocationTableLarge(app, tblLocation, null);
     }//GEN-LAST:event_formComponentShown
 

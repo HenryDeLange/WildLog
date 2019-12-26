@@ -196,26 +196,26 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (locationWL != null) {
             int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
             if (fotoCount > 0) {
-                UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.SMALL, app);
+                UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.S0100_SMALL, app);
             }
             else {
-                lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+                lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
             }
         }
         else {
-            lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+            lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
         }
         if (element != null) {
             int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
             if (fotoCount > 0) {
-                UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
+                UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.S0100_SMALL, app);
             }
             else {
-                lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+                lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
             }
         }
         else {
-            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
         }
         // Setup visit table after the Location has been setup
         if (locationWL != null) {
@@ -298,7 +298,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             cmbViewRating.setSelectedItem(ViewRating.NORMAL);
             cmbLifeStatus.setSelectedItem(LifeStatus.ALIVE);
             cmbTimeAccuracy.setSelectedItem(TimeAccuracy.UNKNOWN);
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
             spnNumberOfElements.setValue(0);
             spnMoonPhase.setValue(-1);
             spnTemperature.setValue(0.0);
@@ -362,7 +362,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     public void run() {
                         imageIndex = 0;
                         // Load the first image
-                        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
                         // Update the label showing the number of images
                         setupNumberOfImages();
                         // Calculate duration
@@ -414,10 +414,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // Setup the sighting's image
         int fotoCount = app.getDBI().countWildLogFiles(0, sighting.getWildLogFileID());
         if (fotoCount > 0) {
-            UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         }
     }
 
@@ -2041,12 +2041,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.nextImage(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.previousImage(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
@@ -2057,7 +2057,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = UtilsImageProcessing.removeImage(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.removeImage(sighting.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
         btnUpdateSightingActionPerformed(null);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -2232,14 +2232,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL.getID());
                 btnAddNewVisit.setEnabled(true);
                 visit = null;
-                UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.SMALL, app);
+                UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.S0100_SMALL, app);
             }
             else {
                 locationWL = null;
                 UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, 0);
                 btnAddNewVisit.setEnabled(false);
                 visit = null;
-                lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+                lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
             }
         }
     }//GEN-LAST:event_tblLocationMouseReleased
@@ -2255,7 +2255,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
             }
             // Clear Images
-            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
         }
     }//GEN-LAST:event_cmbElementTypeActionPerformed
 
@@ -2281,11 +2281,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (tblElement.getSelectedRowCount() == 1) {
             element = app.getDBI().findElement((Long) tblElement.getModel().getValueAt(
                     tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3), null, false, Element.class);
-            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
+            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.S0100_SMALL, app);
         }
         else {
             element = null;
-            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
         }
     }//GEN-LAST:event_tblElementMouseReleased
 

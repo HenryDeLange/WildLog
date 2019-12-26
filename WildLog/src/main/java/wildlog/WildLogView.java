@@ -2556,16 +2556,16 @@ public final class WildLogView extends JFrame {
 //                                UtilsFileProcessing.copyFile(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SYNC_EXPORT),
 //                                        targetFile, false, false);
                                 // Need to create a new image that have power of two dimentions
-                                ImageIcon thumbnail = new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SYNC_EXPORT).toString());
+                                ImageIcon thumbnail = new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0256_SYNC_EXPORT).toString());
                                 try {
                                     // Make the folder
                                     Files.createDirectories(targetFile);
                                     // Create the image to save
-                                    BufferedImage bufferedImage = new BufferedImage(WildLogThumbnailSizes.SYNC_EXPORT.getSize(), WildLogThumbnailSizes.SYNC_EXPORT.getSize(), BufferedImage.TYPE_INT_RGB);
+                                    BufferedImage bufferedImage = new BufferedImage(WildLogThumbnailSizes.S0256_SYNC_EXPORT.getSize(), WildLogThumbnailSizes.S0256_SYNC_EXPORT.getSize(), BufferedImage.TYPE_INT_RGB);
                                     Graphics2D graphics2D = bufferedImage.createGraphics();
                                     graphics2D.drawImage(thumbnail.getImage(),
-                                            (WildLogThumbnailSizes.SYNC_EXPORT.getSize() - thumbnail.getIconWidth())/2,
-                                            (WildLogThumbnailSizes.SYNC_EXPORT.getSize() - thumbnail.getIconHeight())/2,
+                                            (WildLogThumbnailSizes.S0256_SYNC_EXPORT.getSize() - thumbnail.getIconWidth())/2,
+                                            (WildLogThumbnailSizes.S0256_SYNC_EXPORT.getSize() - thumbnail.getIconHeight())/2,
                                             Color.BLACK, null);
                                     // Hardcoding all thumbnails to be JPG (even originally PNG images)
                                     ImageIO.write(bufferedImage, "jpg", targetFile.toFile());

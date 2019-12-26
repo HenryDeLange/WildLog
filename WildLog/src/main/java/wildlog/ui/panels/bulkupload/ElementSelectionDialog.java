@@ -1,10 +1,15 @@
 package wildlog.ui.panels.bulkupload;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import org.apache.logging.log4j.Level;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
@@ -12,17 +17,25 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
+import wildlog.ui.helpers.ScrollableWrappedFlowLayout;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.PanelElement;
+import wildlog.ui.panels.helpers.SightingBox;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -30,6 +43,7 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public class ElementSelectionDialog extends JDialog implements PanelNeedsRefreshWhenDataChanges {
+    private static int GRID_LIMIT = 30;
     private static long previousElementID = 0;
     private static String previousElementName;
     private final WildLogApp app;
@@ -88,7 +102,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 }
             }
         });
-        UtilsImageProcessing.setupFoto(inSelectedElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        UtilsImageProcessing.setupFoto(inSelectedElementID, 0, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
         if (inSelectedElementID > 0) {
             Element element = app.getDBI().findElement(inSelectedElementID, null, false, Element.class);
             if (element != null) {
@@ -100,6 +114,8 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         pnlInfo.setVisible(false);
         pack();
         originalSize = getPreferredSize();
+        // Refresh the grid
+        generateGrid();
     }
 
     /** This method is called from within the constructor to
@@ -128,7 +144,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         jScrollPane21 = new javax.swing.JScrollPane();
         txtIdentification = new javax.swing.JTextArea();
         jLabel3 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        pnlGridView = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a Creature");
@@ -328,8 +344,9 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         jLabel3.setText("Files:");
         jLabel3.setName("jLabel3"); // NOI18N
 
-        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel2.setName("jPanel2"); // NOI18N
+        pnlGridView.setBackground(new java.awt.Color(0, 0, 0));
+        pnlGridView.setName("pnlGridView"); // NOI18N
+        pnlGridView.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
         pnlInfo.setLayout(pnlInfoLayout);
@@ -338,7 +355,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
             .addGroup(pnlInfoLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlGridView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlInfoLayout.createSequentialGroup()
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,7 +374,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .addComponent(pnlGridView, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
 
@@ -447,7 +464,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                     }
                 }
                 // Update the icon
-                UtilsImageProcessing.setupFoto(previousElementID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+                UtilsImageProcessing.setupFoto(previousElementID, 0, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
                 Element element = app.getDBI().findElement(previousElementID, null, false, Element.class);
                 if (element != null) {
                     txtIdentification.setText(element.getDiagnosticDescription());
@@ -467,7 +484,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
             long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
             // Change the image
-            UtilsImageProcessing.setupFoto(selectedID, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+            UtilsImageProcessing.setupFoto(selectedID, 0, lblElementImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
             Element element = app.getDBI().findElement(selectedID, null, false, Element.class);
             if (element != null) {
                 txtIdentification.setText(element.getDiagnosticDescription());
@@ -475,9 +492,11 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
             }
         }
         else {
-            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
+            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
             txtIdentification.setText("");
         }
+        // Refresh the grid
+        generateGrid();
     }//GEN-LAST:event_tblElementMouseReleased
 
     private void tblElementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseClicked
@@ -502,8 +521,10 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         }
         txtSearch.setText("");
         // Clear Images
-        lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+        lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
         txtIdentification.setText("");
+        // Refresh the grid
+        generateGrid();
     }//GEN-LAST:event_cmbElementTypeActionPerformed
 
     private void tblElementKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyReleased
@@ -544,9 +565,13 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     private void btnToggleInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnToggleInfoActionPerformed
         pnlInfo.setVisible(!pnlInfo.isVisible());
         if (pnlInfo.isVisible()) {
-            setPreferredSize(new Dimension(950, (int) getPreferredSize().getHeight()));
+            setPreferredSize(new Dimension(900, (int) getPreferredSize().getHeight()));
+            generateGrid();
         }
         else {
+            pnlGridView.removeAll();
+            pnlGridView.revalidate();
+            pnlGridView.repaint();
             setPreferredSize(originalSize);
         }
         pack();
@@ -556,9 +581,11 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     public void doTheRefresh(Object inIndicator) {
         txtSearch.setText("");
         cmbElementType.setSelectedItem(ElementType.NONE);
-        lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+        lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
         txtIdentification.setText("");
         setupUI(selectedElementID);
+        // Refresh the grid
+        generateGrid();
     }
     
     public boolean isSelectionMade() {
@@ -584,6 +611,80 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     public static void setPreviousElementName(String inPreviousElementName) {
         previousElementName = inPreviousElementName;
     }
+    
+    private void generateGrid() {
+        if (pnlInfo.isVisible()) {
+            pnlGridView.removeAll();
+            pnlGridView.revalidate();
+            pnlGridView.repaint();
+            final JPanel pnlGrid = new JPanel();
+            pnlGrid.setLayout(new ScrollableWrappedFlowLayout(FlowLayout.CENTER));
+            JLabel lblTemp = new JLabel("");
+            lblTemp.setForeground(Color.WHITE);
+            lblTemp.setFont(lblTemp.getFont().deriveFont(18f));
+            pnlGrid.add(lblTemp);
+            pnlGrid.setBackground(Color.BLACK);
+            JScrollPane scrGrid = new JScrollPane(pnlGrid, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+            scrGrid.getVerticalScrollBar().setUnitIncrement(35);
+            pnlGridView.add(scrGrid, BorderLayout.CENTER);
+            pnlGridView.revalidate();
+            pnlGridView.repaint();
+            if (!tblElement.getSelectionModel().isSelectionEmpty()) {
+                lblTemp.setText("Loading...");
+                long selectedID = (long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 3);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<Sighting> lstSightings = app.getDBI().listSightings(selectedID, 0, 0, false, Sighting.class);
+                        Collections.sort(lstSightings, new Comparator<>() {
+                            @Override
+                            public int compare(Sighting inSighting1, Sighting inSighting2) {
+                                if (inSighting1.getViewRating() == null) {
+                                    inSighting1.setViewRating(ViewRating.NORMAL);
+                                }
+                                if (inSighting2.getViewRating() == null) {
+                                    inSighting2.setViewRating(ViewRating.NORMAL);
+                                }
+                                int result = inSighting1.getViewRating().compareTo(inSighting2.getViewRating());
+                                if (result == 0) {
+                                    result = inSighting1.compareTo(inSighting2);
+                                }
+                                return result;
+                            }
+                        });
+                        pnlGrid.removeAll();
+                        if (!lstSightings.isEmpty()) {
+                            ((ScrollableWrappedFlowLayout) pnlGrid.getLayout()).setAlignment(FlowLayout.LEFT);
+                            int boxCount = 0;
+                            breakLoop: for (Sighting sighting : lstSightings) {
+                                List<WildLogFile> lstSightingFiles = app.getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
+                                if (lstSightingFiles != null && !lstSightingFiles.isEmpty()) {
+                                    for (int t = 0; t < lstSightingFiles.size(); t++) {
+                                        generateGridBox(pnlGrid, sighting, t);
+                                        boxCount++;
+                                        if (boxCount >= GRID_LIMIT) {
+                                            break breakLoop;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        pnlGrid.revalidate();
+                        pnlGrid.repaint();
+                        pnlGridView.revalidate();
+                        pnlGridView.repaint();
+                    }
+                });
+            }
+        }
+    }
+    
+    private void generateGridBox(JPanel inPnlGrid, Sighting inSighting, int inFileIndex) {
+        SightingBox sightingBox = new SightingBox(inSighting, inFileIndex, false);
+        sightingBox.setBoxSize(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
+        sightingBox.setSelectable(false);
+        inPnlGrid.add(sightingBox);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -594,10 +695,10 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane21;
     private javax.swing.JLabel lblElementImage;
+    private javax.swing.JPanel pnlGridView;
     private javax.swing.JPanel pnlInfo;
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlWrapper;

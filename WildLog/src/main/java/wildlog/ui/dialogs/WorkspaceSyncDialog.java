@@ -113,8 +113,8 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncThumbnails.setEnabled(false);
         rdbSyncOriginalImages.setEnabled(false);
         cmbThumbnailSize.setEnabled(false);
-        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_TINY);
-        cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT);
+        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.S0020_VERY_TINY);
+        cmbThumbnailSize.removeItem(WildLogThumbnailSizes.S2048_SYNC_LIMIT);
         // Mode
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(false);
@@ -137,8 +137,8 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncThumbnails.setEnabled(false);
         rdbSyncOriginalImages.setEnabled(false);
         cmbThumbnailSize.setEnabled(true);
-        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.SYNC_EXPORT);
-        cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT);
+        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.S0256_SYNC_EXPORT);
+        cmbThumbnailSize.removeItem(WildLogThumbnailSizes.S2048_SYNC_LIMIT);
         // Mode
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(false);
@@ -161,9 +161,9 @@ public class WorkspaceSyncDialog extends JDialog {
         rdbSyncThumbnails.setEnabled(true);
         rdbSyncOriginalImages.setEnabled(true);
         cmbThumbnailSize.setEnabled(true);
-        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.LARGE);
-        cmbThumbnailSize.removeItem(WildLogThumbnailSizes.SYNC_LIMIT); // Removing just to be sure it's not added twice (below)
-        cmbThumbnailSize.addItem(WildLogThumbnailSizes.SYNC_LIMIT);
+        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.S0512_LARGE);
+        cmbThumbnailSize.removeItem(WildLogThumbnailSizes.S2048_SYNC_LIMIT); // Removing just to be sure it's not added twice (below)
+        cmbThumbnailSize.addItem(WildLogThumbnailSizes.S2048_SYNC_LIMIT);
         // Mode
         rdbModeBatch.setSelected(true);
         rdbModeSingle.setEnabled(true);
@@ -341,7 +341,7 @@ public class WorkspaceSyncDialog extends JDialog {
 
         cmbThumbnailSize.setMaximumRowCount(15);
         cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
-        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.NORMAL);
+        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.S0300_NORMAL);
         cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbThumbnailSize.setEnabled(false);
 

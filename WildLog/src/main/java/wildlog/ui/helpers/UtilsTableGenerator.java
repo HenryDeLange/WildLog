@@ -409,7 +409,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
                                 }
                                 else {
-                                    data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.VERY_SMALL);
+                                    data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
                                 }
                                 data[finalT][1] = tempVisit.getName();
                                 data[finalT][2] = tempVisit.getStartDate();
@@ -506,7 +506,7 @@ public final class UtilsTableGenerator {
                                         data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
                                     }
                                     else {
-                                        data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.VERY_SMALL);
+                                        data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
                                     }
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
@@ -604,7 +604,7 @@ public final class UtilsTableGenerator {
                                         data[finalT][0] = setupThumbnailIcon(inApp, tempVisit.getWildLogFileID());
                                     }
                                     else {
-                                        data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.VERY_SMALL);
+                                        data[finalT][0] = UtilsImageProcessing.getScaledIconForStashedFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
                                     }
                                     data[finalT][1] = tempVisit.getName();
                                     data[finalT][2] = tempVisit.getStartDate();
@@ -724,7 +724,7 @@ public final class UtilsTableGenerator {
                         // Setup the default renderers, column and row sizes etc.
                         setupRenderersAndThumbnailRows(inTable, true, false, 0);
                         inTable.getColumnModel().getColumn(7).setCellRenderer(
-                                new IconCellRenderer(WildLogThumbnailSizes.VERY_TINY.getSize(), true));
+                                new IconCellRenderer(WildLogThumbnailSizes.S0020_VERY_TINY.getSize(), true));
                         // Setup the column sizes
                         inTable.getColumnModel().getColumn(1).setMinWidth(100);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
@@ -889,7 +889,7 @@ public final class UtilsTableGenerator {
                     // Set a different TextCellRenderer to left align some rows
                     inTable.setDefaultRenderer(String.class, new TextCellRenderer(0, 1, 2, 3));
                     inTable.getColumnModel().getColumn(9).setCellRenderer(
-                            new IconCellRenderer(WildLogThumbnailSizes.VERY_TINY.getSize(), true));
+                            new IconCellRenderer(WildLogThumbnailSizes.S0020_VERY_TINY.getSize(), true));
                     // Continue to setup the column sizes
                     inTable.getColumnModel().getColumn(0).setMinWidth(110);
                     inTable.getColumnModel().getColumn(0).setPreferredWidth(110);
@@ -1477,9 +1477,9 @@ public final class UtilsTableGenerator {
         if (inApp.getWildLogOptions().isUseThumbnailTables()) {
             WildLogFile wildLogFile = inApp.getDBI().findWildLogFile(0, inWildLogFileID, null, null, WildLogFile.class);
             if (wildLogFile != null) {
-                return new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL).toString());
+                return new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL).toString());
             }
-            return UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
+            return UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0060_VERY_SMALL);
         }
         else {
             return null;
@@ -1493,10 +1493,10 @@ public final class UtilsTableGenerator {
             primaryColumn = 0 + inIconOffset;
         }
         else {
-            inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-            inTable.getColumnModel().getColumn(0 + inIconOffset).setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-            inTable.getColumnModel().getColumn(0 + inIconOffset).setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-            inTable.getColumnModel().getColumn(0 + inIconOffset).setCellRenderer(new IconCellRenderer(WildLogThumbnailSizes.VERY_SMALL.getSize()));
+            inTable.setRowHeight(WildLogThumbnailSizes.S0060_VERY_SMALL.getSize() + 4);
+            inTable.getColumnModel().getColumn(0 + inIconOffset).setMinWidth(WildLogThumbnailSizes.S0060_VERY_SMALL.getSize() + 4);
+            inTable.getColumnModel().getColumn(0 + inIconOffset).setMaxWidth(WildLogThumbnailSizes.S0060_VERY_SMALL.getSize() + 4);
+            inTable.getColumnModel().getColumn(0 + inIconOffset).setCellRenderer(new IconCellRenderer(WildLogThumbnailSizes.S0060_VERY_SMALL.getSize()));
             primaryColumn = 1 + inIconOffset;
         }
         inTable.setDefaultRenderer(Object.class, new TextCellRenderer(primaryColumn));

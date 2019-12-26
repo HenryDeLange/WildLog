@@ -59,7 +59,7 @@ public class ZoomDialog extends JDialog {
         if (filesToView == null || filesToView.isEmpty() || fileIndex >= filesToView.size() || fileIndex < 0) {
             // No files to display
             setTitle("Zoom Popup - No Files");
-            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
             pack();
             UtilsDialog.setDialogToCenter(getParent(), this);
         }
@@ -67,9 +67,9 @@ public class ZoomDialog extends JDialog {
             setupFile(inFilesToView.get(fileIndex));
         }
         // Set size
-        lblZoomedFile.setMinimumSize(new Dimension(WildLogThumbnailSizes.VERY_LARGE.getSize(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
-        lblZoomedFile.setPreferredSize(new Dimension(WildLogThumbnailSizes.VERY_LARGE.getSize(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
-        lblZoomedFile.setMaximumSize(new Dimension(WildLogThumbnailSizes.VERY_LARGE.getSize(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
+        lblZoomedFile.setMinimumSize(new Dimension(WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize()));
+        lblZoomedFile.setPreferredSize(new Dimension(WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize()));
+        lblZoomedFile.setMaximumSize(new Dimension(WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize()));
         pack();
         UtilsDialog.setDialogToCenter(getParent(), this);
     }
@@ -160,15 +160,15 @@ public class ZoomDialog extends JDialog {
     private void setupFile(Path inPath) {
         setTitle("Zoom Popup - " + inPath.getFileName().toString());
         if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
-            ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.VERY_LARGE.getSize(), true);
+            ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), true);
             lblZoomedFile.setIcon(imageIcon);
         }
         else
         if (WildLogFileExtentions.Movies.isKnownExtention(inPath)) {
-            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.NORMAL));
+            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.S0300_NORMAL));
         }
         else {
-            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForOtherFiles(WildLogThumbnailSizes.NORMAL));
+            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForOtherFiles(WildLogThumbnailSizes.S0300_NORMAL));
         }
         // Don't set the tooltip. If it is set then sometimes the tooltip uses the initial ESC press.
 //        lblZoomedFile.setToolTipText(inPath.getFileName().toString());

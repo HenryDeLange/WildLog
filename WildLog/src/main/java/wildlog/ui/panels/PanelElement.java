@@ -99,10 +99,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         imageIndex = 0;
         int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
         if (fotoCount > 0) {
-            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         }
         setupNumberOfImages();
         // Setup the table
@@ -163,7 +163,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     @Override
                     public void run() {
                         imageIndex = 0;
-                        UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                        UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
                         setupNumberOfImages();
                         // everything went well - saving
                         btnUpdateActionPerformed(null);
@@ -1128,12 +1128,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.previousImage(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.nextImage(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
@@ -1185,10 +1185,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
         int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
         if (fotoCount > 0) {
-            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         }
         setupNumberOfImages();
         if (rdbLocations.isSelected()) {
@@ -1218,7 +1218,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = UtilsImageProcessing.removeImage(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.removeImage(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed

@@ -2,6 +2,7 @@ package wildlog.ui.panels.helpers;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -13,10 +14,11 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
-public class SightingBox extends JPanel {
+public final class SightingBox extends JPanel {
     private final Sighting sighting;
     private final int fileIndex;
     private final boolean alsoSelectRelated;
+    private boolean selectable = true;
 
 
     public SightingBox(Sighting inSighting, int inFileIndex, boolean inAlsoSelectRelated) {
@@ -24,9 +26,19 @@ public class SightingBox extends JPanel {
         fileIndex = inFileIndex;
         alsoSelectRelated = inAlsoSelectRelated;
         initComponents();
-        UtilsImageProcessing.setupFoto(inSighting.getID(), fileIndex, lblImage, WildLogThumbnailSizes.MEDIUM, WildLogApp.getApplication());
         lblImage.setToolTipText(Long.toString(inSighting.getID()));
         lblName.setText(inSighting.getCachedElementName());
+        // Default to 200px size
+        setBoxSize(WildLogThumbnailSizes.S0200_MEDIUM);
+    }
+    
+    public void setBoxSize(WildLogThumbnailSizes inSize) {
+        UtilsImageProcessing.setupFoto(sighting.getID(), fileIndex, lblImage, inSize, WildLogApp.getApplication());
+        setPreferredSize(new Dimension(inSize.getSize(), inSize.getSize()));
+    }
+
+    public void setSelectable(boolean inSelectable) {
+        selectable = inSelectable;
     }
 
     /** This method is called from within the constructor to
@@ -46,10 +58,7 @@ public class SightingBox extends JPanel {
 
         setBackground(new java.awt.Color(0, 0, 0));
         setBorder(javax.swing.BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        setMaximumSize(new java.awt.Dimension(200, 220));
-        setMinimumSize(new java.awt.Dimension(200, 220));
         setName("Form"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(200, 220));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 formMouseReleased(evt);
@@ -93,29 +102,34 @@ public class SightingBox extends JPanel {
             // Toggle selection
             toggleSelection();
             // Open the file if it was double clicked
-            if (evt.getClickCount() == 2) {
+            if (!selectable || evt.getClickCount() == 2) {
                 UtilsFileProcessing.openFile(sighting.getID(), fileIndex, WildLogApp.getApplication());
             }
         }
     }//GEN-LAST:event_formMouseReleased
 
     public void toggleSelection() {
-        if (((LineBorder) getBorder()).getLineColor() == Color.LIGHT_GRAY) {
-            setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-        }
-        else {
-            setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
-        }
-        // If this is the Grid Files view, then also select other boxes from the same sighting
-        if (alsoSelectRelated) {
-            for (Component componenet : ((JPanel) getParent()).getComponents()) {
-                if (componenet instanceof SightingBox) {
-                    SightingBox sightingBox = (SightingBox) componenet;
-                    if (sighting.getID() == sightingBox.getSighting().getID()) {
-                        sightingBox.setBorder(BorderFactory.createLineBorder(((LineBorder) getBorder()).getLineColor(), ((LineBorder) getBorder()).getThickness()));
+        if (selectable) {
+            if (((LineBorder) getBorder()).getLineColor() == Color.LIGHT_GRAY) {
+                setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
+            }
+            else {
+                setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
+            }
+            // If this is the Grid Files view, then also select other boxes from the same sighting
+            if (alsoSelectRelated) {
+                for (Component componenet : ((JPanel) getParent()).getComponents()) {
+                    if (componenet instanceof SightingBox) {
+                        SightingBox sightingBox = (SightingBox) componenet;
+                        if (sighting.getID() == sightingBox.getSighting().getID()) {
+                            sightingBox.setBorder(BorderFactory.createLineBorder(((LineBorder) getBorder()).getLineColor(), ((LineBorder) getBorder()).getThickness()));
+                        }
                     }
                 }
             }
+        }
+        else {
+            setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1));
         }
     }
 

@@ -123,10 +123,10 @@ public class PanelLocation extends PanelCanSetupHeader {
         imageIndex = 0;
         int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
-            UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         }
         setupNumberOfImages();
         // Setup the tables
@@ -189,7 +189,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                     @Override
                     public void run() {
                         imageIndex = 0;
-                        UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                        UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
                         setupNumberOfImages();
                         // everything went well - saving
                         btnUpdateActionPerformed(null);
@@ -1155,10 +1155,10 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
         int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
-            UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         }
         setupNumberOfImages();
         // Wait for the table to finish loading
@@ -1276,7 +1276,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 && WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
             return;
         }
-        imageIndex = UtilsImageProcessing.removeImage(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.removeImage(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -1350,7 +1350,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.nextImage(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
@@ -1361,7 +1361,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        imageIndex = UtilsImageProcessing.previousImage(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 

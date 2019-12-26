@@ -147,11 +147,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Load the location detials
         if (selectedLocation != null) {
             lblLocation.setText(selectedLocation.getName());
-            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.S0100_SMALL, app);
         }
         else {
             lblLocation.setText("");
-            lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+            lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
         }
         // If this bulk import was called from the Visit then set the name and disable the fields
         if (existingVisit != null && existingVisit.getID() > 0) {
@@ -884,7 +884,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 // Make sure the location is OK
                 if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().trim().isEmpty()) {
                     // Validate the visit is OK
-                    if (UtilsData.checkCharacters(txtVisitName.getText().trim())) {
+                    if (!UtilsData.checkCharacters(txtVisitName.getText().trim())) {
                         WLOptionPane.showMessageDialog(app.getMainFrame(),
                                 "The Period Name contains unsupported characters.", 
                                 "Can't Save", JOptionPane.ERROR_MESSAGE);
@@ -1208,11 +1208,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Reload the location (espesially the image) as it might have changed
         if (selectedLocation != null) {
             lblLocation.setText(selectedLocation.getName());
-            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.S0100_SMALL, app);
         }
         else {
             lblLocation.setText("");
-            lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
+            lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
         }
         // Re-check all species images already assigned since some might have changed
         DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
@@ -1222,7 +1222,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 Element element = app.getDBI().findElement(sightingWrapper.getElementID(), null, false, Element.class);
                 if (element != null) {
                     JLabel tempLabel = new JLabel();
-                    UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+                    UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
                     sightingWrapper.setIcon(tempLabel.getIcon());
                     sightingWrapper.setCachedElementName(element.getPrimaryName());
                 }
@@ -1231,7 +1231,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         ElementSelectionDialog.setPreviousElementID(0);
                     }
                     sightingWrapper.setElementID(0);
-                    sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_VERY_SMALL));
+                    sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
                     sightingWrapper.setCachedElementName("");
                 }
                 ((DefaultTableModel) tblBulkImport.getModel()).fireTableDataChanged();
@@ -1277,7 +1277,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         if (dialog.isSelectionMade() && dialog.getSelectedLocationID() > 0) {
             selectedLocation = app.getDBI().findLocation(dialog.getSelectedLocationID(), null, false, Location.class);
             lblLocation.setText(selectedLocation.getName());
-            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
+            UtilsImageProcessing.setupFoto(selectedLocation.getWildLogFileID(), 0, lblImageLocation, WildLogThumbnailSizes.S0100_SMALL, app);
             setupVisitName();
             // Update the InfoBoxes
             DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());

@@ -1479,14 +1479,14 @@ public abstract class DBI_JDBC implements DBI {
             if ((inPrimaryName == null || inPrimaryName.length() == 0) && inElementType != null) {
                 sql = sql + " WHERE ELEMENTTYPE = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, inElementType.toString());
+                state.setByte(1, inElementType.getID());
             }
             else
             if (inPrimaryName != null && inPrimaryName.length() > 0 && inElementType != null) {
                 sql = sql + " WHERE PRIMARYNAME = ? AND ELEMENTTYPE = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inPrimaryName));
-                state.setString(2, inElementType.toString());
+                state.setByte(2, inElementType.getID());
             }
             else
             if (inScientificName != null && inScientificName.length() > 0) {
@@ -1590,7 +1590,7 @@ public abstract class DBI_JDBC implements DBI {
             if (inVisitType != null) {
                 sql = sql + " WHERE VISITTYPE = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, inVisitType.toString());
+                state.setByte(1, inVisitType.getID());
             }
             else {
                 state = conn.prepareStatement(sql);

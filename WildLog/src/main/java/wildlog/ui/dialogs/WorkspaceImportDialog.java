@@ -268,7 +268,7 @@ public class WorkspaceImportDialog extends JDialog {
 
         cmbThumbnailSize.setMaximumRowCount(15);
         cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
-        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_LARGE);
+        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.S0700_VERY_LARGE);
         cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbThumbnailSize.setEnabled(false);
 
@@ -826,10 +826,10 @@ public class WorkspaceImportDialog extends JDialog {
         }
         // Create thumbnails
         if (WildLogFileType.IMAGE.equals(fileToImport.getFileType())) {
-            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
         }
     }
 

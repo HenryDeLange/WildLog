@@ -85,7 +85,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         setupDefaultFilters();
         // Continue loading the components
         initComponents();
-        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         // Add key listeners to table to allow the selection of rows based on key events.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
         // Add listner to auto resize columns.
@@ -679,14 +679,14 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             int fotoCount = app.getDBI().countWildLogFiles(0, sightingID);
             if (fotoCount > 0 ) {
                 imageIndex = 0;
-                UtilsImageProcessing.setupFoto(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
             }
             else {
-                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
             }
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         }
     }//GEN-LAST:event_tblSightingsMouseReleased
 
@@ -930,14 +930,14 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void btnPrevFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevFileActionPerformed
         if (tblSightings.getSelectedRowCount() == 1) {
             long sightingID = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
-            imageIndex = UtilsImageProcessing.previousImage(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            imageIndex = UtilsImageProcessing.previousImage(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         }
     }//GEN-LAST:event_btnPrevFileActionPerformed
 
     private void btnNextFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextFileActionPerformed
         if (tblSightings.getSelectedRowCount() == 1) {
             long sightingID = (Long) tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8);
-            imageIndex = UtilsImageProcessing.nextImage(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+            imageIndex = UtilsImageProcessing.nextImage(sightingID, imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
         }
     }//GEN-LAST:event_btnNextFileActionPerformed
 
@@ -1225,6 +1225,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                         lblTemp.setFont(lblTemp.getFont().deriveFont(18f));
                         pnlGrid.add(lblTemp);
                     }
+                    pnlGrid.revalidate();
+                    pnlGrid.repaint();
+                    pnlLayoutView.revalidate();
+                    pnlLayoutView.repaint();
                 }
             });
         }

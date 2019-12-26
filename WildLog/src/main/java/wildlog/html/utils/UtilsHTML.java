@@ -36,7 +36,7 @@ public final class UtilsHTML {
 
     
     public static String generateHTMLImages(WildLogFile inWildLogFile, UtilsHTMLExportTypes inExportType) {
-        Path fromFile = inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+        Path fromFile = inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
         Path toFileAsRelativePath;
         if (UtilsHTMLExportTypes.ForHTML.equals(inExportType)) {
             // Create the directories
@@ -84,7 +84,7 @@ public final class UtilsHTML {
         else
         if (inExportType.equals(UtilsHTMLExportTypes.ForMap)) {
             // Gebruik URI hier om in Windows en Linux reg te werk
-            return "<img src='" + inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL).toUri().toString() + "'/>  ";
+            return "<img src='" + inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL).toUri().toString() + "'/>  ";
         }
         return "[image error]";
     }
@@ -279,7 +279,7 @@ public final class UtilsHTML {
             catch (IOException ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
-            Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+            Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
             Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
             UtilsFileProcessing.copyFile(fromFile, thumbnailPath, true, true);
             // Get relative path
@@ -411,7 +411,7 @@ public final class UtilsHTML {
                 catch (IOException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
-                Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM);
+                Path fromFile = wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM);
                 Path thumbnailPath = thumbnailFolder.resolve(fromFile.getFileName());
                 UtilsFileProcessing.copyFile(fromFile, thumbnailPath, true, true);
                 Path thumbnailAsRelativePath = WildLogPaths.WILDLOG_EXPORT_HTML_FANCY.getAbsoluteFullPath().relativize(thumbnailPath);

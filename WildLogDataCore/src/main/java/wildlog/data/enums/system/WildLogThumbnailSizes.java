@@ -3,33 +3,33 @@ package wildlog.data.enums.system;
 
 public enum WildLogThumbnailSizes {
     /** 20px - For Icons */
-    VERY_TINY(20),
+    S0020_VERY_TINY(20),
     /** 25px - For Icons (larger) */
-    TINY(25),
+    S0025_TINY(25),
     /** 60px - For Photos (Tables) */
-    VERY_SMALL(60),
+    S0060_VERY_SMALL(60),
     /** 100px - For Photos (Small Display) */
-    SMALL(100),
+    S0100_SMALL(100),
     /** 125px - For Photos (Bulk Import Info Box) */
-    MEDIUM_VERY_SMALL(125),
+    S0125_MEDIUM_VERY_SMALL(125),
     /** 150px - For Photos (Medium Display) */
-    MEDIUM_SMALL(150),
+    S0150_MEDIUM_SMALL(150),
     /** 200px - For Photos (Bulk Import) */
-    MEDIUM(200),
+    S0200_MEDIUM(200),
     /** 256px - For Photos (WildNote Sync) */
-    SYNC_EXPORT(256),
+    S0256_SYNC_EXPORT(256),
     /** 300px - For Photos (Large Display) */
-    NORMAL(300),
+    S0300_NORMAL(300),
     /** 512px - Not Used Currently */
-    LARGE(512),
+    S0512_LARGE(512),
     /** 700px - For Photos (Browse, Export) */
-    VERY_LARGE(700),
+    S0700_VERY_LARGE(700),
     /** 875px - For Photos (Cropping) */
-    VERY_VERY_LARGE(875),
+    S0875_VERY_VERY_LARGE(875),
     /** 1024px - For Photos (Export) */
-    EXTRA_LARGE(1024),
+    S1024_EXTRA_LARGE(1024),
     /** 2048px - For Photos (Max size to be uploaded to iNaturalist / Azure) */
-    SYNC_LIMIT(2048);
+    S2048_SYNC_LIMIT(2048);
 
     private final int size;
 

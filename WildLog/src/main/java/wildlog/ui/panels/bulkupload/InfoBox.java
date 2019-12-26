@@ -363,7 +363,7 @@ public class InfoBox extends JPanel {
         dialog.setVisible(true);
         // Update the UI
         table.getCellEditor().stopCellEditing();
-        UtilsImageProcessing.setupFoto(sightingWrapper.getElementID(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        UtilsImageProcessing.setupFoto(sightingWrapper.getElementID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
         sightingWrapper.setIcon(lblImage.getIcon());
         populateUI();
     }//GEN-LAST:event_btnEditActionPerformed
@@ -403,7 +403,7 @@ public class InfoBox extends JPanel {
                 table.getCellEditor().stopCellEditing();
                 sightingWrapper.setElementID(ElementSelectionDialog.getPreviousElementID());
                 sightingWrapper.setCachedElementName(ElementSelectionDialog.getPreviousElementName());
-                UtilsImageProcessing.setupFoto(ElementSelectionDialog.getPreviousElementID(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+                UtilsImageProcessing.setupFoto(ElementSelectionDialog.getPreviousElementID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
                 sightingWrapper.setIcon(lblImage.getIcon());
                 evt.consume();
             }
@@ -470,7 +470,7 @@ public class InfoBox extends JPanel {
         table.getCellEditor().stopCellEditing();
         sightingWrapper.setElementID(emptyElement.getID());
         sightingWrapper.setCachedElementName(emptyElement.getPrimaryName());
-        UtilsImageProcessing.setupFoto(emptyElement.getID(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        UtilsImageProcessing.setupFoto(emptyElement.getID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
         sightingWrapper.setIcon(lblImage.getIcon());
     }//GEN-LAST:event_btnEmptyActionPerformed
 
@@ -484,7 +484,7 @@ public class InfoBox extends JPanel {
         table.getCellEditor().stopCellEditing();
         sightingWrapper.setElementID(vehicleElement.getID());
         sightingWrapper.setCachedElementName(vehicleElement.getPrimaryName());
-        UtilsImageProcessing.setupFoto(vehicleElement.getID(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_VERY_SMALL, app);
+        UtilsImageProcessing.setupFoto(vehicleElement.getID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
         sightingWrapper.setIcon(lblImage.getIcon());
     }//GEN-LAST:event_btnVehicleActionPerformed
 

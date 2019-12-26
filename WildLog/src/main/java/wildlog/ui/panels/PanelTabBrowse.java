@@ -839,11 +839,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             setupFile(app.getDBI().listWildLogFiles(newWildLogFile.getLinkID(), null, WildLogFile.class));
                             // Recreate the thumbnails
                             // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
-                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
-                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0700_VERY_LARGE);
                         }
                         catch (LLJTranException | IOException ex) {
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -2030,7 +2030,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                     public void run() {
                                         Image tempConcImage;
                                         if (WildLogApp.getApplication().getWildLogOptions().isUseThumnailBrowsing()) {
-                                            tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE), inFinalSize, true).getImage();
+                                            tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0700_VERY_LARGE), inFinalSize, true).getImage();
                                         }
                                         else {
                                             tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsolutePath(), inFinalSize, true).getImage();

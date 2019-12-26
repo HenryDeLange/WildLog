@@ -313,7 +313,7 @@ public class WorkspaceExportDialog extends JDialog {
 
         cmbThumbnailSize.setMaximumRowCount(15);
         cmbThumbnailSize.setModel(new DefaultComboBoxModel(WildLogThumbnailSizes.values()));
-        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.VERY_LARGE);
+        cmbThumbnailSize.setSelectedItem(WildLogThumbnailSizes.S0700_VERY_LARGE);
         cmbThumbnailSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbThumbnailSize.setEnabled(false);
 

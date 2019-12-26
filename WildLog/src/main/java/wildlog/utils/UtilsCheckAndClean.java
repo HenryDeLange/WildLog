@@ -844,11 +844,11 @@ public class UtilsCheckAndClean {
                         @Override
                         public void run() {
                             // Maak net die nodigste thumbnails, want anders vat dinge donners lank
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM);
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
                             // Not going to bother with synchornization here, since it's just the progress bar
                             countThumbnails.counter++;
                             inProgressbarTask.setTaskProgress(85 + (int)(countThumbnails.counter/(double)listFiles.size()*14));
@@ -901,11 +901,11 @@ public class UtilsCheckAndClean {
                         @Override
                         public void run() {
                             // Maak net die nodigste thumbnails, want anders vat dinge donners lank
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM);
-                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM);
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
                             // Not going to bother with synchornization here, since it's just the progress bar
                             countThumbnails.counter++;
                             inProgressbarTask.setTaskProgress(85 + (int)(countThumbnails.counter/(double)listFiles.size()*14));

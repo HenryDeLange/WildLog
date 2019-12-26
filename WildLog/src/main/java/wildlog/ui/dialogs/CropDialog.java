@@ -72,7 +72,7 @@ public class CropDialog extends JDialog {
         UtilsDialog.addEscapeKeyListener(this);
         // Setup the image
         setTitle("Crop - " + wildLogFile.getFilename());
-        ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), WildLogThumbnailSizes.VERY_VERY_LARGE.getSize(), true);
+        ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), WildLogThumbnailSizes.S0875_VERY_VERY_LARGE.getSize(), true);
         ((CroppingPanel) pnlImage).setImage(imageIcon.getImage(), imageIcon.getIconWidth(), imageIcon.getIconHeight());
         pnlImage.setMinimumSize(new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight()));
         pnlImage.setPreferredSize(new Dimension(imageIcon.getIconWidth(), imageIcon.getIconHeight()));
@@ -349,7 +349,7 @@ public class CropDialog extends JDialog {
                     try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(newWildLogFile.getAbsolutePath().toFile()))) {
                         // Get crop coordinates
                         CroppingPanel panel = ((CroppingPanel) pnlImage);
-                        double ratio = ((double) Math.max(lljTran.getWidth(), lljTran.getHeight())) / ((double) WildLogThumbnailSizes.VERY_VERY_LARGE.getSize());
+                        double ratio = ((double) Math.max(lljTran.getWidth(), lljTran.getHeight())) / ((double) WildLogThumbnailSizes.S0875_VERY_VERY_LARGE.getSize());
                         int firstX = Math.min(panel.getBeginX(), panel.getEndX());
                         int firstY = Math.min(panel.getBeginY(), panel.getEndY());
                         int lastX = Math.max(panel.getBeginX(), panel.getEndX());
@@ -377,7 +377,7 @@ public class CropDialog extends JDialog {
                     else {
                         // An iNat crop, so the image can be resized to 2048px 
                         // (to make uploads faster because iNat will just resize anything bigger on their side)
-                        UtilsImageProcessing.resizeImage(newWildLogFile, WildLogThumbnailSizes.SYNC_LIMIT.getSize());
+                        UtilsImageProcessing.resizeImage(newWildLogFile, WildLogThumbnailSizes.S2048_SYNC_LIMIT.getSize());
                     }
                 }
                 catch (IOException | LLJTranException ex) {

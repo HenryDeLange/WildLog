@@ -234,18 +234,20 @@ public final class UtilsFileProcessing {
                 if (inTheLock != null) {
                     synchronized (inTheLock) {
                         // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM);
+                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
                     }
                 }
                 else {
                     // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
-                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM);
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
                 }
             }
         }

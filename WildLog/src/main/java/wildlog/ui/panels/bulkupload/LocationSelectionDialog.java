@@ -72,7 +72,7 @@ public class LocationSelectionDialog extends JDialog {
                 }
             }
         });
-        UtilsImageProcessing.setupFoto(inSelectedLocationID, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+        UtilsImageProcessing.setupFoto(inSelectedLocationID, 0, lblImageLocation, WildLogThumbnailSizes.S0150_MEDIUM_SMALL, app);
     }
 
     /** This method is called from within the constructor to
@@ -209,10 +209,10 @@ public class LocationSelectionDialog extends JDialog {
         if (!tblLocation.getSelectionModel().isSelectionEmpty()) {
             long selectedID = (long) tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 2);
             // Change the image
-            UtilsImageProcessing.setupFoto(selectedID, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+            UtilsImageProcessing.setupFoto(selectedID, 0, lblImageLocation, WildLogThumbnailSizes.S0150_MEDIUM_SMALL, app);
         }
         else {
-            lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
+            lblImageLocation.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0150_MEDIUM_SMALL));
         }
     }//GEN-LAST:event_tblLocationMouseReleased
 

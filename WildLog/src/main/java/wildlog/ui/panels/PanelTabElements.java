@@ -324,17 +324,17 @@ public class PanelTabElements extends javax.swing.JPanel {
             long tempElementID = (Long) tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 6);
             int fotoCount = app.getDBI().countWildLogFiles(0, tempElementID);
             if (fotoCount > 0) {
-                UtilsImageProcessing.setupFoto(tempElementID, 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(tempElementID, 0, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
             }
             else {
-                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
             }
             // Get Locations
             UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, tempElementID);
         }
         else {
             UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, 0);
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
             if (tblElement.getSelectedRowCount() == 0) {
                 tblLocation.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
             }
@@ -442,7 +442,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         ElementType type = (ElementType) cmbType.getSelectedItem();
         if (!ElementType.NONE.equals(type)) {
             UtilsTableGenerator.setupElementTableLarge(app, tblElement, null, type, txtSearch.getText());

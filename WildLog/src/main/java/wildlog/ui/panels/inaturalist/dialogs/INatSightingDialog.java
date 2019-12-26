@@ -146,12 +146,12 @@ public class INatSightingDialog extends JDialog {
             txtInfo.setText("");
             imageCounterINat = 0;
             lblImageINat.setIcon(new ImageIcon(
-                    WildLogSystemImages.NO_FILES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL).toString()));
+                    WildLogSystemImages.NO_FILES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL).toString()));
             setupNumberOfImagesINat(0);
             
         }
         lblINaturalistID.setText(Long.toString(linkedData.getINaturalistID()));
-        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageCounterWL, lblImageWL, WildLogThumbnailSizes.NORMAL, app);
+        UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageCounterWL, lblImageWL, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImagesWL();
     }
 
@@ -190,7 +190,7 @@ public class INatSightingDialog extends JDialog {
         catch (Exception ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             lblImageINat.setIcon(new ImageIcon(
-                    WildLogSystemImages.BROKEN_FILES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL).toString()));
+                    WildLogSystemImages.BROKEN_FILES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL).toString()));
             setupNumberOfImagesINat(0);
         }
         finally {
@@ -980,12 +980,12 @@ public class INatSightingDialog extends JDialog {
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnPreviousImageWLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageWLActionPerformed
-        imageCounterWL = UtilsImageProcessing.previousImage(sighting.getWildLogFileID(), imageCounterWL, lblImageWL, WildLogThumbnailSizes.NORMAL, app);
+        imageCounterWL = UtilsImageProcessing.previousImage(sighting.getWildLogFileID(), imageCounterWL, lblImageWL, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImagesWL();
     }//GEN-LAST:event_btnPreviousImageWLActionPerformed
 
     private void btnNextImageWLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageWLActionPerformed
-        imageCounterWL = UtilsImageProcessing.nextImage(sighting.getWildLogFileID(), imageCounterWL, lblImageWL, WildLogThumbnailSizes.NORMAL, app);
+        imageCounterWL = UtilsImageProcessing.nextImage(sighting.getWildLogFileID(), imageCounterWL, lblImageWL, WildLogThumbnailSizes.S0300_NORMAL, app);
         setupNumberOfImagesWL();
     }//GEN-LAST:event_btnNextImageWLActionPerformed
 
