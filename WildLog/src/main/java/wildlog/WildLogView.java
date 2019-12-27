@@ -40,7 +40,6 @@ import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.ImageOutputStream;
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -148,6 +147,7 @@ import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogSystemImages;
 import wildlog.xml.utils.UtilsXML;
 
+
 /**
  * The application's main frame.
  */
@@ -162,6 +162,7 @@ public final class WildLogView extends JFrame {
     private final BalloonTip balloonTip;
     private PanelTabBrowse panelTabBrowse;
 
+    
     public WildLogView() {
         // Call the generated code to build the GUI
         initComponents();
@@ -170,13 +171,8 @@ public final class WildLogView extends JFrame {
         // status bar initialization - message timeout, idle icon and busy animation, etc
         balloonTip = new BalloonTip(progressPanel, "");
         balloonTip.setVisible(false);
-        JButton btnCloseBallonTip = new JButton();
-		btnCloseBallonTip.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		btnCloseBallonTip.setContentAreaFilled(false);
-		btnCloseBallonTip.setIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_default.png")));
-		btnCloseBallonTip.setRolloverIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_rollover.png")));
-		btnCloseBallonTip.setPressedIcon(new ImageIcon(BalloonTip.class.getResource("/net/java/balloontip/images/close_pressed.png")));
-        btnCloseBallonTip.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        JButton btnCloseBallonTip = BalloonTip.getDefaultCloseButton();
+		btnCloseBallonTip.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         balloonTip.setCloseButton(btnCloseBallonTip, false);
         int messageTimeout = 10000;
         messageTimer = new Timer(messageTimeout, new ActionListener() {

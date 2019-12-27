@@ -844,6 +844,7 @@ public class UtilsCheckAndClean {
                         @Override
                         public void run() {
                             // Maak net die nodigste thumbnails, want anders vat dinge donners lank
+                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0030_TINY);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
                             wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);

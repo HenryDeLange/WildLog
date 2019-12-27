@@ -4,8 +4,8 @@ package wildlog.data.enums.system;
 public enum WildLogThumbnailSizes {
     /** 20px - For Icons */
     S0020_VERY_TINY(20),
-    /** 25px - For Icons (larger) */
-    S0025_TINY(25),
+    /** 30px - For Icons (larger) */
+    S0030_TINY(30),
     /** 60px - For Photos (Tables) */
     S0060_VERY_SMALL(60),
     /** 100px - For Photos (Small Display) */

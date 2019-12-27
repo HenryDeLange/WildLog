@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
  * Based on: https://stackoverflow.com/questions/956003/how-can-i-change-the-width-of-a-jcombobox-dropdown-list
  */
 public class WideComboBox<E> extends JComboBox<E> {
+    private boolean layingOut = false;
 
     public WideComboBox() {
     }
@@ -26,8 +27,6 @@ public class WideComboBox<E> extends JComboBox<E> {
         super(aModel);
     }
 
-    private boolean layingOut = false;
-
     @Override
     public void doLayout() {
         try {
@@ -41,10 +40,10 @@ public class WideComboBox<E> extends JComboBox<E> {
 
     @Override
     public Dimension getSize() {
-        Dimension dim = super.getSize();
+        Dimension dimension = super.getSize();
         if (!layingOut) {
-            dim.width = Math.max(dim.width, getPreferredSize().width);
+            dimension.width = Math.max(dimension.width, getPreferredSize().width);
         }
-        return dim;
+        return dimension;
     }
 }

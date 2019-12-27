@@ -114,14 +114,15 @@ public class WorkspacePickerDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel3 = new javax.swing.JLabel();
+        pnlWrapper = new javax.swing.JPanel();
+        lblFeature = new javax.swing.JLabel();
         lblTitle = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         cmbWorkspacePath = new javax.swing.JComboBox<>();
         btnBrowse = new javax.swing.JButton();
         btnConfirmWorkspace = new javax.swing.JButton();
         btnCloudSync = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog Workspace");
@@ -129,15 +130,19 @@ public class WorkspacePickerDialog extends JDialog {
         setMinimumSize(new java.awt.Dimension(550, 265));
         setModal(true);
 
-        jLabel3.setBackground(new java.awt.Color(7, 41, 7));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Feature 2.png"))); // NOI18N
-        jLabel3.setOpaque(true);
+        pnlWrapper.setBackground(new java.awt.Color(59, 91, 59));
+
+        lblFeature.setBackground(new java.awt.Color(7, 41, 7));
+        lblFeature.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblFeature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Feature 2.png"))); // NOI18N
+        lblFeature.setOpaque(true);
 
         lblTitle.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lblTitle.setForeground(new java.awt.Color(237, 247, 234));
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitle.setText("WildLog Workspace");
 
+        cmbWorkspacePath.setBackground(new java.awt.Color(59, 91, 59));
         cmbWorkspacePath.setEditable(true);
         cmbWorkspacePath.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cmbWorkspacePath.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -147,6 +152,7 @@ public class WorkspacePickerDialog extends JDialog {
             }
         });
 
+        btnBrowse.setBackground(new java.awt.Color(59, 91, 59));
         btnBrowse.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnBrowse.setText("Browse");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -157,6 +163,7 @@ public class WorkspacePickerDialog extends JDialog {
             }
         });
 
+        btnConfirmWorkspace.setBackground(new java.awt.Color(59, 91, 59));
         btnConfirmWorkspace.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         btnConfirmWorkspace.setText("OPEN / CREATE");
         btnConfirmWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -166,6 +173,7 @@ public class WorkspacePickerDialog extends JDialog {
             }
         });
 
+        btnCloudSync.setBackground(new java.awt.Color(59, 91, 59));
         btnCloudSync.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnCloudSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sync.png"))); // NOI18N
         btnCloudSync.setText("Cloud Download");
@@ -178,6 +186,7 @@ public class WorkspacePickerDialog extends JDialog {
             }
         });
 
+        btnRemove.setBackground(new java.awt.Color(59, 91, 59));
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnRemove.setText("Remove Workspace");
@@ -190,49 +199,66 @@ public class WorkspacePickerDialog extends JDialog {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+        javax.swing.GroupLayout pnlWrapperLayout = new javax.swing.GroupLayout(pnlWrapper);
+        pnlWrapper.setLayout(pnlWrapperLayout);
+        pnlWrapperLayout.setHorizontalGroup(
+            pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlWrapperLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jSeparator1)
-                    .addComponent(lblTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblTitle, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
+                    .addGroup(pnlWrapperLayout.createSequentialGroup()
+                        .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnCloudSync))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnConfirmWorkspace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(pnlWrapperLayout.createSequentialGroup()
                         .addComponent(cmbWorkspacePath, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBrowse))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(15, 15, 15))
+                    .addComponent(lblFeature, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        pnlWrapperLayout.setVerticalGroup(
+            pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlWrapperLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblFeature, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(lblTitle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbWorkspacePath, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(btnConfirmWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(pnlWrapperLayout.createSequentialGroup()
                         .addComponent(btnCloudSync, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(10, 10, 10))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -459,8 +485,9 @@ public class WorkspacePickerDialog extends JDialog {
     private javax.swing.JButton btnConfirmWorkspace;
     private javax.swing.JButton btnRemove;
     private javax.swing.JComboBox<String> cmbWorkspacePath;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblFeature;
     private javax.swing.JLabel lblTitle;
+    private javax.swing.JPanel pnlWrapper;
     // End of variables declaration//GEN-END:variables
 }

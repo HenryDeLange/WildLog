@@ -2,6 +2,7 @@ package wildlog.ui.panels.bulkupload;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -27,6 +28,7 @@ import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.ui.panels.bulkupload.helpers.ComboBoxElementRenderer;
 import wildlog.ui.panels.bulkupload.helpers.WideComboBox;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
@@ -41,7 +43,6 @@ public class InfoBox extends JPanel {
     private final Visit visit;
     private final JTable table;
     private Location location;
-
 
     public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, Location inLocation, Visit inVisit, JTable inTable) {
         app = inApp;
@@ -77,6 +78,12 @@ public class InfoBox extends JPanel {
             btnVehicle.setVisible(false);
             btnVehicle.setEnabled(false);
         }
+        // Setup the element chooser combobox
+        DefaultComboBoxModel model = new DefaultComboBoxModel<>();
+// TODO: Filter out only the few relevant records
+        List<Element> lstElements = inApp.getDBI().listElements(null, null, null, false, Element.class);
+        model.addAll(lstElements);
+        cmbChooseElement.setModel(model);
     }
 
     public final void populateUI() {
@@ -118,7 +125,7 @@ public class InfoBox extends JPanel {
         lblLongitude = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         lblImage = new javax.swing.JLabel();
-        btnChooseCreature = new javax.swing.JButton();
+        btnChooseElement = new javax.swing.JButton();
         btnGPS = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         lblCount = new javax.swing.JLabel();
@@ -126,6 +133,7 @@ public class InfoBox extends JPanel {
         cmbSex = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
+        cmbChooseElement = new WideComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         cmbCertainty = new WideComboBox<>();
         jLabel7 = new javax.swing.JLabel();
@@ -206,25 +214,26 @@ public class InfoBox extends JPanel {
         });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 80, 125, 125));
 
-        btnChooseCreature.setBackground(new java.awt.Color(229, 241, 212));
-        btnChooseCreature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.png"))); // NOI18N
-        btnChooseCreature.setText("<html><u>Creature</u></html>");
-        btnChooseCreature.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature.");
-        btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnChooseCreature.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnChooseCreature.setMargin(new java.awt.Insets(2, 4, 2, 2));
-        btnChooseCreature.setName("btnChooseCreature"); // NOI18N
-        btnChooseCreature.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnChooseElement.setBackground(new java.awt.Color(229, 241, 212));
+        btnChooseElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.png"))); // NOI18N
+        btnChooseElement.setText("<html><u>Creature</u></html>");
+        btnChooseElement.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature.");
+        btnChooseElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnChooseElement.setDoubleBuffered(true);
+        btnChooseElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnChooseElement.setMargin(new java.awt.Insets(2, 4, 2, 2));
+        btnChooseElement.setName("btnChooseElement"); // NOI18N
+        btnChooseElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                btnChooseCreatureMouseReleased(evt);
+                btnChooseElementMouseReleased(evt);
             }
         });
-        btnChooseCreature.addActionListener(new java.awt.event.ActionListener() {
+        btnChooseElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChooseCreatureActionPerformed(evt);
+                btnChooseElementActionPerformed(evt);
             }
         });
-        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 85, 100, 45));
+        add(btnChooseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 85, 82, 45));
 
         btnGPS.setBackground(new java.awt.Color(229, 241, 212));
         btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
@@ -297,6 +306,23 @@ public class InfoBox extends JPanel {
         jSeparator5.setName("jSeparator5"); // NOI18N
         add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 72, 230, 2));
 
+        cmbChooseElement.setToolTipText("Select a suggested Creature.");
+        cmbChooseElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmbChooseElement.setDoubleBuffered(true);
+        cmbChooseElement.setFocusable(false);
+        cmbChooseElement.setName("cmbChooseElement"); // NOI18N
+        cmbChooseElement.setOpaque(false);
+        cmbChooseElement.setPreferredSize(new java.awt.Dimension(300, 22));
+        cmbChooseElement.setRenderer(new ComboBoxElementRenderer<Element>());
+        cmbChooseElement.setRequestFocusEnabled(false);
+        cmbChooseElement.setVerifyInputWhenFocusTarget(false);
+        cmbChooseElement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbChooseElementActionPerformed(evt);
+            }
+        });
+        add(cmbChooseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(135, 86, 98, 43));
+
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel6.setText("Gen");
         jLabel6.setToolTipText("Gender of the Creature.");
@@ -368,7 +394,7 @@ public class InfoBox extends JPanel {
         populateUI();
     }//GEN-LAST:event_btnEditActionPerformed
 
-    private void btnChooseCreatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreatureActionPerformed
+    private void btnChooseElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseElementActionPerformed
         ElementSelectionDialog dialog = new ElementSelectionDialog(app.getMainFrame(), app, sightingWrapper.getElementID());
         dialog.setVisible(true);
         // Set the label to the selected text
@@ -378,7 +404,7 @@ public class InfoBox extends JPanel {
             sightingWrapper.setCachedElementName(dialog.getSelectedElementName());
             sightingWrapper.setIcon(dialog.getSelectedElementIcon());
         }
-    }//GEN-LAST:event_btnChooseCreatureActionPerformed
+    }//GEN-LAST:event_btnChooseElementActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         UtilsFileProcessing.openFile(sightingWrapper.getElementID(), 0, app);
@@ -396,7 +422,7 @@ public class InfoBox extends JPanel {
         }
     }//GEN-LAST:event_btnGPSActionPerformed
 
-    private void btnChooseCreatureMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseCreatureMouseReleased
+    private void btnChooseElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseElementMouseReleased
         if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
             if (ElementSelectionDialog.getPreviousElementID() > 0) {
                 // Set the label to the selected text
@@ -408,7 +434,7 @@ public class InfoBox extends JPanel {
                 evt.consume();
             }
         }
-    }//GEN-LAST:event_btnChooseCreatureMouseReleased
+    }//GEN-LAST:event_btnChooseElementMouseReleased
 
     private void btnGPSMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGPSMouseReleased
         if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
@@ -488,9 +514,18 @@ public class InfoBox extends JPanel {
         sightingWrapper.setIcon(lblImage.getIcon());
     }//GEN-LAST:event_btnVehicleActionPerformed
 
+    private void cmbChooseElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbChooseElementActionPerformed
+        Element selectedElement = (Element) cmbChooseElement.getSelectedItem();
+        table.getCellEditor().stopCellEditing();
+        sightingWrapper.setElementID(selectedElement.getID());
+        sightingWrapper.setCachedElementName(selectedElement.getPrimaryName());
+        UtilsImageProcessing.setupFoto(selectedElement.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
+        sightingWrapper.setIcon(lblImage.getIcon());
+    }//GEN-LAST:event_cmbChooseElementActionPerformed
+
     public void setRowBackground(Color inColor) {
         this.setBackground(inColor);
-        btnChooseCreature.setBackground(inColor);
+        btnChooseElement.setBackground(inColor);
         btnEdit.setBackground(inColor);
         btnGPS.setBackground(inColor);
         btnEmpty.setBackground(inColor);
@@ -507,12 +542,13 @@ public class InfoBox extends JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnChooseCreature;
+    private javax.swing.JButton btnChooseElement;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnEmpty;
     private javax.swing.JButton btnGPS;
     private javax.swing.JButton btnVehicle;
     private javax.swing.JComboBox<String> cmbCertainty;
+    private javax.swing.JComboBox<Element> cmbChooseElement;
     private javax.swing.JComboBox<String> cmbSex;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

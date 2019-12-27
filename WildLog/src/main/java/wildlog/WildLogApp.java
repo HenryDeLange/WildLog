@@ -115,6 +115,7 @@ public class WildLogApp extends Application {
                 // Try to set the Nimbus look and feel
                 // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
                 // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
+                // Note: Seems like the Application framework already does UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()), so I dont have to do it here.
                 try {
                     for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                         if ("Nimbus".equals(info.getName())) {
