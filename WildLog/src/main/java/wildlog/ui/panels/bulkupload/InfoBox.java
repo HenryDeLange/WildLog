@@ -2,7 +2,7 @@ package wildlog.ui.panels.bulkupload;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -28,7 +28,7 @@ import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
-import wildlog.ui.panels.bulkupload.helpers.ComboBoxElementRenderer;
+import wildlog.ui.panels.bulkupload.helpers.ComboBoxSuggestedElementModel;
 import wildlog.ui.panels.bulkupload.helpers.WideComboBox;
 import wildlog.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
@@ -44,7 +44,8 @@ public class InfoBox extends JPanel {
     private final JTable table;
     private Location location;
 
-    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, Location inLocation, Visit inVisit, JTable inTable) {
+    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, Location inLocation, Visit inVisit, 
+            JTable inTable, Map<Element, Integer> inMapElementSuggestions) {
         app = inApp;
         location = inLocation;
         visit = inVisit;
@@ -79,11 +80,7 @@ public class InfoBox extends JPanel {
             btnVehicle.setEnabled(false);
         }
         // Setup the element chooser combobox
-        DefaultComboBoxModel model = new DefaultComboBoxModel<>();
-// TODO: Filter out only the few relevant records
-        List<Element> lstElements = inApp.getDBI().listElements(null, null, null, false, Element.class);
-        model.addAll(lstElements);
-        cmbChooseElement.setModel(model);
+        cmbChooseElement.setModel(new ComboBoxSuggestedElementModel(inMapElementSuggestions));
     }
 
     public final void populateUI() {
@@ -306,14 +303,15 @@ public class InfoBox extends JPanel {
         jSeparator5.setName("jSeparator5"); // NOI18N
         add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 72, 230, 2));
 
+        cmbChooseElement.setMaximumRowCount(10);
         cmbChooseElement.setToolTipText("Select a suggested Creature.");
         cmbChooseElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbChooseElement.setDoubleBuffered(true);
         cmbChooseElement.setFocusable(false);
         cmbChooseElement.setName("cmbChooseElement"); // NOI18N
         cmbChooseElement.setOpaque(false);
-        cmbChooseElement.setPreferredSize(new java.awt.Dimension(300, 22));
-        cmbChooseElement.setRenderer(new ComboBoxElementRenderer<Element>());
+        cmbChooseElement.setPreferredSize(new java.awt.Dimension(240, 22));
+        cmbChooseElement.setRenderer(new wildlog.ui.panels.bulkupload.helpers.ComboBoxSuggestedElementRenderer<Element>());
         cmbChooseElement.setRequestFocusEnabled(false);
         cmbChooseElement.setVerifyInputWhenFocusTarget(false);
         cmbChooseElement.addActionListener(new java.awt.event.ActionListener() {
@@ -403,6 +401,9 @@ public class InfoBox extends JPanel {
             sightingWrapper.setElementID(dialog.getSelectedElementID());
             sightingWrapper.setCachedElementName(dialog.getSelectedElementName());
             sightingWrapper.setIcon(dialog.getSelectedElementIcon());
+            // Update the combobox model to keep track of selected elements
+            Element selectedElement = new Element(sightingWrapper.getElementID(), sightingWrapper.getCachedElementName());
+            ((ComboBoxSuggestedElementModel) cmbChooseElement.getModel()).registerElementSelection(selectedElement);
         }
     }//GEN-LAST:event_btnChooseElementActionPerformed
 
@@ -432,6 +433,9 @@ public class InfoBox extends JPanel {
                 UtilsImageProcessing.setupFoto(ElementSelectionDialog.getPreviousElementID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
                 sightingWrapper.setIcon(lblImage.getIcon());
                 evt.consume();
+                // Update the combobox model to keep track of selected elements
+                Element selectedElement = new Element(sightingWrapper.getElementID(), sightingWrapper.getCachedElementName());
+                ((ComboBoxSuggestedElementModel) cmbChooseElement.getModel()).registerElementSelection(selectedElement);
             }
         }
     }//GEN-LAST:event_btnChooseElementMouseReleased
@@ -521,6 +525,10 @@ public class InfoBox extends JPanel {
         sightingWrapper.setCachedElementName(selectedElement.getPrimaryName());
         UtilsImageProcessing.setupFoto(selectedElement.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL, app);
         sightingWrapper.setIcon(lblImage.getIcon());
+        ElementSelectionDialog.setPreviousElementID(selectedElement.getID());
+        ElementSelectionDialog.setPreviousElementName(selectedElement.getPrimaryName());
+        // Update the combobox model to keep track of selected elements
+        ((ComboBoxSuggestedElementModel) cmbChooseElement.getModel()).registerElementSelection(selectedElement);
     }//GEN-LAST:event_cmbChooseElementActionPerformed
 
     public void setRowBackground(Color inColor) {

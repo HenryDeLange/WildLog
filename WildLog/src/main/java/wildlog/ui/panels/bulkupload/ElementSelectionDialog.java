@@ -647,6 +647,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                                 }
                                 int result = inSighting1.getViewRating().compareTo(inSighting2.getViewRating());
                                 if (result == 0) {
+// TODO: Maak seker hierdie sorteer in die regte volgorde (nutste eerste)
                                     result = inSighting1.compareTo(inSighting2);
                                 }
                                 return result;

@@ -25,7 +25,23 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         super(inID, inPrimaryName);
     }
 
+    
+// TODO: Ek is nog nie seker hoe veilig dit is om equals te overwrite nie, so vir nou doen ek dit eers nie op die ElementCore nie, en nie vir ander tipes nie... Kan dalk later vir almal doen.
+    
+    @Override
+    public boolean equals(Object inObject) {
+        if (inObject instanceof Element) {
+            return id == ((Element) inObject).getID();
+        }
+        return (this == inObject);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Long.hashCode(id);
+    }
 
+    
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, boolean inIsSummary, 
             WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {

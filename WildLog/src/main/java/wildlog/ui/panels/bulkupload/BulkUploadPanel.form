@@ -727,10 +727,10 @@
                 <Column maxWidth="240" minWidth="240" prefWidth="240" resizable="true">
                   <Title/>
                   <Editor editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="new InfoBoxEditor(app, selectedLocation, existingVisit)" type="code"/>
+                    <Connection code="new InfoBoxEditor(app, selectedLocation, existingVisit, mapElementSuggestions)" type="code"/>
                   </Editor>
                   <Renderer editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                    <Connection code="new InfoBoxRenderer(app, selectedLocation, existingVisit)" type="code"/>
+                    <Connection code="new InfoBoxRenderer(app, selectedLocation, existingVisit, mapElementSuggestions)" type="code"/>
                   </Renderer>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">

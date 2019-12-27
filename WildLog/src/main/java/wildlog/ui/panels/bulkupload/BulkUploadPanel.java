@@ -12,8 +12,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -92,6 +94,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private boolean showAsTab = false;
     private VisitType originalVisitType = VisitType.UNKNOWN;
     private String originalVisitName = null;
+    private Map<Element, Integer> mapElementSuggestions = new HashMap<>(10);
 
 // TODO: Save bulk imports halfway, by stashing the files and then saving the sighting details to the adhoc table
     
@@ -831,8 +834,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             tblBulkImport.getColumnModel().getColumn(0).setMinWidth(240);
             tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(240);
             tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(240);
-            tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, selectedLocation, existingVisit));
-            tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, selectedLocation, existingVisit));
+            tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, selectedLocation, existingVisit, mapElementSuggestions));
+            tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, selectedLocation, existingVisit, mapElementSuggestions));
             tblBulkImport.getColumnModel().getColumn(1).setCellEditor(new ImageBoxEditor());
             tblBulkImport.getColumnModel().getColumn(1).setCellRenderer(new ImageBoxRenderer());
         }
@@ -1238,6 +1241,18 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             }
         }
         btnUpdate.requestFocusInWindow();
+        // Refresh the elements stored in the suggestion list
+        List<Element> lstMapKeys = new ArrayList<>(mapElementSuggestions.keySet());
+        for (int t = lstMapKeys.size() - 1; t >= 0; t--) {
+            Element staleElement = lstMapKeys.get(t);
+            int value = mapElementSuggestions.remove(staleElement);
+            if (staleElement != null) {
+                Element refreshedElement = app.getDBI().findElement(staleElement.getID(), null, false, Element.class);
+                if (refreshedElement != null) {
+                    mapElementSuggestions.put(refreshedElement, value);
+                }
+            }
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void btnGPSForAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSForAllActionPerformed
