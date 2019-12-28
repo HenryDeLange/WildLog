@@ -15,6 +15,7 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public final class SightingBox extends JPanel {
+    public static final WildLogThumbnailSizes DEFAULT_SIZE = WildLogThumbnailSizes.S0200_MEDIUM;
     private final Sighting sighting;
     private final int fileIndex;
     private final boolean alsoSelectRelated;
@@ -28,8 +29,7 @@ public final class SightingBox extends JPanel {
         initComponents();
         lblImage.setToolTipText(Long.toString(inSighting.getID()));
         lblName.setText(inSighting.getCachedElementName());
-        // Default to 200px size
-        setBoxSize(WildLogThumbnailSizes.S0200_MEDIUM);
+        setBoxSize(DEFAULT_SIZE);
     }
     
     public void setBoxSize(WildLogThumbnailSizes inSize) {

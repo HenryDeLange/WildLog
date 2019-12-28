@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -56,6 +57,7 @@ import wildlog.ui.panels.helpers.SightingBox;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
+import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -85,6 +87,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         setupDefaultFilters();
         // Continue loading the components
         initComponents();
+        ComboBoxFixer.configureComboBoxes(cmbGridSize);
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0300_NORMAL));
         // Add key listeners to table to allow the selection of rows based on key events.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
@@ -103,6 +106,13 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 btnDeleteSighting.setVisible(false);
             }
         }
+        // Setup the grid sizes
+        DefaultComboBoxModel<WildLogThumbnailSizes> model = new DefaultComboBoxModel<>();
+        model.addElement(WildLogThumbnailSizes.S0100_SMALL);
+        model.addElement(WildLogThumbnailSizes.S0200_MEDIUM);
+        model.addElement(WildLogThumbnailSizes.S0300_NORMAL);
+        cmbGridSize.setModel(model);
+        cmbGridSize.setSelectedItem(SightingBox.DEFAULT_SIZE);
     }
 
     /**
@@ -139,13 +149,17 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         btnFilterMap = new javax.swing.JButton();
         btnResetFilters = new javax.swing.JButton();
         lblFilterDetails = new javax.swing.JLabel();
+        pnlGridOptions = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        cmbGridSize = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        rdbLayoutTable = new javax.swing.JRadioButton();
+        rdbLayoutGridSightings = new javax.swing.JRadioButton();
+        rdbLayoutGridFiles = new javax.swing.JRadioButton();
         pnlImage = new javax.swing.JPanel();
         btnNextFile = new javax.swing.JButton();
         btnPrevFile = new javax.swing.JButton();
         lblImage = new javax.swing.JLabel();
-        rdbLayoutTable = new javax.swing.JRadioButton();
-        rdbLayoutGridSightings = new javax.swing.JRadioButton();
-        rdbLayoutGridFiles = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -473,13 +487,13 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                         .addGap(10, 10, 10)
                         .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnFilterVisit, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
-                            .addComponent(btnFilterMap, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
+                            .addComponent(btnFilterMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(btnResetFilters, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                            .addComponent(btnResetFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnFilterElements, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)))
                     .addComponent(lblFilterDetails, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         pnlFiltersLayout.setVerticalGroup(
             pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -498,6 +512,81 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addComponent(lblFilterDetails)
                 .addGap(5, 5, 5))
         );
+
+        pnlGridOptions.setBackground(new java.awt.Color(235, 233, 221));
+        pnlGridOptions.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel1.setText("px");
+
+        cmbGridSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmbGridSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbGridSizeActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Grid Size:");
+
+        javax.swing.GroupLayout pnlGridOptionsLayout = new javax.swing.GroupLayout(pnlGridOptions);
+        pnlGridOptions.setLayout(pnlGridOptionsLayout);
+        pnlGridOptionsLayout.setHorizontalGroup(
+            pnlGridOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGridOptionsLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel2)
+                .addGap(5, 5, 5)
+                .addComponent(cmbGridSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlGridOptionsLayout.setVerticalGroup(
+            pnlGridOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGridOptionsLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(pnlGridOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbGridSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(5, 5, 5))
+        );
+
+        rdbLayoutTable.setBackground(new java.awt.Color(235, 233, 221));
+        buttonGroup1.add(rdbLayoutTable);
+        rdbLayoutTable.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        rdbLayoutTable.setSelected(true);
+        rdbLayoutTable.setText("Table View");
+        rdbLayoutTable.setToolTipText("Show the results in as rows in a table.");
+        rdbLayoutTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLayoutTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbLayoutTableActionPerformed(evt);
+            }
+        });
+
+        rdbLayoutGridSightings.setBackground(new java.awt.Color(235, 233, 221));
+        buttonGroup1.add(rdbLayoutGridSightings);
+        rdbLayoutGridSightings.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        rdbLayoutGridSightings.setText("Grid View (Observations)");
+        rdbLayoutGridSightings.setToolTipText("Show the results as images in a grid.");
+        rdbLayoutGridSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLayoutGridSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbLayoutGridSightingsActionPerformed(evt);
+            }
+        });
+
+        rdbLayoutGridFiles.setBackground(new java.awt.Color(235, 233, 221));
+        buttonGroup1.add(rdbLayoutGridFiles);
+        rdbLayoutGridFiles.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        rdbLayoutGridFiles.setText("Grid View (Files)");
+        rdbLayoutGridFiles.setToolTipText("Show the results as images in a grid.");
+        rdbLayoutGridFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLayoutGridFiles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdbLayoutGridFilesActionPerformed(evt);
+            }
+        });
 
         btnNextFile.setBackground(new java.awt.Color(235, 233, 221));
         btnNextFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
@@ -546,7 +635,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(btnNextFile)
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
         pnlImageLayout.setVerticalGroup(
             pnlImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -558,43 +647,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                     .addComponent(btnNextFile, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0))
         );
-
-        rdbLayoutTable.setBackground(new java.awt.Color(235, 233, 221));
-        buttonGroup1.add(rdbLayoutTable);
-        rdbLayoutTable.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        rdbLayoutTable.setSelected(true);
-        rdbLayoutTable.setText("Table View");
-        rdbLayoutTable.setToolTipText("Show the results in as rows in a table.");
-        rdbLayoutTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLayoutTable.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbLayoutTableActionPerformed(evt);
-            }
-        });
-
-        rdbLayoutGridSightings.setBackground(new java.awt.Color(235, 233, 221));
-        buttonGroup1.add(rdbLayoutGridSightings);
-        rdbLayoutGridSightings.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        rdbLayoutGridSightings.setText("Grid View (Observations)");
-        rdbLayoutGridSightings.setToolTipText("Show the results as images in a grid.");
-        rdbLayoutGridSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLayoutGridSightings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbLayoutGridSightingsActionPerformed(evt);
-            }
-        });
-
-        rdbLayoutGridFiles.setBackground(new java.awt.Color(235, 233, 221));
-        buttonGroup1.add(rdbLayoutGridFiles);
-        rdbLayoutGridFiles.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        rdbLayoutGridFiles.setText("Grid View (Files)");
-        rdbLayoutGridFiles.setToolTipText("Show the results as images in a grid.");
-        rdbLayoutGridFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbLayoutGridFiles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdbLayoutGridFilesActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -612,15 +664,14 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                     .addComponent(btnBulkEditSighting, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(pnlLayoutView, javax.swing.GroupLayout.DEFAULT_SIZE, 837, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(pnlGridOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(pnlFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(rdbLayoutTable)
                                 .addGap(15, 15, 15)
@@ -628,7 +679,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                                 .addGap(15, 15, 15)
                                 .addComponent(rdbLayoutGridFiles)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addComponent(pnlImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(pnlImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(pnlLayoutView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -642,7 +696,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(15, 15, 15)
+                                .addGap(10, 10, 10)
+                                .addComponent(pnlGridOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(rdbLayoutTable)
                                     .addComponent(rdbLayoutGridSightings)
@@ -1039,9 +1095,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void rdbLayoutGridSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbLayoutGridSightingsActionPerformed
         reloadUI(activeLayout);
-        
-// TODO: Wys 'n droplist waar mens kan kies tussen 100, 200 of 300px images
-        
         activeLayout = LayoutType.GRID;
     }//GEN-LAST:event_rdbLayoutGridSightingsActionPerformed
 
@@ -1049,6 +1102,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         reloadUI(activeLayout);
         activeLayout = LayoutType.GRID;
     }//GEN-LAST:event_rdbLayoutGridFilesActionPerformed
+
+    private void cmbGridSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGridSizeActionPerformed
+        reloadUI(activeLayout);
+    }//GEN-LAST:event_cmbGridSizeActionPerformed
 
     private List<Sighting> getListOfSelectedSightings(LayoutType inLayoutType, boolean inUseOnlySelectedSightings) {
         List<Sighting> lstSelectedSightings = new ArrayList<>(0);
@@ -1143,7 +1200,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         // Reload the UI
         if (rdbLayoutTable.isSelected()) {
             pnlImage.setVisible(true);
-            lblFilterDetails.setVisible(true);
+            pnlFilters.setVisible(true);
+            pnlGridOptions.setVisible(false);
             pnlLayoutView.removeAll();
             pnlLayoutView.revalidate();
             pnlLayoutView.repaint();
@@ -1158,7 +1216,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         else
         if (rdbLayoutGridSightings.isSelected() || rdbLayoutGridFiles.isSelected()) {
             pnlImage.setVisible(false);
-            lblFilterDetails.setVisible(false);
+            pnlFilters.setVisible(false);
+            pnlGridOptions.setVisible(true);
             // Clear the old table (to hopefully free up its resources)
             tblSightings.setModel(new DefaultTableModel(new String[]{"inactive"}, 0));
             pnlLayoutView.removeAll();
@@ -1254,6 +1313,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                                 SightingBox sightingBox = (SightingBox) componenet;
                                 if (sighting.getID() == sightingBox.getSighting().getID()) {
                                     sightingBox.toggleSelection();
+                                    break;
                                 }
                             }
                         }
@@ -1264,7 +1324,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }
     
     private void generateGridBox(JPanel inPnlGrid, Sighting inSighting, int inFileIndex) {
-        inPnlGrid.add(new SightingBox(inSighting, inFileIndex, rdbLayoutGridFiles.isSelected()));
+        SightingBox sightingBox = new SightingBox(inSighting, inFileIndex, rdbLayoutGridFiles.isSelected());
+        sightingBox.setBoxSize((WildLogThumbnailSizes) cmbGridSize.getSelectedItem());
+        inPnlGrid.add(sightingBox);
     }
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1288,11 +1350,15 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnResetFilters;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<WildLogThumbnailSizes> cmbGridSize;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel lblFilterDetails;
     private javax.swing.JLabel lblImage;
     private javax.swing.JPanel pnlFeatures;
     private javax.swing.JPanel pnlFilters;
+    private javax.swing.JPanel pnlGridOptions;
     private javax.swing.JPanel pnlImage;
     private javax.swing.JPanel pnlLayoutView;
     private javax.swing.JPanel pnlViews;

@@ -332,6 +332,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
 
         jScrollPane21.setName("jScrollPane21"); // NOI18N
 
+        txtIdentification.setEditable(false);
         txtIdentification.setColumns(20);
         txtIdentification.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtIdentification.setLineWrap(true);
@@ -639,16 +640,15 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                         Collections.sort(lstSightings, new Comparator<>() {
                             @Override
                             public int compare(Sighting inSighting1, Sighting inSighting2) {
-                                if (inSighting1.getViewRating() == null) {
+                                if (inSighting1.getViewRating() == null || inSighting1.getViewRating() == ViewRating.NONE) {
                                     inSighting1.setViewRating(ViewRating.NORMAL);
                                 }
-                                if (inSighting2.getViewRating() == null) {
+                                if (inSighting2.getViewRating() == null || inSighting2.getViewRating() == ViewRating.NONE) {
                                     inSighting2.setViewRating(ViewRating.NORMAL);
                                 }
                                 int result = inSighting1.getViewRating().compareTo(inSighting2.getViewRating());
                                 if (result == 0) {
-// TODO: Maak seker hierdie sorteer in die regte volgorde (nutste eerste)
-                                    result = inSighting1.compareTo(inSighting2);
+                                    result = -1 * inSighting1.compareTo(inSighting2);
                                 }
                                 return result;
                             }
