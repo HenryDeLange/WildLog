@@ -7,9 +7,9 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
+import wildlog.ui.panels.bulkupload.helpers.ComboBoxSuggestedElementWrapper;
 import wildlog.ui.panels.bulkupload.renderers.InfoBoxRenderer;
 
 
@@ -18,9 +18,9 @@ public class InfoBoxEditor extends AbstractCellEditor implements TableCellEditor
     private final WildLogApp app;
     private final Location location;
     private final Visit visit;
-    private final Map<Element, Integer> mapElementSuggestions;
+    private final Map<ComboBoxSuggestedElementWrapper, Integer> mapElementSuggestions;
 
-    public InfoBoxEditor(WildLogApp inApp, Location inLocation, Visit inVisit, Map<Element, Integer> inMapElementSuggestions) {
+    public InfoBoxEditor(WildLogApp inApp, Location inLocation, Visit inVisit, Map<ComboBoxSuggestedElementWrapper, Integer> inMapElementSuggestions) {
         location = inLocation;
         visit = inVisit;
         app = inApp;

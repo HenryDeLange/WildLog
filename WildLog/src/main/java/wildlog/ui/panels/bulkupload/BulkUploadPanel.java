@@ -66,6 +66,8 @@ import wildlog.ui.panels.bulkupload.editors.InfoBoxEditor;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.ui.panels.bulkupload.helpers.ComboBoxSuggestedElementRenderer;
+import wildlog.ui.panels.bulkupload.helpers.ComboBoxSuggestedElementWrapper;
 import wildlog.ui.panels.bulkupload.renderers.ImageBoxRenderer;
 import wildlog.ui.panels.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -94,7 +96,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private boolean showAsTab = false;
     private VisitType originalVisitType = VisitType.UNKNOWN;
     private String originalVisitName = null;
-    private Map<Element, Integer> mapElementSuggestions = new HashMap<>(10);
+    private Map<ComboBoxSuggestedElementWrapper, Integer> mapElementSuggestions = new HashMap<>(10);
 
 // TODO: Save bulk imports halfway, by stashing the files and then saving the sighting details to the adhoc table
     
@@ -1242,15 +1244,21 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
         btnUpdate.requestFocusInWindow();
         // Refresh the elements stored in the suggestion list
-        List<Element> lstMapKeys = new ArrayList<>(mapElementSuggestions.keySet());
+        List<ComboBoxSuggestedElementWrapper> lstMapKeys = new ArrayList<>(mapElementSuggestions.keySet());
         for (int t = lstMapKeys.size() - 1; t >= 0; t--) {
-            Element staleElement = lstMapKeys.get(t);
-            int value = mapElementSuggestions.remove(staleElement);
-            if (staleElement != null) {
-                Element refreshedElement = app.getDBI().findElement(staleElement.getID(), null, false, Element.class);
+            ComboBoxSuggestedElementWrapper staleElementWrapper = lstMapKeys.get(t);
+            if (staleElementWrapper != null) {
+                Element refreshedElement = app.getDBI().findElement(staleElementWrapper.getElement().getID(), null, false, Element.class);
                 if (refreshedElement != null) {
-                    mapElementSuggestions.put(refreshedElement, value);
+                    staleElementWrapper.setElement(refreshedElement);
+                    staleElementWrapper.setRenderedCell(ComboBoxSuggestedElementRenderer.generateRenderedCell(staleElementWrapper));
                 }
+                else {
+                    mapElementSuggestions.remove(staleElementWrapper);
+                }
+            }
+            else {
+                mapElementSuggestions.remove(staleElementWrapper);
             }
         }
     }//GEN-LAST:event_formComponentShown

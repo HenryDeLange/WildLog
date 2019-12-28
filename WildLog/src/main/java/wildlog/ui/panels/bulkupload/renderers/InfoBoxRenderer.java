@@ -5,21 +5,21 @@ import java.util.Map;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.bulkupload.InfoBox;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.ui.panels.bulkupload.helpers.ComboBoxSuggestedElementWrapper;
 
 
 public class InfoBoxRenderer implements TableCellRenderer {
     private final WildLogApp app;
     private final Location location;
     private final Visit visit;
-    private final Map<Element, Integer> mapElementSuggestions;
+    private final Map<ComboBoxSuggestedElementWrapper, Integer> mapElementSuggestions;
 
-    public InfoBoxRenderer(WildLogApp inApp, Location inLocation, Visit inVisit, Map<Element, Integer> inMapElementSuggestions) {
+    public InfoBoxRenderer(WildLogApp inApp, Location inLocation, Visit inVisit, Map<ComboBoxSuggestedElementWrapper, Integer> inMapElementSuggestions) {
         location = inLocation;
         visit = inVisit;
         app = inApp;
@@ -32,7 +32,7 @@ public class InfoBoxRenderer implements TableCellRenderer {
     }
 
     public static Component drawInfoBox(JTable inTable, Object inValue, WildLogApp inApp, Location inLocation, Visit inVisit, int inRow, 
-            Map<Element, Integer> inMapElementSuggestions) {
+            Map<ComboBoxSuggestedElementWrapper, Integer> inMapElementSuggestions) {
         // Try to use the old panel if possible (I'm assuming it will be faster, but might use more memory and cause issues)
         BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)inValue;
         InfoBox infoBox = sightingWrapper.getInfoBox();
