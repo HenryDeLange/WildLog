@@ -152,7 +152,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         // Setup info for tab headers
         tabTitle = locationWL.getName();
         tabID = locationWL.getID();
-        tabIconURL = app.getClass().getResource("resources/icons/Location.gif");
+        tabIconURL = WildLogApp.class.getResource("resources/icons/Location.gif");
         // Scroll to the top of the text areas
         txtHabitatType.setCaretPosition(0);
         txtDescription.setCaretPosition(0);

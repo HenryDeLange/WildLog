@@ -160,7 +160,7 @@ public class SunMoonDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("View Sun and Moon Phase");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/SunAndMoon.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/SunAndMoon.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(295, 300));
         setModal(true);
         setName("Form"); // NOI18N

@@ -62,7 +62,7 @@ public class MergeSightingDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Move Observation Files To A New Observation");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(900, 500));
         setModal(true);
 

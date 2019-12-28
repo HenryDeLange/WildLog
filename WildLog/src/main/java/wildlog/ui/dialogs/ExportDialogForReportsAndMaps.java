@@ -86,7 +86,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Export Formats");
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/Export.png")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Export.png")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);

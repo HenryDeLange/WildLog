@@ -168,7 +168,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         // Setup info for tab headers
         tabTitle = visit.getName();
         tabID = visit.getID();
-        tabIconURL = app.getClass().getResource("resources/icons/Visit.gif");
+        tabIconURL = WildLogApp.class.getResource("resources/icons/Visit.gif");
         // Make dates pretty
         dtpStartDate.getComponent(1).setBackground(visitIncludes.getBackground());
         dtpEndDate.getComponent(1).setBackground(visitIncludes.getBackground());

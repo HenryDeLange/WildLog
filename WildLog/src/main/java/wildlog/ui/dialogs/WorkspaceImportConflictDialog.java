@@ -83,7 +83,7 @@ public class WorkspaceImportConflictDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Import Conflict");
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Small Selected.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small Selected.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(900, 650));
         setModal(true);
 

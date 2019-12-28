@@ -141,7 +141,7 @@ public class WorkspaceExportDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Export To A New Workspace");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Small.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(950, 640));
         setModal(true);
 

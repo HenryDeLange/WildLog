@@ -204,7 +204,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Setup info for tab headers
         tabTitle = "Bulk Import";
         tabID = 0;
-        tabIconURL = app.getClass().getResource("resources/icons/Bulk Import.png");
+        tabIconURL = WildLogApp.class.getResource("resources/icons/Bulk Import.png");
         // Spinner selection fix
         SpinnerFixer.configureSpinners(spnInactivityTime);
         // Make dates pretty

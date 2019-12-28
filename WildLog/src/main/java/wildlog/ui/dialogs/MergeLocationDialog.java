@@ -55,7 +55,7 @@ public class MergeLocationDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Merge Two Places");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Location.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Location.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(650, 500));
         setModal(true);
 

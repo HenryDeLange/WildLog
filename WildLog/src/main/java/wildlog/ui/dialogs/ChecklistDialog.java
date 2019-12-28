@@ -89,7 +89,7 @@ public class ChecklistDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add New Observations (CheckList)");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/CheckList.png")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/CheckList.png")).getImage());
         setMinimumSize(new java.awt.Dimension(760, 550));
         setModal(true);
         setName("Form"); // NOI18N

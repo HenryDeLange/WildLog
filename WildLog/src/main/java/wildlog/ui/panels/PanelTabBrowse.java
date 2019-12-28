@@ -712,7 +712,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                imageView.setImage(WildLogApp.class.getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -737,7 +737,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(true);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                imageView.setImage(WildLogApp.class.getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -761,7 +761,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             cmbElementTypesBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='#FFFFFF'>" + DEFAULT_TEXT + "</body>");
             try {
-                imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                imageView.setImage(WildLogApp.class.getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -1042,7 +1042,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     Visit visit = (Visit) (DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                     if (VisitType.STASHED == visit.getType()) {
                         try {
-                            imageView.setImage(app.getClass().getResource("resources/icons/Stash.png"));
+                            imageView.setImage(WildLogApp.class.getResource("resources/icons/Stash.png"));
                         }
                         catch (IOException ex) {
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -1173,7 +1173,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             if (!treBrowsePhoto.isSelectionEmpty()) {
                 JPopupMenu popup = new JPopupMenu();
                 // View
-                JMenuItem mnuView = new JMenuItem("View", new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")));
+                JMenuItem mnuView = new JMenuItem("View", new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif")));
                 mnuView.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -1184,7 +1184,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 // Add
                 if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                     if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                        JMenuItem mnuAdd = new JMenuItem("Add Period", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        JMenuItem mnuAdd = new JMenuItem("Add Period", new ImageIcon(WildLogApp.class.getResource("resources/icons/Add.gif")));
                         mnuAdd.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -1197,7 +1197,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     else
                     if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                         final PanelTabBrowse tabBrowseHandle = this;
-                        JMenuItem mnuAdd = new JMenuItem("Add Observation", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        JMenuItem mnuAdd = new JMenuItem("Add Observation", new ImageIcon(WildLogApp.class.getResource("resources/icons/Add.gif")));
                         mnuAdd.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -1214,7 +1214,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     else
                     if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                         final PanelTabBrowse tabBrowseHandle = this;
-                        JMenuItem mnuAdd = new JMenuItem("Add Observation", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        JMenuItem mnuAdd = new JMenuItem("Add Observation", new ImageIcon(WildLogApp.class.getResource("resources/icons/Add.gif")));
                         mnuAdd.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -1239,7 +1239,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
                                 || (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
                                     && WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER)) {
-                            JMenuItem mnuAddLocation = new JMenuItem("Add Place", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                            JMenuItem mnuAddLocation = new JMenuItem("Add Place", new ImageIcon(WildLogApp.class.getResource("resources/icons/Add.gif")));
                             mnuAddLocation.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -1248,7 +1248,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             });
                             popup.add(mnuAddLocation);
                         }
-                        JMenuItem mnuAddElement = new JMenuItem("Add Creature", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        JMenuItem mnuAddElement = new JMenuItem("Add Creature", new ImageIcon(WildLogApp.class.getResource("resources/icons/Add.gif")));
                         mnuAddElement.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -1262,7 +1262,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                     if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-                            JMenuItem mnuDelete = new JMenuItem("Delete Place", new ImageIcon(app.getClass().getResource("resources/icons/Delete.gif")));
+                            JMenuItem mnuDelete = new JMenuItem("Delete Place", new ImageIcon(WildLogApp.class.getResource("resources/icons/Delete.gif")));
                             mnuDelete.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -1283,7 +1283,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     else
                     if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-                            JMenuItem mnuDelete = new JMenuItem("Delete Creature", new ImageIcon(app.getClass().getResource("resources/icons/Delete.gif")));
+                            JMenuItem mnuDelete = new JMenuItem("Delete Creature", new ImageIcon(WildLogApp.class.getResource("resources/icons/Delete.gif")));
                             mnuDelete.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -1304,7 +1304,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     else
                     if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-                            JMenuItem mnuDelete = new JMenuItem("Delete Period", new ImageIcon(app.getClass().getResource("resources/icons/Delete.gif")));
+                            JMenuItem mnuDelete = new JMenuItem("Delete Period", new ImageIcon(WildLogApp.class.getResource("resources/icons/Delete.gif")));
                             mnuDelete.addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
@@ -1324,7 +1324,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                     else
                     if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                        JMenuItem mnuDelete = new JMenuItem("Delete Observation", new ImageIcon(app.getClass().getResource("resources/icons/Delete.gif")));
+                        JMenuItem mnuDelete = new JMenuItem("Delete Observation", new ImageIcon(WildLogApp.class.getResource("resources/icons/Delete.gif")));
                         mnuDelete.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
@@ -1342,7 +1342,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                 }
                 // Map
-                JMenuItem mnuMap = new JMenuItem("Map", new ImageIcon(app.getClass().getResource("resources/icons/Map_Small.gif")));
+                JMenuItem mnuMap = new JMenuItem("Map", new ImageIcon(WildLogApp.class.getResource("resources/icons/Map_Small.gif")));
                 mnuMap.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -1384,7 +1384,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
                         || (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER 
                             && WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER)) {
-                    JMenuItem mnuReport = new JMenuItem("Charts", new ImageIcon(app.getClass().getResource("resources/icons/Report_Small.png")));
+                    JMenuItem mnuReport = new JMenuItem("Charts", new ImageIcon(WildLogApp.class.getResource("resources/icons/Report_Small.png")));
                     mnuReport.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -1433,7 +1433,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 }
                 // Export
                 if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-                    JMenuItem mnuExport = new JMenuItem("Export", new ImageIcon(app.getClass().getResource("resources/icons/Export.png")));
+                    JMenuItem mnuExport = new JMenuItem("Export", new ImageIcon(WildLogApp.class.getResource("resources/icons/Export.png")));
                     mnuExport.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -1912,7 +1912,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void noFiles() {
         try {
-            imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+            imageView.setImage(WildLogApp.class.getResource("resources/icons/NoFile.png"));
             lblNumberOfImages.setText("0 of 0");
             imageView.setToolTipText("");
         }
@@ -1943,7 +1943,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             String tempKey = inFiles.get(imageIndex).getAbsolutePath().toString();
             if (!preloadedImages.containsKey(tempKey)) {
                 // The image will be loaded, so setup the loading screen so long.
-                imageView.setImage(app.getClass().getResource("resources/icons/Loading.png"));
+                imageView.setImage(WildLogApp.class.getResource("resources/icons/Loading.png"));
             }
             int t = startIndex;
             for (; t < inFiles.size() && t < startIndex + CACHE_LIMIT_FOR_SELECTED_NODE; t++) {
@@ -2059,12 +2059,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.MOVIE)) {
-                        imageView.setImage(app.getClass().getResource("resources/icons/Movie.png"));
+                        imageView.setImage(WildLogApp.class.getResource("resources/icons/Movie.png"));
                         lookupCachedImage(inFotos);
                     }
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.OTHER)) {
-                        imageView.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
+                        imageView.setImage(WildLogApp.class.getResource("resources/icons/OtherFile.png"));
                         lookupCachedImage(inFotos);
                     }
                 }
@@ -2077,7 +2077,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
             else {
                 try {
-                    imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                    imageView.setImage(WildLogApp.class.getResource("resources/icons/NoFile.png"));
                     lblNumberOfImages.setText("0 of 0");
                     lookupCachedImage(inFotos);
                 }
@@ -2091,7 +2091,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
         else {
             try {
-                imageView.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
+                imageView.setImage(WildLogApp.class.getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {

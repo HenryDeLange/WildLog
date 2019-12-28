@@ -133,7 +133,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         // Setup info for tab headers
         tabTitle = element.getPrimaryName();
         tabID = element.getID();
-        tabIconURL = app.getClass().getResource("resources/icons/Element.gif");
+        tabIconURL = WildLogApp.class.getResource("resources/icons/Element.gif");
         // Scroll to the top of the text areas
         txtBehaviourDescription.setCaretPosition(0);
         txtDescription.setCaretPosition(0);

@@ -568,7 +568,7 @@ public class SystemMonitorDialog extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog System Monitor");
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(350, 200));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -991,6 +991,10 @@ public class SystemMonitorDialog extends JFrame {
                 // Save Java data
                 write(feedback, "", "");
                 write(feedback, "***** Java *****", "");
+                InetAddress inetAddress = InetAddress.getLocalHost();
+                if (inetAddress != null) {
+                    write(feedback, "hostname       : ", inetAddress.getHostName());
+                }
                 write(feedback, ">>> Java Properties", "");
                 write(feedback, "user.name      : ", System.getProperty("user.name"));
                 write(feedback, "os.name        : ", System.getProperty("os.name"));

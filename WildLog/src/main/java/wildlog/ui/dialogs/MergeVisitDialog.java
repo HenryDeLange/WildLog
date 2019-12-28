@@ -66,7 +66,7 @@ public class MergeVisitDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Merge Two Periods");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(820, 600));
         setModal(true);
         setName("merge dialog"); // NOI18N

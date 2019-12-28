@@ -76,7 +76,7 @@ public class MoveVisitDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Move A Period To A New Place");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(750, 550));
         setModal(true);
         setName("Form"); // NOI18N

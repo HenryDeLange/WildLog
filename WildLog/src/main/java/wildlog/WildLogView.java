@@ -271,18 +271,18 @@ public final class WildLogView extends JFrame {
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
             tabHome.setBackground(new Color(9, 32, 77));
-            lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-full-horizontal-400px.png")));
+            lblFooterLogo.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-full-horizontal-400px.png")));
             lblBlog.setText("http://wei.org.za ");
-            setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-square-20px.png")).getImage());
             setTitle("WEI WildLog Admin v" + WildLogApp.WILDLOG_VERSION + " -- " + app.getWildLogOptions().getWorkspaceName());
             lblWildLogName.setText("WEI WildLog");
         }
         else
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             tabHome.setBackground(new Color(83, 44, 9));
-            lblFooterLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-full-horizontal-400px.png")));
+            lblFooterLogo.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-full-horizontal-400px.png")));
             lblBlog.setText("http://wei.org.za ");
-            setIconImage(new ImageIcon(app.getClass().getResource("resources/wei/WEI-square-20px.png")).getImage());
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-square-20px.png")).getImage());
             setTitle("WEI WildLog Volunteer v" + WildLogApp.WILDLOG_VERSION + " -- " + app.getWildLogOptions().getWorkspaceName());
             lblWildLogName.setText("WEI WildLog");
         }
@@ -346,7 +346,7 @@ public final class WildLogView extends JFrame {
 
     private void setupTabHeaderHome() {
         JPanel tabHeader = new JPanel();
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif"));
+        ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel(""));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
@@ -358,7 +358,7 @@ public final class WildLogView extends JFrame {
 
     private void setupTabHeaderBrowse(int inIndex) {
         JPanel tabHeader = new JPanel();
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Browse.png"));
+        ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/Browse.png"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Browse"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
@@ -373,7 +373,7 @@ public final class WildLogView extends JFrame {
 
     private void setupTabHeaderLocation(int inIndex) {
         JPanel tabHeader = new JPanel();
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/LocationList.gif"));
+        ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/LocationList.gif"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Places"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
@@ -387,7 +387,7 @@ public final class WildLogView extends JFrame {
 
     private void setupTabHeaderElement(int inIndex) {
         JPanel tabHeader = new JPanel();
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/ElementList.png"));
+        ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/ElementList.png"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Creatures"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
@@ -401,7 +401,7 @@ public final class WildLogView extends JFrame {
     
     private void setupTabHeaderSightings(int inIndex) {
         JPanel tabHeader = new JPanel();
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/SightingList.png"));
+        ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/SightingList.png"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Observations"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
@@ -560,7 +560,7 @@ public final class WildLogView extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(app.getWildLogOptions().getWorkspaceName() + " -- WildLog v" + WildLogApp.WILDLOG_VERSION);
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif")).getImage());
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));

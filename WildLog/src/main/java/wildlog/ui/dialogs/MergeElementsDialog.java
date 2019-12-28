@@ -53,7 +53,7 @@ public class MergeElementsDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Merge Two Creatures");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Element.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(675, 550));
         setModal(true);
 

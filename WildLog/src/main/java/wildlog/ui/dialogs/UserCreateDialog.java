@@ -83,7 +83,7 @@ public class UserCreateDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Create Workspace User");
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(365, 290));
         setModal(true);
         setPreferredSize(new java.awt.Dimension(365, 305));

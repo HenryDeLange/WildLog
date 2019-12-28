@@ -112,7 +112,7 @@ public class DateChangeDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Adjust Date and Time");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(420, 200));
         setModal(true);
         setName("Form"); // NOI18N

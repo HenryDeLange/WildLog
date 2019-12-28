@@ -20,7 +20,6 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import org.apache.logging.log4j.Level;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLFileChooser;
@@ -37,7 +36,7 @@ public class WorkspacePickerDialog extends JDialog {
 
     public WorkspacePickerDialog() {
         super(new DummyTaskbarFrame("WildLog Workspace", 
-                new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon.gif")).getImage()));
+                new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif")).getImage()));
         WildLogApp.LOGGER.log(Level.INFO, "[WorkspacePickerDialog]");
         initComponents();
         pack();
@@ -126,7 +125,7 @@ public class WorkspacePickerDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog Workspace");
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(550, 265));
         setModal(true);
 
@@ -453,7 +452,7 @@ public class WorkspacePickerDialog extends JDialog {
         }
         else {
             if (inTerminateIfNotSelected) {
-                Application.getInstance().exit();
+                WildLogApp.getApplication().exit();
             }
         }
         return false;

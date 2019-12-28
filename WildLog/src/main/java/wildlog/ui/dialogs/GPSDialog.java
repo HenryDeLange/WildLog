@@ -449,7 +449,7 @@ public class GPSDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure GPS Point");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/GPS.png")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/GPS.png")).getImage());
         setMinimumSize(new java.awt.Dimension(480, 325));
         setModal(true);
         setName("Form"); // NOI18N

@@ -116,9 +116,9 @@ public class WelcomeDialog extends JDialog {
                 .addComponent(lblTitle)
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBulkImport)
+                    .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                     .addComponent(btnBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                    .addComponent(btnStash))
+                    .addComponent(btnStash, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
         );
 

@@ -20,7 +20,7 @@ public class UserLoginDialog extends JDialog {
 
     public UserLoginDialog() {
         super(new DummyTaskbarFrame("WildLog Login", new ImageIcon(
-                WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage()));
+                WildLogApp.class.getResource("resources/icons/WildLog Icon Selected.gif")).getImage()));
         WildLogApp.LOGGER.log(Level.INFO, "[UserLoginDialog]");
         initComponents();
         lblWorkspaceName.setText(WildLogApp.getApplication().getWildLogOptions().getWorkspaceName());
@@ -30,7 +30,7 @@ public class UserLoginDialog extends JDialog {
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-            lblBannerLogo.setIcon(new ImageIcon(app.getClass().getResource("resources/wei/WEI-horizontal-400px.png")));
+            lblBannerLogo.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-horizontal-400px.png")));
         }
         txtUsername.requestFocus();
         pack();
@@ -61,7 +61,7 @@ public class UserLoginDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog Login");
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
         setModal(true);
         setResizable(false);
 

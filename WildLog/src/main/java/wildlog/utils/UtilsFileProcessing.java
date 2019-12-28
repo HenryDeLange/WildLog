@@ -90,7 +90,7 @@ public final class UtilsFileProcessing {
         else {
             fileChooser = new FileDialog((JFrame) inParent, "Select Files", FileDialog.LOAD);
         }
-//        fileChooser.setIconImage(new ImageIcon(inApp.getClass().getResource("resources/icons/WildLog Icon Small.gif")).getImage());
+//        fileChooser.setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small.gif")).getImage());
 //        final JFileChooser fileChooser = new JFileChooser();
         if (lastFilePath != null) {
 //            fileChooser.setCurrentDirectory(Paths.get(lastFilePath).toFile());

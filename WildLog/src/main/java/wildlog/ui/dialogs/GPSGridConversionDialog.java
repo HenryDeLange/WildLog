@@ -52,7 +52,7 @@ public class GPSGridConversionDialog extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("GPS To Grid Converter");
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/GPS.png")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/GPS.png")).getImage());
 
         btnFromGPS.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnFromGPS.setText("<html>Calculate using GPS</html>");

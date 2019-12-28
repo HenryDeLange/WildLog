@@ -84,6 +84,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     public static String WILDLOG_VERSION = "6.1.0.BETA";
+    public static Class APPLICATION_CLASS = WildLogApp.class;
     public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
     public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
@@ -374,7 +375,7 @@ public class WildLogApp extends Application {
         addExitListener(new ExitListener() {
             
             @Override
-            public boolean canExit(EventObject event) {
+            public boolean canExit(EventObject inEvent) {
                 boolean doShutdown = true;
                 try {
                     // Waarsku as daar 'n Bulk Import tab oop is (bang mens druk die close van die image viewer twee keer en maak dan per ongeluk WildLog toe...)
@@ -448,7 +449,7 @@ public class WildLogApp extends Application {
             }
             
             @Override
-            public void willExit(EventObject event) {
+            public void willExit(EventObject inEvent) {
                 if (dbi != null) {
                     dbi.close();
                     WildLogApp.LOGGER.log(Level.INFO, "Closing workspace...");
@@ -457,6 +458,7 @@ public class WildLogApp extends Application {
         });
     }
     
+    @Override
     protected void ready() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -482,7 +484,7 @@ public class WildLogApp extends Application {
      * @return the instance of WildLogApp
      */
     public static WildLogApp getApplication() {
-        return Application.getInstance(WildLogApp.class);
+        return (WildLogApp) Application.getInstance(APPLICATION_CLASS);
     }
 
     /**
@@ -570,7 +572,7 @@ public class WildLogApp extends Application {
         WildLogApp.LOGGER.log(Level.INFO, "WildLog Application Type: {}", WILDLOG_APPLICATION_TYPE);
         WildLogApp.LOGGER.log(Level.INFO, "Command Line Arguments: {}", Arrays.toString(args));
         // Launch the Swing application on the event dispatch thread
-        launch(WildLogApp.class, args);
+        launch(APPLICATION_CLASS, args);
     }
 
     @Override

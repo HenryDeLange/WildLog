@@ -149,7 +149,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a Creature");
         setBackground(new java.awt.Color(230, 237, 220));
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Element.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(535, 650));
         setModal(true);
         setPreferredSize(new java.awt.Dimension(535, 650));

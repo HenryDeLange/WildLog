@@ -80,7 +80,7 @@ public class AdvancedDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Advanced Options");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);

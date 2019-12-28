@@ -270,7 +270,7 @@ public class ChartsBaseDialog extends JFrame {
         lblReportDescription = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Report Icon.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Report Icon.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(920, 600));
 
         jSplitPane1.setMinimumSize(new java.awt.Dimension(210, 450));

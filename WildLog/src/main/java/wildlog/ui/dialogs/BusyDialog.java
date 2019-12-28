@@ -11,7 +11,7 @@ public class BusyDialog extends JDialog {
 
     public BusyDialog(String inTitle) {
         super(new DummyTaskbarFrame(inTitle, new ImageIcon(
-                WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage()));
+                WildLogApp.class.getResource("resources/icons/WildLog Icon Selected.gif")).getImage()));
         WildLogApp.LOGGER.log(Level.INFO, "[BusyDialog]");
         initComponents();
         pack();
@@ -29,7 +29,7 @@ public class BusyDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("WildLog Busy");
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
         setMaximumSize(new java.awt.Dimension(400, 10));
         setMinimumSize(new java.awt.Dimension(400, 10));
         setPreferredSize(new java.awt.Dimension(400, 10));

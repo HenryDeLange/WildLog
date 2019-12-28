@@ -106,7 +106,7 @@ public class ExportDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Exports");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Export.png")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Export.png")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);

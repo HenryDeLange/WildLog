@@ -51,7 +51,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         if (typeInstance instanceof Element) {
-            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Element.gif")).getImage());
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif")).getImage());
             Set<Long> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
                 setOriginalData.add(sighting.getElementID());
@@ -64,7 +64,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         }
         else
         if (typeInstance instanceof Location) {
-            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Location.gif")).getImage());
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Location.gif")).getImage());
             Set<Long> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
                 setOriginalData.add(sighting.getLocationID());
@@ -77,7 +77,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         }
         else
         if (typeInstance instanceof Visit) {
-            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Visit.gif")).getImage());
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif")).getImage());
             Set<Long> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
                 setOriginalData.add(sighting.getVisitID());
@@ -119,17 +119,17 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             typeInstance = null;
         }
         if (typeInstance instanceof Element) {
-            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Element.gif")).getImage());
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif")).getImage());
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Element>) inLstOriginalData);
         }
         else
         if (typeInstance instanceof Location) {
-            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Location.gif")).getImage());
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Location.gif")).getImage());
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Location>) inLstOriginalData);
         }
         else
         if (typeInstance instanceof Visit) {
-            setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/Visit.gif")).getImage());
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif")).getImage());
             UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Visit>) inLstOriginalData);
         }
         else

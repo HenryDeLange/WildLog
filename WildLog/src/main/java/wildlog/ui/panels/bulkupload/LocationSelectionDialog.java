@@ -93,7 +93,7 @@ public class LocationSelectionDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a Place");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Location.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Location.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);

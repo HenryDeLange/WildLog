@@ -540,7 +540,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Observation");
         setBackground(new java.awt.Color(208, 204, 181));
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Sighting.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(1005, 685));
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {

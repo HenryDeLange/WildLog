@@ -191,7 +191,7 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Filter Properties");
-        setIconImage(new ImageIcon(WildLogApp.getInstance().getClass().getResource("resources/icons/FilterSightings.png")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/FilterSightings.png")).getImage());
         setMinimumSize(new java.awt.Dimension(550, 300));
         setModal(true);
         setResizable(false);
