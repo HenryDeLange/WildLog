@@ -31,10 +31,10 @@ import wildlog.ui.panels.helpers.SightingBox;
 import wildlog.ui.utils.UtilsUI;
 
 
-public class ElementCompareDialog extends JFrame {
+public class CompareElementsDialog extends JFrame {
 
 
-    public ElementCompareDialog(Element inElement) {
+    public CompareElementsDialog(Element inElement) {
         WildLogApp.LOGGER.log(Level.INFO, "[ElementCompareDialog]");
         initComponents();
         ComboBoxFixer.configureComboBoxes(cmbGridSize);
@@ -126,7 +126,6 @@ public class ElementCompareDialog extends JFrame {
         setTitle("Compare Creatures");
         setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/ElementList.png")).getImage());
         setMinimumSize(new java.awt.Dimension(960, 650));
-        setPreferredSize(new java.awt.Dimension(900, 650));
 
         pnlWrapper.setBackground(new java.awt.Color(231, 240, 223));
 
@@ -307,11 +306,12 @@ public class ElementCompareDialog extends JFrame {
             pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlWrapperLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTitle)
-                    .addComponent(cmbGridSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblTitle)
+                        .addComponent(cmbGridSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(8, 8, 8)
                 .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlRight, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE)

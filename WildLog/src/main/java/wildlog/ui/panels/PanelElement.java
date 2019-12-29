@@ -42,7 +42,7 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
-import wildlog.ui.dialogs.ElementCompareDialog;
+import wildlog.ui.dialogs.CompareElementsDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -1355,7 +1355,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnINaturalistActionPerformed
 
     private void btnCompareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompareActionPerformed
-        ElementCompareDialog dialog = new ElementCompareDialog(element);
+        CompareElementsDialog dialog = new CompareElementsDialog(element);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnCompareActionPerformed
 
