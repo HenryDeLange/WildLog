@@ -144,29 +144,22 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         ComboBoxFixer.configureComboBoxes(cmbViewRating);
         ComboBoxFixer.configureComboBoxes(cmbWeather);
         // Setup Location and Element tables
-        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null);
         UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, null);
         // Setup default values for tables
-        final int columnToUse;
-        if (app.getWildLogOptions().isUseThumbnailTables()) {
-            columnToUse = 1;
-        }
-        else {
-            columnToUse = 0;
-        }
         if (locationWL != null) {
             // Wag eers vir die table om klaar te load voor ek iets probeer select
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     for (int t = 0; t < tblLocation.getRowCount(); t++) {
-                        if (tblLocation.getValueAt(t, columnToUse).equals(locationWL.getName())) {
-                            tblLocation.getSelectionModel().setSelectionInterval(t, t);
-                            int scrollRow = t;
-                            if (t < (tblLocation.getRowCount()) - 1) {
-                                scrollRow = t + 1;
+                        if ((long) tblLocation.getModel().getValueAt(t, 2) == locationWL.getID()) {
+                            int row = tblLocation.convertRowIndexToView(t);
+                            tblLocation.getSelectionModel().setSelectionInterval(row, row);
+                            if (row < (tblLocation.getRowCount() - 1)) {
+                                row = row + 1;
                             }
-                            tblLocation.scrollRectToVisible(tblLocation.getCellRect(scrollRow, 0, true));
+                            tblLocation.scrollRectToVisible(tblLocation.getCellRect(row, 0, true));
                             break;
                         }
                     }
@@ -179,13 +172,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 @Override
                 public void run() {
                     for (int t = 0; t < tblElement.getRowCount(); t++) {
-                        if (tblElement.getValueAt(t, columnToUse).equals(element.getPrimaryName())) {
-                            tblElement.getSelectionModel().setSelectionInterval(t, t);
-                            int scrollRow = t;
-                            if (t < (tblElement.getRowCount()) - 1) {
-                                scrollRow = t + 1;
+                        if ((long) tblElement.getModel().getValueAt(t, 3) == element.getID()) {
+                            int row = tblElement.convertRowIndexToView(t);
+                            tblElement.getSelectionModel().setSelectionInterval(row, row);
+                            if (row < (tblElement.getRowCount() - 1)) {
+                                row = row + 1;
                             }
-                            tblElement.scrollRectToVisible(tblElement.getCellRect(scrollRow, 0, true));
+                            tblElement.scrollRectToVisible(tblElement.getCellRect(row, 0, true));
                             break;
                         }
                     }
@@ -231,13 +224,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 @Override
                 public void run() {
                     for (int t = 0; t < tblVisit.getRowCount(); t++) {
-                        if (tblVisit.getValueAt(t, columnToUse).equals(visit.getName())) {
-                            tblVisit.getSelectionModel().setSelectionInterval(t, t);
-                            int scrollRow = t;
-                            if (t < (tblVisit.getRowCount()) - 1) {
-                                scrollRow = t + 1;
+                        if ((long) tblVisit.getModel().getValueAt(t, 4) == visit.getID()) {
+                            int row = tblVisit.convertRowIndexToView(t);
+                            tblVisit.getSelectionModel().setSelectionInterval(row, row);
+                            if (row < (tblVisit.getRowCount() - 1)) {
+                                row = row + 1;
                             }
-                            tblVisit.scrollRectToVisible(tblVisit.getCellRect(scrollRow, 0, true));
+                            tblVisit.scrollRectToVisible(tblVisit.getCellRect(row, 0, true));
                             break;
                         }
                     }
@@ -2249,10 +2242,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             txtSearch.setText("");
             ElementType type = (ElementType) cmbElementType.getSelectedItem();
             if (!ElementType.NONE.equals(type)) {
-                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, type);
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, type);
             }
             else {
-                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null);
             }
             // Clear Images
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0100_SMALL));
@@ -2343,7 +2336,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     "The first image for the Creature '" + sighting.getCachedElementName() + "' was successfully changed.",
                     "Changed First Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
                 // Refresh the elements table
-                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null);
             }
         }
     }//GEN-LAST:event_btnSetDefaultElementImageActionPerformed
@@ -2387,7 +2380,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
             else
             if (inIndicator instanceof PanelElement) {
-                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, null);
                 txtSearch.setText("");
             }
         }

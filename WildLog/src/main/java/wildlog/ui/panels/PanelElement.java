@@ -42,6 +42,7 @@ import wildlog.ui.maps.MapsBaseDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
+import wildlog.ui.dialogs.ElementCompareDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -249,6 +250,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnMap = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
         btnExport = new javax.swing.JButton();
+        btnCompare = new javax.swing.JButton();
         pnlNames = new javax.swing.JPanel();
         txtScienceName = new javax.swing.JTextField();
         txtReferenceID = new javax.swing.JTextField();
@@ -453,8 +455,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         );
 
         pnlButtons.setBackground(new java.awt.Color(227, 240, 227));
-        pnlButtons.setMaximumSize(new java.awt.Dimension(120, 305));
-        pnlButtons.setMinimumSize(new java.awt.Dimension(120, 305));
         pnlButtons.setName("pnlButtons"); // NOI18N
         pnlButtons.setPreferredSize(new java.awt.Dimension(120, 305));
 
@@ -554,6 +554,20 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         });
 
+        btnCompare.setBackground(new java.awt.Color(227, 240, 227));
+        btnCompare.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.png"))); // NOI18N
+        btnCompare.setText("Compare");
+        btnCompare.setToolTipText("Compare this Creature to another.");
+        btnCompare.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCompare.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCompare.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnCompare.setName("btnCompare"); // NOI18N
+        btnCompare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompareActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlButtonsLayout = new javax.swing.GroupLayout(pnlButtons);
         pnlButtons.setLayout(pnlButtonsLayout);
         pnlButtonsLayout.setHorizontalGroup(
@@ -561,6 +575,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             .addGroup(pnlButtonsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnCompare, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -572,7 +587,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                 .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5))
+                .addContainerGap())
         );
         pnlButtonsLayout.setVerticalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -587,11 +602,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 5, Short.MAX_VALUE)
+                .addGap(5, 5, 5)
                 .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 5, Short.MAX_VALUE)
+                .addGap(5, 5, 5)
                 .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+                .addGap(5, 5, 5)
+                .addComponent(btnCompare, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlNames.setBackground(new java.awt.Color(227, 240, 227));
@@ -875,14 +892,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addGap(5, 5, 5)
                 .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane16)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
                 .addGap(10, 10, 10)
                 .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel69)
                     .addComponent(jLabel61))
                 .addGap(5, 5, 5)
                 .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
                     .addComponent(jScrollPane18))
                 .addGap(0, 0, 0))
         );
@@ -1031,9 +1048,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                 .addComponent(pnlNames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(pnlInfo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(elementIncludesLayout.createSequentialGroup()
-                                .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1, Short.MAX_VALUE)))
+                            .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, 0)
                         .addComponent(pnlInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
@@ -1339,6 +1354,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
     }//GEN-LAST:event_btnINaturalistActionPerformed
 
+    private void btnCompareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCompareActionPerformed
+        ElementCompareDialog dialog = new ElementCompareDialog(element);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnCompareActionPerformed
+
 
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
@@ -1355,6 +1375,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnCheckIUCNOtherName;
+    private javax.swing.JButton btnCompare;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnExport;
     private javax.swing.JButton btnGoLocation;

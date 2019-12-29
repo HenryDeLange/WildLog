@@ -43,6 +43,7 @@ import javafx.util.StringConverter;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
@@ -99,7 +100,6 @@ public class SystemMonitorDialog extends JFrame {
         // Setup JavaFx panel
         jfxPanel = new JFXPanel();
         jfxPanel.setBackground(getBackground());
-        add(jfxPanel, BorderLayout.CENTER);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -114,9 +114,6 @@ public class SystemMonitorDialog extends JFrame {
                 catch (IOException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
-                pack();
-                UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), SystemMonitorDialog.this);
-                lblLoading.setVisible(false);
                 // Setup
                 // CPU
                 seriesCPUs = FXCollections.observableList(new ArrayList<>(hardware.getProcessor().getLogicalProcessorCount() + 1));
@@ -411,6 +408,16 @@ public class SystemMonitorDialog extends JFrame {
                 // Doen die eerste load datelik (en dan 1 sekonde later sal die eerste tick gebeur)
                 btnResetAction(null); // Om die droplists op te stel
                 load();
+                // When all is done, show it on the Swing panel
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        add(jfxPanel, BorderLayout.CENTER);
+                        pack();
+                        UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), SystemMonitorDialog.this);
+                        lblLoading.setVisible(false);
+                    }
+                });
             }
         });
     }

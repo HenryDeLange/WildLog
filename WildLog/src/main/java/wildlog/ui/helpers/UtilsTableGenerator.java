@@ -183,7 +183,7 @@ public final class UtilsTableGenerator {
         });
     }
 
-    public static void setupElementTableSmall(final WildLogApp inApp, final JTable inTable, final String inElementPrimaryName, final ElementType inElementType) {
+    public static void setupElementTableSmall(final WildLogApp inApp, final JTable inTable, final ElementType inElementType) {
         // Deterimine the row IDs of the previously selected rows.
         final long[] selectedRowIDs = getSelectedRowIDs(inTable, 3);
         final List<? extends SortKey> lstPreviousSortKeys = inTable.getRowSorter().getSortKeys();
@@ -201,7 +201,7 @@ public final class UtilsTableGenerator {
                                         "ID" // Hidden
                                         };
                 // Load data from DB
-                final List<Element> listElements = inApp.getDBI().listElements(inElementPrimaryName, null, inElementType, false, Element.class);
+                final List<Element> listElements = inApp.getDBI().listElements(null, null, inElementType, false, Element.class);
                 if (!listElements.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listElements.size());
                     // Setup new table data

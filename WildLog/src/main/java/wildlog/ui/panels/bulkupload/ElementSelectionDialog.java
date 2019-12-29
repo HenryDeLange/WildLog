@@ -83,7 +83,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
 
     private void setupUI(final long inSelectedElementID) {
         // Setup the table
-        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null);
         // Load selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
         SwingUtilities.invokeLater(new Runnable() {
@@ -315,18 +315,18 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                         .addGap(10, 10, 10)
                         .addComponent(btnPreviousElement, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
                         .addComponent(lblElementImage, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(15, 15, 15)
-                        .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnToggleInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10))
         );
 
         pnlInfo.setBackground(new java.awt.Color(230, 237, 220));
         pnlInfo.setName("pnlInfo"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Identification:");
         jLabel1.setName("jLabel1"); // NOI18N
 
@@ -334,14 +334,14 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
 
         txtIdentification.setEditable(false);
         txtIdentification.setColumns(20);
-        txtIdentification.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtIdentification.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtIdentification.setLineWrap(true);
         txtIdentification.setRows(5);
         txtIdentification.setWrapStyleWord(true);
         txtIdentification.setName("txtIdentification"); // NOI18N
         jScrollPane21.setViewportView(txtIdentification);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Files:");
         jLabel3.setName("jLabel3"); // NOI18N
 
@@ -372,10 +372,10 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                 .addComponent(jLabel1)
                 .addGap(2, 2, 2)
                 .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(5, 5, 5)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlGridView, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                .addGap(2, 2, 2)
+                .addComponent(pnlGridView, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                 .addGap(10, 10, 10))
         );
 
@@ -448,7 +448,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
 
     private void btnPreviousElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousElementActionPerformed
         // Reload the entire table to make sure the element is there
-        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+        UtilsTableGenerator.setupElementTableSmall(app, tblElement, null);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -515,10 +515,10 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
         ElementType type = (ElementType) cmbElementType.getSelectedItem();
         if (!ElementType.NONE.equals(type)) {
-            UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, type);
+            UtilsTableGenerator.setupElementTableSmall(app, tblElement, type);
         }
         else {
-            UtilsTableGenerator.setupElementTableSmall(app, tblElement, null, null);
+            UtilsTableGenerator.setupElementTableSmall(app, tblElement, null);
         }
         txtSearch.setText("");
         // Clear Images

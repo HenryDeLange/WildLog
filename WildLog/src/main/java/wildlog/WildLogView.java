@@ -3721,18 +3721,26 @@ public final class WildLogView extends JFrame {
                                                                     Path pathToCopyTo = lstPathsToCopyTo.get(t);
                                                                     // Make sure the folders exist
                                                                     Files.createDirectories(pathToCopyTo.getParent());
-                                                                    // Perfrom the action
-                                                                    if (!Files.exists(pathToCopyTo)) {
-                                                                        // Copy the file
-                                                                        UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, false, false);
-                                                                        // Update report and progress
-                                                                        feedback.println("Copied    : " + pathToCopyTo.toString());
+                                                                    // The daily backup might run in the background and delete a folder, 
+                                                                    // so make sure the source folder still exists
+                                                                    if (Files.exists(pathToCopyFrom)) {
+                                                                        // Perfrom the action
+                                                                        if (!Files.exists(pathToCopyTo)) {
+                                                                            // Copy the file
+                                                                            UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, false, false);
+                                                                            // Update report and progress
+                                                                            feedback.println("Copied    : " + pathToCopyTo.toString());
+                                                                        }
+                                                                        else {
+                                                                            // Replace the file
+                                                                            UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, true, true);
+                                                                            // Update report and progress
+                                                                            feedback.println("Replaced  : " + pathToCopyTo.toString());
+                                                                        }
                                                                     }
                                                                     else {
-                                                                        // Replace the file
-                                                                        UtilsFileProcessing.copyFile(pathToCopyFrom, pathToCopyTo, true, true);
-                                                                        // Update report and progress
-                                                                        feedback.println("Replaced  : " + pathToCopyTo.toString());
+                                                                        WildLogApp.LOGGER.log(Level.WARN, "Can't copy file, the source is no longer available: {}%", pathToCopyFrom);
+                                                                        feedback.println("Skipped   : " + pathToCopyFrom.toString());
                                                                     }
                                                                     setProgress(4 + (int) (((double) (lstPathsToDelete.size() + t)) / totalActions * 95.0));
                                                                     setMessage("Busy with the Echo Workspace Backup: Copying files... " + getProgress() + "%");
