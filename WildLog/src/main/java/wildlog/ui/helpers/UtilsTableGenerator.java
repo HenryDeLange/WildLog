@@ -1848,6 +1848,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
+                    setupRenderersAndThumbnailRows(inTable, false, true, -1);
                     inTable.getColumnModel().getColumn(0).setMinWidth(100);
                     inTable.getColumnModel().getColumn(0).setPreferredWidth(150);
                     inTable.getColumnModel().getColumn(1).setMinWidth(100);
