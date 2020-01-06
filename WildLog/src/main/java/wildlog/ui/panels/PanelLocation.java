@@ -1371,6 +1371,17 @@ public class PanelLocation extends PanelCanSetupHeader {
             if (txtName.getText().length() > 0) {
                 String oldName = lastSavedLocation.getName();
                 populateLocationFromUI();
+                // Validate
+                Location existingLocation = app.getDBI().findLocation(0, locationWL.getName(), false, Location.class);
+                if (existingLocation != null && existingLocation.getID() != locationWL.getID()) {
+                    int choice = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                            "<html>The name is not unique."
+                                    + "<br />Continue to save this Place using the duplicate name?</html>", 
+                            "Warning: Duplicate Name?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (choice != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
                 // Save the location
                 boolean result;
                 if (oldName == null || oldName.isEmpty()) {

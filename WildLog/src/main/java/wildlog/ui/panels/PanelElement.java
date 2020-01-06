@@ -1063,6 +1063,17 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             if (txtPrimaryName.getText().length() > 0) {
                 String oldName = lastSavedElement.getPrimaryName();
                 populateElementFromUI();
+                // Validate
+                Element existingElement = app.getDBI().findElement(0, element.getPrimaryName(), false, Element.class);
+                if (existingElement != null && existingElement.getID() != element.getID()) {
+                    int choice = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                            "<html>The name is not unique."
+                                    + "<br />Continue to save this Creature using the duplicate name?</html>", 
+                            "Warning: Duplicate Name?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (choice != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
                 // Save the element
                 boolean result;
                 if (oldName == null || oldName.isEmpty()) {

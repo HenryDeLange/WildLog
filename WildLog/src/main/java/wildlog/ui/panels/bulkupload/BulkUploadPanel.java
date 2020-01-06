@@ -898,7 +898,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     Visit visit = app.getDBI().findVisit(0, txtVisitName.getText().trim(), false, Visit.class);
                     if ((existingVisit == null || existingVisit.getID() == 0) && visit != null) {
                         WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                "The Period name is not unique, please specify another one.",
+                                "The Period name is not unique, please specify another name.",
                                 "Can't Save", JOptionPane.ERROR_MESSAGE);
                         return null;
                     }

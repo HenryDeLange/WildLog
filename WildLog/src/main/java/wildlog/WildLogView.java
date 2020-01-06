@@ -3525,9 +3525,14 @@ public final class WildLogView extends JFrame {
 
     private void mnuEchoWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuEchoWorkspaceActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[EchoWorkspace]");
-
-// TODO: Wys 'n boodskap (en maak seker deur connection count te kyk) dat alle ander instances van WildLog vir die workspace toe is voordat die echo begin
-
+        int sessionCount = app.getDBI().activeSessionsCount();
+        if (sessionCount > 1) {
+            WLOptionPane.showMessageDialog(app.getMainFrame(), 
+                    "<html>There appear to be " + sessionCount + " WildLog instances connected to this Workspace."
+                            + "<br/>Please close the other connections before running the Echo Backup Workspace process.</html>", 
+                    "Warning - Echo Backup Workspace", WLOptionPane.WARNING_MESSAGE);
+            return;
+        }
         WLOptionPane.showMessageDialog(app.getMainFrame(),
                 "<html>The <i>Echo Backup Workspace</i> process will delete all files from the target folder that aren't in the active Workspace "
                 + "<br>and copy all files from the active Workspace to the target folder that aren't already present (files will be replaced if their size differ)."

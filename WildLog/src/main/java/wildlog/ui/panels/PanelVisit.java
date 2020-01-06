@@ -1556,13 +1556,23 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             if (txtName.getText().length() > 0) {
                 String oldName = lastSavedVisit.getName();
                 populateVisitFromUI();
-                // Waarsku as die daar nie minstens 'n begin datum is nie
+                // Validate
+                Visit existingVisit = app.getDBI().findVisit(0, visit.getName(), false, Visit.class);
+                if (existingVisit != null && existingVisit.getID() != visit.getID()) {
+                    int choice = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                            "<html>The name is not unique."
+                                    + "<br />Continue to save this Period using the duplicate name?</html>", 
+                            "Warning: Duplicate Name?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (choice != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
                 if (evt != null && visit.getStartDate() == null) {
-                    int result = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
+                    int choice = WLOptionPane.showConfirmDialog(app.getMainFrame(), 
                             "<html>No Start Date was provided. The Start Date is used by a number of charts and maps."
                                     + "<br />Continue to save this Period without a Start Date?</html>", 
                             "Warning: Save empty Start Date?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (result != JOptionPane.YES_OPTION) {
+                    if (choice != JOptionPane.YES_OPTION) {
                         return;
                     }
                 }
