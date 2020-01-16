@@ -65,6 +65,7 @@ import net.java.balloontip.styles.EdgedBalloonStyle;
 import org.apache.logging.log4j.Level;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.jdesktop.application.TaskMonitor;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
@@ -470,6 +471,7 @@ public final class WildLogView extends JFrame {
         javax.swing.JMenuItem mnuExitApp = new javax.swing.JMenuItem();
         backupMenu = new javax.swing.JMenu();
         mnuBackupDatabase = new javax.swing.JMenuItem();
+        mnuRestore = new javax.swing.JMenu();
         mnuBackupRestore = new javax.swing.JMenuItem();
         sprEcho = new javax.swing.JPopupMenu.Separator();
         mnuEchoWorkspace = new javax.swing.JMenuItem();
@@ -1039,6 +1041,9 @@ public final class WildLogView extends JFrame {
         });
         backupMenu.add(mnuBackupDatabase);
 
+        mnuRestore.setText("Restore");
+        mnuRestore.setName("mnuRestore"); // NOI18N
+
         mnuBackupRestore.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
         mnuBackupRestore.setText("Database Restore");
         mnuBackupRestore.setToolTipText("Restore a previously backed-up database.");
@@ -1048,7 +1053,9 @@ public final class WildLogView extends JFrame {
                 mnuBackupRestoreActionPerformed(evt);
             }
         });
-        backupMenu.add(mnuBackupRestore);
+        mnuRestore.add(mnuBackupRestore);
+
+        backupMenu.add(mnuRestore);
 
         sprEcho.setName("sprEcho"); // NOI18N
         backupMenu.add(sprEcho);
@@ -2178,6 +2185,9 @@ public final class WildLogView extends JFrame {
                 setMessage("Busy with the CSV WildLog Export");
                 app.getDBI().doExportFullCSV(path, true, null, null, null, null, null);
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_ALL.getAbsoluteFullPath());
+                
+// TODO: Also export a file listing all of the enum keys
+                
                 setProgress(100);
                 setMessage("Done with the CSV WildLog Export");
                 return null;
@@ -3344,6 +3354,9 @@ public final class WildLogView extends JFrame {
                 Path tempPath = path.resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("AllObservations.csv");
                 Files.createDirectories(tempPath.getParent());
                 app.getDBI().doExportBasicCSV(tempPath, null, null, null, null, listSightings);
+                
+// TODO: Also export a file listing all of the enum keys
+                
                 setProgress(100);
                 setMessage("Done with the CSV Basic Export");
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath());
@@ -3460,6 +3473,7 @@ public final class WildLogView extends JFrame {
                 try {
                     workbook = new SXSSFWorkbook(); // Needed to use more than 65535 rows
                     Sheet sheet = workbook.createSheet("WildLog - All Observations");
+                    ((SXSSFSheet) sheet).trackAllColumnsForAutoSizing();
                     // Setup header row
                     int rowCount = 0;
                     UtilsExcel.exportSightingToExcelHeader(sheet, rowCount++);
@@ -3473,7 +3487,11 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(5 + (int)((counter++/(double)lstSightingsToUse.size())*90));
                         setMessage("Busy with the Excel Export... " + getProgress() + "%");
                     }
-                    // Write the last visit's register file (sightings)
+                    // Resize columns
+                    for (int t = 0; t < 30; t++) {
+                        sheet.autoSizeColumn(t);
+                    }
+                    // Write the file
                     setTaskProgress(95);
                     setMessage("Busy with the Excel Export (writing the file)... " + getProgress() + "%");
                     try (FileOutputStream out = new FileOutputStream(path.toFile())) {
@@ -4122,6 +4140,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenu mnuPerformance;
     private javax.swing.JMenuItem mnuReduceImagesSize;
     private javax.swing.JMenuItem mnuReportVisitDates;
+    private javax.swing.JMenu mnuRestore;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuStash;

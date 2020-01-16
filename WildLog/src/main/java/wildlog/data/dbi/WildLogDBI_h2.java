@@ -278,7 +278,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             if (inExportAll || inElement != null) {
                 sql = "SELECT * FROM ELEMENTS";
                 if (inElement != null && inElement.getPrimaryName()!= null && !inElement.getPrimaryName().isEmpty()) {
-                    sql = sql + " WHERE PRIMARYNAME = ''" + inElement.getPrimaryName().replaceAll("'", "''") + "''";
+                    sql = sql + " WHERE ID = " + inElement.getID();
                 }
                 if (inExportAll) {
                     inPath = inPath.resolve("Creatures.csv");
@@ -288,11 +288,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Export Locations
             if (inExportAll || inLocation != null) {
                 sql = "SELECT * "
-                        + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
-                        + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
+                        + ", ((CASE WHEN LATITUDEINDICATOR = ''N'' THEN +1 WHEN LATITUDEINDICATOR = ''S'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
+                        + ", ((CASE WHEN LONGITUDEINDICATOR = ''E'' THEN +1 WHEN LONGITUDEINDICATOR = ''W'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
                         + " FROM LOCATIONS";
                 if (inLocation != null && inLocation.getName() != null && !inLocation.getName().isEmpty()) {
-                    sql = sql + " WHERE NAME = ''" + inLocation.getName().replaceAll("'", "''") + "''";
+                    sql = sql + " WHERE ID = " + inLocation.getID();
                 }
                 if (inExportAll) {
                     inPath = inPath.getParent().resolve("Places.csv");
@@ -303,7 +303,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             if (inExportAll || inVisit != null) {
                 sql = "SELECT * FROM VISITS";
                 if (inVisit != null && inVisit.getName() != null && !inVisit.getName().isEmpty()) {
-                    sql = sql + " WHERE NAME = ''" + inVisit.getName().replaceAll("'", "''") + "''";
+                    sql = sql + " WHERE ID = " + inVisit.getID();
                 }
                 if (inExportAll) {
                     inPath = inPath.getParent().resolve("Periods.csv");
@@ -313,8 +313,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Export Sightings
             if (inExportAll || inSighting != null) {
                 sql = "SELECT * "
-                        + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
-                        + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
+                        + ", ((CASE WHEN LATITUDEINDICATOR = ''N'' THEN +1 WHEN LATITUDEINDICATOR = ''S'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
+                        + ", ((CASE WHEN LONGITUDEINDICATOR = ''E'' THEN +1 WHEN LONGITUDEINDICATOR = ''W'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
                         + " FROM SIGHTINGS";
                 if (inSighting != null && inSighting.getID() > 0) {
                     sql = sql + " WHERE ID = " +  inSighting.getID();
@@ -327,8 +327,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Export List of Sightings
             if (inLstSightings != null && !inLstSightings.isEmpty()) {
                 sql = "SELECT * "
-                        + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
-                        + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
+                        + ", ((CASE WHEN LATITUDEINDICATOR = ''N'' THEN +1 WHEN LATITUDEINDICATOR = ''S'' THEN -1 END) * (LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0)) LatDecDeg"
+                        + ", ((CASE WHEN LONGITUDEINDICATOR = ''E'' THEN +1 WHEN LONGITUDEINDICATOR = ''W'' THEN -1 END) * (LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0)) LonDecDeg"
                         + " FROM SIGHTINGS";
                 sql = sql + " WHERE ID in (";
                 for (Sighting tempSighting : inLstSightings) {
@@ -367,15 +367,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             String sql = "SELECT " +
                         " E.PRIMARYNAME AS CREATURE, E.SCIENTIFICNAME AS SCIENTIFIC_NAME, E.ELEMENTTYPE AS CREATURE_TYPE, " +
                         " L.NAME AS PLACE, L.GPSACCURACY AS PLACE_GPS_ACCURACY, L.GPSACCURACYVALUE AS PLACE_GPS_ACCURACY_VALUE, " +
-                        " ((CASE WHEN L.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN L.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (L.LatDEGREES + (L.LatMINUTES + L.LatSECONDS /60.0)/60.0)) AS PLACE_LATITUDE, " +
-                        " ((CASE WHEN L.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN L.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (L.LonDEGREES + (L.LonMINUTES + L.LonSECONDS /60.0)/60.0)) AS PLACE_LONGITUDE, " +
+                        " ((CASE WHEN L.LATITUDEINDICATOR = ''N'' THEN +1 WHEN L.LATITUDEINDICATOR = ''S'' THEN -1 END) * (L.LatDEGREES + (L.LatMINUTES + L.LatSECONDS /60.0)/60.0)) AS PLACE_LATITUDE, " +
+                        " ((CASE WHEN L.LONGITUDEINDICATOR = ''E'' THEN +1 WHEN L.LONGITUDEINDICATOR = ''W'' THEN -1 END) * (L.LonDEGREES + (L.LonMINUTES + L.LonSECONDS /60.0)/60.0)) AS PLACE_LONGITUDE, " +
                         " V.NAME AS PERIOD, V.VISITTYPE AS PERIOD_TYPE, V.STARTDATE AS PERIOD_START_DATE, V.ENDDATE AS PERIOD_END_DATE, V.DESCRIPTION AS PERIOD_DESCRIPTION, " +
                         " S.ID AS OBSERVATION, S.CERTAINTY, S.SIGHTINGEVIDENCE AS EVIDENCE, " +
                         " S.TIMEACCURACY AS TIME_ACCURACY, S.TIMEOFDAY AS TIME_OF_DAY, " +
                         " trunc(S.SIGHTINGDATE) OBSERVATION_DATE, cast(S.SIGHTINGDATE as time) OBSERVATION_TIME, " +
                         " S.GPSACCURACY AS OBSERVATION_GPS_ACCURACY, S.GPSACCURACYVALUE AS OBSERVATION_GPS_ACCURACY_VALUE, " +
-                        " ((CASE WHEN S.LATITUDEINDICATOR like ''North (+)'' THEN +1 WHEN S.LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * (S.LatDEGREES + (S.LatMINUTES + S.LatSECONDS /60.0)/60.0)) AS OBSERVATION_LATITUDE, " +
-                        " ((CASE WHEN S.LONGITUDEINDICATOR like ''East (+)'' THEN +1 WHEN S.LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * (S.LonDEGREES + (S.LonMINUTES + S.LonSECONDS /60.0)/60.0)) AS OBSERVATION_LONGITUDE, " +
+                        " ((CASE WHEN S.LATITUDEINDICATOR = ''N'' THEN +1 WHEN S.LATITUDEINDICATOR = ''S'' THEN -1 END) * (S.LatDEGREES + (S.LatMINUTES + S.LatSECONDS /60.0)/60.0)) AS OBSERVATION_LATITUDE, " +
+                        " ((CASE WHEN S.LONGITUDEINDICATOR = ''E'' THEN +1 WHEN S.LONGITUDEINDICATOR = ''W'' THEN -1 END) * (S.LonDEGREES + (S.LonMINUTES + S.LonSECONDS /60.0)/60.0)) AS OBSERVATION_LONGITUDE, " +
                         " S.NUMBEROFELEMENTS AS NUMBER_OF_CREATURES, S.LIFESTATUS AS LIFE_STATUS, S.TAG, S.DETAILS " +
                         " FROM SIGHTINGS S " +
                         " LEFT JOIN ELEMENTS E ON S.ELEMENTID = E.ID " +
@@ -383,15 +383,15 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         " LEFT JOIN VISITS V ON S.VISITID = V.ID ";
             String andIndicator = " WHERE ";
             if (inElement != null && inElement.getPrimaryName()!= null && !inElement.getPrimaryName().isEmpty()) {
-                sql = sql + andIndicator + " S.ELEMENTID = ''" + inElement.getID() + "''";
+                sql = sql + andIndicator + " S.ELEMENTID = " + inElement.getID();
                 andIndicator = " AND ";
             }
             if (inLocation != null && inLocation.getName() != null && !inLocation.getName().isEmpty()) {
-                sql = sql + andIndicator + " S.LOCATIONID = ''" + inLocation.getID() + "''";
+                sql = sql + andIndicator + " S.LOCATIONID = " + inLocation.getID();
                 andIndicator = " AND ";
             }
             if (inVisit != null && inVisit.getName() != null && !inVisit.getName().isEmpty()) {
-                sql = sql + andIndicator + " S.VISITID = ''" + inVisit.getID() + "''";
+                sql = sql + andIndicator + " S.VISITID = " + inVisit.getID();
                 andIndicator = " AND ";
             }
             if (inSighting != null && inSighting.getID()> 0) {

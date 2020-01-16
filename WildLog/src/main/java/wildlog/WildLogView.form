@@ -139,19 +139,27 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupDatabaseActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuBackupRestore">
+            <Menu class="javax.swing.JMenu" name="mnuRestore">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Data Icon.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Database Restore"/>
-                <Property name="toolTipText" type="java.lang.String" value="Restore a previously backed-up database."/>
-                <Property name="name" type="java.lang.String" value="mnuBackupRestore" noResource="true"/>
+                <Property name="text" type="java.lang.String" value="Restore"/>
+                <Property name="name" type="java.lang.String" value="mnuRestore" noResource="true"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupRestoreActionPerformed"/>
-              </Events>
-            </MenuItem>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuBackupRestore">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Data Icon.gif"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Database Restore"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Restore a previously backed-up database."/>
+                    <Property name="name" type="java.lang.String" value="mnuBackupRestore" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupRestoreActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprEcho">
               <Properties>
                 <Property name="name" type="java.lang.String" value="sprEcho" noResource="true"/>

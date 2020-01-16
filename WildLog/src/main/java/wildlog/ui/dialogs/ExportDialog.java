@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -918,17 +919,17 @@ public class ExportDialog extends JDialog {
                 List<Sighting> lstSightingsToUse;
                 if (location != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX).resolve(location.getDisplayName());
-                    lstSightingsToUse = app.getDBI().listSightings(0, location.getID(), 0, false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(0, location.getID(), 0, true, Sighting.class);
                 }
                 else
                 if (visit != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getDisplayName());
-                    lstSightingsToUse = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(0, 0, visit.getID(), true, Sighting.class);
                 }
                 else
                 if (element != null) {
                     path = WildLogPaths.WILDLOG_EXPORT_XLS_PAARL.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getDisplayName());
-                    lstSightingsToUse = app.getDBI().listSightings(element.getID(), 0, 0, false, Sighting.class);
+                    lstSightingsToUse = app.getDBI().listSightings(element.getID(), 0, 0, true, Sighting.class);
                 }
                 else
                 if (sighting != null) {
@@ -1065,7 +1066,7 @@ public class ExportDialog extends JDialog {
                 }
                 // Write the last visit's register file (sightings)
                 if (currentVisit != null) {
-                    try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Register.xls").toFile())) {
+                    try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Register.xlsx").toFile())) {
                         workbook.write(out);
                     }
                     catch (IOException ex) {
@@ -1084,7 +1085,7 @@ public class ExportDialog extends JDialog {
                     if (!tempVisit.getName().equals(currentVisit)) {
                         if (currentVisit != null) {
                             // Write the previous site file (visits)
-                            try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Site.xls").toFile())) {
+                            try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Site.xlsx").toFile())) {
                                 workbook.write(out);
                             }
                             catch (IOException ex) {
@@ -1120,7 +1121,7 @@ public class ExportDialog extends JDialog {
                     setMessage("Busy with the Paarl Excel Export... " + getProgress() + "%");
                 }
                 // Write the last site file (visits)
-                try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Site.xls").toFile())) {
+                try (FileOutputStream out = new FileOutputStream(path.resolve(currentVisit).resolve("Site.xlsx").toFile())) {
                     workbook.write(out);
                 }
                 catch (IOException ex) {
@@ -1179,11 +1180,12 @@ public class ExportDialog extends JDialog {
                 }
                 setTaskProgress(3);
                 setMessage("Busy with the Excel Export... " + getProgress() + "%");
-                path = WildLogPaths.WILDLOG_EXPORT_XLS.getAbsoluteFullPath().resolve(name + ".xls");
+                path = WildLogPaths.WILDLOG_EXPORT_XLS.getAbsoluteFullPath().resolve(name + ".xlsx");
                 Files.createDirectories(path.getParent());
                 // Create workbook and sheet
                 Workbook workbook = new SXSSFWorkbook();
                 Sheet sheet = workbook.createSheet("WildLog - " + name);
+                ((SXSSFSheet) sheet).trackAllColumnsForAutoSizing();
                 // Setup header row
                 int rowCount = 0;
                 UtilsExcel.exportSightingToExcelHeader(sheet, rowCount++);
@@ -1197,7 +1199,11 @@ public class ExportDialog extends JDialog {
                     setTaskProgress(5 + (int)((counter++/(double)lstSightingsToUse.size())*90));
                     setMessage("Busy with the Excel Export... " + getProgress() + "%");
                 }
-                // Write the last visit's register file (sightings)
+                // Resize columns
+                for (int t = 0; t < 30; t++) {
+                    sheet.autoSizeColumn(t);
+                }
+                // Write the file
                 setTaskProgress(95);
                 setMessage("Busy with the Excel Export (writing the file)... " + getProgress() + "%");
                 try (FileOutputStream out = new FileOutputStream(path.toFile())) {

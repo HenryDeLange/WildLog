@@ -42,7 +42,7 @@ public class ReportVisitDates {
                 setMessage("Starting the Report: " + inTitle);
                 setTaskProgress(1);
                 setMessage("Busy with the Report: " + inTitle + "... " + getProgress() + "%");
-                Path path = WildLogPaths.WILDLOG_EXPORT_REPORTS.getAbsoluteFullPath().resolve(inTitle + ".xls");
+                Path path = WildLogPaths.WILDLOG_EXPORT_REPORTS.getAbsoluteFullPath().resolve(inTitle + ".xlsx");
                 setTaskProgress(2);
                 setMessage("Busy with the Report: " + inTitle + "... " + getProgress() + "%");
                 List<Visit> lstVisits = WildLogApp.getApplication().getDBI().listVisits(null, 0, null, true, Visit.class);
@@ -98,6 +98,7 @@ public class ReportVisitDates {
                     reportData.startDate = UtilsTime.getLocalDateFromDate(visit.getStartDate());
                     reportData.endDate = UtilsTime.getLocalDateFromDate(visit.getEndDate());
                     reportData.visitType = visit.getType();
+                    // Check for missing or overlapping dates
                     if (reportData.startDate != null && reportData.endDate != null) {
                         reportData.days = (int) ChronoUnit.DAYS.between(reportData.startDate, reportData.endDate) + 1; // +1 om die eerste dag ook te tel
                     }
@@ -124,27 +125,30 @@ public class ReportVisitDates {
                         reportData.isMissing = false;
                         reportData.isOverlapping = false;
                     }
-                    List<Sighting> lstSightings = WildLogApp.getApplication().getDBI().listSightings(0, visit.getLocationID(), visit.getID(), false, Sighting.class);
-                    boolean outsideRange = false;
-                    int startGap = Integer.MAX_VALUE;
-                    int endGap = Integer.MAX_VALUE;
-                    for (Sighting sighting : lstSightings) {
-                        LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
-                        if (sightingDate.isBefore(reportData.startDate) || sightingDate.isAfter(reportData.endDate)) {
-                            outsideRange = true;
+                    // Check Visit and Sighting date range
+                    if (reportData.startDate != null && reportData.endDate != null) {
+                        List<Sighting> lstSightings = WildLogApp.getApplication().getDBI().listSightings(0, visit.getLocationID(), visit.getID(), false, Sighting.class);
+                        boolean outsideRange = false;
+                        int startGap = Integer.MAX_VALUE;
+                        int endGap = Integer.MAX_VALUE;
+                        for (Sighting sighting : lstSightings) {
+                            LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+                            if (sightingDate.isBefore(reportData.startDate) || sightingDate.isAfter(reportData.endDate)) {
+                                outsideRange = true;
+                            }
+                            startGap = Math.min(startGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.startDate)));
+                            endGap = Math.min(endGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.endDate)));
                         }
-                        startGap = Math.min(startGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.startDate)));
-                        endGap = Math.min(endGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.endDate)));
-                    }
-                    reportData.observationsDateRange = "";
-                    if (outsideRange) {
-                        reportData.observationsDateRange = "OBSERVATION DATE OUTSIDE PERIOD DATE. ";
-                    }
-                    if (startGap > 2) {
-                        reportData.observationsDateRange = "LATE OBSERVATION START DATE. ";
-                    }
-                    if (endGap > 2) {
-                        reportData.observationsDateRange = "EARLY OBSERVATION END DATE.";
+                        reportData.observationsDateRange = "";
+                        if (outsideRange) {
+                            reportData.observationsDateRange = "OBSERVATION DATE OUTSIDE PERIOD DATE. ";
+                        }
+                        if (startGap > 2) {
+                            reportData.observationsDateRange = "LATE OBSERVATION START DATE. ";
+                        }
+                        if (endGap > 2) {
+                            reportData.observationsDateRange = "EARLY OBSERVATION END DATE.";
+                        }
                     }
                     // If there was a missing period, then add a row for it
                     if (reportData.isMissing) {
@@ -250,7 +254,7 @@ public class ReportVisitDates {
                 catch (IOException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                            "<html>The new report could not be created. "
+                            "<html>The report could not be created. "
                                     + "<br/>If the file is already open in another application, please close it and try again.</html>",
                             "Report Error", WLOptionPane.ERROR_MESSAGE);
                 }
