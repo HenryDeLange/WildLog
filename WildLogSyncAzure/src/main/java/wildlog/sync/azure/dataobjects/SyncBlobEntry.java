@@ -64,7 +64,7 @@ public class SyncBlobEntry {
     
     @Override
     public String toString() {
-        return "[" + dataType + "] " + workspaceID + "/" + parentID + "/" + recordID;
+        return "[" + dataType + "] " + workspaceID + "/" + parentID + "/" + recordID + " [" + fullBlobID + "]";
     }
 
 }

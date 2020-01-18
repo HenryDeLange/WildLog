@@ -719,10 +719,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         cmbFeedingClass.setModel(new DefaultComboBoxModel(FeedingClass.values()));
         cmbFeedingClass.setSelectedItem(element.getFeedingClass());
+        cmbFeedingClass.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbFeedingClass.setName("cmbFeedingClass"); // NOI18N
 
         cmbEndangeredStatus.setModel(new DefaultComboBoxModel(EndangeredStatus.values()));
         cmbEndangeredStatus.setSelectedItem(element.getEndangeredStatus());
+        cmbEndangeredStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbEndangeredStatus.setName("cmbEndangeredStatus"); // NOI18N
 
         jLabel1.setText("Feeding Class:");
@@ -737,6 +739,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbType.setMaximumRowCount(11);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(element.getType());
+        cmbType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbType.setName("cmbType"); // NOI18N
 
         jLabel60.setText("Creature Type:");

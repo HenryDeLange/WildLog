@@ -36,6 +36,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Rename Active Workspace"/>
                     <Property name="toolTipText" type="java.lang.String" value="Change the name associated with this Workspace."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuChangeWorkspaceName" noResource="true"/>
                   </Properties>
                   <Events>
@@ -54,6 +57,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Manage Workspace Users"/>
                     <Property name="toolTipText" type="java.lang.String" value="Limit access to this Workspace to only certain users."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuWorkspaceUsers" noResource="true"/>
                   </Properties>
                   <Events>
@@ -72,6 +78,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Check and Clean Workspace"/>
                     <Property name="toolTipText" type="java.lang.String" value="Make sure the Workspace is in good order and remove non-essential files."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuCleanWorkspace" noResource="true"/>
                   </Properties>
                   <Events>
@@ -85,6 +94,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Optimise Database"/>
                     <Property name="toolTipText" type="java.lang.String" value="This will attempt to compact and defragment the database."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuOptimseDatabase" noResource="true"/>
                   </Properties>
                   <Events>
@@ -105,6 +117,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Exit WildLog"/>
                 <Property name="toolTipText" type="java.lang.String" value="Close the application."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExitApp" noResource="true"/>
               </Properties>
               <Events>
@@ -133,6 +148,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Database Backup"/>
                 <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;This makes a backup of the database. &lt;br/&gt;&lt;b&gt;Note: This does not backup the files, only the database is backed up.&lt;/b&gt; &lt;br/&gt;To backup the data and files it is recommended to make a manual copy of the entire Workspace folder, or use the Workspace Backup feature.&lt;/html&gt;"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuBackupDatabase" noResource="true"/>
               </Properties>
               <Events>
@@ -152,6 +170,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Database Restore"/>
                     <Property name="toolTipText" type="java.lang.String" value="Restore a previously backed-up database."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuBackupRestore" noResource="true"/>
                   </Properties>
                   <Events>
@@ -172,6 +193,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Workspace Backup (Echo)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Makes a backup of the Workspace by making the content of the target folder reflect that of the active Workspace."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuEchoWorkspace" noResource="true"/>
               </Properties>
               <Events>
@@ -190,6 +214,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Partial Workspace Backup (Export)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Makes a backup of the Workspace using the Workspace Export feature."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuBackupWorkspace" noResource="true"/>
               </Properties>
               <Events>
@@ -213,6 +240,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to CSV (Basic format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to CSV files using the Basic format. (Open in Excel, ArcGIS, etc.)"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportCSVBasic" noResource="true"/>
               </Properties>
               <Events>
@@ -226,6 +256,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to CSV (WildLog format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to CSV files. (Open in Excel, ArcGIS, etc.)"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportCSVFull" noResource="true"/>
               </Properties>
               <Events>
@@ -244,6 +277,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to Web Page (Basic)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportHTML" noResource="true"/>
               </Properties>
               <Events>
@@ -257,6 +293,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to Web Page (Advanced)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportHTMLAdvanced" noResource="true"/>
               </Properties>
               <Events>
@@ -275,6 +314,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to XML"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to XML files. (Open in text editor, web browser, etc.)"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportXML" noResource="true"/>
               </Properties>
               <Events>
@@ -293,6 +335,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to KML"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data and linked thumbnails to a KML file. (Open in Google Earth, etc.)"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportKML" noResource="true"/>
               </Properties>
               <Events>
@@ -311,6 +356,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to Excel (Basic format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to Excel files using the Basic format."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportExcelBasic" noResource="true"/>
               </Properties>
               <Events>
@@ -329,6 +377,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export WildNote Sync File"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export the Creatures to a sync file that can be loaded in WildNote."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportWildNoteSync" noResource="true"/>
               </Properties>
               <Events>
@@ -347,6 +398,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export to New Workspace"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export the specified data to a new WildLog Workspace."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExportWorkspace" noResource="true"/>
               </Properties>
               <Events>
@@ -371,6 +425,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import from CSV (Basic format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;Import the data contained in the CSV files. &lt;br/&gt;All imported data will be prefixed by the provided value. &lt;br/&gt;(Note: This import uses the same format as files generated by the CSV Basic Export.)&lt;/html&gt;"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuImportCSVBasic" noResource="true"/>
               </Properties>
               <Events>
@@ -384,6 +441,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import from CSV (WildLog format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;Import the data contained in the CSV files. &lt;br/&gt;All imported data will be prefixed by the provided value. &lt;br/&gt;(Note: This import uses the same format as files generated by the CSV WildLog Export.)&lt;/html&gt;"/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuImportCSV" noResource="true"/>
               </Properties>
               <Events>
@@ -402,6 +462,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import IUCN Species List (old format)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Import species names from a CSV file exported from the IUCN Red List site."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuImportIUCNList" noResource="true"/>
               </Properties>
               <Events>
@@ -420,6 +483,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import your iNaturalist Observations"/>
                 <Property name="toolTipText" type="java.lang.String" value="Import observations from iNaturalist."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuImportINaturalist" noResource="true"/>
               </Properties>
               <Events>
@@ -438,6 +504,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import WildNote Sync File"/>
                 <Property name="toolTipText" type="java.lang.String" value="Import a sync file that was exported from WildNote."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuImportWildNote" noResource="true"/>
               </Properties>
               <Events>
@@ -456,6 +525,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import from Another Workspace"/>
                 <Property name="toolTipText" type="java.lang.String" value="Import data and files from another WildLog Workspace."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuImportWorkspace" noResource="true"/>
               </Properties>
               <Events>
@@ -474,6 +546,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Stash Files"/>
                 <Property name="toolTipText" type="java.lang.String" value="Stash files in the Workspace for later processing."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuStash" noResource="true"/>
               </Properties>
               <Events>
@@ -487,6 +562,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Bulk Import Files"/>
                 <Property name="toolTipText" type="java.lang.String" value="Import multiple files at once using the Bulk Import feature."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuBulkImport" noResource="true"/>
               </Properties>
               <Events>
@@ -511,6 +589,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Sync with Cloud Workspace"/>
                 <Property name="toolTipText" type="java.lang.String" value="Synchronise the content of this Workspace with that of a cloud backup."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuSyncWorkspace" noResource="true"/>
               </Properties>
               <Events>
@@ -535,6 +616,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Check Period Dates"/>
                 <Property name="toolTipText" type="java.lang.String" value="Generate a report that analysis the Periods&apos; dates."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuReportVisitDates" noResource="true"/>
               </Properties>
               <Events>
@@ -558,6 +642,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Switch Primary, Other and Scientific names of Creatures"/>
                 <Property name="toolTipText" type="java.lang.String" value="Switch Primary, Other and Scientific names of all Creatures in the Workspace."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuSwitchElementNames" noResource="true"/>
               </Properties>
               <Events>
@@ -576,6 +663,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Calculate Sun and Moon information for all Observations"/>
                 <Property name="toolTipText" type="java.lang.String" value="WARNING: This action might recalculate and overwrite the Sun and Moon information for all Observations."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuCalcSunMoon" noResource="true"/>
               </Properties>
               <Events>
@@ -589,6 +679,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Calculate Duration for all Observations"/>
                 <Property name="toolTipText" type="java.lang.String" value="WARNING: This action might recalculate and overwrite the Duration information for all Observations."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuCalcDuration" noResource="true"/>
               </Properties>
               <Events>
@@ -607,6 +700,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Move a Period to a different Place"/>
                 <Property name="toolTipText" type="java.lang.String" value="Move a Period from one Place to another, including all Observations during that Period."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuMoveVisits" noResource="true"/>
               </Properties>
               <Events>
@@ -625,6 +721,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Merge one Place&apos;s Observations into another"/>
                 <Property name="toolTipText" type="java.lang.String" value="Move all Periods from one Place to another Place and then delete the initial Place."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuMergeLocations" noResource="true"/>
               </Properties>
               <Events>
@@ -638,6 +737,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Merge one Period&apos;s Observations into another"/>
                 <Property name="toolTipText" type="java.lang.String" value="Move all Observations from one Period to another Period and then delete the initial Period."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuMergeVisit" noResource="true"/>
               </Properties>
               <Events>
@@ -651,6 +753,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Merge one Creature&apos;s Observations into another"/>
                 <Property name="toolTipText" type="java.lang.String" value="Move all Observations from one Creature to another Creature and then delete the initial Creature."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuMergeElements" noResource="true"/>
               </Properties>
               <Events>
@@ -669,6 +774,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Reduce the size of Images"/>
                 <Property name="toolTipText" type="java.lang.String" value="Reduce the resolution of certain images to reduce the overall size of the Workspace."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuReduceImagesSize" noResource="true"/>
               </Properties>
               <Events>
@@ -687,6 +795,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Setup iNaturalist Authorization"/>
                 <Property name="toolTipText" type="java.lang.String" value="Configure the iNaturalist Authorization Token for this WildLog session."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuINaturalistToken" noResource="true"/>
               </Properties>
               <Events>
@@ -711,6 +822,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Image EXIF Data Reader"/>
                 <Property name="toolTipText" type="java.lang.String" value="Browse to any image on your computer and view the EXIF data."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuExifMenuItem" noResource="true"/>
               </Properties>
               <Events>
@@ -724,6 +838,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Convert GPS / Pentad / QDGC"/>
                 <Property name="toolTipText" type="java.lang.String" value="Convert between GPS, Pentad and QDS coordinates."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuConvertCoordinates" noResource="true"/>
               </Properties>
               <Events>
@@ -737,6 +854,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Create a JPEG Movie"/>
                 <Property name="toolTipText" type="java.lang.String" value="Create a JPEG Movie slideshow using a folder of images anywhere on your computer."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuCreateSlideshow" noResource="true"/>
               </Properties>
               <Events>
@@ -750,6 +870,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Create an Animated GIF"/>
                 <Property name="toolTipText" type="java.lang.String" value="Create an animated GIF slideshow using a folder of images anywhere on your computer."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuCreateGIF" noResource="true"/>
               </Properties>
               <Events>
@@ -763,6 +886,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="View Sun And Moon Phase"/>
                 <Property name="toolTipText" type="java.lang.String" value="Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuSunAndMoon" noResource="true"/>
               </Properties>
               <Events>
@@ -776,6 +902,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="System Monitor"/>
                 <Property name="toolTipText" type="java.lang.String" value="Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuSystemMonitor" noResource="true"/>
               </Properties>
               <Events>
@@ -801,6 +930,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Open H2 Database Console"/>
                     <Property name="toolTipText" type="java.lang.String" value="Open the DB console bundled with the H2 database to access the database used by WildLog."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuDBConsole" noResource="true"/>
                   </Properties>
                   <Events>
@@ -833,6 +965,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Set Offline Map Start Position"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select the GPS location where the Offline Maps will open at by default."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuMapStartMenuItem" noResource="true"/>
                   </Properties>
                   <Events>
@@ -854,6 +989,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Set Slideshow Image Size"/>
                     <Property name="toolTipText" type="java.lang.String" value="Set the size to which the images should be resized for the generated Slideshows."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuSetSlideshowSize" noResource="true"/>
                   </Properties>
                   <Events>
@@ -864,6 +1002,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Set Slideshow Speed"/>
                     <Property name="toolTipText" type="java.lang.String" value="Set the framerate that will be used for generated Slideshows (where applicable)."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="mnuSetSlideshowSpeed" noResource="true"/>
                   </Properties>
                   <Events>
@@ -888,6 +1029,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Show Thumbnails On Tables"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select this option to show thumbnails in the tables. Disabling this option will result in the tables loading much faster, but they won&apos;t show any thumbnails."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="chkMnuUseIconTables" noResource="true"/>
                   </Properties>
                   <Events>
@@ -901,6 +1045,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Use Thumbnails On The Browse Tab"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select this option to use large thumbnails in the Browse Tab instead of the original files. Enabling this option should improve performance on the Browse Tab, but reduce the image quality."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="chkMnuBrowseWithThumbnails" noResource="true"/>
                   </Properties>
                   <Events>
@@ -925,6 +1072,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Use Scientific Name On Tables"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select this option to show the Scientific Name for Creatures in the tables instead of the Other Name."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="chkMnuUseScienteficName" noResource="true"/>
                   </Properties>
                   <Events>
@@ -938,6 +1088,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Enable Beep Sounds"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select this option to enable the application to play a beep sounds in response to user input."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="chkMnuEnableSounds" noResource="true"/>
                   </Properties>
                   <Events>
@@ -951,6 +1104,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Include Number of Individuals in the File Path"/>
                     <Property name="toolTipText" type="java.lang.String" value="This option will change the way in which the Files are stored and exported. Select this option to group all Files for Observations (from the same Period) into folders based on the number of individuals observed."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="chkMnuIncludeCountInSightingPath" noResource="true"/>
                   </Properties>
                   <Events>
@@ -964,6 +1120,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Automatically Upload Error Logs"/>
                     <Property name="toolTipText" type="java.lang.String" value="If this option is selected then WildLog will periodically attempt to upload the error log to a web server. The log will be used to identify bugs and areas in need of improvement."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="chkMnuUploadLogs" noResource="true"/>
                   </Properties>
                   <Events>
@@ -977,6 +1136,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Use Bundled Media Viewers (if available)"/>
                     <Property name="toolTipText" type="java.lang.String" value="If this option is selected WildLog will try to use the bundled media players to open supported file types instead (if available)."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="chkMnuUseBundledMediaViewers" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1007,6 +1169,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Information about WildNote"/>
                 <Property name="toolTipText" type="java.lang.String" value="More information about WildNote."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuAboutWildNote" noResource="true"/>
               </Properties>
               <Events>
@@ -1025,6 +1190,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="User Guide (PDF)"/>
                 <Property name="toolTipText" type="java.lang.String" value="Opens the WildLog User Guide, or a link to a website where it can be downloaded."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuUserGuide" noResource="true"/>
               </Properties>
               <Events>
@@ -1043,6 +1211,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Check for Updates"/>
                 <Property name="toolTipText" type="java.lang.String" value="Check online whether there is a newer version of WildLog available."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuCheckUpdates" noResource="true"/>
               </Properties>
               <Events>
@@ -1056,6 +1227,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="About WildLog"/>
                 <Property name="toolTipText" type="java.lang.String" value="Display information about this version of WildLog."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuAboutWildLog" noResource="true"/>
               </Properties>
               <Events>
@@ -1069,6 +1243,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="About WEI"/>
                 <Property name="toolTipText" type="java.lang.String" value="Display information about WEI."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="mnuAboutWEI" noResource="true"/>
               </Properties>
               <Events>

@@ -52,7 +52,9 @@ import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
+import wildlog.data.enums.VisitType;
 import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogFileType;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.encryption.TokenEncryptor;
 import wildlog.sync.azure.SyncAzure;
@@ -75,11 +77,14 @@ import wildlog.utils.WildLogPaths;
 
 public class WorkspaceSyncDialog extends JDialog {
     private int syncDeleteUp = 0;
+    private int syncDeleteStashUp = 0;
     private int syncDeleteDown = 0;
     private int syncDataUp = 0;
     private int syncDataDown = 0;
     private int syncFileUp = 0;
+    private int syncStashUp = 0;
     private int syncFileDown = 0;
+    private int syncStashDown = 0;
     private int syncFail = 0;
 
 
@@ -551,7 +556,7 @@ public class WorkspaceSyncDialog extends JDialog {
                         JPanel panel = new JPanel(new AbsoluteLayout());
                         panel.setPreferredSize(new Dimension(400, 50));
                         panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
-                        JLabel label = new JLabel("<html>Busy with Cloud Sync Workspace. Please be patient, this might take a while. <br/>"
+                        JLabel label = new JLabel("<html>Busy with Cloud Sync. Please be patient, this might take a while. <br/>"
                                 + "Don't close the application until the process is finished.</html>");
                         label.setFont(new Font("Tahoma", Font.BOLD, 12));
                         label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
@@ -574,7 +579,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     protected Object doInBackground() throws Exception {
                         long startTime = System.currentTimeMillis();
                         setProgress(0);
-                        setMessage("Starting the Cloud Sync Workspace");
+                        setMessage("Starting the Cloud Sync");
                         // Setup the report
                         Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("CloudSyncWorkspaceReport.txt");
                         PrintWriter feedback = null;
@@ -585,37 +590,40 @@ public class WorkspaceSyncDialog extends JDialog {
                             }
                             feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                             feedback.println("-------------------------------------------------");
-                            feedback.println("---------- Cloud Sync Workspace Report ----------");
+                            feedback.println("---------- Cloud Sync Report ----------");
                             feedback.println("-------------------------------------------------");
                             feedback.println("");
                             // SYNC - Delete Logs
                             setProgress((int) (1 * adjustForNoFiles));
-                            setMessage("Busy with the Cloud Sync Workspace - Syncing DeleteLogs ... " + getProgress() + "%");
+                            setMessage("Busy with the Cloud Sync - Syncing DeleteLogs ... " + getProgress() + "%");
                             syncDeleteLogs(feedback, syncAzure, this, (int) (8 * adjustForNoFiles));
                             // SYNC - Data
                             setProgress((int) (9 * adjustForNoFiles));
-                            setMessage("Busy with the Cloud Sync Workspace - Syncing Options ... " + getProgress() + "%");
+                            setMessage("Busy with the Cloud Sync - Syncing Options ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_OPTIONS, this, (int) (1 * adjustForNoFiles));
                             setProgress((int) (10 * adjustForNoFiles));
-                            setMessage("Busy with the Cloud Sync Workspace - Syncing Creatures ... " + getProgress() + "%");
+                            setMessage("Busy with the Cloud Sync - Syncing Creatures ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.ELEMENT, this, (int) (9 * adjustForNoFiles));
                             setProgress((int) (20 * adjustForNoFiles));
-                            setMessage("Busy with the Cloud Sync Workspace - Syncing Places ... " + getProgress() + "%");
+                            setMessage("Busy with the Cloud Sync - Syncing Places ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.LOCATION, this, (int) (8 * adjustForNoFiles));
                             setProgress((int) (30 * adjustForNoFiles));
-                            setMessage("Busy with the Cloud Sync Workspace - Syncing Periods ... " + getProgress() + "%");
+                            setMessage("Busy with the Cloud Sync - Syncing Periods ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.VISIT, this, (int) (12 * adjustForNoFiles));
                             setProgress((int) (40 * adjustForNoFiles));
-                            setMessage("Busy with the Cloud Sync Workspace - Syncing Observations ... " + getProgress() + "%");
+                            setMessage("Busy with the Cloud Sync - Syncing Observations ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.SIGHTING, this, (int) (18 * adjustForNoFiles));
                             setProgress((int) (50 * adjustForNoFiles));
-                            setMessage("Busy with the Cloud Sync Workspace - Syncing Users ... " + getProgress() + "%");
+                            setMessage("Busy with the Cloud Sync - Syncing Users ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_USER, this, (int) (3 * adjustForNoFiles));
                             // SYNC - Files
                             if (!rdbSyncNoFiles.isSelected()) {
                                 setProgress(60);
-                                setMessage("Busy with the Cloud Sync Workspace - Syncing Files ... " + getProgress() + "%");
-                                syncFileRecords(feedback, syncAzure, this, 39);
+                                setMessage("Busy with the Cloud Sync - Syncing Files ... " + getProgress() + "%");
+                                syncFileRecords(feedback, syncAzure, this, 29);
+                                setProgress(89);
+                                setMessage("Busy with the Cloud Sync - Syncing Stashed Files ... " + getProgress() + "%");
+                                syncStashedFileRecords(feedback, syncAzure, this, 10);
                             }
                         }
                         // Finish the report
@@ -636,22 +644,25 @@ public class WorkspaceSyncDialog extends JDialog {
                                 feedback.println("");
                                 feedback.println("--------------- SUMMARY ----------------");
                                 feedback.println("");
-                                feedback.println("Failed Sync Actions        : " + syncFail);
+                                feedback.println("Failed Sync Actions          : " + syncFail);
                                 feedback.println("");
-                                feedback.println("Synced DeleteLog Uploads   : " + syncDeleteUp);
-                                feedback.println("Synced DeleteLog Downloads : " + syncDeleteDown);
-                                feedback.println("Synced Data Uploads        : " + syncDataUp);
-                                feedback.println("Synced Data Downloads      : " + syncDataDown);
-                                feedback.println("Synced File Uploads        : " + syncFileUp);
-                                feedback.println("Synced File Downloads      : " + syncFileDown);
+                                feedback.println("Synced DeleteLog Uploads     : " + syncDeleteUp);
+                                feedback.println("Synced DeleteLog Downloads   : " + syncDeleteDown);
+                                feedback.println("Synced Data Uploads          : " + syncDataUp);
+                                feedback.println("Synced Data Downloads        : " + syncDataDown);
+                                feedback.println("Synced File Uploads          : " + syncFileUp);
+                                feedback.println("Synced File Downloads        : " + syncFileDown);
+                                feedback.println("Synced Stash Uploads         : " + syncStashUp);
+                                feedback.println("Synced Stash Downloads       : " + syncStashDown);
+                                feedback.println("Synced Stash Cloud Deletes   : " + syncDeleteStashUp);
                                 feedback.println("");
                                 feedback.println("--------------- DURATION ----------------");
+                                feedback.println("");
                                 long duration = System.currentTimeMillis() - startTime;
                                 int hours = (int) (((double) duration)/(1000.0*60.0*60.0));
                                 int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
                                 int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
                                 feedback.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
-                                WildLogApp.LOGGER.log(Level.INFO, "Cloud Sync Duration: {} hours, {} minutes, {} seconds", hours, minutes, seconds);
                                 feedback.println("");
                                 feedback.println("--------------------------------------");
                                 feedback.println("-------------- FINISHED --------------");
@@ -661,10 +672,22 @@ public class WorkspaceSyncDialog extends JDialog {
                                 feedback.close();
                                 // Open the summary document
                                 UtilsFileProcessing.openFile(feedbackFile);
+                                // Print summary to the logs
+                                WildLogApp.LOGGER.log(Level.INFO, "Failed Sync Actions          : {}", syncFail);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced DeleteLog Uploads     : {}", syncDeleteUp);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced DeleteLog Downloads   : {}", syncDeleteDown);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced Data Uploads          : {}", syncDataUp);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced Data Downloads        : {}", syncDataDown);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced File Uploads          : {}", syncFileUp);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced File Downloads        : {}", syncFileDown);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Uploads         : {}", syncStashUp);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Downloads       : {}", syncStashDown);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Cloud Deletes   : {}", syncDeleteStashUp);
+                                WildLogApp.LOGGER.log(Level.INFO, "Cloud Sync Duration: {} hours, {} minutes, {} seconds", hours, minutes, seconds);
                             }
                         }
                         setProgress(100);
-                        setMessage("Done with the Cloud Sync Workspace");
+                        setMessage("Done with the Cloud Sync");
                         return null;
                     }
 
@@ -678,8 +701,21 @@ public class WorkspaceSyncDialog extends JDialog {
                             public void run() {
                                 // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
                                 WLOptionPane.showMessageDialog(null, 
-                                        "The Cloud Sync Workspace process has completed. Please restart the application.", 
-                                        "Completed Cloud Sync Workspace", WLOptionPane.INFORMATION_MESSAGE);
+                                        "<html>The Cloud Sync process has completed. Please restart the application."
+                                                + "<br/><br/><hr/>"
+                                                + "<br/><b>Failed Sync Actions          : " + syncFail + "</b>"
+                                                + "<br/>"
+                                                + "<br/>Synced DeleteLog Uploads     : " + syncDeleteUp
+                                                + "<br/>Synced DeleteLog Downloads   : " + syncDeleteDown
+                                                + "<br/>Synced Data Uploads          : " + syncDataUp
+                                                + "<br/>Synced Data Downloads        : " + syncDataDown
+                                                + "<br/>Synced File Uploads          : " + syncFileUp
+                                                + "<br/>Synced File Downloads        : " + syncFileDown
+                                                + "<br/>Synced Stash Uploads         : " + syncStashUp
+                                                + "<br/>Synced Stash Downloads       : " + syncStashDown
+                                                + "<br/>Synced Stash Cloud Deletes   : " + syncDeleteStashUp
+                                                + "<br/><br/><hr/><br/></html>",
+                                        "Completed Cloud Sync", WLOptionPane.INFORMATION_MESSAGE);
                                 WildLogApp.getApplication().quit(null);
                             }
                         });
@@ -1146,16 +1182,16 @@ public class WorkspaceSyncDialog extends JDialog {
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Workspace File Entries: " + lstWorkspaceEntries.size());
         // VERIFY: Make sure that the entries in the cloud table match with the cloud blobs
         Map<WildLogDataType, List<SyncBlobEntry>> mapCloudBlobs = new HashMap<>();
-        List<SyncBlobEntry> lstCloudElementBlobs  = inSyncAzure.getSyncListFileBatch(WildLogDataType.ELEMENT);
+        List<SyncBlobEntry> lstCloudElementBlobs  = inSyncAzure.getSyncListFilesBatch(WildLogDataType.ELEMENT);
         mapCloudBlobs.put(WildLogDataType.ELEMENT, lstCloudElementBlobs);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - Element Cloud Blobs: " + lstCloudElementBlobs.size());
-        List<SyncBlobEntry> lstCloudLocationBlobs  = inSyncAzure.getSyncListFileBatch(WildLogDataType.LOCATION);
+        List<SyncBlobEntry> lstCloudLocationBlobs  = inSyncAzure.getSyncListFilesBatch(WildLogDataType.LOCATION);
         mapCloudBlobs.put(WildLogDataType.LOCATION, lstCloudLocationBlobs);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - Location Cloud Blobs: " + lstCloudLocationBlobs.size());
-        List<SyncBlobEntry> lstCloudVisitBlobs  = inSyncAzure.getSyncListFileBatch(WildLogDataType.VISIT);
+        List<SyncBlobEntry> lstCloudVisitBlobs  = inSyncAzure.getSyncListFilesBatch(WildLogDataType.VISIT);
         mapCloudBlobs.put(WildLogDataType.VISIT, lstCloudVisitBlobs);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - Visit Cloud Blobs: " + lstCloudVisitBlobs.size());
-        List<SyncBlobEntry> lstCloudSightingBlobs  = inSyncAzure.getSyncListFileBatch(WildLogDataType.SIGHTING);
+        List<SyncBlobEntry> lstCloudSightingBlobs  = inSyncAzure.getSyncListFilesBatch(WildLogDataType.SIGHTING);
         mapCloudBlobs.put(WildLogDataType.SIGHTING, lstCloudSightingBlobs);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - Sighting Cloud Blobs: " + lstCloudSightingBlobs.size());
         // Check that the entry in the table storage has a corresponding entry in the blob storage
@@ -1184,7 +1220,7 @@ public class WorkspaceSyncDialog extends JDialog {
             lstCloudDataEntries  = inSyncAzure.getSyncListDataBatch(WildLogDataType.FILE, quickSyncTimestamp);
             WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.FILE.getDescription() + " - All Cloud File Entries (Reloaded): " + lstCloudDataEntries.size());
         }
-        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 / 2.0)));
+        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 / 2.0))); // Step 1 of 3 halfway complete
         inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         baseProgress = inProgressbar.getProgress();
         // Check that the blob storage has a corresponding entry in the table storage
@@ -1199,7 +1235,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     }
                 }
                 if (!found) {
-                    logIfFailed(inFeedback, new SyncAction("SYNC_FIX CLOUD_DELETE_FILE", WildLogDataType.FILE, 
+                    logIfFailed(inFeedback, new SyncAction("CLOUD_DELETE", WildLogDataType.FILE, 
                             blobEntry.getRecordID(), blobEntry.getDataType().getDescription(), null), 
                             inSyncAzure.deleteFile(blobEntry.getDataType(), blobEntry.getFullBlobID()));
                 }
@@ -1208,7 +1244,7 @@ public class WorkspaceSyncDialog extends JDialog {
             }
         }
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Verify Files");
-        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0)));
+        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 1 of 3 complete
         inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         baseProgress = inProgressbar.getProgress();
         // UP: Make sure cloud knows about new workspace records
@@ -1235,13 +1271,15 @@ public class WorkspaceSyncDialog extends JDialog {
                 }
             }
         }
+        // Upload the files
         if (!lstSyncActions.isEmpty()) {
             // Note: Files are always uploaded one at a time
             loopCount = 0.0;
             for (SyncAction syncAction : lstSyncActions) {
                 WildLogFile wildLogFile = (WildLogFile) syncAction.data;
                 syncAction.details = wildLogFile.getLinkType().getDescription() + "_FILE";
-                logIfFailed(inFeedback, syncAction, inSyncAzure.uploadFile(wildLogFile.getLinkType(), getResizedFilePath(wildLogFile), wildLogFile.getLinkID(), wildLogFile.getID()));
+                logIfFailed(inFeedback, syncAction, 
+                        inSyncAzure.uploadFile(wildLogFile.getLinkType(), getResizedFilePath(wildLogFile), wildLogFile.getLinkID(), wildLogFile.getID()));
                 syncAction.details = wildLogFile.getLinkType().getDescription() + "_DATA";
                 logIfFailed(inFeedback, syncAction, inSyncAzure.uploadData(WildLogDataType.FILE, syncAction.data));
                 syncFileUp++;
@@ -1250,7 +1288,7 @@ public class WorkspaceSyncDialog extends JDialog {
             }
         }
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Upload Files");
-        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0)));
+        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 2 of 3 complete
         inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         baseProgress = inProgressbar.getProgress();
         // DOWN: Make sure the workspace knows about new cloud records
@@ -1299,7 +1337,7 @@ public class WorkspaceSyncDialog extends JDialog {
                 lstWorkspaceUpdateEntries.add(inSyncAzure.downloadData(WildLogDataType.FILE, recordId));
             }
         }
-        // Check the the downloads were successful
+        // Check that the downloads were successful
         if (!lstWorkspaceCreateIDs.isEmpty() && (lstWorkspaceCreateEntries == null || lstWorkspaceCreateEntries.size() != lstWorkspaceCreateIDs.size())) {
             logIfFailed(inFeedback, new SyncAction("CLOUD_DOWNLOAD", WildLogDataType.FILE, lstWorkspaceCreateIDs.size(), Arrays.toString(lstWorkspaceCreateIDs.toArray()), null), false);
         }
@@ -1325,7 +1363,8 @@ public class WorkspaceSyncDialog extends JDialog {
                     // Download the file
                     SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
                     syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_FILE";
-                    logIfFailed(inFeedback, syncAction, inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()));
+                    logIfFailed(inFeedback, syncAction, 
+                            inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()));
                     // Check the file size
                     long cloudFileSize = cloudWildLogFile.getSyncIndicator();
                     calculateOriginalFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
@@ -1344,7 +1383,7 @@ public class WorkspaceSyncDialog extends JDialog {
             }
         }
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Files Create");
-        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 / 2.0)));
+        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 / 2.0))); // Step 3 of 3 halfway complete
         inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         baseProgress = inProgressbar.getProgress();
         // Update if outdated
@@ -1401,9 +1440,151 @@ public class WorkspaceSyncDialog extends JDialog {
                 inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
             }
         }
+        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 3 of 3 complete
+        inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Files Update");
     }
+    
+    private void syncStashedFileRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize) {
+        int baseProgress = inProgressbar.getProgress();
+        List<SyncBlobEntry> lstCloudStashedBlobFolders  = inSyncAzure.getSyncListFileParentsBatch(WildLogDataType.STASH);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.STASH.getDescription() + " - All Stashed Cloud Blob Folders: " + lstCloudStashedBlobFolders.size());
+        List<Visit> lstWorkspaceStashedVisits = WildLogApp.getApplication().getDBI().listVisits(null, 0, VisitType.STASHED, false, Visit.class);
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.STASH.getDescription() + " - All Workspace Stashed Visits: " + lstWorkspaceStashedVisits.size());
+        // NOTE: Stashed Visits in the Workspce will already be deleted by the earlier Visits sync, making it easier here to just compare folders with the Cloud
+        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 1 of 3 complete
+        inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+        baseProgress = inProgressbar.getProgress();
+        // UP: Make sure cloud knows about new workspace records
+        List<SyncAction> lstSyncActions = new ArrayList<>();
+        for (Visit workspaceVisit : lstWorkspaceStashedVisits) {
+            boolean foundOnCloud = false;
+            for (SyncBlobEntry blobEntry : lstCloudStashedBlobFolders) {
+                if (workspaceVisit.getID() == blobEntry.getRecordID()) {
+                    foundOnCloud = true;
+                    break;
+                }
+            }
+            if (!foundOnCloud) {
+                Path stashPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(workspaceVisit.getName());
+                List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(stashPath.toFile(), false);
+                // Note: Die stashed files sal klaar alles in een folder wees
+                int counter = 0;
+                for (Path sourcePath : lstAllFiles) {
+                    WildLogFile wrapperWildLogFile = new WildLogFile();
+                    wrapperWildLogFile.setID(counter++);
+                    wrapperWildLogFile.setLinkID(workspaceVisit.getID());
+                    wrapperWildLogFile.setLinkType(WildLogDataType.STASH);
+                    if (WildLogFileExtentions.Images.isKnownExtention(sourcePath)) {
+                        wrapperWildLogFile.setFileType(WildLogFileType.IMAGE);
+                    }
+                    else
+                    if (WildLogFileExtentions.Movies.isKnownExtention(sourcePath)) {
+                        wrapperWildLogFile.setFileType(WildLogFileType.MOVIE);
+                    }
+                    else {
+                        // Only movies or images can be stashed
+                        continue;
+                    }
+                    wrapperWildLogFile.setDBFilePath(WildLogPaths.getFullWorkspacePrefix().relativize(sourcePath).toString());
+                    lstSyncActions.add(new SyncAction("CLOUD_UPLOAD", WildLogDataType.STASH, wrapperWildLogFile.getID(), 
+                            Long.toString(workspaceVisit.getID()), wrapperWildLogFile));
+                }
+            }
+        }
+        // Upload the files
+        if (!lstSyncActions.isEmpty()) {
+            // Note: Files are always uploaded one at a time
+            double loopCount = 0.0;
+            for (SyncAction syncAction : lstSyncActions) {
+                WildLogFile wildLogFile = (WildLogFile) syncAction.data;
+                logIfFailed(inFeedback, syncAction, 
+                        inSyncAzure.uploadFile(wildLogFile.getLinkType(), getResizedFilePath(wildLogFile), wildLogFile.getLinkID(), wildLogFile.getID()));
+                syncStashUp++;
+                inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * loopCount++ / ((double) lstSyncActions.size()))));
+                inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+            }
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Upload Stashed Files");
+        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 2 of 3 complete
+        inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+        baseProgress = inProgressbar.getProgress();
+        // DOWN: Make sure the workspace knows about new cloud records
+        double loopCount = 0.0;
+        for (SyncBlobEntry folderBlobEntry : lstCloudStashedBlobFolders) {
+            boolean foundExistingStashInWorkspace = false;
+            for (Visit workspaceVisit : lstWorkspaceStashedVisits) {
+                Path stashPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(workspaceVisit.getName());
+                // First confirm whether the Visit is in the database, then check whether the stash folder exists
+                if (workspaceVisit.getID() == folderBlobEntry.getRecordID() && Files.exists(stashPath)) {
+                    foundExistingStashInWorkspace = true;
+                    break;
+                }
+            }
+            if (!foundExistingStashInWorkspace) {
+                // Determine whether the cloud stash should be downloaded or deleted
+                WildLogDeleteLog deleteLog = WildLogApp.getApplication().getDBI().findDeleteLog(folderBlobEntry.getRecordID(), WildLogDeleteLog.class);
+                if (deleteLog == null) {
+                    // This is a new stashed folder on the cloud, the corresponding visit should already exist in the workspace from earlier sync steps
+                    Visit visit = WildLogApp.getApplication().getDBI().findVisit(folderBlobEntry.getRecordID(), null, false, Visit.class);
+                    if (visit != null && visit.getType() == VisitType.STASHED) {
+                        // Download the stashed folder into the workspace
+                        
+// FIXME: Ek dink ek gaan probleme kry met die exif data en file modified datum as ek die files probeer bulk import...
+//        Idee: Stoor Exif datum en GPS as blob attributes, dan met download skryf dit in die EXIF in...
 
+                        List<SyncBlobEntry> lstCloudStashedFiles = inSyncAzure.getSyncListFileChildrenBatch(WildLogDataType.STASH, folderBlobEntry.getRecordID());
+                        double subLoopCount = 0.0;
+                        for (SyncBlobEntry fileBlobEntry : lstCloudStashedFiles) {
+                            SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, fileBlobEntry.getRecordID(), visit.getName(), null);
+                            String[] namePieces = fileBlobEntry.getFullBlobID().split("/");
+                            Path workspacePath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).resolve(namePieces[namePieces.length - 1]);
+                            logIfFailed(inFeedback, syncAction, 
+                                    inSyncAzure.downloadFile(WildLogDataType.STASH, workspacePath, fileBlobEntry.getParentID(), fileBlobEntry.getRecordID()));
+                            inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * loopCount / ((double) lstCloudStashedBlobFolders.size())
+                                    * subLoopCount++ / ((double) lstCloudStashedFiles.size()))));
+                            inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+                            syncStashDown++;
+                        }
+                    }
+                    else {
+                        // This should never happen...
+                        SyncAction syncAction = new SyncAction("SYNC_FIX CLOUD_DELETE", WildLogDataType.STASH, folderBlobEntry.getRecordID(), "Orphaned Stash (PT)", null);
+                        // Delete the stashed folder on the cloud
+                        deleteStashedFilesFromCloud(inFeedback, inSyncAzure, folderBlobEntry, syncAction);
+                    }
+                }
+                else {
+                    if (deleteLog.getType() == WildLogDataType.VISIT) {
+                        // Delete the stashed folder on the cloud
+                        deleteStashedFilesFromCloud(inFeedback, inSyncAzure, folderBlobEntry, 
+                                new SyncAction("CLOUD_DELETE", WildLogDataType.STASH, folderBlobEntry.getRecordID(), "", null));
+                    }
+                    else {
+                        // This should never happen...
+                        SyncAction syncAction = new SyncAction("SYNC_FIX CLOUD_DELETE", WildLogDataType.STASH, folderBlobEntry.getRecordID(), "Orphaned Stash (DT)", null);
+                        // Delete the stashed folder on the cloud
+                        deleteStashedFilesFromCloud(inFeedback, inSyncAzure, folderBlobEntry, syncAction);
+                    }
+                }
+            }
+            inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * loopCount++ / ((double) lstCloudStashedBlobFolders.size()))));
+            inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+        }
+        inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 3 of 3 complete
+        inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+        WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download/Delete Stashed Files");
+    }
+
+    private void deleteStashedFilesFromCloud(PrintWriter inFeedback, SyncAzure inSyncAzure, SyncBlobEntry folderBlobEntry, SyncAction syncAction) {
+        List<SyncBlobEntry> lstCloudStashedFiles = inSyncAzure.getSyncListFileChildrenBatch(WildLogDataType.STASH, folderBlobEntry.getRecordID());
+        for (SyncBlobEntry fileBlobEntry : lstCloudStashedFiles) {
+            logIfFailed(inFeedback, syncAction, inSyncAzure.deleteFile(WildLogDataType.STASH, 
+                    fileBlobEntry.getFullBlobID().substring(WildLogDataType.STASH.getDescription().length() + 2)));
+            syncDeleteStashUp++;
+        }
+    }
+    
     private Path getResizedFilePath(WildLogFile inWildLogFile) {
         if (rdbSyncThumbnails.isSelected() && WildLogFileExtentions.Images.isJPG(inWildLogFile.getAbsolutePath())) {
             // Don't use a thumbnail if the original is smaller than the thumbnail

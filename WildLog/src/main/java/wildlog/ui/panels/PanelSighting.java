@@ -1004,6 +1004,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbMoonlight.setModel(new DefaultComboBoxModel(Moonlight.values()));
         cmbMoonlight.setSelectedItem(sighting.getMoonlight());
+        cmbMoonlight.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbMoonlight.setEnabled(!disableEditing);
         cmbMoonlight.setName("cmbMoonlight"); // NOI18N
 
@@ -1045,6 +1046,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbEvidence.setMaximumRowCount(12);
         cmbEvidence.setModel(new DefaultComboBoxModel(SightingEvidence.values()));
         cmbEvidence.setSelectedItem(sighting.getSightingEvidence());
+        cmbEvidence.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbEvidence.setEnabled(!disableEditing);
         cmbEvidence.setName("cmbEvidence"); // NOI18N
 
@@ -1095,6 +1097,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbTemperatureUnits.setModel(new DefaultComboBoxModel(UnitsTemperature.values()));
         cmbTemperatureUnits.setSelectedItem(sighting.getUnitsTemperature());
+        cmbTemperatureUnits.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbTemperatureUnits.setEnabled(!disableEditing);
         cmbTemperatureUnits.setName("cmbTemperatureUnits"); // NOI18N
 
@@ -1106,6 +1109,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
         cmbSex.setSelectedItem(sighting.getSex());
+        cmbSex.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbSex.setEnabled(!disableEditing);
         cmbSex.setName("cmbSex"); // NOI18N
 
@@ -1114,6 +1118,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbLifeStatus.setModel(new DefaultComboBoxModel(LifeStatus.values()));
         cmbLifeStatus.setSelectedItem(sighting.getLifeStatus());
+        cmbLifeStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbLifeStatus.setEnabled(!disableEditing);
         cmbLifeStatus.setName("cmbLifeStatus"); // NOI18N
 
@@ -1177,6 +1182,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbTimeAccuracy.setModel(new DefaultComboBoxModel(TimeAccuracy.values()));
         cmbTimeAccuracy.setSelectedItem(sighting.getTimeAccuracy());
+        cmbTimeAccuracy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbTimeAccuracy.setName("cmbTimeAccuracy"); // NOI18N
 
         jLabel23.setText("Age:");
@@ -1185,6 +1191,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbAge.setMaximumRowCount(10);
         cmbAge.setModel(new DefaultComboBoxModel(Age.values()));
         cmbAge.setSelectedItem(sighting.getAge());
+        cmbAge.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbAge.setName("cmbAge"); // NOI18N
 
         jLabel12.setText("Certainty:");
@@ -1200,6 +1207,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbTimeFormat.setModel(new DefaultComboBoxModel(TimeFormat.values()));
         cmbTimeFormat.setSelectedIndex(0);
+        cmbTimeFormat.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbTimeFormat.setEnabled(!disableEditing);
         cmbTimeFormat.setName("cmbTimeFormat"); // NOI18N
         cmbTimeFormat.addActionListener(new java.awt.event.ActionListener() {
@@ -1224,22 +1232,26 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbWeather.setMaximumRowCount(9);
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
         cmbWeather.setSelectedItem(sighting.getWeather());
+        cmbWeather.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbWeather.setEnabled(!disableEditing);
         cmbWeather.setName("cmbWeather"); // NOI18N
 
         cmbTimeOfDay.setMaximumRowCount(15);
         cmbTimeOfDay.setModel(new DefaultComboBoxModel(ActiveTimeSpesific.values()));
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
+        cmbTimeOfDay.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbTimeOfDay.setEnabled(!disableEditing);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
+        cmbViewRating.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbViewRating.setEnabled(!disableEditing);
         cmbViewRating.setName("cmbViewRating"); // NOI18N
 
         cmbCertainty.setModel(new DefaultComboBoxModel(Certainty.values()));
         cmbCertainty.setSelectedItem(sighting.getCertainty());
+        cmbCertainty.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbCertainty.setEnabled(!disableEditing);
         cmbCertainty.setName("cmbCertainty"); // NOI18N
 

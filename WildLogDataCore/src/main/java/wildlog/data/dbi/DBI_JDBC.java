@@ -223,12 +223,13 @@ public abstract class DBI_JDBC implements DBI {
             + " FROM ELEMENTS";
     protected static final String findFile = "SELECT * FROM FILES";
     protected static final String findWildLogOptions = "SELECT * FROM WILDLOG";
-    protected static final String findAdhocData = "SELECT * FROM ADHOC "
-            + "WHERE FIELDID = ? AND DATAKEY = ?";
-    protected static final String findINaturalistLinkedData = "SELECT * FROM INATURALIST "
-            + "WHERE WILDLOGID = ? OR INATURALISTID = ?";
+    protected static final String findAdhocData = "SELECT * FROM ADHOC"
+            + " WHERE FIELDID = ? AND DATAKEY = ?";
+    protected static final String findINaturalistLinkedData = "SELECT * FROM INATURALIST"
+            + " WHERE WILDLOGID = ? OR INATURALISTID = ?";
     protected static final String findUser = "SELECT * FROM WILDLOGUSERS";
-    protected static final String findDeleteLog = "SELECT * FROM DELETELOGS";
+    protected static final String findDeleteLog = "SELECT * FROM DELETELOGS"
+            + " WHERE ID = ?";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listLocationWithCached = "SELECT LOCATIONS.*,"

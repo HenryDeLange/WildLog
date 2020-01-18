@@ -563,6 +563,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         cmbVisitType.setMaximumRowCount(15);
         cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.valuesForDroplist()));
         cmbVisitType.setSelectedItem(VisitType.OTHER);
+        cmbVisitType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbVisitType.setName("cmbVisitType"); // NOI18N
 
         txtVisitName.setBackground(new java.awt.Color(204, 255, 204));

@@ -3,7 +3,11 @@ package wildlog.sync.azure;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.BlockBlobURL;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlobDirectory;
 import com.microsoft.azure.storage.blob.ContainerURL;
+import com.microsoft.azure.storage.blob.ListBlobItem;
 import com.microsoft.azure.storage.blob.ListBlobsOptions;
 import com.microsoft.azure.storage.blob.PipelineOptions;
 import com.microsoft.azure.storage.blob.ServiceURL;
@@ -42,8 +46,8 @@ import wildlog.sync.azure.dataobjects.SyncTableEntry;
 public final class SyncAzure {
     private static final int BATCH_LIMIT = 50;
     private static final int URL_LIMIT = 30000;
-// TODO: Figure out whether I need to set this dynamically (its much too big for small thumbnails)
-    private static final int MAX_BLOB_BLOCK_SIZE = 8*1024*1024;
+    private static final int MAX_BLOB_SIZE = 1*1024*1024; // bytes (1MB)
+    private static final int MAX_BLOB_UPLOAD_SIZE = 5*1024*1024; // bytes (5MB)
     private String storageConnectionString;
     private String accountName;
     private String accountKey;
@@ -405,7 +409,7 @@ public final class SyncAzure {
             BlockBlobURL blockBlob = container.createBlockBlobURL(calculateFullBlobID(inParentID, inRecordID, inFilePath));
             AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath);
             try {
-                TransferManager.uploadFileToBlockBlob(fileChannel, blockBlob, MAX_BLOB_BLOCK_SIZE, null, null).blockingGet();
+                TransferManager.uploadFileToBlockBlob(fileChannel, blockBlob, MAX_BLOB_SIZE, MAX_BLOB_UPLOAD_SIZE, null).blockingGet();
             }
             finally {
                 fileChannel.close();
@@ -442,9 +446,13 @@ public final class SyncAzure {
     }
     
     public String calculateFullBlobID(long inParentID, long inRecordID, Path inFilePath) {
-        return Long.toString(workspaceID) + "/"
+        String blobPath = Long.toString(workspaceID) + "/"
                 + Long.toString(inParentID) + "/"
                 + Long.toString(inRecordID) + inFilePath.getFileName().toString().substring(inFilePath.getFileName().toString().lastIndexOf('.'));
+        if (blobPath.endsWith(".jpeg")) {
+            blobPath = blobPath.substring(0, blobPath.length() - 4) + "jpg";
+        }
+        return blobPath;
     }
     
     public boolean deleteFile(WildLogDataType inDataType, String inFullBlobName) {
@@ -462,16 +470,17 @@ public final class SyncAzure {
     
     // SYNC LIST - FILES
     
-    public List<SyncBlobEntry> getSyncListFileBatch(WildLogDataType inDataType) {
+    public List<SyncBlobEntry> getSyncListFilesBatch(WildLogDataType inDataType) {
         try {
             List<SyncBlobEntry> lstSyncBlobEntries = new ArrayList<>();
             ContainerURL container = getContainerURL(inDataType);
             ListBlobsOptions options = new ListBlobsOptions();
-            options.withMaxResults(10);
+            options.withMaxResults(100);
             options.withPrefix(Long.toString(workspaceID));
             container.listBlobsFlatSegment(null, options, null)
                     .flatMap(containerListBlobFlatSegmentResponse ->
-                            listAllBlobs(container, containerListBlobFlatSegmentResponse, options, inDataType, lstSyncBlobEntries)).blockingGet();
+                            listAllBlobs(container, containerListBlobFlatSegmentResponse, options, inDataType, lstSyncBlobEntries))
+                    .blockingGet();
             return lstSyncBlobEntries;
         }
         catch (Exception ex) {
@@ -485,25 +494,99 @@ public final class SyncAzure {
         if (inResponse.body().segment() != null) {
             for (BlobItem blobItem : inResponse.body().segment().blobItems()) {
                 String[] namePieces = blobItem.name().split("/");
+                long recordsID = 0;
+                String name = namePieces[2].substring(0, namePieces[2].lastIndexOf('.'));
+                try {
+                    recordsID = Long.parseLong(name);
+                }
+                catch (NumberFormatException ex) {
+                    // Ignore (stashed files will not be numbers, but imported files of type WildLogFile will use IDs)
+                }
                 inLstSyncBlobEntries.add(new SyncBlobEntry(
                         inDataType, 
                         Long.parseLong(namePieces[0]),
                         Long.parseLong(namePieces[1]), 
-                        Long.parseLong(namePieces[2].substring(0, namePieces[2].lastIndexOf('.'))),
+                        recordsID,
                         blobItem.name()));
             }
         }
-        // If there is not another segment, return this response as the final response.
+        // If there is not another segment, return this response as the final response
         if (inResponse.body().nextMarker() == null) {
             return Single.just(inResponse);
         }
         else {
-            // IMPORTANT: ListBlobsFlatSegment returns the start of the next segment; you MUST use this to get the next segment
+            // IMPORTANT:
+            // ListBlobsFlatSegment returns the start of the next segment
+            // You MUST use this to get the next segment
             String nextMarker = inResponse.body().nextMarker();
             return inContainer.listBlobsFlatSegment(nextMarker, inOptions, null)
                     .flatMap(containersListBlobFlatSegmentResponse ->
                             listAllBlobs(inContainer, containersListBlobFlatSegmentResponse, inOptions, inDataType, inLstSyncBlobEntries));
         }
+    }
+    
+    public List<SyncBlobEntry> getSyncListFileParentsBatch(WildLogDataType inDataType) {
+        try {
+            // Setup the blob container
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.parse(storageConnectionString);
+            CloudBlobClient cloudBlobClient = cloudStorageAccount.createCloudBlobClient();
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.getContainerReference(inDataType.getDescription().toLowerCase());
+            cloudBlobContainer.createIfNotExists();
+            // Get the folders
+            CloudBlobDirectory cloudBlobDirectory = cloudBlobContainer.getDirectoryReference(Long.toString(workspaceID));
+            Iterable<ListBlobItem> blobItems = cloudBlobDirectory.listBlobs(null, false, null, null, null);
+            ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
+            for (ListBlobItem blobItem : blobItems) {
+                String[] namePieces = blobItem.getUri().getPath().split("/");
+                lstParents.add(new SyncBlobEntry(
+                        inDataType, 
+                        Long.parseLong(namePieces[2]),
+                        Long.parseLong(namePieces[namePieces.length - 2]), 
+                        Long.parseLong(namePieces[namePieces.length - 1]), 
+                        blobItem.getUri().getPath()));
+            }
+            return lstParents;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+    
+    public List<SyncBlobEntry> getSyncListFileChildrenBatch(WildLogDataType inDataType, long inParentID) {
+        try {
+            // Setup the blob container
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.parse(storageConnectionString);
+            CloudBlobClient cloudBlobClient = cloudStorageAccount.createCloudBlobClient();
+            CloudBlobContainer cloudBlobContainer = cloudBlobClient.getContainerReference(inDataType.getDescription().toLowerCase());
+            cloudBlobContainer.createIfNotExists();
+            // Get the folders
+            CloudBlobDirectory cloudBlobDirectory = cloudBlobContainer.getDirectoryReference(Long.toString(workspaceID) + "/" + inParentID);
+            Iterable<ListBlobItem> blobItems = cloudBlobDirectory.listBlobs(null, false, null, null, null);
+            ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
+            for (ListBlobItem blobItem : blobItems) {
+                String[] namePieces = blobItem.getUri().getPath().split("/");
+                long recordsID = 0;
+                String name = namePieces[namePieces.length - 1].substring(0, namePieces[namePieces.length - 1].lastIndexOf('.'));
+                try {
+                    recordsID = Long.parseLong(name);
+                }
+                catch (NumberFormatException ex) {
+                    // Ignore (stashed files will not be numbers, but imported files of type WildLogFile will use IDs)
+                }
+                lstParents.add(new SyncBlobEntry(
+                        inDataType, 
+                        Long.parseLong(namePieces[2]),
+                        Long.parseLong(namePieces[namePieces.length - 2]), 
+                        recordsID, 
+                        blobItem.getUri().getPath()));
+            }
+            return lstParents;
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
     }
     
 }

@@ -166,7 +166,7 @@ public class ExportDialogForReportsAndMaps extends JDialog {
 
         btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         btnExportHTML.setText("Export as an Offline Webpage");
-        btnExportHTML.setToolTipText("Create a basic HTML web page that can be viewed offline to show theObservations used by the active chart or map.");
+        btnExportHTML.setToolTipText("Create a basic HTML web page that can be viewed offline to show the Observations used by the active chart or map.");
         btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTML.setIconTextGap(10);

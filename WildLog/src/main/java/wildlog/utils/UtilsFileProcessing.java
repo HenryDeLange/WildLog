@@ -587,7 +587,7 @@ public final class UtilsFileProcessing {
         return lstAllFiles;
     }
     
-    private static List<Path> getListOfFilesToImport(File inRoot, boolean inIncludeFolders) {
+    public static List<Path> getListOfFilesToImport(File inRoot, boolean inIncludeFolders) {
         List<Path> lstFilesToImport = new ArrayList<>();
         if (inRoot != null) {
             if (inRoot.isFile()) {

@@ -953,6 +953,7 @@ public final class WildLogView extends JFrame {
         mnuChangeWorkspaceName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuChangeWorkspaceName.setText("Rename Active Workspace");
         mnuChangeWorkspaceName.setToolTipText("Change the name associated with this Workspace.");
+        mnuChangeWorkspaceName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuChangeWorkspaceName.setName("mnuChangeWorkspaceName"); // NOI18N
         mnuChangeWorkspaceName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -967,6 +968,7 @@ public final class WildLogView extends JFrame {
         mnuWorkspaceUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuWorkspaceUsers.setText("Manage Workspace Users");
         mnuWorkspaceUsers.setToolTipText("Limit access to this Workspace to only certain users.");
+        mnuWorkspaceUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuWorkspaceUsers.setName("mnuWorkspaceUsers"); // NOI18N
         mnuWorkspaceUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -981,6 +983,7 @@ public final class WildLogView extends JFrame {
         mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuCleanWorkspace.setText("Check and Clean Workspace");
         mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove non-essential files.");
+        mnuCleanWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuCleanWorkspace.setName("mnuCleanWorkspace"); // NOI18N
         mnuCleanWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -992,6 +995,7 @@ public final class WildLogView extends JFrame {
         mnuOptimseDatabase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuOptimseDatabase.setText("Optimise Database");
         mnuOptimseDatabase.setToolTipText("This will attempt to compact and defragment the database.");
+        mnuOptimseDatabase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuOptimseDatabase.setName("mnuOptimseDatabase"); // NOI18N
         mnuOptimseDatabase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1008,6 +1012,7 @@ public final class WildLogView extends JFrame {
         mnuExitApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuExitApp.setText("Exit WildLog");
         mnuExitApp.setToolTipText("Close the application.");
+        mnuExitApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExitApp.setName("mnuExitApp"); // NOI18N
         mnuExitApp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1033,6 +1038,7 @@ public final class WildLogView extends JFrame {
         mnuBackupDatabase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
         mnuBackupDatabase.setText("Database Backup");
         mnuBackupDatabase.setToolTipText("<html>This makes a backup of the database. <br/><b>Note: This does not backup the files, only the database is backed up.</b> <br/>To backup the data and files it is recommended to make a manual copy of the entire Workspace folder, or use the Workspace Backup feature.</html>");
+        mnuBackupDatabase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuBackupDatabase.setName("mnuBackupDatabase"); // NOI18N
         mnuBackupDatabase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1047,6 +1053,7 @@ public final class WildLogView extends JFrame {
         mnuBackupRestore.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
         mnuBackupRestore.setText("Database Restore");
         mnuBackupRestore.setToolTipText("Restore a previously backed-up database.");
+        mnuBackupRestore.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuBackupRestore.setName("mnuBackupRestore"); // NOI18N
         mnuBackupRestore.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1063,6 +1070,7 @@ public final class WildLogView extends JFrame {
         mnuEchoWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Echo.gif"))); // NOI18N
         mnuEchoWorkspace.setText("Workspace Backup (Echo)");
         mnuEchoWorkspace.setToolTipText("Makes a backup of the Workspace by making the content of the target folder reflect that of the active Workspace.");
+        mnuEchoWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuEchoWorkspace.setName("mnuEchoWorkspace"); // NOI18N
         mnuEchoWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1077,6 +1085,7 @@ public final class WildLogView extends JFrame {
         mnuBackupWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuBackupWorkspace.setText("Partial Workspace Backup (Export)");
         mnuBackupWorkspace.setToolTipText("Makes a backup of the Workspace using the Workspace Export feature.");
+        mnuBackupWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuBackupWorkspace.setName("mnuBackupWorkspace"); // NOI18N
         mnuBackupWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1101,6 +1110,7 @@ public final class WildLogView extends JFrame {
         mnuExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         mnuExportCSVBasic.setText("Export All to CSV (Basic format)");
         mnuExportCSVBasic.setToolTipText("Export all data to CSV files using the Basic format. (Open in Excel, ArcGIS, etc.)");
+        mnuExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportCSVBasic.setName("mnuExportCSVBasic"); // NOI18N
         mnuExportCSVBasic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1112,6 +1122,7 @@ public final class WildLogView extends JFrame {
         mnuExportCSVFull.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         mnuExportCSVFull.setText("Export All to CSV (WildLog format)");
         mnuExportCSVFull.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
+        mnuExportCSVFull.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportCSVFull.setName("mnuExportCSVFull"); // NOI18N
         mnuExportCSVFull.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1126,6 +1137,7 @@ public final class WildLogView extends JFrame {
         mnuExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         mnuExportHTML.setText("Export All to Web Page (Basic)");
         mnuExportHTML.setToolTipText("Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)");
+        mnuExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportHTML.setName("mnuExportHTML"); // NOI18N
         mnuExportHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1137,6 +1149,7 @@ public final class WildLogView extends JFrame {
         mnuExportHTMLAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         mnuExportHTMLAdvanced.setText("Export All to Web Page (Advanced)");
         mnuExportHTMLAdvanced.setToolTipText("Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)");
+        mnuExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportHTMLAdvanced.setName("mnuExportHTMLAdvanced"); // NOI18N
         mnuExportHTMLAdvanced.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1151,6 +1164,7 @@ public final class WildLogView extends JFrame {
         mnuExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/XML.png"))); // NOI18N
         mnuExportXML.setText("Export All to XML");
         mnuExportXML.setToolTipText("Export all data to XML files. (Open in text editor, web browser, etc.)");
+        mnuExportXML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportXML.setName("mnuExportXML"); // NOI18N
         mnuExportXML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1165,6 +1179,7 @@ public final class WildLogView extends JFrame {
         mnuExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
         mnuExportKML.setText("Export All to KML");
         mnuExportKML.setToolTipText("Export all data and linked thumbnails to a KML file. (Open in Google Earth, etc.)");
+        mnuExportKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportKML.setName("mnuExportKML"); // NOI18N
         mnuExportKML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1179,6 +1194,7 @@ public final class WildLogView extends JFrame {
         mnuExportExcelBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Excel.png"))); // NOI18N
         mnuExportExcelBasic.setText("Export All to Excel (Basic format)");
         mnuExportExcelBasic.setToolTipText("Export all data to Excel files using the Basic format.");
+        mnuExportExcelBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportExcelBasic.setName("mnuExportExcelBasic"); // NOI18N
         mnuExportExcelBasic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1193,6 +1209,7 @@ public final class WildLogView extends JFrame {
         mnuExportWildNoteSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
         mnuExportWildNoteSync.setText("Export WildNote Sync File");
         mnuExportWildNoteSync.setToolTipText("Export the Creatures to a sync file that can be loaded in WildNote.");
+        mnuExportWildNoteSync.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportWildNoteSync.setName("mnuExportWildNoteSync"); // NOI18N
         mnuExportWildNoteSync.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1207,6 +1224,7 @@ public final class WildLogView extends JFrame {
         mnuExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuExportWorkspace.setText("Export to New Workspace");
         mnuExportWorkspace.setToolTipText("Export the specified data to a new WildLog Workspace.");
+        mnuExportWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExportWorkspace.setName("mnuExportWorkspace"); // NOI18N
         mnuExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1232,6 +1250,7 @@ public final class WildLogView extends JFrame {
         mnuImportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         mnuImportCSVBasic.setText("Import from CSV (Basic format)");
         mnuImportCSVBasic.setToolTipText("<html>Import the data contained in the CSV files. <br/>All imported data will be prefixed by the provided value. <br/>(Note: This import uses the same format as files generated by the CSV Basic Export.)</html>");
+        mnuImportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuImportCSVBasic.setName("mnuImportCSVBasic"); // NOI18N
         mnuImportCSVBasic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1243,6 +1262,7 @@ public final class WildLogView extends JFrame {
         mnuImportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         mnuImportCSV.setText("Import from CSV (WildLog format)");
         mnuImportCSV.setToolTipText("<html>Import the data contained in the CSV files. <br/>All imported data will be prefixed by the provided value. <br/>(Note: This import uses the same format as files generated by the CSV WildLog Export.)</html>");
+        mnuImportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuImportCSV.setName("mnuImportCSV"); // NOI18N
         mnuImportCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1257,6 +1277,7 @@ public final class WildLogView extends JFrame {
         mnuImportIUCNList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/IUCN.gif"))); // NOI18N
         mnuImportIUCNList.setText("Import IUCN Species List (old format)");
         mnuImportIUCNList.setToolTipText("Import species names from a CSV file exported from the IUCN Red List site.");
+        mnuImportIUCNList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuImportIUCNList.setName("mnuImportIUCNList"); // NOI18N
         mnuImportIUCNList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1271,6 +1292,7 @@ public final class WildLogView extends JFrame {
         mnuImportINaturalist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_white.png"))); // NOI18N
         mnuImportINaturalist.setText("Import your iNaturalist Observations");
         mnuImportINaturalist.setToolTipText("Import observations from iNaturalist.");
+        mnuImportINaturalist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuImportINaturalist.setName("mnuImportINaturalist"); // NOI18N
         mnuImportINaturalist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1285,6 +1307,7 @@ public final class WildLogView extends JFrame {
         mnuImportWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
         mnuImportWildNote.setText("Import WildNote Sync File");
         mnuImportWildNote.setToolTipText("Import a sync file that was exported from WildNote.");
+        mnuImportWildNote.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuImportWildNote.setName("mnuImportWildNote"); // NOI18N
         mnuImportWildNote.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1299,6 +1322,7 @@ public final class WildLogView extends JFrame {
         mnuImportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuImportWorkspace.setText("Import from Another Workspace");
         mnuImportWorkspace.setToolTipText("Import data and files from another WildLog Workspace.");
+        mnuImportWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuImportWorkspace.setName("mnuImportWorkspace"); // NOI18N
         mnuImportWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1313,6 +1337,7 @@ public final class WildLogView extends JFrame {
         mnuStash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Stash Icon Small.png"))); // NOI18N
         mnuStash.setText("Stash Files");
         mnuStash.setToolTipText("Stash files in the Workspace for later processing.");
+        mnuStash.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuStash.setName("mnuStash"); // NOI18N
         mnuStash.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1324,6 +1349,7 @@ public final class WildLogView extends JFrame {
         mnuBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
         mnuBulkImport.setText("Bulk Import Files");
         mnuBulkImport.setToolTipText("Import multiple files at once using the Bulk Import feature.");
+        mnuBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuBulkImport.setName("mnuBulkImport"); // NOI18N
         mnuBulkImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1349,6 +1375,7 @@ public final class WildLogView extends JFrame {
         mnuSyncWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sync.png"))); // NOI18N
         mnuSyncWorkspace.setText("Sync with Cloud Workspace");
         mnuSyncWorkspace.setToolTipText("Synchronise the content of this Workspace with that of a cloud backup.");
+        mnuSyncWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuSyncWorkspace.setName("mnuSyncWorkspace"); // NOI18N
         mnuSyncWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1374,6 +1401,7 @@ public final class WildLogView extends JFrame {
         mnuReportVisitDates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         mnuReportVisitDates.setText("Check Period Dates");
         mnuReportVisitDates.setToolTipText("Generate a report that analysis the Periods' dates.");
+        mnuReportVisitDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuReportVisitDates.setName("mnuReportVisitDates"); // NOI18N
         mnuReportVisitDates.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1398,6 +1426,7 @@ public final class WildLogView extends JFrame {
         mnuSwitchElementNames.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         mnuSwitchElementNames.setText("Switch Primary, Other and Scientific names of Creatures");
         mnuSwitchElementNames.setToolTipText("Switch Primary, Other and Scientific names of all Creatures in the Workspace.");
+        mnuSwitchElementNames.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuSwitchElementNames.setName("mnuSwitchElementNames"); // NOI18N
         mnuSwitchElementNames.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1412,6 +1441,7 @@ public final class WildLogView extends JFrame {
         mnuCalcSunMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
         mnuCalcSunMoon.setText("Calculate Sun and Moon information for all Observations");
         mnuCalcSunMoon.setToolTipText("WARNING: This action might recalculate and overwrite the Sun and Moon information for all Observations.");
+        mnuCalcSunMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuCalcSunMoon.setName("mnuCalcSunMoon"); // NOI18N
         mnuCalcSunMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1423,6 +1453,7 @@ public final class WildLogView extends JFrame {
         mnuCalcDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration_Small.png"))); // NOI18N
         mnuCalcDuration.setText("Calculate Duration for all Observations");
         mnuCalcDuration.setToolTipText("WARNING: This action might recalculate and overwrite the Duration information for all Observations.");
+        mnuCalcDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuCalcDuration.setName("mnuCalcDuration"); // NOI18N
         mnuCalcDuration.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1437,6 +1468,7 @@ public final class WildLogView extends JFrame {
         mnuMoveVisits.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         mnuMoveVisits.setText("Move a Period to a different Place");
         mnuMoveVisits.setToolTipText("Move a Period from one Place to another, including all Observations during that Period.");
+        mnuMoveVisits.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuMoveVisits.setName("mnuMoveVisits"); // NOI18N
         mnuMoveVisits.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1451,6 +1483,7 @@ public final class WildLogView extends JFrame {
         mnuMergeLocations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
         mnuMergeLocations.setText("Merge one Place's Observations into another");
         mnuMergeLocations.setToolTipText("Move all Periods from one Place to another Place and then delete the initial Place.");
+        mnuMergeLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuMergeLocations.setName("mnuMergeLocations"); // NOI18N
         mnuMergeLocations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1462,6 +1495,7 @@ public final class WildLogView extends JFrame {
         mnuMergeVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         mnuMergeVisit.setText("Merge one Period's Observations into another");
         mnuMergeVisit.setToolTipText("Move all Observations from one Period to another Period and then delete the initial Period.");
+        mnuMergeVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuMergeVisit.setName("mnuMergeVisit"); // NOI18N
         mnuMergeVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1473,6 +1507,7 @@ public final class WildLogView extends JFrame {
         mnuMergeElements.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         mnuMergeElements.setText("Merge one Creature's Observations into another");
         mnuMergeElements.setToolTipText("Move all Observations from one Creature to another Creature and then delete the initial Creature.");
+        mnuMergeElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuMergeElements.setName("mnuMergeElements"); // NOI18N
         mnuMergeElements.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1487,6 +1522,7 @@ public final class WildLogView extends JFrame {
         mnuReduceImagesSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Image_Small.png"))); // NOI18N
         mnuReduceImagesSize.setText("Reduce the size of Images");
         mnuReduceImagesSize.setToolTipText("Reduce the resolution of certain images to reduce the overall size of the Workspace.");
+        mnuReduceImagesSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuReduceImagesSize.setName("mnuReduceImagesSize"); // NOI18N
         mnuReduceImagesSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1501,6 +1537,7 @@ public final class WildLogView extends JFrame {
         mnuINaturalistToken.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/iNaturalist_small.png"))); // NOI18N
         mnuINaturalistToken.setText("Setup iNaturalist Authorization");
         mnuINaturalistToken.setToolTipText("Configure the iNaturalist Authorization Token for this WildLog session.");
+        mnuINaturalistToken.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuINaturalistToken.setName("mnuINaturalistToken"); // NOI18N
         mnuINaturalistToken.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1526,6 +1563,7 @@ public final class WildLogView extends JFrame {
         mnuExifMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
         mnuExifMenuItem.setText("Image EXIF Data Reader");
         mnuExifMenuItem.setToolTipText("Browse to any image on your computer and view the EXIF data.");
+        mnuExifMenuItem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuExifMenuItem.setName("mnuExifMenuItem"); // NOI18N
         mnuExifMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1537,6 +1575,7 @@ public final class WildLogView extends JFrame {
         mnuConvertCoordinates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         mnuConvertCoordinates.setText("Convert GPS / Pentad / QDGC");
         mnuConvertCoordinates.setToolTipText("Convert between GPS, Pentad and QDS coordinates.");
+        mnuConvertCoordinates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuConvertCoordinates.setName("mnuConvertCoordinates"); // NOI18N
         mnuConvertCoordinates.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1548,6 +1587,7 @@ public final class WildLogView extends JFrame {
         mnuCreateSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         mnuCreateSlideshow.setText("Create a JPEG Movie");
         mnuCreateSlideshow.setToolTipText("Create a JPEG Movie slideshow using a folder of images anywhere on your computer.");
+        mnuCreateSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuCreateSlideshow.setName("mnuCreateSlideshow"); // NOI18N
         mnuCreateSlideshow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1559,6 +1599,7 @@ public final class WildLogView extends JFrame {
         mnuCreateGIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GIF_Small.png"))); // NOI18N
         mnuCreateGIF.setText("Create an Animated GIF");
         mnuCreateGIF.setToolTipText("Create an animated GIF slideshow using a folder of images anywhere on your computer.");
+        mnuCreateGIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuCreateGIF.setName("mnuCreateGIF"); // NOI18N
         mnuCreateGIF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1570,6 +1611,7 @@ public final class WildLogView extends JFrame {
         mnuSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
         mnuSunAndMoon.setText("View Sun And Moon Phase");
         mnuSunAndMoon.setToolTipText("Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location.");
+        mnuSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuSunAndMoon.setName("mnuSunAndMoon"); // NOI18N
         mnuSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1581,6 +1623,7 @@ public final class WildLogView extends JFrame {
         mnuSystemMonitor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuSystemMonitor.setText("System Monitor");
         mnuSystemMonitor.setToolTipText("Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location.");
+        mnuSystemMonitor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuSystemMonitor.setName("mnuSystemMonitor"); // NOI18N
         mnuSystemMonitor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1599,6 +1642,7 @@ public final class WildLogView extends JFrame {
         mnuDBConsole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
         mnuDBConsole.setText("Open H2 Database Console");
         mnuDBConsole.setToolTipText("Open the DB console bundled with the H2 database to access the database used by WildLog.");
+        mnuDBConsole.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuDBConsole.setName("mnuDBConsole"); // NOI18N
         mnuDBConsole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1629,6 +1673,7 @@ public final class WildLogView extends JFrame {
 
         mnuMapStartMenuItem.setText("Set Offline Map Start Position");
         mnuMapStartMenuItem.setToolTipText("Select the GPS location where the Offline Maps will open at by default.");
+        mnuMapStartMenuItem.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuMapStartMenuItem.setName("mnuMapStartMenuItem"); // NOI18N
         mnuMapStartMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1645,6 +1690,7 @@ public final class WildLogView extends JFrame {
 
         mnuSetSlideshowSize.setText("Set Slideshow Image Size");
         mnuSetSlideshowSize.setToolTipText("Set the size to which the images should be resized for the generated Slideshows.");
+        mnuSetSlideshowSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuSetSlideshowSize.setName("mnuSetSlideshowSize"); // NOI18N
         mnuSetSlideshowSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1655,6 +1701,7 @@ public final class WildLogView extends JFrame {
 
         mnuSetSlideshowSpeed.setText("Set Slideshow Speed");
         mnuSetSlideshowSpeed.setToolTipText("Set the framerate that will be used for generated Slideshows (where applicable).");
+        mnuSetSlideshowSpeed.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuSetSlideshowSpeed.setName("mnuSetSlideshowSpeed"); // NOI18N
         mnuSetSlideshowSpeed.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1672,6 +1719,7 @@ public final class WildLogView extends JFrame {
         chkMnuUseIconTables.setSelected(app.getWildLogOptions().isUseThumbnailTables());
         chkMnuUseIconTables.setText("Show Thumbnails On Tables");
         chkMnuUseIconTables.setToolTipText("Select this option to show thumbnails in the tables. Disabling this option will result in the tables loading much faster, but they won't show any thumbnails.");
+        chkMnuUseIconTables.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMnuUseIconTables.setName("chkMnuUseIconTables"); // NOI18N
         chkMnuUseIconTables.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1683,6 +1731,7 @@ public final class WildLogView extends JFrame {
         chkMnuBrowseWithThumbnails.setSelected(app.getWildLogOptions().isUseThumnailBrowsing());
         chkMnuBrowseWithThumbnails.setText("Use Thumbnails On The Browse Tab");
         chkMnuBrowseWithThumbnails.setToolTipText("Select this option to use large thumbnails in the Browse Tab instead of the original files. Enabling this option should improve performance on the Browse Tab, but reduce the image quality.");
+        chkMnuBrowseWithThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMnuBrowseWithThumbnails.setName("chkMnuBrowseWithThumbnails"); // NOI18N
         chkMnuBrowseWithThumbnails.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1700,6 +1749,7 @@ public final class WildLogView extends JFrame {
         chkMnuUseScienteficName.setSelected(app.getWildLogOptions().isUseScientificNames());
         chkMnuUseScienteficName.setText("Use Scientific Name On Tables");
         chkMnuUseScienteficName.setToolTipText("Select this option to show the Scientific Name for Creatures in the tables instead of the Other Name.");
+        chkMnuUseScienteficName.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMnuUseScienteficName.setName("chkMnuUseScienteficName"); // NOI18N
         chkMnuUseScienteficName.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1711,6 +1761,7 @@ public final class WildLogView extends JFrame {
         chkMnuEnableSounds.setSelected(app.getWildLogOptions().isEnableSounds());
         chkMnuEnableSounds.setText("Enable Beep Sounds");
         chkMnuEnableSounds.setToolTipText("Select this option to enable the application to play a beep sounds in response to user input.");
+        chkMnuEnableSounds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMnuEnableSounds.setName("chkMnuEnableSounds"); // NOI18N
         chkMnuEnableSounds.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1722,6 +1773,7 @@ public final class WildLogView extends JFrame {
         chkMnuIncludeCountInSightingPath.setSelected(app.getWildLogOptions().isUseIndividualsInSightingPath());
         chkMnuIncludeCountInSightingPath.setText("Include Number of Individuals in the File Path");
         chkMnuIncludeCountInSightingPath.setToolTipText("This option will change the way in which the Files are stored and exported. Select this option to group all Files for Observations (from the same Period) into folders based on the number of individuals observed.");
+        chkMnuIncludeCountInSightingPath.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMnuIncludeCountInSightingPath.setName("chkMnuIncludeCountInSightingPath"); // NOI18N
         chkMnuIncludeCountInSightingPath.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1733,6 +1785,7 @@ public final class WildLogView extends JFrame {
         chkMnuUploadLogs.setSelected(app.getWildLogOptions().isUploadLogs());
         chkMnuUploadLogs.setText("Automatically Upload Error Logs");
         chkMnuUploadLogs.setToolTipText("If this option is selected then WildLog will periodically attempt to upload the error log to a web server. The log will be used to identify bugs and areas in need of improvement.");
+        chkMnuUploadLogs.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMnuUploadLogs.setName("chkMnuUploadLogs"); // NOI18N
         chkMnuUploadLogs.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1744,6 +1797,7 @@ public final class WildLogView extends JFrame {
         chkMnuUseBundledMediaViewers.setSelected(app.getWildLogOptions().isBundledPlayers());
         chkMnuUseBundledMediaViewers.setText("Use Bundled Media Viewers (if available)");
         chkMnuUseBundledMediaViewers.setToolTipText("If this option is selected WildLog will try to use the bundled media players to open supported file types instead (if available).");
+        chkMnuUseBundledMediaViewers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkMnuUseBundledMediaViewers.setName("chkMnuUseBundledMediaViewers"); // NOI18N
         chkMnuUseBundledMediaViewers.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1771,6 +1825,7 @@ public final class WildLogView extends JFrame {
         mnuAboutWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
         mnuAboutWildNote.setText("Information about WildNote");
         mnuAboutWildNote.setToolTipText("More information about WildNote.");
+        mnuAboutWildNote.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuAboutWildNote.setName("mnuAboutWildNote"); // NOI18N
         mnuAboutWildNote.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1785,6 +1840,7 @@ public final class WildLogView extends JFrame {
         mnuUserGuide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuUserGuide.setText("User Guide (PDF)");
         mnuUserGuide.setToolTipText("Opens the WildLog User Guide, or a link to a website where it can be downloaded.");
+        mnuUserGuide.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuUserGuide.setName("mnuUserGuide"); // NOI18N
         mnuUserGuide.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1799,6 +1855,7 @@ public final class WildLogView extends JFrame {
         mnuCheckUpdates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuCheckUpdates.setText("Check for Updates");
         mnuCheckUpdates.setToolTipText("Check online whether there is a newer version of WildLog available.");
+        mnuCheckUpdates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuCheckUpdates.setName("mnuCheckUpdates"); // NOI18N
         mnuCheckUpdates.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1810,6 +1867,7 @@ public final class WildLogView extends JFrame {
         mnuAboutWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuAboutWildLog.setText("About WildLog");
         mnuAboutWildLog.setToolTipText("Display information about this version of WildLog.");
+        mnuAboutWildLog.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuAboutWildLog.setName("mnuAboutWildLog"); // NOI18N
         mnuAboutWildLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1821,6 +1879,7 @@ public final class WildLogView extends JFrame {
         mnuAboutWEI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/wei/WEI-square-20px.png"))); // NOI18N
         mnuAboutWEI.setText("About WEI");
         mnuAboutWEI.setToolTipText("Display information about WEI.");
+        mnuAboutWEI.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuAboutWEI.setName("mnuAboutWEI"); // NOI18N
         mnuAboutWEI.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

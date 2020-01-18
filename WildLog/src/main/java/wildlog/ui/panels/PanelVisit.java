@@ -211,6 +211,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnGoLocation.setBackground(getBackground().darker());
             btnBrowse.setBackground(getBackground().darker());
             btnAutoName.setBackground(getBackground().darker());
+            dtpStartDate.getComponent(1).setBackground(getBackground().darker());
+            dtpEndDate.getComponent(1).setBackground(getBackground().darker());
             cmbType.setEnabled(false);
             cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
             cmbType.setSelectedItem(visit.getType());
@@ -843,23 +845,25 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane14.setViewportView(txtDescription);
 
-        jLabel4.setText("Game Watching:");
+        jLabel4.setText("Period Type:");
         jLabel4.setName("jLabel4"); // NOI18N
 
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
 
-        jLabel54.setText("Period Type:");
+        jLabel54.setText("Game Watching:");
         jLabel54.setName("jLabel54"); // NOI18N
 
         cmbType.setMaximumRowCount(15);
         cmbType.setModel(new DefaultComboBoxModel(VisitType.valuesForDroplist()));
         cmbType.setSelectedItem(visit.getType());
+        cmbType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbType.setName("cmbType"); // NOI18N
 
         cmbGameWatchIntensity.setModel(new DefaultComboBoxModel(GameWatchIntensity.values()));
         cmbGameWatchIntensity.setSelectedItem(visit.getGameWatchingIntensity());
+        cmbGameWatchIntensity.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
 
         jLabel53.setText("Notes:");

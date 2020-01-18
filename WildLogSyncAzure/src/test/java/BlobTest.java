@@ -12,7 +12,10 @@ import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 
 public class BlobTest extends JFrame {
-    private SyncAzure syncAzure = new SyncAzure("", "wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 123L, 12);
+    private SyncAzure syncAzure = new SyncAzure(
+            "DefaultEndpointsProtocol=https;AccountName=wildlogtest;AccountKey=HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==;EndpointSuffix=core.windows.net", 
+            "wildlogtest", "HHpe/UN5isNNVth/tJ1+b9ZzIf0U9yL/rbnmzsp8Rjq1J2HQ+AKmm5VekWNbrLvueXjS3VojW7Ck9bJsRvtROA==", 
+            123L, 12);
 
     public BlobTest() {
         initComponents();
@@ -30,7 +33,9 @@ public class BlobTest extends JFrame {
         btnUpload = new javax.swing.JButton();
         btnDownload = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        btnSyncListBatch = new javax.swing.JButton();
+        btnSyncListBlobsBatch = new javax.swing.JButton();
+        btnSyncListParentsBatch = new javax.swing.JButton();
+        btnSyncListChildrenBatch = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Azure Sync Tester");
@@ -66,12 +71,30 @@ public class BlobTest extends JFrame {
             }
         });
 
-        btnSyncListBatch.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnSyncListBatch.setText("Sync List");
-        btnSyncListBatch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSyncListBatch.addActionListener(new java.awt.event.ActionListener() {
+        btnSyncListBlobsBatch.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSyncListBlobsBatch.setText("Sync List (Blobs)");
+        btnSyncListBlobsBatch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSyncListBlobsBatch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSyncListBatchActionPerformed(evt);
+                btnSyncListBlobsBatchActionPerformed(evt);
+            }
+        });
+
+        btnSyncListParentsBatch.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSyncListParentsBatch.setText("Sync List (Parents)");
+        btnSyncListParentsBatch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSyncListParentsBatch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSyncListParentsBatchActionPerformed(evt);
+            }
+        });
+
+        btnSyncListChildrenBatch.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSyncListChildrenBatch.setText("Sync List (Children)");
+        btnSyncListChildrenBatch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSyncListChildrenBatch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSyncListChildrenBatchActionPerformed(evt);
             }
         });
 
@@ -92,7 +115,9 @@ public class BlobTest extends JFrame {
                                 .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
                                 .addGap(25, 25, 25)
                                 .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE))
-                            .addComponent(btnSyncListBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnSyncListBlobsBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSyncListParentsBatch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
@@ -104,11 +129,15 @@ public class BlobTest extends JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnUpload, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                     .addComponent(btnDownload, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
-                .addGap(50, 50, 50)
+                .addGap(40, 40, 40)
                 .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addComponent(btnSyncListBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(40, 40, 40)
+                .addComponent(btnSyncListBlobsBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(btnSyncListParentsBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(btnSyncListChildrenBatch, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
@@ -129,14 +158,32 @@ public class BlobTest extends JFrame {
         System.out.println("DELETED");
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void btnSyncListBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListBatchActionPerformed
-        List<SyncBlobEntry> lstSyncBlobEntry = syncAzure.getSyncListFileBatch(WildLogDataType.ELEMENT);
-        System.out.println("SYNCLIST BATCH: ");
+    private void btnSyncListBlobsBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListBlobsBatchActionPerformed
+        List<SyncBlobEntry> lstSyncBlobEntry = syncAzure.getSyncListFilesBatch(WildLogDataType.ELEMENT);
+        System.out.println("SYNCLIST BLOBS BATCH: ");
         System.out.println(lstSyncBlobEntry.size());
         for (SyncBlobEntry entry : lstSyncBlobEntry) {
             System.out.println(entry);
         }
-    }//GEN-LAST:event_btnSyncListBatchActionPerformed
+    }//GEN-LAST:event_btnSyncListBlobsBatchActionPerformed
+
+    private void btnSyncListParentsBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListParentsBatchActionPerformed
+        List<SyncBlobEntry> lstSyncBlobEntry = syncAzure.getSyncListFileParentsBatch(WildLogDataType.ELEMENT);
+        System.out.println("SYNCLIST PARENTS BATCH: ");
+        System.out.println(lstSyncBlobEntry.size());
+        for (SyncBlobEntry entry : lstSyncBlobEntry) {
+            System.out.println(entry);
+        }
+    }//GEN-LAST:event_btnSyncListParentsBatchActionPerformed
+
+    private void btnSyncListChildrenBatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncListChildrenBatchActionPerformed
+        List<SyncBlobEntry> lstSyncBlobEntry = syncAzure.getSyncListFileChildrenBatch(WildLogDataType.ELEMENT, 777L);
+        System.out.println("SYNCLIST CHILDREN BATCH: ");
+        System.out.println(lstSyncBlobEntry.size());
+        for (SyncBlobEntry entry : lstSyncBlobEntry) {
+            System.out.println(entry);
+        }
+    }//GEN-LAST:event_btnSyncListChildrenBatchActionPerformed
 
     public static void main(String args[]) {
         // Setup the application
@@ -166,7 +213,9 @@ public class BlobTest extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDownload;
-    private javax.swing.JButton btnSyncListBatch;
+    private javax.swing.JButton btnSyncListBlobsBatch;
+    private javax.swing.JButton btnSyncListChildrenBatch;
+    private javax.swing.JButton btnSyncListParentsBatch;
     private javax.swing.JButton btnUpload;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables

@@ -476,6 +476,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         cmbRating.setModel(new DefaultComboBoxModel(LocationRating.values()));
         cmbRating.setSelectedItem(locationWL.getRating());
+        cmbRating.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbRating.setName("cmbRating"); // NOI18N
 
         jLabel42.setText("Wildlife:");
@@ -494,6 +495,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         cmbGameRating.setModel(new DefaultComboBoxModel(GameViewRating.values()));
         cmbGameRating.setSelectedItem(locationWL.getGameViewingRating());
+        cmbGameRating.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbGameRating.setName("cmbGameRating"); // NOI18N
 
         jLabel48.setText("Place Name:");
