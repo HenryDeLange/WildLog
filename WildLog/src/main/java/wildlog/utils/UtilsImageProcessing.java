@@ -43,7 +43,7 @@ import wildlog.data.enums.system.WildLogThumbnailSizes;
 
 
 public class UtilsImageProcessing {
-    private static final DateTimeFormatter EXIF_DATE_FORMAT_1 = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
+    private static final DateTimeFormatter EXIF_DATE_FORMAT_1 = UtilsTime.EXIF_DATE_FORMAT;
     private static final DateTimeFormatter EXIF_DATE_FORMAT_2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private UtilsImageProcessing() {
@@ -499,9 +499,10 @@ public class UtilsImageProcessing {
                         }
                         else
                         if (tag.getTagName().equalsIgnoreCase("GPS Latitude")) {
-                            // Voorbeeld -33°44'57.0"
+                            // Voorbeeld -33°44'57.0"   of   26° 31' 46,68"
                             String temp = tag.getDescription();
                             if (temp != null) {
+                                temp = temp.replace(',', '.');
                                 tempDataObjectWithGPS.setLatDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf('°')).trim())));
                                 tempDataObjectWithGPS.setLatMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf('°')+1, temp.indexOf('\'')).trim())));
                                 tempDataObjectWithGPS.setLatSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
@@ -512,6 +513,7 @@ public class UtilsImageProcessing {
                             // Voorbeeld 26°28'7.0"
                             String temp = tag.getDescription();
                             if (temp != null) {
+                                temp = temp.replace(',', '.');
                                 tempDataObjectWithGPS.setLonDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf('°')).trim())));
                                 tempDataObjectWithGPS.setLonMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf('°')+1, temp.indexOf('\'')).trim())));
                                 tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));

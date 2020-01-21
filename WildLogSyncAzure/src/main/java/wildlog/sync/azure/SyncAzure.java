@@ -7,13 +7,16 @@ import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlobDirectory;
 import com.microsoft.azure.storage.blob.ContainerURL;
+import com.microsoft.azure.storage.blob.DownloadResponse;
 import com.microsoft.azure.storage.blob.ListBlobItem;
 import com.microsoft.azure.storage.blob.ListBlobsOptions;
+import com.microsoft.azure.storage.blob.Metadata;
 import com.microsoft.azure.storage.blob.PipelineOptions;
 import com.microsoft.azure.storage.blob.ServiceURL;
 import com.microsoft.azure.storage.blob.SharedKeyCredentials;
 import com.microsoft.azure.storage.blob.StorageURL;
 import com.microsoft.azure.storage.blob.TransferManager;
+import com.microsoft.azure.storage.blob.TransferManagerUploadToBlockBlobOptions;
 import com.microsoft.azure.storage.blob.models.BlobItem;
 import com.microsoft.azure.storage.blob.models.ContainerListBlobFlatSegmentResponse;
 import com.microsoft.azure.storage.table.CloudTable;
@@ -23,7 +26,10 @@ import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.rest.v2.RestException;
 import io.reactivex.Single;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -37,6 +43,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import mediautil.image.jpeg.Entry;
+import mediautil.image.jpeg.Exif;
+import mediautil.image.jpeg.LLJTran;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.system.WildLogDataType;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
@@ -403,13 +412,28 @@ public final class SyncAzure {
         return containerURL;
     }
     
-    public boolean uploadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID) {
+    public boolean uploadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID, 
+            String inDate, String inLatitude, String inLongitude) {
         try {
             ContainerURL container = getContainerURL(inDataType);
             BlockBlobURL blockBlob = container.createBlockBlobURL(calculateFullBlobID(inParentID, inRecordID, inFilePath));
+            // Set the EXIF values on the blob
+            Metadata metadata = new Metadata();
+            if (inDate != null && !inDate.trim().isEmpty()) {
+                metadata.put("DateTime", inDate.replace(':', '.'));
+            }
+            if (inLatitude != null && !inLatitude.trim().isEmpty()) {
+                metadata.put("GPSLatitude", inLatitude.replace('°', 'D').replace('\'', 'M').replace('"', 'S'));
+            }
+            if (inLongitude != null && !inLongitude.trim().isEmpty()) {
+                metadata.put("GPSLongitude", inLongitude.replace('°', 'D').replace('\'', 'M').replace('"', 'S'));
+            }
+            blockBlob.setMetadata(metadata);
+            TransferManagerUploadToBlockBlobOptions blobOptions = new TransferManagerUploadToBlockBlobOptions(null, null, metadata, null, null);
+            // Upload the file
             AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath);
             try {
-                TransferManager.uploadFileToBlockBlob(fileChannel, blockBlob, MAX_BLOB_SIZE, MAX_BLOB_UPLOAD_SIZE, null).blockingGet();
+                TransferManager.uploadFileToBlockBlob(fileChannel, blockBlob, MAX_BLOB_SIZE, MAX_BLOB_UPLOAD_SIZE, blobOptions).blockingGet();
             }
             finally {
                 fileChannel.close();
@@ -430,12 +454,52 @@ public final class SyncAzure {
                 Files.createDirectories(inFilePath.getParent());
                 Files.createFile(inFilePath);
             }
+            // Download the file
             AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
             try {
                 TransferManager.downloadBlobToFile(fileChannel, blockBlob, null, null).blockingGet();
             }
             finally {
                 fileChannel.close();
+            }
+            // Set the EXIF values on the file
+            try {
+                DownloadResponse downloadResponse = blockBlob.download().blockingGet();
+                String dateTime = downloadResponse.headers().metadata().get("DateTime");
+                LLJTran lljTran = new LLJTran(inFilePath.toFile());
+                lljTran.read(LLJTran.READ_ALL, false);
+//                lljTran.read(LLJTran.READ_INFO, true);
+                lljTran.addAppx(LLJTran.dummyExifHeader, 0, LLJTran.dummyExifHeader.length, true);
+                Exif exif = (Exif) lljTran.getImageInfo();
+                if (dateTime != null && !dateTime.trim().isEmpty()) {
+                    Entry entry = new Entry(Exif.ASCII);
+                    entry.setValue(0, dateTime.replace('.', ':'));
+                    exif.setTagValue(Exif.DATETIME, 0, entry, true);
+                }
+// TODO: Die GPS write werk nog nie (nie krieties nie, maar sal nice wees as dit kan werk...) Extend dalk Exif.java om die GPS IFD te kan hanteer...
+//                String latitude = downloadResponse.headers().metadata().get("GPSLatitude");
+//                if (latitude != null && !latitude.trim().isEmpty()) {
+//                    Entry entry = new Entry(Exif.ASCII);
+//                    entry.setValue(0, latitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
+//                    exif.setTagValue(Exif.GPSINFO, Exif.GPSLatitude, entry, true);
+//                }
+//                String longitude = downloadResponse.headers().metadata().get("GPSLongitude");
+//                if (longitude != null && !longitude.trim().isEmpty()) {
+//                    Entry entry = new Entry(Exif.ASCII);
+//                    entry.setValue(0, longitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
+//                    exif.setTagValue(Exif.GPSINFO, Exif.GPSLongitude, entry, true);
+//                }
+                lljTran.refreshAppx();
+                try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(inFilePath.toFile()))) {
+                    lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
+//                    lljTran.xferInfo(null, outputStream, LLJTran.REPLACE, LLJTran.REMOVE);
+                }
+                finally {
+                    lljTran.freeMemory();
+                }
+            }
+            catch (Exception ex) {
+                ex.printStackTrace(System.err);
             }
             return true;
         }

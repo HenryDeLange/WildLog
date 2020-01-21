@@ -39,6 +39,7 @@ public final class UtilsTime {
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_AUTO_BACKUP = DateTimeFormatter.ofPattern("yyyy-MM, MMM 'week' W");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_DAILY_BACKUP = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_VISITS_WEI = DateTimeFormatter.ofPattern("yyyy_MM_dd");
+    public static final DateTimeFormatter EXIF_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
 
     
     private UtilsTime() {

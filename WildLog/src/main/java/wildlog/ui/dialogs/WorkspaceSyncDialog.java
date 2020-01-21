@@ -52,11 +52,13 @@ import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.WildLogUser;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.system.WildLogDataType;
 import wildlog.data.enums.system.WildLogFileType;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.encryption.TokenEncryptor;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.sync.azure.SyncAzure;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
@@ -67,6 +69,8 @@ import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
@@ -1278,8 +1282,7 @@ public class WorkspaceSyncDialog extends JDialog {
             for (SyncAction syncAction : lstSyncActions) {
                 WildLogFile wildLogFile = (WildLogFile) syncAction.data;
                 syncAction.details = wildLogFile.getLinkType().getDescription() + "_FILE";
-                logIfFailed(inFeedback, syncAction, 
-                        inSyncAzure.uploadFile(wildLogFile.getLinkType(), getResizedFilePath(wildLogFile), wildLogFile.getLinkID(), wildLogFile.getID()));
+                uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile);
                 syncAction.details = wildLogFile.getLinkType().getDescription() + "_DATA";
                 logIfFailed(inFeedback, syncAction, inSyncAzure.uploadData(WildLogDataType.FILE, syncAction.data));
                 syncFileUp++;
@@ -1444,6 +1447,28 @@ public class WorkspaceSyncDialog extends JDialog {
         inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Files Update");
     }
+
+    private void uploadWildLogFile(PrintWriter inFeedback, SyncAzure inSyncAzure, SyncAction syncAction, WildLogFile wildLogFile) {
+        String date = "";
+        String latitude = "";
+        String longitude = "";
+        try {
+            date = UtilsTime.EXIF_DATE_FORMAT.format(UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromWildLogFile(wildLogFile)));
+            if (WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
+                DataObjectWithGPS gps = UtilsImageProcessing.getExifGpsFromJpeg(wildLogFile.getAbsolutePath());
+                if (gps != null && UtilsGPS.hasGPSData(gps)) {
+                    latitude = gps.getLatDegrees() + "° " + gps.getLatMinutes() + "' " + Double.toString(gps.getLatSeconds()).replace(',', '.') + "\"";
+                    longitude = gps.getLonDegrees() + "° " + gps.getLonMinutes() + "' " + Double.toString(gps.getLonSeconds()).replace(',', '.') + "\"";
+                }
+            }
+        }
+        catch (Exception ex) {
+            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+        }
+        logIfFailed(inFeedback, syncAction,
+                inSyncAzure.uploadFile(wildLogFile.getLinkType(), getResizedFilePath(wildLogFile), wildLogFile.getLinkID(), wildLogFile.getID(),
+                        date, latitude, longitude));
+    }
     
     private void syncStashedFileRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize) {
         int baseProgress = inProgressbar.getProgress();
@@ -1498,8 +1523,7 @@ public class WorkspaceSyncDialog extends JDialog {
             double loopCount = 0.0;
             for (SyncAction syncAction : lstSyncActions) {
                 WildLogFile wildLogFile = (WildLogFile) syncAction.data;
-                logIfFailed(inFeedback, syncAction, 
-                        inSyncAzure.uploadFile(wildLogFile.getLinkType(), getResizedFilePath(wildLogFile), wildLogFile.getLinkID(), wildLogFile.getID()));
+                uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile);
                 syncStashUp++;
                 inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * loopCount++ / ((double) lstSyncActions.size()))));
                 inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
@@ -1529,10 +1553,6 @@ public class WorkspaceSyncDialog extends JDialog {
                     Visit visit = WildLogApp.getApplication().getDBI().findVisit(folderBlobEntry.getRecordID(), null, false, Visit.class);
                     if (visit != null && visit.getType() == VisitType.STASHED) {
                         // Download the stashed folder into the workspace
-                        
-// FIXME: Ek dink ek gaan probleme kry met die exif data en file modified datum as ek die files probeer bulk import...
-//        Idee: Stoor Exif datum en GPS as blob attributes, dan met download skryf dit in die EXIF in...
-
                         List<SyncBlobEntry> lstCloudStashedFiles = inSyncAzure.getSyncListFileChildrenBatch(WildLogDataType.STASH, folderBlobEntry.getRecordID());
                         double subLoopCount = 0.0;
                         for (SyncBlobEntry fileBlobEntry : lstCloudStashedFiles) {
