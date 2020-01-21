@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import org.apache.logging.log4j.Level;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -125,9 +127,16 @@ public class ReportVisitDates {
                         reportData.isMissing = false;
                         reportData.isOverlapping = false;
                     }
+                    // Get the unique tags
+                    List<Sighting> lstSightings = WildLogApp.getApplication().getDBI().listSightings(0, visit.getLocationID(), visit.getID(), false, Sighting.class);
+                    reportData.tags = new TreeSet<>();
+                    for (Sighting sighting : lstSightings) {
+                        if (sighting.getTag() != null && !sighting.getTag().trim().isEmpty()) {
+                            reportData.tags.add(sighting.getTag().trim());
+                        }
+                    }
                     // Check Visit and Sighting date range
                     if (reportData.startDate != null && reportData.endDate != null) {
-                        List<Sighting> lstSightings = WildLogApp.getApplication().getDBI().listSightings(0, visit.getLocationID(), visit.getID(), false, Sighting.class);
                         boolean outsideRange = false;
                         int startGap = Integer.MAX_VALUE;
                         int endGap = Integer.MAX_VALUE;
@@ -195,8 +204,9 @@ public class ReportVisitDates {
                     row.createCell(4).setCellValue("Period Type");
                     row.createCell(5).setCellValue("Days");
                     row.createCell(6).setCellValue("Observations");
-                    row.createCell(7).setCellValue("Has Overlap");
-                    row.createCell(8).setCellValue("Incorrect Observation Dates");
+                    row.createCell(7).setCellValue("Observation Tags");
+                    row.createCell(8).setCellValue("Has Overlap");
+                    row.createCell(9).setCellValue("Incorrect Observation Dates");
                     row.getCell(0).setCellStyle(styleHeader);
                     row.getCell(1).setCellStyle(styleHeader);
                     row.getCell(2).setCellStyle(styleHeader);
@@ -206,6 +216,7 @@ public class ReportVisitDates {
                     row.getCell(6).setCellStyle(styleHeader);
                     row.getCell(7).setCellStyle(styleHeader);
                     row.getCell(8).setCellStyle(styleHeader);
+                    row.getCell(9).setCellStyle(styleHeader);
                     List<ReportData> lstReportData = mapReportData.get(key);
                     for (int r = 0; r < lstReportData.size(); r++) {
                         ReportData reportData = lstReportData.get(r);
@@ -229,13 +240,20 @@ public class ReportVisitDates {
                         }
                         row.createCell(5).setCellValue(reportData.days);
                         row.createCell(6).setCellValue(reportData.sigtingCount);
+                        String tags = reportData.tags.toString();
+                        if (tags.length() > 2) {
+                            row.createCell(7).setCellValue(tags.substring(1, tags.length() - 2));
+                        }
+                        else {
+                            row.createCell(7).setCellValue("");
+                        }
                         if (reportData.isOverlapping) {
-                            row.createCell(7).setCellValue("OVERLAPPING");
-                            row.getCell(7).setCellStyle(styleWarning);
+                            row.createCell(8).setCellValue("OVERLAPPING");
+                            row.getCell(8).setCellStyle(styleWarning);
                         }
                         if (reportData.observationsDateRange != null && !reportData.observationsDateRange.isEmpty()) {
-                            row.createCell(8).setCellValue(reportData.observationsDateRange.trim());
-                            row.getCell(8).setCellStyle(styleWarning);
+                            row.createCell(9).setCellValue(reportData.observationsDateRange.trim());
+                            row.getCell(9).setCellStyle(styleWarning);
                         }
                     }
                     sheet.autoSizeColumn(0);
@@ -247,6 +265,7 @@ public class ReportVisitDates {
                     sheet.autoSizeColumn(6);
                     sheet.autoSizeColumn(7);
                     sheet.autoSizeColumn(8);
+                    sheet.autoSizeColumn(9);
                 }
                 try (FileOutputStream out = new FileOutputStream(path.toFile())) {
                     workbook.write(out);
@@ -276,6 +295,7 @@ public class ReportVisitDates {
         private int days;
         private int sigtingCount;
         private boolean isMissing;
+        private Set<String> tags;
         private boolean isOverlapping;
         private String observationsDateRange;
     }
