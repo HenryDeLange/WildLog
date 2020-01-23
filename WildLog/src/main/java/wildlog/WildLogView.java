@@ -2244,9 +2244,7 @@ public final class WildLogView extends JFrame {
                 setMessage("Busy with the CSV WildLog Export");
                 app.getDBI().doExportFullCSV(path, true, null, null, null, null, null);
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_ALL.getAbsoluteFullPath());
-                
 // TODO: Also export a file listing all of the enum keys
-                
                 setProgress(100);
                 setMessage("Done with the CSV WildLog Export");
                 return null;
@@ -3413,9 +3411,7 @@ public final class WildLogView extends JFrame {
                 Path tempPath = path.resolve(Sighting.WILDLOG_FOLDER_PREFIX).resolve("AllObservations.csv");
                 Files.createDirectories(tempPath.getParent());
                 app.getDBI().doExportBasicCSV(tempPath, null, null, null, null, listSightings);
-                
 // TODO: Also export a file listing all of the enum keys
-                
                 setProgress(100);
                 setMessage("Done with the CSV Basic Export");
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV_BASIC.getAbsoluteFullPath());

@@ -22,6 +22,8 @@ import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.wrappers.json.iucn.IUCNSpeciesData;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
+// TODO: Add support for the new format
+
 public class IUCNInformationDialog extends JDialog {
     private final String scientificName;
     private final JTextField txtOtherName;

@@ -20,11 +20,6 @@
             <version>1.14</version>
         </dependency>
         <dependency>
-            <groupId>mywild</groupId>
-            <artifactId>WildLogMediaUtilWrapper</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-storage</artifactId>
             <version>8.3.0</version>

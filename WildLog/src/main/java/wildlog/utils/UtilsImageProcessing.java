@@ -53,6 +53,7 @@ public class UtilsImageProcessing {
         return getScaledIcon(inAbsolutePathToScale, inSize, inDoAutoRotate, null);
     }
 
+    // TODO: Ek moet weer bietjie kyk na die performance van files add... Voel deesdae bietjie stadig met al die rotations lees, ens.
     public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate, Metadata inMetadata) {
         // Get the size to scale the image to
         int finalHeight = inSize;

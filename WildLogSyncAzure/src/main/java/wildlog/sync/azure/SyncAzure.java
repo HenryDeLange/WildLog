@@ -26,10 +26,7 @@ import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
 import com.microsoft.rest.v2.RestException;
 import io.reactivex.Single;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -43,12 +40,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import mediautil.image.jpeg.Entry;
-import mediautil.image.jpeg.Exif;
-import mediautil.image.jpeg.LLJTran;
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.system.WildLogDataType;
 import wildlog.sync.azure.dataobjects.SyncBlobEntry;
+import wildlog.sync.azure.dataobjects.SyncBlobMetadata;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
 
@@ -446,10 +441,12 @@ public final class SyncAzure {
         return false;
     }
     
-    public boolean downloadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID) {
+    public SyncBlobMetadata downloadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID) {
+        SyncBlobMetadata syncBlobMetadata = new SyncBlobMetadata();
+        String blobID = calculateFullBlobID(inParentID, inRecordID, inFilePath);
         try {
             ContainerURL container = getContainerURL(inDataType);
-            BlockBlobURL blockBlob = container.createBlockBlobURL(calculateFullBlobID(inParentID, inRecordID, inFilePath));
+            BlockBlobURL blockBlob = container.createBlockBlobURL(blobID);
             if (!Files.exists(inFilePath)) {
                 Files.createDirectories(inFilePath.getParent());
                 Files.createFile(inFilePath);
@@ -463,50 +460,17 @@ public final class SyncAzure {
                 fileChannel.close();
             }
             // Set the EXIF values on the file
-            try {
-                DownloadResponse downloadResponse = blockBlob.download().blockingGet();
-                String dateTime = downloadResponse.headers().metadata().get("DateTime");
-                LLJTran lljTran = new LLJTran(inFilePath.toFile());
-                lljTran.read(LLJTran.READ_ALL, false);
-//                lljTran.read(LLJTran.READ_INFO, true);
-                lljTran.addAppx(LLJTran.dummyExifHeader, 0, LLJTran.dummyExifHeader.length, true);
-                Exif exif = (Exif) lljTran.getImageInfo();
-                if (dateTime != null && !dateTime.trim().isEmpty()) {
-                    Entry entry = new Entry(Exif.ASCII);
-                    entry.setValue(0, dateTime.replace('.', ':'));
-                    exif.setTagValue(Exif.DATETIME, 0, entry, true);
-                }
-// TODO: Die GPS write werk nog nie (nie krieties nie, maar sal nice wees as dit kan werk...) Extend dalk Exif.java om die GPS IFD te kan hanteer...
-//                String latitude = downloadResponse.headers().metadata().get("GPSLatitude");
-//                if (latitude != null && !latitude.trim().isEmpty()) {
-//                    Entry entry = new Entry(Exif.ASCII);
-//                    entry.setValue(0, latitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
-//                    exif.setTagValue(Exif.GPSINFO, Exif.GPSLatitude, entry, true);
-//                }
-//                String longitude = downloadResponse.headers().metadata().get("GPSLongitude");
-//                if (longitude != null && !longitude.trim().isEmpty()) {
-//                    Entry entry = new Entry(Exif.ASCII);
-//                    entry.setValue(0, longitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
-//                    exif.setTagValue(Exif.GPSINFO, Exif.GPSLongitude, entry, true);
-//                }
-                lljTran.refreshAppx();
-                try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(inFilePath.toFile()))) {
-                    lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
-//                    lljTran.xferInfo(null, outputStream, LLJTran.REPLACE, LLJTran.REMOVE);
-                }
-                finally {
-                    lljTran.freeMemory();
-                }
-            }
-            catch (Exception ex) {
-                ex.printStackTrace(System.err);
-            }
-            return true;
+            DownloadResponse downloadResponse = blockBlob.download().blockingGet();
+            syncBlobMetadata.setDatetime(downloadResponse.headers().metadata().get("DateTime"));
+            syncBlobMetadata.setLatitude(downloadResponse.headers().metadata().get("GPSLatitude"));
+            syncBlobMetadata.setLongitude(downloadResponse.headers().metadata().get("GPSLongitude"));
+            syncBlobMetadata.setSuccess(true);
         }
         catch (Exception ex) {
+            System.err.println("Failed Download: Blob ID = " + blobID);
             ex.printStackTrace(System.err);
         }
-        return false;
+        return syncBlobMetadata;
     }
     
     public String calculateFullBlobID(long inParentID, long inRecordID, Path inFilePath) {
@@ -516,7 +480,7 @@ public final class SyncAzure {
         if (blobPath.endsWith(".jpeg")) {
             blobPath = blobPath.substring(0, blobPath.length() - 4) + "jpg";
         }
-        return blobPath;
+        return blobPath.toLowerCase(); // Extentions might be uppercase or lowercase, so make all lowercase on the cloud
     }
     
     public boolean deleteFile(WildLogDataType inDataType, String inFullBlobName) {

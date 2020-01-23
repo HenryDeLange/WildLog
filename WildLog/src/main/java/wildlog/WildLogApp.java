@@ -85,7 +85,7 @@ import wildlog.utils.WildLogPaths;
 public class WildLogApp extends Application {
     public static String WILDLOG_VERSION = "6.1.0.BETA";
     public static Class APPLICATION_CLASS = WildLogApp.class;
-    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG_WEI_ADMIN;
+    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
     public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
     public static Logger LOGGER;

@@ -932,11 +932,6 @@ public class UtilsCheckAndClean {
                 inProgressbarTask.setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... SKIPPED " + inProgressbarTask.getProgress() + "%");
                 finalHandleFeedback.println("9) Recreate the default thumbnails for all images. SKIPPED");
             }
-
-            // ---------------------?---------------------
-            // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
-// TODO: Maybe delete all non-wildlog files from the rest of the Workspace during cleanup?
-
             // --------------------- DONE ---------------------
             // Write out the summary
             finalHandleFeedback.println("");
