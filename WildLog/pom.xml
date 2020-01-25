@@ -224,6 +224,10 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <!--JavaFX libraries will be provided by the JRE (see Liberica JRE)-->
+                            <!--Note: Even if the JavaFX JARs are included in the /lib folder it still won't be able to run on a "normal" Java 13 JRE, 
+                                      because it needs SwingInterOpUtils which is only in the JDK or the bigger Liberica JRE...-->
+                            <excludeGroupIds>org.openjfx</excludeGroupIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -243,14 +247,14 @@
                 </executions>
             </plugin>
             <!--JavaFX plugins-->
-            <plugin>
+<!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
                     <release>${maven.compiler.release}</release>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <!--See https://github.com/openjfx/javafx-maven-plugin-->
             <!--To run add a new Maven Action with command "mvn javafx:run"-->
 <!--            <plugin>

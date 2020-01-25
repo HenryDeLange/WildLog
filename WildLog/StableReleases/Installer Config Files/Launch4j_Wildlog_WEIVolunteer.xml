@@ -15,7 +15,7 @@
   <manifest></manifest>
   <icon>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\misc files\WEI-Volunteer.ico</icon>
   <jre>
-    <path>jdk-13.0.1+9-jre</path>
+    <path>jre-13.0.2</path>
     <bundledJre64Bit>true</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
     <minVersion>13</minVersion>
@@ -36,7 +36,7 @@
     <fileVersion>6.1.0.0</fileVersion>
     <txtFileVersion>WildLog v6.1.5 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
-    <copyright>2019</copyright>
+    <copyright>2020</copyright>
     <productVersion>6.1.0.0</productVersion>
     <txtProductVersion>WildLog v6.1.5</txtProductVersion>
     <productName>WildLog</productName>
