@@ -32,6 +32,8 @@ import wildlog.ui.utils.UtilsUI;
 
 
 public class CompareElementsDialog extends JFrame {
+// TODO: Add a pagenator or something, to not have to load ALL files at once...
+    private static int GRID_LIMIT = 300;
 
 
     public CompareElementsDialog(Element inElement) {
@@ -349,7 +351,7 @@ public class CompareElementsDialog extends JFrame {
         refreshUI(tblElements2, lblElement2, txaIdentification2, pnlGridView2);
     }//GEN-LAST:event_tblElements2MouseReleased
 
-    private void refreshUI(JTable inTable, JLabel inName, JTextArea inIdentification, JPanel inGrid) {
+    private void refreshUI(JTable inTable, JLabel inLblName, JTextArea inTxaIdentification, JPanel inPnlGrid) {
         Element element;
         if (inTable.getSelectedRowCount() == 1) {
             element = WildLogApp.getApplication().getDBI().findElement((Long) inTable.getModel().getValueAt(
@@ -359,14 +361,15 @@ public class CompareElementsDialog extends JFrame {
             element = null;
         }
         if (element != null) {
-            inName.setText(element.getPrimaryName());
-            inIdentification.setText(element.getDiagnosticDescription());
-            generateGrid(inGrid, element.getID());
+            inLblName.setText(element.getPrimaryName());
+            inTxaIdentification.setText(element.getDiagnosticDescription());
+            inTxaIdentification.setCaretPosition(0);
+            generateGrid(inPnlGrid, element.getID());
         }
         else {
-            inName.setText("Please select a Creature to compare...");
-            inIdentification.setText("");
-            inGrid.removeAll();
+            inLblName.setText("Please select a Creature to compare...");
+            inTxaIdentification.setText("");
+            inPnlGrid.removeAll();
         }
     }
     
@@ -410,17 +413,16 @@ public class CompareElementsDialog extends JFrame {
                 pnlGrid.removeAll();
                 if (!lstSightings.isEmpty()) {
                     ((ScrollableWrappedFlowLayout) pnlGrid.getLayout()).setAlignment(FlowLayout.LEFT);
-// TODO: Add a pagenator or something, to not have to load ALL files at once...
-//                        int boxCount = 0;
+                    int boxCount = 0;
                     breakLoop: for (Sighting sighting : lstSightings) {
                         List<WildLogFile> lstSightingFiles = WildLogApp.getApplication().getDBI().listWildLogFiles(sighting.getWildLogFileID(), null, WildLogFile.class);
                         if (lstSightingFiles != null && !lstSightingFiles.isEmpty()) {
                             for (int t = 0; t < lstSightingFiles.size(); t++) {
                                 generateGridBox(pnlGrid, sighting, t);
-//                                    boxCount++;
-//                                    if (boxCount >= GRID_LIMIT) {
-//                                        break breakLoop;
-//                                    }
+                                boxCount++;
+                                if (boxCount >= GRID_LIMIT) {
+                                    break breakLoop;
+                                }
                             }
                         }
                     }

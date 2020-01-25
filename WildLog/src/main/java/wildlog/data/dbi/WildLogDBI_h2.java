@@ -2071,14 +2071,20 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         ResultSet results = null;
         try {
             state = conn.createStatement();
-            // Add the audit columns to the WildLog Options table (for syncing)
+            // Add the audit columns to the WildLog Options and Users tables (for syncing)
             WildLogApp.LOGGER.log(Level.INFO, "Starting update 14 - Phase 1 ...");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN ID bigint DEFAULT 1 PRIMARY KEY NOT NULL");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN AUDITTIME bigint DEFAULT 0 NOT NULL");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN AUDITUSER varchar(150) DEFAULT '' NOT NULL");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN IF NOT EXISTS ID bigint DEFAULT 1 PRIMARY KEY NOT NULL");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN IF NOT EXISTS AUDITTIME bigint DEFAULT 0 NOT NULL");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN IF NOT EXISTS AUDITUSER varchar(150) DEFAULT '' NOT NULL");
             state.executeUpdate("UPDATE WILDLOG SET ID=WORKSPACEID");
             state.executeUpdate("UPDATE WILDLOG SET AUDITTIME=0");
             state.executeUpdate("UPDATE WILDLOG SET AUDITUSER='Update14'");
+            state.execute("ALTER TABLE WILDLOGUSERS ADD COLUMN IF NOT EXISTS ID bigint");
+            state.execute("ALTER TABLE WILDLOGUSERS ADD COLUMN IF NOT EXISTS AUDITTIME bigint DEFAULT 0 NOT NULL");
+            state.execute("ALTER TABLE WILDLOGUSERS ADD COLUMN IF NOT EXISTS AUDITUSER varchar(150) DEFAULT '' NOT NULL");
+            state.executeUpdate("UPDATE WILDLOGUSERS SET ID=ROWNUM()");
+            state.executeUpdate("UPDATE WILDLOGUSERS SET AUDITTIME=0");
+            state.executeUpdate("UPDATE WILDLOGUSERS SET AUDITUSER='Update14'");
             // Get rid of the uniqueness of the indexes on the name columns
             // Note: Not needed because the tables are being recreated below
             // state.execute("DROP INDEX IF EXISTS V12_ELEMENT_PRINAME");
