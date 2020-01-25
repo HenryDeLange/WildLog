@@ -664,7 +664,7 @@ public class WildLogApp extends Application {
                     });
                     editorPane.setEditable(false);
                     editorPane.setBackground(label.getBackground());
-                    WLOptionPane.showMessageDialog(getMainFrame(),
+                    WLOptionPane.showMessageDialog(null, // Using null to prevent the glasspane from being used (it will remove the existing one)
                             editorPane,
                             "A new WildLog update is available!", JOptionPane.INFORMATION_MESSAGE);
                 }

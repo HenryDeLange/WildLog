@@ -712,7 +712,7 @@ public class WorkspaceSyncDialog extends JDialog {
                             @Override
                             public void run() {
                                 // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                WLOptionPane.showMessageDialog(null, 
+                                WLOptionPane.showMessageDialog(null, // Using null to prevent the glasspane from being used (it will remove the existing one)
                                         "<html>The Cloud Sync process has completed. Please restart the application."
                                                 + "<br/><br/><hr/>"
                                                 + "<br/><b>Failed Sync Actions   : " + syncFail + "</b>"
@@ -1492,6 +1492,10 @@ public class WorkspaceSyncDialog extends JDialog {
     }
     
     private void syncStashedFileRecords(PrintWriter inFeedback, SyncAzure inSyncAzure, ProgressbarTask inProgressbar, int inProgressStepSize) {
+// TODO: Ek is nie seker hoe om dit op te los nie, maar dis moontlik dat stashed folders agterbly in die workspace 
+//       as mens dit bulk import van 'n ander synced workspace af. Die Check an Clean sal dit skoon maak, so dit OK vir nou...
+//       Omdat die stash die naam gebruik (dalk moet ek eerder ID gebruik of altwee?) is dit nie so maklik om die folder te check 
+//       teen 'n visit as dit visit nie meer 'n stashed tipe is nie want die naam kan dan verander...
         int baseProgress = inProgressbar.getProgress();
         List<SyncBlobEntry> lstCloudStashedBlobFolders  = inSyncAzure.getSyncListFileParentsBatch(WildLogDataType.STASH);
         WildLogApp.LOGGER.log(Level.INFO, "Sync - " + WildLogDataType.STASH.getDescription() + " - All Stashed Cloud Blob Folders: " + lstCloudStashedBlobFolders.size());
