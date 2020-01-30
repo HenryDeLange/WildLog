@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.ElementCore;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
@@ -54,7 +55,7 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected SecureRandom randomGenerator;
     // Version
-    protected static final int WILDLOG_DB_VERSION = 14;
+    protected static final int WILDLOG_DB_VERSION = 15;
     // Tables
     protected static final String tableElements = "CREATE TABLE ELEMENTS ("
             + "ID bigint PRIMARY KEY NOT NULL, "
@@ -190,6 +191,15 @@ public abstract class DBI_JDBC implements DBI {
             + "TYPE varchar(1) NOT NULL, "
             + "AUDITTIME bigint NOT NULL, "
             + "AUDITUSER varchar(150) NOT NULL)";
+    protected static final String tableExtraData = "CREATE TABLE EXTRA ("
+            + "ID bigint PRIMARY KEY NOT NULL, "
+            + "LINKID bigint NOT NULL, "
+            + "LINKTYPE varchar(1) NOT NULL, "
+            + "FIELDID varchar(150) NOT NULL, "
+            + "DATAKEY varchar(150) NOT NULL, "
+            + "DATAVALUE TEXT, "
+            + "AUDITTIME bigint NOT NULL, "
+            + "AUDITUSER varchar(150) NOT NULL)";
     // Count
     protected static final String countLocation = "SELECT count(*) FROM LOCATIONS";
     protected static final String countVisit = "SELECT count(*) FROM VISITS";
@@ -230,6 +240,8 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String findUser = "SELECT * FROM WILDLOGUSERS";
     protected static final String findDeleteLog = "SELECT * FROM DELETELOGS"
             + " WHERE ID = ?";
+    protected static final String findExtraData = "SELECT * FROM EXTRA"
+            + " WHERE LINKID = ? AND FIELDID = ? AND DATAKEY = ?";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listLocationWithCached = "SELECT LOCATIONS.*,"
@@ -250,6 +262,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String listINaturalistLinkedData = "SELECT * FROM INATURALIST";
     protected static final String listUsers = "SELECT * FROM WILDLOGUSERS";
     protected static final String listDeleteLogs = "SELECT * FROM DELETELOGS";
+    protected static final String listExtraData = "SELECT * FROM EXTRA";
     // Create
     protected static final String createLocation = "INSERT INTO LOCATIONS ("
             + "ID, "
@@ -377,6 +390,16 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITTIME, "
             + "AUDITUSER) "
             + "VALUES (?, ?, ?, ?)";
+    protected static final String createExtraData = "INSERT INTO EXTRA ("
+            + "ID, "
+            + "LINKID, "
+            + "LINKTYPE, "
+            + "FIELDID, "
+            + "DATAKEY, "
+            + "DATAVALUE, "
+            + "AUDITTIME, "
+            + "AUDITUSER) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     // Update
     protected static final String updateLocation = "UPDATE LOCATIONS SET "
             + "ID = ?, "
@@ -445,7 +468,7 @@ public abstract class DBI_JDBC implements DBI {
             + "TIMEACCURACY = ?, "
             + "AGE = ?, "
             + "AUDITTIME = ?, "
-            + "AUDITUSER = ?"
+            + "AUDITUSER = ? "
             + "WHERE ID = ?";
     protected static final String updateElement = "UPDATE ELEMENTS SET "
             + "ID = ?, "
@@ -512,7 +535,17 @@ public abstract class DBI_JDBC implements DBI {
             + "PASSWORD = ?, "
             + "TYPE = ?, "
             + "AUDITTIME = ?, "
-            + "AUDITUSER = ?"
+            + "AUDITUSER = ? "
+            + "WHERE ID = ?";
+    protected static final String updateExtraData = "UPDATE EXTRA SET "
+            + "ID = ?, "
+            + "LINKID = ?, "
+            + "LINKTYPE = ?, "
+            + "FIELDID = ?, "
+            + "DATAKEY = ?, "
+            + "DATAVALUE = ?, "
+            + "AUDITTIME = ?, "
+            + "AUDITUSER = ? "
             + "WHERE ID = ?";
     // Delete
     protected static final String deleteLocation = "DELETE FROM LOCATIONS "
@@ -530,6 +563,8 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteINaturalistLinkedData = "DELETE "
             + "FROM INATURALIST WHERE WILDLOGID = ? OR INATURALISTID = ?";
     protected static final String deleteUser = "DELETE FROM WILDLOGUSERS "
+            + "WHERE ID = ?";
+    protected static final String deleteExtraData = "DELETE FROM EXTRA "
             + "WHERE ID = ?";
     // Queries
     protected static final String queryLocationCountForElement = "SELECT SIGHTINGS.LOCATIONID, COUNT(LOCATIONS.ID) CNT, LOCATIONS.NAME"
@@ -664,6 +699,14 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute(tableDeleteLog);
                 closeStatement(state);
             }
+            results = conn.getMetaData().getTables(null, null, "EXTRA", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableExtraData);
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V15_EXTRA_LINK_FIELD_KEY ON EXTRA (LINKID, FIELDID, DATAKEY)");
+                closeStatement(state);
+            }
+            closeResultset(results);
             closeResultset(results);
             results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
             if (!results.next()) {
@@ -1016,10 +1059,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1085,10 +1125,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1157,10 +1194,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1222,10 +1256,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1344,10 +1375,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1414,10 +1442,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1438,18 +1463,13 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             if (results.next()) {
                 temp = inReturnType.newInstance();
-                temp.setFieldID(results.getString("FIELDID"));
-                temp.setDataKey(results.getString("DATAKEY"));
-                temp.setDataValue(results.getString("DATAVALUE"));
+                populateAdhocData(temp, results);
             }
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1458,11 +1478,56 @@ public abstract class DBI_JDBC implements DBI {
         return temp;
     }
 
+    private <T extends AdhocData> void populateAdhocData(T inAdhocData, ResultSet inResults) throws SQLException {
+        inAdhocData.setFieldID(inResults.getString("FIELDID"));
+        inAdhocData.setDataKey(inResults.getString("DATAKEY"));
+        inAdhocData.setDataValue(inResults.getString("DATAVALUE"));
+    }
+    
+    @Override
+    public <T extends ExtraData> T findExtraData(long inLinkID, String inFieldID, String inDataKey, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        T temp = null;
+        try {
+            state = conn.prepareStatement(findExtraData);
+            state.setLong(1, inLinkID);
+            state.setString(2, UtilsData.sanitizeString(inFieldID));
+            state.setString(3, UtilsData.sanitizeString(inDataKey));
+            results = state.executeQuery();
+            if (results.next()) {
+                temp = inReturnType.newInstance();
+                populateExtraData(temp, results);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException | IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return temp;
+    }
+
+    private <T extends ExtraData> void populateExtraData(T inExtraData, ResultSet inResults) throws SQLException {
+        inExtraData.setID(inResults.getLong("ID"));
+        inExtraData.setLinkID(inResults.getLong("LINKID"));
+        inExtraData.setLinkType(WildLogDataType.getEnumFromText(inResults.getString("LINKTYPE")));
+        inExtraData.setFieldID(inResults.getString("FIELDID"));
+        inExtraData.setDataKey(inResults.getString("DATAKEY"));
+        inExtraData.setDataValue(inResults.getString("DATAVALUE"));
+        inExtraData.setAuditTime(inResults.getLong("AUDITTIME"));
+        inExtraData.setAuditUser(inResults.getString("AUDITUSER"));
+    }
+
     @Override
     public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, boolean inIncludeCachedValues, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql;
             if (inIncludeCachedValues) {
@@ -1508,10 +1573,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1524,7 +1586,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends LocationCore> List<T> listLocations(String inName, boolean inIncludeCachedValues, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql;
             if (inIncludeCachedValues) {
@@ -1551,10 +1613,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1567,7 +1626,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends VisitCore> List<T> listVisits(String inName, long inLocationID, VisitType inVisitType, boolean inIncludeCachedValues, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql;
             if (inIncludeCachedValues) {
@@ -1606,10 +1665,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1622,7 +1678,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends SightingCore> List<T> listSightings(long inElementID, long inLocationID, long inVisitID, boolean inIncludeCachedValues, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql;
             if (inIncludeCachedValues) {
@@ -1690,10 +1746,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1706,7 +1759,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends WildLogFileCore> List<T> listWildLogFiles(long inLinkID, WildLogFileType inWildLogFileType, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql = listFile;
             if (inLinkID >= 0 && (inWildLogFileType == null || WildLogFileType.NONE.equals(inWildLogFileType))) {
@@ -1744,10 +1797,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1760,7 +1810,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends AdhocData> List<T> listAdhocDatas(String inFieldID, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql = listAdhocData;
             if (inFieldID != null && inFieldID.length() > 0) {
@@ -1775,19 +1825,14 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             while (results.next()) {
                 T temp = inReturnType.newInstance();
-                temp.setFieldID(results.getString("FIELDID"));
-                temp.setDataKey(results.getString("DATAKEY"));
-                temp.setDataValue(results.getString("DATAVALUE"));
+                populateAdhocData(temp, results);
                 tempList.add(temp);
             }
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1800,7 +1845,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql = listINaturalistLinkedData;
             state = conn.prepareStatement(sql);
@@ -1816,10 +1861,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1832,7 +1874,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends WildLogUser> List<T> listUsers(WildLogUserTypes inType, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql = listUsers;
             if (inType != null) {
@@ -1858,10 +1900,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -1874,7 +1913,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends WildLogDeleteLog> List<T> listDeleteLogs(WildLogDataType inDataType, long inAfterAuditTime, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql = listDeleteLogs;
             if (inDataType != null && inAfterAuditTime > 0) {
@@ -1911,10 +1950,50 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
-        catch (IllegalAccessException ex) {
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+    
+    @Override
+    public <T extends ExtraData> List<T> listExtraDatas(long inLinkID, String inFieldID, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<T> tempList = new ArrayList<>();
+        try {
+            String sql = listExtraData;
+            if (inLinkID > 0 && inFieldID != null && inFieldID.length() > 0) {
+                sql = sql + " WHERE LINKID = ? AND FIELDID = ?";
+                sql = sql + " ORDER BY FIELDID, DATAKEY";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inLinkID);
+                state.setString(2, UtilsData.sanitizeString(inFieldID));
+            }
+            else
+            if (inLinkID > 0) {
+                sql = sql + " WHERE LINKID = ?";
+                sql = sql + " ORDER BY FIELDID, DATAKEY";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inLinkID);
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                T temp = inReturnType.newInstance();
+                populateExtraData(temp, results);
+                tempList.add(temp);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -2421,6 +2500,63 @@ public abstract class DBI_JDBC implements DBI {
         state.setString(2, inAdhocData.getDataKey());
         state.setString(3, inAdhocData.getDataValue());
     }
+    
+    @Override
+    public <T extends ExtraData> boolean createExtraData(T inExtraData, boolean inNewButUseOldAuditAndID) {
+        PreparedStatement state = null;
+        try {
+            //Insert
+            state = conn.prepareStatement(createExtraData);
+            // Populate the values
+            maintainExtraData(state, inExtraData, inNewButUseOldAuditAndID);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends ExtraData> boolean updateExtraData(T inExtraData, boolean inUseOldAudit) {
+        PreparedStatement state = null;
+        try {
+            // Update
+            state = conn.prepareStatement(updateExtraData);
+            // Populate the values
+            maintainExtraData(state, inExtraData, inUseOldAudit);
+            state.setLong(9, inExtraData.getID());
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+
+    private <T extends ExtraData> void maintainExtraData(PreparedStatement state, T inExtraData, boolean inUseOldAudit) throws SQLException {
+        state.setLong(1, inExtraData.getID());
+        state.setLong(2, inExtraData.getLinkID());
+        state.setString(3, UtilsData.getKeyFromEnum(inExtraData.getLinkType()));
+        state.setString(4, inExtraData.getFieldID());
+        state.setString(5, inExtraData.getDataKey());
+        state.setString(6, inExtraData.getDataValue());
+        if (!inUseOldAudit) {
+            setupAuditInfo(inExtraData);
+        }
+        state.setLong(7, inExtraData.getAuditTime());
+        state.setString(8, UtilsData.limitLength(UtilsData.sanitizeString(inExtraData.getAuditUser()), 150));
+    }
 
     @Override
     public boolean deleteElement(long inID) {
@@ -2584,6 +2720,24 @@ public abstract class DBI_JDBC implements DBI {
         }
         return true;
     }
+    
+    @Override
+    public boolean deleteExtraData(long inID) {
+        PreparedStatement state = null;
+        try {
+            state = conn.prepareStatement(deleteExtraData);
+            state.setLong(1, inID);
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
 
     /**
      * Prints details of an SQLException chain to <code>System.err</code>.
@@ -2641,7 +2795,7 @@ public abstract class DBI_JDBC implements DBI {
             boolean inIncludeCachedValues, Class<S> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<S> tempList = new ArrayList<S>();
+        List<S> tempList = new ArrayList<>();
         try {
             String sql;
             if (inIncludeCachedValues) {
@@ -2733,10 +2887,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -2749,7 +2900,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends LocationCount> List<T> queryLocationCountForElement(long inElementID, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql = queryLocationCountForElement;
             state = conn.prepareStatement(sql);
@@ -2771,10 +2922,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -2786,7 +2934,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends ElementCount> List<T> queryElementCountForLocation(long inLocationID, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql = queryElementCountForLocation;
             state = conn.prepareStatement(sql);
@@ -2809,10 +2957,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -2825,7 +2970,7 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends ElementCount> List<T> queryElementCountForVisit(long inVisitID, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<T> tempList = new ArrayList<>();
         try {
             String sql = queryElementCountForVisit;
             state = conn.prepareStatement(sql);
@@ -2848,10 +2993,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
@@ -2865,7 +3007,7 @@ public abstract class DBI_JDBC implements DBI {
 //        return UUID.randomUUID().getMostSignificantBits();
         // Gebruik die mees betekenisvolle gedeelte van die tyd, en dan 'n random getal.
         // Dan draai die getal om, sodat die ID vinniger uniek raak (vir indekse) andersins begin almal met byna dieselfde waardes.
-        // VErvang dan die laaste drie geyalle met 'n unieke getal.
+        // Vervang dan die laaste drie getalle met 'n unieke getal.
         return Long.parseLong(Long.toString(randomGenerator.nextInt(100000)) + new StringBuilder(Long.toString(System.currentTimeMillis())).reverse().toString()) 
                 / 1000L * 1000L + randomGenerator.nextInt(1000);
     }
@@ -2896,12 +3038,6 @@ public abstract class DBI_JDBC implements DBI {
             System.err.println("More than one iNaturalist database records matched the parameters: "
                     + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
             printSQLException(ex);
-        }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
-            ex.printStackTrace(System.err);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -3022,13 +3158,7 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException ex) {
             printSQLException(ex);
         }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (Exception ex) {
+        catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
