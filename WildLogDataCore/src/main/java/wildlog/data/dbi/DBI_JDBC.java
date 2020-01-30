@@ -595,6 +595,18 @@ public abstract class DBI_JDBC implements DBI {
             randomGenerator = new SecureRandom();
         }
     }
+    
+    @Override
+    public long generateID() {
+//        return UUID.randomUUID().getMostSignificantBits();
+        // Gebruik die mees betekenisvolle gedeelte van die tyd, en dan 'n random getal.
+        // Dan draai die getal om, sodat die ID vinniger uniek raak (vir indekse) andersins begin almal met byna dieselfde waardes.
+        // Vervang dan die laaste drie getalle met 'n unieke getal.
+        return Long.parseLong(Long.toString(randomGenerator.nextInt(100000)) + new StringBuilder(Long.toString(System.currentTimeMillis())).reverse().toString()) 
+                / 1000L * 1000L + randomGenerator.nextInt(1000);
+    }
+    
+    protected abstract void setupAuditInfo(DataObjectWithAudit inDataObjectWithAudit);
 
     @Override
     public boolean initialize(boolean inCreateDefaultRecords) throws SQLException {
@@ -1485,6 +1497,133 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
+    public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        T temp = null;
+        try {
+            state = conn.prepareStatement(findINaturalistLinkedData);
+            state.setLong(1, inWildLogID);
+            state.setLong(2, inINaturalistID);
+            results = state.executeQuery();
+            if (results.next()) {
+                temp = inReturnType.newInstance();
+                populateINaturalistLinkedData(temp, results);
+            }
+            if (results.next()) {
+                temp = null;
+                throw new Exception("More than one iNaturalist database records matched the parameters: "
+                        + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
+            }
+        }
+        catch (SQLException ex) {
+            System.err.println("More than one iNaturalist database records matched the parameters: "
+                    + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
+            printSQLException(ex);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return temp;
+    }
+
+    private <T extends INaturalistLinkedData> void populateINaturalistLinkedData(T inINaturalistLinkedData, ResultSet inResults) throws SQLException {
+        inINaturalistLinkedData.setWildlogID(inResults.getLong("WILDLOGID"));
+        inINaturalistLinkedData.setINaturalistID(inResults.getLong("INATURALISTID"));
+        inINaturalistLinkedData.setINaturalistData(inResults.getString("INATURALISTDATA"));
+    }
+    
+    @Override
+    public <T extends WildLogUser> T findUser(long inID, String inUsername, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        T temp = null;
+        try {
+            String sql = findUser;
+            if (inID > 0) {
+                sql = sql + " WHERE ID = ?";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inID);
+            }
+            else
+            if (inUsername != null && !inUsername.isEmpty()) {
+                sql = sql + " WHERE USERNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, inUsername);
+            }
+            else {
+                return null;
+            }
+            results = state.executeQuery();
+            if (results.next()) {
+                temp = inReturnType.newInstance();
+                populateUser(temp, results);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException | IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return temp;
+    }
+
+    private <T extends WildLogUser> void populateUser(T inWildLogUser, ResultSet inResults) throws SQLException {
+        inWildLogUser.setID(inResults.getLong("ID"));
+        inWildLogUser.setUsername(inResults.getString("USERNAME"));
+        inWildLogUser.setPassword(inResults.getString("PASSWORD"));
+        inWildLogUser.setType(WildLogUserTypes.getEnumFromText(inResults.getString("TYPE")));
+        inWildLogUser.setAuditTime(inResults.getLong("AUDITTIME"));
+        inWildLogUser.setAuditUser(inResults.getString("AUDITUSER"));
+    }
+    
+    @Override
+    public <T extends WildLogDeleteLog> T findDeleteLog(long inID, Class<T> inReturnType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        T temp = null;
+        try {
+            state = conn.prepareStatement(findDeleteLog);
+            state.setLong(1, inID);
+            results = state.executeQuery();
+            if (results.next()) {
+                temp = inReturnType.newInstance();
+                populateDeleteLog(temp, results);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return temp;
+    }
+
+    private <T extends WildLogDeleteLog> void populateDeleteLog(T inDeleteLog, ResultSet inResults) throws SQLException {
+        inDeleteLog.setID(inResults.getLong("ID"));
+        inDeleteLog.setType(WildLogDataType.getEnumFromText(inResults.getString("TYPE")));
+        inDeleteLog.setAuditTime(inResults.getLong("AUDITTIME"));
+        inDeleteLog.setAuditUser(inResults.getString("AUDITUSER"));
+    }
+    
+    @Override
     public <T extends ExtraData> T findExtraData(long inLinkID, String inFieldID, String inDataKey, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
@@ -1852,9 +1991,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             while (results.next()) {
                 T temp = inReturnType.newInstance();
-                temp.setWildlogID(results.getLong("WILDLOGID"));
-                temp.setINaturalistID(results.getLong("INATURALISTID"));
-                temp.setINaturalistData(results.getString("INATURALISTDATA"));
+                populateINaturalistLinkedData(temp, results);
                 tempList.add(temp);
             }
         }
@@ -1888,12 +2025,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             while (results.next()) {
                 T temp = inReturnType.newInstance();
-                temp.setID(results.getLong("ID"));
-                temp.setUsername(results.getString("USERNAME"));
-                temp.setPassword(results.getString("PASSWORD"));
-                temp.setType(WildLogUserTypes.getEnumFromText(results.getString("TYPE")));
-                temp.setAuditTime(results.getLong("AUDITTIME"));
-                temp.setAuditUser(results.getString("AUDITUSER"));
+                populateUser(temp, results);
                 tempList.add(temp);
             }
         }
@@ -1940,10 +2072,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             while (results.next()) {
                 T temp = inReturnType.newInstance();
-                temp.setID(results.getLong("ID"));
-                temp.setType(WildLogDataType.getEnumFromText(results.getString("TYPE")));
-                temp.setAuditTime(results.getLong("AUDITTIME"));
-                temp.setAuditUser(results.getString("AUDITUSER"));
+                populateDeleteLog(temp, results);
                 tempList.add(temp);
             }
         }
@@ -2502,6 +2631,154 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
+    public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData) {
+        PreparedStatement state = null;
+        try {
+            //Insert
+            state = conn.prepareStatement(createINaturalistLinkedData);
+            // Populate the values
+            maintainINaturalistLinkedData(state, inINaturalistLinkedData);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            System.err.println("More than one iNaturalist database records matched the parameters: "
+                    + "WildLogID = " + inINaturalistLinkedData.getWildlogID() + " | iNaturalistID = " + inINaturalistLinkedData.getINaturalistID());
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+
+    @Override
+    public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData) {
+        PreparedStatement state = null;
+        try {
+            // Update
+            state = conn.prepareStatement(updateINaturalistLinkedData);
+            // Populate the values
+            maintainINaturalistLinkedData(state, inINaturalistLinkedData);
+            state.setLong(4, inINaturalistLinkedData.getWildlogID());
+            state.setLong(5, inINaturalistLinkedData.getINaturalistID());
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            System.err.println("More than one iNaturalist database records matched the parameters: "
+                    + "WildLogID = " + inINaturalistLinkedData.getWildlogID() + " | iNaturalistID = " + inINaturalistLinkedData.getINaturalistID());
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    private <T extends INaturalistLinkedData> void maintainINaturalistLinkedData(PreparedStatement state, T inINaturalistLinkedData) throws SQLException {
+        state.setLong(1, inINaturalistLinkedData.getWildlogID());
+        state.setLong(2, inINaturalistLinkedData.getINaturalistID());
+        state.setString(3, inINaturalistLinkedData.getINaturalistData());
+    }
+    
+    @Override
+    public <T extends WildLogUser> boolean createUser(T inWildLogUser, boolean inNewButUseOldAuditAndID) {
+        PreparedStatement state = null;
+        try {
+            //Insert
+            state = conn.prepareStatement(createUser);
+            // Get the new ID
+            if (!inNewButUseOldAuditAndID) {
+                inWildLogUser.setID(generateID());
+            }
+            // Populate the values
+            maintainUser(state, inWildLogUser, inNewButUseOldAuditAndID);
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public <T extends WildLogUser> boolean updateUser(T inWildLogUser, boolean inUseOldAudit) {
+        PreparedStatement state = null;
+        try {
+            // Update
+            state = conn.prepareStatement(updateUser);
+            // Populate the values
+            maintainUser(state, inWildLogUser, inUseOldAudit);
+            state.setString(4, inWildLogUser.getUsername());
+            // Execute
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    private <T extends WildLogUser> void maintainUser(PreparedStatement state, T inWildLogUser, boolean inUseOldAudit) throws SQLException {
+        state.setLong(1, inWildLogUser.getID());
+        state.setString(2, UtilsData.limitLength(inWildLogUser.getUsername(), 150));
+        state.setString(3, inWildLogUser.getPassword());
+        if (inWildLogUser.getType() != null) {
+            state.setString(4, inWildLogUser.getType().getKey());
+        }
+        else {
+            state.setString(4, WildLogUserTypes.NONE.getKey());
+        }
+        if (!inUseOldAudit) {
+            setupAuditInfo(inWildLogUser);
+        }
+        state.setLong(5, inWildLogUser.getAuditTime());
+        state.setString(6, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogUser.getAuditUser()), 150));
+    }
+    
+    @Override
+    public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog, boolean inNewButUseOldAudit) {
+        PreparedStatement state = null;
+        try {
+            // Don't add the delete log twice (might already been created by the cloud sync)
+            if (countDeleteLogs(inWildLogDeleteLog.getID(), inWildLogDeleteLog.getType()) == 0) {
+                //Insert
+                state = conn.prepareStatement(createDeleteLog);
+                // Populate the values
+                state.setLong(1, inWildLogDeleteLog.getID());
+                state.setString(2, UtilsData.getKeyFromEnum(inWildLogDeleteLog.getType()));
+                if (!inNewButUseOldAudit) {
+                    setupAuditInfo(inWildLogDeleteLog);
+                }
+                state.setLong(3, inWildLogDeleteLog.getAuditTime());
+                state.setString(4, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogDeleteLog.getAuditUser()), 150));
+                // Execute
+                state.executeUpdate();
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
     public <T extends ExtraData> boolean createExtraData(T inExtraData, boolean inNewButUseOldAuditAndID) {
         PreparedStatement state = null;
         try {
@@ -2709,6 +2986,48 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.prepareStatement(deleteAdhocData);
             state.setString(1, UtilsData.sanitizeString(inFieldID));
             state.setString(2, UtilsData.sanitizeString(inDataKey));
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public boolean deleteINaturalistLinkedData(long inWildLogID, long inINaturalistID) {
+        PreparedStatement state = null;
+        try {
+            state = conn.prepareStatement(deleteINaturalistLinkedData);
+            state.setLong(1, inWildLogID);
+            state.setLong(2, inINaturalistID);
+            state.executeUpdate();
+        }
+        catch (SQLException ex) {
+            System.err.println("More than one iNaturalist database records matched the parameters: "
+                    + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatement(state);
+        }
+        return true;
+    }
+    
+    @Override
+    public boolean deleteUser(long inID) {
+        PreparedStatement state = null;
+        try {
+            // Create the DeleteLog record (to know about the delete when syncing)
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.WILDLOG_USER, inID), false);
+            // Delete the user
+            state = conn.prepareStatement(deleteUser);
+            state.setLong(1, inID);
             state.executeUpdate();
         }
         catch (SQLException ex) {
@@ -3003,321 +3322,6 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public long generateID() {
-//        return UUID.randomUUID().getMostSignificantBits();
-        // Gebruik die mees betekenisvolle gedeelte van die tyd, en dan 'n random getal.
-        // Dan draai die getal om, sodat die ID vinniger uniek raak (vir indekse) andersins begin almal met byna dieselfde waardes.
-        // Vervang dan die laaste drie getalle met 'n unieke getal.
-        return Long.parseLong(Long.toString(randomGenerator.nextInt(100000)) + new StringBuilder(Long.toString(System.currentTimeMillis())).reverse().toString()) 
-                / 1000L * 1000L + randomGenerator.nextInt(1000);
-    }
-
-    @Override
-    public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType) {
-        PreparedStatement state = null;
-        ResultSet results = null;
-        T temp = null;
-        try {
-            state = conn.prepareStatement(findINaturalistLinkedData);
-            state.setLong(1, inWildLogID);
-            state.setLong(2, inINaturalistID);
-            results = state.executeQuery();
-            if (results.next()) {
-                temp = inReturnType.newInstance();
-                temp.setWildlogID(results.getLong("WILDLOGID"));
-                temp.setINaturalistID(results.getLong("INATURALISTID"));
-                temp.setINaturalistData(results.getString("INATURALISTDATA"));
-            }
-            if (results.next()) {
-                temp = null;
-                throw new Exception("More than one iNaturalist database records matched the parameters: "
-                        + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
-            }
-        }
-        catch (SQLException ex) {
-            System.err.println("More than one iNaturalist database records matched the parameters: "
-                    + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
-            printSQLException(ex);
-        }
-        catch (Exception ex) {
-            ex.printStackTrace(System.err);
-        }
-        finally {
-            closeStatementAndResultset(state, results);
-        }
-        return temp;
-    }
-    
-    @Override
-    public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData) {
-        PreparedStatement state = null;
-        try {
-            //Insert
-            state = conn.prepareStatement(createINaturalistLinkedData);
-            // Populate the values
-            maintainINaturalistLinkedData(state, inINaturalistLinkedData);
-            // Execute
-            state.executeUpdate();
-        }
-        catch (SQLException ex) {
-            System.err.println("More than one iNaturalist database records matched the parameters: "
-                    + "WildLogID = " + inINaturalistLinkedData.getWildlogID() + " | iNaturalistID = " + inINaturalistLinkedData.getINaturalistID());
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatement(state);
-        }
-        return true;
-    }
-
-    @Override
-    public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData) {
-        PreparedStatement state = null;
-        try {
-            // Update
-            state = conn.prepareStatement(updateINaturalistLinkedData);
-            // Populate the values
-            maintainINaturalistLinkedData(state, inINaturalistLinkedData);
-            state.setLong(4, inINaturalistLinkedData.getWildlogID());
-            state.setLong(5, inINaturalistLinkedData.getINaturalistID());
-            // Execute
-            state.executeUpdate();
-        }
-        catch (SQLException ex) {
-            System.err.println("More than one iNaturalist database records matched the parameters: "
-                    + "WildLogID = " + inINaturalistLinkedData.getWildlogID() + " | iNaturalistID = " + inINaturalistLinkedData.getINaturalistID());
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatement(state);
-        }
-        return true;
-    }
-    
-    private <T extends INaturalistLinkedData> void maintainINaturalistLinkedData(PreparedStatement state, T inINaturalistLinkedData) throws SQLException {
-        state.setLong(1, inINaturalistLinkedData.getWildlogID());
-        state.setLong(2, inINaturalistLinkedData.getINaturalistID());
-        state.setString(3, inINaturalistLinkedData.getINaturalistData());
-    }
-
-    @Override
-    public boolean deleteINaturalistLinkedData(long inWildLogID, long inINaturalistID) {
-        PreparedStatement state = null;
-        try {
-            state = conn.prepareStatement(deleteINaturalistLinkedData);
-            state.setLong(1, inWildLogID);
-            state.setLong(2, inINaturalistID);
-            state.executeUpdate();
-        }
-        catch (SQLException ex) {
-            System.err.println("More than one iNaturalist database records matched the parameters: "
-                    + "WildLogID = " + inWildLogID + " | iNaturalistID = " + inINaturalistID);
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatement(state);
-        }
-        return true;
-    }
-    
-    @Override
-    public <T extends WildLogUser> T findUser(long inID, String inUsername, Class<T> inReturnType) {
-        PreparedStatement state = null;
-        ResultSet results = null;
-        T temp = null;
-        try {
-            String sql = findUser;
-            if (inID > 0) {
-                sql = sql + " WHERE ID = ?";
-                state = conn.prepareStatement(sql);
-                state.setLong(1, inID);
-            }
-            else
-            if (inUsername != null && !inUsername.isEmpty()) {
-                sql = sql + " WHERE USERNAME = ?";
-                state = conn.prepareStatement(sql);
-                state.setString(1, inUsername);
-            }
-            else {
-                return null;
-            }
-            results = state.executeQuery();
-            if (results.next()) {
-                temp = inReturnType.newInstance();
-                temp.setID(results.getLong("ID"));
-                temp.setUsername(results.getString("USERNAME"));
-                temp.setPassword(results.getString("PASSWORD"));
-                temp.setType(WildLogUserTypes.getEnumFromText(results.getString("TYPE")));
-                temp.setAuditTime(results.getLong("AUDITTIME"));
-                temp.setAuditUser(results.getString("AUDITUSER"));
-            }
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-        }
-        catch (InstantiationException | IllegalAccessException ex) {
-            ex.printStackTrace(System.err);
-        }
-        finally {
-            closeStatementAndResultset(state, results);
-        }
-        return temp;
-    }
-    
-    @Override
-    public <T extends WildLogDeleteLog> T findDeleteLog(long inID, Class<T> inReturnType) {
-        PreparedStatement state = null;
-        ResultSet results = null;
-        T temp = null;
-        try {
-            state = conn.prepareStatement(findDeleteLog);
-            state.setLong(1, inID);
-            results = state.executeQuery();
-            if (results.next()) {
-                temp = inReturnType.newInstance();
-                temp.setID(results.getLong("ID"));
-                temp.setType(WildLogDataType.getEnumFromText(results.getString("TYPE")));
-                temp.setAuditTime(results.getLong("AUDITTIME"));
-                temp.setAuditUser(results.getString("AUDITUSER"));
-            }
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-        }
-        catch (InstantiationException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (IllegalAccessException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (Exception ex) {
-            ex.printStackTrace(System.err);
-        }
-        finally {
-            closeStatementAndResultset(state, results);
-        }
-        return temp;
-    }
-    
-    @Override
-    public <T extends WildLogUser> boolean createUser(T inWildLogUser, boolean inNewButUseOldAuditAndID) {
-        PreparedStatement state = null;
-        try {
-            //Insert
-            state = conn.prepareStatement(createUser);
-            // Get the new ID
-            if (!inNewButUseOldAuditAndID) {
-                inWildLogUser.setID(generateID());
-            }
-            // Populate the values
-            maintainUser(state, inWildLogUser, inNewButUseOldAuditAndID);
-            // Execute
-            state.executeUpdate();
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatement(state);
-        }
-        return true;
-    }
-    
-    @Override
-    public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog, boolean inNewButUseOldAudit) {
-        PreparedStatement state = null;
-        try {
-            // Don't add the delete log twice (might already been created by the cloud sync)
-            if (countDeleteLogs(inWildLogDeleteLog.getID(), inWildLogDeleteLog.getType()) == 0) {
-                //Insert
-                state = conn.prepareStatement(createDeleteLog);
-                // Populate the values
-                state.setLong(1, inWildLogDeleteLog.getID());
-                state.setString(2, UtilsData.getKeyFromEnum(inWildLogDeleteLog.getType()));
-                if (!inNewButUseOldAudit) {
-                    setupAuditInfo(inWildLogDeleteLog);
-                }
-                state.setLong(3, inWildLogDeleteLog.getAuditTime());
-                state.setString(4, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogDeleteLog.getAuditUser()), 150));
-                // Execute
-                state.executeUpdate();
-            }
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatement(state);
-        }
-        return true;
-    }
-
-    @Override
-    public <T extends WildLogUser> boolean updateUser(T inWildLogUser, boolean inUseOldAudit) {
-        PreparedStatement state = null;
-        try {
-            // Update
-            state = conn.prepareStatement(updateUser);
-            // Populate the values
-            maintainUser(state, inWildLogUser, inUseOldAudit);
-            state.setString(4, inWildLogUser.getUsername());
-            // Execute
-            state.executeUpdate();
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatement(state);
-        }
-        return true;
-    }
-    
-    private <T extends WildLogUser> void maintainUser(PreparedStatement state, T inWildLogUser, boolean inUseOldAudit) throws SQLException {
-        state.setLong(1, inWildLogUser.getID());
-        state.setString(2, UtilsData.limitLength(inWildLogUser.getUsername(), 150));
-        state.setString(3, inWildLogUser.getPassword());
-        if (inWildLogUser.getType() != null) {
-            state.setString(4, inWildLogUser.getType().getKey());
-        }
-        else {
-            state.setString(4, WildLogUserTypes.NONE.getKey());
-        }
-        if (!inUseOldAudit) {
-            setupAuditInfo(inWildLogUser);
-        }
-        state.setLong(5, inWildLogUser.getAuditTime());
-        state.setString(6, UtilsData.limitLength(UtilsData.sanitizeString(inWildLogUser.getAuditUser()), 150));
-    }
-
-    @Override
-    public boolean deleteUser(long inID) {
-        PreparedStatement state = null;
-        try {
-            // Create the DeleteLog record (to know about the delete when syncing)
-            createDeleteLog(new WildLogDeleteLog(WildLogDataType.WILDLOG_USER, inID), false);
-            // Delete the user
-            state = conn.prepareStatement(deleteUser);
-            state.setLong(1, inID);
-            state.executeUpdate();
-        }
-        catch (SQLException ex) {
-            printSQLException(ex);
-            return false;
-        }
-        finally {
-            closeStatement(state);
-        }
-        return true;
-    }
-    
-    @Override
     public int activeSessionsCount() {
         PreparedStatement state = null;
         ResultSet results = null;
@@ -3337,7 +3341,5 @@ public abstract class DBI_JDBC implements DBI {
         }
         return 0;
     }
-    
-    protected abstract void setupAuditInfo(DataObjectWithAudit inDataObjectWithAudit);
 
 }
