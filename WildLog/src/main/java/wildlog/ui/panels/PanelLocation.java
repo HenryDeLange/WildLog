@@ -41,6 +41,7 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
+import wildlog.ui.dialogs.ExtraDataDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
@@ -281,6 +282,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLatitude = new javax.swing.JTextField();
         btnApplyGPSToVisit = new javax.swing.JButton();
         btnGPS = new javax.swing.JButton();
+        btnExtraData = new javax.swing.JButton();
         pnlButtons = new javax.swing.JPanel();
         btnMap = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
@@ -596,6 +598,14 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGap(0, 0, 0))
         );
 
+        btnExtraData.setText("Extra Data");
+        btnExtraData.setName("btnExtraData"); // NOI18N
+        btnExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExtraDataActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
         pnlInfo.setLayout(pnlInfoLayout);
         pnlInfoLayout.setHorizontalGroup(
@@ -614,8 +624,11 @@ public class PanelLocation extends PanelCanSetupHeader {
                                 .addGap(0, 0, 0)
                                 .addComponent(jScrollPane10))
                             .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
+                                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
+                                        .addComponent(btnExtraData)
+                                        .addGap(18, 18, 18)))
                                 .addComponent(jScrollPane13)))
                         .addGap(5, 5, 5))
                     .addGroup(pnlInfoLayout.createSequentialGroup()
@@ -664,7 +677,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel40)
+                            .addGroup(pnlInfoLayout.createSequentialGroup()
+                                .addComponent(jLabel40)
+                                .addGap(43, 43, 43)
+                                .addComponent(btnExtraData))
                             .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(10, 10, 10))
         );
@@ -1510,6 +1526,11 @@ public class PanelLocation extends PanelCanSetupHeader {
         app.getMainFrame().getGlassPane().setVisible(false);
     }//GEN-LAST:event_btnApplyGPSToVisitActionPerformed
 
+    private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
+        ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), locationWL.getID());
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnExtraDataActionPerformed
+
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
@@ -1559,6 +1580,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteVisit;
     private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnExtraData;
     private javax.swing.JButton btnGPS;
     private javax.swing.JButton btnGoElement;
     private javax.swing.JButton btnGoVisit;

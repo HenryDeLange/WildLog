@@ -16,10 +16,10 @@ public class AdhocData {
     public AdhocData() {
     }
 
-    public AdhocData(String fieldID, String dataKey, String dataValue) {
-        this.fieldID = fieldID;
-        this.dataKey = dataKey;
-        this.dataValue = dataValue;
+    public AdhocData(String inFieldID, String inDataKey, String inDataValue) {
+        fieldID = inFieldID;
+        dataKey = inDataKey;
+        dataValue = inDataValue;
     }
 
     

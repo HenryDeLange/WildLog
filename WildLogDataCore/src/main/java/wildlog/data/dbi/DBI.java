@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.AdhocData;
 import wildlog.data.dataobjects.ElementCore;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
@@ -45,6 +46,7 @@ public interface DBI {
     public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType);
     public <T extends WildLogUser> T findUser(long inID, String inUsername, Class<T> inReturnType);
     public <T extends WildLogDeleteLog> T findDeleteLog(long inID, Class<T> inReturnType);
+    public <T extends ExtraData> T findExtraData(long inLinkID, String inFieldID, String inDataKey, Class<T> inReturnType);
 
     public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends LocationCore> List<T> listLocations(String inName, boolean inIncludeCachedValues, Class<T> inReturnType);
@@ -55,6 +57,7 @@ public interface DBI {
     public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType);
     public <T extends WildLogUser> List<T> listUsers(WildLogUserTypes inType, Class<T> inReturnType);
     public <T extends WildLogDeleteLog> List<T> listDeleteLogs(WildLogDataType inDataType, long inAfterAuditTime, Class<T> inReturnType);
+    public <T extends ExtraData> List<T> listExtraDatas(long inLinkID, String inFieldID, Class<T> inReturnType);
 
     public <T extends ElementCore> boolean createElement(T inElement, boolean inNewButUseOldAuditAndID);
     public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButUseOldAuditAndID);
@@ -66,6 +69,7 @@ public interface DBI {
     public <T extends INaturalistLinkedData> boolean createINaturalistLinkedData(T inINaturalistLinkedData);
     public <T extends WildLogUser> boolean createUser(T inWildLogUser, boolean inNewButUseOldAuditAndID);
     public <T extends WildLogDeleteLog> boolean createDeleteLog(T inWildLogDeleteLog, boolean inNewButUseOldAudit);
+    public <T extends ExtraData> boolean createExtraData(T inExtraData, boolean inNewButUseOldAudit);
     
     public <T extends ElementCore> boolean updateElement(T inElement, String inOldName, boolean inUseOldAudit);
     public <T extends LocationCore> boolean updateLocation(T inLocation, String inOldName, boolean inUseOldAudit);
@@ -76,6 +80,7 @@ public interface DBI {
     public <T extends AdhocData> boolean updateAdhocData(T inAdhocData);
     public <T extends INaturalistLinkedData> boolean updateINaturalistLinkedData(T inINaturalistLinkedData);
     public <T extends WildLogUser> boolean updateUser(T inWildLogUser, boolean inUseOldAudit);
+    public <T extends ExtraData> boolean updateExtraData(T inExtraData, boolean inUseOldAudit);
 
     public boolean deleteElement(long inID);
     public boolean deleteLocation(long inID);
@@ -85,6 +90,7 @@ public interface DBI {
     public boolean deleteAdhocData(String inFieldID, String inDataKey);
     public boolean deleteINaturalistLinkedData(long inWildLogID, long inINaturalistID);
     public boolean deleteUser(long inID);
+    public boolean deleteExtraData(long inID);
 
     public <S extends SightingCore> List<S> searchSightings(List<Long> inActiveSightingIDs, Date inStartDate, Date inEndDate, 
             List<Long> inActiveLocations, List<Long> inActiveVisits, List<Long> inActiveElements, 

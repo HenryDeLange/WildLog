@@ -32,6 +32,7 @@ import javax.swing.table.TableRowSorter;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -1853,6 +1854,68 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(0).setPreferredWidth(150);
                     inTable.getColumnModel().getColumn(1).setMinWidth(100);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+                    // Setup default sorting
+                    setupRowSorter(inTable, 1, 0, SortOrder.ASCENDING, SortOrder.ASCENDING);
+                }
+                else {
+                    inTable.setModel(new DefaultTableModel(new String[]{"No Users"}, 0));
+                }
+            }
+        });
+    }
+    
+    public static void setupExtraDataTable(final WildLogApp inApp, final JTable inTable, long inLinkID) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Load the table content
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                // Setup column names
+                String[] columnNames = {
+                                        "Key",
+                                        "Value",
+                                        "Remove",
+                                        "ID" // Hidden
+                                        };
+                // Load data from DB
+                final List<ExtraData> listExtraDatas = inApp.getDBI().listExtraDatas(inLinkID, null, ExtraData.class);
+                if (!listExtraDatas.isEmpty()) {
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listExtraDatas.size());
+                    // Setup new table data
+                    final Object[][] data = new Object[listExtraDatas.size()][columnNames.length + 1];
+                    for (int t = 0; t < listExtraDatas.size(); t++) {
+                        final int finalT = t;
+                        listCallables.add(new Callable<>() {
+                            @Override
+                            public Object call() throws Exception {
+                                ExtraData tempExtraData = listExtraDatas.get(finalT);
+                                data[finalT][0] = tempExtraData.getDataKey();
+                                data[finalT][1] = tempExtraData.getDataValue();
+                                data[finalT][2] = "";
+                                data[finalT][3] = tempExtraData.getID();
+                                return null;
+                            }
+                        });
+                    }
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                    // Create the new model
+                    setupTableModel(inTable, data, columnNames);
+                    // Setup the column and row sizes etc.
+                    setupRenderersAndThumbnailRows(inTable, false, true, -1);
+                    inTable.getColumnModel().getColumn(0).setMinWidth(100);
+                    inTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(100);
+                    inTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+                    inTable.getColumnModel().getColumn(2).setMinWidth(50);
+                    inTable.getColumnModel().getColumn(2).setPreferredWidth(50);
+                    inTable.getColumnModel().getColumn(2).setMaxWidth(50);
+                    inTable.removeColumn(inTable.getColumnModel().getColumn(3));
                     // Setup default sorting
                     setupRowSorter(inTable, 1, 0, SortOrder.ASCENDING, SortOrder.ASCENDING);
                 }

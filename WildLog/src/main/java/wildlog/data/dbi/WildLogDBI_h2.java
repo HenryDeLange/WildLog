@@ -1187,6 +1187,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                 if (currentDBVersion == 13) {
                                     doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v13 (before upgrade to 14)"));
                                     upgradeSuccess = doUpdate14();
+                                    wasMajorUpgrade = true; // Omdat die baie koelomme verander het
+                                }
+                                else
+                                if (currentDBVersion == 14) {
+                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v14 (before upgrade to 15)"));
+                                    upgradeSuccess = doUpdate15();
                                 }
                                 // Set the flag to indicate that an upgrade took place
                                 upgradeWasDone = true;
@@ -2463,6 +2469,28 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         WildLogApp.LOGGER.log(Level.INFO, "Finished update 14");
+        return true;
+    }
+    
+    private boolean doUpdate15() {
+        WildLogApp.LOGGER.log(Level.INFO, "Starting update 15");
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // The EXTRA table is created automatically, if absent
+            // There are no other changes...
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=15");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        WildLogApp.LOGGER.log(Level.INFO, "Finished update 15");
         return true;
     }
 

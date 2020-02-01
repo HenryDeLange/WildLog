@@ -10,7 +10,7 @@ public enum WildLogDataType implements EnumWithKey {
     SIGHTING        ("S", "SIGHTINGS"),
     FILE            ("F", "FILES"),
     STASH           ("T", "STASH"),
-    //EXTRA           ("X", "EXTRA"), // TODO: To be used for the planned custom key-value data that can be linked to the core DTOs
+    EXTRA           ("X", "EXTRA"),
     ADHOC           ("A", "ADHOC"),
     WILDLOG_USER    ("U", "USERS"),
     WILDLOG_OPTIONS ("W", "OPTIONS"),
