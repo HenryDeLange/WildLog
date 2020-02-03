@@ -163,7 +163,7 @@ public class UtilsCheckAndClean {
                                         destination = destination.getParent().resolve("wl_" + destination.getFileName());
                                     }
                                     UtilsFileProcessing.copyFile(originalFile, destination, false, true);
-                                    UtilsFileProcessing.deleteRecursive(originalFile.toFile());
+                                    UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(originalFile.toFile());
                                     fileCount.counter++;
                                 }
                             }
@@ -371,7 +371,7 @@ public class UtilsCheckAndClean {
             inProgressbarTask.setMessage("Cleanup Step 2: Validate database references to the files in the Workspace... " + inProgressbarTask.getProgress() + "%");
             finalHandleFeedback.println("");
             finalHandleFeedback.println("2) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
-            List<WildLogFile> allFiles = inApp.getDBI().listWildLogFiles(0, null, WildLogFile.class);
+            List<WildLogFile> allFiles = inApp.getDBI().listWildLogFiles(-1, null, WildLogFile.class);
             int filesWithoutID = 0;
             int filesWithoutPath = 0;
             int filesNotOnDisk = 0;
@@ -586,7 +586,7 @@ public class UtilsCheckAndClean {
             inProgressbarTask.setMessage("Cleanup Step 4: Check the file size and dates... " + inProgressbarTask.getProgress() + "%");
             finalHandleFeedback.println("");
             finalHandleFeedback.println("4) Compare the size and modified date of the files on disk to the values stored in the database.");
-            allFiles = inApp.getDBI().listWildLogFiles(0, null, WildLogFile.class);
+            allFiles = inApp.getDBI().listWildLogFiles(-1, null, WildLogFile.class);
             fileProcessCounter = 0;
             for (WildLogFile wildLogFile : allFiles) {
                 try {
@@ -764,7 +764,7 @@ public class UtilsCheckAndClean {
 
             // ---------------------8---------------------
             // Checks Visit dates
-            inProgressbarTask.setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + inProgressbarTask.getProgress() + "%");
+            inProgressbarTask.setMessage("Cleanup Step 8: Check the Period and linked Observation date ranges... " + inProgressbarTask.getProgress() + "%");
             finalHandleFeedback.println("");
             finalHandleFeedback.println("8) Check the Period and linked Observation date ranges.");
             allSightings = inApp.getDBI().listSightings(0, 0, 0, false, Sighting.class);
@@ -805,7 +805,7 @@ public class UtilsCheckAndClean {
                 }
                 linkCount++;
                 inProgressbarTask.setTaskProgress(83 + (int)(linkCount/(double)allSightings.size()*2));
-                inProgressbarTask.setMessage("Cleanup Step 8: Check the Period and linked Observation  date ranges... " + inProgressbarTask.getProgress() + "%");
+                inProgressbarTask.setMessage("Cleanup Step 8: Check the Period and linked Observation date ranges... " + inProgressbarTask.getProgress() + "%");
             }
 
             // ---------------------9---------------------
@@ -921,7 +921,7 @@ public class UtilsCheckAndClean {
                 }
                 // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
                 executorService.shutdown();
-                if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
+                if (!executorService.awaitTermination(5, TimeUnit.DAYS)) {
                     finalHandleFeedback.println("PROBLEM:       Processing the thumbnails took too long.");
                     finalHandleFeedback.println("  -UNRESOLVED: Thumbnails can be created on demand by the application.");
                 }
@@ -930,6 +930,7 @@ public class UtilsCheckAndClean {
             else {
                 inProgressbarTask.setTaskProgress(99);
                 inProgressbarTask.setMessage("Cleanup Step 9: (Optional) Recreating all default thumbnails... SKIPPED " + inProgressbarTask.getProgress() + "%");
+                finalHandleFeedback.println("");
                 finalHandleFeedback.println("9) Recreate the default thumbnails for all images. SKIPPED");
             }
             // --------------------- DONE ---------------------
