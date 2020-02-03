@@ -339,7 +339,10 @@ public class UtilsCheckAndClean {
                         List<WildLogFile> lstFiles = inApp.getDBI().listWildLogFiles(sighting.getID(), WildLogFileType.IMAGE, WildLogFile.class);
                         Set<String> setCameraNames = new HashSet<>();
                         for (WildLogFile wildLogFile : lstFiles) {
-                            setCameraNames.add(UtilsImageProcessing.getExifCameraNameFromJpeg(wildLogFile.getAbsolutePath()));
+                            String cameraName = UtilsImageProcessing.getExifCameraNameFromJpeg(wildLogFile.getAbsolutePath());
+                            if (cameraName != null && !cameraName.trim().isEmpty()) {
+                                setCameraNames.add(cameraName);
+                            }
                         }
                         for (String cameraName : setCameraNames) {
                             sighting.setTag((sighting.getTag() + " " + cameraName).trim());
