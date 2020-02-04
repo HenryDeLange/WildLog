@@ -1,5 +1,6 @@
 package wildlog.ui.helpers;
 
+import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -18,9 +19,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
+import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
@@ -45,6 +50,8 @@ import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
@@ -1864,7 +1871,7 @@ public final class UtilsTableGenerator {
         });
     }
     
-    public static void setupExtraDataTable(final WildLogApp inApp, final JTable inTable, long inLinkID) {
+    public static void setupExtraDataTable(final WildLogApp inApp, final JTable inTable, long inLinkID, WildLogDataType inLinkType) {
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -1875,11 +1882,13 @@ public final class UtilsTableGenerator {
                 String[] columnNames = {
                                         "Key",
                                         "Value",
-                                        "Remove",
                                         "ID" // Hidden
                                         };
                 // Load data from DB
-                final List<ExtraData> listExtraDatas = inApp.getDBI().listExtraDatas(inLinkID, null, ExtraData.class);
+                final List<ExtraData> listExtraDatas = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.USER, inLinkID, ExtraData.class);
+                // Always add an empty row for new records
+                listExtraDatas.add(new ExtraData(WildLogExtraDataFieldTypes.USER, 0L, WildLogDataType.NONE, "", ""));
+                // Populate the table data
                 if (!listExtraDatas.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listExtraDatas.size());
                     // Setup new table data
@@ -1892,8 +1901,7 @@ public final class UtilsTableGenerator {
                                 ExtraData tempExtraData = listExtraDatas.get(finalT);
                                 data[finalT][0] = tempExtraData.getDataKey();
                                 data[finalT][1] = tempExtraData.getDataValue();
-                                data[finalT][2] = "";
-                                data[finalT][3] = tempExtraData.getID();
+                                data[finalT][2] = tempExtraData.getID();
                                 return null;
                             }
                         });
@@ -1905,22 +1913,35 @@ public final class UtilsTableGenerator {
                         WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                     }
                     // Create the new model
-                    setupTableModel(inTable, data, columnNames);
+                    inTable.setModel(new DefaultTableModel(data, columnNames));
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false, true, -1);
                     inTable.getColumnModel().getColumn(0).setMinWidth(100);
                     inTable.getColumnModel().getColumn(0).setPreferredWidth(150);
                     inTable.getColumnModel().getColumn(1).setMinWidth(100);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(150);
-                    inTable.getColumnModel().getColumn(2).setMinWidth(50);
-                    inTable.getColumnModel().getColumn(2).setPreferredWidth(50);
-                    inTable.getColumnModel().getColumn(2).setMaxWidth(50);
-                    inTable.removeColumn(inTable.getColumnModel().getColumn(3));
+                    inTable.removeColumn(inTable.getColumnModel().getColumn(2));
                     // Setup default sorting
-                    setupRowSorter(inTable, 1, 0, SortOrder.ASCENDING, SortOrder.ASCENDING);
+                    setupRowSorter(inTable, 0, 1, SortOrder.ASCENDING, SortOrder.ASCENDING);
+                    // Setup the renderers and editors
+                    List<String> lstDataKeys = inApp.getDBI().queryExtraDataUniqueDataKeys(WildLogExtraDataFieldTypes.USER, inLinkType);
+                    JComboBox comboBox = new JComboBox();
+                    comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    comboBox.setEditable(true);
+                    if (lstDataKeys != null && !lstDataKeys.isEmpty()) {
+                        comboBox.setModel(new DefaultComboBoxModel(lstDataKeys.toArray()));
+                    }
+                    ComboBoxFixer.configureComboBoxes(comboBox);
+                    inTable.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer());
+                    inTable.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox));
+                    JTextField textField = new JTextField();
+// FIXME: Die textfield wys die cell dotted border
+// FIXME: Die textfield wys nie die editoer op die eerste kliek nie (moet double click)
+                    inTable.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer());
+                    inTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(textField));
                 }
                 else {
-                    inTable.setModel(new DefaultTableModel(new String[]{"No Users"}, 0));
+                    inTable.setModel(new DefaultTableModel(new String[]{"No Extra Data"}, 0));
                 }
             }
         });

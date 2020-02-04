@@ -2,6 +2,7 @@ package wildlog.data.dataobjects;
 
 import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 
 
 /**
@@ -11,10 +12,10 @@ import wildlog.data.enums.system.WildLogDataType;
  */
 public class ExtraData extends DataObjectWithAudit {
     public static enum EXTRA_FIELD_IDS {WILDLOG, USER};
-    public static enum EXTRA_KEY_IDS {BULK_IMPORT};
+    public static enum EXTRA_KEY_IDS {WL_BULK_IMPORT};
+    private WildLogExtraDataFieldTypes fieldType;
     private long linkID; // The ID of the linked data object (Element, Location, etc.)
     private WildLogDataType linkType;
-    private String fieldID;
     private String dataKey;
     private String dataValue;
 
@@ -22,12 +23,12 @@ public class ExtraData extends DataObjectWithAudit {
     public ExtraData() {
     }
 
-    public ExtraData(long inLinkID, WildLogDataType inLinkType, String inFieldID, String inDataKey, String inDataValue) {
-        fieldID = inFieldID;
-        dataKey = inDataKey;
-        dataValue = inDataValue;
+    public ExtraData(WildLogExtraDataFieldTypes inFieldType, long inLinkID, WildLogDataType inLinkType, String inDataKey, String inDataValue) {
+        fieldType = inFieldType;
         linkID = inLinkID;
         linkType = inLinkType;
+        dataKey = inDataKey;
+        dataValue = inDataValue;
     }
 
     
@@ -47,12 +48,12 @@ public class ExtraData extends DataObjectWithAudit {
         linkType = inLinkType;
     }
     
-    public String getFieldID() {
-        return fieldID;
+    public WildLogExtraDataFieldTypes getFieldType() {
+        return fieldType;
     }
 
-    public void setFieldID(String inFieldID) {
-        fieldID = inFieldID;
+    public void setFieldType(WildLogExtraDataFieldTypes inFieldType) {
+        fieldType = inFieldType;
     }
 
     public String getDataKey() {
@@ -69,6 +70,11 @@ public class ExtraData extends DataObjectWithAudit {
 
     public void setDataValue(String inDataValue) {
         dataValue = inDataValue;
+    }
+
+    @Override
+    public String toString() {
+        return "[ID: " + id + "; fieldType: " + fieldType + "; linkID: " + linkID + "; linkType: " + linkType + "; dataKey: " + dataKey + "; dataValue: " + dataValue + "]";
     }
 
 }

@@ -19,6 +19,7 @@ import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.data.enums.system.WildLogFileType;
 import wildlog.data.enums.system.WildLogUserTypes;
 
@@ -46,7 +47,7 @@ public interface DBI {
     public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType);
     public <T extends WildLogUser> T findUser(long inID, String inUsername, Class<T> inReturnType);
     public <T extends WildLogDeleteLog> T findDeleteLog(long inID, Class<T> inReturnType);
-    public <T extends ExtraData> T findExtraData(long inLinkID, String inFieldID, String inDataKey, Class<T> inReturnType);
+    public <T extends ExtraData> T findExtraData(WildLogExtraDataFieldTypes inFieldType, long inLinkID, String inDataKey, Class<T> inReturnType);
 
     public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends LocationCore> List<T> listLocations(String inName, boolean inIncludeCachedValues, Class<T> inReturnType);
@@ -57,7 +58,7 @@ public interface DBI {
     public <T extends INaturalistLinkedData> List<T> listINaturalistLinkedDatas(Class<T> inReturnType);
     public <T extends WildLogUser> List<T> listUsers(WildLogUserTypes inType, Class<T> inReturnType);
     public <T extends WildLogDeleteLog> List<T> listDeleteLogs(WildLogDataType inDataType, long inAfterAuditTime, Class<T> inReturnType);
-    public <T extends ExtraData> List<T> listExtraDatas(long inLinkID, String inFieldID, Class<T> inReturnType);
+    public <T extends ExtraData> List<T> listExtraDatas(WildLogExtraDataFieldTypes inFieldType, long inLinkID, Class<T> inReturnType);
 
     public <T extends ElementCore> boolean createElement(T inElement, boolean inNewButUseOldAuditAndID);
     public <T extends LocationCore> boolean createLocation(T inLocation, boolean inNewButUseOldAuditAndID);
@@ -99,6 +100,7 @@ public interface DBI {
     public <T extends LocationCount> List<T> queryLocationCountForElement(long inElementID, Class<T> inReturnType);
     public <T extends ElementCount> List<T> queryElementCountForLocation(long inLocationID, Class<T> inReturnType);
     public <T extends ElementCount> List<T> queryElementCountForVisit(long inVisitID, Class<T> inReturnType);
+    public List<String> queryExtraDataUniqueDataKeys(WildLogExtraDataFieldTypes inFieldType, WildLogDataType inLinkType);
 
     public long generateID();
     

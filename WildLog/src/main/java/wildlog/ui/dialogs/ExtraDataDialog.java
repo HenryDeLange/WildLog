@@ -4,26 +4,34 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.ExtraData;
+import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsTableGenerator;
 
+
 public class ExtraDataDialog extends JDialog {
+    private final long linkID;
+    private final WildLogDataType linkType;
 
-
-    public ExtraDataDialog(JFrame inParent, long inLinkID) {
+// TODO: Kry 'n manier om meer as een ry op 'n slag by te sit
+    
+// TODO: Die ry se waarde update eers as die table fokus verloor (dus as jy 'n cell edit en dan dadelik Save dan laai dit nie die waarde nie)
+    
+    public ExtraDataDialog(JFrame inParent, long inLinkID, WildLogDataType inLinkType) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[ExtraDataDialog]");
+        linkID = inLinkID;
+        linkType = inLinkType;
         // Auto generated code
         initComponents();
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
-        
-        
-        UtilsTableGenerator.setupExtraDataTable(WildLogApp.getApplication(), tblExtraData, inLinkID);
-        
-        
+        // Load initial data
+        UtilsTableGenerator.setupExtraDataTable(WildLogApp.getApplication(), tblExtraData, inLinkID, inLinkType);
     }
 
     /**
@@ -34,12 +42,12 @@ public class ExtraDataDialog extends JDialog {
     private void initComponents() {
 
         btnSave = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblExtraData = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Extra Data");
+        setMinimumSize(new java.awt.Dimension(400, 300));
         setModal(true);
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
@@ -51,27 +59,9 @@ public class ExtraDataDialog extends JDialog {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Extra Data");
-
         tblExtraData.setAutoCreateRowSorter(true);
-        tblExtraData.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Data Key", "Data Value", "Remove"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        tblExtraData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblExtraData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblExtraData.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblExtraData);
 
@@ -80,38 +70,58 @@ public class ExtraDataDialog extends JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 430, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(10, 10, 10))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+        WildLogApp app = WildLogApp.getApplication();
+        for (int r = 0; r < tblExtraData.getRowCount(); r++) {
+            ExtraData extraData = new ExtraData(WildLogExtraDataFieldTypes.USER, linkID, linkType, 
+                    (String) tblExtraData.getModel().getValueAt(r, 0), (String) tblExtraData.getModel().getValueAt(r, 1));
+            extraData.setID((long) tblExtraData.getModel().getValueAt(r, 2));
+            if (extraData.getDataKey().isEmpty()) {
+                if (extraData.getID() != 0) {
+                    System.out.println("DELETE: " + extraData);
+                    app.getDBI().deleteExtraData(extraData.getID());
+                }
+            }
+            else {
+                if (extraData.getID() == 0) {
+                    System.out.println("CREATE: " + extraData);
+                    app.getDBI().createExtraData(extraData, false);
+                }
+                else {
+// TODO: Moet nie rye update wat nie verander het nie...
+                    System.out.println("UPDATE: " + extraData);
+                    app.getDBI().updateExtraData(extraData, false);
+                }
+            }
+        }
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblExtraData;
     // End of variables declaration//GEN-END:variables

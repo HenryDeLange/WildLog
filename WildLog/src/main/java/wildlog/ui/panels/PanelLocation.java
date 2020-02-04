@@ -1527,7 +1527,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnApplyGPSToVisitActionPerformed
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
-        ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), locationWL.getID());
+        ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), locationWL.getID(), WildLogDataType.LOCATION);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnExtraDataActionPerformed
 

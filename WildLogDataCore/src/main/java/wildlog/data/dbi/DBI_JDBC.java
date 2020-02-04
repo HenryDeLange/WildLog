@@ -47,6 +47,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.data.enums.system.WildLogFileType;
 import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
@@ -193,9 +194,9 @@ public abstract class DBI_JDBC implements DBI {
             + "AUDITUSER varchar(150) NOT NULL)";
     protected static final String tableExtraData = "CREATE TABLE EXTRA ("
             + "ID bigint PRIMARY KEY NOT NULL, "
+            + "FIELDTYPE varchar(1) NOT NULL, "
             + "LINKID bigint NOT NULL, "
             + "LINKTYPE varchar(1) NOT NULL, "
-            + "FIELDID varchar(150) NOT NULL, "
             + "DATAKEY varchar(150) NOT NULL, "
             + "DATAVALUE TEXT, "
             + "AUDITTIME bigint NOT NULL, "
@@ -241,7 +242,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String findDeleteLog = "SELECT * FROM DELETELOGS"
             + " WHERE ID = ?";
     protected static final String findExtraData = "SELECT * FROM EXTRA"
-            + " WHERE LINKID = ? AND FIELDID = ? AND DATAKEY = ?";
+            + " WHERE LINKID = ? AND FIELDTYPE = ? AND DATAKEY = ?";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listLocationWithCached = "SELECT LOCATIONS.*,"
@@ -392,9 +393,9 @@ public abstract class DBI_JDBC implements DBI {
             + "VALUES (?, ?, ?, ?)";
     protected static final String createExtraData = "INSERT INTO EXTRA ("
             + "ID, "
+            + "FIELDTYPE, "
             + "LINKID, "
             + "LINKTYPE, "
-            + "FIELDID, "
             + "DATAKEY, "
             + "DATAVALUE, "
             + "AUDITTIME, "
@@ -539,9 +540,9 @@ public abstract class DBI_JDBC implements DBI {
             + "WHERE ID = ?";
     protected static final String updateExtraData = "UPDATE EXTRA SET "
             + "ID = ?, "
+            + "FIELDTYPE = ?, "
             + "LINKID = ?, "
             + "LINKTYPE = ?, "
-            + "FIELDID = ?, "
             + "DATAKEY = ?, "
             + "DATAVALUE = ?, "
             + "AUDITTIME = ?, "
@@ -582,6 +583,10 @@ public abstract class DBI_JDBC implements DBI {
             + " LEFT JOIN ELEMENTS ON ELEMENTS.ID = SIGHTINGS.ELEMENTID"
             + " WHERE SIGHTINGS.VISITID = ?"
             + " GROUP BY SIGHTINGS.ELEMENTID ORDER BY CNT DESC";
+    protected static final String queryExtraDataUniqueDataKeys = "SELECT DISTINCT DATAKEY"
+            + " FROM EXTRA"
+            + " WHERE FIELDTYPE = ? AND LINKTYPE = ?"
+            + " ORDER BY DATAKEY";
     // Monitor
     protected static final String activeSessionsCount = "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SESSIONS";
     // Variables
@@ -715,7 +720,8 @@ public abstract class DBI_JDBC implements DBI {
             if (!results.next()) {
                 state = conn.createStatement();
                 state.execute(tableExtraData);
-                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V15_EXTRA_LINK_FIELD_KEY ON EXTRA (LINKID, FIELDID, DATAKEY)");
+                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_LINK_FIELD_KEY ON EXTRA (LINKID, FIELDTYPE, DATAKEY)");
+                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_FIELD_LINKTYPE_KEY ON EXTRA (FIELDTYPE, LINKTYPE, DATAKEY)");
                 closeStatement(state);
             }
             closeResultset(results);
@@ -1624,14 +1630,14 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends ExtraData> T findExtraData(long inLinkID, String inFieldID, String inDataKey, Class<T> inReturnType) {
+    public <T extends ExtraData> T findExtraData(WildLogExtraDataFieldTypes inFieldType, long inLinkID, String inDataKey, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T temp = null;
         try {
             state = conn.prepareStatement(findExtraData);
             state.setLong(1, inLinkID);
-            state.setString(2, UtilsData.sanitizeString(inFieldID));
+            state.setString(2, UtilsData.getKeyFromEnum(inFieldType));
             state.setString(3, UtilsData.sanitizeString(inDataKey));
             results = state.executeQuery();
             if (results.next()) {
@@ -1653,9 +1659,9 @@ public abstract class DBI_JDBC implements DBI {
 
     private <T extends ExtraData> void populateExtraData(T inExtraData, ResultSet inResults) throws SQLException {
         inExtraData.setID(inResults.getLong("ID"));
+        inExtraData.setFieldType(WildLogExtraDataFieldTypes.getEnumFromText(inResults.getString("FIELDTYPE")));
         inExtraData.setLinkID(inResults.getLong("LINKID"));
         inExtraData.setLinkType(WildLogDataType.getEnumFromText(inResults.getString("LINKTYPE")));
-        inExtraData.setFieldID(inResults.getString("FIELDID"));
         inExtraData.setDataKey(inResults.getString("DATAKEY"));
         inExtraData.setDataValue(inResults.getString("DATAVALUE"));
         inExtraData.setAuditTime(inResults.getLong("AUDITTIME"));
@@ -2089,23 +2095,23 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends ExtraData> List<T> listExtraDatas(long inLinkID, String inFieldID, Class<T> inReturnType) {
+    public <T extends ExtraData> List<T> listExtraDatas(WildLogExtraDataFieldTypes inFieldType, long inLinkID, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<>();
         try {
             String sql = listExtraData;
-            if (inLinkID > 0 && inFieldID != null && inFieldID.length() > 0) {
-                sql = sql + " WHERE LINKID = ? AND FIELDID = ?";
-                sql = sql + " ORDER BY FIELDID, DATAKEY";
+            if (inFieldType != null && inLinkID > 0) {
+                sql = sql + " WHERE LINKID = ? AND FIELDTYPE = ?";
+                sql = sql + " ORDER BY LINKID, FIELDTYPE, DATAKEY";
                 state = conn.prepareStatement(sql);
                 state.setLong(1, inLinkID);
-                state.setString(2, UtilsData.sanitizeString(inFieldID));
+                state.setString(2, UtilsData.getKeyFromEnum(inFieldType));
             }
             else
             if (inLinkID > 0) {
                 sql = sql + " WHERE LINKID = ?";
-                sql = sql + " ORDER BY FIELDID, DATAKEY";
+                sql = sql + " ORDER BY LINKID, FIELDTYPE, DATAKEY";
                 state = conn.prepareStatement(sql);
                 state.setLong(1, inLinkID);
             }
@@ -2782,6 +2788,10 @@ public abstract class DBI_JDBC implements DBI {
     public <T extends ExtraData> boolean createExtraData(T inExtraData, boolean inNewButUseOldAuditAndID) {
         PreparedStatement state = null;
         try {
+            // Get the new ID
+            if (!inNewButUseOldAuditAndID) {
+                inExtraData.setID(generateID());
+            }
             //Insert
             state = conn.prepareStatement(createExtraData);
             // Populate the values
@@ -2823,9 +2833,9 @@ public abstract class DBI_JDBC implements DBI {
 
     private <T extends ExtraData> void maintainExtraData(PreparedStatement state, T inExtraData, boolean inUseOldAudit) throws SQLException {
         state.setLong(1, inExtraData.getID());
-        state.setLong(2, inExtraData.getLinkID());
-        state.setString(3, UtilsData.getKeyFromEnum(inExtraData.getLinkType()));
-        state.setString(4, inExtraData.getFieldID());
+        state.setString(2, UtilsData.getKeyFromEnum(inExtraData.getFieldType()));
+        state.setLong(3, inExtraData.getLinkID());
+        state.setString(4, UtilsData.getKeyFromEnum(inExtraData.getLinkType()));
         state.setString(5, inExtraData.getDataKey());
         state.setString(6, inExtraData.getDataValue());
         if (!inUseOldAudit) {
@@ -3042,6 +3052,11 @@ public abstract class DBI_JDBC implements DBI {
     
     @Override
     public boolean deleteExtraData(long inID) {
+        
+// TODO: Also delete when linked record gets deleted
+// TODO: Also check during Check and Clean
+// TODO: Also add to Cloud Sync
+
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteExtraData);
@@ -3314,6 +3329,30 @@ public abstract class DBI_JDBC implements DBI {
         }
         catch (InstantiationException | IllegalAccessException ex) {
             ex.printStackTrace(System.err);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+    
+    @Override
+    public List<String> queryExtraDataUniqueDataKeys(WildLogExtraDataFieldTypes inFieldType, WildLogDataType inLinkType) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<String> tempList = new ArrayList<>();
+        try {
+            String sql = queryExtraDataUniqueDataKeys;
+            state = conn.prepareStatement(sql);
+            state.setString(1, UtilsData.getKeyFromEnum(inFieldType));
+            state.setString(2, UtilsData.getKeyFromEnum(inLinkType));
+            results = state.executeQuery();
+            while (results.next()) {
+                tempList.add(results.getString("DATAKEY").trim());
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
         }
         finally {
             closeStatementAndResultset(state, results);
