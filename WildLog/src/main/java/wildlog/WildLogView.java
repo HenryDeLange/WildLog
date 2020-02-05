@@ -93,6 +93,7 @@ import wildlog.maps.utils.UtilsGPS;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.reports.ReportVisitDates;
+import wildlog.ui.dialogs.CheckAndCleanStepsDialog;
 import wildlog.ui.dialogs.GPSGridConversionDialog;
 import wildlog.ui.dialogs.ImageResizeDialog;
 import wildlog.ui.dialogs.MergeElementsDialog;
@@ -2410,19 +2411,27 @@ public final class WildLogView extends JFrame {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    final int recreateThumbnailsResult = WLOptionPane.showOptionDialog(app.getMainFrame(),
-                            "<html>Would you like to also recreate all cached image thumbnails?"
-                                    + "<br/>Recreating the thumbnails can improve system performance and might correct thumbnails that are displaying incorrectly."
-                                    + "<br/>Warning: This step is optional but recommended. It can take very long to complete."
-                                    + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
-                            "Recreate Thumbnails?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
-                            null, new String[] {
-                                "Delete all, recreate essential",
-                                "Delete all, recreate all", 
-                                "Delete all, don't recreate any", 
-                                "Don't delete, create missing", 
-                                "Don't delete, don't create any"
-                            }, null);
+                    final CheckAndCleanStepsDialog stepsDialog = new CheckAndCleanStepsDialog();
+                    stepsDialog.setVisible(true);
+                    final int recreateThumbnailsResult;
+                    if (stepsDialog.getSelectedSteps().contains(9)) {
+                        recreateThumbnailsResult = WLOptionPane.showOptionDialog(app.getMainFrame(),
+                                "<html>Would you like to also recreate all cached image thumbnails?"
+                                        + "<br/>Recreating the thumbnails can improve system performance and might correct thumbnails that are displaying incorrectly."
+                                        + "<br/>Warning: This step is optional but recommended. It can take very long to complete."
+                                        + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
+                                "Recreate Thumbnails?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                                null, new String[] {
+                                    "Delete all, recreate essential",
+                                    "Delete all, recreate all", 
+                                    "Delete all, don't recreate any", 
+                                    "Don't delete, create missing", 
+                                    "Don't delete, don't create any"
+                                }, null);
+                    }
+                    else {
+                        recreateThumbnailsResult = 4;
+                    }
                     // Ja... Ek moet STUPID baie SwingUtilities.invokeLater calls gebruik...
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
@@ -2463,7 +2472,7 @@ public final class WildLogView extends JFrame {
                             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                                 @Override
                                 protected Object doInBackground() throws Exception {
-                                    UtilsCheckAndClean.doCheckAndClean(app, this, recreateThumbnailsResult);
+                                    UtilsCheckAndClean.doCheckAndClean(app, this, stepsDialog.getSelectedSteps(), recreateThumbnailsResult);
                                     return null;
                                 }
 

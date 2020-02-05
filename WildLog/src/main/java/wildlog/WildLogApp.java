@@ -83,6 +83,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
+    private static WildLogApp INSTANCE = null;
     public static String WILDLOG_VERSION = "6.2.0.beta";
     public static Class APPLICATION_CLASS = WildLogApp.class;
     public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
@@ -484,7 +485,10 @@ public class WildLogApp extends Application {
      * @return the instance of WildLogApp
      */
     public static WildLogApp getApplication() {
-        return (WildLogApp) Application.getInstance(APPLICATION_CLASS);
+        if (INSTANCE == null) {
+            INSTANCE = (WildLogApp) Application.getInstance(APPLICATION_CLASS);
+        }
+        return INSTANCE;
     }
 
     /**

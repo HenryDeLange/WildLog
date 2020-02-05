@@ -56,7 +56,8 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected SecureRandom randomGenerator;
     // Version
-    protected static final int WILDLOG_DB_VERSION = 15;
+//    protected static final int WILDLOG_DB_VERSION = 15;
+    protected static final int WILDLOG_DB_VERSION = 14;
     // Tables
     protected static final String tableElements = "CREATE TABLE ELEMENTS ("
             + "ID bigint PRIMARY KEY NOT NULL, "
@@ -716,14 +717,14 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute(tableDeleteLog);
                 closeStatement(state);
             }
-            results = conn.getMetaData().getTables(null, null, "EXTRA", null);
-            if (!results.next()) {
-                state = conn.createStatement();
-                state.execute(tableExtraData);
-                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_LINK_FIELD_KEY ON EXTRA (LINKID, FIELDTYPE, DATAKEY)");
-                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_FIELD_LINKTYPE_KEY ON EXTRA (FIELDTYPE, LINKTYPE, DATAKEY)");
-                closeStatement(state);
-            }
+//            results = conn.getMetaData().getTables(null, null, "EXTRA", null);
+//            if (!results.next()) {
+//                state = conn.createStatement();
+//                state.execute(tableExtraData);
+//                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_LINK_FIELD_KEY ON EXTRA (LINKID, FIELDTYPE, DATAKEY)");
+//                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_FIELD_LINKTYPE_KEY ON EXTRA (FIELDTYPE, LINKTYPE, DATAKEY)");
+//                closeStatement(state);
+//            }
             closeResultset(results);
             closeResultset(results);
             results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
