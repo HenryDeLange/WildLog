@@ -59,7 +59,7 @@ public class CheckAndCleanStepsDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Check and Clean Steps");
-        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Export.png")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
@@ -102,7 +102,7 @@ public class CheckAndCleanStepsDialog extends JDialog {
 
         jCheckBox6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jCheckBox6.setSelected(true);
-        jCheckBox6.setText("Step 6: Delete exports and thumbnails");
+        jCheckBox6.setText("Step 6: Delete exports");
         jCheckBox6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jCheckBox6.setName("jCheckBox6"); // NOI18N
         getContentPane().add(jCheckBox6);
@@ -123,14 +123,14 @@ public class CheckAndCleanStepsDialog extends JDialog {
 
         jCheckBox9.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jCheckBox9.setSelected(true);
-        jCheckBox9.setText("Step 9: Recreating essential default thumbnails");
+        jCheckBox9.setText("Step 9: Recreating thumbnails");
         jCheckBox9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jCheckBox9.setName("jCheckBox9"); // NOI18N
         getContentPane().add(jCheckBox9);
 
         chkStep10.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkStep10.setSelected(true);
-        chkStep10.setText("Step 10: Set camera model as Observation Tag (WEI)");
+        chkStep10.setText("Step 10: WEI - Set camera model as Observation Tag");
         chkStep10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkStep10.setName("chkStep10"); // NOI18N
         getContentPane().add(chkStep10);

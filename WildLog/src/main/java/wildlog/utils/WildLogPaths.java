@@ -81,6 +81,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace")),
     WILDLOG_EXPORT_SYSTEM_MONITOR         (Paths.get("Export", "SystemMonitor")),
     WILDLOG_BUNDLED_APPLICATION           (Paths.get("WildLogApplication")),
+    WILDLOG_PROCESSES                     (Paths.get("Processes")),
     /** Folder for temporary files */
     WILDLOG_TEMP                          (Paths.get(System.getProperty("user.home"), "WildLogSettings", "Temp"));
 

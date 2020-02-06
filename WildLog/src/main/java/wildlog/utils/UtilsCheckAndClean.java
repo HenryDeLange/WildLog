@@ -49,11 +49,14 @@ public class UtilsCheckAndClean {
         long startTime = System.currentTimeMillis();
         inProgressbarTask.setTaskProgress(0);
         inProgressbarTask.setMessage("Workspace Cleanup starting...");
-        // Setup the feedback file
-        Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("WorkspaceCleanupFeedback.txt");
+        Path feedbackFile = null;
         PrintWriter feedback = null;
         // Start cleanup
         try {
+            // Setup the feedback file
+            Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+            feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                    "WorkspaceCleanupFeedback_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
             feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
             feedback.println("------------------------------------------------");
             feedback.println("---------- STARTING WORKSPACE CLEANUP ----------");
@@ -511,9 +514,9 @@ public class UtilsCheckAndClean {
             // ---------------------6---------------------
             // Delete alle temporary/onnodige files en folders
             if (inSelectedSteps.contains(6)) {
-                inProgressbarTask.setMessage("Cleanup Step 6: Delete exports and thumbnails... " + inProgressbarTask.getProgress() + "%");
+                inProgressbarTask.setMessage("Cleanup Step 6: Delete exports... " + inProgressbarTask.getProgress() + "%");
                 finalHandleFeedback.println("");
-                finalHandleFeedback.println("6) Delete all exports and thumbnails (since these files can be recreated from within WildLog).");
+                finalHandleFeedback.println("6) Delete all exports.");
                 try {
                     UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT.getAbsoluteFullPath().toFile());
                 }
@@ -523,20 +526,7 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("PROBLEM:       Could not delete export folders.");
                     finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                 }
-                inProgressbarTask.setTaskProgress(72);
-                inProgressbarTask.setMessage("Cleanup Step 6: Delete exports and thumbnails... " + inProgressbarTask.getProgress() + "%");
-                if (inRecreateThumbnailsResult >= 0 && inRecreateThumbnailsResult <= 2) {
-                    try {
-
-                        UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
-                    }
-                    catch (final IOException ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, "Could not delete thumbnail folders.");
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        finalHandleFeedback.println("PROBLEM:       Could not delete thumbnail folders.");
-                        finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
-                    }
-                }
+// FIXME: Die progress sprong is te groot (nou dat die thumbnail delete skuif na stap 9)
                 inProgressbarTask.setTaskProgress(79);
             }
             // ---------------------7---------------------
@@ -672,6 +662,21 @@ public class UtilsCheckAndClean {
             // ---------------------9---------------------
             // Re-create die default thumbnails
             if (inSelectedSteps.contains(9)) {
+// FIXME: Die delete moet ook progress wys
+                inProgressbarTask.setTaskProgress(85);
+                inProgressbarTask.setMessage("Cleanup Step 9: Delete thumbnails... " + inProgressbarTask.getProgress() + "%");
+                if (inRecreateThumbnailsResult >= 0 && inRecreateThumbnailsResult <= 2) {
+                    try {
+
+                        UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().toFile());
+                    }
+                    catch (final IOException ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, "Could not delete thumbnail folders.");
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        finalHandleFeedback.println("PROBLEM:       Could not delete thumbnail folders.");
+                        finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
+                    }
+                }
                 if (inRecreateThumbnailsResult == 0) {
                     // Recreate essential thumbnails
                     inProgressbarTask.setMessage("Cleanup Step 9: Recreating essential default thumbnails... " + inProgressbarTask.getProgress() + "%");
@@ -909,7 +914,9 @@ public class UtilsCheckAndClean {
             }
         }
         // Open the summary document
-        UtilsFileProcessing.openFile(feedbackFile);
+        if (feedbackFile != null) {
+            UtilsFileProcessing.openFile(feedbackFile);
+        }
     }
 
     // Setup helper classes (Op hierdie stadium wil ek al die code op een plek hou, ek kan dit later in Util methods in skuif of iets...)
