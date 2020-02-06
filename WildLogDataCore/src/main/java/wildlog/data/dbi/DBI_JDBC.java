@@ -56,6 +56,7 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected SecureRandom randomGenerator;
     // Version
+// FIXME: Sit later terug
 //    protected static final int WILDLOG_DB_VERSION = 15;
     protected static final int WILDLOG_DB_VERSION = 14;
     // Tables
@@ -717,6 +718,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute(tableDeleteLog);
                 closeStatement(state);
             }
+// FIXME: Sit later terug
 //            results = conn.getMetaData().getTables(null, null, "EXTRA", null);
 //            if (!results.next()) {
 //                state = conn.createStatement();
