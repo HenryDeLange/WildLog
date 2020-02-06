@@ -1189,6 +1189,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                                     upgradeSuccess = doUpdate14();
                                     wasMajorUpgrade = true; // Omdat die baie koelomme verander het
                                 }
+// FIXME: Sit later terug
 //                                else
 //                                if (currentDBVersion == 14) {
 //                                    doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v14 (before upgrade to 15)"));
