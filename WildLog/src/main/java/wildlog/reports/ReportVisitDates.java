@@ -240,9 +240,14 @@ public class ReportVisitDates {
                         }
                         row.createCell(5).setCellValue(reportData.days);
                         row.createCell(6).setCellValue(reportData.sigtingCount);
-                        String tags = reportData.tags.toString();
-                        if (tags.length() > 2) {
-                            row.createCell(7).setCellValue(tags.substring(1, tags.length() - 2));
+                        if (reportData.tags != null) {
+                            String tags = reportData.tags.toString();
+                            if (tags.length() > 2) {
+                                row.createCell(7).setCellValue(tags.substring(1, tags.length() - 2));
+                            }
+                            else {
+                                row.createCell(7).setCellValue("");
+                            }
                         }
                         else {
                             row.createCell(7).setCellValue("");
