@@ -52,6 +52,7 @@ import wildlog.ui.panels.bulkupload.LocationSelectionDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 
 public final class UtilsFileProcessing {
+    private static final int FILE_LIMIT = 3000;
     private static final ExecutorService executorService = 
             Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_FileUpload"));
     private static final Map<String, Object> fileLocks = Collections.synchronizedMap(new HashMap<>(50));
@@ -645,6 +646,24 @@ public final class UtilsFileProcessing {
                     int result = fileChooser.showOpenDialog(WildLogApp.getApplication().getMainFrame());
                     if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFiles() != null) {
                         setProgress(1);
+                        setMessage("Busy with the Stash Files Process (finding files) " + getProgress() + "%");
+                        // Get a list of files into the stash folder
+                        List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(fileChooser.getSelectedFiles());
+                        final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
+                        if (lstAllFiles.size() > FILE_LIMIT) {
+                            result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
+                                    "<html>A total of " + lstAllFiles.size() + " files have been selected for stashing."
+                                            + "<br/>WildLog might become unresponsive if you continue."
+                                            + "<br/>It is recommended to select a smaller subset of files."
+                                            + "<br/><b>Would you like to cancel the Bulk Import process?</b>", 
+                                    "Too Many Files", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                            if (result != JOptionPane.NO_OPTION) {
+                                setProgress(100);
+                                setMessage("Aborted the Stash Files Process " + getProgress() + "%");
+                                return null;
+                            }
+                        }
+                        setProgress(2);
                         setMessage("Busy with the Stash Files Process " + getProgress() + "%");
                         // Create the new visit of type Stash
                         Location location = WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, false, Location.class);
@@ -662,14 +681,10 @@ public final class UtilsFileProcessing {
                         visit.setType(VisitType.STASHED);
                         visit.setLocationID(location.getID());
                         WildLogApp.getApplication().getDBI().createVisit(visit, false);
-                        setProgress(2);
-                        setMessage("Busy with the Stash Files Process " + getProgress() + "%");
-                        // Copy the files into the stash folder
-                        List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(fileChooser.getSelectedFiles());
-                        final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
-                        Path destinationPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
                         setProgress(3);
                         setMessage("Busy with the Stash Files Process " + getProgress() + "%");
+                        // Copy the files into the stash folder
+                        Path destinationPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
                         int errors = 0;
                         int filesProcessed = 0;
                         for (Path sourcePath : lstAllFiles) {

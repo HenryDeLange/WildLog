@@ -45,6 +45,7 @@ import wildlog.utils.WildLogSystemImages;
 
 
 public class BulkUploadDataLoader {
+    private static final int FILE_LIMIT = 3000;
     
     public static BulkUploadDataWrapper genenrateTableData(List<Path> inLstFolderPaths, boolean inIsRecuresive, 
             int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp, 
@@ -74,13 +75,14 @@ public class BulkUploadDataLoader {
                 return null;
             }
         }
-        if (lstAllFiles.size() > 3000) {
+        if (lstAllFiles.size() > FILE_LIMIT) {
             int result = WLOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
-                    "<html>A very large number of files have been selected for processing. WildLog might become unresponsive if you continue. "
+                    "<html>A total of " + lstAllFiles.size() + " files have been selected for processing."
+                            + "<br/>WildLog might become unresponsive if you continue."
                             + "<br/>It is recommended to select a smaller subset of files."
-                            + "<br/>Would you like to cancel the Bulk Import process?", 
+                            + "<br/><b>Would you like to cancel the Bulk Import process?</b>", 
                     "Too Many Files", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (result == JOptionPane.YES_OPTION) {
+            if (result != JOptionPane.NO_OPTION) {
                 return null;
             }
         }
