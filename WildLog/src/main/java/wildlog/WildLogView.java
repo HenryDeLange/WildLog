@@ -3847,13 +3847,13 @@ public final class WildLogView extends JFrame {
                         super.finished();
                         try {
                             WLOptionPane.showMessageDialog(app.getMainFrame(), 
-                                    "The databse was optimised successfully. Please restart the application.", 
+                                    "The database was optimised successfully. Please restart the application.", 
                                     "Database Optimisation Complete", WLOptionPane.INFORMATION_MESSAGE);
                         }
                         catch (Exception ex) {
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                             WLOptionPane.showMessageDialog(app.getMainFrame(), 
-                                    "The databse could not be optimised successfully.", 
+                                    "The database could not be optimised successfully.", 
                                     "Database Optimisation Failed!", WLOptionPane.ERROR_MESSAGE);
                         }
                         // Close the application (because the DB was shutdown)
