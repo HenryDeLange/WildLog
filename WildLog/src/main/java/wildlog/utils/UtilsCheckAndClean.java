@@ -219,8 +219,8 @@ public class UtilsCheckAndClean {
                     inProgressbarTask.setTaskProgress(4 + (int) (countSightings / (double) allSightings.size() * 4));
                     inProgressbarTask.setMessage("Cleanup Step 1: Check links between records in the database... " + inProgressbarTask.getProgress() + "%");
                 }
-                inProgressbarTask.setTaskProgress(8);
             }
+            inProgressbarTask.setTaskProgress(8);
             // ---------------------2---------------------
             // First check database files
             // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
@@ -392,8 +392,8 @@ public class UtilsCheckAndClean {
                         badStashes++;
                     }
                 }
-                inProgressbarTask.setTaskProgress(27);
             }
+            inProgressbarTask.setTaskProgress(27);
             // ---------------------3---------------------
             // Validate that the Workspace files are in the database
             CleanupCounter filesNotInDB = new CleanupCounter();
@@ -436,8 +436,8 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("PROBLEM:       Could not check all files on disk.");
                     finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                 }
-                inProgressbarTask.setTaskProgress(47);
             }
+            inProgressbarTask.setTaskProgress(47);
             // ---------------------4---------------------
             // By this time the file link should be "trusted" enough to use it to update inconsistent FileDate and FileSize values (not just empty ones)
             int filesWithIncorrectDate = 0;
@@ -492,8 +492,8 @@ public class UtilsCheckAndClean {
                     inProgressbarTask.setTaskProgress(47 + (int) (fileProcessCounter++ / (double) allFiles.size() * 12));
                     inProgressbarTask.setMessage("Cleanup Step 4: Check the file size and dates... " + inProgressbarTask.getProgress() + "%");
                 }
-                inProgressbarTask.setTaskProgress(69);
             }
+            inProgressbarTask.setTaskProgress(69);
             // ---------------------5---------------------
             // As alles klaar is delete alle lee en temporary folders
             if (inSelectedSteps.contains(5)) {
@@ -509,8 +509,8 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("PROBLEM:       Could not delete all empty folders.");
                     finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                 }
-                inProgressbarTask.setTaskProgress(71);
             }
+            inProgressbarTask.setTaskProgress(71);
             // ---------------------6---------------------
             // Delete alle temporary/onnodige files en folders
             if (inSelectedSteps.contains(6)) {
@@ -526,9 +526,9 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("PROBLEM:       Could not delete export folders.");
                     finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                 }
-// FIXME: Die progress sprong is te groot (nou dat die thumbnail delete skuif na stap 9)
-                inProgressbarTask.setTaskProgress(79);
             }
+// FIXME: Die progress sprong is te groot (nou dat die thumbnail delete skuif na stap 9)
+            inProgressbarTask.setTaskProgress(79);
             // ---------------------7---------------------
             // Check GPS Accuracy
             int badGPSAccuracy = 0;
@@ -610,8 +610,8 @@ public class UtilsCheckAndClean {
                     inProgressbarTask.setTaskProgress(81 + (int) (countGPSAccuracy / (double) allSightings.size() * 2));
                     inProgressbarTask.setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + inProgressbarTask.getProgress() + "%");
                 }
-                inProgressbarTask.setTaskProgress(83);
             }
+            inProgressbarTask.setTaskProgress(83);
             // ---------------------8---------------------
             // Checks Visit dates
             int badVisitDates = 0;
@@ -659,11 +659,11 @@ public class UtilsCheckAndClean {
                     inProgressbarTask.setMessage("Cleanup Step 8: Check the Period and linked Observation date ranges... " + inProgressbarTask.getProgress() + "%");
                 }
             }
+            inProgressbarTask.setTaskProgress(85);
             // ---------------------9---------------------
             // Re-create die default thumbnails
             if (inSelectedSteps.contains(9)) {
 // FIXME: Die delete moet ook progress wys
-                inProgressbarTask.setTaskProgress(85);
                 inProgressbarTask.setMessage("Cleanup Step 9: Delete thumbnails... " + inProgressbarTask.getProgress() + "%");
                 if (inRecreateThumbnailsResult >= 0 && inRecreateThumbnailsResult <= 2) {
                     try {
@@ -792,7 +792,6 @@ public class UtilsCheckAndClean {
                         finalHandleFeedback.println("PROBLEM:       Processing the thumbnails took too long.");
                         finalHandleFeedback.println("  -UNRESOLVED: Thumbnails can be created on demand by the application.");
                     }
-                    inProgressbarTask.setTaskProgress(99);
                 }
                 else {
                     inProgressbarTask.setTaskProgress(99);
@@ -801,6 +800,7 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("9) Recreate the default thumbnails for all images. SKIPPED");
                 }
             }
+            inProgressbarTask.setTaskProgress(99);
             // ---------------------10---------------------
             // For WEI, set the camera model as a tag
             if (inSelectedSteps.contains(10)) {
