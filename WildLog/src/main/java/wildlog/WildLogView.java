@@ -1950,7 +1950,7 @@ public final class WildLogView extends JFrame {
                     return true;
                 }
                 if (WildLogFileExtentions.Images.isJPG(inFile.toPath())) {
-                        return true;
+                    return true;
                 }
                 return false;
             }

@@ -4,7 +4,9 @@ import java.awt.Cursor;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -312,9 +314,12 @@ public class AdvancedDialog extends JDialog {
     }//GEN-LAST:event_btnSetDurationActionPerformed
 
     private void btnDuplicateSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDuplicateSightingsActionPerformed
-        Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("DetectDuplicatesFeedback.txt");
+        Path feedbackFile = null;
         PrintWriter feedback = null;
         try {
+            Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+            feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                    "DetectDuplicatesFeedback_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
             feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
             List<Sighting> listSightings = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
             feedback.println("Checking " + listSightings.size() + " Observations for similarities.");

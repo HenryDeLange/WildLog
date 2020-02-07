@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,6 +45,7 @@ import wildlog.ui.helpers.renderers.WorkspaceTreeDataWrapper;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.UtilsTime;
 import wildlog.utils.WildLogPaths;
 
 
@@ -392,9 +394,12 @@ public class WorkspaceImportDialog extends JDialog {
                         try {
                             int totalSelectedNodes = getNumberOfSelectedNodes(treWorkspace.getModel(), (DefaultMutableTreeNode) treWorkspace.getModel().getRoot());
                             if (totalSelectedNodes > 0) {
-                                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("WorkspaceImportReport.txt");
+                                Path feedbackFile = null;
                                 PrintWriter feedback = null;
                                 try {
+                                    Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                                    feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                                            "WorkspaceImportReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                                     feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                                     feedback.println("---------------------------------------------");
                                     feedback.println("---------- Workspace Import Report ----------");

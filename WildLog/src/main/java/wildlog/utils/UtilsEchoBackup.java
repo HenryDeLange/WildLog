@@ -37,9 +37,12 @@ public class UtilsEchoBackup {
             inProgressbarTask.setMessage("Busy with the Echo Workspace Backup " + inProgressbarTask.getProgress() + "%");
             WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
             // Setup the report
-            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("EchoWorkspaceReport.txt");
+            Path feedbackFile = null;
             PrintWriter feedback = null;
             try {
+                Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                        "EchoWorkspaceReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                 feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                 feedback.println("--------------------------------------------------");
                 feedback.println("---------- Echo Workspace Backup Report ----------");
@@ -86,6 +89,7 @@ public class UtilsEchoBackup {
                 inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
                 WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
                 // Walk the active workspace and copy all files that aren't already present in the echo path
+                final Path finalFeedbackFile = feedbackFile;
                 Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
 
                     @Override
@@ -101,7 +105,7 @@ public class UtilsEchoBackup {
                     @Override
                     public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
                         // Skip the report file
-                        if (inFilePath.equals(feedbackFile)) {
+                        if (inFilePath.equals(finalFeedbackFile)) {
                             return FileVisitResult.SKIP_SUBTREE;
                         }
                         Path echoFile = echoPath.resolve(workspacePath.relativize(inFilePath));
@@ -194,13 +198,16 @@ public class UtilsEchoBackup {
                     feedback.flush();
                     feedback.close();
                     // Copy the report to the echo folder
-                    try {
-                        Path echoPath = inEchoPath;
-                        UtilsFileProcessing.copyFile(feedbackFile, echoPath.resolve(feedbackFile.getFileName()), true, true);
-                    }
-                    catch (Exception ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        hasError = true;
+                    if (feedbackFile != null) {
+                        try {
+                            Path echoPath = inEchoPath;
+                            UtilsFileProcessing.copyFile(feedbackFile, echoPath.resolve(
+                                    WildLogPaths.WILDLOG_PROCESSES.getRelativePath()).resolve(feedbackFile.getFileName()), true, true);
+                        }
+                        catch (Exception ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                            hasError = true;
+                        }
                     }
                     // Open the summary document
                     UtilsFileProcessing.openFile(feedbackFile);

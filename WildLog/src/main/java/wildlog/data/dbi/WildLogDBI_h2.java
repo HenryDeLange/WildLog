@@ -430,9 +430,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         Statement state = null;
         ResultSet results = null;
         try {
-            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("CSVImportReport.txt");
+            Path feedbackFile = null;
             PrintWriter feedback = null;
             try {
+                Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                        "CSVImportReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                 feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                 feedback.println("---------------------------------------------");
                 feedback.println("------------- CSV Import Report -------------");
@@ -557,9 +560,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         Statement state = null;
         ResultSet resultSet = null;
         try {
-            Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("BasicCSVImportReport.txt");
+            Path feedbackFile = null;
             PrintWriter feedback = null;
             try {
+                Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                        "BasicCSVImportReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                 int importElementCreated = 0;
                 int importLocationCreated = 0;
                 int importVisitCreated = 0;

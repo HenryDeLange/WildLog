@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -593,9 +594,12 @@ public class WorkspaceSyncDialog extends JDialog {
                         setProgress(0);
                         setMessage("Starting the Cloud Sync");
                         // Setup the report
-                        Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("CloudSyncWorkspaceReport.txt");
+                        Path feedbackFile = null;
                         PrintWriter feedback = null;
                         try {
+                            Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                            feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                                    "CloudSyncWorkspaceReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                             double adjustForNoFiles = 1;
                             if (rdbSyncNoFiles.isSelected()) {
                                 adjustForNoFiles = 1.65;

@@ -349,9 +349,12 @@ public class INatImportDialog extends JDialog {
                 setMessage("Starting the iNaturalist Import");
                 setTaskProgress(1);
                 setMessage("Busy with the iNaturalist Import... " + getProgress() + "%");
-                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogDownloadReport.txt");
+                Path feedbackFile = null;
                 PrintWriter feedback = null;
                 try {
+                    Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                    feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                            "iNaturalistWildLogDownloadReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                     feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                     feedback.println("---------------------------------------------------------");
                     feedback.println("-------- iNaturalist and WildLog Download Report --------");
@@ -683,9 +686,12 @@ public class INatImportDialog extends JDialog {
                 setMessage("Starting the check for broken iNaturalist-WildLog links");
                 setTaskProgress(1);
                 setMessage("Busy with the check for broken iNaturalist-WildLog links... " + getProgress() + "%");
-                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+                Path feedbackFile = null;
                 PrintWriter feedback = null;
                 try {
+                    Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                    feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                            "iNaturalistWildLogLinkReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                     feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                     feedback.println("---------------------------------------------------------");
                     feedback.println("---------- iNaturalist and WildLog Link Report ----------");
@@ -807,9 +813,12 @@ public class INatImportDialog extends JDialog {
                 setMessage("Starting the check for broken WildLog-iNaturalist links");
                 setTaskProgress(1);
                 setMessage("Busy with the check for broken WildLog-iNaturalist links... " + getProgress() + "%");
-                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+                Path feedbackFile = null;
                 PrintWriter feedback = null;
                 try {
+                    Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                    feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                            "iNaturalistWildLogLinkReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                     feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                     feedback.println("---------------------------------------------------------");
                     feedback.println("---------- iNaturalist and WildLog Link Report ----------");
@@ -917,9 +926,12 @@ public class INatImportDialog extends JDialog {
                 setMessage("Starting the iNaturalist-WildLog scientific name comparison");
                 setTaskProgress(1);
                 setMessage("Busy with the iNaturalist-WildLog scientific name comparison... " + getProgress() + "%");
-                Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("iNaturalistWildLogLinkReport.txt");
+                Path feedbackFile = null;
                 PrintWriter feedback = null;
                 try {
+                    Files.createDirectories(WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath());
+                    feedbackFile = WildLogPaths.WILDLOG_PROCESSES.getAbsoluteFullPath().resolve(
+                            "iNaturalistWildLogLinkReport_" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ".txt");
                     feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
                     feedback.println("--------------------------------------------------------------------");
                     feedback.println("---------- iNaturalist and WildLog Scientific Name Report ----------");
