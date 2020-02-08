@@ -49,52 +49,36 @@ public class UtilsEchoBackup {
                 feedback.println("--------------------------------------------------");
                 feedback.println("");
                 // Start walking the folders and building a list of what needs to be copied / deleted
-                final List<Path> lstPathsToDelete = new ArrayList<>();
-                final List<Path> lstPathsToCopyFrom = new ArrayList<>();
-                final List<Path> lstPathsToCopyTo = new ArrayList<>();
+                final List<Path> lstAllEchoRelativePaths = new ArrayList<>();
+                final List<Path> lstAllWorkspaceRelativesPaths = new ArrayList<>();
+                final List<Path> lstPathsToDeleteFromEcho = new ArrayList<>();
+                final List<Path> lstPathsToCopyFromWorkspace = new ArrayList<>();
+                final List<Path> lstPathsToCopyToEcho = new ArrayList<>();
                 Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
                 Path echoPath = inEchoPath;
-                // Walk the echo path and delete all folders and files that aren't in the active Workspace
+                // Get all Echo (relative) Paths
                 inProgressbarTask.setTaskProgress(2);
-                inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
+                inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of Echo files... " + inProgressbarTask.getProgress() + "%");
                 WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
                 Files.walkFileTree(echoPath, new SimpleFileVisitor<Path>() {
-
-                    @Override
-                    public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
-// TODO: In plaas van elke keer exists op die file te roep, bou twee lyste / sets en doen dan "contains"
-                        if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFolderPath)))) {
-                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath().normalize());
-                            return FileVisitResult.SKIP_SUBTREE;
-                        }
-                        // Always delete some folders (if somehow present)
-                        if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
-                                || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
-                            lstPathsToDelete.add(inFolderPath.normalize().toAbsolutePath().normalize());
-                            return FileVisitResult.SKIP_SUBTREE;
-                        }
-                        return FileVisitResult.CONTINUE;
-                    }
-
+                    
                     @Override
                     public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
-                        if (!Files.exists(workspacePath.resolve(echoPath.relativize(inFilePath)))) {
-                            lstPathsToDelete.add(inFilePath.normalize().toAbsolutePath().normalize());
-                        }
+                        lstAllEchoRelativePaths.add(echoPath.relativize(inFilePath));
                         return FileVisitResult.CONTINUE;
                     }
-
+                    
                 });
+                // Get all Workspace (relative) Paths
                 inProgressbarTask.setTaskProgress(3);
-                inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
+                inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of Workspace files... " + inProgressbarTask.getProgress() + "%");
                 WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
-                // Walk the active workspace and copy all files that aren't already present in the echo path
                 final Path finalFeedbackFile = feedbackFile;
                 Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
-
+                    
                     @Override
                     public FileVisitResult preVisitDirectory(final Path inFolderPath, final BasicFileAttributes inAttributes) throws IOException {
-                        // Skip some folders
+                        // Skip Export and Tumbnails folders
                         if (inFolderPath.endsWith(WildLogPaths.WILDLOG_EXPORT.getRelativePath())
                                 || inFolderPath.endsWith(WildLogPaths.WILDLOG_THUMBNAILS.getRelativePath())) {
                             return FileVisitResult.SKIP_SUBTREE;
@@ -108,37 +92,70 @@ public class UtilsEchoBackup {
                         if (inFilePath.equals(finalFeedbackFile)) {
                             return FileVisitResult.SKIP_SUBTREE;
                         }
-                        Path echoFile = echoPath.resolve(workspacePath.relativize(inFilePath));
-                        if (!Files.exists(echoFile)) {
-                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath().normalize());
-                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath().normalize());
-                        }
-                        else if (Files.size(inFilePath) != Files.size(echoFile)) {
-                            lstPathsToCopyFrom.add(inFilePath.normalize().toAbsolutePath().normalize());
-                            lstPathsToCopyTo.add(echoFile.normalize().toAbsolutePath().normalize());
-                        }
+                        lstAllWorkspaceRelativesPaths.add(workspacePath.relativize(inFilePath));
                         return FileVisitResult.CONTINUE;
                     }
 
                 });
+                // Walk the echo paths and delete all paths that aren't in the active Workspace
                 inProgressbarTask.setTaskProgress(4);
-                inProgressbarTask.setMessage("Busy with the Echo Workspace Backup " + inProgressbarTask.getProgress() + "%");
+                inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
                 WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                double counter = 0.0;
+                for (Path tempEchoPath : lstAllEchoRelativePaths) {
+                    boolean foundFile = false;
+                    for (Path tempWorkspacePath : lstAllWorkspaceRelativesPaths) {
+                        if (tempEchoPath.equals(tempWorkspacePath)) {
+                            foundFile = true;
+                            break;
+                        }
+                    }
+                    if (!foundFile) {
+                        lstPathsToDeleteFromEcho.add(echoPath.resolve(tempEchoPath).normalize().toAbsolutePath().normalize());
+                    }
+                    inProgressbarTask.setTaskProgress(4 + (int) ((double) (counter++ / (double) lstAllEchoRelativePaths.size()) * 3.0));
+                    inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
+                    WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                }
+                // Walk the active workspace and copy all paths that aren't already present or a different size in the echo path
+                counter = 0.0;
+                for (Path tempWorkspacePath : lstAllWorkspaceRelativesPaths) {
+                    boolean foundAndSameSize = false;
+                    for (Path tempEchoPath : lstAllEchoRelativePaths) {
+                        if (tempEchoPath.equals(tempWorkspacePath)) {
+                            if (Files.size(workspacePath.resolve(tempWorkspacePath)) == Files.size(echoPath.resolve(tempEchoPath))) {
+                                foundAndSameSize = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (!foundAndSameSize) {
+                        lstPathsToCopyFromWorkspace.add(workspacePath.resolve(tempWorkspacePath).normalize().toAbsolutePath().normalize());
+                        lstPathsToCopyToEcho.add(echoPath.resolve(tempWorkspacePath).normalize().toAbsolutePath().normalize());
+                    }
+                    inProgressbarTask.setTaskProgress(7 + (int) ((double) (counter++ / (double) lstAllWorkspaceRelativesPaths.size()) * 3.0));
+                    inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
+                    WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                }
                 // To the actual file processing based on the built up lists
-                double totalActions = lstPathsToDelete.size() + lstPathsToCopyTo.size();
-                for (int t = 0; t < lstPathsToDelete.size(); t++) {
-                    Path pathToDelete = lstPathsToDelete.get(t);
+                inProgressbarTask.setTaskProgress(10);
+                inProgressbarTask.setMessage("Busy with the Echo Workspace Backup... " + inProgressbarTask.getProgress() + "%");
+                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                double totalActions = lstPathsToDeleteFromEcho.size() + lstPathsToCopyToEcho.size();
+                for (int t = 0; t < lstPathsToDeleteFromEcho.size(); t++) {
+                    Path pathToDelete = lstPathsToDeleteFromEcho.get(t);
                     // Delete the folder or file
+// FIXME: Empty folders are still being left behind. (Don't think they get added to the lists, only files are added?)
                     UtilsFileProcessing.deleteRecursive(pathToDelete.toFile());
                     // Update report and progress
                     feedback.println("Deleted   : " + pathToDelete.toString());
-                    inProgressbarTask.setTaskProgress(4 + (int) (((double) t) / totalActions * 95.0));
+                    inProgressbarTask.setTaskProgress(10 + (int) (((double) t) / totalActions * 89.0));
                     inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Deleting files... " + inProgressbarTask.getProgress() + "%");
                     WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
                 }
-                for (int t = 0; t < lstPathsToCopyFrom.size(); t++) {
-                    Path pathToCopyFrom = lstPathsToCopyFrom.get(t);
-                    Path pathToCopyTo = lstPathsToCopyTo.get(t);
+                for (int t = 0; t < lstPathsToCopyFromWorkspace.size(); t++) {
+                    Path pathToCopyFrom = lstPathsToCopyFromWorkspace.get(t);
+                    Path pathToCopyTo = lstPathsToCopyToEcho.get(t);
                     // Make sure the folders exist
                     Files.createDirectories(pathToCopyTo.getParent());
                     // The daily backup might run in the background and delete a folder, 
@@ -162,7 +179,7 @@ public class UtilsEchoBackup {
                         WildLogApp.LOGGER.log(Level.WARN, "Can't copy file, the source is no longer available: {}%", pathToCopyFrom);
                         feedback.println("Skipped   : " + pathToCopyFrom.toString());
                     }
-                    inProgressbarTask.setTaskProgress(4 + (int) (((double) (lstPathsToDelete.size() + t)) / totalActions * 95.0));
+                    inProgressbarTask.setTaskProgress(10 + (int) (((double) (lstPathsToDeleteFromEcho.size() + t)) / totalActions * 89.0));
                     inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Copying files... " + inProgressbarTask.getProgress() + "%");
                     WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
                 }
