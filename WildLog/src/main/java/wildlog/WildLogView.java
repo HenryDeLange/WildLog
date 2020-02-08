@@ -2425,7 +2425,7 @@ public final class WildLogView extends JFrame {
                                     "Delete all, recreate essential",
                                     "Delete all, recreate all", 
                                     "Delete all, don't recreate any", 
-                                    "Don't delete, create missing", 
+                                    "Don't delete, create all missing", 
                                     "Don't delete, don't create any"
                                 }, null);
                     }

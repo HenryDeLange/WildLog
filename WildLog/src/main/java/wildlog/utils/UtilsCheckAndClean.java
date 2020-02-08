@@ -704,7 +704,8 @@ public class UtilsCheckAndClean {
                             listFiles.add(image);
                         }
                     }
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
+                    ExecutorService executorService = Executors.newFixedThreadPool(
+                            (int) Math.round(((double) inApp.getThreadCount()) / 2.0), new NamedThreadFactory("WL_CleanWorkspace"));
                     final CleanupCounter countThumbnails = new CleanupCounter();
                     for (final WildLogFile wildLogFile : listFiles) {
                         executorService.submit(new Runnable() {
@@ -740,7 +741,7 @@ public class UtilsCheckAndClean {
                 else 
                 if (inRecreateThumbnailsResult == 1 || inRecreateThumbnailsResult == 3) {
                     // Recreate all thumbnails or create missing thumbnails
-                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails... " + inProgressbarTask.getProgress() + "%");
+                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails (sorting files)... " + inProgressbarTask.getProgress() + "%");
                     finalHandleFeedback.println("");
                     finalHandleFeedback.println("9) Recreate the default thumbnails for all images.");
                     List<WildLogFile> listFiles = inApp.getDBI().listWildLogFiles(-1, WildLogFileType.IMAGE, WildLogFile.class);
@@ -750,8 +751,8 @@ public class UtilsCheckAndClean {
                     Collections.sort(listFiles, new Comparator<WildLogFileCore>() {
                         @Override
                         public int compare(WildLogFileCore wlFile1, WildLogFileCore wlFile2) {
-                            String prioritisedID1 = wlFile1.getLinkType().toString();
-                            String prioritisedID2 = wlFile2.getLinkType().toString();
+                            String prioritisedID1 = wlFile1.getLinkType().toString() + wlFile1.getDBFilePath();
+                            String prioritisedID2 = wlFile2.getLinkType().toString() + wlFile2.getDBFilePath();
                             // Maak seker Visits word voor Sightings gedoen
                             if (prioritisedID1.charAt(0) == 'V') {
                                 prioritisedID1 = "LZZZ" + prioritisedID1;
@@ -762,7 +763,9 @@ public class UtilsCheckAndClean {
                             return prioritisedID1.compareTo(prioritisedID2);
                         }
                     });
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
+                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails... " + inProgressbarTask.getProgress() + "%");
+                    ExecutorService executorService = Executors.newFixedThreadPool(
+                            (int) Math.round(((double) inApp.getThreadCount()) / 2.0), new NamedThreadFactory("WL_CleanWorkspace"));
                     final CleanupCounter countThumbnails = new CleanupCounter();
                     for (final WildLogFile wildLogFile : listFiles) {
                         executorService.submit(new Runnable() {
@@ -810,7 +813,7 @@ public class UtilsCheckAndClean {
                     inProgressbarTask.setMessage("Cleanup Step 10: Set the camera model as the Observation's Tag... " + inProgressbarTask.getProgress() + "%");
                     finalHandleFeedback.println("");
                     finalHandleFeedback.println("10) Set the camera model as the Observation's Tag.");
-                    List<Sighting> allSightings = inApp.getDBI().listSightings(0, 0, 0, true, Sighting.class);
+                    List<Sighting> allSightings = inApp.getDBI().listSightings(0, 0, 0, false, Sighting.class);
                     for (Sighting sighting : allSightings) {
                         try {
                             String oldTag = sighting.getTag();
