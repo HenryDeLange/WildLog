@@ -2486,7 +2486,9 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         try {
             state = conn.createStatement();
             // The EXTRA table is created automatically, if absent
-            // There are no other changes...
+            // Drop onnodige indexes
+            state.execute("DROP INDEX IF EXISTS V14_FILE_LINKID");
+            state.execute("DROP INDEX IF EXISTS V14_FILE_ORGPATH_DEFAULT");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=15");
         }

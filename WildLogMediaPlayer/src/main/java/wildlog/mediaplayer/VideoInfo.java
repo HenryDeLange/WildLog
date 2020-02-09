@@ -12,7 +12,7 @@ import io.humble.video.KeyValueBag;
 /**
  * Based on the GetContainerInfo.java demo from https://github.com/artclarke/humble-video
  */
-public class GetContainerInfo {
+public class VideoInfo {
 
     /**
      * Parse information from a file, and also optionally print information about what formats, containers and codecs fit into that file.

@@ -21,8 +21,6 @@ public class CheckAndCleanStepsDialog extends JDialog {
         WildLogApp.LOGGER.log(Level.INFO, "[CheckAndCleanStepsDialog]");
         // Auto generated code
         initComponents();
-        // Pack
-        pack();
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
@@ -34,6 +32,8 @@ public class CheckAndCleanStepsDialog extends JDialog {
             chkStep10.setEnabled(false);
             chkStep10.setVisible(false);
         }
+        // Pack
+        pack();
     }
 
     /** This method is called from within the constructor to

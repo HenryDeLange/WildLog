@@ -235,7 +235,6 @@ public final class UtilsFileProcessing {
                 if (inTheLock != null) {
                     synchronized (inTheLock) {
                         // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
-                        wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0030_TINY);
                         wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
                         wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
                         wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
@@ -245,7 +244,6 @@ public final class UtilsFileProcessing {
                 }
                 else {
                     // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
-                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0030_TINY);
                     wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
                     wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
                     wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);

@@ -681,10 +681,8 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableFiles);
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS V14_FILE_ORGPATH ON FILES (ORIGINALPATH)");
-                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_LINKID ON FILES (LINKID)");
                 state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_FILETYPE ON FILES (FILETYPE)");
                 state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ID_DEFAULT ON FILES (LINKID, ISDEFAULT)");
-                state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
                 state.execute("CREATE INDEX IF NOT EXISTS V14_FILE_ID_TYPE_DEFAULT ON FILES (LINKID, FILETYPE, ISDEFAULT)");
                 closeStatement(state);
             }
