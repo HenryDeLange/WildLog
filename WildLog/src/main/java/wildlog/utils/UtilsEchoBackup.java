@@ -16,6 +16,7 @@ import wildlog.WildLogApp;
 import wildlog.ui.helpers.ProgressbarTask;
 
 public class UtilsEchoBackup {
+    private static int lastUpdatedProgress = 0;
 
     private UtilsEchoBackup() {
     }
@@ -27,7 +28,7 @@ public class UtilsEchoBackup {
             // Make a DB backup, just to be safe
             inProgressbarTask.setTaskProgress(0);
             inProgressbarTask.setMessage("Starting the Echo Workspace Backup");
-            WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+            writeProgressToLogs(inProgressbarTask);
             inProgressbarTask.setMessage("Starting the Echo Workspace Backup (performing database backup)");
             inApp.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath()
                     .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()) + ")"));
@@ -35,7 +36,7 @@ public class UtilsEchoBackup {
             inApp.getDBI().close();
             inProgressbarTask.setTaskProgress(1);
             inProgressbarTask.setMessage("Busy with the Echo Workspace Backup " + inProgressbarTask.getProgress() + "%");
-            WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+            writeProgressToLogs(inProgressbarTask);
             // Setup the report
             Path feedbackFile = null;
             PrintWriter feedback = null;
@@ -59,7 +60,7 @@ public class UtilsEchoBackup {
                 // Get all Echo (relative) Paths
                 inProgressbarTask.setTaskProgress(2);
                 inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of Echo files... " + inProgressbarTask.getProgress() + "%");
-                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                writeProgressToLogs(inProgressbarTask);
                 Files.walkFileTree(echoPath, new SimpleFileVisitor<Path>() {
                     
                     @Override
@@ -72,7 +73,7 @@ public class UtilsEchoBackup {
                 // Get all Workspace (relative) Paths
                 inProgressbarTask.setTaskProgress(3);
                 inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of Workspace files... " + inProgressbarTask.getProgress() + "%");
-                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                writeProgressToLogs(inProgressbarTask);
                 final Path finalFeedbackFile = feedbackFile;
                 Files.walkFileTree(workspacePath, new SimpleFileVisitor<Path>() {
                     
@@ -100,7 +101,7 @@ public class UtilsEchoBackup {
                 // Walk the echo paths and delete all paths that aren't in the active Workspace
                 inProgressbarTask.setTaskProgress(4);
                 inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
-                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                writeProgressToLogs(inProgressbarTask);
                 double counter = 0.0;
                 for (Path tempEchoPath : lstAllEchoRelativePaths) {
                     boolean foundFile = false;
@@ -115,7 +116,7 @@ public class UtilsEchoBackup {
                     }
                     inProgressbarTask.setTaskProgress(4 + (int) ((double) (counter++ / (double) lstAllEchoRelativePaths.size()) * 3.0));
                     inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
-                    WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                    writeProgressToLogs(inProgressbarTask);
                 }
                 // Walk the active workspace and copy all paths that aren't already present or a different size in the echo path
                 counter = 0.0;
@@ -135,24 +136,25 @@ public class UtilsEchoBackup {
                     }
                     inProgressbarTask.setTaskProgress(7 + (int) ((double) (counter++ / (double) lstAllWorkspaceRelativesPaths.size()) * 3.0));
                     inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
-                    WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                    writeProgressToLogs(inProgressbarTask);
                 }
                 // To the actual file processing based on the built up lists
                 inProgressbarTask.setTaskProgress(10);
                 inProgressbarTask.setMessage("Busy with the Echo Workspace Backup... " + inProgressbarTask.getProgress() + "%");
-                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                writeProgressToLogs(inProgressbarTask);
                 double totalActions = lstPathsToDeleteFromEcho.size() + lstPathsToCopyToEcho.size();
+                // Delete
                 for (int t = 0; t < lstPathsToDeleteFromEcho.size(); t++) {
                     Path pathToDelete = lstPathsToDeleteFromEcho.get(t);
                     // Delete the folder or file
-// FIXME: Empty folders are still being left behind. (Don't think they get added to the lists, only files are added?)
                     UtilsFileProcessing.deleteRecursive(pathToDelete.toFile());
                     // Update report and progress
                     feedback.println("Deleted   : " + pathToDelete.toString());
                     inProgressbarTask.setTaskProgress(10 + (int) (((double) t) / totalActions * 89.0));
                     inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Deleting files... " + inProgressbarTask.getProgress() + "%");
-                    WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                    writeProgressToLogs(inProgressbarTask);
                 }
+                // Copy
                 for (int t = 0; t < lstPathsToCopyFromWorkspace.size(); t++) {
                     Path pathToCopyFrom = lstPathsToCopyFromWorkspace.get(t);
                     Path pathToCopyTo = lstPathsToCopyToEcho.get(t);
@@ -181,8 +183,14 @@ public class UtilsEchoBackup {
                     }
                     inProgressbarTask.setTaskProgress(10 + (int) (((double) (lstPathsToDeleteFromEcho.size() + t)) / totalActions * 89.0));
                     inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Copying files... " + inProgressbarTask.getProgress() + "%");
-                    WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+                    writeProgressToLogs(inProgressbarTask);
                 }
+                // Cleanup
+                // Empty folders might remain in the Echo path (when files were deleted)
+                inProgressbarTask.setTaskProgress(99);
+                inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Removing empty folders... " + inProgressbarTask.getProgress() + "%");
+                writeProgressToLogs(inProgressbarTask);
+                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(echoPath.toFile());
             }
             // Finish the report
             catch (Exception ex) {
@@ -232,13 +240,21 @@ public class UtilsEchoBackup {
             }
             inProgressbarTask.setTaskProgress(100);
             inProgressbarTask.setMessage("Done with the Echo Workspace Backup");
-            WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+            writeProgressToLogs(inProgressbarTask);
         }
         catch (Exception ex) {
             hasError = true;
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
         }
         return hasError;
+    }
+
+    private static void writeProgressToLogs(ProgressbarTask inProgressbarTask) {
+        // Log net elke persentasie (nie elke progress update nie)
+        if (lastUpdatedProgress != inProgressbarTask.getProgress()) {
+            WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Progress: {}%", inProgressbarTask.getProgress());
+            lastUpdatedProgress = inProgressbarTask.getProgress();
+        }
     }
 
 }

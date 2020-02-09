@@ -679,7 +679,7 @@ public class UtilsCheckAndClean {
                 }
                 if (inRecreateThumbnailsResult == 0) {
                     // Recreate essential thumbnails
-                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating essential default thumbnails... " + inProgressbarTask.getProgress() + "%");
+                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating essential default thumbnails (finding files)... " + inProgressbarTask.getProgress() + "%");
                     finalHandleFeedback.println("");
                     finalHandleFeedback.println("9) Recreate the default thumbnails for essential images.");
                     List<WildLogFile> listFiles = new ArrayList<>(128);
@@ -704,6 +704,7 @@ public class UtilsCheckAndClean {
                             listFiles.add(image);
                         }
                     }
+                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating essential default thumbnails (setup workers)... " + inProgressbarTask.getProgress() + "%");
                     ExecutorService executorService = Executors.newFixedThreadPool(
                             (int) Math.round(((double) inApp.getThreadCount()) / 2.0), new NamedThreadFactory("WL_CleanWorkspace"));
                     final CleanupCounter countThumbnails = new CleanupCounter();
@@ -741,13 +742,14 @@ public class UtilsCheckAndClean {
                 else 
                 if (inRecreateThumbnailsResult == 1 || inRecreateThumbnailsResult == 3) {
                     // Recreate all thumbnails or create missing thumbnails
-                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails (sorting files)... " + inProgressbarTask.getProgress() + "%");
+                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails (finding files)... " + inProgressbarTask.getProgress() + "%");
                     finalHandleFeedback.println("");
                     finalHandleFeedback.println("9) Recreate the default thumbnails for all images.");
                     List<WildLogFile> listFiles = inApp.getDBI().listWildLogFiles(-1, WildLogFileType.IMAGE, WildLogFile.class);
                     // Sort the files by name to put the related location, element, visit and sighting images close to one another, 
                     // otherwise the loading from disk actually gets worse because the files are all over the place.
                     // This way the read-ahead will get more hits and be faster.
+                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails (sorting files)... " + inProgressbarTask.getProgress() + "%");
                     Collections.sort(listFiles, new Comparator<WildLogFileCore>() {
                         @Override
                         public int compare(WildLogFileCore wlFile1, WildLogFileCore wlFile2) {
@@ -763,7 +765,7 @@ public class UtilsCheckAndClean {
                             return prioritisedID1.compareTo(prioritisedID2);
                         }
                     });
-                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails... " + inProgressbarTask.getProgress() + "%");
+                    inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails (setup workers)... " + inProgressbarTask.getProgress() + "%");
                     ExecutorService executorService = Executors.newFixedThreadPool(
                             (int) Math.round(((double) inApp.getThreadCount()) / 2.0), new NamedThreadFactory("WL_CleanWorkspace"));
                     final CleanupCounter countThumbnails = new CleanupCounter();

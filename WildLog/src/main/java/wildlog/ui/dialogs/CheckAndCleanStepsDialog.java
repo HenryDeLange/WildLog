@@ -136,6 +136,7 @@ public class CheckAndCleanStepsDialog extends JDialog {
         getContentPane().add(chkStep10);
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
+        btnConfirm.setToolTipText("Start the Check and Clean process.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirm.setMaximumSize(new java.awt.Dimension(450, 50));
         btnConfirm.setMinimumSize(new java.awt.Dimension(450, 50));

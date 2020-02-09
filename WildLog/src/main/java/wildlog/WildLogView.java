@@ -3613,9 +3613,9 @@ public final class WildLogView extends JFrame {
         }
         WLOptionPane.showMessageDialog(app.getMainFrame(),
                 "<html>The <i>Echo Backup Workspace</i> process will delete all files from the target folder that aren't in the active Workspace "
-                + "<br>and copy all files from the active Workspace to the target folder that aren't already present (files will be replaced if their size differ)."
-                + "<hr>"
-                + "This process is best used to make (and periodically update) a backup copy of the active Workspace.</html>",
+                        + "<br>and copy all files from the active Workspace to the target folder that aren't already present (files will be replaced if their size differ)."
+                        + "<hr>"
+                        + "This process is best used to make (and periodically update) a backup copy of the active Workspace.</html>",
                 "Echo Backup Workspace", JOptionPane.WARNING_MESSAGE);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -3636,15 +3636,35 @@ public final class WildLogView extends JFrame {
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
+                            Path writePath  = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
                             int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
                                     "<html>Run the Echo Backup Workspace process for the following folder?<br>"
                                             + "<b>Read From: </b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "<br>"
-                                            + "<b>Write To: </b>" + fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize().toString()
+                                            + "<b>Write To: </b>" + writePath.toString()
                                             + "</html>",
                                     "Confirm Echo Backup Workspace", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                             if (result == JOptionPane.YES_OPTION) {
+                                // Warn if it not an empty folder or exisitng workspace
+                                if (writePath.toFile().listFiles().length != 0 
+                                        && !(Files.exists(writePath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))
+                                        && Files.exists(writePath.resolve(WildLogPaths.WILDLOG_FILES.getRelativePath())))) {
+                                    result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                            "<html>The folder which was selected for the Echo Backup destination "
+                                                    + "<br/>does not appear to be an empty folder, nor another WildLog workspace."
+                                                    + "<br/>If you continue all files in the destination folder will be replaced by the active workspace's files."
+                                                    + "<br/><b>Continue to use this folder?</b>"
+                                                    + "<br/><b>Write To: </b>" + writePath.toString()
+                                                    + "</html>",
+                                            "Unconventional Echo Backup Destination", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                    if (result != JOptionPane.YES_OPTION) {
+                                        // Abort the Echo Backup due to dodgy destination folder
+                                        WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Aborting Write To: {}", writePath.toString());
+                                        return;
+                                    }
+                                }
+                                // Kick off the echo backup process
                                 WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Read From: {}", WildLogPaths.getFullWorkspacePrefix().toString());
-                                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Write To: {}", fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize().toString());
+                                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Write To: {}", writePath.toString());
                                 SwingUtilities.invokeLater(new Runnable() {
                                     @Override
                                     public void run() {
