@@ -382,8 +382,32 @@ public class ImageBox extends JPanel {
                 index = t;
             }
         }
-        ZoomDialog dialog = new ZoomDialog(WildLogApp.getApplication().getMainFrame(), filePaths, index);
-        dialog.setVisible(true);
+//        if (WildLogFileExtentions.Movies.isKnownExtention(filePaths.get(index))) {
+//            final int finalIndex = index;
+//            SwingUtilities.invokeLater(new Runnable() {
+//                @Override
+//                public void run() {
+//                    JFrame frame = new JFrame();
+//                    frame.setBackground(Color.GRAY);
+//                    VideoPanel videoPanel = new VideoPanel(300, 300);
+//                    frame.add(videoPanel);
+//                    frame.pack();
+//                    frame.setLocationRelativeTo(WildLogApp.getApplication().getMainFrame());
+//                    frame.setVisible(true);
+//                    // Die video decoding moet op sy eie thread gebeur
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            VideoPlayer.playVideo(videoPanel, filePaths.get(finalIndex), 300);
+//                        }
+//                    }).start();
+//                }
+//            });
+//        }
+//        else {
+            ZoomDialog dialog = new ZoomDialog(WildLogApp.getApplication().getMainFrame(), filePaths, index);
+            dialog.setVisible(true);
+//        }
     }//GEN-LAST:event_btnZoomActionPerformed
 
     private void btnRemoveMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRemoveMouseReleased

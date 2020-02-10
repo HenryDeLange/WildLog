@@ -39,6 +39,7 @@ import wildlog.data.enums.system.WildLogFileType;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
 
+
 public class UtilsCheckAndClean {
 
     private UtilsCheckAndClean() {

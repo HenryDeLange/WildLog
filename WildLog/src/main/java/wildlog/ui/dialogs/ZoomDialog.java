@@ -1,5 +1,6 @@
 package wildlog.ui.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,8 @@ import javax.swing.KeyStroke;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
+import wildlog.mediaplayer.VideoPanel;
+import wildlog.mediaplayer.VideoPlayer;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -24,6 +27,7 @@ import wildlog.utils.WildLogFileExtentions;
 public class ZoomDialog extends JDialog {
     private final List<Path> filesToView;
     private int fileIndex;
+    private VideoPanel videoPanel = null;
 
     
     public ZoomDialog(JFrame inParent, List<Path> inFilesToView, int inStartIndex) {
@@ -159,6 +163,14 @@ public class ZoomDialog extends JDialog {
 
     private void setupFile(Path inPath) {
         setTitle("Zoom Popup - " + inPath.getFileName().toString());
+        lblZoomedFile.setVisible(false);
+        try {
+            remove(videoPanel);
+            add(lblZoomedFile, BorderLayout.CENTER);
+        }
+        catch (Exception ex) {
+            // TODO: All of this needs to happen much smoother...
+        }
         if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
             ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), true);
             lblZoomedFile.setIcon(imageIcon);
@@ -166,6 +178,23 @@ public class ZoomDialog extends JDialog {
         else
         if (WildLogFileExtentions.Movies.isKnownExtention(inPath)) {
             lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.S0300_NORMAL));
+// FIXME: Stop die ou video as mens die popup toe maak of Prev/Next druk
+// FIXME: Kry 'n manier om die log errors nie te print nie (slf4j config)
+            if (videoPanel == null) {
+                videoPanel = new VideoPanel(WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize());
+            }
+            // Replace the image label with the video panel
+            lblZoomedFile.setVisible(false);
+            remove(lblZoomedFile);
+            add(videoPanel, BorderLayout.CENTER);
+            // Play the video
+            // Die video decoding moet op sy eie thread gebeur
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    VideoPlayer.playVideo(videoPanel, inPath, WildLogThumbnailSizes.S0700_VERY_LARGE.getSize());
+                }
+            }).start();
         }
         else {
             lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForOtherFiles(WildLogThumbnailSizes.S0300_NORMAL));

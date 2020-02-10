@@ -71,6 +71,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>mywild</groupId>
+            <artifactId>WildLogMediaPlayer</artifactId>
+            <version>1.0</version>
+        </dependency>
         <!--Java: JavaFX-->
         <dependency>
             <groupId>org.openjfx</groupId>
