@@ -1,6 +1,7 @@
 package wildlog.ui.helpers;
 
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -1886,8 +1887,8 @@ public final class UtilsTableGenerator {
                                         };
                 // Load data from DB
                 final List<ExtraData> listExtraDatas = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.USER, inLinkID, ExtraData.class);
-                // Always add an empty row for new records
-                listExtraDatas.add(new ExtraData(WildLogExtraDataFieldTypes.USER, 0L, WildLogDataType.NONE, "", ""));
+//                // Always add an empty row for new records
+//                listExtraDatas.add(new ExtraData(WildLogExtraDataFieldTypes.USER, 0L, WildLogDataType.NONE, "", ""));
                 // Populate the table data
                 if (!listExtraDatas.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listExtraDatas.size());
@@ -1916,29 +1917,31 @@ public final class UtilsTableGenerator {
                     inTable.setModel(new DefaultTableModel(data, columnNames));
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false, true, -1);
-                    inTable.getColumnModel().getColumn(0).setMinWidth(100);
-                    inTable.getColumnModel().getColumn(0).setPreferredWidth(150);
+                    inTable.getColumnModel().getColumn(0).setMinWidth(50);
+                    inTable.getColumnModel().getColumn(0).setPreferredWidth(100);
                     inTable.getColumnModel().getColumn(1).setMinWidth(100);
-                    inTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+                    inTable.getColumnModel().getColumn(1).setPreferredWidth(200);
                     inTable.removeColumn(inTable.getColumnModel().getColumn(2));
                     // Setup default sorting
                     setupRowSorter(inTable, 0, 1, SortOrder.ASCENDING, SortOrder.ASCENDING);
                     // Setup the renderers and editors
+                    inTable.setDefaultRenderer(Object.class, new TextCellRenderer(0, 1));
                     List<String> lstDataKeys = inApp.getDBI().queryExtraDataUniqueDataKeys(WildLogExtraDataFieldTypes.USER, inLinkType);
                     JComboBox comboBox = new JComboBox();
                     comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                    comboBox.setFont(comboBox.getFont().deriveFont(Font.BOLD, comboBox.getFont().getSize()*1.2f));
                     comboBox.setEditable(true);
                     if (lstDataKeys != null && !lstDataKeys.isEmpty()) {
                         comboBox.setModel(new DefaultComboBoxModel(lstDataKeys.toArray()));
                     }
                     ComboBoxFixer.configureComboBoxes(comboBox);
-                    inTable.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer());
-                    inTable.getColumnModel().getColumn(0).setCellEditor(new DefaultCellEditor(comboBox));
+                    DefaultCellEditor cellEditor = new DefaultCellEditor(comboBox);
+                    cellEditor.setClickCountToStart(1);
+                    inTable.getColumnModel().getColumn(0).setCellEditor(cellEditor);
                     JTextField textField = new JTextField();
-// FIXME: Die textfield wys die cell dotted border
-// FIXME: Die textfield wys nie die editoer op die eerste kliek nie (moet double click)
-                    inTable.getColumnModel().getColumn(1).setCellRenderer(new DefaultTableCellRenderer());
-                    inTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(textField));
+                    cellEditor = new DefaultCellEditor(textField);
+                    cellEditor.setClickCountToStart(1);
+                    inTable.getColumnModel().getColumn(1).setCellEditor(cellEditor);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Extra Data"}, 0));

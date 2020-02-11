@@ -17,8 +17,6 @@ public class ExtraDataDialog extends JDialog {
 
 // TODO: Kry 'n manier om meer as een ry op 'n slag by te sit
     
-// TODO: Die ry se waarde update eers as die table fokus verloor (dus as jy 'n cell edit en dan dadelik Save dan laai dit nie die waarde nie)
-    
     public ExtraDataDialog(JFrame inParent, long inLinkID, WildLogDataType inLinkType) {
         super(inParent);
         WildLogApp.LOGGER.log(Level.INFO, "[ExtraDataDialog]");
@@ -30,6 +28,8 @@ public class ExtraDataDialog extends JDialog {
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        // Tell the table to stop the editing when focus is lost
+        tblExtraData.putClientProperty("terminateEditOnFocusLost", true);
         // Load initial data
         UtilsTableGenerator.setupExtraDataTable(WildLogApp.getApplication(), tblExtraData, inLinkID, inLinkType);
     }
@@ -50,7 +50,7 @@ public class ExtraDataDialog extends JDialog {
         setMinimumSize(new java.awt.Dimension(400, 300));
         setModal(true);
 
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/OK.png"))); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnSave.setToolTipText("Close this dialog.");
         btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -109,9 +109,11 @@ public class ExtraDataDialog extends JDialog {
                     app.getDBI().createExtraData(extraData, false);
                 }
                 else {
-// TODO: Moet nie rye update wat nie verander het nie...
-                    System.out.println("UPDATE: " + extraData);
-                    app.getDBI().updateExtraData(extraData, false);
+                    ExtraData oldExtraData = app.getDBI().findExtraData(extraData.getID(), null, 0, null, ExtraData.class);
+                    if (!extraData.getDataKey().equals(oldExtraData.getDataKey()) || !extraData.getDataValue().equals(oldExtraData.getDataValue())) {
+                        System.out.println("UPDATE: " + extraData);
+                        app.getDBI().updateExtraData(extraData, false);
+                    }
                 }
             }
         }

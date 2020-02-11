@@ -47,7 +47,7 @@ public interface DBI {
     public <T extends INaturalistLinkedData> T findINaturalistLinkedData(long inWildLogID, long inINaturalistID, Class<T> inReturnType);
     public <T extends WildLogUser> T findUser(long inID, String inUsername, Class<T> inReturnType);
     public <T extends WildLogDeleteLog> T findDeleteLog(long inID, Class<T> inReturnType);
-    public <T extends ExtraData> T findExtraData(WildLogExtraDataFieldTypes inFieldType, long inLinkID, String inDataKey, Class<T> inReturnType);
+    public <T extends ExtraData> T findExtraData(long inID, WildLogExtraDataFieldTypes inFieldType, long inLinkID, String inDataKey, Class<T> inReturnType);
 
     public <T extends ElementCore> List<T> listElements(String inPrimaryName, String inScientificName, ElementType inElementType, boolean inIncludeCachedValues, Class<T> inReturnType);
     public <T extends LocationCore> List<T> listLocations(String inName, boolean inIncludeCachedValues, Class<T> inReturnType);

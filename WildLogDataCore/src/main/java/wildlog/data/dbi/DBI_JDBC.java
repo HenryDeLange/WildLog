@@ -56,9 +56,7 @@ import wildlog.data.utils.UtilsData;
 public abstract class DBI_JDBC implements DBI {
     protected SecureRandom randomGenerator;
     // Version
-// FIXME: Sit later terug
-//    protected static final int WILDLOG_DB_VERSION = 15;
-    protected static final int WILDLOG_DB_VERSION = 14;
+    protected static final int WILDLOG_DB_VERSION = 15;
     // Tables
     protected static final String tableElements = "CREATE TABLE ELEMENTS ("
             + "ID bigint PRIMARY KEY NOT NULL, "
@@ -243,8 +241,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String findUser = "SELECT * FROM WILDLOGUSERS";
     protected static final String findDeleteLog = "SELECT * FROM DELETELOGS"
             + " WHERE ID = ?";
-    protected static final String findExtraData = "SELECT * FROM EXTRA"
-            + " WHERE LINKID = ? AND FIELDTYPE = ? AND DATAKEY = ?";
+    protected static final String findExtraData = "SELECT * FROM EXTRA";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listLocationWithCached = "SELECT LOCATIONS.*,"
@@ -716,15 +713,14 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute(tableDeleteLog);
                 closeStatement(state);
             }
-// FIXME: Sit later terug
-//            results = conn.getMetaData().getTables(null, null, "EXTRA", null);
-//            if (!results.next()) {
-//                state = conn.createStatement();
-//                state.execute(tableExtraData);
-//                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_LINK_FIELD_KEY ON EXTRA (LINKID, FIELDTYPE, DATAKEY)");
-//                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_FIELD_LINKTYPE_KEY ON EXTRA (FIELDTYPE, LINKTYPE, DATAKEY)");
-//                closeStatement(state);
-//            }
+            results = conn.getMetaData().getTables(null, null, "EXTRA", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableExtraData);
+                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_LINK_FIELD_KEY ON EXTRA (LINKID, FIELDTYPE, DATAKEY)");
+                state.execute("CREATE INDEX IF NOT EXISTS V15_EXTRA_FIELD_LINKTYPE_KEY ON EXTRA (FIELDTYPE, LINKTYPE, DATAKEY)");
+                closeStatement(state);
+            }
             closeResultset(results);
             closeResultset(results);
             results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
@@ -1056,14 +1052,12 @@ public abstract class DBI_JDBC implements DBI {
                 sql = findElement;
             }
             if (inID > 0) {
-                sql = sql + " WHERE ID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE ID = ?");
                 state.setLong(1, inID);
             }
             else
             if (inPrimaryName != null && UtilsData.sanitizeString(inPrimaryName).length() > 0) {
-                sql = sql + " WHERE PRIMARYNAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE PRIMARYNAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             }
             else {
@@ -1122,14 +1116,12 @@ public abstract class DBI_JDBC implements DBI {
                 sql = findLocation;
             }
             if (inID > 0) {
-                sql = sql + " WHERE ID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE ID = ?");
                 state.setLong(1, inID);
             }
             else
             if (inName != null && UtilsData.sanitizeString(inName).length() > 0) {
-                sql = sql + " WHERE NAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(" WHERE NAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inName));
             }
             else {
@@ -1191,14 +1183,12 @@ public abstract class DBI_JDBC implements DBI {
                 sql = findVisit;
             }
             if (inID > 0) {
-                sql = sql + " WHERE VISITS.ID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE VISITS.ID = ?");
                 state.setLong(1, inID);
             }
             else
             if (inName != null && UtilsData.sanitizeString(inName).length() > 0) {
-                sql = sql + " WHERE VISITS.NAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE VISITS.NAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inName));
             }
             else {
@@ -1263,8 +1253,7 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 sql = findSighting;
             }
-            sql = sql + " WHERE SIGHTINGS.ID = ?";
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(sql + " WHERE SIGHTINGS.ID = ?");
             state.setLong(1, inID);
             results = state.executeQuery();
             if (results.next()) {
@@ -1551,14 +1540,12 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = findUser;
             if (inID > 0) {
-                sql = sql + " WHERE ID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE ID = ?");
                 state.setLong(1, inID);
             }
             else
             if (inUsername != null && !inUsername.isEmpty()) {
-                sql = sql + " WHERE USERNAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE USERNAME = ?");
                 state.setString(1, inUsername);
             }
             else {
@@ -1631,15 +1618,21 @@ public abstract class DBI_JDBC implements DBI {
     }
     
     @Override
-    public <T extends ExtraData> T findExtraData(WildLogExtraDataFieldTypes inFieldType, long inLinkID, String inDataKey, Class<T> inReturnType) {
+    public <T extends ExtraData> T findExtraData(long inID, WildLogExtraDataFieldTypes inFieldType, long inLinkID, String inDataKey, Class<T> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         T temp = null;
         try {
-            state = conn.prepareStatement(findExtraData);
-            state.setLong(1, inLinkID);
-            state.setString(2, UtilsData.getKeyFromEnum(inFieldType));
-            state.setString(3, UtilsData.sanitizeString(inDataKey));
+            if (inID >= 0) {
+                state = conn.prepareStatement(findExtraData + " WHERE ID = ?");
+                state.setLong(1, inID);
+            }
+            else {
+                state = conn.prepareStatement(findExtraData + " WHERE LINKID = ? AND FIELDTYPE = ? AND DATAKEY = ?");
+                state.setLong(1, inLinkID);
+                state.setString(2, UtilsData.getKeyFromEnum(inFieldType));
+                state.setString(3, UtilsData.sanitizeString(inDataKey));
+            }
             results = state.executeQuery();
             if (results.next()) {
                 temp = inReturnType.newInstance();
