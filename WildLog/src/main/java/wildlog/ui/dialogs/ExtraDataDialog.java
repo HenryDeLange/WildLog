@@ -2,6 +2,10 @@ package wildlog.ui.dialogs;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.ExtraData;
@@ -15,7 +19,7 @@ public class ExtraDataDialog extends JDialog {
     private final long linkID;
     private final WildLogDataType linkType;
 
-// TODO: Kry 'n manier om meer as een ry op 'n slag by te sit
+// TODO: Maak 'n Extra Data icon (vir buttons en popup title)
     
     public ExtraDataDialog(JFrame inParent, long inLinkID, WildLogDataType inLinkType) {
         super(inParent);
@@ -32,6 +36,20 @@ public class ExtraDataDialog extends JDialog {
         tblExtraData.putClientProperty("terminateEditOnFocusLost", true);
         // Load initial data
         UtilsTableGenerator.setupExtraDataTable(WildLogApp.getApplication(), tblExtraData, inLinkID, inLinkType);
+        // Always add an empty row for new records
+        setupEmptyRow();
+        // Note: Using invokeLater because it needs to happen after the setupExtraDataTable has set the model on the table
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                ((DefaultTableModel) tblExtraData.getModel()).addTableModelListener(new TableModelListener() {
+                    @Override
+                    public void tableChanged(TableModelEvent inEvent) {
+                        setupEmptyRow();
+                    }
+                });
+                }
+        });
     }
 
     /**
@@ -59,7 +77,6 @@ public class ExtraDataDialog extends JDialog {
             }
         });
 
-        tblExtraData.setAutoCreateRowSorter(true);
         tblExtraData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblExtraData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblExtraData.getTableHeader().setReorderingAllowed(false);
@@ -121,6 +138,24 @@ public class ExtraDataDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void setupEmptyRow() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                boolean found = false;
+                for (int r = 0; r < tblExtraData.getRowCount(); r++) {
+                    if (((String) tblExtraData.getModel().getValueAt(r, 0)).isEmpty()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    System.out.println("Adding empty row");
+                    ((DefaultTableModel) tblExtraData.getModel()).addRow(new Object[] {"", "", 0L});
+                }
+            }
+        });
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;

@@ -1887,8 +1887,6 @@ public final class UtilsTableGenerator {
                                         };
                 // Load data from DB
                 final List<ExtraData> listExtraDatas = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.USER, inLinkID, ExtraData.class);
-//                // Always add an empty row for new records
-//                listExtraDatas.add(new ExtraData(WildLogExtraDataFieldTypes.USER, 0L, WildLogDataType.NONE, "", ""));
                 // Populate the table data
                 if (!listExtraDatas.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listExtraDatas.size());
@@ -1922,8 +1920,6 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(1).setMinWidth(100);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(200);
                     inTable.removeColumn(inTable.getColumnModel().getColumn(2));
-                    // Setup default sorting
-                    setupRowSorter(inTable, 0, 1, SortOrder.ASCENDING, SortOrder.ASCENDING);
                     // Setup the renderers and editors
                     inTable.setDefaultRenderer(Object.class, new TextCellRenderer(0, 1));
                     List<String> lstDataKeys = inApp.getDBI().queryExtraDataUniqueDataKeys(WildLogExtraDataFieldTypes.USER, inLinkType);
