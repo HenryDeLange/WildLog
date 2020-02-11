@@ -1888,60 +1888,55 @@ public final class UtilsTableGenerator {
                 // Load data from DB
                 final List<ExtraData> listExtraDatas = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.USER, inLinkID, ExtraData.class);
                 // Populate the table data
-                if (!listExtraDatas.isEmpty()) {
-                    Collection<Callable<Object>> listCallables = new ArrayList<>(listExtraDatas.size());
-                    // Setup new table data
-                    final Object[][] data = new Object[listExtraDatas.size()][columnNames.length + 1];
-                    for (int t = 0; t < listExtraDatas.size(); t++) {
-                        final int finalT = t;
-                        listCallables.add(new Callable<>() {
-                            @Override
-                            public Object call() throws Exception {
-                                ExtraData tempExtraData = listExtraDatas.get(finalT);
-                                data[finalT][0] = tempExtraData.getDataKey();
-                                data[finalT][1] = tempExtraData.getDataValue();
-                                data[finalT][2] = tempExtraData.getID();
-                                return null;
-                            }
-                        });
-                    }
-                    try {
-                        executorService.invokeAll(listCallables);
-                    }
-                    catch (InterruptedException ex) {
-                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                    }
-                    // Create the new model
-                    inTable.setModel(new DefaultTableModel(data, columnNames));
-                    // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, true, -1);
-                    inTable.getColumnModel().getColumn(0).setMinWidth(50);
-                    inTable.getColumnModel().getColumn(0).setPreferredWidth(100);
-                    inTable.getColumnModel().getColumn(1).setMinWidth(100);
-                    inTable.getColumnModel().getColumn(1).setPreferredWidth(200);
-                    inTable.removeColumn(inTable.getColumnModel().getColumn(2));
-                    // Setup the renderers and editors
-                    inTable.setDefaultRenderer(Object.class, new TextCellRenderer(0, 1));
-                    List<String> lstDataKeys = inApp.getDBI().queryExtraDataUniqueDataKeys(WildLogExtraDataFieldTypes.USER, inLinkType);
-                    JComboBox comboBox = new JComboBox();
-                    comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                    comboBox.setFont(comboBox.getFont().deriveFont(Font.BOLD, comboBox.getFont().getSize()*1.2f));
-                    comboBox.setEditable(true);
-                    if (lstDataKeys != null && !lstDataKeys.isEmpty()) {
-                        comboBox.setModel(new DefaultComboBoxModel(lstDataKeys.toArray()));
-                    }
-                    ComboBoxFixer.configureComboBoxes(comboBox);
-                    DefaultCellEditor cellEditor = new DefaultCellEditor(comboBox);
-                    cellEditor.setClickCountToStart(1);
-                    inTable.getColumnModel().getColumn(0).setCellEditor(cellEditor);
-                    JTextField textField = new JTextField();
-                    cellEditor = new DefaultCellEditor(textField);
-                    cellEditor.setClickCountToStart(1);
-                    inTable.getColumnModel().getColumn(1).setCellEditor(cellEditor);
+                Collection<Callable<Object>> listCallables = new ArrayList<>(listExtraDatas.size());
+                // Setup new table data
+                final Object[][] data = new Object[listExtraDatas.size()][columnNames.length + 1];
+                for (int t = 0; t < listExtraDatas.size(); t++) {
+                    final int finalT = t;
+                    listCallables.add(new Callable<>() {
+                        @Override
+                        public Object call() throws Exception {
+                            ExtraData tempExtraData = listExtraDatas.get(finalT);
+                            data[finalT][0] = tempExtraData.getDataKey();
+                            data[finalT][1] = tempExtraData.getDataValue();
+                            data[finalT][2] = tempExtraData.getID();
+                            return null;
+                        }
+                    });
                 }
-                else {
-                    inTable.setModel(new DefaultTableModel(new String[]{"No Extra Data"}, 0));
+                try {
+                    executorService.invokeAll(listCallables);
                 }
+                catch (InterruptedException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+                // Create the new model
+                inTable.setModel(new DefaultTableModel(data, columnNames));
+                // Setup the column and row sizes etc.
+                setupRenderersAndThumbnailRows(inTable, false, true, -1);
+                inTable.getColumnModel().getColumn(0).setMinWidth(50);
+                inTable.getColumnModel().getColumn(0).setPreferredWidth(100);
+                inTable.getColumnModel().getColumn(1).setMinWidth(100);
+                inTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+                inTable.removeColumn(inTable.getColumnModel().getColumn(2));
+                // Setup the renderers and editors
+                inTable.setDefaultRenderer(Object.class, new TextCellRenderer(0, 1));
+                List<String> lstDataKeys = inApp.getDBI().queryExtraDataUniqueDataKeys(WildLogExtraDataFieldTypes.USER, inLinkType);
+                JComboBox comboBox = new JComboBox();
+                comboBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                comboBox.setFont(comboBox.getFont().deriveFont(Font.BOLD, comboBox.getFont().getSize()*1.2f));
+                comboBox.setEditable(true);
+                if (lstDataKeys != null && !lstDataKeys.isEmpty()) {
+                    comboBox.setModel(new DefaultComboBoxModel(lstDataKeys.toArray()));
+                }
+                ComboBoxFixer.configureComboBoxes(comboBox);
+                DefaultCellEditor cellEditor = new DefaultCellEditor(comboBox);
+                cellEditor.setClickCountToStart(1);
+                inTable.getColumnModel().getColumn(0).setCellEditor(cellEditor);
+                JTextField textField = new JTextField();
+                cellEditor = new DefaultCellEditor(textField);
+                cellEditor.setClickCountToStart(1);
+                inTable.getColumnModel().getColumn(1).setCellEditor(cellEditor);
             }
         });
     }

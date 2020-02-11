@@ -419,15 +419,16 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnBrowse" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnUpdate" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnBulkImport" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnGoLocation" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="btnExtraData" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="btnBrowse" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnUpdate" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Component id="btnBulkImport" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -438,10 +439,10 @@
                           <Component id="btnUpdate" min="-2" pref="60" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Component id="btnBrowse" min="-2" pref="35" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           <Component id="btnBulkImport" min="-2" pref="35" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Component id="btnGoLocation" min="-2" pref="30" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                          <Component id="btnExtraData" min="-2" pref="33" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -469,29 +470,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBrowseActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="btnGoLocation">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="f0" green="e4" red="e6" type="rgb"/>
-                    </Property>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/LocationList.gif"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="View Place"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Open the tab of the the Place linked to this Period."/>
-                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Hand Cursor"/>
-                    </Property>
-                    <Property name="horizontalAlignment" type="int" value="2"/>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[2, 6, 2, 6]"/>
-                    </Property>
-                    <Property name="name" type="java.lang.String" value="btnGoLocation" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGoLocationActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnBulkImport">
@@ -533,6 +511,26 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnExtraData">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Extra_Small.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Extra Data"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Link extra fields to this Period."/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 6, 2, 4]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnExtraData" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExtraDataActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>

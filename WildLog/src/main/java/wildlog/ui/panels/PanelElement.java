@@ -43,6 +43,7 @@ import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
 import wildlog.ui.dialogs.CompareElementsDialog;
+import wildlog.ui.dialogs.ExtraDataDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -251,6 +252,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnBrowse = new javax.swing.JButton();
         btnExport = new javax.swing.JButton();
         btnCompare = new javax.swing.JButton();
+        btnExtraData = new javax.swing.JButton();
         pnlNames = new javax.swing.JPanel();
         txtScienceName = new javax.swing.JTextField();
         txtReferenceID = new javax.swing.JTextField();
@@ -568,6 +570,19 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         });
 
+        btnExtraData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Extra_Small.png"))); // NOI18N
+        btnExtraData.setText("Extra Data");
+        btnExtraData.setToolTipText("Link extra fields to this Creature.");
+        btnExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExtraData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExtraData.setMargin(new java.awt.Insets(2, 6, 2, 4));
+        btnExtraData.setName("btnExtraData"); // NOI18N
+        btnExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExtraDataActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlButtonsLayout = new javax.swing.GroupLayout(pnlButtons);
         pnlButtons.setLayout(pnlButtonsLayout);
         pnlButtonsLayout.setHorizontalGroup(
@@ -575,18 +590,22 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             .addGroup(pnlButtonsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnCompare, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExtraData, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlButtonsLayout.createSequentialGroup()
                         .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnCompare, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlButtonsLayout.setVerticalGroup(
@@ -598,6 +617,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
@@ -1373,6 +1394,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         dialog.setVisible(true);
     }//GEN-LAST:event_btnCompareActionPerformed
 
+    private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
+        ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), element.getID(), WildLogDataType.ELEMENT);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnExtraDataActionPerformed
+
 
     private void setupNumberOfImages() {
         int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
@@ -1392,6 +1418,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private javax.swing.JButton btnCompare;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnExtraData;
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnINaturalist;
     private javax.swing.JButton btnMap;

@@ -282,13 +282,13 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLatitude = new javax.swing.JTextField();
         btnApplyGPSToVisit = new javax.swing.JButton();
         btnGPS = new javax.swing.JButton();
-        btnExtraData = new javax.swing.JButton();
+        btnSunAndMoon = new javax.swing.JButton();
         pnlButtons = new javax.swing.JPanel();
-        btnMap = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
-        btnSunAndMoon = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
+        btnExtraData = new javax.swing.JButton();
+        btnMap = new javax.swing.JButton();
         pnlSubButtons1 = new javax.swing.JPanel();
         btnReport = new javax.swing.JButton();
         pnlSubButtons2 = new javax.swing.JPanel();
@@ -542,7 +542,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLatitude.setName("txtLatitude"); // NOI18N
 
         btnApplyGPSToVisit.setBackground(new java.awt.Color(233, 239, 244));
-        btnApplyGPSToVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS_Small.png"))); // NOI18N
+        btnApplyGPSToVisit.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnApplyGPSToVisit.setText("<html>Apply GPS to Periods</html>");
         btnApplyGPSToVisit.setToolTipText("Set the GPS coordinates of the related Observations to be the same as this Place's.");
         btnApplyGPSToVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -568,6 +568,19 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
+        btnSunAndMoon.setBackground(new java.awt.Color(233, 239, 244));
+        btnSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
+        btnSunAndMoon.setToolTipText("Show the Sun and Moon information for this Place.");
+        btnSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSunAndMoon.setMargin(new java.awt.Insets(2, 6, 2, 2));
+        btnSunAndMoon.setName("btnSunAndMoon"); // NOI18N
+        btnSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSunAndMoonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlGPSLayout = new javax.swing.GroupLayout(pnlGPS);
         pnlGPS.setLayout(pnlGPSLayout);
         pnlGPSLayout.setHorizontalGroup(
@@ -580,8 +593,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGap(5, 5, 5)
                 .addComponent(btnGPS)
                 .addGap(3, 3, 3)
-                .addComponent(btnApplyGPSToVisit, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-                .addGap(5, 5, 5))
+                .addComponent(btnApplyGPSToVisit, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                .addGap(7, 7, 7)
+                .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
         );
         pnlGPSLayout.setVerticalGroup(
             pnlGPSLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -594,17 +609,9 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addGap(0, 0, 0)
                         .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnApplyGPSToVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                    .addComponent(btnApplyGPSToVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
-
-        btnExtraData.setText("Extra Data");
-        btnExtraData.setName("btnExtraData"); // NOI18N
-        btnExtraData.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExtraDataActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
         pnlInfo.setLayout(pnlInfoLayout);
@@ -614,28 +621,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGap(5, 5, 5)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addComponent(jLabel48, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtName))
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(jScrollPane10))
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
-                                        .addComponent(btnExtraData)
-                                        .addGap(18, 18, 18)))
-                                .addComponent(jScrollPane13)))
-                        .addGap(5, 5, 5))
-                    .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
                         .addComponent(pnlGPS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
+                        .addGap(10, 10, 10)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel41))
@@ -643,7 +632,20 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cmbGameRating, 0, 90, Short.MAX_VALUE)
                             .addComponent(cmbRating, 0, 90, Short.MAX_VALUE))
-                        .addContainerGap(24, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlInfoLayout.createSequentialGroup()
+                        .addComponent(jLabel48, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtName))
+                    .addGroup(pnlInfoLayout.createSequentialGroup()
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, 0)
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane13)
+                            .addComponent(jScrollPane10))))
+                .addGap(5, 5, 5))
         );
         pnlInfoLayout.setVerticalGroup(
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -677,10 +679,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addComponent(jLabel40)
-                                .addGap(43, 43, 43)
-                                .addComponent(btnExtraData))
+                            .addComponent(jLabel40)
                             .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(10, 10, 10))
         );
@@ -691,17 +690,14 @@ public class PanelLocation extends PanelCanSetupHeader {
         pnlButtons.setName("pnlButtons"); // NOI18N
         pnlButtons.setPreferredSize(new java.awt.Dimension(120, 345));
 
-        btnMap.setBackground(new java.awt.Color(233, 239, 244));
-        btnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
-        btnMap.setText("Maps");
-        btnMap.setToolTipText("Show maps for this Place.");
-        btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnMap.setMargin(new java.awt.Insets(2, 6, 2, 8));
-        btnMap.setName("btnMap"); // NOI18N
-        btnMap.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdate.setBackground(new java.awt.Color(0, 204, 51));
+        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnUpdate.setToolTipText("Save and update the Place.");
+        btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUpdate.setName("btnUpdate"); // NOI18N
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMapActionPerformed(evt);
+                btnUpdateActionPerformed(evt);
             }
         });
 
@@ -733,28 +729,30 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
-        btnSunAndMoon.setBackground(new java.awt.Color(233, 239, 244));
-        btnSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
-        btnSunAndMoon.setText("Sun / Moon");
-        btnSunAndMoon.setToolTipText("Show the Sun and Moon information for this Place.");
-        btnSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSunAndMoon.setMargin(new java.awt.Insets(2, 6, 2, 2));
-        btnSunAndMoon.setName("btnSunAndMoon"); // NOI18N
-        btnSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
+        btnExtraData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Extra_Small.png"))); // NOI18N
+        btnExtraData.setText("Extra Data");
+        btnExtraData.setToolTipText("Link extra fields to this Place.");
+        btnExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExtraData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExtraData.setMargin(new java.awt.Insets(2, 6, 2, 4));
+        btnExtraData.setName("btnExtraData"); // NOI18N
+        btnExtraData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSunAndMoonActionPerformed(evt);
+                btnExtraDataActionPerformed(evt);
             }
         });
 
-        btnUpdate.setBackground(new java.awt.Color(0, 204, 51));
-        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
-        btnUpdate.setToolTipText("Save and update the Place.");
-        btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdate.setName("btnUpdate"); // NOI18N
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+        btnMap.setBackground(new java.awt.Color(233, 239, 244));
+        btnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnMap.setText("Maps");
+        btnMap.setToolTipText("Show maps for this Place.");
+        btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnMap.setMargin(new java.awt.Insets(2, 6, 2, 8));
+        btnMap.setName("btnMap"); // NOI18N
+        btnMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
+                btnMapActionPerformed(evt);
             }
         });
 
@@ -831,10 +829,9 @@ public class PanelLocation extends PanelCanSetupHeader {
             pnlSubButtons2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSubButtons2Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addGroup(pnlSubButtons2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                .addGroup(pnlSubButtons2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnExport, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(btnSlideshow, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
         );
         pnlSubButtons2Layout.setVerticalGroup(
             pnlSubButtons2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -843,7 +840,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout pnlButtonsLayout = new javax.swing.GroupLayout(pnlButtons);
@@ -854,16 +851,13 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGap(5, 5, 5)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlSubButtons2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pnlButtonsLayout.createSequentialGroup()
-                        .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSunAndMoon, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnMap, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                .addComponent(btnBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                .addComponent(pnlSubButtons1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnMap, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                        .addComponent(btnBulkImport, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                        .addComponent(btnBrowse, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                        .addComponent(pnlSubButtons1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, Short.MAX_VALUE)
+                        .addComponent(btnExtraData, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlButtonsLayout.setVerticalGroup(
@@ -876,14 +870,14 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGap(5, 5, 5)
                 .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
+                .addComponent(btnExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
                 .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(pnlSubButtons1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
+                .addGap(5, 5, 5)
                 .addComponent(pnlSubButtons2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pnlVisit.setBackground(new java.awt.Color(233, 239, 244));

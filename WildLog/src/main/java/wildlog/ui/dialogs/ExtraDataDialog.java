@@ -1,5 +1,6 @@
 package wildlog.ui.dialogs;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -19,7 +20,6 @@ public class ExtraDataDialog extends JDialog {
     private final long linkID;
     private final WildLogDataType linkType;
 
-// TODO: Maak 'n Extra Data icon (vir buttons en popup title)
     
     public ExtraDataDialog(JFrame inParent, long inLinkID, WildLogDataType inLinkType) {
         super(inParent);
@@ -65,6 +65,7 @@ public class ExtraDataDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Extra Data");
+        setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/Extra.png")).getImage());
         setMinimumSize(new java.awt.Dimension(400, 300));
         setModal(true);
 
@@ -116,19 +117,16 @@ public class ExtraDataDialog extends JDialog {
             extraData.setID((long) tblExtraData.getModel().getValueAt(r, 2));
             if (extraData.getDataKey().isEmpty()) {
                 if (extraData.getID() != 0) {
-                    System.out.println("DELETE: " + extraData);
                     app.getDBI().deleteExtraData(extraData.getID());
                 }
             }
             else {
                 if (extraData.getID() == 0) {
-                    System.out.println("CREATE: " + extraData);
                     app.getDBI().createExtraData(extraData, false);
                 }
                 else {
                     ExtraData oldExtraData = app.getDBI().findExtraData(extraData.getID(), null, 0, null, ExtraData.class);
                     if (!extraData.getDataKey().equals(oldExtraData.getDataKey()) || !extraData.getDataValue().equals(oldExtraData.getDataValue())) {
-                        System.out.println("UPDATE: " + extraData);
                         app.getDBI().updateExtraData(extraData, false);
                     }
                 }
@@ -150,7 +148,6 @@ public class ExtraDataDialog extends JDialog {
                     }
                 }
                 if (!found) {
-                    System.out.println("Adding empty row");
                     ((DefaultTableModel) tblExtraData.getModel()).addRow(new Object[] {"", "", 0L});
                 }
             }

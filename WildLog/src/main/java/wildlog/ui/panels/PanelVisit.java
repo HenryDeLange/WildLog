@@ -43,6 +43,7 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.charts.ChartsBaseDialog;
+import wildlog.ui.dialogs.ExtraDataDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
@@ -78,7 +79,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnAddSighting.setEnabled(false);
             btnAdvanced.setEnabled(false);
             btnBrowse.setEnabled(false);
-            btnGoLocation.setEnabled(false);
+            btnExtraData.setEnabled(false);
             btnBulkImport.setEnabled(false);
             btnDeleteImage.setEnabled(false);
             btnDeleteSighting.setEnabled(false);
@@ -208,7 +209,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnNextImage.setBackground(getBackground().darker());
             btnUpdate.setBackground(getBackground().darker());
             btnBulkImport.setBackground(getBackground().darker());
-            btnGoLocation.setBackground(getBackground().darker());
+            btnExtraData.setBackground(getBackground().darker());
             btnBrowse.setBackground(getBackground().darker());
             btnAutoName.setBackground(getBackground().darker());
             dtpStartDate.getComponent(1).setBackground(getBackground().darker());
@@ -401,9 +402,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         pnlButtons = new javax.swing.JPanel();
         pnlButtonsRight = new javax.swing.JPanel();
         btnBrowse = new javax.swing.JButton();
-        btnGoLocation = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
+        btnExtraData = new javax.swing.JButton();
         pnlButtonsLeft = new javax.swing.JPanel();
         btnSlideshow = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
@@ -635,20 +636,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
-        btnGoLocation.setBackground(new java.awt.Color(230, 228, 240));
-        btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/LocationList.gif"))); // NOI18N
-        btnGoLocation.setText("View Place");
-        btnGoLocation.setToolTipText("Open the tab of the the Place linked to this Period.");
-        btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnGoLocation.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnGoLocation.setName("btnGoLocation"); // NOI18N
-        btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoLocationActionPerformed(evt);
-            }
-        });
-
         btnBulkImport.setBackground(new java.awt.Color(230, 228, 240));
         btnBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
         btnBulkImport.setText("<html><u>Bulk Import</u></html>");
@@ -674,6 +661,19 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
+        btnExtraData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Extra_Small.png"))); // NOI18N
+        btnExtraData.setText("Extra Data");
+        btnExtraData.setToolTipText("Link extra fields to this Period.");
+        btnExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExtraData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExtraData.setMargin(new java.awt.Insets(2, 6, 2, 4));
+        btnExtraData.setName("btnExtraData"); // NOI18N
+        btnExtraData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExtraDataActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlButtonsRightLayout = new javax.swing.GroupLayout(pnlButtonsRight);
         pnlButtonsRight.setLayout(pnlButtonsRightLayout);
         pnlButtonsRightLayout.setHorizontalGroup(
@@ -681,11 +681,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             .addGroup(pnlButtonsRightLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                    .addComponent(btnExtraData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         pnlButtonsRightLayout.setVerticalGroup(
             pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -694,10 +694,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
+                .addGap(3, 3, 3)
                 .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(btnExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
 
@@ -1550,10 +1550,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
-    private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
-        UtilsPanelGenerator.openPanelAsTab(app, locationForVisit.getID(), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
-    }//GEN-LAST:event_btnGoLocationActionPerformed
-
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         WildLogApp.LOGGER.log(Level.INFO, "[PanelVisit-Save]");
         if (UtilsData.checkCharacters(txtName.getText().trim())) {
@@ -1680,6 +1676,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         generateVisitName();
     }//GEN-LAST:event_btnAutoNameActionPerformed
 
+    private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
+        ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), visit.getID(), WildLogDataType.VISIT);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnExtraDataActionPerformed
+
     private void populateVisitFromUI() {
         visit.setName(UtilsData.limitLength(txtName.getText(), 100));
         visit.setStartDate(dtpStartDate.getDate());
@@ -1776,8 +1777,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JButton btnDeleteSighting;
     private javax.swing.JButton btnEditSighting;
     private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnExtraData;
     private javax.swing.JButton btnGoElement;
-    private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnMapSighting;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnNextImageSighting;
