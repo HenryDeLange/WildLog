@@ -90,6 +90,7 @@ public class VideoPlayer {
             // This is a decoding loop, and as you work with Humble you'll write a lot of these.
             // Notice how in this loop we reuse all of our objects to avoid reallocating them. 
             // Each call to Humble resets objects to avoid unnecessary reallocation.
+            long pauseTime = 0;
             BufferedImage image = null;
             final MediaPacket packet = MediaPacket.make();
             while (demuxer.read(packet) >= 0) {
@@ -104,7 +105,7 @@ public class VideoPlayer {
                             bytesRead += videoDecoder.decode(picture, packet, offset);
                             if (picture.isComplete()) {
                                 image = displayVideoAtCorrectTime(
-                                        streamStartTime, picture, converter, image, inVideoPanel, systemStartTime, systemTimeBase, streamTimebase);
+                                        streamStartTime, pauseTime, picture, converter, image, inVideoPanel, systemStartTime, systemTimeBase, streamTimebase);
                             }
                             offset += bytesRead;
                         }
@@ -115,6 +116,8 @@ public class VideoPlayer {
                             //System.err.println(ex.getMessage());
                             break;
                         }
+                        // Check whether the video is paused
+                        pauseTime = pauseTime + handlePauseStatus(inVideoPanel.getController());
                     }
                     while (offset < packet.getSize());
                 }
@@ -124,11 +127,12 @@ public class VideoPlayer {
             // The convention to flush Encoders or Decoders in Humble Video
             // is to keep passing in null until incomplete samples or packets are returned.
             do {
+                // Decode the video
                 videoDecoder.decode(picture, null, 0);
                 if (picture.isComplete()) {
                     try {
                         image = displayVideoAtCorrectTime(
-                                streamStartTime, picture, converter, image, inVideoPanel, systemStartTime, systemTimeBase, streamTimebase);
+                                streamStartTime, pauseTime, picture, converter, image, inVideoPanel, systemStartTime, systemTimeBase, streamTimebase);
                     }
                     catch (Exception ex) {
                         // WildLog NOTE: The camera trap files can be very "dirty", 
@@ -161,25 +165,44 @@ public class VideoPlayer {
     /**
      * Takes the video picture and displays it at the right time.
      */
-    private static BufferedImage displayVideoAtCorrectTime(long streamStartTime, final MediaPicture picture, 
+    private static BufferedImage displayVideoAtCorrectTime(long streamStartTime, long inPauseTime, final MediaPicture picture, 
             final MediaPictureConverter converter, BufferedImage image, final VideoPanel inVideoPanel, long systemStartTime,
             final Rational systemTimeBase, final Rational streamTimebase) throws InterruptedException {
-        long streamTimestamp = picture.getTimeStamp();
         // Convert streamTimestamp into system units (i.e. nano-seconds)
-        streamTimestamp = systemTimeBase.rescale(streamTimestamp - streamStartTime, streamTimebase);
+        long streamTimestamp = systemTimeBase.rescale(picture.getTimeStamp() - streamStartTime, streamTimebase);
         // Get the current clock time, with our most accurate clock
-        long systemTimestamp = System.nanoTime();
+        long systemTimestamp = System.nanoTime() - inPauseTime;
         // Loop in a sleeping loop until we're within 1 ms of the time for that video frame.
         // A real video player needs to be much more sophisticated than this.
         while (streamTimestamp > (systemTimestamp - systemStartTime + 1000000)) {
             Thread.sleep(1);
-            systemTimestamp = System.nanoTime();
+            systemTimestamp = System.nanoTime() - inPauseTime;
         }
         // Finally, convert the image from Humble format into Java images.
         image = converter.toImage(image, picture);
         // And ask the UI thread to repaint with the new image.
         inVideoPanel.setImage(image);
         return image;
+    }
+    
+    private static long handlePauseStatus(VideoController inController) {
+        if (inController.getStatus() == VideoController.VideoStatus.PAUSED) {
+            try {
+                long pauseTime = System.nanoTime();
+                boolean wasPaused = false;
+                while (inController.getStatus() == VideoController.VideoStatus.PAUSED) {
+                    Thread.sleep(100);
+                    wasPaused = true;
+                }
+                if (wasPaused) {
+                    return System.nanoTime() - pauseTime;
+                }
+            }
+            catch (InterruptedException ex) {
+                ex.printStackTrace(System.err);
+            }
+        }
+        return 0;
     }
 
 }

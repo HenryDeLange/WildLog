@@ -20,14 +20,14 @@ public class VideoPanel extends JPanel {
     private final Font font = new JLabel().getFont().deriveFont(13);
     private final int panelWidth;
     private final int panelHeight;
+    private final VideoController controller;
     private int xOffset = 0;
     private int yOffset = 0;
     private Image image;
-// TODO: Kry 'n manier om te pause / play
-    private boolean playing = true;
 
     
-    public VideoPanel(int inWidth, int inHeight) {
+    public VideoPanel(VideoController inVideoController, int inWidth, int inHeight) {
+        controller = inVideoController;
         panelWidth = inWidth;
         panelHeight = inHeight;
         VideoPanel.this.setBackground(Color.BLACK);
@@ -38,16 +38,22 @@ public class VideoPanel extends JPanel {
         VideoPanel.this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent inEvent) {
-                if ((inEvent.isPopupTrigger() || SwingUtilities.isRightMouseButton(inEvent))) {
-                    playing = !playing;
-                    System.out.println("Playing = " + playing);
+                if (controller.getStatus() == VideoController.VideoStatus.PLAYING) {
+                    controller.setStatus(VideoController.VideoStatus.PAUSED);
+                }
+                else
+                if (controller.getStatus() == VideoController.VideoStatus.PAUSED) {
+                    controller.setStatus(VideoController.VideoStatus.PLAYING);
                 }
             }
         });
     }
 
+    public VideoController getController() {
+        return controller;
+    }
     
-    public boolean setImage(final Image newImage) {
+    public void setImage(final Image newImage) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -58,7 +64,6 @@ public class VideoPanel extends JPanel {
                 repaint();
             }
         });
-        return playing;
     }
 
     @Override

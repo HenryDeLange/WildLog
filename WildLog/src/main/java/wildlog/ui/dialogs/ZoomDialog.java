@@ -16,6 +16,7 @@ import javax.swing.KeyStroke;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
+import wildlog.mediaplayer.VideoController;
 import wildlog.mediaplayer.VideoPanel;
 import wildlog.mediaplayer.VideoPlayer;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -181,7 +182,8 @@ public class ZoomDialog extends JDialog {
 // FIXME: Stop die ou video as mens die popup toe maak of Prev/Next druk
 // FIXME: Kry 'n manier om die log errors nie te print nie (slf4j config)
             if (videoPanel == null) {
-                videoPanel = new VideoPanel(WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize());
+                VideoController videoController = new VideoController();
+                videoPanel = new VideoPanel(videoController, WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize());
             }
             // Replace the image label with the video panel
             lblZoomedFile.setVisible(false);

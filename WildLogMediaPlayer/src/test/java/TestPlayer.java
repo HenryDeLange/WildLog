@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import javax.swing.JFrame;
+import wildlog.mediaplayer.VideoController;
 import wildlog.mediaplayer.VideoPanel;
 import wildlog.mediaplayer.VideoPlayer;
 
@@ -14,7 +15,8 @@ public class TestPlayer {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBackground(Color.GRAY);
-        VideoPanel videoPanel = new VideoPanel(300, 300);
+        VideoController videoController = new VideoController();
+        VideoPanel videoPanel = new VideoPanel(videoController, 300, 300);
         frame.add(videoPanel);
         frame.pack();
         frame.setLocationRelativeTo(null);
