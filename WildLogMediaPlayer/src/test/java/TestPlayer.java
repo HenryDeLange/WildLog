@@ -10,10 +10,11 @@ import wildlog.mediaplayer.VideoPlayer;
 
 public class TestPlayer {
     public static void main(String[] args) throws InterruptedException, IOException {
-        Path videoPath = Paths.get("C:\\WildLogToets\\WEI-DATA\\GSZ_Non-big-5_area-20200207T174520Z-001\\GSZ_Non-big-5_area\\IMG_0008.AVI");
+        Path videoPath = Paths.get("C:\\_temp\\IMG_0008.AVI");
 //        VideoInfo.getInfo(videoFile);
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setBackground(Color.GRAY);
         VideoController videoController = new VideoController();
         VideoPanel videoPanel = new VideoPanel(videoController, 300, 300);

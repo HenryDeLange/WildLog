@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 /**
  * Based on ImageFrame.java demo from https://github.com/artclarke/humble-video
@@ -35,6 +37,7 @@ public class VideoPanel extends JPanel {
         VideoPanel.this.setMinimumSize(new Dimension(panelWidth, panelHeight));
         VideoPanel.this.setPreferredSize(new Dimension(panelWidth, panelHeight));
         VideoPanel.this.setMinimumSize(new Dimension(panelWidth, panelHeight));
+        // Play / Pause on click
         VideoPanel.this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent inEvent) {
@@ -45,6 +48,21 @@ public class VideoPanel extends JPanel {
                 if (controller.getStatus() == VideoController.VideoStatus.PAUSED) {
                     controller.setStatus(VideoController.VideoStatus.PLAYING);
                 }
+            }
+        });
+        // Stop playback when the panel is close
+        VideoPanel.this.addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorAdded(AncestorEvent event) {
+            }
+
+            @Override
+            public void ancestorRemoved(AncestorEvent event) {
+                controller.setStatus(VideoController.VideoStatus.STOPPED);
+            }
+
+            @Override
+            public void ancestorMoved(AncestorEvent event) {
             }
         });
     }

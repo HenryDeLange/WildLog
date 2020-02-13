@@ -138,7 +138,12 @@ public class ZoomDialog extends JDialog {
             }
             fileIndex = filesToView.size() - 1;
         }
-        if (!filesToView.isEmpty()) {
+        if (filesToView.size() > 1) {
+            // If a video was busy playing then stop it
+            if (videoPanel != null) {
+                videoPanel.getController().setStatus(VideoController.VideoStatus.STOPPED);
+            }
+            // Load the previous file
             setupFile(filesToView.get(fileIndex));
         }
     }//GEN-LAST:event_btnPrevActionPerformed
@@ -153,7 +158,12 @@ public class ZoomDialog extends JDialog {
             }
             fileIndex = 0;
         }
-        if (!filesToView.isEmpty()) {
+        if (filesToView.size() > 1) {
+            // If a video was busy playing then stop it
+            if (videoPanel != null) {
+                videoPanel.getController().setStatus(VideoController.VideoStatus.STOPPED);
+            }
+            // Load the next file
             setupFile(filesToView.get(fileIndex));
         }
     }//GEN-LAST:event_btnNextActionPerformed
@@ -164,33 +174,39 @@ public class ZoomDialog extends JDialog {
 
     private void setupFile(Path inPath) {
         setTitle("Zoom Popup - " + inPath.getFileName().toString());
-        lblZoomedFile.setVisible(false);
-        try {
-            remove(videoPanel);
-            add(lblZoomedFile, BorderLayout.CENTER);
-        }
-        catch (Exception ex) {
-            // TODO: All of this needs to happen much smoother...
-        }
+        // Setup the file based on the different file types
         if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
             ImageIcon imageIcon = UtilsImageProcessing.getScaledIcon(inPath, WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), true);
             lblZoomedFile.setIcon(imageIcon);
+            // Replace the video panel with the image label
+            if (videoPanel != null) {
+                remove(videoPanel);
+                videoPanel = null;
+                add(lblZoomedFile, BorderLayout.CENTER);
+                invalidate();
+                repaint();
+            }
         }
         else
         if (WildLogFileExtentions.Movies.isKnownExtention(inPath)) {
-            lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.S0300_NORMAL));
-// FIXME: Stop die ou video as mens die popup toe maak of Prev/Next druk
+            //lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.S0300_NORMAL));
 // FIXME: Kry 'n manier om die log errors nie te print nie (slf4j config)
-            if (videoPanel == null) {
-                VideoController videoController = new VideoController();
-                videoPanel = new VideoPanel(videoController, WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize());
+            // Stop the old video
+            if (videoPanel != null) {
+                videoPanel.getController().setStatus(VideoController.VideoStatus.STOPPED);
+                remove(videoPanel);
+                videoPanel = null;
             }
-            // Replace the image label with the video panel
-            lblZoomedFile.setVisible(false);
+            // Replace the image label with the new video panel
+            VideoController videoController = new VideoController();
+            videoPanel = new VideoPanel(videoController, WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize());
             remove(lblZoomedFile);
             add(videoPanel, BorderLayout.CENTER);
+            invalidate();
+            repaint();
             // Play the video
-            // Die video decoding moet op sy eie thread gebeur
+            // Note: Die video decoding moet op sy eie thread gebeur
+// TODO: Better thread handeling? (not a fan of making floating threads)
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -200,6 +216,14 @@ public class ZoomDialog extends JDialog {
         }
         else {
             lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForOtherFiles(WildLogThumbnailSizes.S0300_NORMAL));
+            // Replace the video panel with the image label
+            if (videoPanel != null) {
+                remove(videoPanel);
+                videoPanel = null;
+                add(lblZoomedFile, BorderLayout.CENTER);
+                invalidate();
+                repaint();
+            }
         }
         // Don't set the tooltip. If it is set then sometimes the tooltip uses the initial ESC press.
 //        lblZoomedFile.setToolTipText(inPath.getFileName().toString());

@@ -121,6 +121,10 @@ public class VideoPlayer {
                     }
                     while (offset < packet.getSize());
                 }
+                // Check whether to stop playback
+                if (inVideoPanel.getController().getStatus() == VideoController.VideoStatus.STOPPED) {
+                    break;
+                }
             }
             // Some video decoders (especially advanced ones) will cache
             // video data before they begin decoding, so when you are done you need to flush them. 
