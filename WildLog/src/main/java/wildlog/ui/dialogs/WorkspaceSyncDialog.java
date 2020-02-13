@@ -619,10 +619,10 @@ public class WorkspaceSyncDialog extends JDialog {
                             syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_OPTIONS, this, (int) (1 * adjustForNoFiles));
                             setProgress((int) (10 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Creatures ... " + getProgress() + "%");
-                            syncDataRecords(feedback, syncAzure, WildLogDataType.ELEMENT, this, (int) (9 * adjustForNoFiles));
+                            syncDataRecords(feedback, syncAzure, WildLogDataType.ELEMENT, this, (int) (8 * adjustForNoFiles));
                             setProgress((int) (20 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Places ... " + getProgress() + "%");
-                            syncDataRecords(feedback, syncAzure, WildLogDataType.LOCATION, this, (int) (8 * adjustForNoFiles));
+                            syncDataRecords(feedback, syncAzure, WildLogDataType.LOCATION, this, (int) (6 * adjustForNoFiles));
                             setProgress((int) (30 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Periods ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.VISIT, this, (int) (12 * adjustForNoFiles));
@@ -632,6 +632,9 @@ public class WorkspaceSyncDialog extends JDialog {
                             setProgress((int) (50 * adjustForNoFiles));
                             setMessage("Busy with the Cloud Sync - Syncing Users ... " + getProgress() + "%");
                             syncDataRecords(feedback, syncAzure, WildLogDataType.WILDLOG_USER, this, (int) (3 * adjustForNoFiles));
+                            setProgress((int) (50 * adjustForNoFiles));
+                            setMessage("Busy with the Cloud Sync - Syncing Extra Data ... " + getProgress() + "%");
+                            syncDataRecords(feedback, syncAzure, WildLogDataType.EXTRA, this, (int) (3 * adjustForNoFiles));
                             // SYNC - Files
                             if (!rdbSyncNoFiles.isSelected()) {
                                 setProgress(60);
@@ -939,6 +942,10 @@ public class WorkspaceSyncDialog extends JDialog {
                 else
                 if(workspaceDataType == WildLogDataType.FILE) {
                     logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteWildLogFile(cloudEntry.getRecordID()));
+                }
+                else
+                if(workspaceDataType == WildLogDataType.EXTRA) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().deleteExtraData(cloudEntry.getRecordID()));
                 }
                 else {
                     logIfFailed(inFeedback, syncAction, false);

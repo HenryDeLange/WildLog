@@ -8,6 +8,7 @@ import com.microsoft.azure.storage.table.TableServiceEntity;
 import java.util.Date;
 import java.util.HashMap;
 import wildlog.data.dataobjects.ElementCore;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
 import wildlog.data.dataobjects.VisitCore;
@@ -38,6 +39,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.system.WildLogDataType;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.data.enums.system.WildLogFileType;
 import wildlog.data.enums.system.WildLogUserTypes;
 import wildlog.data.utils.UtilsData;
@@ -189,6 +191,12 @@ public class SyncTableEntry extends TableServiceEntity {
         if (dataType.equals(WildLogDataType.WILDLOG_OPTIONS.getKey())) {
             if (dbVersion >= 14) {
                 data = readOptionsV14(inProperties);
+            }
+        }
+        else
+        if (dataType.equals(WildLogDataType.EXTRA.getKey())) {
+            if (dbVersion >= 15) {
+                data = readExtraDataV15(inProperties);
             }
         }
         else {
@@ -362,6 +370,20 @@ public class SyncTableEntry extends TableServiceEntity {
         return tempData;
     }
     
+    private ExtraData readExtraDataV15(HashMap<String, EntityProperty> inProperties) {
+        ExtraData tempData = new ExtraData();
+        tempData.setID(Long.parseLong(rowKey));
+        tempData.setFieldType(WildLogExtraDataFieldTypes.getEnumFromText(inProperties.getOrDefault("fieldType", EMPTY_STRING).getValueAsString()));
+        tempData.setLinkID(inProperties.getOrDefault("linkID", EMPTY_LONG).getValueAsLong());
+        tempData.setLinkType(WildLogDataType.getEnumFromText(inProperties.getOrDefault("linkType", EMPTY_STRING).getValueAsString()));
+        tempData.setDataKey(inProperties.getOrDefault("dataKey", EMPTY_STRING).getValueAsString());
+        tempData.setDataValue(inProperties.getOrDefault("dataValue", EMPTY_STRING).getValueAsString());
+        tempData.setAuditTime(inProperties.getOrDefault("AuditTime", EMPTY_LONG).getValueAsLong());
+        tempData.setAuditUser(inProperties.getOrDefault("AuditUser", EMPTY_STRING).getValueAsString());
+        tempData.setSyncIndicator(inProperties.getOrDefault("SyncIndicator", EMPTY_LONG).getValueAsLong());
+        return tempData;
+    }
+    
     // WRITE PROPERTIES:
     
     @Override
@@ -416,6 +438,12 @@ public class SyncTableEntry extends TableServiceEntity {
             if (dataType.equals(WildLogDataType.WILDLOG_OPTIONS.getKey())) {
                 if (dbVersion >= 14) {
                     writeOptionsV14((WildLogOptions) data, properties);
+                }
+            }
+            else
+            if (dataType.equals(WildLogDataType.EXTRA.getKey())) {
+                if (dbVersion >= 15) {
+                    writeExtraDataV15((ExtraData) data, properties);
                 }
             }
         }
@@ -562,6 +590,14 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
         inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
         inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
+    }
+    
+    private void writeExtraDataV15(ExtraData inData, HashMap<String, EntityProperty> inProperties) {
+        inProperties.put("fieldType", new EntityProperty(UtilsData.getKeyFromEnum(inData.getFieldType())));
+        inProperties.put("linkID", new EntityProperty(inData.getLinkID()));
+        inProperties.put("linkType", new EntityProperty(UtilsData.getKeyFromEnum(inData.getLinkType())));
+        inProperties.put("dataKey", new EntityProperty(inData.getDataKey()));
+        inProperties.put("dataValue", new EntityProperty(inData.getDataValue()));
     }
 
 }
