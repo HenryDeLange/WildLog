@@ -20,6 +20,9 @@ public class ExtraDataDialog extends JDialog {
     private final long linkID;
     private final WildLogDataType linkType;
 
+// TODO: Add to check and clean
+// TODO: Add to sync
+// TODO: Add to import/export
     
     public ExtraDataDialog(JFrame inParent, long inLinkID, WildLogDataType inLinkType) {
         super(inParent);

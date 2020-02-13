@@ -2850,14 +2850,19 @@ public abstract class DBI_JDBC implements DBI {
             state.setLong(1, inID);
             state.executeUpdate();
             // Delete all Sightings for this ElementCore
-            List<SightingCore> sightingList = listSightings(inID, 0, 0, false, SightingCore.class);
-            for (SightingCore temp : sightingList) {
+            List<SightingCore> lstSighting = listSightings(inID, 0, 0, false, SightingCore.class);
+            for (SightingCore temp : lstSighting) {
                 deleteSighting(temp.getID());
             }
             // Delete Fotos
-            List<WildLogFileCore> fileList = listWildLogFiles(inID, null, WildLogFileCore.class);
-            for (WildLogFileCore temp : fileList) {
+            List<WildLogFileCore> lstFiles = listWildLogFiles(inID, null, WildLogFileCore.class);
+            for (WildLogFileCore temp : lstFiles) {
                 deleteWildLogFile(temp.getID());
+            }
+            // Delete Extra Data
+            List<ExtraData> lstExtraData = listExtraDatas(null, inID, ExtraData.class);
+            for (ExtraData temp : lstExtraData) {
+                deleteExtraData(temp.getID());
             }
         }
         catch (SQLException ex) {
@@ -2882,14 +2887,19 @@ public abstract class DBI_JDBC implements DBI {
             state.executeUpdate();
             state.close();
             // Delete Visits for this LocationCore
-            List<VisitCore> visitList = listVisits(null, inID, null, false, VisitCore.class);
-            for (VisitCore temp : visitList) {
+            List<VisitCore> lstVisits = listVisits(null, inID, null, false, VisitCore.class);
+            for (VisitCore temp : lstVisits) {
                 deleteVisit(temp.getID());
             }
             // Delete Fotos
-            List<WildLogFileCore> fileList = listWildLogFiles(inID, null, WildLogFileCore.class);
-            for (WildLogFileCore temp : fileList) {
+            List<WildLogFileCore> lstFiles = listWildLogFiles(inID, null, WildLogFileCore.class);
+            for (WildLogFileCore temp : lstFiles) {
                 deleteWildLogFile(temp.getID());
+            }
+            // Delete Extra Data
+            List<ExtraData> lstExtraData = listExtraDatas(null, inID, ExtraData.class);
+            for (ExtraData temp : lstExtraData) {
+                deleteExtraData(temp.getID());
             }
         }
         catch (SQLException ex) {
@@ -2913,14 +2923,19 @@ public abstract class DBI_JDBC implements DBI {
             state.setLong(1, inID);
             state.executeUpdate();
             // Delete Sightings for this VisitCore
-            List<SightingCore> sightingList = listSightings(0, 0, inID, false, SightingCore.class);
-            for (SightingCore temp : sightingList) {
+            List<SightingCore> lstSightings = listSightings(0, 0, inID, false, SightingCore.class);
+            for (SightingCore temp : lstSightings) {
                 deleteSighting(temp.getID());
             }
             // Delete Fotos
-            List<WildLogFileCore> fileList = listWildLogFiles(inID, null, WildLogFileCore.class);
-            for (WildLogFileCore temp : fileList) {
+            List<WildLogFileCore> lstFiles = listWildLogFiles(inID, null, WildLogFileCore.class);
+            for (WildLogFileCore temp : lstFiles) {
                 deleteWildLogFile(temp.getID());
+            }
+            // Delete Extra Data
+            List<ExtraData> lstExtraData = listExtraDatas(null, inID, ExtraData.class);
+            for (ExtraData temp : lstExtraData) {
+                deleteExtraData(temp.getID());
             }
         }
         catch (SQLException ex) {
@@ -2944,12 +2959,17 @@ public abstract class DBI_JDBC implements DBI {
             state.setLong(1, inID);
             state.executeUpdate();
             // Delete Fotos
-            List<WildLogFileCore> fileList = listWildLogFiles(inID, null, WildLogFileCore.class);
-            for (WildLogFileCore temp : fileList) {
+            List<WildLogFileCore> lstFiles = listWildLogFiles(inID, null, WildLogFileCore.class);
+            for (WildLogFileCore temp : lstFiles) {
                 deleteWildLogFile(temp.getID());
             }
             // Delete any linked iNaturalist data
             deleteINaturalistLinkedData(inID, 0);
+            // Delete Extra Data
+            List<ExtraData> lstExtraData = listExtraDatas(null, inID, ExtraData.class);
+            for (ExtraData temp : lstExtraData) {
+                deleteExtraData(temp.getID());
+            }
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -3029,7 +3049,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Create the DeleteLog record (to know about the delete when syncing)
             createDeleteLog(new WildLogDeleteLog(WildLogDataType.WILDLOG_USER, inID), false);
-            // Delete the user
+            // Delete the User
             state = conn.prepareStatement(deleteUser);
             state.setLong(1, inID);
             state.executeUpdate();
@@ -3046,13 +3066,11 @@ public abstract class DBI_JDBC implements DBI {
     
     @Override
     public boolean deleteExtraData(long inID) {
-        
-// TODO: Also delete when linked record gets deleted
-// TODO: Also check during Check and Clean
-// TODO: Also add to Cloud Sync
-
         PreparedStatement state = null;
         try {
+            // Create the DeleteLog record (to know about the delete when syncing)
+            createDeleteLog(new WildLogDeleteLog(WildLogDataType.EXTRA, inID), false);
+            // Delete the Extra Data
             state = conn.prepareStatement(deleteExtraData);
             state.setLong(1, inID);
             state.executeUpdate();

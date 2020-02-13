@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.ExtraData;
+import wildlog.data.dataobjects.INaturalistLinkedData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -74,7 +76,7 @@ public class UtilsCheckAndClean {
             inProgressbarTask.setTaskProgress(1);
             finalHandleFeedback.println("** Starting Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
             // ---------------------1---------------------
-            // Check the rest of the data for inconsistencies (all Locations, Visits, Creatures and Observations link correctly)
+            // Check the the data for inconsistencies (all Locations, Visits, Creatures and Observations link correctly)
             int badDataLinks = 0;
             if (inSelectedSteps.contains(1)) {
                 inProgressbarTask.setMessage("Cleanup Step 1: Check links between records in the database... " + inProgressbarTask.getProgress() + "%");
@@ -220,28 +222,83 @@ public class UtilsCheckAndClean {
                     inProgressbarTask.setTaskProgress(4 + (int) (countSightings / (double) allSightings.size() * 4));
                     inProgressbarTask.setMessage("Cleanup Step 1: Check links between records in the database... " + inProgressbarTask.getProgress() + "%");
                 }
+                inProgressbarTask.setTaskProgress(6);
+                // Check Extra Links
+                List<ExtraData> lstExtraDatas = inApp.getDBI().listExtraDatas(null, 0, ExtraData.class);
+                for (ExtraData extraData : lstExtraDatas) {
+                    if (extraData.getLinkType() == WildLogDataType.ELEMENT) {
+                        if (inApp.getDBI().findElement(extraData.getLinkID(), null, false, Element.class) == null) {
+                            badDataLinks++;
+                            finalHandleFeedback.println("PROBLEM:     Could not find link between the Creature and Extra Data. "
+                                    + "Creature: " + extraData.getLinkID() + ", Extra Data: " + extraData.getID());
+                            finalHandleFeedback.println("  +RESOLVED: Deleted the Extra Data record.");
+                            inApp.getDBI().deleteExtraData(extraData.getID());
+                        }
+                    }
+                    else
+                    if (extraData.getLinkType() == WildLogDataType.LOCATION) {
+                        if (inApp.getDBI().findLocation(extraData.getLinkID(), null, false, Location.class) == null) {
+                            badDataLinks++;
+                            finalHandleFeedback.println("PROBLEM:     Could not find link between the Place and Extra Data. "
+                                    + "Creature: " + extraData.getLinkID() + ", Extra Data: " + extraData.getID());
+                            finalHandleFeedback.println("  +RESOLVED: Deleted the Extra Data record.");
+                            inApp.getDBI().deleteExtraData(extraData.getID());
+                        }
+                    }
+                    else
+                    if (extraData.getLinkType() == WildLogDataType.VISIT) {
+                        if (inApp.getDBI().findVisit(extraData.getLinkID(), null, false, Visit.class) == null) {
+                            badDataLinks++;
+                            finalHandleFeedback.println("PROBLEM:     Could not find link between the Period and Extra Data. "
+                                    + "Creature: " + extraData.getLinkID() + ", Extra Data: " + extraData.getID());
+                            finalHandleFeedback.println("  +RESOLVED: Deleted the Extra Data record.");
+                            inApp.getDBI().deleteExtraData(extraData.getID());
+                        }
+                    }
+                    else
+                    if (extraData.getLinkType() == WildLogDataType.SIGHTING) {
+                        if (inApp.getDBI().findSighting(extraData.getLinkID(), false, Sighting.class) == null) {
+                            badDataLinks++;
+                            finalHandleFeedback.println("PROBLEM:     Could not find link between the Observation and Extra Data. "
+                                    + "Creature: " + extraData.getLinkID() + ", Extra Data: " + extraData.getID());
+                            finalHandleFeedback.println("  +RESOLVED: Deleted the Extra Data record.");
+                            inApp.getDBI().deleteExtraData(extraData.getID());
+                        }
+                    }
+                }
+                inProgressbarTask.setTaskProgress(7);
+                inProgressbarTask.setMessage("Cleanup Step 1: Check links between records in the database... " + inProgressbarTask.getProgress() + "%");
+                // Check iNat Data
+                List<INaturalistLinkedData> lstINatData = inApp.getDBI().listINaturalistLinkedDatas(INaturalistLinkedData.class);
+                for (INaturalistLinkedData iNaturalistLinkedData : lstINatData) {
+                    if (inApp.getDBI().findSighting(iNaturalistLinkedData.getWildlogID(), false, Sighting.class) == null) {
+                        badDataLinks++;
+                        finalHandleFeedback.println("PROBLEM:     Could not find link between the Observation and iNaturalist Data. "
+                                + "Creature: " + iNaturalistLinkedData.getWildlogID()+ ", iNaturalist Data: " + iNaturalistLinkedData.getINaturalistID());
+                        finalHandleFeedback.println("  +RESOLVED: Deleted the iNaturalist Data record.");
+                        inApp.getDBI().deleteINaturalistLinkedData(iNaturalistLinkedData.getWildlogID(), iNaturalistLinkedData.getINaturalistID());
+                    }
+                }
+                inProgressbarTask.setTaskProgress(8);
+                inProgressbarTask.setMessage("Cleanup Step 1: Check links between records in the database... " + inProgressbarTask.getProgress() + "%");
             }
             inProgressbarTask.setTaskProgress(8);
             // ---------------------2---------------------
-            // First check database files
-            // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
+            // Maak seker alle files in die database wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
             int filesWithoutID = 0;
             int filesWithoutPath = 0;
             int filesNotOnDisk = 0;
             int filesWithMissingData = 0;
             int filesWithBadType = 0;
             int filesWithBadID = 0;
-            int countImages = 0;
-            int countMovies = 0;
-            int countOther = 0;
             int badStashes = 0;
-            int fileProcessCounter = 0;
             CleanupCounter filesMoved = new CleanupCounter();
             if (inSelectedSteps.contains(2)) {
                 inProgressbarTask.setMessage("Cleanup Step 2: Validate database references to the files in the Workspace... " + inProgressbarTask.getProgress() + "%");
                 finalHandleFeedback.println("");
                 finalHandleFeedback.println("2) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
                 List<WildLogFile> allFiles = inApp.getDBI().listWildLogFiles(-1, null, WildLogFile.class);
+                int fileProcessCounter = 0;
                 for (WildLogFile wildLogFile : allFiles) {
                     // Check the WildLogFile's content
                     if (wildLogFile.getLinkID() == 0) {
@@ -366,17 +423,6 @@ public class UtilsCheckAndClean {
                         filesWithBadID++;
                     }
                     fileProcessCounter++;
-                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                        countImages++;
-                    }
-                    else
-                    if (WildLogFileType.MOVIE.equals(wildLogFile.getFileType())) {
-                        countMovies++;
-                    }
-                    else
-                    if (WildLogFileType.OTHER.equals(wildLogFile.getFileType())) {
-                        countOther++;
-                    }
                     inProgressbarTask.setTaskProgress(8 + (int) (fileProcessCounter / (double) allFiles.size() * 18));
                     inProgressbarTask.setMessage("Cleanup Step 2: Validate database references to the files in the Workspace... " + inProgressbarTask.getProgress() + "%");
                 }
@@ -403,11 +449,29 @@ public class UtilsCheckAndClean {
                 finalHandleFeedback.println("");
                 finalHandleFeedback.println("3) Make sure the files in the Workspace are present in the database.");
                 // Secondly check the files on disk
+                List<WildLogFile> allFiles = inApp.getDBI().listWildLogFiles(-1, null, WildLogFile.class);
+                int totalFiles = allFiles.size();
+                int countImages = 0;
+                int countMovies = 0;
+                int countOther = 0;
+                for (WildLogFile wildLogFile : allFiles) {
+                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                        countImages++;
+                    }
+                    else
+                    if (WildLogFileType.MOVIE.equals(wildLogFile.getFileType())) {
+                        countMovies++;
+                    }
+                    else
+                    if (WildLogFileType.OTHER.equals(wildLogFile.getFileType())) {
+                        countOther++;
+                    }
+                }
                 try {
                     // Kyk of al die files op die hardeskyf in die database bestaan
-                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_IMAGES, filesNotInDB, countImages, (int) (countImages / (double) fileProcessCounter * 20));
-                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_MOVIES, filesNotInDB, countMovies, (int) (countMovies / (double) fileProcessCounter * 20));
-                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER, filesNotInDB, countOther, (int) (countOther / (double) fileProcessCounter * 20));
+                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_IMAGES, filesNotInDB, countImages, (int) (countImages / (double) totalFiles * 20));
+                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_MOVIES, filesNotInDB, countMovies, (int) (countMovies / (double) totalFiles * 20));
+                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER, filesNotInDB, countOther, (int) (countOther / (double) totalFiles * 20));
                     // Kyk of die Stashed Files folders 'n bestaande Visit het
                     File fileStashes = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().toFile();
                     if (fileStashes != null && fileStashes.listFiles() != null) {
@@ -448,7 +512,7 @@ public class UtilsCheckAndClean {
                 finalHandleFeedback.println("");
                 finalHandleFeedback.println("4) Compare the size and modified date of the files on disk to the values stored in the database.");
                 List<WildLogFile> allFiles = inApp.getDBI().listWildLogFiles(-1, null, WildLogFile.class);
-                fileProcessCounter = 0;
+                int fileProcessCounter = 0;
                 for (WildLogFile wildLogFile : allFiles) {
                     try {
                         LocalDateTime actualFileDate = UtilsTime.getLocalDateTimeFromDate(UtilsImageProcessing.getDateFromFileDate(wildLogFile.getAbsolutePath()));
@@ -494,7 +558,7 @@ public class UtilsCheckAndClean {
                     inProgressbarTask.setMessage("Cleanup Step 4: Check the file size and dates... " + inProgressbarTask.getProgress() + "%");
                 }
             }
-            inProgressbarTask.setTaskProgress(69);
+            inProgressbarTask.setTaskProgress(59);
             // ---------------------5---------------------
             // As alles klaar is delete alle lee en temporary folders
             if (inSelectedSteps.contains(5)) {
@@ -511,7 +575,7 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                 }
             }
-            inProgressbarTask.setTaskProgress(71);
+            inProgressbarTask.setTaskProgress(63);
             // ---------------------6---------------------
             // Delete alle temporary/onnodige files en folders
             if (inSelectedSteps.contains(6)) {
@@ -528,8 +592,7 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                 }
             }
-// FIXME: Die progress sprong is te groot (nou dat die thumbnail delete skuif na stap 9)
-            inProgressbarTask.setTaskProgress(79);
+            inProgressbarTask.setTaskProgress(65);
             // ---------------------7---------------------
             // Check GPS Accuracy
             int badGPSAccuracy = 0;
@@ -538,7 +601,7 @@ public class UtilsCheckAndClean {
                 finalHandleFeedback.println("");
                 finalHandleFeedback.println("7) Check the GPS Accuracy values.");
                 List<Sighting> allSightings = inApp.getDBI().listSightings(0, 0, 0, false, Sighting.class);
-                int countGPSAccuracy = 0;
+                double countGPSAccuracy = 0.0;
                 for (Sighting sighting : allSightings) {
                     if ((sighting.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(sighting.getGPSAccuracy()))
                             && sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
@@ -571,11 +634,11 @@ public class UtilsCheckAndClean {
                         finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                     }
                     countGPSAccuracy++;
-                    inProgressbarTask.setTaskProgress(79 + (int) (countGPSAccuracy / (double) allSightings.size() * 2));
+                    inProgressbarTask.setTaskProgress(65 + (int) (countGPSAccuracy / (double) allSightings.size() * 2.0));
                     inProgressbarTask.setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + inProgressbarTask.getProgress() + "%");
                 }
                 List<Location> allLocations = inApp.getDBI().listLocations(null, false, Location.class);
-                countGPSAccuracy = 0;
+                countGPSAccuracy = 0.0;
                 for (Location location : allLocations) {
                     if ((location.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
                             && location.getLatitude() != null && !Latitudes.NONE.equals(location.getLatitude())
@@ -608,11 +671,11 @@ public class UtilsCheckAndClean {
                         finalHandleFeedback.println("  +RESOLVED: Set the GPS Accuracy Value to the maximum value associated with the GPS Accuracy category.");
                     }
                     countGPSAccuracy++;
-                    inProgressbarTask.setTaskProgress(81 + (int) (countGPSAccuracy / (double) allSightings.size() * 2));
+                    inProgressbarTask.setTaskProgress(67 + (int) (countGPSAccuracy / (double) allLocations.size() * 2.0));
                     inProgressbarTask.setMessage("Cleanup Step 7: Check the GPS Accuracy values... " + inProgressbarTask.getProgress() + "%");
                 }
             }
-            inProgressbarTask.setTaskProgress(83);
+            inProgressbarTask.setTaskProgress(69);
             // ---------------------8---------------------
             // Checks Visit dates
             int badVisitDates = 0;
@@ -656,15 +719,14 @@ public class UtilsCheckAndClean {
                         badVisitDates++;
                     }
                     linkCount++;
-                    inProgressbarTask.setTaskProgress(83 + (int) (linkCount / (double) allSightings.size() * 2));
+                    inProgressbarTask.setTaskProgress(69 + (int) (linkCount / (double) allSightings.size() * 2));
                     inProgressbarTask.setMessage("Cleanup Step 8: Check the Period and linked Observation date ranges... " + inProgressbarTask.getProgress() + "%");
                 }
             }
-            inProgressbarTask.setTaskProgress(85);
+            inProgressbarTask.setTaskProgress(71);
             // ---------------------9---------------------
             // Re-create die default thumbnails
             if (inSelectedSteps.contains(9)) {
-// FIXME: Die delete moet ook progress wys
                 inProgressbarTask.setMessage("Cleanup Step 9: Delete thumbnails... " + inProgressbarTask.getProgress() + "%");
                 if (inRecreateThumbnailsResult >= 0 && inRecreateThumbnailsResult <= 2) {
                     try {
@@ -678,6 +740,7 @@ public class UtilsCheckAndClean {
                         finalHandleFeedback.println("  -UNRESOLVED: Unexpected error accessing file...");
                     }
                 }
+                inProgressbarTask.setTaskProgress(75);
                 if (inRecreateThumbnailsResult == 0) {
                     // Recreate essential thumbnails
                     inProgressbarTask.setMessage("Cleanup Step 9: Recreating essential default thumbnails (finding files)... " + inProgressbarTask.getProgress() + "%");
@@ -721,7 +784,7 @@ public class UtilsCheckAndClean {
                                 wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
                                 // Not going to bother with synchornization here, since it's just the progress bar
                                 countThumbnails.counter++;
-                                inProgressbarTask.setTaskProgress(85 + (int) (countThumbnails.counter / (double) listFiles.size() * 14));
+                                inProgressbarTask.setTaskProgress(75 + (int) (countThumbnails.counter / (double) listFiles.size() * 24));
                                 inProgressbarTask.setMessage("Cleanup Step 9: Recreating essential default thumbnails... " + inProgressbarTask.getProgress() + "%");
                             }
                         });
@@ -781,7 +844,7 @@ public class UtilsCheckAndClean {
                                 wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
                                 // Not going to bother with synchornization here, since it's just the progress bar
                                 countThumbnails.counter++;
-                                inProgressbarTask.setTaskProgress(85 + (int) (countThumbnails.counter / (double) listFiles.size() * 14));
+                                inProgressbarTask.setTaskProgress(75 + (int) (countThumbnails.counter / (double) listFiles.size() * 24));
                                 inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails... " + inProgressbarTask.getProgress() + "%");
                             }
                         });
@@ -816,6 +879,7 @@ public class UtilsCheckAndClean {
                     finalHandleFeedback.println("");
                     finalHandleFeedback.println("10) Set the camera model as the Observation's Tag.");
                     List<Sighting> allSightings = inApp.getDBI().listSightings(0, 0, 0, false, Sighting.class);
+                    int counter = 0;
                     for (Sighting sighting : allSightings) {
                         try {
                             String oldTag = sighting.getTag();
@@ -848,6 +912,8 @@ public class UtilsCheckAndClean {
                             finalHandleFeedback.println("PROBLEM:       Could not get the camera model for the Observation.");
                             finalHandleFeedback.println("  -UNRESOLVED: Unexpected error...");
                         }
+                        inProgressbarTask.setMessage("Cleanup Step 10: Set the camera model as the Observation's Tag "
+                                + "[" + counter++ + " of " + allSightings.size() + "]... " + inProgressbarTask.getProgress() + "%");
                     }
                 }
             }
