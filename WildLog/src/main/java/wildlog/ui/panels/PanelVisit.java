@@ -661,6 +661,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
+        btnExtraData.setBackground(new java.awt.Color(230, 228, 240));
         btnExtraData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Extra_Small.png"))); // NOI18N
         btnExtraData.setText("Extra Data");
         btnExtraData.setToolTipText("Link extra fields to this Period.");
@@ -682,10 +683,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 .addGap(5, 5, 5)
                 .addGroup(pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnExtraData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         pnlButtonsRightLayout.setVerticalGroup(
             pnlButtonsRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1677,8 +1677,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnAutoNameActionPerformed
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
-        ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), visit.getID(), WildLogDataType.VISIT);
-        dialog.setVisible(true);
+        if (visit != null && visit.getID() > 0) {
+            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), visit.getID(), WildLogDataType.VISIT);
+            dialog.setVisible(true);
+        }
+        else {
+            if (app.getWildLogOptions().isEnableSounds()) {
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
     }//GEN-LAST:event_btnExtraDataActionPerformed
 
     private void populateVisitFromUI() {

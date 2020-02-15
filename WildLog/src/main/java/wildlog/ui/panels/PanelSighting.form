@@ -110,7 +110,7 @@
                                   <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                                   <Component id="lblLocationImage" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="pnlVisitControls" pref="267" max="32767" attributes="0"/>
+                              <Component id="pnlVisitControls" pref="257" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" attributes="0">
@@ -768,7 +768,7 @@
                           <Component id="lblVisit" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="sclVisit" pref="239" max="32767" attributes="0"/>
+                      <Component id="sclVisit" pref="223" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -965,7 +965,7 @@
                           <Component id="cmbLifeStatus" alignment="1" max="32767" attributes="0"/>
                           <Component id="cmbAge" alignment="1" max="32767" attributes="0"/>
                           <Component id="cmbSex" alignment="1" max="32767" attributes="0"/>
-                          <Component id="jScrollPane2" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" pref="165" max="32767" attributes="0"/>
                           <Component id="spnNumberOfElements" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -1808,6 +1808,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="btnExtraData" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="btnCalculateDuration" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="btnCalculateSunAndMoon" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="btnGetGPSFromImage" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
@@ -1823,21 +1824,23 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Component id="btnUpdateSighting" min="-2" pref="60" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="btnGetDateFromImage" max="-2" attributes="0"/>
+                      <Component id="btnExtraData" min="-2" pref="40" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <Component id="btnGetDateFromImage" min="-2" pref="30" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="btnGetGPSFromImage" max="-2" attributes="0"/>
+                      <Component id="btnGetGPSFromImage" min="-2" pref="30" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="btnCalculateSunAndMoon" max="-2" attributes="0"/>
+                      <Component id="btnCalculateSunAndMoon" min="-2" pref="50" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="btnCalculateDuration" max="-2" attributes="0"/>
+                      <Component id="btnCalculateDuration" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Component id="btnINaturalist" max="-2" attributes="0"/>
+                      <Component id="btnINaturalist" min="-2" pref="30" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="lblSightingID" min="-2" pref="40" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1867,6 +1870,101 @@
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lblSightingIDMouseReleased"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JButton" name="btnUpdateSighting">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="33" green="cc" red="0" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/Update.png"/>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="Save and update the Observation."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="btnUpdateSighting" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateSightingActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnExtraData">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="b5" green="cc" red="d0" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/Extra_Small.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Extra Data"/>
+                <Property name="toolTipText" type="java.lang.String" value="Link extra fields to this Observation."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                  <Insets value="[2, 6, 2, 4]"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="btnExtraData" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnExtraDataActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnGetDateFromImage">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="b5" green="cc" red="d0" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/EXIF_small.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Use File Date&lt;/html&gt;"/>
+                <Property name="toolTipText" type="java.lang.String" value="Attempt to load the date and time from the image&apos;s EXIF data."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="!disableEditing &amp;&amp; !bulkUploadMode &amp;&amp; !bulkEditMode" type="code"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+                <Property name="iconTextGap" type="int" value="8"/>
+                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                  <Insets value="[2, 4, 2, 2]"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="btnGetDateFromImage" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGetDateFromImageActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnGetGPSFromImage">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="b5" green="cc" red="d0" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/GPS_Small.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Use File GPS&lt;/html&gt;"/>
+                <Property name="toolTipText" type="java.lang.String" value="Attempt to load the GPS from the image&apos;s EXIF data."/>
+                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                  <Color id="Hand Cursor"/>
+                </Property>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="!disableEditing &amp;&amp; !bulkUploadMode &amp;&amp; !bulkEditMode" type="code"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="2"/>
+                <Property name="iconTextGap" type="int" value="8"/>
+                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                  <Insets value="[2, 4, 2, 2]"/>
+                </Property>
+                <Property name="name" type="java.lang.String" value="btnGetGPSFromImage" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGetGPSFromImageActionPerformed"/>
+              </Events>
+            </Component>
             <Component class="javax.swing.JButton" name="btnCalculateDuration">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -1875,7 +1973,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/Duration_Small.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;Get Duration from Images&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;Get Duration from Files&lt;/html&gt;"/>
                 <Property name="toolTipText" type="java.lang.String" value="Attempt to calculate the Duration of the Observation based on times specified on the uploaded images."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -1921,87 +2019,15 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalculateSunAndMoonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnGetGPSFromImage">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="b5" green="cc" red="d0" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/GPS_Small.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;Use GPS from Images&lt;/html&gt;"/>
-                <Property name="toolTipText" type="java.lang.String" value="Attempt to load the GPS from the image&apos;s EXIF data."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="!disableEditing &amp;&amp; !bulkUploadMode &amp;&amp; !bulkEditMode" type="code"/>
-                </Property>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="iconTextGap" type="int" value="8"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 4, 2, 2]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnGetGPSFromImage" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGetGPSFromImageActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnGetDateFromImage">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="b5" green="cc" red="d0" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/EXIF_small.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;Use Date from Images&lt;/html&gt;"/>
-                <Property name="toolTipText" type="java.lang.String" value="Attempt to load the date and time from the image&apos;s EXIF data."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="!disableEditing &amp;&amp; !bulkUploadMode &amp;&amp; !bulkEditMode" type="code"/>
-                </Property>
-                <Property name="horizontalAlignment" type="int" value="2"/>
-                <Property name="iconTextGap" type="int" value="8"/>
-                <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                  <Insets value="[2, 4, 2, 2]"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnGetDateFromImage" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGetDateFromImageActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnUpdateSighting">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="33" green="cc" red="0" type="rgb"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Update.png"/>
-                </Property>
-                <Property name="toolTipText" type="java.lang.String" value="Save and update the Observation."/>
-                <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                  <Color id="Hand Cursor"/>
-                </Property>
-                <Property name="name" type="java.lang.String" value="btnUpdateSighting" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateSightingActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.JButton" name="btnINaturalist">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="b5" green="cc" red="d0" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/iNaturalist_small.png"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/iNaturalist.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&lt;html&gt;Link with iNaturalist&lt;/html&gt;"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;iNaturalist&lt;/html&gt;"/>
                 <Property name="toolTipText" type="java.lang.String" value="Link this Observatin with an iNaturalist account."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>

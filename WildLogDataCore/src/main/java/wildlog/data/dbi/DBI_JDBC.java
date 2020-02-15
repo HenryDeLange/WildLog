@@ -780,14 +780,12 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = countElement;
             if (inPrimaryName != null && UtilsData.sanitizeString(inPrimaryName).length() > 0) {
-                sql = sql + " WHERE PRIMARYNAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE PRIMARYNAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             }
             else
             if (inScientificName != null && UtilsData.sanitizeString(inScientificName).length() > 0) {
-                sql = sql + " WHERE SCIENTIFICNAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE SCIENTIFICNAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inScientificName));
             }
             else {
@@ -813,14 +811,12 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         int count = 0;
         try {
-            String sql = countLocation;
             if (inName != null && UtilsData.sanitizeString(inName).length() > 0) {
-                sql = sql + " WHERE NAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countLocation + " WHERE NAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inName));
             }
             else {
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countLocation);
             }
             results = state.executeQuery();
             while (results.next()) {
@@ -842,20 +838,17 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         int count = 0;
         try {
-            String sql = countVisit;
             if (inName != null && UtilsData.sanitizeString(inName).length() > 0) {
-                sql = sql + " WHERE NAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countVisit + " WHERE NAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inName));
             }
             else 
             if (inLocationID > 0) {
-                sql = sql + " WHERE LOCATIONID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countVisit + " WHERE LOCATIONID = ?");
                 state.setLong(1, inLocationID);
             }
             else {
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countVisit);
             }
             results = state.executeQuery();
             while (results.next()) {
@@ -877,53 +870,45 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         int count = 0;
         try {
-            String sql = countSighting;
             if (inID > 0) {
-                sql = sql + " WHERE ID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countSighting + " WHERE ID = ?");
                 state.setLong(1, inID);
             }
             else
             if (inElementID > 0 && inLocationID > 0) {
-                sql = sql + " WHERE ELEMENTID = ? AND LOCATIONID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countSighting + " WHERE ELEMENTID = ? AND LOCATIONID = ?");
                 state.setLong(1, inElementID);
                 state.setLong(2, inLocationID);
             }
             else
             if (inElementID > 0 && inVisitID > 0) {
-                sql = sql + " WHERE ELEMENTID = ? AND VISITID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countSighting + " WHERE ELEMENTID = ? AND VISITID = ?");
                 state.setLong(1, inElementID);
                 state.setLong(2, inVisitID);
             }
             else
             if (inElementID > 0) {
-                sql = sql + " WHERE ELEMENTID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countSighting + " WHERE ELEMENTID = ?");
                 state.setLong(1, inElementID);
             }
             else
             if (inLocationID > 0 && inVisitID > 0) {
-                sql = sql + " WHERE LOCATIONID = ? AND VISITID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countSighting + " WHERE LOCATIONID = ? AND VISITID = ?");
                 state.setLong(1, inLocationID);
                 state.setLong(2, inVisitID);
             }
             else
             if (inLocationID > 0) {
-                sql = sql + " WHERE LOCATIONID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countSighting + " WHERE LOCATIONID = ?");
                 state.setLong(1, inLocationID);
             }
             else
             if (inVisitID > 0) {
-                sql = sql + " WHERE VISITID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countSighting + " WHERE VISITID = ?");
                 state.setLong(1, inVisitID);
             }
             else {
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countSighting);
             }
             results = state.executeQuery();
             while (results.next()) {
@@ -945,20 +930,17 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         int count = 0;
         try {
-            String sql = countFile;
             if (inID > 0) {
-                sql = sql + " WHERE ID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countFile + " WHERE ID = ?");
                 state.setLong(1, inID);
             }
             else
             if (inLinkID >= 0) {
-                sql = sql + " WHERE LINKID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countFile + " WHERE LINKID = ?");
                 state.setLong(1, inLinkID);
             }
             else {
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countFile);
             }
             results = state.executeQuery();
             while (results.next()) {
@@ -980,8 +962,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         int count = 0;
         try {
-            String sql = countUser;
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(countUser);
             results = state.executeQuery();
             while (results.next()) {
                 count = results.getInt(1);
@@ -1002,27 +983,23 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         int count = 0;
         try {
-            String sql = countDeleteLog;
             if (inID > 0 && inDataType != null) {
-                sql = sql + " WHERE ID = ? AND TYPE = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countDeleteLog + " WHERE ID = ? AND TYPE = ?");
                 state.setLong(1, inID);
                 state.setString(2, UtilsData.getKeyFromEnum(inDataType));
             }
             else
             if (inID > 0 && inDataType == null) {
-                sql = sql + " WHERE ID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countDeleteLog + " WHERE ID = ?");
                 state.setLong(1, inID);
             }
             else
             if (inID <= 0 && inDataType != null) {
-                sql = sql + " WHERE TYPE = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countDeleteLog + " WHERE TYPE = ?");
                 state.setString(1, UtilsData.getKeyFromEnum(inDataType));
             }
             else {
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(countDeleteLog);
             }
             results = state.executeQuery();
             while (results.next()) {
@@ -1121,7 +1098,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             else
             if (inName != null && UtilsData.sanitizeString(inName).length() > 0) {
-                state = conn.prepareStatement(" WHERE NAME = ?");
+                state = conn.prepareStatement(sql + " WHERE NAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inName));
             }
             else {
@@ -1538,14 +1515,13 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         T temp = null;
         try {
-            String sql = findUser;
             if (inID > 0) {
-                state = conn.prepareStatement(sql + " WHERE ID = ?");
+                state = conn.prepareStatement(findUser + " WHERE ID = ?");
                 state.setLong(1, inID);
             }
             else
             if (inUsername != null && !inUsername.isEmpty()) {
-                state = conn.prepareStatement(sql + " WHERE USERNAME = ?");
+                state = conn.prepareStatement(findUser + " WHERE USERNAME = ?");
                 state.setString(1, inUsername);
             }
             else {
@@ -1676,27 +1652,23 @@ public abstract class DBI_JDBC implements DBI {
                 sql = listElement;
             }
             if (inPrimaryName != null && inPrimaryName.length() > 0 && inElementType == null) {
-                sql = sql + " WHERE PRIMARYNAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE PRIMARYNAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inPrimaryName));
             }
             else
             if ((inPrimaryName == null || inPrimaryName.length() == 0) && inElementType != null) {
-                sql = sql + " WHERE ELEMENTTYPE = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE ELEMENTTYPE = ?");
                 state.setByte(1, inElementType.getID());
             }
             else
             if (inPrimaryName != null && inPrimaryName.length() > 0 && inElementType != null) {
-                sql = sql + " WHERE PRIMARYNAME = ? AND ELEMENTTYPE = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE PRIMARYNAME = ? AND ELEMENTTYPE = ?");
                 state.setString(1, UtilsData.sanitizeString(inPrimaryName));
                 state.setByte(2, inElementType.getID());
             }
             else
             if (inScientificName != null && inScientificName.length() > 0) {
-                sql = sql + " WHERE SCIENTIFICNAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE SCIENTIFICNAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inScientificName));
             }
             else {
@@ -1735,8 +1707,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = listLocation;
             }
             if (inName != null) {
-                sql = sql + " WHERE NAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE NAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inName));
             }
             else {
@@ -1775,20 +1746,17 @@ public abstract class DBI_JDBC implements DBI {
                 sql = listVisit;
             }
             if (inName != null) {
-                sql = sql + " WHERE VISITS.NAME = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE VISITS.NAME = ?");
                 state.setString(1, UtilsData.sanitizeString(inName));
             }
             else 
             if (inLocationID > 0) {
-                sql = sql + " WHERE LOCATIONID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE LOCATIONID = ?");
                 state.setLong(1, inLocationID);
             }
             else 
             if (inVisitType != null) {
-                sql = sql + " WHERE VISITTYPE = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE VISITTYPE = ?");
                 state.setByte(1, inVisitType.getID());
             }
             else {
@@ -1827,49 +1795,42 @@ public abstract class DBI_JDBC implements DBI {
                 sql = findSighting;
             }
             if (inElementID > 0 && inLocationID > 0 && inVisitID > 0) {
-                sql = sql + " WHERE ELEMENTID = ? AND SIGHTINGS.LOCATIONID = ? AND VISITID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE ELEMENTID = ? AND SIGHTINGS.LOCATIONID = ? AND VISITID = ?");
                 state.setLong(1, inElementID);
                 state.setLong(2, inLocationID);
                 state.setLong(3, inVisitID);
             }
             else
             if (inElementID > 0 && inLocationID > 0) {
-                sql = sql + " WHERE ELEMENTID = ? AND SIGHTINGS.LOCATIONID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE ELEMENTID = ? AND SIGHTINGS.LOCATIONID = ?");
                 state.setLong(1, inElementID);
                 state.setLong(2, inLocationID);
             }
             else
             if (inElementID > 0 && inVisitID > 0) {
-                sql = sql + " WHERE ELEMENTID = ? AND VISITID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE ELEMENTID = ? AND VISITID = ?");
                 state.setLong(1, inElementID);
                 state.setLong(2, inVisitID);
             }
             else
             if (inLocationID > 0 && inVisitID > 0) {
-                sql = sql + " WHERE SIGHTINGS.LOCATIONID = ? AND VISITID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE SIGHTINGS.LOCATIONID = ? AND VISITID = ?");
                 state.setLong(1, inLocationID);
                 state.setLong(2, inVisitID);
             }
             else
             if (inElementID > 0) {
-                sql = sql + " WHERE ELEMENTID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE ELEMENTID = ?");
                 state.setLong(1, inElementID);
             }
             else
             if (inLocationID > 0) {
-                sql = sql + " WHERE SIGHTINGS.LOCATIONID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE SIGHTINGS.LOCATIONID = ?");
                 state.setLong(1, inLocationID);
             }
             else
             if (inVisitID > 0) {
-                sql = sql + " WHERE VISITID = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(sql + " WHERE VISITID = ?");
                 state.setLong(1, inVisitID);
             }
             else {
@@ -1986,8 +1947,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         List<T> tempList = new ArrayList<>();
         try {
-            String sql = listINaturalistLinkedData;
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(listINaturalistLinkedData);
             results = state.executeQuery();
             while (results.next()) {
                 T temp = inReturnType.newInstance();
@@ -2013,14 +1973,12 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         List<T> tempList = new ArrayList<>();
         try {
-            String sql = listUsers;
             if (inType != null) {
-                sql = sql + " WHERE TYPE = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(listUsers + " WHERE TYPE = ?");
                 state.setString(1, UtilsData.getKeyFromEnum(inType));
             }
             else {
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(listUsers);
             }
             results = state.executeQuery();
             while (results.next()) {
@@ -2047,27 +2005,23 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         List<T> tempList = new ArrayList<>();
         try {
-            String sql = listDeleteLogs;
             if (inDataType != null && inAfterAuditTime > 0) {
-                sql = sql + " WHERE TYPE = ? AND AUDITTIME >= ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(listDeleteLogs + " WHERE TYPE = ? AND AUDITTIME >= ?");
                 state.setString(1, UtilsData.getKeyFromEnum(inDataType));
                 state.setLong(2, inAfterAuditTime);
             }
             else
             if (inDataType != null) {
-                sql = sql + " WHERE TYPE = ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(listDeleteLogs + " WHERE TYPE = ?");
                 state.setString(1, UtilsData.getKeyFromEnum(inDataType));
             }
             else
             if (inAfterAuditTime > 0) {
-                sql = sql + " WHERE AUDITTIME >= ?";
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(listDeleteLogs + " WHERE AUDITTIME >= ?");
                 state.setLong(1, inAfterAuditTime);
             }
             else {
-                state = conn.prepareStatement(sql);
+                state = conn.prepareStatement(listDeleteLogs);
             }
             results = state.executeQuery();
             while (results.next()) {
@@ -3248,8 +3202,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         List<T> tempList = new ArrayList<>();
         try {
-            String sql = queryLocationCountForElement;
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(queryLocationCountForElement);
             if (inElementID > 0) {
                 state.setLong(1, inElementID);
             }
@@ -3282,8 +3235,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         List<T> tempList = new ArrayList<>();
         try {
-            String sql = queryElementCountForLocation;
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(queryElementCountForLocation);
             if (inLocationID > 0) {
                 state.setLong(1, inLocationID);
             }
@@ -3318,8 +3270,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         List<T> tempList = new ArrayList<>();
         try {
-            String sql = queryElementCountForVisit;
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(queryElementCountForVisit);
             if (inVisitID > 0) {
                 state.setLong(1, inVisitID);
             }
@@ -3354,8 +3305,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         List<String> tempList = new ArrayList<>();
         try {
-            String sql = queryExtraDataUniqueDataKeys;
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(queryExtraDataUniqueDataKeys);
             state.setString(1, UtilsData.getKeyFromEnum(inFieldType));
             state.setString(2, UtilsData.getKeyFromEnum(inLinkType));
             results = state.executeQuery();
@@ -3377,8 +3327,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         ResultSet results = null;
         try {
-            String sql = activeSessionsCount;
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(activeSessionsCount);
             results = state.executeQuery();
             if (results.next()) {
                 return results.getInt(1);

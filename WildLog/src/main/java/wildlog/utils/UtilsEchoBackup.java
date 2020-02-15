@@ -10,7 +10,10 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -21,7 +24,7 @@ public class UtilsEchoBackup {
     private UtilsEchoBackup() {
     }
 
-    public static boolean doEchoBackup(WildLogApp inApp, ProgressbarTask inProgressbarTask, Path inEchoPath) throws InterruptedException {
+    public static boolean doEchoBackup(WildLogApp inApp, ProgressbarTask inProgressbarTask, Path inEchoPath, boolean inSkipSizeComparison) throws InterruptedException {
         boolean hasError = false;
         try {
             long startTime = System.currentTimeMillis();
@@ -50,11 +53,11 @@ public class UtilsEchoBackup {
                 feedback.println("--------------------------------------------------");
                 feedback.println("");
                 // Start walking the folders and building a list of what needs to be copied / deleted
-                final List<Path> lstAllEchoRelativePaths = new ArrayList<>();
-                final List<Path> lstAllWorkspaceRelativesPaths = new ArrayList<>();
-                final List<Path> lstPathsToDeleteFromEcho = new ArrayList<>();
-                final List<Path> lstPathsToCopyFromWorkspace = new ArrayList<>();
-                final List<Path> lstPathsToCopyToEcho = new ArrayList<>();
+// FIXME: Ek is bietjie bang ek kan uit heap memory uit hardloop want die sets kan vrek baie Strings bevat...
+                final Set<String> lstAllEchoRelativePaths = new HashSet<>(75000);
+                final Set<String> lstAllWorkspaceRelativesPaths = new HashSet<>(75000);
+                final List<String> lstPathsToDeleteFromEcho = new ArrayList<>(500);
+                final List<String> lstPathsToCopyToEcho = new ArrayList<>(1000);
                 Path workspacePath = WildLogPaths.getFullWorkspacePrefix();
                 Path echoPath = inEchoPath;
                 // Get all Echo (relative) Paths
@@ -65,7 +68,7 @@ public class UtilsEchoBackup {
                     
                     @Override
                     public FileVisitResult visitFile(final Path inFilePath, final BasicFileAttributes inAttributes) throws IOException {
-                        lstAllEchoRelativePaths.add(echoPath.relativize(inFilePath));
+                        lstAllEchoRelativePaths.add(echoPath.relativize(inFilePath).toString());
                         return FileVisitResult.CONTINUE;
                     }
                     
@@ -93,51 +96,50 @@ public class UtilsEchoBackup {
                         if (inFilePath.equals(finalFeedbackFile)) {
                             return FileVisitResult.SKIP_SUBTREE;
                         }
-                        lstAllWorkspaceRelativesPaths.add(workspacePath.relativize(inFilePath));
+                        lstAllWorkspaceRelativesPaths.add(workspacePath.relativize(inFilePath).toString());
                         return FileVisitResult.CONTINUE;
                     }
 
                 });
-                // Walk the echo paths and delete all paths that aren't in the active Workspace
+                // Walk the echo paths and to find all paths to delete if they aren't in the active Workspace
                 inProgressbarTask.setTaskProgress(4);
                 inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
                 writeProgressToLogs(inProgressbarTask);
                 double counter = 0.0;
-                for (Path tempEchoPath : lstAllEchoRelativePaths) {
-                    boolean foundFile = false;
-                    for (Path tempWorkspacePath : lstAllWorkspaceRelativesPaths) {
-                        if (tempEchoPath.equals(tempWorkspacePath)) {
-                            foundFile = true;
-                            break;
-                        }
-                    }
-                    if (!foundFile) {
-                        lstPathsToDeleteFromEcho.add(echoPath.resolve(tempEchoPath).normalize().toAbsolutePath().normalize());
+                for (String tempEchoPath : lstAllEchoRelativePaths) {
+                    if (!lstAllWorkspaceRelativesPaths.contains(tempEchoPath)) {
+                        lstPathsToDeleteFromEcho.add(tempEchoPath);
                     }
                     inProgressbarTask.setTaskProgress(4 + (int) ((double) (counter++ / (double) lstAllEchoRelativePaths.size()) * 3.0));
                     inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
                     writeProgressToLogs(inProgressbarTask);
                 }
-                // Walk the active workspace and copy all paths that aren't already present or a different size in the echo path
+                // Walk the active workspace and to find all paths to copy if they aren't already present or a different size in the echo path
                 counter = 0.0;
-                for (Path tempWorkspacePath : lstAllWorkspaceRelativesPaths) {
+                for (String tempWorkspacePath : lstAllWorkspaceRelativesPaths) {
                     boolean foundAndSameSize = false;
-                    for (Path tempEchoPath : lstAllEchoRelativePaths) {
-                        if (tempEchoPath.equals(tempWorkspacePath)) {
-                            if (Files.size(workspacePath.resolve(tempWorkspacePath)) == Files.size(echoPath.resolve(tempEchoPath))) {
-                                foundAndSameSize = true;
-                            }
-                            break;
+                    if (lstAllEchoRelativePaths.contains(tempWorkspacePath)) {
+                        Path fullWorkspacePath = workspacePath.resolve(tempWorkspacePath);
+                        Path fullEchoPath = echoPath.resolve(tempWorkspacePath);
+                        if ((inSkipSizeComparison && !tempWorkspacePath.startsWith(WildLogPaths.WILDLOG_DATA.getRelativePath().toString())) // Skip only non-data files
+                                || (Files.getLastModifiedTime(fullWorkspacePath).equals(Files.getLastModifiedTime(fullEchoPath)) // If not skipping, first check modified date
+                                && Files.size(fullWorkspacePath) == Files.size(fullEchoPath))) { // Then check size
+                            foundAndSameSize = true;
                         }
                     }
                     if (!foundAndSameSize) {
-                        lstPathsToCopyFromWorkspace.add(workspacePath.resolve(tempWorkspacePath).normalize().toAbsolutePath().normalize());
-                        lstPathsToCopyToEcho.add(echoPath.resolve(tempWorkspacePath).normalize().toAbsolutePath().normalize());
+                        lstPathsToCopyToEcho.add(tempWorkspacePath);
                     }
                     inProgressbarTask.setTaskProgress(7 + (int) ((double) (counter++ / (double) lstAllWorkspaceRelativesPaths.size()) * 3.0));
                     inProgressbarTask.setMessage("Busy with the Echo Workspace Backup: Compiling list of changes... " + inProgressbarTask.getProgress() + "%");
                     writeProgressToLogs(inProgressbarTask);
                 }
+                // Kan noual die groot lyste se memory los maak
+                lstAllEchoRelativePaths.clear();
+                lstAllWorkspaceRelativesPaths.clear();
+                // Sort die lyste want hulle kom vanaf 'n Set
+                Collections.sort(lstPathsToDeleteFromEcho);
+                Collections.sort(lstPathsToCopyToEcho);
                 // To the actual file processing based on the built up lists
                 inProgressbarTask.setTaskProgress(10);
                 inProgressbarTask.setMessage("Busy with the Echo Workspace Backup... " + inProgressbarTask.getProgress() + "%");
@@ -145,7 +147,7 @@ public class UtilsEchoBackup {
                 double totalActions = lstPathsToDeleteFromEcho.size() + lstPathsToCopyToEcho.size();
                 // Delete
                 for (int t = 0; t < lstPathsToDeleteFromEcho.size(); t++) {
-                    Path pathToDelete = lstPathsToDeleteFromEcho.get(t);
+                    Path pathToDelete = echoPath.resolve(lstPathsToDeleteFromEcho.get(t)).normalize().toAbsolutePath().normalize();
                     // Delete the folder or file
                     UtilsFileProcessing.deleteRecursive(pathToDelete.toFile());
                     // Update report and progress
@@ -155,9 +157,9 @@ public class UtilsEchoBackup {
                     writeProgressToLogs(inProgressbarTask);
                 }
                 // Copy
-                for (int t = 0; t < lstPathsToCopyFromWorkspace.size(); t++) {
-                    Path pathToCopyFrom = lstPathsToCopyFromWorkspace.get(t);
-                    Path pathToCopyTo = lstPathsToCopyToEcho.get(t);
+                for (int t = 0; t < lstPathsToCopyToEcho.size(); t++) {
+                    Path pathToCopyFrom = workspacePath.resolve(lstPathsToCopyToEcho.get(t)).normalize().toAbsolutePath().normalize();
+                    Path pathToCopyTo = echoPath.resolve(lstPathsToCopyToEcho.get(t)).normalize().toAbsolutePath().normalize();
                     // Make sure the folders exist
                     Files.createDirectories(pathToCopyTo.getParent());
                     // The daily backup might run in the background and delete a folder, 

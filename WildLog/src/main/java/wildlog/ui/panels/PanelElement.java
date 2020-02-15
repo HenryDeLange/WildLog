@@ -570,6 +570,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         });
 
+        btnExtraData.setBackground(new java.awt.Color(227, 240, 227));
         btnExtraData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Extra_Small.png"))); // NOI18N
         btnExtraData.setText("Extra Data");
         btnExtraData.setToolTipText("Link extra fields to this Creature.");
@@ -1395,8 +1396,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnCompareActionPerformed
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
-        ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), element.getID(), WildLogDataType.ELEMENT);
-        dialog.setVisible(true);
+        if (element != null && element.getID() > 0) {
+            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), element.getID(), WildLogDataType.ELEMENT);
+            dialog.setVisible(true);
+        }
+        else {
+            if (app.getWildLogOptions().isEnableSounds()) {
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
     }//GEN-LAST:event_btnExtraDataActionPerformed
 
 

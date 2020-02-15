@@ -3611,150 +3611,165 @@ public final class WildLogView extends JFrame {
                     "Warning - Echo Backup Workspace", WLOptionPane.WARNING_MESSAGE);
             return;
         }
-        WLOptionPane.showMessageDialog(app.getMainFrame(),
+        final int modeResult = WLOptionPane.showOptionDialog(app.getMainFrame(),
                 "<html>The <i>Echo Backup Workspace</i> process will delete all files from the target folder that aren't in the active Workspace "
                         + "<br>and copy all files from the active Workspace to the target folder that aren't already present (files will be replaced if their size differ)."
                         + "<hr>"
-                        + "This process is best used to make (and periodically update) a backup copy of the active Workspace.</html>",
-                "Echo Backup Workspace", JOptionPane.WARNING_MESSAGE);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                WLFileChooser fileChooser = new WLFileChooser();
-                try {
-                    fileChooser.setCurrentDirectory(File.listRoots()[0]);
-                    fileChooser.changeToParentDirectory();
-                }
-                catch (Exception ex) {
-                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                }
-                fileChooser.setDialogTitle("Select the target folder");
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                fileChooser.setMultiSelectionEnabled(false);
-                int result = fileChooser.showOpenDialog(app.getMainFrame());
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            Path writePath  = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
-                            int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                                    "<html>Run the Echo Backup Workspace process for the following folder?<br>"
-                                            + "<b>Read From: </b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "<br>"
-                                            + "<b>Write To: </b>" + writePath.toString()
-                                            + "</html>",
-                                    "Confirm Echo Backup Workspace", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                            if (result == JOptionPane.YES_OPTION) {
-                                // Warn if it not an empty folder or exisitng workspace
-                                if (writePath.toFile().listFiles().length != 0 
-                                        && !(Files.exists(writePath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))
-                                        && Files.exists(writePath.resolve(WildLogPaths.WILDLOG_FILES.getRelativePath())))) {
-                                    result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
-                                            "<html>The folder which was selected for the Echo Backup destination "
-                                                    + "<br/>does not appear to be an empty folder, nor another WildLog workspace."
-                                                    + "<br/>If you continue all files in the destination folder will be replaced by the active workspace's files."
-                                                    + "<br/><b>Continue to use this folder?</b>"
-                                                    + "<br/><b>Write To: </b>" + writePath.toString()
-                                                    + "</html>",
-                                            "Unconventional Echo Backup Destination", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                                    if (result != JOptionPane.YES_OPTION) {
-                                        // Abort the Echo Backup due to dodgy destination folder
-                                        WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Aborting Write To: {}", writePath.toString());
-                                        return;
+                        + "This process is best used to make (and periodically update) a backup copy of the active Workspace."
+                        + "<hr>"
+                        + "<b>Complete Mode:</b> Backup the database and <i>all files</i>."
+                        + "<br/>"
+                        + "<b>Quick Mode:</b> Backup the database and <i>new files</i>. Modified files might be skipped, for example cropped or rotated files."
+                        + "</html>",
+                "Echo Backup Workspace", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, 
+                null, new String[] {
+                    "Complete Mode (recommended)",
+                    "Quick Mode"
+                }, null);
+        if (modeResult != JOptionPane.CLOSED_OPTION) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    WLFileChooser fileChooser = new WLFileChooser();
+                    try {
+                        fileChooser.setCurrentDirectory(File.listRoots()[0]);
+                        fileChooser.changeToParentDirectory();
+                    }
+                    catch (Exception ex) {
+                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                    }
+                    fileChooser.setDialogTitle("Select the target folder");
+                    fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    fileChooser.setMultiSelectionEnabled(false);
+                    int result = fileChooser.showOpenDialog(app.getMainFrame());
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                Path writePath  = fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize();
+                                int result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                        "<html>Run the Echo Backup Workspace process for the following folder?<br>"
+                                                + "<b>Read From: </b>" + WildLogPaths.getFullWorkspacePrefix().toString() + "<br>"
+                                                + "<b>Write To: </b>" + writePath.toString()
+                                                + "</html>",
+                                        "Confirm Echo Backup Workspace", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                                if (result == JOptionPane.YES_OPTION) {
+                                    // Warn if it not an empty folder or exisitng workspace
+                                    if (writePath.toFile().listFiles().length != 0 
+                                            && !(Files.exists(writePath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))
+                                            && Files.exists(writePath.resolve(WildLogPaths.WILDLOG_FILES.getRelativePath())))) {
+                                        result = WLOptionPane.showConfirmDialog(app.getMainFrame(),
+                                                "<html>The folder which was selected for the Echo Backup destination "
+                                                        + "<br/>does not appear to be an empty folder, nor another WildLog workspace."
+                                                        + "<br/>If you continue all files in the destination folder will be replaced by the active workspace's files."
+                                                        + "<br/><b>Continue to use this folder?</b>"
+                                                        + "<br/><b>Write To: </b>" + writePath.toString()
+                                                        + "</html>",
+                                                "Unconventional Echo Backup Destination", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                        if (result != JOptionPane.YES_OPTION) {
+                                            // Abort the Echo Backup due to dodgy destination folder
+                                            WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Aborting Write To: {}", writePath.toString());
+                                            return;
+                                        }
                                     }
-                                }
-                                // Kick off the echo backup process
-                                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Read From: {}", WildLogPaths.getFullWorkspacePrefix().toString());
-                                WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Write To: {}", writePath.toString());
-                                SwingUtilities.invokeLater(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // Ja... Ek moet STUPID baie SwingUtilities.invokeLater calls gebruik...
-                                        SwingUtilities.invokeLater(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                // Close all tabs and go to the home tab
-                                                tabbedPanel.setSelectedIndex(0);
-                                                while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
-                                                    tabbedPanel.remove(STATIC_TAB_COUNT);
-                                                }
-                                                // Lock the input/display and show busy message
-                                                // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
-                                                tabbedPanel.setSelectedIndex(0);
-                                                SwingUtilities.invokeLater(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        JPanel panel = new JPanel(new AbsoluteLayout());
-                                                        panel.setPreferredSize(new Dimension(400, 50));
-                                                        panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
-                                                        JLabel label = new JLabel("<html>Busy with Echo Backup Workspace. Please be patient, this might take a while. <br/>"
-                                                                + "Don't close the application until the process is finished.</html>");
-                                                        label.setFont(new Font("Tahoma", Font.BOLD, 12));
-                                                        label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
-                                                        panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-                                                        panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
-                                                        panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
-                                                        JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
-                                                        glassPane.removeAll();
-                                                        glassPane.setLayout(new BorderLayout(100, 100));
-                                                        glassPane.add(panel, BorderLayout.CENTER);
-                                                        glassPane.addMouseListener(new MouseAdapter() {});
-                                                        glassPane.addKeyListener(new KeyAdapter() {});
-                                                        app.getMainFrame().setGlassPane(glassPane);
-                                                        app.getMainFrame().getGlassPane().setVisible(true);
-                                                        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                                    // Kick off the echo backup process
+                                    WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Read From: {}", WildLogPaths.getFullWorkspacePrefix().toString());
+                                    WildLogApp.LOGGER.log(Level.INFO, "Echo Backup Write To: {}", writePath.toString());
+                                    SwingUtilities.invokeLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            // Ja... Ek moet STUPID baie SwingUtilities.invokeLater calls gebruik...
+                                            SwingUtilities.invokeLater(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    // Close all tabs and go to the home tab
+                                                    tabbedPanel.setSelectedIndex(0);
+                                                    while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                                                        tabbedPanel.remove(STATIC_TAB_COUNT);
                                                     }
-                                                });
-                                                UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                                                    private boolean hasError = false;
-                                                    
-                                                    @Override
-                                                    protected Object doInBackground() throws Exception {
-                                                        hasError = UtilsEchoBackup.doEchoBackup(
-                                                                app, this, fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize());
-                                                        return null;
-                                                    }
+                                                    // Lock the input/display and show busy message
+                                                    // Note: we never remove the Busy dialog and greyed out background since the app will be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
+                                                    tabbedPanel.setSelectedIndex(0);
+                                                    SwingUtilities.invokeLater(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            JPanel panel = new JPanel(new AbsoluteLayout());
+                                                            panel.setPreferredSize(new Dimension(400, 50));
+                                                            panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
+                                                            JLabel label = new JLabel("<html>Busy with Echo Backup Workspace. Please be patient, this might take a while. <br/>"
+                                                                    + "Don't close the application until the process is finished.</html>");
+                                                            label.setFont(new Font("Tahoma", Font.BOLD, 12));
+                                                            label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
+                                                            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+                                                            panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
+                                                            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+                                                            JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
+                                                            glassPane.removeAll();
+                                                            glassPane.setLayout(new BorderLayout(100, 100));
+                                                            glassPane.add(panel, BorderLayout.CENTER);
+                                                            glassPane.addMouseListener(new MouseAdapter() {});
+                                                            glassPane.addKeyListener(new KeyAdapter() {});
+                                                            app.getMainFrame().setGlassPane(glassPane);
+                                                            app.getMainFrame().getGlassPane().setVisible(true);
+                                                            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                                                        }
+                                                    });
+                                                    UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                                                        private boolean hasError = false;
 
-                                                    @Override
-                                                    protected void finished() {
-                                                        super.finished();
-                                                        if (!hasError) {
-                                                            // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
-                                                            // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
-                                                            SwingUtilities.invokeLater(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                                                    WLOptionPane.showMessageDialog(app.getMainFrame(), 
-                                                                            "The Echo Backup Workspace process has completed. Please restart the application.", 
-                                                                            "Completed Echo Backup Workspace", WLOptionPane.INFORMATION_MESSAGE);
-                                                                    app.quit(null);
-                                                                }
-                                                            });
+                                                        @Override
+                                                        protected Object doInBackground() throws Exception {
+                                                            boolean skipSizeComparison = false;
+                                                            if (modeResult == 1) {
+                                                                skipSizeComparison = true;
+                                                            }
+                                                            hasError = UtilsEchoBackup.doEchoBackup(
+                                                                    app, this, fileChooser.getSelectedFile().toPath().normalize().toAbsolutePath().normalize(), skipSizeComparison);
+                                                            return null;
                                                         }
-                                                        else {
-                                                            SwingUtilities.invokeLater(new Runnable() {
-                                                                @Override
-                                                                public void run() {
-                                                                    // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                                                                    WLOptionPane.showMessageDialog(app.getMainFrame(), 
-                                                                            "The Echo Backup Workspace process did NOT complete successfully.", 
-                                                                            "ERROR - Echo Backup Workspace", WLOptionPane.ERROR_MESSAGE);
-                                                                    app.quit(null);
-                                                                }
-                                                            });
+
+                                                        @Override
+                                                        protected void finished() {
+                                                            super.finished();
+                                                            if (!hasError) {
+                                                                // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
+                                                                // that asks whether you want to close the application or not, and it's best to rather restart after the cleanup.
+                                                                SwingUtilities.invokeLater(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                                                        WLOptionPane.showMessageDialog(app.getMainFrame(), 
+                                                                                "The Echo Backup Workspace process has completed. Please restart the application.", 
+                                                                                "Completed Echo Backup Workspace", WLOptionPane.INFORMATION_MESSAGE);
+                                                                        app.quit(null);
+                                                                    }
+                                                                });
+                                                            }
+                                                            else {
+                                                                SwingUtilities.invokeLater(new Runnable() {
+                                                                    @Override
+                                                                    public void run() {
+                                                                        // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                                                                        WLOptionPane.showMessageDialog(app.getMainFrame(), 
+                                                                                "The Echo Backup Workspace process did NOT complete successfully.", 
+                                                                                "ERROR - Echo Backup Workspace", WLOptionPane.ERROR_MESSAGE);
+                                                                        app.quit(null);
+                                                                    }
+                                                                });
+                                                            }
                                                         }
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
     }//GEN-LAST:event_mnuEchoWorkspaceActionPerformed
 
     private void mnuReportVisitDatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReportVisitDatesActionPerformed

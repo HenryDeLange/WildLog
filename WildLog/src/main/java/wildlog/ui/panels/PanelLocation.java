@@ -729,6 +729,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
+        btnExtraData.setBackground(new java.awt.Color(233, 239, 244));
         btnExtraData.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Extra_Small.png"))); // NOI18N
         btnExtraData.setText("Extra Data");
         btnExtraData.setToolTipText("Link extra fields to this Place.");
@@ -1521,8 +1522,15 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnApplyGPSToVisitActionPerformed
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
-        ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), locationWL.getID(), WildLogDataType.LOCATION);
-        dialog.setVisible(true);
+        if (locationWL != null && locationWL.getID() > 0) {
+            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), locationWL.getID(), WildLogDataType.LOCATION);
+            dialog.setVisible(true);
+        }
+        else {
+            if (app.getWildLogOptions().isEnableSounds()) {
+                Toolkit.getDefaultToolkit().beep();
+            }
+        }
     }//GEN-LAST:event_btnExtraDataActionPerformed
 
     private void setupNumberOfImages() {

@@ -21,18 +21,32 @@ public class ExtraDataDialog extends JDialog {
     private final WildLogDataType linkType;
 
 // TODO: Add to import/export
+// TODO: Add to HTML view of Browse tab
+    
+    public ExtraDataDialog(JDialog inParent, long inLinkID, WildLogDataType inLinkType) {
+        super(inParent);
+        linkID = inLinkID;
+        linkType = inLinkType;
+        init(inLinkID, inLinkType);
+        UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(inParent, this);
+    }
     
     public ExtraDataDialog(JFrame inParent, long inLinkID, WildLogDataType inLinkType) {
         super(inParent);
-        WildLogApp.LOGGER.log(Level.INFO, "[ExtraDataDialog]");
         linkID = inLinkID;
         linkType = inLinkType;
+        init(inLinkID, inLinkType);
+        UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(inParent, this);
+    }
+
+    private void init(long inLinkID, WildLogDataType inLinkType) {
+        WildLogApp.LOGGER.log(Level.INFO, "[ExtraDataDialog]");
         // Auto generated code
         initComponents();
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
-        UtilsDialog.setDialogToCenter(inParent, this);
-        UtilsDialog.addModalBackgroundPanel(inParent, this);
         // Tell the table to stop the editing when focus is lost
         tblExtraData.putClientProperty("terminateEditOnFocusLost", true);
         // Load initial data
