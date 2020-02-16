@@ -831,10 +831,12 @@ public class WorkspaceImportDialog extends JDialog {
         }
         // Create thumbnails
         if (WildLogFileType.IMAGE.equals(fileToImport.getFileType())) {
-            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
-            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
-            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
-            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
+            UtilsImageProcessing.ImageProperties imageProperties = UtilsImageProcessing.getImageProperties(fileToImport.getAbsolutePath(), null);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL, imageProperties);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL, imageProperties);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL, imageProperties);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM, imageProperties);
+            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL, imageProperties);
         }
     }
 

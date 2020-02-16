@@ -842,6 +842,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM);
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
                             newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0700_VERY_LARGE);
                         }

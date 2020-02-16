@@ -57,7 +57,7 @@ public class WildLogSystemFile extends WildLogFile {
     public Path getAbsoluteThumbnailPath(WildLogThumbnailSizes inSize) {
         // Make sure the file original file has been copied out of the JAR and is in the thumbnails folder.
         copyOriginalFileToThumbnails();
-        return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(this, inSize);
+        return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(this, inSize, null);
     }
 
     @Override

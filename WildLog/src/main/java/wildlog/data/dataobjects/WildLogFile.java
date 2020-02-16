@@ -109,18 +109,29 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
      * @return
      */
     public Path getAbsoluteThumbnailPath(WildLogThumbnailSizes inSize) {
+        return getAbsoluteThumbnailPath(inSize, null);
+    }
+    
+    /**
+     * Convenience method for UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate().
+     * NOTE: The method exists for performance gains when creating many thumbnails of the same image
+     * @param inSize
+     * @param inImageProperties
+     * @return
+     */
+    public Path getAbsoluteThumbnailPath(WildLogThumbnailSizes inSize, UtilsImageProcessing.ImageProperties inImageProperties) {
         if (WildLogFileType.IMAGE.equals(getFileType())) {
-            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(this, inSize);
+            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(this, inSize, inImageProperties);
         }
         else
         if (WildLogFileType.MOVIE.equals(getFileType())) {
-            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.MOVIES.getWildLogFile(), inSize);
+            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.MOVIES.getWildLogFile(), inSize, inImageProperties);
         }
         else
         if (WildLogFileType.OTHER.equals(getFileType())) {
-            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.OTHER_FILES.getWildLogFile(), inSize);
+            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.OTHER_FILES.getWildLogFile(), inSize, inImageProperties);
         }
-        return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.NO_FILES.getWildLogFile(), inSize);
+        return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.NO_FILES.getWildLogFile(), inSize, inImageProperties);
     }
 
     /**

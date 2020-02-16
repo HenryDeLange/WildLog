@@ -769,19 +769,14 @@ public class UtilsCheckAndClean {
                         }
                     }
                     inProgressbarTask.setMessage("Cleanup Step 9: Recreating essential default thumbnails (setup workers)... " + inProgressbarTask.getProgress() + "%");
-                    ExecutorService executorService = Executors.newFixedThreadPool(
-                            (int) Math.round(((double) inApp.getThreadCount()) / 2.0), new NamedThreadFactory("WL_CleanWorkspace"));
+                    ExecutorService executorService = Executors.newFixedThreadPool(Math.min(4, inApp.getThreadCount()), new NamedThreadFactory("WL_CleanWorkspace"));
                     final CleanupCounter countThumbnails = new CleanupCounter();
                     for (final WildLogFile wildLogFile : listFiles) {
                         executorService.submit(new Runnable() {
                             @Override
                             public void run() {
                                 // Maak net die nodigste thumbnails, want anders vat dinge donners lank
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM);
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
+                                createThumbnails(wildLogFile);
                                 // Not going to bother with synchornization here, since it's just the progress bar
                                 countThumbnails.counter++;
                                 inProgressbarTask.setTaskProgress(75 + (int) (countThumbnails.counter / (double) listFiles.size() * 24));
@@ -829,19 +824,14 @@ public class UtilsCheckAndClean {
                         }
                     });
                     inProgressbarTask.setMessage("Cleanup Step 9: Recreating all default thumbnails (setup workers)... " + inProgressbarTask.getProgress() + "%");
-                    ExecutorService executorService = Executors.newFixedThreadPool(
-                            (int) Math.round(((double) inApp.getThreadCount()) / 2.0), new NamedThreadFactory("WL_CleanWorkspace"));
+                    ExecutorService executorService = Executors.newFixedThreadPool(Math.min(4, inApp.getThreadCount()), new NamedThreadFactory("WL_CleanWorkspace"));
                     final CleanupCounter countThumbnails = new CleanupCounter();
                     for (final WildLogFile wildLogFile : listFiles) {
                         executorService.submit(new Runnable() {
                             @Override
                             public void run() {
                                 // Maak net die nodigste thumbnails, want anders vat dinge donners lank
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL);
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL);
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL);
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM);
-                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL);
+                                createThumbnails(wildLogFile);
                                 // Not going to bother with synchornization here, since it's just the progress bar
                                 countThumbnails.counter++;
                                 inProgressbarTask.setTaskProgress(75 + (int) (countThumbnails.counter / (double) listFiles.size() * 24));
@@ -989,7 +979,7 @@ public class UtilsCheckAndClean {
             UtilsFileProcessing.openFile(feedbackFile);
         }
     }
-
+    
     // Setup helper classes (Op hierdie stadium wil ek al die code op een plek hou, ek kan dit later in Util methods in skuif of iets...)
     private static class CleanupCounter {
         public int counter = 0;
@@ -1117,6 +1107,15 @@ public class UtilsCheckAndClean {
             });
         }
 
+    }
+    
+    private static void createThumbnails(WildLogFile inWildLogFile) {
+        UtilsImageProcessing.ImageProperties imageProperties = UtilsImageProcessing.getImageProperties(inWildLogFile.getAbsolutePath(), null);
+        inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0060_VERY_SMALL, imageProperties);
+        inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0100_SMALL, imageProperties);
+        inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0150_MEDIUM_SMALL, imageProperties);
+        inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0200_MEDIUM, imageProperties);
+        inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.S0300_NORMAL, imageProperties);
     }
 
 }

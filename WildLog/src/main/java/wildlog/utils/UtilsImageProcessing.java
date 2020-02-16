@@ -48,16 +48,19 @@ public class UtilsImageProcessing {
 
     private UtilsImageProcessing() {
     }
-
-    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate) {
-        return getScaledIcon(inAbsolutePathToScale, inSize, inDoAutoRotate, null);
+    
+    public static class ImageProperties {
+        public Image image;
+        public int imageWidth;
+        public int imageHeight;
+        public Metadata metadata;
     }
-
-    // TODO: Ek moet weer bietjie kyk na die performance van files add... Voel deesdae bietjie stadig met al die rotations lees, ens.
-    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate, Metadata inMetadata) {
-        // Get the size to scale the image to
-        int finalHeight = inSize;
-        int finalWidth = inSize;
+    
+    public static ImageProperties getImageProperties(Path inAbsolutePathToScale, Metadata inMetadata) {
+        ImageProperties properties = new ImageProperties();
+        // Load the image
+        properties.image = Toolkit.getDefaultToolkit().createImage(inAbsolutePathToScale.toAbsolutePath().normalize().toString());
+        // Get the image size
         ImageReader imageReader = null;
         FileImageInputStream inputStream = null;
         try {
@@ -65,28 +68,8 @@ public class UtilsImageProcessing {
             Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
             imageReader = imageReaderList.next();
             imageReader.setInput(inputStream);
-            int imageWidth = imageReader.getWidth(imageReader.getMinIndex());
-            int imageHeight = imageReader.getHeight(imageReader.getMinIndex());
-            if (imageHeight >= imageWidth) {
-                if (imageHeight >= inSize) {
-                    double ratio = (double)imageHeight/inSize;
-                    finalWidth = (int)(imageWidth/ratio);
-                }
-                else {
-                    double ratio = (double)inSize/imageHeight;
-                    finalWidth = (int)(imageWidth*ratio);
-                }
-            }
-            else {
-                if (imageWidth >= inSize) {
-                    double ratio = (double)imageWidth/inSize;
-                    finalHeight = (int)(imageHeight/ratio);
-                }
-                else {
-                    double ratio = (double)inSize/imageWidth;
-                    finalHeight = (int)(imageHeight*ratio);
-                }
-            }
+            properties.imageWidth = imageReader.getWidth(imageReader.getMinIndex());
+            properties.imageHeight = imageReader.getHeight(imageReader.getMinIndex());
         }
         catch (IOException ex) {
             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -104,35 +87,87 @@ public class UtilsImageProcessing {
                 }
             }
         }
+        // Get metadata
+        if (inMetadata != null) {
+            properties.metadata = inMetadata;
+        }
+        else {
+            try {
+                properties.metadata = ImageMetadataReader.readMetadata(inAbsolutePathToScale.toFile());
+            }
+            catch (IOException | ImageProcessingException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+            }
+        }
+        return properties;
+    }
+
+    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate) {
+        return getScaledIcon(inAbsolutePathToScale, inSize, inDoAutoRotate, (ImageProperties) null);
+    }
+    
+    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate, Metadata inMetadata) {
+        return getScaledIcon(inAbsolutePathToScale, inSize, inDoAutoRotate, 
+                getImageProperties(inAbsolutePathToScale, inMetadata));
+    }
+    
+// TODO: Ek moet weer bietjie kyk na die performance van files add... Voel deesdae bietjie stadig met al die rotations lees, ens.
+    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize, boolean inDoAutoRotate, ImageProperties inImageProperties) {
+        if (inImageProperties == null) {
+            inImageProperties = getImageProperties(inAbsolutePathToScale, null);
+        }
         try {
             // Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou,
             // maar ek sal in elk geval moet uitwerk of dit landscape of portriate is, so vir eers hou ek maar die kode soos hierbo.
-            Image image = Toolkit.getDefaultToolkit().createImage(inAbsolutePathToScale.toAbsolutePath().normalize().toString());
+            Image image = inImageProperties.image;
+            // Get the size to scale the image to
+            int finalHeight = inSize;
+            int finalWidth = inSize;
+            if (inImageProperties.imageHeight >= inImageProperties.imageWidth) {
+                if (inImageProperties.imageHeight >= inSize) {
+                    double ratio = (double)inImageProperties.imageHeight/inSize;
+                    finalWidth = (int)(inImageProperties.imageWidth/ratio);
+                }
+                else {
+                    double ratio = (double)inSize/inImageProperties.imageHeight;
+                    finalWidth = (int)(inImageProperties.imageWidth*ratio);
+                }
+            }
+            else {
+                if (inImageProperties.imageWidth >= inSize) {
+                    double ratio = (double)inImageProperties.imageWidth/inSize;
+                    finalHeight = (int)(inImageProperties.imageHeight/ratio);
+                }
+                else {
+                    double ratio = (double)inSize/inImageProperties.imageWidth;
+                    finalHeight = (int)(inImageProperties.imageHeight*ratio);
+                }
+            }
             Image scaledImage = getScaledImage(image, finalWidth, finalHeight);
             // Rotate the image
             if (inDoAutoRotate) {
                 try {
                     Metadata metadata;
-                    if (inMetadata != null) {
-                        metadata = inMetadata;
+                    if (inImageProperties.metadata != null) {
+                        metadata = inImageProperties.metadata;
                     }
                     else {
                         metadata = ImageMetadataReader.readMetadata(inAbsolutePathToScale.toFile());
                     }
                     Collection<ExifIFD0Directory> directories = metadata.getDirectoriesOfType(ExifIFD0Directory.class);
                     int orientation = 0;
-                    if (directories != null) {
-                        for (ExifIFD0Directory directory : directories) {
-                            if (directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
-                                orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
-                            }
+                    for (ExifIFD0Directory directory : directories) {
+                        if (directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+                            orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
                         }
                     }
                     if (orientation > 1) {
                         AffineTransform transform = new AffineTransform();
+                        boolean rotationNeeded = true;
                         switch (orientation) {
                             case 1:
                                 // No rotation
+                                rotationNeeded = false;
                                 break;
                             case 2: 
                                 // Flip H
@@ -173,24 +208,26 @@ public class UtilsImageProcessing {
                                 transform.rotate(3 * Math.PI / 2);
                                 break;
                         }
-                        // Get BufferedImage of scaled image
-                        BufferedImage bufferedImage = new BufferedImage(finalWidth, finalHeight, BufferedImage.TYPE_INT_RGB);
-                        Graphics2D bufferedImageG2D = bufferedImage.createGraphics();
-                        // Maak 'n ImageIcon sodat die scaledImage actually klaar gelees word (nie net blank bly nie)
-                        new ImageIcon(scaledImage).paintIcon(null, bufferedImageG2D, 0, 0);
-                        // Rotate the thumbnail
-                        AffineTransformOp transformOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
-                        BufferedImage rotatedImage = transformOp.createCompatibleDestImage(bufferedImage, bufferedImage.getColorModel());
-//                        rotatedImage.getWidth() rotatedImage.getHeight()
-                        rotatedImage = transformOp.filter(bufferedImage, rotatedImage);
-                        return new ImageIcon(rotatedImage);
+                        if (rotationNeeded) {
+                            // Get BufferedImage of scaled image
+                            BufferedImage bufferedImage = new BufferedImage(finalWidth, finalHeight, BufferedImage.TYPE_INT_RGB);
+                            Graphics2D bufferedImageG2D = bufferedImage.createGraphics();
+                            // Maak 'n ImageIcon sodat die scaledImage actually klaar gelees word (nie net blank bly nie)
+                            new ImageIcon(scaledImage).paintIcon(null, bufferedImageG2D, 0, 0);
+                            // Rotate the thumbnail
+                            AffineTransformOp transformOp = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
+                            BufferedImage rotatedImage = transformOp.createCompatibleDestImage(bufferedImage, bufferedImage.getColorModel());
+                            rotatedImage = transformOp.filter(bufferedImage, rotatedImage);
+                            // Return the rotated ImageIcon
+                            return new ImageIcon(rotatedImage);
+                        }
                     }
                 }
                 catch (MetadataException | ImageProcessingException ex) {
                     WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
                 }
             }
-            // Return final ImageIcon
+            // Return normal (not rotated) ImageIcon
             return new ImageIcon(scaledImage);
         }
         catch (IOException ex) {
@@ -606,9 +643,9 @@ public class UtilsImageProcessing {
      * @param inOriginalAbsolutePath
      * @param inSize
      */
-    private static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
+    private static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize, ImageProperties inImageProperties) {
         // Resize the file and then save the thumbnail to into WildLog's folders
-        ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalAbsolutePath, inSize.getSize(), true);
+        ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalAbsolutePath, inSize.getSize(), true, inImageProperties);
         try {
             // Make the folder
             Files.createDirectories(inThumbnailAbsolutePath.getParent());
@@ -676,12 +713,13 @@ public class UtilsImageProcessing {
      * the absolute path that points to thumbnail.
      * @param inWildLogFile
      * @param inSize
+     * @param inImageProperties
      * @return
      */
-    public static Path getAbsoluteThumbnailPathAndCreate(WildLogFile inWildLogFile, WildLogThumbnailSizes inSize) {
+    public static Path getAbsoluteThumbnailPathAndCreate(WildLogFile inWildLogFile, WildLogThumbnailSizes inSize, ImageProperties inImageProperties) {
         Path thumbnail = calculateAbsoluteThumbnailPath(inWildLogFile.getDBFilePath(), inSize);
         if (!Files.exists(thumbnail)) {
-            createThumbnailOnDisk(thumbnail, inWildLogFile.getAbsolutePath(), inSize);
+            createThumbnailOnDisk(thumbnail, inWildLogFile.getAbsolutePath(), inSize, inImageProperties);
         }
         return thumbnail;
     }
