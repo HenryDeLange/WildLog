@@ -190,7 +190,6 @@ public class ZoomDialog extends JDialog {
         else
         if (WildLogFileExtentions.Movies.isKnownExtention(inPath)) {
             //lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.S0300_NORMAL));
-// FIXME: Kry 'n manier om die log errors nie te print nie (slf4j config)
             // Stop the old video
             if (videoPanel != null) {
                 videoPanel.getController().setStatus(VideoController.VideoStatus.STOPPED);

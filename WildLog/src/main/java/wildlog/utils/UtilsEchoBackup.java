@@ -53,7 +53,6 @@ public class UtilsEchoBackup {
                 feedback.println("--------------------------------------------------");
                 feedback.println("");
                 // Start walking the folders and building a list of what needs to be copied / deleted
-// FIXME: Ek is bietjie bang ek kan uit heap memory uit hardloop want die sets kan vrek baie Strings bevat...
                 final Set<String> lstAllEchoRelativePaths = new HashSet<>(75000);
                 final Set<String> lstAllWorkspaceRelativesPaths = new HashSet<>(75000);
                 final List<String> lstPathsToDeleteFromEcho = new ArrayList<>(500);
