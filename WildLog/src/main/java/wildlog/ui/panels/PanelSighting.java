@@ -1499,6 +1499,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnExtraData.setText("Extra Data");
         btnExtraData.setToolTipText("Link extra fields to this Observation.");
         btnExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExtraData.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
         btnExtraData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExtraData.setMargin(new java.awt.Insets(2, 6, 2, 4));
         btnExtraData.setName("btnExtraData"); // NOI18N

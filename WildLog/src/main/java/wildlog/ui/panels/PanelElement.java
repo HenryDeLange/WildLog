@@ -70,6 +70,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         if (inIsPopup) {
             btnAddSighting.setEnabled(false);
             btnBrowse.setEnabled(false);
+            btnExtraData.setEnabled(false);
             btnDeleteImage.setEnabled(false);
             btnGoLocation.setEnabled(false);
             btnExport.setEnabled(false);

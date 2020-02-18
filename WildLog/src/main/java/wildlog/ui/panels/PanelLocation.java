@@ -69,6 +69,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (inIsPopup) {
             btnAddVisit.setEnabled(false);
             btnBrowse.setEnabled(false);
+            btnExtraData.setEnabled(false);
             btnBulkImport.setEnabled(false);
             btnDeleteImage.setEnabled(false);
             btnDeleteVisit.setEnabled(false);
