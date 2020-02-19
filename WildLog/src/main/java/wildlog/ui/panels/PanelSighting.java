@@ -370,7 +370,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
                             Set<String> setCameraNames = new HashSet<>();
                             for (File file : inFiles) {
-                                setCameraNames.add(UtilsImageProcessing.getExifCameraNameFromJpeg(file.toPath()));
+                                String cameraName = UtilsImageProcessing.getExifCameraNameFromJpeg(file.toPath());
+                                if (cameraName != null && !cameraName.trim().isEmpty()) {
+                                    setCameraNames.add(cameraName);
+                                }
                             }
                             for (String cameraName : setCameraNames) {
                                 sighting.setTag((sighting.getTag() + " " + cameraName).trim());
@@ -1946,7 +1949,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (!hasRelevantFiles) {
             WLOptionPane.showMessageDialog(this,
                 "Please upload some image files and try again.",
-                "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
+                "No Files Uploaded", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnGetGPSFromImageActionPerformed
 
@@ -1995,7 +1998,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     else {
                         WLOptionPane.showMessageDialog(this,
                             "Please make sure to first provide an accurate values for the GPS point.",
-                            "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
+                            "Could not calculate the Sun and Moon information", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
@@ -2006,7 +2009,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             if (evt != null) {
                 WLOptionPane.showMessageDialog(this,
                     "Please make sure to first provide an accurate Date.",
-                    "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
+                    "Could not calculate the Sun and Moon information", JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnCalculateSunAndMoonActionPerformed
@@ -2039,7 +2042,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             if (evt != null) {
                 WLOptionPane.showMessageDialog(this,
                     "Please upload some image or movie files and try again.",
-                    "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
+                    "No Files Uploaded", JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnCalculateDurationActionPerformed
@@ -2376,6 +2379,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnSetDefaultElementImageActionPerformed
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
+        btnUpdateSightingActionPerformed(null);
         if (sighting != null && sighting.getID() > 0) {
             ExtraDataDialog dialog = new ExtraDataDialog(this, sighting.getID(), WildLogDataType.SIGHTING);
             dialog.setVisible(true);
@@ -2384,6 +2388,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             if (app.getWildLogOptions().isEnableSounds()) {
                 Toolkit.getDefaultToolkit().beep();
             }
+            WLOptionPane.showMessageDialog(this,
+                    "The Observation needs to be successfully saved first.",
+                    "Unsaved Observation", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnExtraDataActionPerformed
 

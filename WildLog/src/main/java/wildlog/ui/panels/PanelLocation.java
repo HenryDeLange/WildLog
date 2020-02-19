@@ -1421,7 +1421,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                     txtName.setBackground(Color.RED);
                     locationWL.setName(oldName);
                     txtName.setText(oldName);
-                    WLOptionPane.showMessageDialog(this, 
+                    WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                             "The Place could not be saved.", 
                             "Not Saved!", JOptionPane.ERROR_MESSAGE);
                 }
@@ -1442,14 +1442,14 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
             else {
                 txtName.setBackground(Color.RED);
-                WLOptionPane.showMessageDialog(this, 
+                WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                         "Please provide a Place Name before trying to save.", 
                         "Not Saved!", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
             txtName.setBackground(Color.RED);
-            WLOptionPane.showMessageDialog(this, 
+            WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                     "The Place Name contains unsupported characters and could not be saved.", 
                     "Not Saved!", JOptionPane.ERROR_MESSAGE);
         }
@@ -1528,6 +1528,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnApplyGPSToVisitActionPerformed
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
+        btnUpdateActionPerformed(null);
         if (locationWL != null && locationWL.getID() > 0) {
             ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), locationWL.getID(), WildLogDataType.LOCATION);
             dialog.setVisible(true);

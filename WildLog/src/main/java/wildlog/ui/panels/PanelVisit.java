@@ -51,6 +51,7 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogApplicationTypes;
+import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
 
@@ -780,12 +781,12 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             pnlButtonsLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLeftLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlButtonsLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnMapSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlButtonsLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnMapSighting, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(btnReport, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(btnSlideshow, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(btnAdvanced, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(btnExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         pnlButtonsLeftLayout.setVerticalGroup(
@@ -793,14 +794,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             .addGroup(pnlButtonsLeftLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(btnMapSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
+                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
                 .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
                 .addComponent(btnAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
 
@@ -1369,7 +1370,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 refreshSightingInfo();
             }
             else {
-                WLOptionPane.showMessageDialog(app.getMainFrame(),
+                WLOptionPane.showMessageDialog(getTopLevelAncestor(),
                         "Only one Observation can be viewed at a time. Please select one row in the table and try again.",
                         "Select One Observation", JOptionPane.WARNING_MESSAGE);
             }
@@ -1610,7 +1611,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     txtName.setBackground(Color.RED);
                     visit.setName(oldName);
                     txtName.setText(oldName);
-                    WLOptionPane.showMessageDialog(this, 
+                    WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                             "The Period could not be saved.", 
                             "Not Saved!", JOptionPane.ERROR_MESSAGE);
                 }
@@ -1631,14 +1632,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
             else {
                 txtName.setBackground(Color.RED);
-                WLOptionPane.showMessageDialog(this, 
+                WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                         "Please provide a Period Name before trying to save.", 
                         "Not Saved!", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
             txtName.setBackground(Color.RED);
-            WLOptionPane.showMessageDialog(this, 
+            WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                     "The Period Name contains unsupported characters and could not be saved.", 
                     "Not Saved!", JOptionPane.ERROR_MESSAGE);
         }
@@ -1679,6 +1680,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnAutoNameActionPerformed
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
+        btnUpdateActionPerformed(null);
         if (visit != null && visit.getID() > 0) {
             ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), visit.getID(), WildLogDataType.VISIT);
             dialog.setVisible(true);
@@ -1736,7 +1738,17 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 imageIndex = 0;
             }
             if (files.length > 0) {
-                lblImage.setIcon(UtilsImageProcessing.getScaledIcon(stashPath.resolve(files[imageIndex]), WildLogThumbnailSizes.S0300_NORMAL.getSize(), true));
+                Path filePath = stashPath.resolve(files[imageIndex]);
+                if (WildLogFileExtentions.Images.isKnownExtention(filePath)) {
+                    lblImage.setIcon(UtilsImageProcessing.getScaledIcon(filePath, WildLogThumbnailSizes.S0300_NORMAL.getSize(), true));
+                }
+                else
+                if (WildLogFileExtentions.Movies.isKnownExtention(filePath)) {
+                    lblImage.setIcon(UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.S0300_NORMAL));
+                }
+                else {
+                    lblImage.setIcon(UtilsImageProcessing.getScaledIconForOtherFiles(WildLogThumbnailSizes.S0300_NORMAL));
+                }
                 lblNumberOfImages.setText((imageIndex + 1) + " of " + files.length);
             }
             else {

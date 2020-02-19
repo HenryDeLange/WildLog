@@ -621,6 +621,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addGap(5, 5, 5)
                 .addComponent(btnExtraData, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
+                .addComponent(btnCompare, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
                 .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -628,9 +630,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5)
-                .addComponent(btnCompare, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 174, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pnlNames.setBackground(new java.awt.Color(227, 240, 227));
@@ -1087,7 +1087,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     txtPrimaryName.setBackground(Color.RED);
                     element.setPrimaryName(oldName);
                     txtPrimaryName.setText(oldName);
-                    WLOptionPane.showMessageDialog(this, 
+                    WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                             "The Creature could not be saved.", 
                             "Not Saved!", JOptionPane.ERROR_MESSAGE);
                 }
@@ -1109,14 +1109,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
             else {
                 txtPrimaryName.setBackground(Color.RED);
-                WLOptionPane.showMessageDialog(this, 
+                WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                         "Please provide a Primary Name before trying to save.", 
                         "Not Saved!", JOptionPane.ERROR_MESSAGE);
             }
         }
         else {
             txtPrimaryName.setBackground(Color.RED);
-            WLOptionPane.showMessageDialog(this, 
+            WLOptionPane.showMessageDialog(getTopLevelAncestor(), 
                     "The Primary Name contains unsupported characters and could not be saved.", 
                     "Not Saved!", JOptionPane.ERROR_MESSAGE);
         }
@@ -1186,7 +1186,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     dialog.setVisible(true);
                 }
                 else {
-                    WLOptionPane.showMessageDialog(app.getMainFrame(),
+                    WLOptionPane.showMessageDialog(getTopLevelAncestor(),
                             "Please choose one Observation to view.",
                             "Select Observation To View", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -1369,6 +1369,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnCompareActionPerformed
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
+        btnUpdateActionPerformed(null);
         if (element != null && element.getID() > 0) {
             ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), element.getID(), WildLogDataType.ELEMENT);
             dialog.setVisible(true);

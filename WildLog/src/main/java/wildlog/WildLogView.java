@@ -337,6 +337,11 @@ public final class WildLogView extends JFrame {
             reportsMenu.setVisible(false);
             syncMenu.setEnabled(false);
             syncMenu.setVisible(false);
+            sprApplication.setVisible(false);
+            restoreMenu.setEnabled(false);
+            restoreMenu.setVisible(false);
+            workspaceMenu.setEnabled(false);
+            workspaceMenu.setVisible(false);
             // Show the WEI welcome popup
             showWelcomeDialog();
         }
@@ -464,11 +469,11 @@ public final class WildLogView extends JFrame {
         sprWorkspace2 = new javax.swing.JPopupMenu.Separator();
         mnuCleanWorkspace = new javax.swing.JMenuItem();
         mnuOptimseDatabase = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        sprApplication = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem mnuExitApp = new javax.swing.JMenuItem();
         backupMenu = new javax.swing.JMenu();
         mnuBackupDatabase = new javax.swing.JMenuItem();
-        mnuRestore = new javax.swing.JMenu();
+        restoreMenu = new javax.swing.JMenu();
         mnuBackupRestore = new javax.swing.JMenuItem();
         sprEcho = new javax.swing.JPopupMenu.Separator();
         mnuEchoWorkspace = new javax.swing.JMenuItem();
@@ -1003,8 +1008,8 @@ public final class WildLogView extends JFrame {
 
         fileMenu.add(workspaceMenu);
 
-        jSeparator2.setName("jSeparator2"); // NOI18N
-        fileMenu.add(jSeparator2);
+        sprApplication.setName("sprApplication"); // NOI18N
+        fileMenu.add(sprApplication);
 
         mnuExitApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuExitApp.setText("Exit WildLog");
@@ -1044,8 +1049,8 @@ public final class WildLogView extends JFrame {
         });
         backupMenu.add(mnuBackupDatabase);
 
-        mnuRestore.setText("Restore");
-        mnuRestore.setName("mnuRestore"); // NOI18N
+        restoreMenu.setText("Restore");
+        restoreMenu.setName("restoreMenu"); // NOI18N
 
         mnuBackupRestore.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
         mnuBackupRestore.setText("Database Restore");
@@ -1057,9 +1062,9 @@ public final class WildLogView extends JFrame {
                 mnuBackupRestoreActionPerformed(evt);
             }
         });
-        mnuRestore.add(mnuBackupRestore);
+        restoreMenu.add(mnuBackupRestore);
 
-        backupMenu.add(mnuRestore);
+        backupMenu.add(restoreMenu);
 
         sprEcho.setName("sprEcho"); // NOI18N
         backupMenu.add(sprEcho);
@@ -3971,7 +3976,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator17;
     private javax.swing.JPopupMenu.Separator jSeparator18;
     private javax.swing.JPopupMenu.Separator jSeparator19;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator20;
     private javax.swing.JPopupMenu.Separator jSeparator21;
     private javax.swing.JPopupMenu.Separator jSeparator23;
@@ -4045,7 +4049,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenu mnuPerformance;
     private javax.swing.JMenuItem mnuReduceImagesSize;
     private javax.swing.JMenuItem mnuReportVisitDates;
-    private javax.swing.JMenu mnuRestore;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuStash;
@@ -4058,8 +4061,10 @@ public final class WildLogView extends JFrame {
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JPanel progressPanel;
     private javax.swing.JMenu reportsMenu;
+    private javax.swing.JMenu restoreMenu;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JMenu slideshowMenu;
+    private javax.swing.JPopupMenu.Separator sprApplication;
     private javax.swing.JPopupMenu.Separator sprBackup;
     private javax.swing.JPopupMenu.Separator sprEcho;
     private javax.swing.JPopupMenu.Separator sprExtra;

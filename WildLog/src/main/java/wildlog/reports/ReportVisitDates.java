@@ -127,12 +127,21 @@ public class ReportVisitDates {
                         reportData.isMissing = false;
                         reportData.isOverlapping = false;
                     }
-                    // Get the unique tags
+                    // Get the unique tags and count the files
                     List<Sighting> lstSightings = WildLogApp.getApplication().getDBI().listSightings(0, visit.getLocationID(), visit.getID(), false, Sighting.class);
                     reportData.tags = new TreeSet<>();
                     for (Sighting sighting : lstSightings) {
+                        // Tags
                         if (sighting.getTag() != null && !sighting.getTag().trim().isEmpty()) {
                             reportData.tags.add(sighting.getTag().trim());
+                        }
+                        // Count Files
+                        int countFiles = WildLogApp.getApplication().getDBI().countWildLogFiles(0, sighting.getID());
+                        if (countFiles > 0) {
+                            reportData.fileCount = reportData.fileCount + countFiles;
+                        }
+                        else {
+                            reportData.missingFileCount++;
                         }
                     }
                     // Check Visit and Sighting date range
@@ -204,9 +213,11 @@ public class ReportVisitDates {
                     row.createCell(4).setCellValue("Period Type");
                     row.createCell(5).setCellValue("Days");
                     row.createCell(6).setCellValue("Observations");
-                    row.createCell(7).setCellValue("Observation Tags");
-                    row.createCell(8).setCellValue("Has Overlap");
-                    row.createCell(9).setCellValue("Incorrect Observation Dates");
+                    row.createCell(7).setCellValue("Files");
+                    row.createCell(8).setCellValue("Observation Tags");
+                    row.createCell(9).setCellValue("Has Overlap");
+                    row.createCell(10).setCellValue("Incorrect Observation Dates");
+                    row.createCell(11).setCellValue("Observations Without Files");
                     row.getCell(0).setCellStyle(styleHeader);
                     row.getCell(1).setCellStyle(styleHeader);
                     row.getCell(2).setCellStyle(styleHeader);
@@ -217,6 +228,8 @@ public class ReportVisitDates {
                     row.getCell(7).setCellStyle(styleHeader);
                     row.getCell(8).setCellStyle(styleHeader);
                     row.getCell(9).setCellStyle(styleHeader);
+                    row.getCell(10).setCellStyle(styleHeader);
+                    row.getCell(11).setCellStyle(styleHeader);
                     List<ReportData> lstReportData = mapReportData.get(key);
                     for (int r = 0; r < lstReportData.size(); r++) {
                         ReportData reportData = lstReportData.get(r);
@@ -240,25 +253,30 @@ public class ReportVisitDates {
                         }
                         row.createCell(5).setCellValue(reportData.days);
                         row.createCell(6).setCellValue(reportData.sigtingCount);
+                        row.createCell(7).setCellValue(reportData.fileCount);
                         if (reportData.tags != null) {
                             String tags = reportData.tags.toString();
                             if (tags.length() > 2) {
-                                row.createCell(7).setCellValue(tags.substring(1, tags.length() - 2));
+                                row.createCell(8).setCellValue(tags.substring(1, tags.length() - 2));
                             }
                             else {
-                                row.createCell(7).setCellValue("");
+                                row.createCell(8).setCellValue("");
                             }
                         }
                         else {
-                            row.createCell(7).setCellValue("");
+                            row.createCell(8).setCellValue("");
                         }
                         if (reportData.isOverlapping) {
-                            row.createCell(8).setCellValue("OVERLAPPING");
-                            row.getCell(8).setCellStyle(styleWarning);
+                            row.createCell(9).setCellValue("OVERLAPPING");
+                            row.getCell(9).setCellStyle(styleWarning);
                         }
                         if (reportData.observationsDateRange != null && !reportData.observationsDateRange.isEmpty()) {
-                            row.createCell(9).setCellValue(reportData.observationsDateRange.trim());
-                            row.getCell(9).setCellStyle(styleWarning);
+                            row.createCell(10).setCellValue(reportData.observationsDateRange.trim());
+                            row.getCell(10).setCellStyle(styleWarning);
+                        }
+                        if (reportData.missingFileCount > 0) {
+                            row.createCell(11).setCellValue(reportData.missingFileCount);
+                            row.getCell(11).setCellStyle(styleWarning);
                         }
                     }
                     sheet.autoSizeColumn(0);
@@ -271,6 +289,8 @@ public class ReportVisitDates {
                     sheet.autoSizeColumn(7);
                     sheet.autoSizeColumn(8);
                     sheet.autoSizeColumn(9);
+                    sheet.autoSizeColumn(10);
+                    sheet.autoSizeColumn(11);
                 }
                 try (FileOutputStream out = new FileOutputStream(path.toFile())) {
                     workbook.write(out);
@@ -299,6 +319,8 @@ public class ReportVisitDates {
         private VisitType visitType;
         private int days;
         private int sigtingCount;
+        private int fileCount;
+        private int missingFileCount;
         private boolean isMissing;
         private Set<String> tags;
         private boolean isOverlapping;

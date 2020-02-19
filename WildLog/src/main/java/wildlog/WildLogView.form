@@ -105,9 +105,9 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="sprApplication">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator2" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="sprApplication" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuExitApp">
@@ -157,10 +157,10 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupDatabaseActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="mnuRestore">
+            <Menu class="javax.swing.JMenu" name="restoreMenu">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Restore"/>
-                <Property name="name" type="java.lang.String" value="mnuRestore" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="restoreMenu" noResource="true"/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuBackupRestore">
