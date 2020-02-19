@@ -265,7 +265,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel56 = new javax.swing.JLabel();
         btnCheckIUCNOtherName = new javax.swing.JButton();
         btnINaturalist = new javax.swing.JButton();
-        pnlInfo1 = new javax.swing.JPanel();
+        pnlInfo = new javax.swing.JPanel();
         cmbFeedingClass = new javax.swing.JComboBox();
         cmbEndangeredStatus = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
@@ -275,16 +275,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel60 = new javax.swing.JLabel();
         jScrollPane17 = new javax.swing.JScrollPane();
         txtDiagnosticDescription = new javax.swing.JTextArea();
-        pnlInfo2 = new javax.swing.JPanel();
-        jScrollPane18 = new javax.swing.JScrollPane();
-        txtBehaviourDescription = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtDistribution = new javax.swing.JTextArea();
+        jLabel59 = new javax.swing.JLabel();
         jScrollPane16 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
-        jLabel61 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel59 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtDistribution = new javax.swing.JTextArea();
+        jLabel61 = new javax.swing.JLabel();
+        jScrollPane18 = new javax.swing.JScrollPane();
+        txtBehaviourDescription = new javax.swing.JTextArea();
         jLabel69 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtNutrition = new javax.swing.JTextArea();
@@ -631,7 +630,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(btnCompare, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 174, Short.MAX_VALUE))
         );
 
         pnlNames.setBackground(new java.awt.Color(227, 240, 227));
@@ -737,8 +736,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addGap(5, 5, 5))
         );
 
-        pnlInfo1.setBackground(new java.awt.Color(227, 240, 227));
-        pnlInfo1.setName("pnlInfo1"); // NOI18N
+        pnlInfo.setBackground(new java.awt.Color(227, 240, 227));
+        pnlInfo.setName("pnlInfo"); // NOI18N
 
         cmbFeedingClass.setModel(new DefaultComboBoxModel(FeedingClass.values()));
         cmbFeedingClass.setSelectedItem(element.getFeedingClass());
@@ -780,71 +779,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtDiagnosticDescription.setName("txtDiagnosticDescription"); // NOI18N
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
-        javax.swing.GroupLayout pnlInfo1Layout = new javax.swing.GroupLayout(pnlInfo1);
-        pnlInfo1.setLayout(pnlInfo1Layout);
-        pnlInfo1Layout.setHorizontalGroup(
-            pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlInfo1Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane17)
-                    .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbFeedingClass, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cmbEndangeredStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(5, 5, 5))
-        );
-        pnlInfo1Layout.setVerticalGroup(
-            pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlInfo1Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel60))
-                .addGap(5, 5, 5)
-                .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbFeedingClass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbEndangeredStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel62, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane17))
-                .addGap(8, 8, 8))
-        );
-
-        pnlInfo2.setBackground(new java.awt.Color(227, 240, 227));
-        pnlInfo2.setName("pnlInfo2"); // NOI18N
-
-        jScrollPane18.setName("jScrollPane18"); // NOI18N
-
-        txtBehaviourDescription.setColumns(20);
-        txtBehaviourDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        txtBehaviourDescription.setLineWrap(true);
-        txtBehaviourDescription.setRows(4);
-        txtBehaviourDescription.setText(element.getBehaviourDescription());
-        txtBehaviourDescription.setWrapStyleWord(true);
-        txtBehaviourDescription.setName("txtBehaviourDescription"); // NOI18N
-        jScrollPane18.setViewportView(txtBehaviourDescription);
-
-        jScrollPane2.setName("jScrollPane2"); // NOI18N
-
-        txtDistribution.setColumns(20);
-        txtDistribution.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        txtDistribution.setLineWrap(true);
-        txtDistribution.setRows(3);
-        txtDistribution.setText(element.getDistribution());
-        txtDistribution.setWrapStyleWord(true);
-        txtDistribution.setName("txtDistribution"); // NOI18N
-        jScrollPane2.setViewportView(txtDistribution);
+        jLabel59.setText("Habitat:");
+        jLabel59.setName("jLabel59"); // NOI18N
 
         jScrollPane16.setName("jScrollPane16"); // NOI18N
 
@@ -857,14 +793,33 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane16.setViewportView(txtDescription);
 
-        jLabel61.setText("Behaviour:");
-        jLabel61.setName("jLabel61"); // NOI18N
-
         jLabel9.setText("Distribution:");
         jLabel9.setName("jLabel9"); // NOI18N
 
-        jLabel59.setText("Habitat:");
-        jLabel59.setName("jLabel59"); // NOI18N
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        txtDistribution.setColumns(20);
+        txtDistribution.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtDistribution.setLineWrap(true);
+        txtDistribution.setRows(3);
+        txtDistribution.setText(element.getDistribution());
+        txtDistribution.setWrapStyleWord(true);
+        txtDistribution.setName("txtDistribution"); // NOI18N
+        jScrollPane2.setViewportView(txtDistribution);
+
+        jLabel61.setText("Behaviour:");
+        jLabel61.setName("jLabel61"); // NOI18N
+
+        jScrollPane18.setName("jScrollPane18"); // NOI18N
+
+        txtBehaviourDescription.setColumns(20);
+        txtBehaviourDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtBehaviourDescription.setLineWrap(true);
+        txtBehaviourDescription.setRows(4);
+        txtBehaviourDescription.setText(element.getBehaviourDescription());
+        txtBehaviourDescription.setWrapStyleWord(true);
+        txtBehaviourDescription.setName("txtBehaviourDescription"); // NOI18N
+        jScrollPane18.setViewportView(txtBehaviourDescription);
 
         jLabel69.setText("Food / Nutrition:");
         jLabel69.setName("jLabel69"); // NOI18N
@@ -880,53 +835,69 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtNutrition.setName("txtNutrition"); // NOI18N
         jScrollPane1.setViewportView(txtNutrition);
 
-        javax.swing.GroupLayout pnlInfo2Layout = new javax.swing.GroupLayout(pnlInfo2);
-        pnlInfo2.setLayout(pnlInfo2Layout);
-        pnlInfo2Layout.setHorizontalGroup(
-            pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlInfo2Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlInfoLayout = new javax.swing.GroupLayout(pnlInfo);
+        pnlInfo.setLayout(pnlInfoLayout);
+        pnlInfoLayout.setHorizontalGroup(
+            pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfo2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(pnlInfo2Layout.createSequentialGroup()
-                        .addComponent(jScrollPane18, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                        .addGap(10, 10, 10))
-                    .addGroup(pnlInfo2Layout.createSequentialGroup()
-                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel61, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel59, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)))
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
-                    .addGroup(pnlInfo2Layout.createSequentialGroup()
-                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel69, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel69, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jLabel62, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jLabel70, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jLabel60, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jLabel59, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jLabel61, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane16)
+                    .addComponent(jScrollPane17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
+                    .addComponent(cmbType, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbFeedingClass, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbEndangeredStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane18)
+                    .addComponent(jScrollPane1))
                 .addGap(5, 5, 5))
         );
-        pnlInfo2Layout.setVerticalGroup(
-            pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfo2Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        pnlInfoLayout.setVerticalGroup(
+            pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlInfoLayout.createSequentialGroup()
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel60))
+                .addGap(5, 5, 5)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbFeedingClass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbEndangeredStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel62, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(5, 5, 5)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane17))
+                .addGap(5, 5, 5)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel59)
+                    .addComponent(jScrollPane16))
+                .addGap(5, 5, 5)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
-                    .addComponent(jLabel59))
+                    .addComponent(jScrollPane2))
                 .addGap(5, 5, 5)
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane16)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel69)
-                    .addComponent(jLabel61))
-                .addGap(5, 5, 5)
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel61)
                     .addComponent(jScrollPane18))
+                .addGap(5, 5, 5)
+                .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlInfoLayout.createSequentialGroup()
+                        .addComponent(jLabel69)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addGap(0, 0, 0))
         );
 
@@ -1012,7 +983,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             .addGroup(pnlTablesLayout.createSequentialGroup()
                 .addComponent(lblLocationsOrElements)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(jScrollPane15, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
                 .addGap(3, 3, 3)
                 .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1038,12 +1009,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, elementIncludesLayout.createSequentialGroup()
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlInfo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pnlNames, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, 0)
                         .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator10, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSeparator10, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(5, 5, 5)
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1072,11 +1041,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addComponent(pnlNames, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(pnlInfo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, 0)
-                        .addComponent(pnlInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(0, 0, 0)
+                                .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(pnlButtons, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE))))
                 .addGap(5, 5, 5))
         );
 
@@ -1235,6 +1202,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             lblNumberOfSightings.setText("0");
             lblNumberOfLocations.setText("0");
         }
+        lblNumberOfSightings.setToolTipText(lblNumberOfSightings.getText());
+        lblNumberOfLocations.setToolTipText(lblNumberOfLocations.getText());
         int fotoCount = app.getDBI().countWildLogFiles(0, element.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
@@ -1255,6 +1224,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             @Override
             public void run() {
                 lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
+                lblNumberOfLocations.setToolTipText(lblNumberOfLocations.getText());
             }
         });
         btnUpdate.requestFocusInWindow();
@@ -1300,6 +1270,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
         lblNumberOfLocations.setText("0");
+        lblNumberOfLocations.setToolTipText(lblNumberOfLocations.getText());
         if (evt != null) {
             tblLocation.clearSelection();
         }
@@ -1323,6 +1294,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             @Override
             public void run() {
                 lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
+                lblNumberOfLocations.setToolTipText(lblNumberOfLocations.getText());
             }
         });
     }//GEN-LAST:event_rdbSightingsItemStateChanged
@@ -1472,8 +1444,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlFiles;
-    private javax.swing.JPanel pnlInfo1;
-    private javax.swing.JPanel pnlInfo2;
+    private javax.swing.JPanel pnlInfo;
     private javax.swing.JPanel pnlNames;
     private javax.swing.JPanel pnlTables;
     private javax.swing.JRadioButton rdbLocations;

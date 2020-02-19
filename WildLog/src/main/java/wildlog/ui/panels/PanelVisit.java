@@ -1278,6 +1278,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
+        lblNumberOfSightings.setToolTipText(lblNumberOfSightings.getText());
+        lblNumberOfElements.setToolTipText(lblNumberOfElements.getText());
         if (VisitType.STASHED != visit.getType()) {
             int fotoCount = app.getDBI().countWildLogFiles(0, visit.getWildLogFileID());
             if (fotoCount > 0) {

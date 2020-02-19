@@ -70,14 +70,12 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="pnlInfo1" max="32767" attributes="0"/>
+                              <Component id="pnlInfo" max="32767" attributes="0"/>
                               <Component id="pnlNames" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           <Component id="pnlButtons" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jSeparator10" alignment="0" max="32767" attributes="0"/>
-                      <Component id="pnlInfo2" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -114,13 +112,11 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="pnlNames" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="pnlInfo1" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                  <Component id="pnlInfo" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="pnlButtons" min="-2" pref="346" max="-2" attributes="0"/>
+                              <Component id="pnlButtons" pref="554" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="pnlInfo2" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -441,7 +437,7 @@
                       <Component id="btnExport" min="-2" pref="35" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="btnCompare" min="-2" pref="35" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="174" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -829,31 +825,39 @@
             </Component>
           </SubComponents>
         </Container>
-        <Container class="javax.swing.JPanel" name="pnlInfo1">
+        <Container class="javax.swing.JPanel" name="pnlInfo">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="e3" green="f0" red="e3" type="rgb"/>
             </Property>
-            <Property name="name" type="java.lang.String" value="pnlInfo1" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="pnlInfo" noResource="true"/>
           </Properties>
 
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel1" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="jLabel62" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="jLabel70" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="jLabel60" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jLabel69" max="32767" attributes="0"/>
+                          <Component id="jLabel1" alignment="0" pref="100" max="32767" attributes="0"/>
+                          <Component id="jLabel62" alignment="0" pref="100" max="32767" attributes="0"/>
+                          <Component id="jLabel70" alignment="0" pref="100" max="32767" attributes="0"/>
+                          <Component id="jLabel60" alignment="0" pref="100" max="32767" attributes="0"/>
+                          <Component id="jLabel59" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jLabel9" alignment="0" pref="100" max="32767" attributes="0"/>
+                          <Component id="jLabel61" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane17" max="32767" attributes="0"/>
-                          <Component id="cmbType" max="32767" attributes="0"/>
-                          <Component id="cmbFeedingClass" max="32767" attributes="0"/>
-                          <Component id="cmbEndangeredStatus" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="jScrollPane16" max="32767" attributes="0"/>
+                          <Component id="jScrollPane17" alignment="0" pref="463" max="32767" attributes="0"/>
+                          <Component id="cmbType" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cmbFeedingClass" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cmbEndangeredStatus" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" max="32767" attributes="0"/>
+                          <Component id="jScrollPane18" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
                   </Group>
@@ -862,7 +866,6 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="cmbType" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel60" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -877,12 +880,35 @@
                           <Component id="cmbEndangeredStatus" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel62" alignment="3" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel70" min="-2" pref="18" max="-2" attributes="0"/>
                           <Component id="jScrollPane17" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel59" min="-2" max="-2" attributes="0"/>
+                          <Component id="jScrollPane16" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel61" min="-2" max="-2" attributes="0"/>
+                          <Component id="jScrollPane18" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="jLabel69" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="jScrollPane1" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -983,136 +1009,12 @@
                 </Component>
               </SubComponents>
             </Container>
-          </SubComponents>
-        </Container>
-        <Container class="javax.swing.JPanel" name="pnlInfo2">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="e3" green="f0" red="e3" type="rgb"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="pnlInfo2" noResource="true"/>
-          </Properties>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jScrollPane16" max="32767" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="jScrollPane18" pref="327" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel61" min="-2" pref="110" max="-2" attributes="0"/>
-                                  <Component id="jLabel59" min="-2" pref="110" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" pref="346" max="32767" attributes="0"/>
-                          <Component id="jScrollPane2" pref="346" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel9" min="-2" pref="113" max="-2" attributes="0"/>
-                                  <Component id="jLabel69" min="-2" pref="130" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel59" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane16" max="32767" attributes="0"/>
-                          <Component id="jScrollPane2" pref="79" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel69" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel61" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" pref="79" max="32767" attributes="0"/>
-                          <Component id="jScrollPane18" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane18">
+            <Component class="javax.swing.JLabel" name="jLabel59">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jScrollPane18" noResource="true"/>
+                <Property name="text" type="java.lang.String" value="Habitat:"/>
+                <Property name="name" type="java.lang.String" value="jLabel59" noResource="true"/>
               </Properties>
-              <AuxValues>
-                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-              </AuxValues>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Component class="javax.swing.JTextArea" name="txtBehaviourDescription">
-                  <Properties>
-                    <Property name="columns" type="int" value="20"/>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="11" style="0"/>
-                    </Property>
-                    <Property name="lineWrap" type="boolean" value="true"/>
-                    <Property name="rows" type="int" value="4"/>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="element.getBehaviourDescription()" type="code"/>
-                    </Property>
-                    <Property name="wrapStyleWord" type="boolean" value="true"/>
-                    <Property name="name" type="java.lang.String" value="txtBehaviourDescription" noResource="true"/>
-                  </Properties>
-                </Component>
-              </SubComponents>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-              </AuxValues>
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Component class="javax.swing.JTextArea" name="txtDistribution">
-                  <Properties>
-                    <Property name="columns" type="int" value="20"/>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Tahoma" size="11" style="0"/>
-                    </Property>
-                    <Property name="lineWrap" type="boolean" value="true"/>
-                    <Property name="rows" type="int" value="3"/>
-                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="element.getDistribution()" type="code"/>
-                    </Property>
-                    <Property name="wrapStyleWord" type="boolean" value="true"/>
-                    <Property name="name" type="java.lang.String" value="txtDistribution" noResource="true"/>
-                  </Properties>
-                </Component>
-              </SubComponents>
-            </Container>
+            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane16">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jScrollPane16" noResource="true"/>
@@ -1140,24 +1042,72 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JLabel" name="jLabel61">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Behaviour:"/>
-                <Property name="name" type="java.lang.String" value="jLabel61" noResource="true"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Distribution:"/>
                 <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel59">
+            <Container class="javax.swing.JScrollPane" name="jScrollPane2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Habitat:"/>
-                <Property name="name" type="java.lang.String" value="jLabel59" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTextArea" name="txtDistribution">
+                  <Properties>
+                    <Property name="columns" type="int" value="20"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Tahoma" size="11" style="0"/>
+                    </Property>
+                    <Property name="lineWrap" type="boolean" value="true"/>
+                    <Property name="rows" type="int" value="3"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="element.getDistribution()" type="code"/>
+                    </Property>
+                    <Property name="wrapStyleWord" type="boolean" value="true"/>
+                    <Property name="name" type="java.lang.String" value="txtDistribution" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Component class="javax.swing.JLabel" name="jLabel61">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Behaviour:"/>
+                <Property name="name" type="java.lang.String" value="jLabel61" noResource="true"/>
               </Properties>
             </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane18">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jScrollPane18" noResource="true"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTextArea" name="txtBehaviourDescription">
+                  <Properties>
+                    <Property name="columns" type="int" value="20"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Tahoma" size="11" style="0"/>
+                    </Property>
+                    <Property name="lineWrap" type="boolean" value="true"/>
+                    <Property name="rows" type="int" value="4"/>
+                    <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="element.getBehaviourDescription()" type="code"/>
+                    </Property>
+                    <Property name="wrapStyleWord" type="boolean" value="true"/>
+                    <Property name="name" type="java.lang.String" value="txtBehaviourDescription" noResource="true"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
             <Component class="javax.swing.JLabel" name="jLabel69">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Food / Nutrition:"/>
@@ -1227,7 +1177,7 @@
                   <Group type="102" attributes="0">
                       <Component id="lblLocationsOrElements" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane15" pref="0" max="32767" attributes="0"/>
+                      <Component id="jScrollPane15" pref="172" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">

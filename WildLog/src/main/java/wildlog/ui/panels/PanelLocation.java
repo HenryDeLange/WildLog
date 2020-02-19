@@ -1167,6 +1167,8 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblNumberOfSightings.setText("0");
             lblNumberOfVisits.setText("0");
         }
+        lblNumberOfSightings.setToolTipText(lblNumberOfSightings.getText());
+        lblNumberOfVisits.setToolTipText(lblNumberOfVisits.getText());
         int fotoCount = app.getDBI().countWildLogFiles(0, locationWL.getWildLogFileID());
         if (fotoCount > 0) {
             UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
@@ -1180,6 +1182,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             @Override
             public void run() {
                 lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+                lblNumberOfElements.setToolTipText(lblNumberOfElements.getText());
             }
         });
         btnUpdate.requestFocusInWindow();
@@ -1245,6 +1248,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
         lblNumberOfElements.setText("0");
+        lblNumberOfElements.setToolTipText(lblNumberOfElements.getText());
         if (locationWL.getName() != null) {
             if (evt != null) {
                 tblElement.clearSelection();
@@ -1271,6 +1275,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 @Override
                 public void run() {
                     lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+                    lblNumberOfElements.setToolTipText(lblNumberOfElements.getText());
                 }
             });
         }
