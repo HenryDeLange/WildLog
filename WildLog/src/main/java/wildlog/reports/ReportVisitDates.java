@@ -27,6 +27,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.VisitType;
+import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.utils.UtilsConcurency;
@@ -88,6 +89,7 @@ public class ReportVisitDates {
                 // Calculate the values
                 Map<String, List<ReportData>> mapReportData = new HashMap<>();
                 ReportData prevReportData = new ReportData();
+                double counter = 0.0;
                 for (Visit visit : lstVisits) {
                     List<ReportData> lstReportData = mapReportData.get(visit.getCachedLocationName());
                     if (lstReportData == null) {
@@ -136,12 +138,29 @@ public class ReportVisitDates {
                             reportData.tags.add(sighting.getTag().trim());
                         }
                         // Count Files
-                        int countFiles = WildLogApp.getApplication().getDBI().countWildLogFiles(0, sighting.getID());
-                        if (countFiles > 0) {
-                            reportData.fileCount = reportData.fileCount + countFiles;
+                        if (visit.getType() != VisitType.STASHED) {
+                            int countFiles = WildLogApp.getApplication().getDBI().countWildLogFiles(0, sighting.getID());
+                            if (countFiles > 0) {
+                                reportData.fileCount = reportData.fileCount + countFiles;
+                            }
+                            else {
+                                reportData.missingFileCount++;
+                            }
+                        }
+                        // Missing GPS
+                        if (!UtilsGPS.hasGPSData(sighting)) {
+                            reportData.missingGPSCount++;
+                        }
+                    }
+                    // Count stashed files
+                    if (visit.getType() == VisitType.STASHED) {
+                        Path stashPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
+                        String[] files = stashPath.toFile().list();
+                        if (files != null) {
+                            reportData.fileCount = files.length;
                         }
                         else {
-                            reportData.missingFileCount++;
+                            reportData.fileCount = -1;
                         }
                     }
                     // Check Visit and Sighting date range
@@ -159,13 +178,19 @@ public class ReportVisitDates {
                         }
                         reportData.observationsDateRange = "";
                         if (outsideRange) {
-                            reportData.observationsDateRange = "OBSERVATION DATE OUTSIDE PERIOD DATE. ";
+                            reportData.observationsDateRange = "OBSERVATION DATE OUTSIDE PERIOD DATE";
                         }
                         if (startGap > 2) {
-                            reportData.observationsDateRange = "LATE OBSERVATION START DATE. ";
+                            if (!reportData.observationsDateRange.isEmpty()) {
+                                reportData.observationsDateRange = reportData.observationsDateRange + ", ";
+                            }
+                            reportData.observationsDateRange = reportData.observationsDateRange + "LATE OBSERVATION START DATE";
                         }
                         if (endGap > 2) {
-                            reportData.observationsDateRange = "EARLY OBSERVATION END DATE.";
+                            if (!reportData.observationsDateRange.isEmpty()) {
+                                reportData.observationsDateRange = reportData.observationsDateRange + ", ";
+                            }
+                            reportData.observationsDateRange = reportData.observationsDateRange + "EARLY OBSERVATION END DATE";
                         }
                     }
                     // If there was a missing period, then add a row for it
@@ -186,8 +211,10 @@ public class ReportVisitDates {
                     }
                     lstReportData.add(reportData);
                     prevReportData = reportData;
+                    setTaskProgress(10 + (int) (counter / (double) lstVisits.size() * 70.0));
+                    setMessage("Busy with the Report: " + inTitle + "... " + getProgress() + "%");
                 }
-                setTaskProgress(50);
+                setTaskProgress(80);
                 setMessage("Busy with the Report: " + inTitle + "... " + getProgress() + "%");
                 // Write the report
                 Workbook workbook = new SXSSFWorkbook();
@@ -208,16 +235,17 @@ public class ReportVisitDates {
                     Row row = sheet.createRow(0);
                     row.createCell(0).setCellValue("Place Name");
                     row.createCell(1).setCellValue("Period Name");
-                    row.createCell(2).setCellValue("Start Date");
-                    row.createCell(3).setCellValue("End Date");
-                    row.createCell(4).setCellValue("Period Type");
-                    row.createCell(5).setCellValue("Days");
-                    row.createCell(6).setCellValue("Observations");
-                    row.createCell(7).setCellValue("Files");
-                    row.createCell(8).setCellValue("Observation Tags");
-                    row.createCell(9).setCellValue("Has Overlap");
-                    row.createCell(10).setCellValue("Incorrect Observation Dates");
-                    row.createCell(11).setCellValue("Observations Without Files");
+                    row.createCell(2).setCellValue("Tags");
+                    row.createCell(3).setCellValue("Start Date");
+                    row.createCell(4).setCellValue("End Date");
+                    row.createCell(5).setCellValue("Period Type");
+                    row.createCell(6).setCellValue("Days");
+                    row.createCell(7).setCellValue("Observations");
+                    row.createCell(8).setCellValue("Files");
+                    row.createCell(9).setCellValue("Missing Files");
+                    row.createCell(10).setCellValue("Missing GPS");
+                    row.createCell(11).setCellValue("Period Overlap");
+                    row.createCell(12).setCellValue("Incorrect Dates");
                     row.getCell(0).setCellStyle(styleHeader);
                     row.getCell(1).setCellStyle(styleHeader);
                     row.getCell(2).setCellStyle(styleHeader);
@@ -230,6 +258,7 @@ public class ReportVisitDates {
                     row.getCell(9).setCellStyle(styleHeader);
                     row.getCell(10).setCellStyle(styleHeader);
                     row.getCell(11).setCellStyle(styleHeader);
+                    row.getCell(12).setCellStyle(styleHeader);
                     List<ReportData> lstReportData = mapReportData.get(key);
                     for (int r = 0; r < lstReportData.size(); r++) {
                         ReportData reportData = lstReportData.get(r);
@@ -239,44 +268,51 @@ public class ReportVisitDates {
                         if (reportData.visitName.equals("MISSING")) {
                             row.getCell(1).setCellStyle(styleWarning);
                         }
-                        if (reportData.startDate != null) {
-                            row.createCell(2).setCellValue(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(reportData.startDate));
-                        }
-                        if (reportData.endDate != null) {
-                            row.createCell(3).setCellValue(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(reportData.endDate));
-                        }
-                        if (reportData.visitType != null) {
-                            row.createCell(4).setCellValue(reportData.visitType.toString());
-                        }
-                        else {
-                            row.createCell(4).setCellValue("");
-                        }
-                        row.createCell(5).setCellValue(reportData.days);
-                        row.createCell(6).setCellValue(reportData.sigtingCount);
-                        row.createCell(7).setCellValue(reportData.fileCount);
                         if (reportData.tags != null) {
                             String tags = reportData.tags.toString();
                             if (tags.length() > 2) {
-                                row.createCell(8).setCellValue(tags.substring(1, tags.length() - 2));
+                                row.createCell(2).setCellValue(tags.substring(1, tags.length() - 2));
                             }
                             else {
-                                row.createCell(8).setCellValue("");
+                                row.createCell(2).setCellValue("");
                             }
                         }
                         else {
-                            row.createCell(8).setCellValue("");
+                            row.createCell(2).setCellValue("");
                         }
-                        if (reportData.isOverlapping) {
-                            row.createCell(9).setCellValue("OVERLAPPING");
-                            row.getCell(9).setCellStyle(styleWarning);
+                        if (reportData.startDate != null) {
+                            row.createCell(3).setCellValue(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(reportData.startDate));
                         }
-                        if (reportData.observationsDateRange != null && !reportData.observationsDateRange.isEmpty()) {
-                            row.createCell(10).setCellValue(reportData.observationsDateRange.trim());
-                            row.getCell(10).setCellStyle(styleWarning);
+                        if (reportData.endDate != null) {
+                            row.createCell(4).setCellValue(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(reportData.endDate));
+                        }
+                        if (reportData.visitType != null) {
+                            row.createCell(5).setCellValue(reportData.visitType.toString());
+                        }
+                        row.createCell(6).setCellValue(reportData.days);
+                        row.createCell(7).setCellValue(reportData.sigtingCount);
+                        if (reportData.fileCount >= 0) {
+                            row.createCell(8).setCellValue(reportData.fileCount);
+                        }
+                        else {
+                            row.createCell(8).setCellValue("MISSING");
+                            row.getCell(8).setCellStyle(styleWarning);
                         }
                         if (reportData.missingFileCount > 0) {
-                            row.createCell(11).setCellValue(reportData.missingFileCount);
+                            row.createCell(9).setCellValue(reportData.missingFileCount);
+                            row.getCell(9).setCellStyle(styleWarning);
+                        }
+                        if (reportData.missingGPSCount > 0) {
+                            row.createCell(10).setCellValue(reportData.missingGPSCount);
+                            row.getCell(10).setCellStyle(styleWarning);
+                        }
+                        if (reportData.isOverlapping) {
+                            row.createCell(11).setCellValue("OVERLAPPING");
                             row.getCell(11).setCellStyle(styleWarning);
+                        }
+                        if (reportData.observationsDateRange != null && !reportData.observationsDateRange.isEmpty()) {
+                            row.createCell(12).setCellValue(reportData.observationsDateRange.trim());
+                            row.getCell(12).setCellStyle(styleWarning);
                         }
                     }
                     sheet.autoSizeColumn(0);
@@ -291,6 +327,7 @@ public class ReportVisitDates {
                     sheet.autoSizeColumn(9);
                     sheet.autoSizeColumn(10);
                     sheet.autoSizeColumn(11);
+                    sheet.autoSizeColumn(12);
                 }
                 try (FileOutputStream out = new FileOutputStream(path.toFile())) {
                     workbook.write(out);
@@ -325,6 +362,7 @@ public class ReportVisitDates {
         private Set<String> tags;
         private boolean isOverlapping;
         private String observationsDateRange;
+        private int missingGPSCount;
     }
     
 }
