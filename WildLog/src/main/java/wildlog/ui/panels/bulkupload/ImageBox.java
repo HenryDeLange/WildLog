@@ -24,6 +24,7 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogFileExtentions;
 
 
 public class ImageBox extends JPanel {
@@ -245,7 +246,9 @@ public class ImageBox extends JPanel {
         BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
         newSightingWrapper.setLocationID(currentSightingWrapper.getLocationID());
         newSightingWrapper.setDate(imageWrapper.getDate());
-        UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
+        if (WildLogFileExtentions.Images.isJPG(imageWrapper.getFile())) {
+            UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
+        }
         BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper, 
                 bulkUploadPanel.getChkForceLocationGPSCoordinates().isSelected(), bulkUploadPanel.getSelectedLocation());
         BulkUploadImageListWrapper currentListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
@@ -320,7 +323,9 @@ public class ImageBox extends JPanel {
                     BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper, 
                             bulkUploadPanel.getChkForceLocationGPSCoordinates().isSelected(), bulkUploadPanel.getSelectedLocation());
                     newSightingWrapper.setDate(imageWrapper.getDate());
-                    UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
+                    if (WildLogFileExtentions.Images.isJPG(imageWrapper.getFile())) {
+                        UtilsGPS.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
+                    }
                     BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper(imageBoxSize);
                     newListWrapper.getImageList().add(imageWrapper.getClone());
                     if (imageWrapper.getDate().before(currentSightingWrapper.getDate())) {

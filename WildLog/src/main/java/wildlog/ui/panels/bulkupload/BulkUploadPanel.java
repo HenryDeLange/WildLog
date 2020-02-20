@@ -25,6 +25,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollBar;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -88,6 +89,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private static String lastFilePath = "";
     private final WildLogApp app;
     private final CustomMouseWheelScroller mouseWheel;
+    private final JScrollBar originalSCrollBar;
     private final List<Path> lstVisitFiles;
     private final PanelNeedsRefreshWhenDataChanges panelToRefresh;
     final private Visit existingVisit;
@@ -129,6 +131,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Set table scroling to only one row at a time
         mouseWheel = new CustomMouseWheelScroller(scrTable);
         mouseWheel.install();
+        originalSCrollBar = scrTable.getVerticalScrollBar();
         // "Hack" to make the buttons clickable when the mouse scrolls over the cell (very performance intensive, but "better" now...)
         // of as mens die model clear deur 'n nuwe browse besigheid oop te maak...
         final JTable tableHandle = tblBulkImport;
@@ -396,6 +399,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkForceLocationGPSCoordinates = new javax.swing.JCheckBox();
         cmbImageBoxSize = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
+        chkSmoothScroll = new javax.swing.JCheckBox();
         btnUpdate = new javax.swing.JButton();
         btnGPSForAll = new javax.swing.JButton();
         scrTable = new javax.swing.JScrollPane();
@@ -482,7 +486,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(lblFilesRead)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(lblFilesLinked)
                 .addContainerGap(22, Short.MAX_VALUE))
             .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -511,7 +515,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     .addGroup(pnlPlaceLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addGroup(pnlPlaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                            .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(2, 2, 2))
                     .addGroup(pnlPlaceLayout.createSequentialGroup()
@@ -603,7 +607,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     .addGroup(pnlPeriodLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
-                        .addComponent(txtVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                        .addComponent(txtVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
                         .addComponent(jLabel5)
                         .addGap(8, 8, 8)
@@ -696,6 +700,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel9.setText("File box size:");
         jLabel9.setName("jLabel9"); // NOI18N
 
+        chkSmoothScroll.setBackground(new java.awt.Color(153, 180, 115));
+        chkSmoothScroll.setText("Smooth Scroll");
+        chkSmoothScroll.setToolTipText("");
+        chkSmoothScroll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkSmoothScroll.setName("chkSmoothScroll"); // NOI18N
+        chkSmoothScroll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkSmoothScrollActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSettingsLayout = new javax.swing.GroupLayout(pnlSettings);
         pnlSettings.setLayout(pnlSettingsLayout);
         pnlSettingsLayout.setHorizontalGroup(
@@ -710,7 +725,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addGap(5, 5, 5)
                         .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
-                        .addComponent(jLabel7))
+                        .addComponent(jLabel7)
+                        .addGap(10, 10, 10)
+                        .addComponent(chkSmoothScroll))
                     .addGroup(pnlSettingsLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jLabel9)
@@ -720,21 +737,22 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addComponent(chkIncludeSubfolders)
                         .addGap(15, 15, 15)
                         .addComponent(chkForceLocationGPSCoordinates)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(btnReload, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
         );
         pnlSettingsLayout.setVerticalGroup(
             pnlSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSettingsLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(4, 4, 4)
                 .addGroup(pnlSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlSettingsLayout.createSequentialGroup()
                         .addGroup(pnlSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(chkSmoothScroll))
                         .addGap(2, 2, 2)
                         .addGroup(pnlSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(chkIncludeSubfolders)
@@ -1128,7 +1146,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     }
                                     Set<String> setCameraNames = new HashSet<>();
                                     for (File file : files) {
-                                        setCameraNames.add(UtilsImageProcessing.getExifCameraNameFromJpeg(file.toPath()));
+                                        String cameraName = UtilsImageProcessing.getExifCameraNameFromJpeg(file.toPath());
+                                        if (cameraName != null && !cameraName.isEmpty()) {
+                                            setCameraNames.add(cameraName);
+                                        }
                                     }
                                     for (String cameraName : setCameraNames) {
                                         sightingWrapper.setTag((sightingWrapper.getTag() + " " + cameraName).trim());
@@ -1337,6 +1358,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         setupVisitName();
     }//GEN-LAST:event_dtpEndDatePropertyChange
 
+    private void chkSmoothScrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkSmoothScrollActionPerformed
+        if (chkSmoothScroll.isSelected()) {
+            scrTable.setVerticalScrollBar(new JScrollBar(JScrollBar.VERTICAL));
+            scrTable.getVerticalScrollBar().setUnitIncrement(50);
+        }
+        else {
+            scrTable.setVerticalScrollBar(originalSCrollBar);
+        }
+        tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(0, 0, true));
+    }//GEN-LAST:event_chkSmoothScrollActionPerformed
+
     public boolean isShowAsTab() {
         return showAsTab;
     }
@@ -1395,6 +1427,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBox chkForceLocationGPSCoordinates;
     private javax.swing.JCheckBox chkIncludeSubfolders;
+    private javax.swing.JCheckBox chkSmoothScroll;
     private javax.swing.JComboBox<String> cmbImageBoxSize;
     private javax.swing.JComboBox cmbVisitType;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
