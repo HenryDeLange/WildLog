@@ -180,6 +180,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (!(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
                 || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER)) {
             btnAutoName.setVisible(false);
+            lblTotalFiles.setVisible(false);
+            lblTotalNumberOfFiles.setVisible(false);
         }
         // Enforce user access
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
@@ -436,6 +438,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel5 = new javax.swing.JLabel();
         btnAddSighting = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JSeparator();
+        lblTotalNumberOfFiles = new javax.swing.JLabel();
+        lblTotalFiles = new javax.swing.JLabel();
         pnlSelectedFiles = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         lblSightingImage = new javax.swing.JLabel();
@@ -926,7 +930,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addGap(71, 71, 71)
-                                        .addComponent(txtName))
+                                        .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addComponent(jLabel52)
                                         .addGap(311, 311, 311)))
@@ -1042,6 +1046,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         jSeparator5.setName("jSeparator5"); // NOI18N
 
+        lblTotalNumberOfFiles.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblTotalNumberOfFiles.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTotalNumberOfFiles.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        lblTotalNumberOfFiles.setName("lblTotalNumberOfFiles"); // NOI18N
+
+        lblTotalFiles.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblTotalFiles.setText("Files:");
+        lblTotalFiles.setName("lblTotalFiles"); // NOI18N
+
         javax.swing.GroupLayout pnlSightingsLayout = new javax.swing.GroupLayout(pnlSightings);
         pnlSightings.setLayout(pnlSightingsLayout);
         pnlSightingsLayout.setHorizontalGroup(
@@ -1051,14 +1064,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 .addGroup(pnlSightingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnEditSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
+                    .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalNumberOfFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTotalFiles))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnlSightingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlSightingsLayout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 569, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
             .addComponent(jSeparator5)
         );
@@ -1078,8 +1093,12 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGap(20, 20, 20)
                         .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
-                        .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblTotalFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(lblTotalNumberOfFiles, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
 
@@ -1273,11 +1292,22 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 }
             }
             lblNumberOfElements.setText(Integer.toString(allElements.size()));
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+                List<Sighting> lstSightings = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
+                int totalFiles = 0;
+                for (Sighting sighting : lstSightings) {
+                    totalFiles = totalFiles + app.getDBI().countWildLogFiles(0, sighting.getID());
+                }
+                lblTotalNumberOfFiles.setText(Integer.toString(totalFiles));
+            }
         }
         else {
             UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, 0);
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+                lblTotalNumberOfFiles.setText("0");
+            }
         }
         lblNumberOfSightings.setToolTipText(lblNumberOfSightings.getText());
         lblNumberOfElements.setToolTipText(lblNumberOfElements.getText());
@@ -1836,6 +1866,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JLabel lblNumberOfSightingImages;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblSightingImage;
+    private javax.swing.JLabel lblTotalFiles;
+    private javax.swing.JLabel lblTotalNumberOfFiles;
     private javax.swing.JLabel lblVisitName;
     private javax.swing.JPanel pnlButtons;
     private javax.swing.JPanel pnlButtonsLeft;
