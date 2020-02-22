@@ -164,33 +164,35 @@ public class ReportVisitDates {
                         }
                     }
                     // Check Visit and Sighting date range
-                    if (reportData.startDate != null && reportData.endDate != null) {
-                        boolean outsideRange = false;
-                        int startGap = Integer.MAX_VALUE;
-                        int endGap = Integer.MAX_VALUE;
-                        for (Sighting sighting : lstSightings) {
-                            LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
-                            if (sightingDate.isBefore(reportData.startDate) || sightingDate.isAfter(reportData.endDate)) {
-                                outsideRange = true;
+                    if (visit.getType() != VisitType.STASHED) {
+                        if (reportData.startDate != null && reportData.endDate != null) {
+                            boolean outsideRange = false;
+                            int startGap = Integer.MAX_VALUE;
+                            int endGap = Integer.MAX_VALUE;
+                            for (Sighting sighting : lstSightings) {
+                                LocalDate sightingDate = UtilsTime.getLocalDateFromDate(sighting.getDate());
+                                if (sightingDate.isBefore(reportData.startDate) || sightingDate.isAfter(reportData.endDate)) {
+                                    outsideRange = true;
+                                }
+                                startGap = Math.min(startGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.startDate)));
+                                endGap = Math.min(endGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.endDate)));
                             }
-                            startGap = Math.min(startGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.startDate)));
-                            endGap = Math.min(endGap, Math.abs((int) ChronoUnit.DAYS.between(sightingDate, reportData.endDate)));
-                        }
-                        reportData.observationsDateRange = "";
-                        if (outsideRange) {
-                            reportData.observationsDateRange = "OBSERVATION DATE OUTSIDE PERIOD DATE";
-                        }
-                        if (startGap > 2) {
-                            if (!reportData.observationsDateRange.isEmpty()) {
-                                reportData.observationsDateRange = reportData.observationsDateRange + ", ";
+                            reportData.observationsDateRange = "";
+                            if (outsideRange) {
+                                reportData.observationsDateRange = "OBSERVATION DATE OUTSIDE PERIOD DATE";
                             }
-                            reportData.observationsDateRange = reportData.observationsDateRange + "LATE OBSERVATION START DATE";
-                        }
-                        if (endGap > 2) {
-                            if (!reportData.observationsDateRange.isEmpty()) {
-                                reportData.observationsDateRange = reportData.observationsDateRange + ", ";
+                            if (startGap > 2) {
+                                if (!reportData.observationsDateRange.isEmpty()) {
+                                    reportData.observationsDateRange = reportData.observationsDateRange + ", ";
+                                }
+                                reportData.observationsDateRange = reportData.observationsDateRange + "LATE OBSERVATION START DATE";
                             }
-                            reportData.observationsDateRange = reportData.observationsDateRange + "EARLY OBSERVATION END DATE";
+                            if (endGap > 2) {
+                                if (!reportData.observationsDateRange.isEmpty()) {
+                                    reportData.observationsDateRange = reportData.observationsDateRange + ", ";
+                                }
+                                reportData.observationsDateRange = reportData.observationsDateRange + "EARLY OBSERVATION END DATE";
+                            }
                         }
                     }
                     // If there was a missing period, then add a row for it
