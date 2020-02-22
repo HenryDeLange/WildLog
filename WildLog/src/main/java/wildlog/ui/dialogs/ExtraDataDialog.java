@@ -21,7 +21,6 @@ public class ExtraDataDialog extends JDialog {
     private final WildLogDataType linkType;
 
 // TODO: Add to import/export
-// TODO: Add to HTML view of Browse tab
     
     public ExtraDataDialog(JDialog inParent, long inLinkID, WildLogDataType inLinkType) {
         super(inParent);

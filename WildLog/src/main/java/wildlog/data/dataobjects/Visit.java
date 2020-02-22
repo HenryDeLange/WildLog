@@ -7,6 +7,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithTXT;
 import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
+import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -46,6 +47,17 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Notes:</b><br/>", description, true);
         if (!inIsSummary) {
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Game Watching:</b><br/>", gameWatchingIntensity, true);
+        }
+        if (!inIsSummary) {
+            List<ExtraData> lstExtraData = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.USER, id, ExtraData.class);
+            if (!lstExtraData.isEmpty()) {
+                html.append("<br/><hr/>");
+                for (ExtraData extraData : lstExtraData) {
+                    if (extraData.getDataKey() != null && !extraData.getDataKey().isEmpty()) {
+                        UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>" + extraData.getDataKey() + ":</b><br/>", extraData.getDataValue(), true);
+                    }
+                }
+            }
         }
         if (!inIsSummary && (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER)) {
             html.append("<br/><hr/>");

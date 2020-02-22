@@ -598,6 +598,9 @@ public class SyncTableEntry extends TableServiceEntity {
         inProperties.put("linkType", new EntityProperty(UtilsData.getKeyFromEnum(inData.getLinkType())));
         inProperties.put("dataKey", new EntityProperty(inData.getDataKey()));
         inProperties.put("dataValue", new EntityProperty(inData.getDataValue()));
+        inProperties.put("AuditTime", new EntityProperty(inData.getAuditTime()));
+        inProperties.put("AuditUser", new EntityProperty(inData.getAuditUser()));
+        inProperties.put("SyncIndicator", new EntityProperty(inData.getSyncIndicator()));
     }
 
 }

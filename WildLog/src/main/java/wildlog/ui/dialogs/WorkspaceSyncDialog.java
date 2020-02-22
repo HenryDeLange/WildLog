@@ -48,6 +48,7 @@ import wildlog.WildLogApp;
 import wildlog.WildLogView;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.ElementCore;
+import wildlog.data.dataobjects.ExtraData;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.Sighting;
@@ -1001,6 +1002,10 @@ public class WorkspaceSyncDialog extends JDialog {
             lstWorkspaceEntries = new ArrayList<>(1);
             ((List<DataObjectWithAudit>) lstWorkspaceEntries).add(WildLogApp.getApplication().getDBI().findWildLogOptions(WildLogOptions.class));
         }
+        else
+        if(inDataType == WildLogDataType.EXTRA) {
+            lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listExtraDatas(null, 0, ExtraData.class);
+        }
         else {
             lstWorkspaceEntries = null;
         }
@@ -1129,6 +1134,10 @@ public class WorkspaceSyncDialog extends JDialog {
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.WILDLOG_OPTIONS) {
                     // Never created via sync, would have already been created earlier, thus only needs to be updated via sync
                 }
+                else
+                if(cloudEntry.getWildLogDataType() == WildLogDataType.EXTRA) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createExtraData((ExtraData) syncAction.data, true));
+                }
                 else {
                     logIfFailed(inFeedback, syncAction, false);
                 }
@@ -1171,6 +1180,10 @@ public class WorkspaceSyncDialog extends JDialog {
                 else
                 if(cloudEntry.getWildLogDataType() == WildLogDataType.WILDLOG_OPTIONS) {
                     logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateWildLogOptions((WildLogOptions) syncAction.data, false));
+                }
+                else
+                if(cloudEntry.getWildLogDataType() == WildLogDataType.EXTRA) {
+                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().updateExtraData((ExtraData) syncAction.data, true));
                 }
                 else {
                     logIfFailed(inFeedback, syncAction, false);
