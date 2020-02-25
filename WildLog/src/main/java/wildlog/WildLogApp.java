@@ -84,7 +84,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     private static WildLogApp INSTANCE = null;
-    public static String WILDLOG_VERSION = "6.1.1.beta";
+    public static String WILDLOG_VERSION = "6.1.1";
     public static Class APPLICATION_CLASS = WildLogApp.class;
     public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
@@ -668,7 +668,7 @@ public class WildLogApp extends Application {
                     });
                     editorPane.setEditable(false);
                     editorPane.setBackground(label.getBackground());
-                    WLOptionPane.showMessageDialog(null, // Using null to prevent the glasspane from being used (it will remove the existing one)
+                    JOptionPane.showMessageDialog(null, // Using JOptionPane and null to prevent the glasspane from being used (it will remove the existing one)
                             editorPane,
                             "A new WildLog update is available!", JOptionPane.INFORMATION_MESSAGE);
                 }
