@@ -400,7 +400,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         cmbImageBoxSize = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         chkSmoothScroll = new javax.swing.JCheckBox();
-        btnUpdate = new javax.swing.JButton();
+        btnProcess = new javax.swing.JButton();
+        btnStash = new javax.swing.JButton();
         btnGPSForAll = new javax.swing.JButton();
         scrTable = new javax.swing.JScrollPane();
         tblBulkImport = new javax.swing.JTable();
@@ -607,7 +608,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     .addGroup(pnlPeriodLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
-                        .addComponent(txtVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                        .addComponent(txtVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
                         .addComponent(jLabel5)
                         .addGap(8, 8, 8)
@@ -653,7 +654,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel6.setText("Start new Observations after");
         jLabel6.setName("jLabel6"); // NOI18N
 
-        jLabel7.setText("seconds of inactivaty.");
+        jLabel7.setText("seconds of inactivaty");
         jLabel7.setName("jLabel7"); // NOI18N
 
         spnInactivityTime.setModel(new javax.swing.SpinnerNumberModel(120, 1, 10000000, 1));
@@ -737,7 +738,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addComponent(chkIncludeSubfolders)
                         .addGap(15, 15, 15)
                         .addComponent(chkForceLocationGPSCoordinates)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(btnReload, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
         );
@@ -763,20 +764,34 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 .addGap(5, 5, 5))
         );
 
-        btnUpdate.setBackground(new java.awt.Color(0, 204, 0));
-        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
-        btnUpdate.setToolTipText("Save the defined Observations for the specified Period and Place.");
-        btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnUpdate.setName("btnUpdate"); // NOI18N
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+        btnProcess.setBackground(new java.awt.Color(0, 204, 0));
+        btnProcess.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnProcess.setToolTipText("Save the defined Observations for the specified Period and Place.");
+        btnProcess.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnProcess.setName("btnProcess"); // NOI18N
+        btnProcess.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
+                btnProcessActionPerformed(evt);
+            }
+        });
+
+        btnStash.setBackground(new java.awt.Color(153, 180, 115));
+        btnStash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Stash Icon Small.png"))); // NOI18N
+        btnStash.setText("Stash for later");
+        btnStash.setToolTipText("Stash these files in the Workspace and save all assigned values. Stashed Periods can be Bulk Imported at a later stage.");
+        btnStash.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnStash.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnStash.setMargin(new java.awt.Insets(2, 4, 2, 1));
+        btnStash.setName("btnStash"); // NOI18N
+        btnStash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStashActionPerformed(evt);
             }
         });
 
         btnGPSForAll.setBackground(new java.awt.Color(153, 180, 115));
         btnGPSForAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnGPSForAll.setText("<html>Set one GPS point for all Observations</html>");
+        btnGPSForAll.setText("Set one GPS");
         btnGPSForAll.setToolTipText("The specified GPS point will be applied to all currently defined Observations.");
         btnGPSForAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPSForAll.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -798,10 +813,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(pnlPeriod, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(5, 5, 5)
                 .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGPSForAll, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlTopLayout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGPSForAll, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlTopLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnStash, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(3, 3, 3))
         );
         pnlTopLayout.setVerticalGroup(
@@ -818,10 +838,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addComponent(pnlPlace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlTopLayout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
-                        .addComponent(btnGPSForAll)
-                        .addGap(1, 1, 1)))
+                        .addComponent(btnStash, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
+                        .addComponent(btnGPSForAll, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(2, 2, 2))
         );
 
@@ -880,7 +901,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 btnGPSForAll.setEnabled(false);
                 Border originalBorder = btnReload.getBorder();
                 Timer timer = UtilsUI.doAnimationForFlashingBorder(btnReload.getBackground(), new Color(200, 220, 250), btnReload);
-                btnUpdate.setEnabled(false);
+                btnProcess.setEnabled(false);
                 // Do the re-setting up
                 setupTab(this);
                 // Enable die button sodat mens dit weer kan druk
@@ -888,14 +909,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 btnGPSForAll.setEnabled(true);
                 timer.stop();
                 btnReload.setBorder(originalBorder);
-                btnUpdate.setEnabled(true);
+                btnProcess.setEnabled(true);
                 btnReload.requestFocus();
                 return null;
             }
         });
     }//GEN-LAST:event_btnReloadActionPerformed
 
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+    private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
         // You can only use a task once, hence for the saving we need to create a new task
         final Container thisParentHandle = this.getParent();
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
@@ -1229,7 +1250,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 return null;
             }
         });
-    }//GEN-LAST:event_btnUpdateActionPerformed
+    }//GEN-LAST:event_btnProcessActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // Reload the location (espesially the image) as it might have changed
@@ -1264,7 +1285,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 ((DefaultTableModel) tblBulkImport.getModel()).fireTableDataChanged();
             }
         }
-        btnUpdate.requestFocusInWindow();
+        btnProcess.requestFocusInWindow();
         // Refresh the elements stored in the suggestion list
         List<ComboBoxSuggestedElementWrapper> lstMapKeys = new ArrayList<>(mapElementSuggestions.keySet());
         for (int t = lstMapKeys.size() - 1; t >= 0; t--) {
@@ -1369,6 +1390,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(0, 0, true));
     }//GEN-LAST:event_chkSmoothScrollActionPerformed
 
+    private void btnStashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStashActionPerformed
+        // TODO: Create a new visit of Stash type
+
+        // TODO: Stash the files into a new visit
+        
+        // TODO: Save the assigned data into a JSON object under Extra Data
+        
+    }//GEN-LAST:event_btnStashActionPerformed
+
     public boolean isShowAsTab() {
         return showAsTab;
     }
@@ -1422,9 +1452,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGPSForAll;
+    private javax.swing.JButton btnProcess;
     private javax.swing.JButton btnReload;
     private javax.swing.JButton btnSelectLocation;
-    private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton btnStash;
     private javax.swing.JCheckBox chkForceLocationGPSCoordinates;
     private javax.swing.JCheckBox chkIncludeSubfolders;
     private javax.swing.JCheckBox chkSmoothScroll;
