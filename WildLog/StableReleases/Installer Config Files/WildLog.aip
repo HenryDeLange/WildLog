@@ -25,10 +25,10 @@
     <ROW Property="CTRLS" Value="3"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
     <ROW Property="Manufacturer" Value="MyWild" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{44C350D8-EB3A-4975-BC54-AE69D8E37F00} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{FA9CB784-5FEA-41ED-A01B-37EE679AF41A} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="WildLog" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="6.1.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="6.1.1" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{46872473-716E-4D94-B617-046B7C8FED5C}"/>
@@ -199,7 +199,6 @@
     <ROW Component="ADDITIONAL_LICENSE_INFO_8" ComponentId="{3F3959C7-503D-4DC2-99E3-8FB11CAA021E}" Directory_="java.naming_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_8" Type="0"/>
     <ROW Component="ADDITIONAL_LICENSE_INFO_9" ComponentId="{6FD58DAD-31FC-413D-8398-B0C084616485}" Directory_="java.net.http_Dir" Attributes="0" KeyPath="ADDITIONAL_LICENSE_INFO_9" Type="0"/>
     <ROW Component="APPDIR" ComponentId="{CAFC9F27-279E-45E7-B55E-E7F0099DC7D4}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="AbsoluteLayoutRELEASE82.jar" ComponentId="{F400D6E7-46BE-47CA-BDCE-01FA7A3844DE}" Directory_="lib_1_Dir" Attributes="0" KeyPath="AbsoluteLayoutRELEASE82.jar" Type="0"/>
     <ROW Component="Authors.txt" ComponentId="{6914D45C-1E42-478F-9446-DB8CBE9DA9D0}" Directory_="MPCHC_Dir" Attributes="0" KeyPath="Authors.txt" Type="0"/>
     <ROW Component="Azure.txt" ComponentId="{389F7737-10DE-45EC-A452-A8441D5965CC}" Directory_="licenses_Dir" Attributes="0" KeyPath="Azure.txt" Type="0"/>
     <ROW Component="CrashReporterDialog.dll" ComponentId="{7F0C309A-B04D-409E-9F1A-ECEB72BFCA3C}" Directory_="CrashReporter_Dir" Attributes="0" KeyPath="CrashReporterDialog.dll"/>
@@ -213,7 +212,7 @@
     <ROW Component="README.txt" ComponentId="{9C4ACC97-7C95-4992-A4F7-C1CD40F47C36}" Directory_="policy_Dir" Attributes="0" KeyPath="README.txt" Type="0"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{D139B584-3C2C-42D0-819F-A2D651F0A22D}" Directory_="SHORTCUTDIR" Attributes="0"/>
     <ROW Component="WICLoader.dll" ComponentId="{5F911EA6-0DCD-45F3-9D71-7F02402D2B68}" Directory_="JPEGView_Dir" Attributes="256" KeyPath="WICLoader.dll"/>
-    <ROW Component="WILDLOG_README_v6.1.0.txt" ComponentId="{4B2767C8-5CE0-49E5-90FD-CF1F7B5D9075}" Directory_="APPDIR" Attributes="0" KeyPath="WILDLOG_README_v6.1.0.txt" Type="0"/>
+    <ROW Component="WILDLOG_README_v6.1.0.txt" ComponentId="{4B2767C8-5CE0-49E5-90FD-CF1F7B5D9075}" Directory_="APPDIR" Attributes="0" KeyPath="WILDLOG_README_v6.1.1.txt" Type="0"/>
     <ROW Component="WildLog.exe" ComponentId="{6F0255D6-B620-4D44-B35F-D26B383E213A}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog.exe"/>
     <ROW Component="WildLogUserGuide.pdf" ComponentId="{5961DA33-978A-4CD2-9C60-268C7A3D035A}" Directory_="documentation_Dir" Attributes="0" KeyPath="WildLogUserGuide.pdf"/>
     <ROW Component="WildLogWEIAdmin.jar" ComponentId="{36364794-F61E-403E-AA9D-9E5E52947FD2}" Directory_="application_Dir" Attributes="0" KeyPath="WildLog.jar" Type="0"/>
@@ -266,6 +265,7 @@
     <ROW Component="blacklisted.certs" ComponentId="{B6ED6637-DAE6-4DB2-97AA-362B1CE31482}" Directory_="security_1_Dir" Attributes="0" KeyPath="blacklisted.certs" Type="0"/>
     <ROW Component="classes.jsa" ComponentId="{7699B6EB-E7B2-4661-9C2D-E7C729CECF33}" Directory_="server_Dir" Attributes="0" KeyPath="classes.jsa" Type="0"/>
     <ROW Component="classlist" ComponentId="{FB03DE85-32C5-4C2F-A4D8-192C483F5D50}" Directory_="lib_Dir" Attributes="0" KeyPath="classlist" Type="0"/>
+    <ROW Component="clientruntime2.1.0.jar" ComponentId="{2AF9CE2B-D8AD-46FB-A392-0DC8B160E621}" Directory_="lib_1_Dir" Attributes="0" KeyPath="clientruntime2.1.0.jar" Type="0"/>
     <ROW Component="concrt140.dll" ComponentId="{8E8BFBA7-7336-4889-A7D3-BF066140DAB7}" Directory_="bin_Dir" Attributes="256" KeyPath="concrt140.dll"/>
     <ROW Component="crashrpt.dll" ComponentId="{3F3C1DCD-AD3B-45D0-B53F-FFC12C77D762}" Directory_="CrashReporter_Dir" Attributes="0" KeyPath="crashrpt.dll"/>
     <ROW Component="d3dx9_43.dll" ComponentId="{DDC38462-21A5-4E53-8FC7-A9385F3798FE}" Directory_="MPCHC_Dir" Attributes="0" KeyPath="d3dx9_43.dll"/>
@@ -419,7 +419,6 @@
     <ROW File="SwingXLicense.txt" Component_="Azure.txt" FileName="SWINGX~1.TXT|SwingX License.txt" Attributes="0" SourcePath="WildLog\licenses\SwingX License.txt" SelfReg="false"/>
     <ROW File="WildLogLicense.rtf" Component_="Azure.txt" FileName="WILDLO~1.RTF|WildLog License.rtf" Attributes="0" SourcePath="WildLog\licenses\WildLog License.rtf" SelfReg="false"/>
     <ROW File="WildLogLicense.txt" Component_="Azure.txt" FileName="WILDLO~1.TXT|WildLog License.txt" Attributes="0" SourcePath="WildLog\licenses\WildLog License.txt" SelfReg="false"/>
-    <ROW File="WILDLOG_README_v6.1.0.txt" Component_="WILDLOG_README_v6.1.0.txt" FileName="WILDLO~1.TXT|WILDLOG_README_v6.1.0.txt" Attributes="0" SourcePath="WildLog\WILDLOG_README_v6.1.0.txt" SelfReg="false"/>
     <ROW File="JPEGView.exe" Component_="JPEGView.exe" FileName="JPEGView.exe" Attributes="0" SourcePath="WildLog\application\JPEGView\JPEGView.exe" SelfReg="false" DigSign="true"/>
     <ROW File="JPEGView.ini" Component_="JPEGView.ini" FileName="JPEGView.ini" Attributes="0" SourcePath="WildLog\application\JPEGView\JPEGView.ini" SelfReg="false"/>
     <ROW File="KeyMap.txt" Component_="JPEGView.ini" FileName="KeyMap.txt" Attributes="0" SourcePath="WildLog\application\JPEGView\KeyMap.txt" SelfReg="false"/>
@@ -805,153 +804,6 @@
     <ROW File="LICENSE_62" Component_="LICENSE" FileName="LICENSE" Attributes="0" SourcePath="WildLog\application\jre-13.0.2\LICENSE" SelfReg="false"/>
     <ROW File="readme.txt_1" Component_="LICENSE" FileName="readme.txt" Attributes="0" SourcePath="WildLog\application\jre-13.0.2\readme.txt" SelfReg="false"/>
     <ROW File="release" Component_="LICENSE" FileName="release" Attributes="0" SourcePath="WildLog\application\jre-13.0.2\release" SelfReg="false"/>
-    <ROW File="AbsoluteLayoutRELEASE82.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="ABSOLU~1.JAR|AbsoluteLayout-RELEASE82.jar" Attributes="0" SourcePath="WildLog\application\lib\AbsoluteLayout-RELEASE82.jar" SelfReg="false"/>
-    <ROW File="appframework1.0.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="APPFRA~1.JAR|appframework-1.0.3.jar" Attributes="0" SourcePath="WildLog\application\lib\appframework-1.0.3.jar" SelfReg="false"/>
-    <ROW File="azurekeyvaultcore1.0.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="AZURE-~1.JAR|azure-keyvault-core-1.0.0.jar" Attributes="0" SourcePath="WildLog\application\lib\azure-keyvault-core-1.0.0.jar" SelfReg="false"/>
-    <ROW File="azurestorage8.3.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="AZURE-~2.JAR|azure-storage-8.3.0.jar" Attributes="0" SourcePath="WildLog\application\lib\azure-storage-8.3.0.jar" SelfReg="false"/>
-    <ROW File="azurestorageblob11.0.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="AZURE-~3.JAR|azure-storage-blob-11.0.0.jar" Attributes="0" SourcePath="WildLog\application\lib\azure-storage-blob-11.0.0.jar" SelfReg="false"/>
-    <ROW File="balloontip1.2.4.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="BALLOO~1.JAR|balloontip-1.2.4.1.jar" Attributes="0" SourcePath="WildLog\application\lib\balloontip-1.2.4.1.jar" SelfReg="false"/>
-    <ROW File="bigint0.7.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="BIGINT~1.JAR|bigint-0.7.1.jar" Attributes="0" SourcePath="WildLog\application\lib\bigint-0.7.1.jar" SelfReg="false"/>
-    <ROW File="clientruntime2.1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="CLIENT~1.JAR|client-runtime-2.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\client-runtime-2.1.0.jar" SelfReg="false"/>
-    <ROW File="commonscodec1.12.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~1.JAR|commons-codec-1.12.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-codec-1.12.jar" SelfReg="false"/>
-    <ROW File="commonscollections3.2.2.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~2.JAR|commons-collections-3.2.2.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-collections-3.2.2.jar" SelfReg="false"/>
-    <ROW File="commonscollections44.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~3.JAR|commons-collections4-4.3.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-collections4-4.3.jar" SelfReg="false"/>
-    <ROW File="commonscompress1.18.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~4.JAR|commons-compress-1.18.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-compress-1.18.jar" SelfReg="false"/>
-    <ROW File="commonsio2.6.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~5.JAR|commons-io-2.6.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-io-2.6.jar" SelfReg="false"/>
-    <ROW File="commonslang33.8.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~6.JAR|commons-lang3-3.8.1.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-lang3-3.8.1.jar" SelfReg="false"/>
-    <ROW File="commonslogging1.2.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~7.JAR|commons-logging-1.2.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-logging-1.2.jar" SelfReg="false"/>
-    <ROW File="commonsmath33.6.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~8.JAR|commons-math3-3.6.1.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-math3-3.6.1.jar" SelfReg="false"/>
-    <ROW File="commonspool1.5.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMON~9.JAR|commons-pool-1.5.4.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-pool-1.5.4.jar" SelfReg="false"/>
-    <ROW File="commonstext1.6.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="COMMO~10.JAR|commons-text-1.6.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-text-1.6.jar" SelfReg="false"/>
-    <ROW File="curvesapi1.06.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="CURVES~1.JAR|curvesapi-1.06.jar" Attributes="0" SourcePath="WildLog\application\lib\curvesapi-1.06.jar" SelfReg="false"/>
-    <ROW File="disruptor1.2.13.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="DISRUP~1.JAR|disruptor-1.2.13.jar" Attributes="0" SourcePath="WildLog\application\lib\disruptor-1.2.13.jar" SelfReg="false"/>
-    <ROW File="ejmlcore0.34.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="EJML-C~1.JAR|ejml-core-0.34.jar" Attributes="0" SourcePath="WildLog\application\lib\ejml-core-0.34.jar" SelfReg="false"/>
-    <ROW File="ejmlddense0.34.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="EJML-D~1.JAR|ejml-ddense-0.34.jar" Attributes="0" SourcePath="WildLog\application\lib\ejml-ddense-0.34.jar" SelfReg="false"/>
-    <ROW File="FastInfoset1.2.15.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="FASTIN~1.JAR|FastInfoset-1.2.15.jar" Attributes="0" SourcePath="WildLog\application\lib\FastInfoset-1.2.15.jar" SelfReg="false"/>
-    <ROW File="fontbox2.0.16.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="FONTBO~1.JAR|fontbox-2.0.16.jar" Attributes="0" SourcePath="WildLog\application\lib\fontbox-2.0.16.jar" SelfReg="false"/>
-    <ROW File="GeographicLibJava1.49.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GEOGRA~1.JAR|GeographicLib-Java-1.49.jar" Attributes="0" SourcePath="WildLog\application\lib\GeographicLib-Java-1.49.jar" SelfReg="false"/>
-    <ROW File="gson2.8.6.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GSON-2~1.JAR|gson-2.8.6.jar" Attributes="0" SourcePath="WildLog\application\lib\gson-2.8.6.jar" SelfReg="false"/>
-    <ROW File="gtcoverage21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-COV~1.JAR|gt-coverage-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-coverage-21.4.jar" SelfReg="false"/>
-    <ROW File="gtcql21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-CQL~1.JAR|gt-cql-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-cql-21.4.jar" SelfReg="false"/>
-    <ROW File="gtepsghsql21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-EPS~1.JAR|gt-epsg-hsql-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-epsg-hsql-21.4.jar" SelfReg="false"/>
-    <ROW File="gtgeotiff21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-GEO~1.JAR|gt-geotiff-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-geotiff-21.4.jar" SelfReg="false"/>
-    <ROW File="gtmain21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-MAI~1.JAR|gt-main-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-main-21.4.jar" SelfReg="false"/>
-    <ROW File="gtmetadata21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-MET~1.JAR|gt-metadata-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-metadata-21.4.jar" SelfReg="false"/>
-    <ROW File="gtopengis21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-OPE~1.JAR|gt-opengis-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-opengis-21.4.jar" SelfReg="false"/>
-    <ROW File="gtreferencing21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-REF~1.JAR|gt-referencing-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-referencing-21.4.jar" SelfReg="false"/>
-    <ROW File="gtrender21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-REN~1.JAR|gt-render-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-render-21.4.jar" SelfReg="false"/>
-    <ROW File="gtshapefile21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-SHA~1.JAR|gt-shapefile-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-shapefile-21.4.jar" SelfReg="false"/>
-    <ROW File="gtxml21.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GT-XML~1.JAR|gt-xml-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-xml-21.4.jar" SelfReg="false"/>
-    <ROW File="guava20.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="GUAVA-~1.JAR|guava-20.0.jar" Attributes="0" SourcePath="WildLog\application\lib\guava-20.0.jar" SelfReg="false"/>
-    <ROW File="h21.4.200.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="H2-142~1.JAR|h2-1.4.200.jar" Attributes="0" SourcePath="WildLog\application\lib\h2-1.4.200.jar" SelfReg="false"/>
-    <ROW File="hsqldb2.4.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="HSQLDB~1.JAR|hsqldb-2.4.1.jar" Attributes="0" SourcePath="WildLog\application\lib\hsqldb-2.4.1.jar" SelfReg="false"/>
-    <ROW File="imageioextgeocore1.2.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="IMAGEI~1.JAR|imageio-ext-geocore-1.2.3.jar" Attributes="0" SourcePath="WildLog\application\lib\imageio-ext-geocore-1.2.3.jar" SelfReg="false"/>
-    <ROW File="imageioextstreams1.2.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="IMAGEI~2.JAR|imageio-ext-streams-1.2.3.jar" Attributes="0" SourcePath="WildLog\application\lib\imageio-ext-streams-1.2.3.jar" SelfReg="false"/>
-    <ROW File="imageioexttiff1.2.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="IMAGEI~3.JAR|imageio-ext-tiff-1.2.3.jar" Attributes="0" SourcePath="WildLog\application\lib\imageio-ext-tiff-1.2.3.jar" SelfReg="false"/>
-    <ROW File="imageioextutilities1.2.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="IMAGEI~4.JAR|imageio-ext-utilities-1.2.3.jar" Attributes="0" SourcePath="WildLog\application\lib\imageio-ext-utilities-1.2.3.jar" SelfReg="false"/>
-    <ROW File="istackcommonsruntime3.0.7.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="ISTACK~1.JAR|istack-commons-runtime-3.0.7.jar" Attributes="0" SourcePath="WildLog\application\lib\istack-commons-runtime-3.0.7.jar" SelfReg="false"/>
-    <ROW File="jacksonannotations2.8.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JACKSO~1.JAR|jackson-annotations-2.8.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-annotations-2.8.0.jar" SelfReg="false"/>
-    <ROW File="jacksoncore2.9.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JACKSO~2.JAR|jackson-core-2.9.4.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-core-2.9.4.jar" SelfReg="false"/>
-    <ROW File="jacksondatabind2.8.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JACKSO~3.JAR|jackson-databind-2.8.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-databind-2.8.11.jar" SelfReg="false"/>
-    <ROW File="jacksondataformatxml2.8.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JACKSO~4.JAR|jackson-dataformat-xml-2.8.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-dataformat-xml-2.8.11.jar" SelfReg="false"/>
-    <ROW File="jacksondatatypejsr3102.8.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JACKSO~5.JAR|jackson-datatype-jsr310-2.8.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-datatype-jsr310-2.8.11.jar" SelfReg="false"/>
-    <ROW File="jacksonmodulejaxbannotations2.8.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JACKSO~6.JAR|jackson-module-jaxb-annotations-2.8.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-module-jaxb-annotations-2.8.11.jar" SelfReg="false"/>
-    <ROW File="jai_codec1.1.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAI_CO~1.JAR|jai_codec-1.1.3.jar" Attributes="0" SourcePath="WildLog\application\lib\jai_codec-1.1.3.jar" SelfReg="false"/>
-    <ROW File="jai_core1.1.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAI_CO~2.JAR|jai_core-1.1.3.jar" Attributes="0" SourcePath="WildLog\application\lib\jai_core-1.1.3.jar" SelfReg="false"/>
-    <ROW File="jai_imageio1.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAI_IM~1.JAR|jai_imageio-1.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jai_imageio-1.1.jar" SelfReg="false"/>
-    <ROW File="javax.activationapi1.2.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAVAXA~1.JAR|javax.activation-api-1.2.0.jar" Attributes="0" SourcePath="WildLog\application\lib\javax.activation-api-1.2.0.jar" SelfReg="false"/>
-    <ROW File="javax.json1.0.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAVAXJ~1.JAR|javax.json-1.0.4.jar" Attributes="0" SourcePath="WildLog\application\lib\javax.json-1.0.4.jar" SelfReg="false"/>
-    <ROW File="jaxbapi2.3.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAXB-A~1.JAR|jaxb-api-2.3.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jaxb-api-2.3.0.jar" SelfReg="false"/>
-    <ROW File="jaxbcore2.3.0.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAXB-C~1.JAR|jaxb-core-2.3.0.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jaxb-core-2.3.0.1.jar" SelfReg="false"/>
-    <ROW File="jaxbimpl2.3.0.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAXB-I~1.JAR|jaxb-impl-2.3.0.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jaxb-impl-2.3.0.1.jar" SelfReg="false"/>
-    <ROW File="jaxbruntime2.4.0b180830.0438.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JAXB-R~1.JAR|jaxb-runtime-2.4.0-b180830.0438.jar" Attributes="0" SourcePath="WildLog\application\lib\jaxb-runtime-2.4.0-b180830.0438.jar" SelfReg="false"/>
-    <ROW File="jdom22.0.6.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JDOM2-~1.JAR|jdom2-2.0.6.jar" Attributes="0" SourcePath="WildLog\application\lib\jdom2-2.0.6.jar" SelfReg="false"/>
-    <ROW File="jgridshift1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JGRIDS~1.JAR|jgridshift-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jgridshift-1.0.jar" SelfReg="false"/>
-    <ROW File="jmf2.1.1e.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JMF-21~1.JAR|jmf-2.1.1e.jar" Attributes="0" SourcePath="WildLog\application\lib\jmf-2.1.1e.jar" SelfReg="false"/>
-    <ROW File="jna5.3.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JNA-53~1.JAR|jna-5.3.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jna-5.3.1.jar" SelfReg="false"/>
-    <ROW File="jnaplatform5.3.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JNA-PL~1.JAR|jna-platform-5.3.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jna-platform-5.3.1.jar" SelfReg="false"/>
-    <ROW File="jtaffine1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-AFF~1.JAR|jt-affine-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-affine-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtalgebra1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-ALG~1.JAR|jt-algebra-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-algebra-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtbandcombine1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-BAN~1.JAR|jt-bandcombine-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-bandcombine-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtbandmerge1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-BAN~2.JAR|jt-bandmerge-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-bandmerge-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtbandselect1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-BAN~3.JAR|jt-bandselect-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-bandselect-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtbinarize1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-BIN~1.JAR|jt-binarize-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-binarize-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtborder1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-BOR~1.JAR|jt-border-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-border-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtbuffer1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-BUF~1.JAR|jt-buffer-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-buffer-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtclassifier1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-CLA~1.JAR|jt-classifier-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-classifier-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtcolorconvert1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-COL~1.JAR|jt-colorconvert-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-colorconvert-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtcolorindexer1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-COL~2.JAR|jt-colorindexer-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-colorindexer-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtcrop1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-CRO~1.JAR|jt-crop-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-crop-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jterrordiffusion1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-ERR~1.JAR|jt-errordiffusion-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-errordiffusion-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtformat1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-FOR~1.JAR|jt-format-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-format-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtimagefunction1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-IMA~1.JAR|jt-imagefunction-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-imagefunction-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtiterators1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-ITE~1.JAR|jt-iterators-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-iterators-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtlookup1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-LOO~1.JAR|jt-lookup-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-lookup-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtmosaic1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-MOS~1.JAR|jt-mosaic-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-mosaic-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtnullop1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-NUL~1.JAR|jt-nullop-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-nullop-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtorderdither1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-ORD~1.JAR|jt-orderdither-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-orderdither-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtpiecewise1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-PIE~1.JAR|jt-piecewise-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-piecewise-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtrescale1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-RES~1.JAR|jt-rescale-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-rescale-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtrlookup1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-RLO~1.JAR|jt-rlookup-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-rlookup-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtscale1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-SCA~1.JAR|jt-scale-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-scale-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtscale21.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-SCA~2.JAR|jt-scale2-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-scale2-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtshadedrelief1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-SHA~1.JAR|jt-shadedrelief-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-shadedrelief-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtstats1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-STA~1.JAR|jt-stats-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-stats-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jttranslate1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-TRA~1.JAR|jt-translate-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-translate-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtutilities1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-UTI~1.JAR|jt-utilities-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-utilities-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtutils1.5.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-UTI~2.JAR|jt-utils-1.5.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-utils-1.5.0.jar" SelfReg="false"/>
-    <ROW File="jtvectorbin1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-VEC~1.JAR|jt-vectorbin-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-vectorbin-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtwarp1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-WAR~1.JAR|jt-warp-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-warp-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtzonal1.1.11.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-ZON~1.JAR|jt-zonal-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-zonal-1.1.11.jar" SelfReg="false"/>
-    <ROW File="jtzonalstats1.5.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JT-ZON~2.JAR|jt-zonalstats-1.5.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-zonalstats-1.5.0.jar" SelfReg="false"/>
-    <ROW File="jtscore1.16.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="JTS-CO~1.JAR|jts-core-1.16.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jts-core-1.16.0.jar" SelfReg="false"/>
-    <ROW File="log4j1.2api2.12.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="LOG4J-~1.JAR|log4j-1.2-api-2.12.0.jar" Attributes="0" SourcePath="WildLog\application\lib\log4j-1.2-api-2.12.0.jar" SelfReg="false"/>
-    <ROW File="log4japi2.12.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="LOG4J-~2.JAR|log4j-api-2.12.0.jar" Attributes="0" SourcePath="WildLog\application\lib\log4j-api-2.12.0.jar" SelfReg="false"/>
-    <ROW File="log4jcore2.12.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="LOG4J-~3.JAR|log4j-core-2.12.0.jar" Attributes="0" SourcePath="WildLog\application\lib\log4j-core-2.12.0.jar" SelfReg="false"/>
-    <ROW File="metadataextractor2.13.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="METADA~1.JAR|metadata-extractor-2.13.0.jar" Attributes="0" SourcePath="WildLog\application\lib\metadata-extractor-2.13.0.jar" SelfReg="false"/>
-    <ROW File="nettybuffer4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~1.JAR|netty-buffer-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-buffer-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="nettycodec4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~2.JAR|netty-codec-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-codec-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="nettycodechttp4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~3.JAR|netty-codec-http-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-codec-http-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="nettycodecsocks4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~4.JAR|netty-codec-socks-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-codec-socks-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="nettycommon4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~5.JAR|netty-common-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-common-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="nettyhandler4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~6.JAR|netty-handler-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-handler-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="nettyhandlerproxy4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~7.JAR|netty-handler-proxy-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-handler-proxy-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="nettyresolver4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~8.JAR|netty-resolver-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-resolver-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="nettytransport4.1.28.Final.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="NETTY-~9.JAR|netty-transport-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-transport-4.1.28.Final.jar" SelfReg="false"/>
-    <ROW File="oshicore3.13.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="OSHI-C~1.JAR|oshi-core-3.13.4.jar" Attributes="0" SourcePath="WildLog\application\lib\oshi-core-3.13.4.jar" SelfReg="false"/>
-    <ROW File="oshidist3.13.4.pom" Component_="AbsoluteLayoutRELEASE82.jar" FileName="OSHI-D~1.POM|oshi-dist-3.13.4.pom" Attributes="0" SourcePath="WildLog\application\lib\oshi-dist-3.13.4.pom" SelfReg="false"/>
-    <ROW File="oshijson3.13.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="OSHI-J~1.JAR|oshi-json-3.13.4.jar" Attributes="0" SourcePath="WildLog\application\lib\oshi-json-3.13.4.jar" SelfReg="false"/>
-    <ROW File="pdfbox2.0.16.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="PDFBOX~1.JAR|pdfbox-2.0.16.jar" Attributes="0" SourcePath="WildLog\application\lib\pdfbox-2.0.16.jar" SelfReg="false"/>
-    <ROW File="poi4.1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="POI-41~1.JAR|poi-4.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\poi-4.1.0.jar" SelfReg="false"/>
-    <ROW File="poiooxml4.1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="POI-OO~1.JAR|poi-ooxml-4.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\poi-ooxml-4.1.0.jar" SelfReg="false"/>
-    <ROW File="poiooxmlschemas4.1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="POI-OO~2.JAR|poi-ooxml-schemas-4.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\poi-ooxml-schemas-4.1.0.jar" SelfReg="false"/>
-    <ROW File="poiscratchpad4.1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="POI-SC~1.JAR|poi-scratchpad-4.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\poi-scratchpad-4.1.0.jar" SelfReg="false"/>
-    <ROW File="reactivestreams1.0.2.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="REACTI~1.JAR|reactive-streams-1.0.2.jar" Attributes="0" SourcePath="WildLog\application\lib\reactive-streams-1.0.2.jar" SelfReg="false"/>
-    <ROW File="rxjava2.2.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="RXJAVA~1.JAR|rxjava-2.2.0.jar" Attributes="0" SourcePath="WildLog\application\lib\rxjava-2.2.0.jar" SelfReg="false"/>
-    <ROW File="siquantity0.7.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="SI-QUA~1.JAR|si-quantity-0.7.1.jar" Attributes="0" SourcePath="WildLog\application\lib\si-quantity-0.7.1.jar" SelfReg="false"/>
-    <ROW File="siunitsjava80.7.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="SI-UNI~1.JAR|si-units-java8-0.7.1.jar" Attributes="0" SourcePath="WildLog\application\lib\si-units-java8-0.7.1.jar" SelfReg="false"/>
-    <ROW File="slf4japi1.7.26.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="SLF4J-~1.JAR|slf4j-api-1.7.26.jar" Attributes="0" SourcePath="WildLog\application\lib\slf4j-api-1.7.26.jar" SelfReg="false"/>
-    <ROW File="slf4jsimple1.7.26.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="SLF4J-~2.JAR|slf4j-simple-1.7.26.jar" Attributes="0" SourcePath="WildLog\application\lib\slf4j-simple-1.7.26.jar" SelfReg="false"/>
-    <ROW File="staxex1.8.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="STAX-E~1.JAR|stax-ex-1.8.jar" Attributes="0" SourcePath="WildLog\application\lib\stax-ex-1.8.jar" SelfReg="false"/>
-    <ROW File="stax2api3.1.4.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="STAX2-~1.JAR|stax2-api-3.1.4.jar" Attributes="0" SourcePath="WildLog\application\lib\stax2-api-3.1.4.jar" SelfReg="false"/>
-    <ROW File="swingworker1.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="SWING-~1.JAR|swing-worker-1.1.jar" Attributes="0" SourcePath="WildLog\application\lib\swing-worker-1.1.jar" SelfReg="false"/>
-    <ROW File="swingxall1.6.51.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="SWINGX~1.JAR|swingx-all-1.6.5-1.jar" Attributes="0" SourcePath="WildLog\application\lib\swingx-all-1.6.5-1.jar" SelfReg="false"/>
-    <ROW File="systemscommonjava80.7.2.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="SYSTEM~1.JAR|systems-common-java8-0.7.2.jar" Attributes="0" SourcePath="WildLog\application\lib\systems-common-java8-0.7.2.jar" SelfReg="false"/>
-    <ROW File="txw22.4.0b180830.0438.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="TXW2-2~1.JAR|txw2-2.4.0-b180830.0438.jar" Attributes="0" SourcePath="WildLog\application\lib\txw2-2.4.0-b180830.0438.jar" SelfReg="false"/>
-    <ROW File="unitapi1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="UNIT-A~1.JAR|unit-api-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\unit-api-1.0.jar" SelfReg="false"/>
-    <ROW File="uomlibcommon1.0.2.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="UOM-LI~1.JAR|uom-lib-common-1.0.2.jar" Attributes="0" SourcePath="WildLog\application\lib\uom-lib-common-1.0.2.jar" SelfReg="false"/>
-    <ROW File="uomse1.0.8.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="UOM-SE~1.JAR|uom-se-1.0.8.jar" Attributes="0" SourcePath="WildLog\application\lib\uom-se-1.0.8.jar" SelfReg="false"/>
-    <ROW File="WildLogDataCore1.14.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="WILDLO~2.JAR|WildLogDataCore-1.14.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogDataCore-1.14.jar" SelfReg="false"/>
-    <ROW File="WildLogGeoTools1.2.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="WILDLO~3.JAR|WildLogGeoTools-1.2.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogGeoTools-1.2.jar" SelfReg="false"/>
-    <ROW File="WildLogHTMLTemplates1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="WILDLO~4.JAR|WildLogHTMLTemplates-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogHTMLTemplates-1.0.jar" SelfReg="false"/>
-    <ROW File="WildLogINaturalistAPI1.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="WILDLO~5.JAR|WildLogINaturalistAPI-1.1.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogINaturalistAPI-1.1.jar" SelfReg="false"/>
-    <ROW File="WildLogMapData1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="WILDLO~6.JAR|WildLogMapData-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogMapData-1.0.jar" SelfReg="false"/>
-    <ROW File="WildLogMediaUtilWrapper1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="WILDLO~7.JAR|WildLogMediaUtilWrapper-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogMediaUtilWrapper-1.0.jar" SelfReg="false"/>
-    <ROW File="WildLogSyncAzure1.1.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="WILDLO~8.JAR|WildLogSyncAzure-1.1.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogSyncAzure-1.1.jar" SelfReg="false"/>
-    <ROW File="woodstoxcore5.0.3.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="WOODST~1.JAR|woodstox-core-5.0.3.jar" Attributes="0" SourcePath="WildLog\application\lib\woodstox-core-5.0.3.jar" SelfReg="false"/>
-    <ROW File="xmlcommonsresolver1.2.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="XML-CO~1.JAR|xml-commons-resolver-1.2.jar" Attributes="0" SourcePath="WildLog\application\lib\xml-commons-resolver-1.2.jar" SelfReg="false"/>
-    <ROW File="xmlbeans3.1.0.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="XMLBEA~1.JAR|xmlbeans-3.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\xmlbeans-3.1.0.jar" SelfReg="false"/>
-    <ROW File="xmpcore6.0.6.jar" Component_="AbsoluteLayoutRELEASE82.jar" FileName="XMPCOR~1.JAR|xmpcore-6.0.6.jar" Attributes="0" SourcePath="WildLog\application\lib\xmpcore-6.0.6.jar" SelfReg="false"/>
     <ROW File="Authors.txt" Component_="Authors.txt" FileName="Authors.txt" Attributes="0" SourcePath="WildLog\application\MPC-HC\Authors.txt" SelfReg="false"/>
     <ROW File="Changelog.txt" Component_="Authors.txt" FileName="CHANGE~1.TXT|Changelog.txt" Attributes="0" SourcePath="WildLog\application\MPC-HC\Changelog.txt" SelfReg="false"/>
     <ROW File="COPYING.txt" Component_="Authors.txt" FileName="COPYING.txt" Attributes="0" SourcePath="WildLog\application\MPC-HC\COPYING.txt" SelfReg="false"/>
@@ -1048,6 +900,159 @@
     <ROW File="wildlog_mac.command" Component_="WildLogWEIAdmin.jar" FileName="WILDLO~1.COM|wildlog_mac.command" Attributes="0" SourcePath="WildLog\application\wildlog_mac.command" SelfReg="false"/>
     <ROW File="wildlog_mac.properties" Component_="WildLogWEIAdmin.jar" FileName="WILDLO~4.PRO|wildlog_mac.properties" Attributes="0" SourcePath="WildLog\application\wildlog_mac.properties" SelfReg="false"/>
     <ROW File="WildLog_Windows.bat" Component_="WildLogWEIAdmin.jar" FileName="WILDLO~1.BAT|WildLog_Windows.bat" Attributes="0" SourcePath="WildLog\application\WildLog_Windows.bat" SelfReg="false"/>
+    <ROW File="clientruntime2.1.0.jar" Component_="clientruntime2.1.0.jar" FileName="CLIENT~1.JAR|client-runtime-2.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\client-runtime-2.1.0.jar" SelfReg="false"/>
+    <ROW File="commonscodec1.12.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~1.JAR|commons-codec-1.12.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-codec-1.12.jar" SelfReg="false"/>
+    <ROW File="commonscollections3.2.2.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~2.JAR|commons-collections-3.2.2.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-collections-3.2.2.jar" SelfReg="false"/>
+    <ROW File="commonscollections44.3.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~3.JAR|commons-collections4-4.3.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-collections4-4.3.jar" SelfReg="false"/>
+    <ROW File="commonscompress1.18.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~4.JAR|commons-compress-1.18.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-compress-1.18.jar" SelfReg="false"/>
+    <ROW File="commonsio2.6.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~5.JAR|commons-io-2.6.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-io-2.6.jar" SelfReg="false"/>
+    <ROW File="commonslang33.8.1.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~6.JAR|commons-lang3-3.8.1.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-lang3-3.8.1.jar" SelfReg="false"/>
+    <ROW File="commonslogging1.2.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~7.JAR|commons-logging-1.2.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-logging-1.2.jar" SelfReg="false"/>
+    <ROW File="commonsmath33.6.1.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~8.JAR|commons-math3-3.6.1.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-math3-3.6.1.jar" SelfReg="false"/>
+    <ROW File="commonspool1.5.4.jar" Component_="clientruntime2.1.0.jar" FileName="COMMON~9.JAR|commons-pool-1.5.4.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-pool-1.5.4.jar" SelfReg="false"/>
+    <ROW File="commonstext1.6.jar" Component_="clientruntime2.1.0.jar" FileName="COMMO~10.JAR|commons-text-1.6.jar" Attributes="0" SourcePath="WildLog\application\lib\commons-text-1.6.jar" SelfReg="false"/>
+    <ROW File="curvesapi1.06.jar" Component_="clientruntime2.1.0.jar" FileName="CURVES~1.JAR|curvesapi-1.06.jar" Attributes="0" SourcePath="WildLog\application\lib\curvesapi-1.06.jar" SelfReg="false"/>
+    <ROW File="disruptor1.2.13.jar" Component_="clientruntime2.1.0.jar" FileName="DISRUP~1.JAR|disruptor-1.2.13.jar" Attributes="0" SourcePath="WildLog\application\lib\disruptor-1.2.13.jar" SelfReg="false"/>
+    <ROW File="ejmlcore0.34.jar" Component_="clientruntime2.1.0.jar" FileName="EJML-C~1.JAR|ejml-core-0.34.jar" Attributes="0" SourcePath="WildLog\application\lib\ejml-core-0.34.jar" SelfReg="false"/>
+    <ROW File="ejmlddense0.34.jar" Component_="clientruntime2.1.0.jar" FileName="EJML-D~1.JAR|ejml-ddense-0.34.jar" Attributes="0" SourcePath="WildLog\application\lib\ejml-ddense-0.34.jar" SelfReg="false"/>
+    <ROW File="FastInfoset1.2.15.jar" Component_="clientruntime2.1.0.jar" FileName="FASTIN~1.JAR|FastInfoset-1.2.15.jar" Attributes="0" SourcePath="WildLog\application\lib\FastInfoset-1.2.15.jar" SelfReg="false"/>
+    <ROW File="fontbox2.0.16.jar" Component_="clientruntime2.1.0.jar" FileName="FONTBO~1.JAR|fontbox-2.0.16.jar" Attributes="0" SourcePath="WildLog\application\lib\fontbox-2.0.16.jar" SelfReg="false"/>
+    <ROW File="GeographicLibJava1.49.jar" Component_="clientruntime2.1.0.jar" FileName="GEOGRA~1.JAR|GeographicLib-Java-1.49.jar" Attributes="0" SourcePath="WildLog\application\lib\GeographicLib-Java-1.49.jar" SelfReg="false"/>
+    <ROW File="gson2.8.6.jar" Component_="clientruntime2.1.0.jar" FileName="GSON-2~1.JAR|gson-2.8.6.jar" Attributes="0" SourcePath="WildLog\application\lib\gson-2.8.6.jar" SelfReg="false"/>
+    <ROW File="gtcoverage21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-COV~1.JAR|gt-coverage-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-coverage-21.4.jar" SelfReg="false"/>
+    <ROW File="gtcql21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-CQL~1.JAR|gt-cql-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-cql-21.4.jar" SelfReg="false"/>
+    <ROW File="gtepsghsql21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-EPS~1.JAR|gt-epsg-hsql-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-epsg-hsql-21.4.jar" SelfReg="false"/>
+    <ROW File="gtgeotiff21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-GEO~1.JAR|gt-geotiff-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-geotiff-21.4.jar" SelfReg="false"/>
+    <ROW File="gtmain21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-MAI~1.JAR|gt-main-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-main-21.4.jar" SelfReg="false"/>
+    <ROW File="gtmetadata21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-MET~1.JAR|gt-metadata-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-metadata-21.4.jar" SelfReg="false"/>
+    <ROW File="gtopengis21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-OPE~1.JAR|gt-opengis-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-opengis-21.4.jar" SelfReg="false"/>
+    <ROW File="gtreferencing21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-REF~1.JAR|gt-referencing-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-referencing-21.4.jar" SelfReg="false"/>
+    <ROW File="gtrender21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-REN~1.JAR|gt-render-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-render-21.4.jar" SelfReg="false"/>
+    <ROW File="gtshapefile21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-SHA~1.JAR|gt-shapefile-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-shapefile-21.4.jar" SelfReg="false"/>
+    <ROW File="gtxml21.4.jar" Component_="clientruntime2.1.0.jar" FileName="GT-XML~1.JAR|gt-xml-21.4.jar" Attributes="0" SourcePath="WildLog\application\lib\gt-xml-21.4.jar" SelfReg="false"/>
+    <ROW File="guava20.0.jar" Component_="clientruntime2.1.0.jar" FileName="GUAVA-~1.JAR|guava-20.0.jar" Attributes="0" SourcePath="WildLog\application\lib\guava-20.0.jar" SelfReg="false"/>
+    <ROW File="h21.4.200.jar" Component_="clientruntime2.1.0.jar" FileName="H2-142~1.JAR|h2-1.4.200.jar" Attributes="0" SourcePath="WildLog\application\lib\h2-1.4.200.jar" SelfReg="false"/>
+    <ROW File="hsqldb2.4.1.jar" Component_="clientruntime2.1.0.jar" FileName="HSQLDB~1.JAR|hsqldb-2.4.1.jar" Attributes="0" SourcePath="WildLog\application\lib\hsqldb-2.4.1.jar" SelfReg="false"/>
+    <ROW File="humblevideoall0.3.0.jar" Component_="clientruntime2.1.0.jar" FileName="HUMBLE~1.JAR|humble-video-all-0.3.0.jar" Attributes="0" SourcePath="WildLog\application\lib\humble-video-all-0.3.0.jar" SelfReg="false"/>
+    <ROW File="humblevideoarchx86_64w64mingw320.3.0.jar" Component_="clientruntime2.1.0.jar" FileName="HUMBLE~2.JAR|humble-video-arch-x86_64-w64-mingw32-0.3.0.jar" Attributes="0" SourcePath="WildLog\application\lib\humble-video-arch-x86_64-w64-mingw32-0.3.0.jar" SelfReg="false"/>
+    <ROW File="humblevideonoarch0.3.0.jar" Component_="clientruntime2.1.0.jar" FileName="HUMBLE~3.JAR|humble-video-noarch-0.3.0.jar" Attributes="0" SourcePath="WildLog\application\lib\humble-video-noarch-0.3.0.jar" SelfReg="false"/>
+    <ROW File="imageioextgeocore1.2.3.jar" Component_="clientruntime2.1.0.jar" FileName="IMAGEI~1.JAR|imageio-ext-geocore-1.2.3.jar" Attributes="0" SourcePath="WildLog\application\lib\imageio-ext-geocore-1.2.3.jar" SelfReg="false"/>
+    <ROW File="imageioextstreams1.2.3.jar" Component_="clientruntime2.1.0.jar" FileName="IMAGEI~2.JAR|imageio-ext-streams-1.2.3.jar" Attributes="0" SourcePath="WildLog\application\lib\imageio-ext-streams-1.2.3.jar" SelfReg="false"/>
+    <ROW File="imageioexttiff1.2.3.jar" Component_="clientruntime2.1.0.jar" FileName="IMAGEI~3.JAR|imageio-ext-tiff-1.2.3.jar" Attributes="0" SourcePath="WildLog\application\lib\imageio-ext-tiff-1.2.3.jar" SelfReg="false"/>
+    <ROW File="imageioextutilities1.2.3.jar" Component_="clientruntime2.1.0.jar" FileName="IMAGEI~4.JAR|imageio-ext-utilities-1.2.3.jar" Attributes="0" SourcePath="WildLog\application\lib\imageio-ext-utilities-1.2.3.jar" SelfReg="false"/>
+    <ROW File="istackcommonsruntime3.0.7.jar" Component_="clientruntime2.1.0.jar" FileName="ISTACK~1.JAR|istack-commons-runtime-3.0.7.jar" Attributes="0" SourcePath="WildLog\application\lib\istack-commons-runtime-3.0.7.jar" SelfReg="false"/>
+    <ROW File="jacksonannotations2.8.0.jar" Component_="clientruntime2.1.0.jar" FileName="JACKSO~1.JAR|jackson-annotations-2.8.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-annotations-2.8.0.jar" SelfReg="false"/>
+    <ROW File="jacksoncore2.9.4.jar" Component_="clientruntime2.1.0.jar" FileName="JACKSO~2.JAR|jackson-core-2.9.4.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-core-2.9.4.jar" SelfReg="false"/>
+    <ROW File="jacksondatabind2.8.11.jar" Component_="clientruntime2.1.0.jar" FileName="JACKSO~3.JAR|jackson-databind-2.8.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-databind-2.8.11.jar" SelfReg="false"/>
+    <ROW File="jacksondataformatxml2.8.11.jar" Component_="clientruntime2.1.0.jar" FileName="JACKSO~4.JAR|jackson-dataformat-xml-2.8.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-dataformat-xml-2.8.11.jar" SelfReg="false"/>
+    <ROW File="jacksondatatypejsr3102.8.11.jar" Component_="clientruntime2.1.0.jar" FileName="JACKSO~5.JAR|jackson-datatype-jsr310-2.8.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-datatype-jsr310-2.8.11.jar" SelfReg="false"/>
+    <ROW File="jacksonmodulejaxbannotations2.8.11.jar" Component_="clientruntime2.1.0.jar" FileName="JACKSO~6.JAR|jackson-module-jaxb-annotations-2.8.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jackson-module-jaxb-annotations-2.8.11.jar" SelfReg="false"/>
+    <ROW File="jai_codec1.1.3.jar" Component_="clientruntime2.1.0.jar" FileName="JAI_CO~1.JAR|jai_codec-1.1.3.jar" Attributes="0" SourcePath="WildLog\application\lib\jai_codec-1.1.3.jar" SelfReg="false"/>
+    <ROW File="jai_core1.1.3.jar" Component_="clientruntime2.1.0.jar" FileName="JAI_CO~2.JAR|jai_core-1.1.3.jar" Attributes="0" SourcePath="WildLog\application\lib\jai_core-1.1.3.jar" SelfReg="false"/>
+    <ROW File="jai_imageio1.1.jar" Component_="clientruntime2.1.0.jar" FileName="JAI_IM~1.JAR|jai_imageio-1.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jai_imageio-1.1.jar" SelfReg="false"/>
+    <ROW File="javax.activationapi1.2.0.jar" Component_="clientruntime2.1.0.jar" FileName="JAVAXA~1.JAR|javax.activation-api-1.2.0.jar" Attributes="0" SourcePath="WildLog\application\lib\javax.activation-api-1.2.0.jar" SelfReg="false"/>
+    <ROW File="javax.json1.0.4.jar" Component_="clientruntime2.1.0.jar" FileName="JAVAXJ~1.JAR|javax.json-1.0.4.jar" Attributes="0" SourcePath="WildLog\application\lib\javax.json-1.0.4.jar" SelfReg="false"/>
+    <ROW File="jaxbapi2.3.0.jar" Component_="clientruntime2.1.0.jar" FileName="JAXB-A~1.JAR|jaxb-api-2.3.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jaxb-api-2.3.0.jar" SelfReg="false"/>
+    <ROW File="jaxbcore2.3.0.1.jar" Component_="clientruntime2.1.0.jar" FileName="JAXB-C~1.JAR|jaxb-core-2.3.0.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jaxb-core-2.3.0.1.jar" SelfReg="false"/>
+    <ROW File="jaxbimpl2.3.0.1.jar" Component_="clientruntime2.1.0.jar" FileName="JAXB-I~1.JAR|jaxb-impl-2.3.0.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jaxb-impl-2.3.0.1.jar" SelfReg="false"/>
+    <ROW File="jaxbruntime2.4.0b180830.0438.jar" Component_="clientruntime2.1.0.jar" FileName="JAXB-R~1.JAR|jaxb-runtime-2.4.0-b180830.0438.jar" Attributes="0" SourcePath="WildLog\application\lib\jaxb-runtime-2.4.0-b180830.0438.jar" SelfReg="false"/>
+    <ROW File="jdom22.0.6.jar" Component_="clientruntime2.1.0.jar" FileName="JDOM2-~1.JAR|jdom2-2.0.6.jar" Attributes="0" SourcePath="WildLog\application\lib\jdom2-2.0.6.jar" SelfReg="false"/>
+    <ROW File="jgridshift1.0.jar" Component_="clientruntime2.1.0.jar" FileName="JGRIDS~1.JAR|jgridshift-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jgridshift-1.0.jar" SelfReg="false"/>
+    <ROW File="jmf2.1.1e.jar" Component_="clientruntime2.1.0.jar" FileName="JMF-21~1.JAR|jmf-2.1.1e.jar" Attributes="0" SourcePath="WildLog\application\lib\jmf-2.1.1e.jar" SelfReg="false"/>
+    <ROW File="jna5.3.1.jar" Component_="clientruntime2.1.0.jar" FileName="JNA-53~1.JAR|jna-5.3.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jna-5.3.1.jar" SelfReg="false"/>
+    <ROW File="jnaplatform5.3.1.jar" Component_="clientruntime2.1.0.jar" FileName="JNA-PL~1.JAR|jna-platform-5.3.1.jar" Attributes="0" SourcePath="WildLog\application\lib\jna-platform-5.3.1.jar" SelfReg="false"/>
+    <ROW File="jtaffine1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-AFF~1.JAR|jt-affine-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-affine-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtalgebra1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-ALG~1.JAR|jt-algebra-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-algebra-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtbandcombine1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-BAN~1.JAR|jt-bandcombine-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-bandcombine-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtbandmerge1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-BAN~2.JAR|jt-bandmerge-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-bandmerge-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtbandselect1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-BAN~3.JAR|jt-bandselect-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-bandselect-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtbinarize1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-BIN~1.JAR|jt-binarize-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-binarize-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtborder1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-BOR~1.JAR|jt-border-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-border-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtbuffer1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-BUF~1.JAR|jt-buffer-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-buffer-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtclassifier1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-CLA~1.JAR|jt-classifier-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-classifier-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtcolorconvert1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-COL~1.JAR|jt-colorconvert-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-colorconvert-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtcolorindexer1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-COL~2.JAR|jt-colorindexer-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-colorindexer-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtcrop1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-CRO~1.JAR|jt-crop-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-crop-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jterrordiffusion1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-ERR~1.JAR|jt-errordiffusion-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-errordiffusion-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtformat1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-FOR~1.JAR|jt-format-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-format-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtimagefunction1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-IMA~1.JAR|jt-imagefunction-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-imagefunction-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtiterators1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-ITE~1.JAR|jt-iterators-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-iterators-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtlookup1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-LOO~1.JAR|jt-lookup-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-lookup-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtmosaic1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-MOS~1.JAR|jt-mosaic-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-mosaic-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtnullop1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-NUL~1.JAR|jt-nullop-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-nullop-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtorderdither1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-ORD~1.JAR|jt-orderdither-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-orderdither-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtpiecewise1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-PIE~1.JAR|jt-piecewise-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-piecewise-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtrescale1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-RES~1.JAR|jt-rescale-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-rescale-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtrlookup1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-RLO~1.JAR|jt-rlookup-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-rlookup-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtscale1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-SCA~1.JAR|jt-scale-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-scale-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtscale21.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-SCA~2.JAR|jt-scale2-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-scale2-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtscore1.16.0.jar" Component_="clientruntime2.1.0.jar" FileName="JTS-CO~1.JAR|jts-core-1.16.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jts-core-1.16.0.jar" SelfReg="false"/>
+    <ROW File="jtshadedrelief1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-SHA~1.JAR|jt-shadedrelief-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-shadedrelief-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtstats1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-STA~1.JAR|jt-stats-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-stats-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jttranslate1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-TRA~1.JAR|jt-translate-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-translate-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtutilities1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-UTI~1.JAR|jt-utilities-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-utilities-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtutils1.5.0.jar" Component_="clientruntime2.1.0.jar" FileName="JT-UTI~2.JAR|jt-utils-1.5.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-utils-1.5.0.jar" SelfReg="false"/>
+    <ROW File="jtvectorbin1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-VEC~1.JAR|jt-vectorbin-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-vectorbin-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtwarp1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-WAR~1.JAR|jt-warp-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-warp-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtzonal1.1.11.jar" Component_="clientruntime2.1.0.jar" FileName="JT-ZON~1.JAR|jt-zonal-1.1.11.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-zonal-1.1.11.jar" SelfReg="false"/>
+    <ROW File="jtzonalstats1.5.0.jar" Component_="clientruntime2.1.0.jar" FileName="JT-ZON~2.JAR|jt-zonalstats-1.5.0.jar" Attributes="0" SourcePath="WildLog\application\lib\jt-zonalstats-1.5.0.jar" SelfReg="false"/>
+    <ROW File="log4j1.2api2.12.0.jar" Component_="clientruntime2.1.0.jar" FileName="LOG4J-~1.JAR|log4j-1.2-api-2.12.0.jar" Attributes="0" SourcePath="WildLog\application\lib\log4j-1.2-api-2.12.0.jar" SelfReg="false"/>
+    <ROW File="log4japi2.12.0.jar" Component_="clientruntime2.1.0.jar" FileName="LOG4J-~2.JAR|log4j-api-2.12.0.jar" Attributes="0" SourcePath="WildLog\application\lib\log4j-api-2.12.0.jar" SelfReg="false"/>
+    <ROW File="log4jcore2.12.0.jar" Component_="clientruntime2.1.0.jar" FileName="LOG4J-~3.JAR|log4j-core-2.12.0.jar" Attributes="0" SourcePath="WildLog\application\lib\log4j-core-2.12.0.jar" SelfReg="false"/>
+    <ROW File="metadataextractor2.13.0.jar" Component_="clientruntime2.1.0.jar" FileName="METADA~1.JAR|metadata-extractor-2.13.0.jar" Attributes="0" SourcePath="WildLog\application\lib\metadata-extractor-2.13.0.jar" SelfReg="false"/>
+    <ROW File="nettybuffer4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~1.JAR|netty-buffer-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-buffer-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="nettycodec4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~2.JAR|netty-codec-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-codec-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="nettycodechttp4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~3.JAR|netty-codec-http-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-codec-http-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="nettycodecsocks4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~4.JAR|netty-codec-socks-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-codec-socks-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="nettycommon4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~5.JAR|netty-common-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-common-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="nettyhandler4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~6.JAR|netty-handler-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-handler-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="nettyhandlerproxy4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~7.JAR|netty-handler-proxy-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-handler-proxy-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="nettyresolver4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~8.JAR|netty-resolver-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-resolver-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="nettytransport4.1.28.Final.jar" Component_="clientruntime2.1.0.jar" FileName="NETTY-~9.JAR|netty-transport-4.1.28.Final.jar" Attributes="0" SourcePath="WildLog\application\lib\netty-transport-4.1.28.Final.jar" SelfReg="false"/>
+    <ROW File="oshicore3.13.4.jar" Component_="clientruntime2.1.0.jar" FileName="OSHI-C~1.JAR|oshi-core-3.13.4.jar" Attributes="0" SourcePath="WildLog\application\lib\oshi-core-3.13.4.jar" SelfReg="false"/>
+    <ROW File="oshidist3.13.4.pom" Component_="clientruntime2.1.0.jar" FileName="OSHI-D~1.POM|oshi-dist-3.13.4.pom" Attributes="0" SourcePath="WildLog\application\lib\oshi-dist-3.13.4.pom" SelfReg="false"/>
+    <ROW File="oshijson3.13.4.jar" Component_="clientruntime2.1.0.jar" FileName="OSHI-J~1.JAR|oshi-json-3.13.4.jar" Attributes="0" SourcePath="WildLog\application\lib\oshi-json-3.13.4.jar" SelfReg="false"/>
+    <ROW File="pdfbox2.0.16.jar" Component_="clientruntime2.1.0.jar" FileName="PDFBOX~1.JAR|pdfbox-2.0.16.jar" Attributes="0" SourcePath="WildLog\application\lib\pdfbox-2.0.16.jar" SelfReg="false"/>
+    <ROW File="poi4.1.0.jar" Component_="clientruntime2.1.0.jar" FileName="POI-41~1.JAR|poi-4.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\poi-4.1.0.jar" SelfReg="false"/>
+    <ROW File="poiooxml4.1.0.jar" Component_="clientruntime2.1.0.jar" FileName="POI-OO~1.JAR|poi-ooxml-4.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\poi-ooxml-4.1.0.jar" SelfReg="false"/>
+    <ROW File="poiooxmlschemas4.1.0.jar" Component_="clientruntime2.1.0.jar" FileName="POI-OO~2.JAR|poi-ooxml-schemas-4.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\poi-ooxml-schemas-4.1.0.jar" SelfReg="false"/>
+    <ROW File="poiscratchpad4.1.0.jar" Component_="clientruntime2.1.0.jar" FileName="POI-SC~1.JAR|poi-scratchpad-4.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\poi-scratchpad-4.1.0.jar" SelfReg="false"/>
+    <ROW File="reactivestreams1.0.2.jar" Component_="clientruntime2.1.0.jar" FileName="REACTI~1.JAR|reactive-streams-1.0.2.jar" Attributes="0" SourcePath="WildLog\application\lib\reactive-streams-1.0.2.jar" SelfReg="false"/>
+    <ROW File="rxjava2.2.0.jar" Component_="clientruntime2.1.0.jar" FileName="RXJAVA~1.JAR|rxjava-2.2.0.jar" Attributes="0" SourcePath="WildLog\application\lib\rxjava-2.2.0.jar" SelfReg="false"/>
+    <ROW File="siquantity0.7.1.jar" Component_="clientruntime2.1.0.jar" FileName="SI-QUA~1.JAR|si-quantity-0.7.1.jar" Attributes="0" SourcePath="WildLog\application\lib\si-quantity-0.7.1.jar" SelfReg="false"/>
+    <ROW File="siunitsjava80.7.1.jar" Component_="clientruntime2.1.0.jar" FileName="SI-UNI~1.JAR|si-units-java8-0.7.1.jar" Attributes="0" SourcePath="WildLog\application\lib\si-units-java8-0.7.1.jar" SelfReg="false"/>
+    <ROW File="slf4japi1.7.26.jar" Component_="clientruntime2.1.0.jar" FileName="SLF4J-~1.JAR|slf4j-api-1.7.26.jar" Attributes="0" SourcePath="WildLog\application\lib\slf4j-api-1.7.26.jar" SelfReg="false"/>
+    <ROW File="slf4jsimple1.7.26.jar" Component_="clientruntime2.1.0.jar" FileName="SLF4J-~2.JAR|slf4j-simple-1.7.26.jar" Attributes="0" SourcePath="WildLog\application\lib\slf4j-simple-1.7.26.jar" SelfReg="false"/>
+    <ROW File="stax2api3.1.4.jar" Component_="clientruntime2.1.0.jar" FileName="STAX2-~1.JAR|stax2-api-3.1.4.jar" Attributes="0" SourcePath="WildLog\application\lib\stax2-api-3.1.4.jar" SelfReg="false"/>
+    <ROW File="staxex1.8.jar" Component_="clientruntime2.1.0.jar" FileName="STAX-E~1.JAR|stax-ex-1.8.jar" Attributes="0" SourcePath="WildLog\application\lib\stax-ex-1.8.jar" SelfReg="false"/>
+    <ROW File="swingworker1.1.jar" Component_="clientruntime2.1.0.jar" FileName="SWING-~1.JAR|swing-worker-1.1.jar" Attributes="0" SourcePath="WildLog\application\lib\swing-worker-1.1.jar" SelfReg="false"/>
+    <ROW File="swingxall1.6.51.jar" Component_="clientruntime2.1.0.jar" FileName="SWINGX~1.JAR|swingx-all-1.6.5-1.jar" Attributes="0" SourcePath="WildLog\application\lib\swingx-all-1.6.5-1.jar" SelfReg="false"/>
+    <ROW File="systemscommonjava80.7.2.jar" Component_="clientruntime2.1.0.jar" FileName="SYSTEM~1.JAR|systems-common-java8-0.7.2.jar" Attributes="0" SourcePath="WildLog\application\lib\systems-common-java8-0.7.2.jar" SelfReg="false"/>
+    <ROW File="txw22.4.0b180830.0438.jar" Component_="clientruntime2.1.0.jar" FileName="TXW2-2~1.JAR|txw2-2.4.0-b180830.0438.jar" Attributes="0" SourcePath="WildLog\application\lib\txw2-2.4.0-b180830.0438.jar" SelfReg="false"/>
+    <ROW File="unitapi1.0.jar" Component_="clientruntime2.1.0.jar" FileName="UNIT-A~1.JAR|unit-api-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\unit-api-1.0.jar" SelfReg="false"/>
+    <ROW File="uomlibcommon1.0.2.jar" Component_="clientruntime2.1.0.jar" FileName="UOM-LI~1.JAR|uom-lib-common-1.0.2.jar" Attributes="0" SourcePath="WildLog\application\lib\uom-lib-common-1.0.2.jar" SelfReg="false"/>
+    <ROW File="uomse1.0.8.jar" Component_="clientruntime2.1.0.jar" FileName="UOM-SE~1.JAR|uom-se-1.0.8.jar" Attributes="0" SourcePath="WildLog\application\lib\uom-se-1.0.8.jar" SelfReg="false"/>
+    <ROW File="WildLogDataCore1.15.jar" Component_="clientruntime2.1.0.jar" FileName="WILDLO~2.JAR|WildLogDataCore-1.15.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogDataCore-1.15.jar" SelfReg="false"/>
+    <ROW File="WildLogGeoTools1.2.jar" Component_="clientruntime2.1.0.jar" FileName="WILDLO~3.JAR|WildLogGeoTools-1.2.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogGeoTools-1.2.jar" SelfReg="false"/>
+    <ROW File="WildLogHTMLTemplates1.0.jar" Component_="clientruntime2.1.0.jar" FileName="WILDLO~4.JAR|WildLogHTMLTemplates-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogHTMLTemplates-1.0.jar" SelfReg="false"/>
+    <ROW File="WildLogINaturalistAPI1.1.jar" Component_="clientruntime2.1.0.jar" FileName="WILDLO~5.JAR|WildLogINaturalistAPI-1.1.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogINaturalistAPI-1.1.jar" SelfReg="false"/>
+    <ROW File="WildLogMapData1.0.jar" Component_="clientruntime2.1.0.jar" FileName="WILDLO~6.JAR|WildLogMapData-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogMapData-1.0.jar" SelfReg="false"/>
+    <ROW File="WildLogMediaPlayer1.0.jar" Component_="clientruntime2.1.0.jar" FileName="WILDLO~7.JAR|WildLogMediaPlayer-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogMediaPlayer-1.0.jar" SelfReg="false"/>
+    <ROW File="WildLogMediaUtilWrapper1.0.jar" Component_="clientruntime2.1.0.jar" FileName="WILDLO~8.JAR|WildLogMediaUtilWrapper-1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogMediaUtilWrapper-1.0.jar" SelfReg="false"/>
+    <ROW File="WildLogSyncAzure1.1.jar" Component_="clientruntime2.1.0.jar" FileName="WILDLO~9.JAR|WildLogSyncAzure-1.1.jar" Attributes="0" SourcePath="WildLog\application\lib\WildLogSyncAzure-1.1.jar" SelfReg="false"/>
+    <ROW File="woodstoxcore5.0.3.jar" Component_="clientruntime2.1.0.jar" FileName="WOODST~1.JAR|woodstox-core-5.0.3.jar" Attributes="0" SourcePath="WildLog\application\lib\woodstox-core-5.0.3.jar" SelfReg="false"/>
+    <ROW File="xmlbeans3.1.0.jar" Component_="clientruntime2.1.0.jar" FileName="XMLBEA~1.JAR|xmlbeans-3.1.0.jar" Attributes="0" SourcePath="WildLog\application\lib\xmlbeans-3.1.0.jar" SelfReg="false"/>
+    <ROW File="xmlcommonsresolver1.2.jar" Component_="clientruntime2.1.0.jar" FileName="XML-CO~1.JAR|xml-commons-resolver-1.2.jar" Attributes="0" SourcePath="WildLog\application\lib\xml-commons-resolver-1.2.jar" SelfReg="false"/>
+    <ROW File="xmpcore6.0.6.jar" Component_="clientruntime2.1.0.jar" FileName="XMPCOR~1.JAR|xmpcore-6.0.6.jar" Attributes="0" SourcePath="WildLog\application\lib\xmpcore-6.0.6.jar" SelfReg="false"/>
+    <ROW File="AbsoluteLayoutRELEASE82.jar" Component_="clientruntime2.1.0.jar" FileName="ABSOLU~1.JAR|AbsoluteLayout-RELEASE82.jar" Attributes="0" SourcePath="WildLog\application\lib\AbsoluteLayout-RELEASE82.jar" SelfReg="false"/>
+    <ROW File="appframework1.0.3.jar" Component_="clientruntime2.1.0.jar" FileName="APPFRA~1.JAR|appframework-1.0.3.jar" Attributes="0" SourcePath="WildLog\application\lib\appframework-1.0.3.jar" SelfReg="false"/>
+    <ROW File="azurekeyvaultcore1.0.0.jar" Component_="clientruntime2.1.0.jar" FileName="AZURE-~1.JAR|azure-keyvault-core-1.0.0.jar" Attributes="0" SourcePath="WildLog\application\lib\azure-keyvault-core-1.0.0.jar" SelfReg="false"/>
+    <ROW File="azurestorage8.3.0.jar" Component_="clientruntime2.1.0.jar" FileName="AZURE-~2.JAR|azure-storage-8.3.0.jar" Attributes="0" SourcePath="WildLog\application\lib\azure-storage-8.3.0.jar" SelfReg="false"/>
+    <ROW File="azurestorageblob11.0.0.jar" Component_="clientruntime2.1.0.jar" FileName="AZURE-~3.JAR|azure-storage-blob-11.0.0.jar" Attributes="0" SourcePath="WildLog\application\lib\azure-storage-blob-11.0.0.jar" SelfReg="false"/>
+    <ROW File="balloontip1.2.4.1.jar" Component_="clientruntime2.1.0.jar" FileName="BALLOO~1.JAR|balloontip-1.2.4.1.jar" Attributes="0" SourcePath="WildLog\application\lib\balloontip-1.2.4.1.jar" SelfReg="false"/>
+    <ROW File="bigint0.7.1.jar" Component_="clientruntime2.1.0.jar" FileName="BIGINT~1.JAR|bigint-0.7.1.jar" Attributes="0" SourcePath="WildLog\application\lib\bigint-0.7.1.jar" SelfReg="false"/>
+    <ROW File="WILDLOG_README_v6.1.1.txt" Component_="WILDLOG_README_v6.1.0.txt" FileName="WILDLO~2.TXT|WILDLOG_README_v6.1.1.txt" Attributes="0" SourcePath="WildLog\WILDLOG_README_v6.1.1.txt" SelfReg="false"/>
+    <ROW File="HumbleVideoLicense.txt" Component_="Azure.txt" FileName="HUMBLE~1.TXT|Humble-Video License.txt" Attributes="0" SourcePath="WildLog\licenses\Humble-Video License.txt" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
     <ROW Action="AI_DetectSoftware" Sequence="101"/>
@@ -1327,7 +1332,6 @@
     <ROW Feature_="MainFeature" Component_="default.jfc"/>
     <ROW Feature_="MainFeature" Component_="blacklisted.certs"/>
     <ROW Feature_="MainFeature" Component_="LICENSE"/>
-    <ROW Feature_="MainFeature" Component_="AbsoluteLayoutRELEASE82.jar"/>
     <ROW Feature_="MainFeature" Component_="Authors.txt"/>
     <ROW Feature_="MainFeature" Component_="CrashReporterDialog.dll"/>
     <ROW Feature_="MainFeature" Component_="crashrpt.dll"/>
@@ -1391,6 +1395,7 @@
     <ROW Feature_="MainFeature" Component_="mpciconlib.dll"/>
     <ROW Feature_="MainFeature" Component_="to16235.hlsl"/>
     <ROW Feature_="MainFeature" Component_="WildLogWEIAdmin.jar"/>
+    <ROW Feature_="MainFeature" Component_="clientruntime2.1.0.jar"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="SystemFoldermsiexec.exe" SourcePath="&lt;AI_RES&gt;uninstall.ico" Index="0"/>
@@ -1422,10 +1427,10 @@
     <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="UninstallWildLogv6.0.2" Directory_="SHORTCUTDIR" Name="UNINST~1.0|Uninstall WildLog v6.1.0" Component_="SHORTCUTDIR" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFoldermsiexec.exe" IconIndex="0" ShowCmd="1"/>
+    <ROW Shortcut="UninstallWildLogv6.0.2" Directory_="SHORTCUTDIR" Name="UNINST~1.1|Uninstall WildLog v6.1.1" Component_="SHORTCUTDIR" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFoldermsiexec.exe" IconIndex="0" ShowCmd="1"/>
     <ROW Shortcut="WildLog" Directory_="DesktopFolder" Name="WildLog" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="application_Dir"/>
     <ROW Shortcut="WildLogUserGuide" Directory_="SHORTCUTDIR" Name="WILDLO~1|WildLog v6 User Guide" Component_="WildLogUserGuide.pdf" Target="[#WildLogUserGuide.pdf]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="documentation_Dir"/>
-    <ROW Shortcut="WildLog_1" Directory_="SHORTCUTDIR" Name="WILDLO~1.0|WildLog v6.1.0" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="application_Dir"/>
+    <ROW Shortcut="WildLog_1" Directory_="SHORTCUTDIR" Name="WILDLO~1.1|WildLog v6.1.1" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="application_Dir"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>

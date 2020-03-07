@@ -100,8 +100,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private String originalVisitName = null;
     private Map<ComboBoxSuggestedElementWrapper, Integer> mapElementSuggestions = new HashMap<>(10);
 
-// TODO: Save bulk imports halfway, by stashing the files and then saving the sighting details to the adhoc table
-    
 // TODO: Add a button that does the "adjust date and time" popup for all observations
     
 // TODO: Om dinge vinniger te maak kan ek 'n HashMap hou van elke file se metadata (exif - basies net die gps + date?) wanneer ek dit die eerste keer lees, dan later as ek safe kan dit die cache gebruik in plaas van weer die files lees
@@ -430,6 +428,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel1.setName("jLabel1"); // NOI18N
 
         btnSelectLocation.setBackground(new java.awt.Color(153, 180, 115));
+        btnSelectLocation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnSelectLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/LocationList.gif"))); // NOI18N
         btnSelectLocation.setText("Choose Place");
         btnSelectLocation.setToolTipText("Select a Place to use for all Observation.");
@@ -487,7 +486,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(lblFilesRead)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addComponent(lblFilesLinked)
                 .addContainerGap(22, Short.MAX_VALUE))
             .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -516,7 +515,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     .addGroup(pnlPlaceLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addGroup(pnlPlaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                            .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(2, 2, 2))
                     .addGroup(pnlPlaceLayout.createSequentialGroup()
@@ -608,7 +607,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     .addGroup(pnlPeriodLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
-                        .addComponent(txtVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                        .addComponent(txtVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
                         .addComponent(jLabel5)
                         .addGap(8, 8, 8)
@@ -642,9 +641,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
             .addGroup(pnlPeriodLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
+                .addGap(2, 2, 2)
                 .addComponent(lblVisitFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
+                .addGap(5, 5, 5))
         );
 
         pnlSettings.setBackground(new java.awt.Color(153, 180, 115));
@@ -727,7 +726,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(5, 5, 5)
                         .addComponent(jLabel7)
-                        .addGap(10, 10, 10)
+                        .addGap(15, 15, 15)
                         .addComponent(chkSmoothScroll))
                     .addGroup(pnlSettingsLayout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -738,7 +737,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addComponent(chkIncludeSubfolders)
                         .addGap(15, 15, 15)
                         .addComponent(chkForceLocationGPSCoordinates)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
                 .addComponent(btnReload, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
         );
@@ -791,7 +790,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         btnGPSForAll.setBackground(new java.awt.Color(153, 180, 115));
         btnGPSForAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnGPSForAll.setText("Set one GPS");
+        btnGPSForAll.setText("Replace GPS");
         btnGPSForAll.setToolTipText("The specified GPS point will be applied to all currently defined Observations.");
         btnGPSForAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPSForAll.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

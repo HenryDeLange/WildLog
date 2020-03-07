@@ -1,11 +1,6 @@
-WildLog is developed and owned (Copyright, Intellectual Property, Trademarks, etc.) by Henry de Lange (myself).
-
-I give you, the user, permission to use this application, for its intended purposes, free of charge and at own risk.
-
-You are not allowed to re-sell this application without my consent.
-
-No alterations to this application are allowed without my permission.
-
-WildLog might periodically check for updates or send usage statistics and error logs to the developer. This data is only used to improve the product and is not shared with any third party. (This feature can be turned off from the Settings menu.)
-
-If you have any questions please feel free to contact me at: WildLog.Support@gmail.com
+WildLog is developed and owned (Copyright, Intellectual Property, Trademarks, etc.) by Henry de Lange (developer).
+You, the user, are given permission to use this application, for its intended purposes, free of charge and at own risk.
+You are not allowed to re-sell this application without consent.
+No alterations to this application are allowed without permission.
+WildLog might periodically check for updates or send usage statistics and error logs to the developer. This data is only used to improve the product and is not shared with any third parties. (This feature can be turned off from the Settings menu.)
+If you have any questions please feel free to contact: support@mywild.co.za

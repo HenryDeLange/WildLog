@@ -263,6 +263,7 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
             }
         });
 
+        btnToggleInfo.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnToggleInfo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnToggleInfo.setText("More Info");
         btnToggleInfo.setToolTipText("Show more information about the selected Creature.");
@@ -305,8 +306,8 @@ public class ElementSelectionDialog extends JDialog implements PanelNeedsRefresh
                         .addComponent(jLabel2)
                         .addGap(5, 5, 5)
                         .addGroup(pnlMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbElementType, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlMainLayout.createSequentialGroup()
                                 .addGap(20, 20, 20)
                                 .addComponent(jScrollPane2))))
