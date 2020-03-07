@@ -8,7 +8,7 @@ public class BulkUploadImageListWrapper {
     private int imageBoxSize;
 
     public BulkUploadImageListWrapper(int inImageBoxSize) {
-        imageList = new ArrayList<BulkUploadImageFileWrapper>();
+        imageList = new ArrayList<>();
         imageBoxSize = inImageBoxSize;
     }
 

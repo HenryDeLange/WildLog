@@ -1692,9 +1692,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         List<Path> lstPaths = UtilsFileProcessing.getPathsFromSelectedFile(
                                 new File[] { WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).toFile() });
                         final List<Path> lstAllFiles = UtilsFileProcessing.getListOfFilesToImport(lstPaths, true);
-                        
-// TODO: Check for saved Extra Data to prepopulate the data
-                        
                         UtilsPanelGenerator.openBulkUploadTab(
                                 new BulkUploadPanel(app, this, locationForVisit, visit, lstAllFiles, panelVisitHandle), (JTabbedPane)getParent());
                     }

@@ -20,7 +20,7 @@ public class ImageBoxRenderer implements TableCellRenderer {
         return drawImageBoxes(inValue, inTable, inRow, inColumn);
     }
 
-    public static JPanel drawImageBoxes(Object inValue, JTable inTable, int inRow, int inColumn) {
+    public static Component drawImageBoxes(Object inValue, JTable inTable, int inRow, int inColumn) {
         // Note: Java already only calls this method for visible rows, so no need to check that
         BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper)inValue;
         JPanel panel = new JPanel(new AbsoluteLayout());

@@ -47,7 +47,7 @@ public final class UtilsConcurency {
      * If it fails it will try to force the shutdown.
      * Tasks will be allowed about 120 minutes to complete, which should really be enough unless something went very wrong.
      * @param inExecutorService
-     * @return
+     * @return true if successful, or false if terminated early
      */
     public static boolean waitForExecutorToShutdown(ExecutorService inExecutorService) {
         if (inExecutorService != null) {
@@ -73,6 +73,7 @@ public final class UtilsConcurency {
             }
             catch (InterruptedException ex) {
                 WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                return false;
             }
         }
         return true;

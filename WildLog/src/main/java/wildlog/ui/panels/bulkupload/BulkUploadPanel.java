@@ -1,6 +1,8 @@
 package wildlog.ui.panels.bulkupload;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.MouseAdapter;
@@ -94,7 +96,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private static String lastFilePath = "";
     private final WildLogApp app;
     private final CustomMouseWheelScroller mouseWheel;
-    private final JScrollBar originalSCrollBar;
+    private final JScrollBar originalScrollBar;
     private final List<Path> lstVisitFiles;
     private final PanelNeedsRefreshWhenDataChanges panelToRefresh;
     final private Visit existingVisit;
@@ -112,7 +114,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 // FIXME: As mens tabs wissel en met die nuwe groter rye, dan is die boonste ry te klein
     
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, Location inLocation, Visit inExistingVisit, 
-            List<Path> inlstImportPaths, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
+            List<Path> inLstImportPaths, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         WildLogApp.LOGGER.log(Level.INFO, "[BulkUploadPanel]");
         app = inApp;
         selectedLocation = inLocation;
@@ -123,18 +125,30 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             originalVisitName = existingVisit.getName();
         }
         panelToRefresh = inPanelToRefresh;
-        if (inlstImportPaths != null) {
-            lstImportPaths = inlstImportPaths;
+        if (inLstImportPaths != null) {
+            lstImportPaths = inLstImportPaths;
         }
         lstVisitFiles = new ArrayList<>(3);
         // Init auto generated code
         initComponents();
+        // Setup info for tab headers
+        tabTitle = "Bulk Import";
+        tabID = 0;
+        tabIconURL = WildLogApp.class.getResource("resources/icons/Bulk Import.png");
+        // Setup comboboxes
         ComboBoxFixer.configureComboBoxes(cmbImageBoxSize);
         ComboBoxFixer.configureComboBoxes(cmbVisitType);
+        // Setup clipboard
+        UtilsUI.attachClipboardPopup(txtVisitName);
+        // Spinner selection fix
+        SpinnerFixer.configureSpinners(spnInactivityTime);
+        // Make dates pretty
+        dtpStartDate.getComponent(1).setBackground(pnlTop.getBackground());
+        dtpEndDate.getComponent(1).setBackground(pnlTop.getBackground());
         // Set table scroling to only one row at a time
         mouseWheel = new CustomMouseWheelScroller(scrTable);
         mouseWheel.install();
-        originalSCrollBar = scrTable.getVerticalScrollBar();
+        originalScrollBar = scrTable.getVerticalScrollBar();
         // "Hack" to make the buttons clickable when the mouse scrolls over the cell (very performance intensive, but "better" now...)
         // of as mens die model clear deur 'n nuwe browse besigheid oop te maak...
         final JTable tableHandle = tblBulkImport;
@@ -202,20 +216,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             cmbImageBoxSize.setSelectedIndex(2);
         }
         // Setup the tab's content
-        setupTab(inProgressbarTask);
+        setupTable(inProgressbarTask);
         // Setup the initial visit name
         setupVisitName();
-        // Setup clipboard
-        UtilsUI.attachClipboardPopup(txtVisitName);
-        // Setup info for tab headers
-        tabTitle = "Bulk Import";
-        tabID = 0;
-        tabIconURL = WildLogApp.class.getResource("resources/icons/Bulk Import.png");
-        // Spinner selection fix
-        SpinnerFixer.configureSpinners(spnInactivityTime);
-        // Make dates pretty
-        dtpStartDate.getComponent(1).setBackground(pnlTop.getBackground());
-        dtpEndDate.getComponent(1).setBackground(pnlTop.getBackground());
         // Do WEI volunteer specific stuff
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             // For WEI show a tips popup
@@ -231,11 +234,27 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
     }
 
-    public final void setupTab(ProgressbarTask inProgressbarTask) {
+    private void setupTable(ProgressbarTask inProgressbarTask) {
         inProgressbarTask.setTaskProgress(0);
         inProgressbarTask.setMessage("Preparing the Bulk Import process...");
         // Load the images
-        loadImages(inProgressbarTask);
+        if (existingVisit != null && VisitType.STASHED == existingVisit.getType()) {
+            // Check for saved data
+            ExtraData extraDataTableModel = app.getDBI().findExtraData(-1, WildLogExtraDataFieldTypes.WILDLOG, 
+                    existingVisit.getID(), ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), ExtraData.class);
+            if (extraDataTableModel != null) {
+                // Load the previously stashed ExtraData instead of the raw files
+                loadStashedData(inProgressbarTask, extraDataTableModel);
+            }
+            else {
+                // Load normally
+                loadFiles(inProgressbarTask);
+            }
+        }
+        else {
+            // Load normally
+            loadFiles(inProgressbarTask);
+        }
         inProgressbarTask.setTaskProgress(100);
         inProgressbarTask.setMessage("Finished preparing the Bulk Import");
     }
@@ -246,7 +265,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         return true;
     }
 
-    private void loadImages(ProgressbarTask inProgressbarTask) {
+    private void loadFiles(ProgressbarTask inProgressbarTask) {
         // Get the list of files from the folder to import from
         if (lstImportPaths == null) {
             lstImportPaths = showFileChooser();
@@ -295,6 +314,77 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         else {
             showAsTab = false;
         }
+    }
+    
+    private void loadStashedData(ProgressbarTask inProgressbarTask, ExtraData extraDataTableModel) throws JsonSyntaxException {
+        DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
+        model.getDataVector().clear();
+        model.fireTableDataChanged();
+        Gson gson = new Gson();
+        Path stashPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(existingVisit.getName());
+        // Load the table using the previously saved data
+        List<BulkImportStashedTableData> lstStashedData = gson.fromJson(extraDataTableModel.getDataValue(),
+                new TypeToken<List<BulkImportStashedTableData>>(){}.getType());
+        Object[][] modelData = new Object[lstStashedData.size()][2];
+        int row = 0;
+        for (BulkImportStashedTableData stashedTableData : lstStashedData) {
+            BulkUploadImageListWrapper imageListWrapper = new BulkUploadImageListWrapper(stashedTableData.getImageBoxSize());
+            for (BulkImportStashedTableData.FileData stashedFileData : stashedTableData.getLstFileData()) {
+                BulkUploadImageFileWrapper fileWrapper = new BulkUploadImageFileWrapper(
+                        stashPath.resolve(stashedFileData.path).normalize(), null, stashedTableData.getImageBoxSize(),
+                        UtilsTime.getDateFromLocalDateTime(LocalDateTime.parse(stashedFileData.date, UtilsTime.EXIF_DATE_FORMAT)),
+                        stashedFileData.dataObjectWithGPS);
+                imageListWrapper.getImageList().add(fileWrapper);
+            }
+            // Add the row to the model
+            modelData[row][0] = stashedTableData.getSighting().cloneShallow(BulkUploadSightingWrapper.class);
+            modelData[row][1] = imageListWrapper;
+            row++;
+        }
+        // Set the visit file based on the previously saved data
+        ExtraData extraDataVisitFiles = app.getDBI().findExtraData(-1, WildLogExtraDataFieldTypes.WILDLOG,
+                existingVisit.getID(), ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_VISIT_FILES.toString(), ExtraData.class);
+        List<String> lstStashedVisitFiles = gson.fromJson(extraDataVisitFiles.getDataValue(),
+                new TypeToken<List<String>>(){}.getType());
+        for (String visitFile : lstStashedVisitFiles) {
+            lstVisitFiles.add(stashPath.resolve(visitFile).normalize());
+        }
+        // Fetch the icon now, during loading, to prevent the UI hanging later if it needs to find many icons at once
+        ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_BulkImport(StashLoad)"));
+        AtomicInteger counter = new AtomicInteger();
+        for (int r = 0; r < modelData.length; r++) {
+            final BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper) modelData[r][1];
+            for (BulkUploadImageFileWrapper fileWrapper : imageListWrapper.getImageList()) {
+                executorService.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        fileWrapper.getIcon();
+                        try {
+                            inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, modelData.length + 1); // Prevent the progress bar from reaching 100%
+                            inProgressbarTask.setMessage("Bulk Import Preparation: Loading stashed files... " + inProgressbarTask.getProgress() + "%");
+                        }
+                        catch (Exception ex) {
+                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        }
+                    }
+                });
+            }
+        }
+        if (!UtilsConcurency.waitForExecutorToShutdown(executorService)) {
+            return;
+        }
+        // Update the UI
+        model.getDataVector().addAll(UtilsTableGenerator.convertToVector(modelData));
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                model.fireTableDataChanged();
+                WildLogApp.LOGGER.log(Level.INFO, "BulkUploadPanel.setupTable() - The model has been loaded to the table (finished loading stashed ExtraData)");
+// TODO: Also need to populate the visit's totla linked fiels and number of read files
+                updateCountForFilesLinked();
+            }
+        });
+        showAsTab = true;
     }
     
     private void setupVisitName() {
@@ -912,7 +1002,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 Timer timer = UtilsUI.doAnimationForFlashingBorder(btnReload.getBackground(), new Color(200, 220, 250), btnReload);
                 btnProcess.setEnabled(false);
                 // Do the re-setting up
-                setupTab(this);
+                setupTable(this);
                 // Enable die button sodat mens dit weer kan druk
                 btnReload.setEnabled(true);
                 btnGPSForAll.setEnabled(true);
@@ -1354,7 +1444,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             scrTable.getVerticalScrollBar().setUnitIncrement(50);
         }
         else {
-            scrTable.setVerticalScrollBar(originalSCrollBar);
+            scrTable.setVerticalScrollBar(originalScrollBar);
         }
         tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(0, 0, true));
     }//GEN-LAST:event_chkSmoothScrollActionPerformed
@@ -1446,8 +1536,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             }
                             UtilsFileProcessing.copyFile(fileEntry.getKey(), writePath, false, false);
                             // Update the table model (which will be saved and needs to be able to be loaded later, pointing to the stashed files
-                            for (BulkUploadImageFileWrapper fileWrapper : fileEntry.getValue()) {
-                                fileWrapper.setFile(writePath);
+                            List<BulkUploadImageFileWrapper> lstFileWrappers = fileEntry.getValue();
+                            if (lstFileWrappers != null) {
+                                for (BulkUploadImageFileWrapper fileWrapper : lstFileWrappers) {
+                                    fileWrapper.setFile(writePath);
+                                }
                             }
                         }
                         catch (Exception ex) {

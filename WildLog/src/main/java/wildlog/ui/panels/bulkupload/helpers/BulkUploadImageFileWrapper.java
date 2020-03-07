@@ -6,6 +6,7 @@ import javax.swing.Icon;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.ui.panels.bulkupload.ImageBox;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogSystemImages;
@@ -31,16 +32,16 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
         // When loading from a saved bulk import, then the icon will initially be null and needs to be reloaded
         if (icon == null) {
             if (WildLogFileExtentions.Images.isKnownExtention(file)) {
-                icon = UtilsImageProcessing.getScaledIcon(file, size, true);
+                icon = UtilsImageProcessing.getScaledIcon(file, size - ImageBox.BUTTON_AND_PADDING_BUFFER, true);
             }
             else 
             if (WildLogFileExtentions.Movies.isKnownExtention(file)) {
                 icon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), size, false);
+                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), size - ImageBox.BUTTON_AND_PADDING_BUFFER, false);
             }
             else {
                 icon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), size, false);
+                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), size - ImageBox.BUTTON_AND_PADDING_BUFFER, false);
             }
         }
         return icon;

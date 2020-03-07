@@ -97,7 +97,7 @@ public class BulkUploadDataLoader {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    loadFileData(tempFile, imageList, inImageBoxSize - ImageBox.BUTTON_AND_PADDING_BUFFER);
+                    loadFileData(tempFile, imageList, inImageBoxSize);
                     try {
                         inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, lstAllFiles.size() + 1); // Prevent the progress bar from reaching 100%
                         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files... " + inProgressbarTask.getProgress() + "%");
@@ -205,16 +205,16 @@ public class BulkUploadDataLoader {
         if (date != null) {
             ImageIcon imageIcon;
             if (WildLogFileExtentions.Images.isKnownExtention(inFile)) {
-                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, inImageIconSize, true, metadata);
+                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, inImageIconSize - ImageBox.BUTTON_AND_PADDING_BUFFER, true, metadata);
             }
             else 
             if (WildLogFileExtentions.Movies.isKnownExtention(inFile)) {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), inImageIconSize, false);
+                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), inImageIconSize - ImageBox.BUTTON_AND_PADDING_BUFFER, false);
             }
             else {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), inImageIconSize, false);
+                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), inImageIconSize - ImageBox.BUTTON_AND_PADDING_BUFFER, false);
             }
             BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(
                     inFile, imageIcon, inImageIconSize, date, UtilsImageProcessing.getExifGpsFromJpeg(metadata));
