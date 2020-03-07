@@ -31,19 +31,22 @@ public class InfoBoxRenderer implements TableCellRenderer {
         return drawInfoBox(inTable, inValue, app, location, visit, inRow, mapElementSuggestions);
     }
 
-    public static Component drawInfoBox(JTable inTable, Object inValue, WildLogApp inApp, Location inLocation, Visit inVisit, int inRow, 
+    public static Component drawInfoBox(JTable inTable, Object inValue, WildLogApp inApp, Location inLocation, Visit inVisit, int inRow,
             Map<ComboBoxSuggestedElementWrapper, Integer> inMapElementSuggestions) {
         // Try to use the old panel if possible (I'm assuming it will be faster, but might use more memory and cause issues)
-        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)inValue;
+        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) inValue;
         InfoBox infoBox = sightingWrapper.getInfoBox();
         if (infoBox == null) {
             infoBox = new InfoBox(inApp, sightingWrapper, inLocation, inVisit, inTable, inMapElementSuggestions);
-        } else {
+            sightingWrapper.setInfoBox(infoBox);
+        }
+        else {
             infoBox.populateUI();
         }
         if (inRow % 2 == 0) {
             infoBox.setRowBackground(BulkUploadPanel.tableBackgroundColor1);
-        } else {
+        }
+        else {
             infoBox.setRowBackground(BulkUploadPanel.tableBackgroundColor2);
         }
         infoBox.getLblCount().setText(Integer.toString(inRow + 1));

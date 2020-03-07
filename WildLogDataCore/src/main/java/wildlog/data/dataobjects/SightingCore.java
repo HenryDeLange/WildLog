@@ -148,9 +148,9 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
                 && UtilsData.isTheSame(getAuditUser(), inSighting.getAuditUser());
     }
     
-    public <T extends SightingCore> T cloneShallow() {
+    public <T extends SightingCore> T cloneShallow(Class<T> inClass) {
         try {
-            T sighting = (T) this.getClass().newInstance();
+            T sighting = inClass.newInstance();
             sighting.setID(id);
             sighting.setAge(age);
             sighting.setCertainty(certainty);

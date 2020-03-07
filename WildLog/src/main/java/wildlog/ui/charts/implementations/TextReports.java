@@ -124,7 +124,7 @@ public class TextReports extends AbstractChart<Sighting> {
             if (UtilsGPS.hasGPSData(sighting)) {
                 Sighting tempSighting;
                 if (groupSimilarGPS) {
-                    tempSighting = sighting.cloneShallow();
+                    tempSighting = sighting.cloneShallow(Sighting.class);
                     tempSighting.setLatSeconds(0);
                     tempSighting.setLonSeconds(0);
                 }

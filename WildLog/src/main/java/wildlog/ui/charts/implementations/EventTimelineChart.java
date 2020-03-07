@@ -111,7 +111,7 @@ public class EventTimelineChart extends AbstractChart<Sighting> {
             lstSightingsToUse = new ArrayList<>(inSightings.size());
             for (Sighting sighting : inSightings) {
                 // Stel die jaar na dieselfde waarde vir alle Sightings
-                Sighting clonedSighting = sighting.cloneShallow();
+                Sighting clonedSighting = sighting.cloneShallow(Sighting.class);
                 clonedSighting.setDate(UtilsTime.getDateFromLocalDateTime(
                         UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).withYear(LocalDate.now().getYear())));
                 lstSightingsToUse.add(clonedSighting);

@@ -27,7 +27,6 @@ import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
-import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
@@ -123,12 +122,12 @@ public class BulkUploadDataLoader {
             // Start off with a value that is garuanteed to be updated for the first record, to get things started...
             Date currentSightingDate = new Date(imageList.get(0).getDate().getTime() - timeDiffInMiliseconds*2);
             // If no image has any date, then all will be in this initial SightingWrapper.
-            BulkUploadSightingWrapper sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
+            BulkUploadSightingWrapper sightingKey = new BulkUploadSightingWrapper();
             setDefaultsForNewBulkUploadSightings(sightingKey, inForceLocationGPS, inLocation);
             for (BulkUploadImageFileWrapper temp : imageList) {
                 if (!temp.isInSameSighting(currentSightingDate, timeDiffInMiliseconds)) {
                     // Start a new sighting and image list for the linked images
-                    sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
+                    sightingKey = new BulkUploadSightingWrapper();
                     // Set other defaults for the sighting
                     setDefaultsForNewBulkUploadSightings(sightingKey, inForceLocationGPS, inLocation);
                     // Update the map
@@ -217,7 +216,8 @@ public class BulkUploadDataLoader {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
                         WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), inImageIconSize, false);
             }
-            BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(inFile, imageIcon, date, UtilsImageProcessing.getExifGpsFromJpeg(metadata));
+            BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(
+                    inFile, imageIcon, inImageIconSize, date, UtilsImageProcessing.getExifGpsFromJpeg(metadata));
             inImageList.add(wrapper);
         }
         else {

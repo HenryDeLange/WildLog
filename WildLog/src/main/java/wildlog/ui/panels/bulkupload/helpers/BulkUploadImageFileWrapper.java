@@ -6,23 +6,43 @@ import javax.swing.Icon;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogFileExtentions;
+import wildlog.utils.WildLogSystemImages;
 
 
 public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFileWrapper> {
-    private final Icon icon;
-    private final Path file;
+    private Path file;
+    private Icon icon;
+    private int size;
     private final Date date;
     private final DataObjectWithGPS dataObjectWithGPS;
     
 
-    public BulkUploadImageFileWrapper(Path inFile, Icon inIcon, Date inDate, DataObjectWithGPS inDataObjectWithGPS) {
+    public BulkUploadImageFileWrapper(Path inFile, Icon inIcon, int inSize, Date inDate, DataObjectWithGPS inDataObjectWithGPS) {
         file = inFile;
         icon = inIcon;
+        size = inSize;
         date = inDate;
         dataObjectWithGPS = inDataObjectWithGPS;
     }
 
     public Icon getIcon() {
+        // When loading from a saved bulk import, then the icon will initially be null and needs to be reloaded
+        if (icon == null) {
+            if (WildLogFileExtentions.Images.isKnownExtention(file)) {
+                icon = UtilsImageProcessing.getScaledIcon(file, size, true);
+            }
+            else 
+            if (WildLogFileExtentions.Movies.isKnownExtention(file)) {
+                icon = UtilsImageProcessing.getScaledIcon(
+                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), size, false);
+            }
+            else {
+                icon = UtilsImageProcessing.getScaledIcon(
+                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), size, false);
+            }
+        }
         return icon;
     }
 
@@ -33,9 +53,25 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     public DataObjectWithGPS getDataObjectWithGPS() {
         return dataObjectWithGPS;
     }
+
+    public void setFile(Path inFile) {
+        file = inFile;
+    }
     
     public Path getFile() {
         return file;
+    }
+
+    public void setIcon(Icon inIcon) {
+        icon = inIcon;
+    }
+
+    public void setSize(int inSize) {
+        size = inSize;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     @Override
@@ -67,7 +103,7 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     }
 
     public BulkUploadImageFileWrapper getClone() {
-        BulkUploadImageFileWrapper imageFileWrapper = new BulkUploadImageFileWrapper(file, icon, date, dataObjectWithGPS);
+        BulkUploadImageFileWrapper imageFileWrapper = new BulkUploadImageFileWrapper(file, icon, size, date, dataObjectWithGPS);
         return imageFileWrapper;
     }
 

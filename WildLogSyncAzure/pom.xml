@@ -17,7 +17,7 @@
         <dependency>
             <groupId>mywild</groupId>
             <artifactId>WildLogDataCore</artifactId>
-            <version>1.15</version>
+            <version>1.16</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>

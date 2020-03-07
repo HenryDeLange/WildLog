@@ -688,7 +688,7 @@ public class MapsBaseDialog extends JFrame {
     private List<Sighting> getCopiedList(List<Sighting> inList) {
         List<Sighting> list = new ArrayList<>(inList.size());
         for (Sighting sighting : inList) {
-            list.add(sighting.cloneShallow());
+            list.add(sighting.cloneShallow(Sighting.class));
         }
         return list;
     }
@@ -751,7 +751,7 @@ public class MapsBaseDialog extends JFrame {
             }
             // If we haven't breaked from the for loop yet (aka continued to the next record), 
             // then this record can be added to the list
-            lstFilteredData.add(sighting.cloneShallow());
+            lstFilteredData.add(sighting.cloneShallow(Sighting.class));
         }
         lblFilteredRecords.setText(Integer.toString(lstFilteredData.size()));
         // Redraw the map

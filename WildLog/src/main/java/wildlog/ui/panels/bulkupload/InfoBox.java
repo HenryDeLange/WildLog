@@ -56,7 +56,6 @@ public class InfoBox extends JPanel {
         ComboBoxFixer.configureComboBoxes(cmbSex);
         sightingWrapper = inBulkUploadSightingWrapper;
         populateUI();
-        sightingWrapper.setInfoBox(this);
         // Configure the spinner
         SpinnerFixer.configureSpinners(spnNumber);
         spnNumber.setUI(new HorizontalSpinner());

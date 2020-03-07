@@ -14,7 +14,6 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
-import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.ui.dialogs.ZoomDialog;
 import wildlog.ui.helpers.WLOptionPane;
@@ -243,7 +242,7 @@ public class ImageBox extends JPanel {
         // Perform the add and remember to let the model know
         DefaultTableModel model = ((DefaultTableModel)table.getModel());
         BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
-        BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
+        BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper();
         newSightingWrapper.setLocationID(currentSightingWrapper.getLocationID());
         newSightingWrapper.setDate(imageWrapper.getDate());
         if (WildLogFileExtentions.Images.isJPG(imageWrapper.getFile())) {
@@ -319,7 +318,7 @@ public class ImageBox extends JPanel {
                     // Perform the add and remember to let the model know
                     DefaultTableModel model = ((DefaultTableModel)table.getModel());
                     BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
-                    BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.S0125_MEDIUM_VERY_SMALL));
+                    BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper();
                     BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper, 
                             bulkUploadPanel.getChkForceLocationGPSCoordinates().isSelected(), bulkUploadPanel.getSelectedLocation());
                     newSightingWrapper.setDate(imageWrapper.getDate());

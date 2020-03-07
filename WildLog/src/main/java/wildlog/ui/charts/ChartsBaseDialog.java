@@ -699,7 +699,7 @@ public class ChartsBaseDialog extends JFrame {
     private List<Sighting> getCopiedList(List<Sighting> inList) {
         List<Sighting> list = new ArrayList<>(inList.size());
         for (Sighting sighting : inList) {
-            list.add(sighting.cloneShallow());
+            list.add(sighting.cloneShallow(Sighting.class));
         }
         return list;
     }
@@ -758,7 +758,7 @@ public class ChartsBaseDialog extends JFrame {
             }
             // If we haven't breaked from the for loop yet (aka continued to the next record), 
             // then this record can be added to the list
-            inLstFilteredData.add(sighting.cloneShallow());
+            inLstFilteredData.add(sighting.cloneShallow(Sighting.class));
         }
         inLblFilteredRecords.setText(Integer.toString(inLstFilteredData.size()));
         // Redraw the chart

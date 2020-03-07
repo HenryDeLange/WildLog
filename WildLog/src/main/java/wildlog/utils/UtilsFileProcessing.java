@@ -689,7 +689,7 @@ public final class UtilsFileProcessing {
                         int filesProcessed = 0;
                         for (Path sourcePath : lstAllFiles) {
                             try {
-                                // Ek will alles die files in een folder hê (nie sub-folders nie), so ek moet files rename as hulle name conflict
+                                // Ek will all die files in een folder hê (nie sub-folders nie), so ek moet files rename as hulle name conflict
                                 Path writePath = destinationPath.resolve(sourcePath.getParent().relativize(sourcePath));
                                 while (Files.exists(writePath)) {
                                     writePath = destinationPath.resolve("wl_" + writePath.getFileName().toString());
