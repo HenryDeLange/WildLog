@@ -46,6 +46,9 @@ import wildlog.utils.WildLogSystemImages;
 public class BulkUploadDataLoader {
     private static final int FILE_LIMIT = 3000;
     
+    private BulkUploadDataLoader() {
+    }
+    
     public static BulkUploadDataWrapper genenrateTableData(List<Path> inLstFolderPaths, boolean inIsRecuresive, 
             int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, final JLabel inLblFilesRead, WildLogApp inApp, 
             boolean inForceLocationGPS, Location inLocation, int inImageBoxSize) {
@@ -85,7 +88,7 @@ public class BulkUploadDataLoader {
                 return null;
             }
         }
-        // Update the UI to show the numebr of files found
+        // Update the UI to show the number of files found
         inLblFilesRead.setText(inLblFilesRead.getText().substring(0, inLblFilesRead.getText().lastIndexOf(':') + 1) + " " + lstAllFiles.size());
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         final List<BulkUploadImageFileWrapper> imageList = Collections.synchronizedList(new ArrayList<BulkUploadImageFileWrapper>(lstAllFiles.size()));
@@ -234,12 +237,6 @@ public class BulkUploadDataLoader {
             temp[i][1] = values[i];
         }
         return temp;
-    }
-
-    public static String[] getColumnNames() {
-        return new String[] {
-            "Observations", "Images"
-        };
     }
 
 }

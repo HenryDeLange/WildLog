@@ -358,6 +358,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 executorService.execute(new Runnable() {
                     @Override
                     public void run() {
+                        // Load the icon
                         fileWrapper.getIcon();
                         try {
                             inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, modelData.length + 1); // Prevent the progress bar from reaching 100%
@@ -380,8 +381,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             public void run() {
                 model.fireTableDataChanged();
                 WildLogApp.LOGGER.log(Level.INFO, "BulkUploadPanel.setupTable() - The model has been loaded to the table (finished loading stashed ExtraData)");
-// TODO: Also need to populate the visit's totla linked fiels and number of read files
+                // Update the UI to show the number of files found and linked
+// FIXME: Hierdie tel tegnies nie unique files nie...
+                lblFilesRead.setText(lblFilesRead.getText().substring(0, lblFilesRead.getText().lastIndexOf(':') + 1) + " " + counter.get());
                 updateCountForFilesLinked();
+                lblVisitFiles.setText(lblVisitFiles.getText().substring(0, lblVisitFiles.getText().lastIndexOf(':') + 1) + " " + lstVisitFiles.size());
             }
         });
         showAsTab = true;
@@ -1150,6 +1154,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     else {
                         app.getDBI().updateVisit(visit, existingVisit.getName(), false);
                     }
+                    // Delete the ExtraData from saved stashes, if present
+                    ExtraData extraData = app.getDBI().findExtraData(-1, WildLogExtraDataFieldTypes.WILDLOG, 
+                            visit.getID(), ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), ExtraData.class);
+                    if (extraData != null) {
+                        app.getDBI().deleteExtraData(extraData.getID());
+                    }
+                    extraData = app.getDBI().findExtraData(-1, WildLogExtraDataFieldTypes.WILDLOG, 
+                            visit.getID(), ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_VISIT_FILES.toString(), ExtraData.class);
+                    if (extraData != null) {
+                        app.getDBI().deleteExtraData(extraData.getID());
+                    }
                     // Save the images associated with the Visit
                     File[] visitFiles = new File[lstVisitFiles.size()];
                     for (int t = 0; t < lstVisitFiles.size(); t++) {
@@ -1461,12 +1476,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 // Make sure the location is OK
                 if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().trim().isEmpty()) {
                     String stashedVisitName = txtVisitName.getText().trim();
+// FIXME: Daar is steeds 'n probleem as iemand 'n stashed visit se naam verander met die hand en dan weer stash...
                     if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
                             || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-                        stashedVisitName = stashedVisitName + " - File Stash";
+                        if (!stashedVisitName.endsWith(" - File Stash")) {
+                            stashedVisitName = stashedVisitName + " - File Stash";
+                        }
                     }
                     else {
-                        stashedVisitName = "File Stash - " + stashedVisitName;
+                        if (!stashedVisitName.startsWith("File Stash - ")) {
+                            stashedVisitName = "File Stash - " + stashedVisitName;
+                        }
                     }
                     // Validate the visit is OK
                     Visit visit = getValidatedVisit(stashedVisitName);
@@ -1496,15 +1516,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         app.getDBI().updateVisit(visit, existingVisit.getName(), false);
                     }
                     // Stash the files into the new visit
-                    Map<Path, List<BulkUploadImageFileWrapper>> mapAllFiles = new HashMap<>();
+                    Map<String, List<BulkUploadImageFileWrapper>> mapAllFiles = new HashMap<>();
                     // Add all the files (still - some might have been deleted) in the table
                     DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
                     for (int row = 0; row < model.getRowCount(); row++) {
                         BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper) model.getValueAt(row, 1);
                         for (BulkUploadImageFileWrapper fileWrapper : listWrapper.getImageList()) {
-                            mapAllFiles.compute(fileWrapper.getFile(), (key, oldValue) -> {
+                            mapAllFiles.compute(fileWrapper.getFile().normalize().toString(), (key, oldValue) -> {
                                 if (oldValue == null) {
-                                    return new ArrayList<>(3);
+                                    List<BulkUploadImageFileWrapper> lstFileWrapper = new ArrayList<>(3);
+                                    lstFileWrapper.add(fileWrapper);
+                                    return lstFileWrapper;
                                 }
                                 else {
                                     oldValue.add(fileWrapper);
@@ -1519,46 +1541,49 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     setTaskProgress(4);
                     setMessage("Stashing the Bulk Import: Calculating... " + getProgress() + "%");
                     for (Path visitFile : lstVisitFiles) {
-                        mapAllFiles.putIfAbsent(visitFile, null);
+                        mapAllFiles.putIfAbsent(visitFile.normalize().toString(), null);
                     }
                     setTaskProgress(5);
                     setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
                     // Copy the files to the stash folder
                     Path destinationPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
-                    int errors = 0;
-                    int filesProcessed = 0;
-                    for (Map.Entry<Path, List<BulkUploadImageFileWrapper>> fileEntry : mapAllFiles.entrySet()) {
-                        try {
-                            // Ek will all die files in een folder hê (nie sub-folders nie), so ek moet files rename as hulle name conflict
-                            Path writePath = destinationPath.resolve(fileEntry.getKey().getParent().relativize(fileEntry.getKey()));
-                            while (Files.exists(writePath)) {
-                                writePath = destinationPath.resolve("wl_" + writePath.getFileName().toString());
-                            }
-                            UtilsFileProcessing.copyFile(fileEntry.getKey(), writePath, false, false);
-                            // Update the table model (which will be saved and needs to be able to be loaded later, pointing to the stashed files
-                            List<BulkUploadImageFileWrapper> lstFileWrappers = fileEntry.getValue();
-                            if (lstFileWrappers != null) {
-                                for (BulkUploadImageFileWrapper fileWrapper : lstFileWrappers) {
-                                    fileWrapper.setFile(writePath);
+                    // Only copy the the files the first time, when the stashed folder does not yet exist
+                    if (!Files.exists(destinationPath)) {
+                        int errors = 0;
+                        int filesProcessed = 0;
+                        for (Map.Entry<String, List<BulkUploadImageFileWrapper>> fileEntry : mapAllFiles.entrySet()) {
+                            try {
+                                // Ek will all die files in een folder hê (nie sub-folders nie), so ek moet files rename as hulle name conflict
+                                Path filePath = Paths.get(fileEntry.getKey());
+                                Path writePath = destinationPath.resolve(filePath.getParent().relativize(filePath)).normalize();
+                                while (Files.exists(writePath)) {
+                                    writePath = destinationPath.resolve("wl_" + writePath.getFileName().toString());
+                                }
+                                UtilsFileProcessing.copyFile(filePath, writePath, false, false);
+                                // Update the table model (which will be saved and needs to be able to be loaded later, pointing to the stashed files
+                                List<BulkUploadImageFileWrapper> lstFileWrappers = fileEntry.getValue();
+                                if (lstFileWrappers != null) {
+                                    for (BulkUploadImageFileWrapper fileWrapper : lstFileWrappers) {
+                                        fileWrapper.setFile(writePath);
+                                    }
                                 }
                             }
+                            catch (Exception ex) {
+                                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                errors++;
+                            }
+                            filesProcessed++;
+                            setTaskProgress(5 + (int) (((double) filesProcessed / (double) mapAllFiles.size()) * 90.0));
+                            setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
                         }
-                        catch (Exception ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                            errors++;
+                        if (errors > 0) {
+                            WLOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "There were " + errors + " unexpected errors while trying to stash the files.",
+                                    "Errors Stashing Files", JOptionPane.ERROR_MESSAGE);
                         }
-                        filesProcessed++;
-                        setTaskProgress(5 + (int) (((double) filesProcessed / (double) mapAllFiles.size()) * 90.0));
-                        setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
-                    }
-                    if (errors > 0) {
-                        WLOptionPane.showMessageDialog(app.getMainFrame(),
-                                "There were " + errors + " unexpected errors while trying to stash the files.",
-                                "Errors Stashing Files", JOptionPane.ERROR_MESSAGE);
                     }
                     // Save the assigned data into as Extra Data in JSON format
                     // Save the table model (Note: by now the path to the files have already been updated to the stashed folder above)
-// TODO: Progress bar
                     List<BulkImportStashedTableData> lstStashData = new ArrayList<>();
                     for (int row = 0; row < model.getRowCount(); row++) {
                         BulkImportStashedTableData stashData = new BulkImportStashedTableData();
@@ -1569,39 +1594,45 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         stashData.setLstFileData(new ArrayList<>(fileListWrapper.getImageList().size()));
                         for (BulkUploadImageFileWrapper fileWrapper : fileListWrapper.getImageList()) {
                             BulkImportStashedTableData.FileData fileData = new BulkImportStashedTableData.FileData();
-                            fileData.path = destinationPath.relativize(fileWrapper.getFile()).toString();
+                            fileData.path = destinationPath.relativize(fileWrapper.getFile()).normalize().toString();
                             fileData.date = UtilsTime.EXIF_DATE_FORMAT.format(UtilsTime.getLocalDateTimeFromDate(fileWrapper.getDate()));
                             fileData.dataObjectWithGPS = fileWrapper.getDataObjectWithGPS();
                             stashData.getLstFileData().add(fileData);
                         }
                         lstStashData.add(stashData);
+                        setTaskProgress(95 + (int) (((double) lstStashData.size() / (double) model.getRowCount()) * 3.0));
+                        setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
                     }
-                    boolean isNew = app.getDBI().findExtraData(-1, WildLogExtraDataFieldTypes.WILDLOG, 
-                            visit.getID(), ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), ExtraData.class) == null;
-                    // NOTE:
-// TODO: Is dit nog waar / nodig nou dat ek 'n custom object gebruik?
-                    // For this to work in Java 9 and later: 
-                    // Add "--add-opens java.base/java.lang=ALL-UNNAMED" as a JVM param
+                    ExtraData extraData = app.getDBI().findExtraData(-1, WildLogExtraDataFieldTypes.WILDLOG, 
+                            visit.getID(), ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), ExtraData.class);
                     Gson gson = new Gson();
-                    ExtraData extraData = new ExtraData(WildLogExtraDataFieldTypes.WILDLOG, visit.getID(), WildLogDataType.VISIT, 
-                            ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), gson.toJson(lstStashData));
-                    if (isNew) {
+                    if (extraData == null) {
+                        extraData = new ExtraData(WildLogExtraDataFieldTypes.WILDLOG, visit.getID(), WildLogDataType.VISIT, 
+                                ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_TABLE_MODEL.toString(), gson.toJson(lstStashData));
                         app.getDBI().createExtraData(extraData, false);
                     }
                     else {
+                        extraData.setDataValue(gson.toJson(lstStashData));
                         app.getDBI().updateExtraData(extraData, false);
                     }
+                    setTaskProgress(98);
+                    setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
                     // Save the Visit's files
                     List<String> lstVisitFilePaths = new ArrayList<>(lstVisitFiles.size());
                     for (Path path : lstVisitFiles) {
-                        lstVisitFilePaths.add(destinationPath.relativize(path).toString());
+                        lstVisitFilePaths.add(destinationPath.relativize(path).normalize().toString());
                     }
-                    extraData = new ExtraData(WildLogExtraDataFieldTypes.WILDLOG, visit.getID(), WildLogDataType.VISIT, 
-                            ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_VISIT_FILES.toString(), gson.toJson(lstVisitFilePaths));
-                    if (isNew) {
+                    setTaskProgress(99);
+                    setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
+                    extraData = app.getDBI().findExtraData(-1, WildLogExtraDataFieldTypes.WILDLOG, 
+                            visit.getID(), ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_VISIT_FILES.toString(), ExtraData.class);
+                    if (extraData == null) {
+                        extraData = new ExtraData(WildLogExtraDataFieldTypes.WILDLOG, visit.getID(), WildLogDataType.VISIT,
+                                ExtraData.EXTRA_KEY_IDS.WL_BULK_IMPORT_VISIT_FILES.toString(), gson.toJson(lstVisitFilePaths));
                         app.getDBI().createExtraData(extraData, false);
                     }
                     else {
+                        extraData.setDataValue(gson.toJson(lstVisitFilePaths));
                         app.getDBI().updateExtraData(extraData, false);
                     }
                     // Saving is done, now open the visits's tab
