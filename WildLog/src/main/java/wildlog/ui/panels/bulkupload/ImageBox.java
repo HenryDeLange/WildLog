@@ -4,9 +4,13 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -15,18 +19,22 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.maps.utils.UtilsGPS;
+import wildlog.mediaplayer.VideoController;
+import wildlog.mediaplayer.VideoPlayer;
 import wildlog.ui.dialogs.ZoomDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
 
 
 public class ImageBox extends JPanel {
+    private static final ExecutorService VIDEOLOADER = Executors.newFixedThreadPool(1, new NamedThreadFactory("WL_BulkImport(VideoLoader)"));
     public static int BUTTON_AND_PADDING_BUFFER = 40;
     private final BulkUploadPanel bulkUploadPanel;
     private final BulkUploadImageFileWrapper imageWrapper;
@@ -47,6 +55,26 @@ public class ImageBox extends JPanel {
         // Setup the image label
         lblImage.setIcon(imageWrapper.getIcon());
         lblImage.setToolTipText(imageWrapper.getFile().getFileName().toString());
+        if (imageWrapper.getVideoPanel() != null) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    // Play the video up to the first frame
+                    imageWrapper.getVideoPanel().getController().setStatus(VideoController.VideoStatus.STOPPED); // Stop after first frame
+                    // Note: Die video decoding moet op sy eie thread gebeur
+// TODO: Better thread handeling? (not a fan of making floating threads)
+                    VIDEOLOADER.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            BufferedImage thumbnail = VideoPlayer.playVideo(
+                                    imageWrapper.getVideoPanel(), imageWrapper.getFile(), imageWrapper.getSize() - ImageBox.BUTTON_AND_PADDING_BUFFER);
+                            imageWrapper.setIcon(new ImageIcon(thumbnail));
+                            lblImage.setIcon(imageWrapper.getIcon());
+                        }
+                    });
+                }
+            });
+        }
     }
 
     /** This method is called from within the constructor to

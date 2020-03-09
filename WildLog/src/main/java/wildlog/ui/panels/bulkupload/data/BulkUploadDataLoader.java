@@ -28,6 +28,8 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.maps.utils.UtilsGPS;
+import wildlog.mediaplayer.VideoController;
+import wildlog.mediaplayer.VideoPanel;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.panels.bulkupload.ImageBox;
@@ -206,21 +208,25 @@ public class BulkUploadDataLoader {
         }
         Date date = UtilsImageProcessing.getDateFromImage(metadata, inFile);
         if (date != null) {
+            int boxSize = inImageIconSize - ImageBox.BUTTON_AND_PADDING_BUFFER;
+            VideoPanel videoPanel = null;
             ImageIcon imageIcon;
             if (WildLogFileExtentions.Images.isKnownExtention(inFile)) {
-                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, inImageIconSize - ImageBox.BUTTON_AND_PADDING_BUFFER, true, metadata);
+                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, boxSize, true, metadata);
             }
             else 
             if (WildLogFileExtentions.Movies.isKnownExtention(inFile)) {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), inImageIconSize - ImageBox.BUTTON_AND_PADDING_BUFFER, false);
+                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), boxSize, false);
+                videoPanel = new VideoPanel(new VideoController(), boxSize, boxSize);
             }
             else {
                 imageIcon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), inImageIconSize - ImageBox.BUTTON_AND_PADDING_BUFFER, false);
+                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), boxSize, false);
             }
             BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(
                     inFile, imageIcon, inImageIconSize, date, UtilsImageProcessing.getExifGpsFromJpeg(metadata));
+            wrapper.setVideoPanel(videoPanel);
             inImageList.add(wrapper);
         }
         else {

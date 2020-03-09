@@ -22,8 +22,9 @@ public class VideoPlayer {
     /**
      * Opens a file, and plays the video from it on a screen at the right rate.
      */
-    public static void playVideo(VideoPanel inVideoPanel, Path inFilePath, int inBoxSize) {
+    public static BufferedImage playVideo(VideoPanel inVideoPanel, Path inFilePath, int inBoxSize) {
         Demuxer demuxer = null;
+        BufferedImage image = null;
         try {
             // Start by creating a container object, in this case a demuxer since we are reading, to get video data from.
             demuxer = Demuxer.make();
@@ -91,7 +92,6 @@ public class VideoPlayer {
             // Notice how in this loop we reuse all of our objects to avoid reallocating them. 
             // Each call to Humble resets objects to avoid unnecessary reallocation.
             long pauseTime = 0;
-            BufferedImage image = null;
             final MediaPacket packet = MediaPacket.make();
             while (demuxer.read(packet) >= 0) {
                 // Now we have a packet, let's see if it belongs to our video stream
@@ -164,6 +164,7 @@ public class VideoPlayer {
                 }
             }
         }
+        return image;
     }
 
     /**

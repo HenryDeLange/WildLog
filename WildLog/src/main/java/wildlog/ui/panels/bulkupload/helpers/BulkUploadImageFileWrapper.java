@@ -6,6 +6,7 @@ import javax.swing.Icon;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.mediaplayer.VideoPanel;
 import wildlog.ui.panels.bulkupload.ImageBox;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
@@ -18,6 +19,7 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     private int size;
     private final Date date;
     private final DataObjectWithGPS dataObjectWithGPS;
+    private VideoPanel videoPanel;
     
 
     public BulkUploadImageFileWrapper(Path inFile, Icon inIcon, int inSize, Date inDate, DataObjectWithGPS inDataObjectWithGPS) {
@@ -31,20 +33,25 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     public Icon getIcon() {
         // When loading from a saved bulk import, then the icon will initially be null and needs to be reloaded
         if (icon == null) {
+            int boxSize = size - ImageBox.BUTTON_AND_PADDING_BUFFER;
             if (WildLogFileExtentions.Images.isKnownExtention(file)) {
-                icon = UtilsImageProcessing.getScaledIcon(file, size - ImageBox.BUTTON_AND_PADDING_BUFFER, true);
+                icon = UtilsImageProcessing.getScaledIcon(file, boxSize, true);
             }
             else 
             if (WildLogFileExtentions.Movies.isKnownExtention(file)) {
                 icon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), size - ImageBox.BUTTON_AND_PADDING_BUFFER, false);
+                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), boxSize, false);
             }
             else {
                 icon = UtilsImageProcessing.getScaledIcon(
-                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), size - ImageBox.BUTTON_AND_PADDING_BUFFER, false);
+                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsolutePath(), boxSize, false);
             }
         }
         return icon;
+    }
+    
+    public void setIcon(Icon inIcon) {
+        icon = inIcon;
     }
 
     public Date getDate() {
@@ -61,10 +68,6 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     
     public Path getFile() {
         return file;
-    }
-
-    public void setIcon(Icon inIcon) {
-        icon = inIcon;
     }
 
     public void setSize(int inSize) {
@@ -106,6 +109,14 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     public BulkUploadImageFileWrapper getClone() {
         BulkUploadImageFileWrapper imageFileWrapper = new BulkUploadImageFileWrapper(file, icon, size, date, dataObjectWithGPS);
         return imageFileWrapper;
+    }
+
+    public VideoPanel getVideoPanel() {
+        return videoPanel;
+    }
+
+    public void setVideoPanel(VideoPanel inVideoPanel) {
+        videoPanel = inVideoPanel;
     }
 
 }

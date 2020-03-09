@@ -197,8 +197,7 @@ public class ZoomDialog extends JDialog {
                 videoPanel = null;
             }
             // Replace the image label with the new video panel
-            VideoController videoController = new VideoController();
-            videoPanel = new VideoPanel(videoController, WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize());
+            videoPanel = new VideoPanel(new VideoController(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize(), WildLogThumbnailSizes.S0700_VERY_LARGE.getSize());
             remove(lblZoomedFile);
             add(videoPanel, BorderLayout.CENTER);
             invalidate();
