@@ -55,6 +55,8 @@ import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.data.enums.system.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
 import wildlog.maps.utils.UtilsGPS;
+import wildlog.mediaplayer.VideoController;
+import wildlog.mediaplayer.VideoPanel;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.ZoomDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
@@ -87,7 +89,9 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogApplicationTypes;
+import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogSystemImages;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
@@ -351,18 +355,32 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
         // Fetch the icon now, during loading, to prevent the UI hanging later if it needs to find many icons at once
         ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_BulkImport(StashLoad)"));
-        AtomicInteger counter = new AtomicInteger();
+        Set<String> uniqueFiles = new HashSet<>();
         for (int r = 0; r < modelData.length; r++) {
+            final int rowFinalHandle = r;
             final BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper) modelData[r][1];
             for (BulkUploadImageFileWrapper fileWrapper : imageListWrapper.getImageList()) {
                 executorService.execute(new Runnable() {
                     @Override
                     public void run() {
+                        // Count unique files
+                        uniqueFiles.add(fileWrapper.getFile().normalize().toString());
                         // Load the icon
                         fileWrapper.getIcon();
+                        // Setup the video (if applicable)
+                        if (WildLogFileExtentions.Movies.isKnownExtention(fileWrapper.getFile())) {
+                            int boxSize = fileWrapper.getSize() - ImageBox.BUTTON_AND_PADDING_BUFFER;
+                            fileWrapper.setIcon(UtilsImageProcessing.getScaledIcon(
+                                    WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), boxSize, false));
+                            fileWrapper.setVideoPanel(new VideoPanel(new VideoController(), boxSize, boxSize));
+                        }
+                        // Update progress
                         try {
-                            inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, modelData.length + 1); // Prevent the progress bar from reaching 100%
-                            inProgressbarTask.setMessage("Bulk Import Preparation: Loading stashed files... " + inProgressbarTask.getProgress() + "%");
+                            int progress = 1 + (int) (((double) rowFinalHandle / (double) modelData.length) * 98.0); // Prevent the progress bar from reaching 100%
+                            if (progress > inProgressbarTask.getProgress()) {
+                                inProgressbarTask.setTaskProgress(progress);
+                                inProgressbarTask.setMessage("Bulk Import Preparation: Loading stashed files... " + inProgressbarTask.getProgress() + "%");
+                            }
                         }
                         catch (Exception ex) {
                             WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
@@ -382,8 +400,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 model.fireTableDataChanged();
                 WildLogApp.LOGGER.log(Level.INFO, "BulkUploadPanel.setupTable() - The model has been loaded to the table (finished loading stashed ExtraData)");
                 // Update the UI to show the number of files found and linked
-// FIXME: Hierdie tel tegnies nie unique files nie...
-                lblFilesRead.setText(lblFilesRead.getText().substring(0, lblFilesRead.getText().lastIndexOf(':') + 1) + " " + counter.get());
+                lblFilesRead.setText(lblFilesRead.getText().substring(0, lblFilesRead.getText().lastIndexOf(':') + 1) + " " + uniqueFiles.size());
                 updateCountForFilesLinked();
                 lblVisitFiles.setText(lblVisitFiles.getText().substring(0, lblVisitFiles.getText().lastIndexOf(':') + 1) + " " + lstVisitFiles.size());
             }
