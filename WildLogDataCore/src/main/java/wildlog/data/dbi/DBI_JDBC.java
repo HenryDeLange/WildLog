@@ -2057,7 +2057,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.setString(2, UtilsData.getKeyFromEnum(inFieldType));
             }
             else
-            if (inLinkID > 0) {
+            if (inLinkID >= 0) {
                 sql = sql + " WHERE LINKID = ?";
                 sql = sql + " ORDER BY LINKID, FIELDTYPE, DATAKEY";
                 state = conn.prepareStatement(sql);

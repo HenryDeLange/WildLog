@@ -1371,7 +1371,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
         btnUpdateActionPerformed(null);
         if (element != null && element.getID() > 0) {
-            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), element.getID(), WildLogDataType.ELEMENT);
+            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), element, WildLogDataType.ELEMENT);
             dialog.setVisible(true);
         }
         else {

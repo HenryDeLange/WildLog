@@ -1530,7 +1530,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
         btnUpdateActionPerformed(null);
         if (locationWL != null && locationWL.getID() > 0) {
-            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), locationWL.getID(), WildLogDataType.LOCATION);
+            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), locationWL, WildLogDataType.LOCATION);
             dialog.setVisible(true);
         }
         else {

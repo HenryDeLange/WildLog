@@ -1,5 +1,6 @@
 package wildlog.ui.dialogs;
 
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -10,6 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.ExtraData;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.interfaces.DataObjectWithAudit;
 import wildlog.data.enums.system.WildLogDataType;
 import wildlog.data.enums.system.WildLogExtraDataFieldTypes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -17,30 +20,30 @@ import wildlog.ui.helpers.UtilsTableGenerator;
 
 
 public class ExtraDataDialog extends JDialog {
-    private final long linkID;
+    private final DataObjectWithAudit linkObject;
     private final WildLogDataType linkType;
 
 // TODO: Add to import/export
     
-    public ExtraDataDialog(JDialog inParent, long inLinkID, WildLogDataType inLinkType) {
+    public ExtraDataDialog(JDialog inParent, DataObjectWithAudit inLinkObject, WildLogDataType inLinkType) {
         super(inParent);
-        linkID = inLinkID;
+        linkObject = inLinkObject;
         linkType = inLinkType;
-        init(inLinkID, inLinkType);
+        init();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
     }
     
-    public ExtraDataDialog(JFrame inParent, long inLinkID, WildLogDataType inLinkType) {
+    public ExtraDataDialog(JFrame inParent, DataObjectWithAudit inLinkObject, WildLogDataType inLinkType) {
         super(inParent);
-        linkID = inLinkID;
+        linkObject = inLinkObject;
         linkType = inLinkType;
-        init(inLinkID, inLinkType);
+        init();
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
     }
 
-    private void init(long inLinkID, WildLogDataType inLinkType) {
+    private void init() {
         WildLogApp.LOGGER.log(Level.INFO, "[ExtraDataDialog]");
         // Auto generated code
         initComponents();
@@ -49,7 +52,15 @@ public class ExtraDataDialog extends JDialog {
         // Tell the table to stop the editing when focus is lost
         tblExtraData.putClientProperty("terminateEditOnFocusLost", true);
         // Load initial data
-        UtilsTableGenerator.setupExtraDataTable(WildLogApp.getApplication(), tblExtraData, inLinkID, inLinkType);
+        if (linkObject.getID() > 0) {
+            UtilsTableGenerator.setupExtraDataTable(WildLogApp.getApplication(), tblExtraData, linkObject.getID(), linkType, null);
+        }
+        else {
+            if (linkObject instanceof Sighting) {
+                UtilsTableGenerator.setupExtraDataTable(WildLogApp.getApplication(), tblExtraData, linkObject.getID(), linkType, 
+                        ((Sighting) linkObject).getCachedLstExtraData());
+            }
+        }
         // Always add an empty row for new records
         setupEmptyRow();
         // Note: Using invokeLater because it needs to happen after the setupExtraDataTable has set the model on the table
@@ -125,23 +136,41 @@ public class ExtraDataDialog extends JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         WildLogApp app = WildLogApp.getApplication();
-        for (int r = 0; r < tblExtraData.getRowCount(); r++) {
-            ExtraData extraData = new ExtraData(WildLogExtraDataFieldTypes.USER, linkID, linkType, 
-                    (String) tblExtraData.getModel().getValueAt(r, 0), (String) tblExtraData.getModel().getValueAt(r, 1));
-            extraData.setID((long) tblExtraData.getModel().getValueAt(r, 2));
-            if (extraData.getDataKey().isEmpty()) {
-                if (extraData.getID() != 0) {
-                    app.getDBI().deleteExtraData(extraData.getID());
-                }
+        if (linkObject.getID() == 0) {
+            if (linkObject instanceof Sighting) {
+                Sighting sighting = (Sighting) linkObject;
+                sighting.setCachedLstExtraData(new ArrayList<>(tblExtraData.getRowCount()));
             }
-            else {
-                if (extraData.getID() == 0) {
-                    app.getDBI().createExtraData(extraData, false);
+        }
+        for (int r = 0; r < tblExtraData.getRowCount(); r++) {
+            ExtraData extraData = new ExtraData(WildLogExtraDataFieldTypes.USER, linkObject.getID(), linkType, 
+                        (String) tblExtraData.getModel().getValueAt(r, 0), (String) tblExtraData.getModel().getValueAt(r, 1));
+            // If the ExtraData is linked to an existing object, then save it to the DB
+            if (linkObject.getID() > 0) {
+                extraData.setID((long) tblExtraData.getModel().getValueAt(r, 2));
+                if (extraData.getDataKey().isEmpty()) {
+                    if (extraData.getID() != 0) {
+                        app.getDBI().deleteExtraData(extraData.getID());
+                    }
                 }
                 else {
-                    ExtraData oldExtraData = app.getDBI().findExtraData(extraData.getID(), null, 0, null, ExtraData.class);
-                    if (!extraData.getDataKey().equals(oldExtraData.getDataKey()) || !extraData.getDataValue().equals(oldExtraData.getDataValue())) {
-                        app.getDBI().updateExtraData(extraData, false);
+                    if (extraData.getID() == 0) {
+                        app.getDBI().createExtraData(extraData, false);
+                    }
+                    else {
+                        ExtraData oldExtraData = app.getDBI().findExtraData(extraData.getID(), null, 0, null, ExtraData.class);
+                        if (!extraData.getDataKey().equals(oldExtraData.getDataKey()) || !extraData.getDataValue().equals(oldExtraData.getDataValue())) {
+                            app.getDBI().updateExtraData(extraData, false);
+                        }
+                    }
+                }
+            }
+            // If the ExtraData is being linked to a new object, then add it to it's cached list instead (to be saved with the object)
+            else {
+                if (linkObject instanceof Sighting) {
+                    Sighting sighting = (Sighting) linkObject;
+                    if (!extraData.getDataKey().isEmpty()) {
+                        sighting.getCachedLstExtraData().add(extraData);
                     }
                 }
             }

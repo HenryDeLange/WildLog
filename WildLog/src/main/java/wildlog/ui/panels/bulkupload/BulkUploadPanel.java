@@ -1283,6 +1283,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 // Save the sigting
                                 synchronized (saveSightingLock) {
                                     app.getDBI().createSighting(sightingWrapper, false);
+                                    // Save the ExtraData, if present
+                                    if (sightingWrapper.getCachedLstExtraData() != null && !sightingWrapper.getCachedLstExtraData().isEmpty()) {
+                                        for (ExtraData extraData : sightingWrapper.getCachedLstExtraData()) {
+                                            extraData.setLinkID(sightingWrapper.getID());
+                                            app.getDBI().createExtraData(extraData, false);
+                                        }
+                                    }
                                 }
                                 // Save the corresponding images
                                 UtilsFileProcessing.performFileUpload(sightingWrapper,

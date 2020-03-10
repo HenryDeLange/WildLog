@@ -224,7 +224,7 @@ public class UtilsCheckAndClean {
                 }
                 inProgressbarTask.setTaskProgress(6);
                 // Check Extra Links
-                List<ExtraData> lstExtraDatas = inApp.getDBI().listExtraDatas(null, 0, ExtraData.class);
+                List<ExtraData> lstExtraDatas = inApp.getDBI().listExtraDatas(null, -1, ExtraData.class);
                 for (ExtraData extraData : lstExtraDatas) {
                     if (extraData.getLinkType() == WildLogDataType.ELEMENT) {
                         if (inApp.getDBI().findElement(extraData.getLinkID(), null, false, Element.class) == null) {

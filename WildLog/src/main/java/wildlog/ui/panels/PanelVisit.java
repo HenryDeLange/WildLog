@@ -1712,7 +1712,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
         btnUpdateActionPerformed(null);
         if (visit != null && visit.getID() > 0) {
-            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), visit.getID(), WildLogDataType.VISIT);
+            ExtraDataDialog dialog = new ExtraDataDialog(app.getMainFrame(), visit, WildLogDataType.VISIT);
             dialog.setVisible(true);
         }
         else {

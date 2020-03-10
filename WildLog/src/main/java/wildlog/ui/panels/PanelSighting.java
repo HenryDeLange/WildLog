@@ -1502,7 +1502,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnExtraData.setText("Extra Data");
         btnExtraData.setToolTipText("Link extra fields to this Observation.");
         btnExtraData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExtraData.setEnabled(!disableEditing && !bulkUploadMode && !bulkEditMode);
+        btnExtraData.setEnabled(!disableEditing && !bulkEditMode);
         btnExtraData.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExtraData.setMargin(new java.awt.Insets(2, 6, 2, 4));
         btnExtraData.setName("btnExtraData"); // NOI18N
@@ -2380,8 +2380,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void btnExtraDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExtraDataActionPerformed
         btnUpdateSightingActionPerformed(null);
-        if (sighting != null && sighting.getID() > 0) {
-            ExtraDataDialog dialog = new ExtraDataDialog(this, sighting.getID(), WildLogDataType.SIGHTING);
+        if ((sighting != null && sighting.getID() > 0) || bulkUploadMode) {
+            ExtraDataDialog dialog = new ExtraDataDialog(this, sighting, WildLogDataType.SIGHTING);
             dialog.setVisible(true);
         }
         else {

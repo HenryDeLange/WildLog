@@ -1004,7 +1004,7 @@ public class WorkspaceSyncDialog extends JDialog {
         }
         else
         if(inDataType == WildLogDataType.EXTRA) {
-            lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listExtraDatas(null, 0, ExtraData.class);
+            lstWorkspaceEntries = WildLogApp.getApplication().getDBI().listExtraDatas(null, -1, ExtraData.class);
         }
         else {
             lstWorkspaceEntries = null;

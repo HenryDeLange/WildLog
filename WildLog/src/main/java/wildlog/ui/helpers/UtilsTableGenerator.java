@@ -1872,7 +1872,7 @@ public final class UtilsTableGenerator {
         });
     }
     
-    public static void setupExtraDataTable(final WildLogApp inApp, final JTable inTable, long inLinkID, WildLogDataType inLinkType) {
+    public static void setupExtraDataTable(final WildLogApp inApp, final JTable inTable, long inLinkID, WildLogDataType inLinkType, List<ExtraData> inLstExtraData) {
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -1886,7 +1886,16 @@ public final class UtilsTableGenerator {
                                         "ID" // Hidden
                                         };
                 // Load data from DB
-                final List<ExtraData> listExtraDatas = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.USER, inLinkID, ExtraData.class);
+                final List<ExtraData> listExtraDatas;
+                if (inLinkID > 0) {
+                    listExtraDatas = inApp.getDBI().listExtraDatas(WildLogExtraDataFieldTypes.USER, inLinkID, ExtraData.class);
+                }
+                else {
+                    listExtraDatas = new ArrayList<>();
+                    if (inLstExtraData != null && !inLstExtraData.isEmpty()) {
+                        listExtraDatas.addAll(inLstExtraData);
+                    }
+                }
                 // Populate the table data
                 Collection<Callable<Object>> listCallables = new ArrayList<>(listExtraDatas.size());
                 // Setup new table data

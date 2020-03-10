@@ -1,6 +1,7 @@
 package wildlog.data.dataobjects;
 
 import java.util.Date;
+import java.util.List;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -50,6 +51,7 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     protected ElementType cachedElementType;
     protected VisitType cachedVisitType;
     protected boolean cachedLinkedToINaturalist;
+    protected List<ExtraData> cachedLstExtraData;
 
 
     public SightingCore() {
@@ -189,6 +191,7 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
             sighting.setWeather(weather);
             sighting.setCachedElementType(cachedElementType);
             sighting.setCachedVisitType(cachedVisitType);
+            sighting.setCachedLstExtraData(cachedLstExtraData);
             sighting.setAuditTime(auditTime);
             sighting.setAuditUser(auditUser);
             return sighting;
@@ -427,6 +430,14 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
 
     public void setCachedLinkedToINaturalist(boolean inCachedLinkedToINaturalist) {
         cachedLinkedToINaturalist = inCachedLinkedToINaturalist;
+    }
+
+    public List<ExtraData> getCachedLstExtraData() {
+        return cachedLstExtraData;
+    }
+
+    public void setCachedLstExtraData(List<ExtraData> inCachedLstExtraData) {
+        cachedLstExtraData = inCachedLstExtraData;
     }
 
 }
