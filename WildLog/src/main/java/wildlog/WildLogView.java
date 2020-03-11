@@ -92,6 +92,7 @@ import wildlog.maps.kml.generator.KmlGenerator;
 import wildlog.maps.utils.UtilsGPS;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
+import wildlog.reports.ReportOccupanyModelForR;
 import wildlog.reports.ReportVisitDates;
 import wildlog.ui.dialogs.CheckAndCleanStepsDialog;
 import wildlog.ui.dialogs.GPSGridConversionDialog;
@@ -513,6 +514,7 @@ public final class WildLogView extends JFrame {
         mnuSyncWorkspace = new javax.swing.JMenuItem();
         reportsMenu = new javax.swing.JMenu();
         mnuReportVisitDates = new javax.swing.JMenuItem();
+        mnuReportOccupancyModel = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
         mnuSwitchElementNames = new javax.swing.JMenuItem();
         jSeparator15 = new javax.swing.JPopupMenu.Separator();
@@ -1411,6 +1413,18 @@ public final class WildLogView extends JFrame {
             }
         });
         reportsMenu.add(mnuReportVisitDates);
+
+        mnuReportOccupancyModel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        mnuReportOccupancyModel.setText("R Occupancy Model");
+        mnuReportOccupancyModel.setToolTipText("Generate CSV files which can be used for occupancy modelling.");
+        mnuReportOccupancyModel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        mnuReportOccupancyModel.setName("mnuReportOccupancyModel"); // NOI18N
+        mnuReportOccupancyModel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuReportOccupancyModelActionPerformed(evt);
+            }
+        });
+        reportsMenu.add(mnuReportOccupancyModel);
 
         menuBar.add(reportsMenu);
 
@@ -3904,6 +3918,11 @@ public final class WildLogView extends JFrame {
         });
     }//GEN-LAST:event_mnuOptimseDatabaseActionPerformed
 
+    private void mnuReportOccupancyModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReportOccupancyModelActionPerformed
+        ReportOccupanyModelForR report = new ReportOccupanyModelForR();
+        report.setVisible(true);
+    }//GEN-LAST:event_mnuReportOccupancyModelActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -4048,6 +4067,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenu mnuOther;
     private javax.swing.JMenu mnuPerformance;
     private javax.swing.JMenuItem mnuReduceImagesSize;
+    private javax.swing.JMenuItem mnuReportOccupancyModel;
     private javax.swing.JMenuItem mnuReportVisitDates;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
