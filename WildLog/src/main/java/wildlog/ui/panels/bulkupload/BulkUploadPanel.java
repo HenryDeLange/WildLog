@@ -433,7 +433,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 else {
                     endDate = LocalDate.now();
                 }
-                txtVisitName.setText(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(startDate) + "-" + UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(endDate)
+                txtVisitName.setText(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(startDate) 
+                        + "-" + UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(endDate)
                         + "_" + locationName);
             }
             else {
@@ -1494,7 +1495,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 // Make sure the location is OK
                 if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().trim().isEmpty()) {
                     String stashedVisitName = txtVisitName.getText().trim();
-// FIXME: Daar is steeds 'n probleem as iemand 'n stashed visit se naam verander met die hand en dan weer stash...
                     if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
                             || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
                         if (!stashedVisitName.endsWith(" - File Stash")) {
@@ -1599,6 +1599,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     "There were " + errors + " unexpected errors while trying to stash the files.",
                                     "Errors Stashing Files", JOptionPane.ERROR_MESSAGE);
                         }
+                    }
+                    // If the visit's name changed also delete the stashed files in the folder that points to the old name
+                    if (!visit.getName().equalsIgnoreCase(originalVisitName)) {
+System.out.println("DELETING OLD STASH");
+                        setTaskProgress(95);
+                        setMessage("Stashing the Bulk Import: Cleaning... " + getProgress() + "%");
+                        UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(originalVisitName).toFile());
                     }
                     // Save the assigned data into as Extra Data in JSON format
                     // Save the table model (Note: by now the path to the files have already been updated to the stashed folder above)

@@ -1,5 +1,5 @@
-// ------ STYLE: wl-bar-single-color ------
-// Bar Chart using one series and one bar color
+/*------ STYLE: wl-bar-single-color ------*/
+/*Bar Chart using one series and one bar color*/
 .wl-bar-single-color .chart-bar {
     -fx-background-color: linear-gradient(to bottom, #4B7E21, #365A18);
     -fx-background-radius: 3 3 0 0;
@@ -44,8 +44,8 @@
 }
 
 
-// ------ STYLE: wl-bar-30-color ------
-// Bar Chart using 30 bar colors
+/*------ STYLE: wl-bar-30-color ------*/
+/*Bar Chart using 30 bar colors*/
 .wl-bar-30-color .chart-bar {
     -fx-background-radius: 3 3 0 0;
 }
@@ -84,8 +84,8 @@
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
-// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
-// Once the specific colours defined below run out these defaults will be iterated over for the rest.
+/*Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...*/
+/*Once the specific colours defined below run out these defaults will be iterated over for the rest.*/
 .default-color0.chart-bar  { -fx-bar-fill: #5E8325; }
 .default-color1.chart-bar  { -fx-bar-fill: #1D643E; }
 .default-color2.chart-bar  { -fx-bar-fill: #22355F; }
@@ -94,7 +94,7 @@
 .default-color5.chart-bar  { -fx-bar-fill: #8E3428; }
 .default-color6.chart-bar  { -fx-bar-fill: #E28E44; }
 .default-color7.chart-bar  { -fx-bar-fill: #8E8428; }
-// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+/*Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)*/
 .data0.chart-bar  { -fx-bar-fill: #5E8325; }
 .data1.chart-bar  { -fx-bar-fill: #1D643E; }
 .data2.chart-bar  { -fx-bar-fill: #22355F; }
@@ -127,8 +127,8 @@
 .data29.chart-bar { -fx-bar-fill: #B94F41; }
 
 
-// ------ STYLE: wl-bar-custom-color ------
-// Bar Chart using one series and a custom bar color defined dynamically in the code
+/*------ STYLE: wl-bar-custom-color ------*/
+/*Bar Chart using one series and a custom bar color defined dynamically in the code*/
 .wl-bar-custom-color .chart-bar {
     -fx-background-radius: 3 3 0 0;
 }
@@ -169,8 +169,8 @@
 }
 
 
-// ------ STYLE: wl-stacked-bar-30-color ------
-// Bar Chart using up to 30 colors
+/*------ STYLE: wl-stacked-bar-30-color ------*/
+/*Bar Chart using up to 30 colors*/
 .wl-stacked-bar-30-color .chart-plot-background {
     -fx-background-color: transparent;
 }
@@ -206,15 +206,15 @@
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
-// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
-// Once the specific colours defined below run out these defaults will be iterated over for the rest.
-//   ... The defauls are already defined with wl-bar-30-color ...
-// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
-// -------------------------------------------------------------
-// NOTE: I'm only using this for moon phase which has a fixed data (bar) number of 3, 
-//       so I can get away with not defining more.
-// UPDATE: Think again... Will need all 30 for the presence-absence chart...
-// -------------------------------------------------------------
+/* Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
+   Once the specific colours defined below run out these defaults will be iterated over for the rest.
+     ... The defauls are already defined with wl-bar-30-color ...
+   Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+   -------------------------------------------------------------
+   NOTE: I'm only using this for moon phase which has a fixed data (bar) number of 3, 
+         so I can get away with not defining more.
+   UPDATE: Think again... Will need all 30 for the presence-absence chart...
+  -------------------------------------------------------------*/
 .series0.data0.chart-bar  { -fx-bar-fill: #5E8325; }
 .series0.data1.chart-bar  { -fx-bar-fill: #5E8325; }
 .series0.data2.chart-bar  { -fx-bar-fill: #5E8325; }
@@ -1145,8 +1145,8 @@
 .series29.data28.chart-bar  { -fx-bar-fill: #B94F41; }
 .series29.data29.chart-bar  { -fx-bar-fill: #B94F41; }
 
-// ------ STYLE: wl-pie-30-color ------
-// Pie Chart using up to 30 colors
+/*------ STYLE: wl-pie-30-color ------*/
+/*Pie Chart using up to 30 colors*/
 .wl-pie-30-color .chart-title {
     -fx-text-fill: #333432;
     -fx-font-size: 1.8em;
@@ -1168,8 +1168,8 @@
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
-// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
-// Once the specific colours defined below run out these defaults will be iterated over for the rest.
+/*Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
+  Once the specific colours defined below run out these defaults will be iterated over for the rest.*/
 .default-color0.chart-pie  { -fx-pie-color: #5E8325; }
 .default-color1.chart-pie  { -fx-pie-color: #1D643E; }
 .default-color2.chart-pie  { -fx-pie-color: #22355F; }
@@ -1178,7 +1178,7 @@
 .default-color5.chart-pie  { -fx-pie-color: #8E3428; }
 .default-color6.chart-pie  { -fx-pie-color: #E28E44; }
 .default-color7.chart-pie  { -fx-pie-color: #8E8428; }
-// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+/*Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)*/
 .data0.chart-pie  { -fx-pie-color: #5E8325; }
 .data1.chart-pie  { -fx-pie-color: #1D643E; }
 .data2.chart-pie  { -fx-pie-color: #22355F; }
@@ -1211,8 +1211,8 @@
 .data29.chart-pie { -fx-pie-color: #B94F41; }
 
 
-// ------ STYLE: wl-line-30-color -------
-// Area Chart using up to 30 colors
+/*------ STYLE: wl-line-30-color -------*/
+/*Area Chart using up to 30 colors*/
 .wl-line-30-color .chart-plot-background {
     -fx-background-color: transparent;
 }
@@ -1248,8 +1248,8 @@
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
-// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded in the JavaFx code...
-// Once the specific colours defined below run out these defaults will be iterated over for the rest.
+/*Currently it is a waste to define more than 8 default colours, because 8 is hardcoded in the JavaFx code...
+  Once the specific colours defined below run out these defaults will be iterated over for the rest.*/
 .default-color0.chart-series-area-line  { -fx-stroke: #5E8325; }
 .default-color1.chart-series-area-line  { -fx-stroke: #1D643E; }
 .default-color2.chart-series-area-line  { -fx-stroke: #22355F; }
@@ -1274,7 +1274,7 @@
 .default-color5.chart-series-area-fill  { -fx-fill: #8E342822; }
 .default-color6.chart-series-area-fill  { -fx-fill: #E28E4422; }
 .default-color7.chart-series-area-fill  { -fx-fill: #8E842822; }
-// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+/*Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)*/
 .chart-series-area-line.series0  { -fx-stroke: #5E8325; }
 .chart-series-area-line.series1  { -fx-stroke: #1D643E; }
 .chart-series-area-line.series2  { -fx-stroke: #22355F; }
@@ -1365,4 +1365,3 @@
 .chart-series-area-fill.series27 { -fx-fill: #4C3E6922; }
 .chart-series-area-fill.series28 { -fx-fill: #625B1522; }
 .chart-series-area-fill.series29 { -fx-fill: #B94F4122; }
-

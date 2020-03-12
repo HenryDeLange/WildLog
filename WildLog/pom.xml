@@ -77,7 +77,8 @@
             <version>1.1</version>
         </dependency>
         <!--Java: JavaFX-->
-        <dependency>
+        <!--NOTE: Instead using a JDK with JavaFX bundled with it (Liberica)-->
+        <!--<dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
@@ -96,7 +97,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>${javafx.version}</version>
-        </dependency>
+        </dependency>-->
         <!--Java: JAXB-->
         <dependency>
             <groupId>javax.xml.bind</groupId>

@@ -32,7 +32,8 @@
     
     <dependencies>
         <!--Java: JavaFX-->
-        <dependency>
+        <!--NOTE: Instead using a JDK with JavaFX bundled with it (Liberica)-->
+        <!--<dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>${javafx.version}</version>
@@ -51,7 +52,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
             <version>${javafx.version}</version>
-        </dependency>
+        </dependency>-->
         <!--GEOTools-->
         <dependency>
             <groupId>org.geotools</groupId>

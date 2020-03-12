@@ -172,6 +172,7 @@ public final class UtilsCharts {
 //        return chart;
 //    }
 
+// TODO: Nie seker of hierdie hack nog werk in Java 13 nie?
     public static StackedBarChart createStackedBarChartWithStyleIndexBiggerThanEight(CategoryAxis inCategoryAxis, NumberAxis inNumberAxis,
             ObservableList<StackedBarChart.Series<String, Number>> inLstData) {
         // FIXME: FOKKEN BELAGLIKKE HACK: Die legend se style kleure word gehardcode na mod 8, nou moet ek met reflection dit fix...

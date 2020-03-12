@@ -1,5 +1,5 @@
-// STYLE: wl-pie-day-night-color
-// Pie Chart using specific colors for the time of day
+/*STYLE: wl-pie-day-night-color*/
+/*Pie Chart using specific colors for the time of day*/
 .wl-pie-day-night-color .chart-title {
     -fx-text-fill: #333432;
     -fx-font-size: 1.8em;
@@ -21,9 +21,9 @@
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
-// These are "fixed" colors, thus I don't need to define any defaults.
-// (no defaults needed))
-// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+/*These are "fixed" colors, thus I don't need to define any defaults.
+  (no defaults needed))
+  Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)*/
 .data0.chart-pie  { -fx-pie-color: #B5441F; }
 .data1.chart-pie  { -fx-pie-color: #262D57; }
 .data2.chart-pie  { -fx-pie-color: #9771A8; }
@@ -31,8 +31,8 @@
 .data4.chart-pie  { -fx-pie-color: #D1D9C7; }
 
 
-// ------ STYLE: wl-line-day-night-color -------
-// Area Chart using up to 30 colors
+/*------ STYLE: wl-line-day-night-color -------*/
+/*Area Chart using up to 30 colors*/
 .wl-line-day-night-color .chart-plot-background {
     -fx-background-color: transparent;
 }
@@ -68,10 +68,10 @@
     -fx-font-family: sans-serif;
     -fx-font-weight: bold;
 }
-// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded in the JavaFx code...
-// Once the specific colours defined below run out these defaults will be iterated over for the rest.
-// (no defaults needed))
-// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+/*Currently it is a waste to define more than 8 default colours, because 8 is hardcoded in the JavaFx code...
+  Once the specific colours defined below run out these defaults will be iterated over for the rest.
+  (no defaults needed))
+  Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)*/
 .chart-series-area-line.series0  { -fx-stroke: #B5441F; }
 .chart-series-area-line.series1  { -fx-stroke: #262D57; }
 .chart-series-area-line.series2  { -fx-stroke: #9771A8; }
@@ -87,4 +87,3 @@
 .chart-series-area-fill.series2  { -fx-fill: #9771A822; }
 .chart-series-area-fill.series3  { -fx-fill: #D1D9C722; }
 .chart-series-area-fill.series4  { -fx-fill: #D1D9C722; }
-

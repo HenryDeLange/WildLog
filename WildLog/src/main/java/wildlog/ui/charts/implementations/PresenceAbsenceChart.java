@@ -178,6 +178,7 @@ public class PresenceAbsenceChart extends AbstractChart<Sighting> {
         UtilsCharts.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         UtilsCharts.setupCategoryAxis(catAxis, intervalCount, true);
+// FIXME: java.lang.NoSuchFieldException: seriesDefaultColorMap
         StackedBarChart<String, Number> chart = UtilsCharts.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
         chart.getStyleClass().add("wl-stacked-bar-30-color");
         chart.setTitle("Presence-Absence per " + cmbInterval.getSelectionModel().getSelectedItem());
