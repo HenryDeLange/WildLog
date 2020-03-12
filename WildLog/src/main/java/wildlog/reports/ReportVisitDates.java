@@ -45,11 +45,11 @@ public class ReportVisitDates {
                 setMessage("Starting the Report: " + inTitle);
                 setTaskProgress(1);
                 setMessage("Busy with the Report: " + inTitle + "... " + getProgress() + "%");
-                Path path = WildLogPaths.WILDLOG_EXPORT_REPORTS.getAbsoluteFullPath().resolve(inTitle + ".xlsx");
+                Path path = WildLogPaths.WILDLOG_EXPORT_REPORTS.getAbsoluteFullPath().resolve(inTitle).resolve(inTitle + ".xlsx");
+                Files.createDirectories(path.getParent());
                 setTaskProgress(2);
                 setMessage("Busy with the Report: " + inTitle + "... " + getProgress() + "%");
                 List<Visit> lstVisits = WildLogApp.getApplication().getDBI().listVisits(null, 0, null, true, Visit.class);
-                Files.createDirectories(path.getParent());
                 setTaskProgress(5);
                 setMessage("Busy with the Report: " + inTitle + "... " + getProgress() + "%");
                 // Sort the Visits to be ordered by Location and then date

@@ -1,23 +1,43 @@
 package wildlog.reports;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import org.apache.logging.log4j.Level;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.enums.Certainty;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ComboBoxFixer;
+import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.SpinnerFixer;
+import wildlog.ui.helpers.WLOptionPane;
+import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsTime;
+import wildlog.utils.WildLogPaths;
 
 
-public class ReportOccupanyModelForR extends JDialog {
-
+public final class ReportOccupanyModelForR extends JDialog {
+    private static final String EXTRADATA_KEY_ROAD_LENGTH = "Road.length.adj";
+    private static final String EXTRADATA_KEY_AVERAGE_AREA = "Av.area.adj";
+    private String reportTitle;
     
-    public ReportOccupanyModelForR() {
+    public ReportOccupanyModelForR(String inTitle) {
         super(WildLogApp.getApplication().getMainFrame());
+        reportTitle = inTitle;
         initComponents();
         pack();
         setMinimumSize(getSize());
-        ComboBoxFixer.configureComboBoxes(cmbInterval);
+        ComboBoxFixer.configureComboBoxes(cmbCertainty);
+        SpinnerFixer.configureSpinners(spnInterval);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
@@ -37,9 +57,9 @@ public class ReportOccupanyModelForR extends JDialog {
         jLabel3 = new javax.swing.JLabel();
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
         jLabel4 = new javax.swing.JLabel();
-        cmbInterval = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        spnInterval = new javax.swing.JSpinner();
         cmbCertainty = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -72,14 +92,17 @@ public class ReportOccupanyModelForR extends JDialog {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel4.setText("Interval:");
 
-        cmbInterval.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel5.setText("<html>This report will generate a CSV files containing occupancy model data for each Creature.</html>");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("Certainty:");
 
-        cmbCertainty.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        spnInterval.setModel(new javax.swing.SpinnerNumberModel(4, 0, 365, 1));
+        spnInterval.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnInterval.setEditor(new javax.swing.JSpinner.NumberEditor(spnInterval, "#"));
+
+        cmbCertainty.setModel(new DefaultComboBoxModel(Certainty.values()));
+        cmbCertainty.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -103,14 +126,15 @@ public class ReportOccupanyModelForR extends JDialog {
                                     .addComponent(jLabel4))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbInterval, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(dtpEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(dtpStartDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel6)
                         .addGap(26, 26, 26)
-                        .addComponent(cmbCertainty, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(spnInterval)
+                            .addComponent(cmbCertainty, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -123,7 +147,7 @@ public class ReportOccupanyModelForR extends JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5))
                     .addComponent(btnProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -131,10 +155,10 @@ public class ReportOccupanyModelForR extends JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(cmbInterval, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnInterval, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -146,7 +170,77 @@ public class ReportOccupanyModelForR extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
-        
+        UtilsConcurency.kickoffProgressbarTask(WildLogApp.getApplication(), new ProgressbarTask(WildLogApp.getApplication()) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the Report: " + reportTitle);
+                setTaskProgress(1);
+                
+                Path reportFolder = null;
+                PrintWriter feedback = null;
+                // Start cleanup
+                try {
+                    // Setup the feedback file
+                    reportFolder = WildLogPaths.WILDLOG_EXPORT_REPORTS.getAbsoluteFullPath().resolve(reportTitle);
+                    Files.createDirectories(reportFolder);
+                    // Delete old files
+                    try {
+                        UtilsFileProcessing.deleteRecursive(reportFolder.toFile());
+                    }
+                    catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                        WLOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
+                                "<html>The report could not be created. "
+                                        + "<br/>If the files are already open in another application, please close it and try again.</html>",
+                                "Report Error", WLOptionPane.ERROR_MESSAGE);
+                    }
+                    // Load the data
+                    setTaskProgress(1);
+                    setMessage("Starting the Report: " + reportTitle + " - Loading Data... " + getProgress() + "%");
+                    List<Sighting> lstSightings = WildLogApp.getApplication().getDBI().searchSightings(
+                            null, dtpStartDate.getDate(), dtpEndDate.getDate(), null, null, null, true, Sighting.class);
+                    // Process the data
+                    setTaskProgress(5);
+                    setMessage("Starting the Report: " + reportTitle + " - Processing Data... " + getProgress() + "%");
+                    int intervals = (int) spnInterval.getValue();
+                    for (Sighting sighting : lstSightings) {
+                        
+                    }
+                    // Write the files
+                    setTaskProgress(1);
+                    setMessage("Starting the Report: " + reportTitle + " - Loading Data... " + getProgress() + "%");
+// TODO: Do for each creature
+                    feedback = new PrintWriter(new FileWriter(reportFolder.toFile()), true);
+                    // Write the header
+                    feedback.print("Site");
+                    for (int i = 0; i < intervals; i++) {
+                        feedback.print(",y." + i);
+                    }
+                    feedback.print("," + EXTRADATA_KEY_ROAD_LENGTH);
+                    feedback.print("," + EXTRADATA_KEY_AVERAGE_AREA);
+                    for (int i = 0; i < intervals; i++) {
+                        feedback.print(",dat." + i);
+                    }
+                    feedback.println();
+                }
+                catch (IOException ex) {
+                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                }
+                finally {
+                    if (feedback != null) {
+                        feedback.flush();
+                        feedback.close();
+                    }
+                }
+                // Open the report folder
+                if (reportFolder != null) {
+                    UtilsFileProcessing.openFile(reportFolder);
+                }
+                setTaskProgress(100);
+                setMessage("Done with the Report: " + reportTitle);
+                return null;
+            }
+        });
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnProcessActionPerformed
@@ -154,7 +248,6 @@ public class ReportOccupanyModelForR extends JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnProcess;
     private javax.swing.JComboBox<String> cmbCertainty;
-    private javax.swing.JComboBox<String> cmbInterval;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private javax.swing.JLabel jLabel1;
@@ -163,5 +256,6 @@ public class ReportOccupanyModelForR extends JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JSpinner spnInterval;
     // End of variables declaration//GEN-END:variables
 }

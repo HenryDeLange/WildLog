@@ -1403,7 +1403,7 @@ public final class WildLogView extends JFrame {
         });
 
         mnuReportVisitDates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
-        mnuReportVisitDates.setText("Check Period Dates");
+        mnuReportVisitDates.setText("Period Summary Report");
         mnuReportVisitDates.setToolTipText("Generate a report that analysis the Periods' dates.");
         mnuReportVisitDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuReportVisitDates.setName("mnuReportVisitDates"); // NOI18N
@@ -1415,7 +1415,7 @@ public final class WildLogView extends JFrame {
         reportsMenu.add(mnuReportVisitDates);
 
         mnuReportOccupancyModel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
-        mnuReportOccupancyModel.setText("R Occupancy Model");
+        mnuReportOccupancyModel.setText("R Occupancy Model Report");
         mnuReportOccupancyModel.setToolTipText("Generate CSV files which can be used for occupancy modelling.");
         mnuReportOccupancyModel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mnuReportOccupancyModel.setName("mnuReportOccupancyModel"); // NOI18N
@@ -3919,7 +3919,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuOptimseDatabaseActionPerformed
 
     private void mnuReportOccupancyModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuReportOccupancyModelActionPerformed
-        ReportOccupanyModelForR report = new ReportOccupanyModelForR();
+        ReportOccupanyModelForR report = new ReportOccupanyModelForR(mnuReportOccupancyModel.getText());
         report.setVisible(true);
     }//GEN-LAST:event_mnuReportOccupancyModelActionPerformed
 
