@@ -1602,7 +1602,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     }
                     // If the visit's name changed also delete the stashed files in the folder that points to the old name
                     if (!visit.getName().equalsIgnoreCase(originalVisitName)) {
-System.out.println("DELETING OLD STASH");
                         setTaskProgress(95);
                         setMessage("Stashing the Bulk Import: Cleaning... " + getProgress() + "%");
                         UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(originalVisitName).toFile());
