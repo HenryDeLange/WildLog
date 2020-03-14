@@ -1156,8 +1156,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     closeTab();
                     // For volunteers redirect to the home tab and then show the welcome dialog again
                     if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-                        WildLogApp.getApplication().getMainFrame().getTabbedPane().setSelectedIndex(0);
-                        WildLogApp.getApplication().getMainFrame().showWelcomeDialog();
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                WildLogApp.getApplication().getMainFrame().getTabbedPane().setSelectedIndex(0);
+                                WildLogApp.getApplication().getMainFrame().showWelcomeDialog();
+                            }
+                        });
                     }
                     // Save the Visit (before saving the sightings, because the Visit's ID is needed)
                     if (existingVisit == null || existingVisit.getID() == 0) {
@@ -1517,14 +1522,19 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     visit.setEndDate(dtpEndDate.getDate());
                     visit.setType(VisitType.STASHED);
                     // Everything seems fine, start saving and close the tab to prevent new edits
-                    WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnProcessActionPerformed() - The data will be saved to the workspace.");
+                    WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - The data will be saved and files will be stashed to the workspace.");
                     setTaskProgress(0);
                     setMessage("Stashing the Bulk Import: Starting...");
                     closeTab();
                     // For volunteers redirect to the home tab and then show the welcome dialog again
                     if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
-                        WildLogApp.getApplication().getMainFrame().getTabbedPane().setSelectedIndex(0);
-                        WildLogApp.getApplication().getMainFrame().showWelcomeDialog();
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                WildLogApp.getApplication().getMainFrame().getTabbedPane().setSelectedIndex(0);
+                                WildLogApp.getApplication().getMainFrame().showWelcomeDialog();
+                            }
+                        });
                     }
                     // Save the Visit
                     if (existingVisit == null || existingVisit.getID() == 0) {
@@ -1563,8 +1573,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     }
                     setTaskProgress(5);
                     setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
+                    WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Files to be stashed: " + mapAllFiles.size());
                     // Copy the files to the stash folder
                     Path destinationPath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName());
+                    WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Stash destination: " + destinationPath);
                     // Only copy the the files the first time, when the stashed folder does not yet exist
                     if (!Files.exists(destinationPath)) {
                         int errors = 0;
@@ -1595,13 +1607,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             setMessage("Stashing the Bulk Import: Stashing... " + getProgress() + "%");
                         }
                         if (errors > 0) {
+                            WildLogApp.LOGGER.log(Level.WARN, "Starting BulkUploadPanel.btnStashActionPerformed() - Stash errors: " + errors);
                             WLOptionPane.showMessageDialog(app.getMainFrame(),
                                     "There were " + errors + " unexpected errors while trying to stash the files.",
                                     "Errors Stashing Files", JOptionPane.ERROR_MESSAGE);
                         }
+                        WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Finished stashing files");
                     }
                     // If the visit's name changed also delete the stashed files in the folder that points to the old name
                     if (!visit.getName().equalsIgnoreCase(originalVisitName)) {
+                        WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Delete old stash...");
                         setTaskProgress(95);
                         setMessage("Stashing the Bulk Import: Cleaning... " + getProgress() + "%");
                         UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(originalVisitName).toFile());
@@ -1660,7 +1675,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         app.getDBI().updateExtraData(extraData, false);
                     }
                     // Saving is done, now open the visits's tab
-                    openVisitTab(visit, (JTabbedPane) thisParentHandle);
+                    WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Finished saving ExtraData for the Visit");
+                    if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                        openVisitTab(visit, (JTabbedPane) thisParentHandle);
+                    }
                     setMessage("Stashing the Bulk Import: Finished");
                     setTaskProgress(100);
                 }

@@ -5,7 +5,7 @@
   <jar>.\WildLog-WEIVolunteer.jar</jar>
   <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLog-WEIVolunteer.exe</outfile>
   <errTitle>WildLog Startup Error</errTitle>
-  <cmdLine>properties=./wildlog.properties</cmdLine>
+  <cmdLine>properties=./wildlog-wei.properties</cmdLine>
   <chdir></chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
@@ -33,12 +33,12 @@
     <timeoutErr>true</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>6.1.0.0</fileVersion>
-    <txtFileVersion>WildLog v6.1.5 Launcher</txtFileVersion>
+    <fileVersion>6.1.2.0</fileVersion>
+    <txtFileVersion>WildLog v6.1.2 Launcher</txtFileVersion>
     <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
     <copyright>2020</copyright>
-    <productVersion>6.1.0.0</productVersion>
-    <txtProductVersion>WildLog v6.1.5</txtProductVersion>
+    <productVersion>6.1.2.0</productVersion>
+    <txtProductVersion>WildLog v6.1.2</txtProductVersion>
     <productName>WildLog</productName>
     <companyName>MyWild</companyName>
     <internalName>WildLog</internalName>
