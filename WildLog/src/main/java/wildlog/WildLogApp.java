@@ -84,7 +84,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     private static WildLogApp INSTANCE = null;
-    public static String WILDLOG_VERSION = "6.1.2";
+    public static String WILDLOG_VERSION = "6.1.3.BETA";
     public static Class APPLICATION_CLASS = WildLogApp.class;
     public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
@@ -403,7 +403,7 @@ public class WildLogApp extends Application {
                     // Waarsku as daar progressbar tasks is wat nog hardloop
                     TaskMonitor taskMonitor = getContext().getTaskMonitor();
                     if (taskMonitor.getTasks() != null && !taskMonitor.getTasks().isEmpty()) {
-                        int result = WLOptionPane.showConfirmDialog(getMainFrame(),
+                        int result = WLOptionPane.showConfirmDialog(null, // Gebruik null sodat die glasspane nie verwyder word nie
                                 "<html>There are background processes running that have not finished yet. "
                                         + "<br>It is <b>recommended to wait for these processes to finish</b>."
                                         + "<br>(See the progressbar at the bottom right hand corner for details.)"
