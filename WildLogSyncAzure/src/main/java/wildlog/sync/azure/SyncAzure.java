@@ -46,10 +46,20 @@ import wildlog.sync.azure.dataobjects.SyncBlobEntry;
 import wildlog.sync.azure.dataobjects.SyncBlobMetadata;
 import wildlog.sync.azure.dataobjects.SyncTableEntry;
 
-
+/**
+ * TIPS:
+ *  - Moving an Azure Storage Account to a different region:
+ *      https://docs.microsoft.com/en-us/azure/storage/common/storage-account-move?tabs=azure-portal
+ *      Basies maak mens 'n nuwe account en copy dan die data oor met AzCopy (blobs, tussen servers) of StorageExplorer (tables, met die hand).
+ *          ./azcopy copy 'https://<source-storage-account-name>.blob.core.windows.net/<SAS-token>' 'https://<destination-storage-account-name>.blob.core.windows.net/' --recursive
+ *  - Preferred setup:
+ *      Performance/Access tier: Standard/Hot
+ *      Replication: Locally-redundant storage (LRS)
+ *      Account kind: StorageV2 (general purpose v2)
+ */
 public final class SyncAzure {
     private static final int BATCH_LIMIT = 50;
-    private static final int URL_LIMIT = 30000;
+    private static final int URL_LIMIT = 15000; // Ek dog dis "32684 characters", maar ek kry steeds errors, so ek kies maar iets randomly kleiner
     private static final int MAX_BLOB_SIZE = 1*1024*1024; // bytes (1MB)
     private static final int MAX_BLOB_UPLOAD_SIZE = 5*1024*1024; // bytes (5MB)
     private String storageConnectionString;
@@ -258,10 +268,10 @@ public final class SyncAzure {
     }
     
     public List<SyncTableEntry> downloadDataBatch(WildLogDataType inDataType, long inAfterTimestamp, List<Long> inLstRecordIDs) {
-        // Limit the URL length to max 32684 characters by splitting long URLs into multiple calls
+        // Limit the URL length by splitting long URLs into multiple calls
         List<List<Long>> lstAllBatchDataChunks = new ArrayList<>();
         if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
-            final int RECORDID_STATEMENT_LENGTH = 35; // Estimated length of " or RowKey eq 9223372036854775807L"
+            final int RECORDID_STATEMENT_LENGTH = 37; // Estimated length of " or RowKey eq 9223372036854775807L"
             final int MAX_RECORDIDS_PER_CALL = URL_LIMIT / RECORDID_STATEMENT_LENGTH;
             int idCounter = 0;
             for (Long recordID : inLstRecordIDs) {
@@ -284,12 +294,14 @@ public final class SyncAzure {
     }
 
     private List<SyncTableEntry> downloadDataPerBatch(WildLogDataType inDataType, long inAfterTimestamp, List<Long> inLstRecordIDs) {
+        List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
         try {
             CloudTable cloudTable = getTable(inDataType);
             TableQuery<SyncTableEntry> query = TableQuery.from(SyncTableEntry.class);
             // Create the id filter (if present)
             String idFilter = null;
             if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
+System.out.println("Downloading table data: " + inLstRecordIDs.size() + " records");
                 for (long recordID : inLstRecordIDs) {
                     if (idFilter == null) {
                         idFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
@@ -300,6 +312,9 @@ public final class SyncAzure {
                     }
                 }
             }
+else {
+System.out.println("Downloading table data: " + null + " records");
+}
             // Build the combined filters
             if (workspaceID > 0 && inAfterTimestamp > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
                 String baseFilter = TableQuery.combineFilters(
@@ -329,22 +344,36 @@ public final class SyncAzure {
                     throw new Exception("ERROR: Only WildLog Options can be read without specifying the PartitionKey (WorkspaceID)!");
                 }
             }
-            // Run the query
-            List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
-            for (SyncTableEntry syncTableEntry : cloudTable.execute(query)) {
-                lstSyncTableEntries.add(syncTableEntry);
+if (query.getFilterString() != null) {
+System.out.println("Submitting download query for table data: " + query.getFilterString().length() + " query length");
+}
+else {
+System.out.println("Submitting download query for table data: " + null + " query length");
+}
+            // Make sure the query isn't too long
+            if (query.getFilterString() != null && query.getFilterString().length() > URL_LIMIT) {
+System.out.println("SPLITTING");
+                int splitIndex = inLstRecordIDs.size() / 2;
+                lstSyncTableEntries.addAll(downloadDataPerBatch(inDataType, inAfterTimestamp, inLstRecordIDs.subList(0, splitIndex)));
+                lstSyncTableEntries.addAll(downloadDataPerBatch(inDataType, inAfterTimestamp, inLstRecordIDs.subList(splitIndex, inLstRecordIDs.size())));
             }
-            return lstSyncTableEntries;
+            else {
+                // Run the query
+                for (SyncTableEntry syncTableEntry : cloudTable.execute(query)) {
+                    lstSyncTableEntries.add(syncTableEntry);
+                }
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
-        return null;
+        return lstSyncTableEntries;
     }
     
     // SYNC LIST - DATA
     
     public List<SyncTableEntry> getSyncListDataBatch(WildLogDataType inDataType, long inAfterTimestamp) {
+        List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
         try {
             CloudTable cloudTable = getTable(inDataType);
             TableQuery<SyncTableEntry> query = TableQuery.from(SyncTableEntry.class);
@@ -371,16 +400,14 @@ public final class SyncAzure {
                 query = query.where(TableQuery.generateFilterCondition("PartitionKey", TableQuery.QueryComparisons.EQUAL, Long.toString(workspaceID)));
             }
             // Get the list of results
-            List<SyncTableEntry> lstSyncTableEntries = new ArrayList<>();
             for (SyncTableEntry syncTableEntry : cloudTable.execute(query)) {
                 lstSyncTableEntries.add(syncTableEntry);
             }
-            return lstSyncTableEntries;
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
-        return null;
+        return lstSyncTableEntries;
     }
     
     // FILES
@@ -499,8 +526,8 @@ public final class SyncAzure {
     // SYNC LIST - FILES
     
     public List<SyncBlobEntry> getSyncListFilesBatch(WildLogDataType inDataType) {
+        List<SyncBlobEntry> lstSyncBlobEntries = new ArrayList<>();
         try {
-            List<SyncBlobEntry> lstSyncBlobEntries = new ArrayList<>();
             ContainerURL container = getContainerURL(inDataType);
             ListBlobsOptions options = new ListBlobsOptions();
             options.withMaxResults(100);
@@ -509,12 +536,11 @@ public final class SyncAzure {
                     .flatMap(containerListBlobFlatSegmentResponse ->
                             listAllBlobs(container, containerListBlobFlatSegmentResponse, options, inDataType, lstSyncBlobEntries))
                     .blockingGet();
-            return lstSyncBlobEntries;
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
-        return null;
+        return lstSyncBlobEntries;
     }
 
     private Single<ContainerListBlobFlatSegmentResponse> listAllBlobs(ContainerURL inContainer, ContainerListBlobFlatSegmentResponse inResponse, 
@@ -554,6 +580,7 @@ public final class SyncAzure {
     }
     
     public List<SyncBlobEntry> getSyncListFileParentsBatch(WildLogDataType inDataType) {
+        ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
         try {
             // Setup the blob container
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.parse(storageConnectionString);
@@ -563,7 +590,6 @@ public final class SyncAzure {
             // Get the folders
             CloudBlobDirectory cloudBlobDirectory = cloudBlobContainer.getDirectoryReference(Long.toString(workspaceID));
             Iterable<ListBlobItem> blobItems = cloudBlobDirectory.listBlobs(null, false, null, null, null);
-            ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
             for (ListBlobItem blobItem : blobItems) {
                 String[] namePieces = blobItem.getUri().getPath().split("/");
                 lstParents.add(new SyncBlobEntry(
@@ -573,15 +599,15 @@ public final class SyncAzure {
                         Long.parseLong(namePieces[namePieces.length - 1]), 
                         blobItem.getUri().getPath()));
             }
-            return lstParents;
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
-        return null;
+        return lstParents;
     }
     
     public List<SyncBlobEntry> getSyncListFileChildrenBatch(WildLogDataType inDataType, long inParentID) {
+        ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
         try {
             // Setup the blob container
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.parse(storageConnectionString);
@@ -591,7 +617,6 @@ public final class SyncAzure {
             // Get the folders
             CloudBlobDirectory cloudBlobDirectory = cloudBlobContainer.getDirectoryReference(Long.toString(workspaceID) + "/" + inParentID);
             Iterable<ListBlobItem> blobItems = cloudBlobDirectory.listBlobs(null, false, null, null, null);
-            ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
             for (ListBlobItem blobItem : blobItems) {
                 String[] namePieces = blobItem.getUri().getPath().split("/");
                 long recordsID = 0;
@@ -609,12 +634,11 @@ public final class SyncAzure {
                         recordsID, 
                         blobItem.getUri().getPath()));
             }
-            return lstParents;
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
         }
-        return null;
+        return lstParents;
     }
     
 }
