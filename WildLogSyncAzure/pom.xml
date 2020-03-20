@@ -20,15 +20,35 @@
             <version>1.16</version>
         </dependency>
         <dependency>
+            <!--For Table Storage, legacy-->
+            <!--https://github.com/Azure/azure-storage-java-->
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-storage</artifactId>
-            <version>8.3.0</version>
+            <version>8.6.0</version>
+            <exclusions>
+                <!--Newer versions provided (needed) by azure-storage-blob-->
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
+            <!--https://github.com/Azure/azure-sdk-for-java/blob/master/sdk/storage/azure-storage-blob/README.md-->
+            <groupId>com.azure</groupId>
             <artifactId>azure-storage-blob</artifactId>
-            <version>11.0.0</version>
+            <version>12.5.0</version>
         </dependency>
+        <!--<dependency>
+            https://github.com/Azure/azure-sdk-for-java/blob/master/sdk/storage/azure-storage-blob-batch/README.md
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-blob-batch</artifactId>
+            <version>12.4.0</version>
+        </dependency>-->
     </dependencies>
     
 </project>

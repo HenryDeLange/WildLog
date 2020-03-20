@@ -38,6 +38,13 @@
             <groupId>mywild</groupId>
             <artifactId>WildLogGeoTools</artifactId>
             <version>1.2</version>
+            <exclusions>
+                <!--Newer version is provided (needed) by azure-storage-blob-->
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>mywild</groupId>

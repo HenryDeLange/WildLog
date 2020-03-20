@@ -26,6 +26,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.FileImageInputStream;
@@ -77,6 +81,7 @@ import wildlog.ui.helpers.ComboBoxFixer;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -97,7 +102,7 @@ public class WorkspaceSyncDialog extends JDialog {
     private int syncDataDown = 0;
     private int syncFileUp = 0;
     private int syncStashUp = 0;
-    private int syncFileDown = 0;
+    private AtomicInteger syncFileDown = new AtomicInteger(0);
     private int syncStashDown = 0;
     private int syncFail = 0;
 
@@ -671,7 +676,7 @@ public class WorkspaceSyncDialog extends JDialog {
                                 feedback.println("Data Uploads          : " + syncDataUp);
                                 feedback.println("Data Downloads        : " + syncDataDown);
                                 feedback.println("File Uploads          : " + syncFileUp);
-                                feedback.println("File Downloads        : " + syncFileDown);
+                                feedback.println("File Downloads        : " + syncFileDown.get());
                                 feedback.println("Stash Uploads         : " + syncStashUp);
                                 feedback.println("Stash Downloads       : " + syncStashDown);
                                 feedback.println("Stash Cloud Deletes   : " + syncDeleteStashUp);
@@ -699,7 +704,7 @@ public class WorkspaceSyncDialog extends JDialog {
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Data Uploads          : {}", syncDataUp);
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Data Downloads        : {}", syncDataDown);
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced File Uploads          : {}", syncFileUp);
-                                WildLogApp.LOGGER.log(Level.INFO, "Synced File Downloads        : {}", syncFileDown);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced File Downloads        : {}", syncFileDown.get());
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Uploads         : {}", syncStashUp);
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Downloads       : {}", syncStashDown);
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Cloud Deletes   : {}", syncDeleteStashUp);
@@ -730,7 +735,7 @@ public class WorkspaceSyncDialog extends JDialog {
                                                 + "<br/>Data Uploads          : " + syncDataUp
                                                 + "<br/>Data Downloads        : " + syncDataDown
                                                 + "<br/>File Uploads          : " + syncFileUp
-                                                + "<br/>File Downloads        : " + syncFileDown
+                                                + "<br/>File Downloads        : " + syncFileDown.get()
                                                 + "<br/>Stash Uploads         : " + syncStashUp
                                                 + "<br/>Stash Downloads       : " + syncStashDown
                                                 + "<br/>Stash Cloud Deletes   : " + syncDeleteStashUp
@@ -1382,41 +1387,64 @@ public class WorkspaceSyncDialog extends JDialog {
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Full File Records");
         // Create if not found
         if (lstWorkspaceCreateEntries != null) {
-            loopCount = 0.0;
+            ExecutorService syncExecutor = Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_Sync(Create)"));
+            AtomicInteger threadLoopCount = new AtomicInteger(0);
+            final int threadBaseProgress = baseProgress;
+            final double threadTotalSize = lstWorkspaceCreateEntries.size();
             for (SyncTableEntry cloudEntry : lstWorkspaceCreateEntries) {
-                WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) cloudEntry.getData());
-                if (rdbSyncAllFiles.isSelected() || (rdbSyncJpegOnly.isSelected() && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath()))) {
-                    // Don't overwrite existing files
-                    if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
-                        // There is already a file on the disk with the same path, thus we need to rename this one
-                        while (Files.exists(cloudWildLogFile.getAbsolutePath())) {
-                            cloudWildLogFile.setDBFilePath(cloudWildLogFile.getRelativePath().getParent().resolve(
-                                    "wlsync_" + cloudWildLogFile.getRelativePath().getFileName()).toString());
-                            WildLogApp.LOGGER.log(Level.INFO, "Renaming sync file before downloading: " + cloudWildLogFile.getAbsolutePath().toString());
+                syncExecutor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) cloudEntry.getData());
+                        if (rdbSyncAllFiles.isSelected() || (rdbSyncJpegOnly.isSelected() && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath()))) {
+                            // Don't overwrite existing files
+                            if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
+                                // There is already a file on the disk with the same path, thus we need to rename this one
+                                while (Files.exists(cloudWildLogFile.getAbsolutePath())) {
+                                    cloudWildLogFile.setDBFilePath(cloudWildLogFile.getRelativePath().getParent().resolve(
+                                            "wlsync_" + cloudWildLogFile.getRelativePath().getFileName()).toString());
+                                    WildLogApp.LOGGER.log(Level.INFO, "Renaming sync file before downloading: " + cloudWildLogFile.getAbsolutePath().toString());
+                                }
+                            }
+                            // Download the file
+                            SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
+                            syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_FILE";
+                            logIfFailed(inFeedback, syncAction, 
+                                    inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), 
+                                            cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()).isSuccess());
+                            // Note: Ek stel nie die metadata hier in die EXIF nie want dit verander die file size en kan soms die image corrupt
+                            // Check the file size
+                            long cloudFileSize = cloudWildLogFile.getSyncIndicator();
+                            calculateOriginalFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
+                            if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
+                                logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), 
+                                        "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
+                            }
+                            else {
+                                // Download and save the workspace data record if all seems correct
+                                syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_DATA";
+                                logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createWildLogFile(cloudWildLogFile, true));
+                                syncFileDown.incrementAndGet();
+                            }
                         }
+                        inProgressbar.setTaskProgress(threadBaseProgress + ((int) (((double) inProgressStepSize) 
+                                / 3.0 / 2.0 * (double) threadLoopCount.incrementAndGet() / threadTotalSize)));
+                        inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
                     }
-                    // Download the file
-                    SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
-                    syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_FILE";
-                    logIfFailed(inFeedback, syncAction, 
-                            inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), cloudWildLogFile.getAbsolutePath(), 
-                                    cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()).isSuccess());
-                    // Note: Ek stel nie die metadata hier in die EXIF nie want dit verander die file size en kan soms die image corrupt
-                    // Check the file size
-                    long cloudFileSize = cloudWildLogFile.getSyncIndicator();
-                    calculateOriginalFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
-                    if (cloudFileSize != cloudWildLogFile.getSyncIndicator()) {
-                        logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), 
-                                "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
-                        continue;
-                    }
-                    // Download and save the workspace data record if all seems correct
-                    syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_NEW_DATA";
-                    logIfFailed(inFeedback, syncAction, WildLogApp.getApplication().getDBI().createWildLogFile(cloudWildLogFile, true));
-                    syncFileDown++;
+                });
+            }
+            // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
+            try {
+                syncExecutor.shutdown();
+                if (!syncExecutor.awaitTermination(3, TimeUnit.DAYS)) {
+                    WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown timeout!!!");
+                    logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "TIMEOUT", null), false);
                 }
-                inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 / 2.0 * loopCount++ / ((double) lstWorkspaceCreateEntries.size()))));
-                inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+            }
+            catch (InterruptedException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown failed!!!");
+                logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "ERROR", null), false);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Download Files Create");
@@ -1425,67 +1453,90 @@ public class WorkspaceSyncDialog extends JDialog {
         baseProgress = inProgressbar.getProgress();
         // Update if outdated
         if (lstWorkspaceUpdateEntries != null) {
-            loopCount = 0.0;
+            ExecutorService syncExecutor = Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_Sync(Update)"));
+            AtomicInteger threadLoopCount = new AtomicInteger(0);
+            final int threadBaseProgress = baseProgress;
+            final double threadTotalSize = lstWorkspaceUpdateEntries.size();
             for (SyncTableEntry cloudEntry : lstWorkspaceUpdateEntries) {
-                WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) cloudEntry.getData());
-                if (rdbSyncAllFiles.isSelected() || (rdbSyncJpegOnly.isSelected() && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath()))) {
-                    // Don't overwrite existing files, unless it is the same file that is being replaced
-                    Path oldPathToDelete = null;
-                    if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
-                        WildLogFile workspaceWildLogFile = WildLogApp.getApplication().getDBI().findWildLogFile(0, 0, null, cloudWildLogFile.getDBFilePath(), WildLogFile.class);
-                        // There might be a file on disk that is not linked to a database record, in which case it can probabily be overwritten
-                        if (workspaceWildLogFile != null) {
-                            // Check whether there is already a different file on the disk with the same path but for a different linked database record, 
-                            // thus we need to rename this one
-                            if (cloudWildLogFile.getID() != workspaceWildLogFile.getID()) {
-                                while (Files.exists(cloudWildLogFile.getAbsolutePath())) {
-                                    cloudWildLogFile.setDBFilePath(cloudWildLogFile.getRelativePath().getParent().resolve(
-                                            "wlsync_" + cloudWildLogFile.getRelativePath().getFileName()).toString());
-                                    WildLogApp.LOGGER.log(Level.INFO, "Renaming sync file before downloading: " + cloudWildLogFile.getAbsolutePath().toString());
+                syncExecutor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        WildLogFile cloudWildLogFile = new WildLogFile((WildLogFileCore) cloudEntry.getData());
+                        if (rdbSyncAllFiles.isSelected() || (rdbSyncJpegOnly.isSelected() && WildLogFileExtentions.Images.isJPG(cloudWildLogFile.getAbsolutePath()))) {
+                            // Don't overwrite existing files, unless it is the same file that is being replaced
+                            Path oldPathToDelete = null;
+                            if (Files.exists(cloudWildLogFile.getAbsolutePath())) {
+                                WildLogFile workspaceWildLogFile = WildLogApp.getApplication().getDBI().findWildLogFile(0, 0, null, cloudWildLogFile.getDBFilePath(), WildLogFile.class);
+                                // There might be a file on disk that is not linked to a database record, in which case it can probabily be overwritten
+                                if (workspaceWildLogFile != null) {
+                                    // Check whether there is already a different file on the disk with the same path but for a different linked database record, 
+                                    // thus we need to rename this one
+                                    if (cloudWildLogFile.getID() != workspaceWildLogFile.getID()) {
+                                        while (Files.exists(cloudWildLogFile.getAbsolutePath())) {
+                                            cloudWildLogFile.setDBFilePath(cloudWildLogFile.getRelativePath().getParent().resolve(
+                                                    "wlsync_" + cloudWildLogFile.getRelativePath().getFileName()).toString());
+                                            WildLogApp.LOGGER.log(Level.INFO, "Renaming sync file before downloading: " + cloudWildLogFile.getAbsolutePath().toString());
+                                        }
+                                        // Get the path of the exisitng file that will be synced (to delete it afterwards, because the downloaded file will end up in a different path)
+                                        oldPathToDelete = WildLogApp.getApplication().getDBI().findWildLogFile(cloudWildLogFile.getID(), 0, null, null, WildLogFile.class).getAbsolutePath();
+                                    }
                                 }
-                                // Get the path of the exisitng file that will be synced (to delete it afterwards, because the downloaded file will end up in a different path)
+                            }
+                            else {
+                                // Get the path of the old existing file that will be updated by the synce, 
+                                // to delete it afterwards, because the new downloaded file will be saved to a different path 
+                                // that doesn't contain an existing file already
                                 oldPathToDelete = WildLogApp.getApplication().getDBI().findWildLogFile(cloudWildLogFile.getID(), 0, null, null, WildLogFile.class).getAbsolutePath();
                             }
+                            // Download the file
+                            SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
+                            syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_UPDATE_FILE";
+                            logIfFailed(inFeedback, syncAction, 
+                                    inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), 
+                                            cloudWildLogFile.getAbsolutePath(), cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()).isSuccess());
+                            // Note: Ek stel nie die metadata hier in die EXIF nie want dit verander die file size en kan soms die image corrupt
+                            // Check the file size
+                            long cloudFileSize = cloudWildLogFile.getSyncIndicator();
+                            calculateOriginalFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
+                            if (cloudFileSize > cloudWildLogFile.getSyncIndicator()) {
+                                logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), 
+                                        "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
+                            }
+                            else {
+                                // Download and save the workspace data record if all seems correct
+                                syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_UPDATE_DATA";
+                                logIfFailed(inFeedback, syncAction, 
+                                        WildLogApp.getApplication().getDBI().updateWildLogFile(cloudWildLogFile, true));
+                                // Delete the old file (if is wasn't replaced)
+                                if (oldPathToDelete != null) {
+                                    try {
+                                        Files.delete(oldPathToDelete);
+                                    }
+                                    catch (IOException ex) {
+                                        WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                    }
+                                }
+                                syncFileDown.incrementAndGet();
+                            }
                         }
+                        inProgressbar.setTaskProgress(threadBaseProgress + ((int) (((double) inProgressStepSize) 
+                                / 3.0 / 2.0 * (double) threadLoopCount.incrementAndGet() / threadTotalSize)));
+                        inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
                     }
-                    else {
-                        // Get the path of the old existing file that will be updated by the synce, 
-                        // to delete it afterwards, because the new downloaded file will be saved to a different path 
-                        // that doesn't contain an existing file already
-                        oldPathToDelete = WildLogApp.getApplication().getDBI().findWildLogFile(cloudWildLogFile.getID(), 0, null, null, WildLogFile.class).getAbsolutePath();
-                    }
-                    // Download the file
-                    SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), "", cloudWildLogFile);
-                    syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_UPDATE_FILE";
-                    logIfFailed(inFeedback, syncAction, 
-                            inSyncAzure.downloadFile(cloudWildLogFile.getLinkType(), 
-                                    cloudWildLogFile.getAbsolutePath(), cloudWildLogFile.getLinkID(), cloudWildLogFile.getID()).isSuccess());
-                    // Note: Ek stel nie die metadata hier in die EXIF nie want dit verander die file size en kan soms die image corrupt
-                    // Check the file size
-                    long cloudFileSize = cloudWildLogFile.getSyncIndicator();
-                    calculateOriginalFileSizeAsSyncIndicator(inFeedback, cloudWildLogFile); // Get the new file size
-                    if (cloudFileSize > cloudWildLogFile.getSyncIndicator()) {
-                        logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, cloudWildLogFile.getID(), 
-                                "[Incorrect Size: " + cloudFileSize + " != "+ Long.toString(cloudWildLogFile.getSyncIndicator()) + "]", cloudWildLogFile), false);
-                        continue;
-                    }
-                    // Download and save the workspace data record if all seems correct
-                    syncAction.details = cloudWildLogFile.getLinkType().getDescription() + "_UPDATE_DATA";
-                    logIfFailed(inFeedback, syncAction, 
-                            WildLogApp.getApplication().getDBI().updateWildLogFile(cloudWildLogFile, true));
-                    // Delete the old file (if is wasn't replaced)
-                    if (oldPathToDelete != null) {
-                        try {
-                            Files.delete(oldPathToDelete);
-                        }
-                        catch (IOException ex) {
-                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                        }
-                    }
-                    syncFileDown++;
+                });
+            }
+            // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
+            try {
+                syncExecutor.shutdown();
+                if (!syncExecutor.awaitTermination(3, TimeUnit.DAYS)) {
+                    WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown timeout!!!");
+                    logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "TIMEOUT", null), false);
                 }
-                inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 / 2.0 * loopCount++ / ((double) lstWorkspaceUpdateEntries.size()))));
-                inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+            }
+            catch (InterruptedException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown failed!!!");
+                logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "ERROR", null), false);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 3 of 3 complete
@@ -1583,7 +1634,7 @@ public class WorkspaceSyncDialog extends JDialog {
         inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         baseProgress = inProgressbar.getProgress();
         // DOWN: Make sure the workspace knows about new cloud records
-        double loopCount = 0.0;
+        AtomicInteger threadLoopCount = new AtomicInteger(0);
         for (SyncBlobEntry folderBlobEntry : lstCloudStashedBlobFolders) {
             boolean foundExistingStashInWorkspace = false;
             for (Visit workspaceVisit : lstWorkspaceStashedVisits) {
@@ -1603,61 +1654,71 @@ public class WorkspaceSyncDialog extends JDialog {
                     if (visit != null && visit.getType() == VisitType.STASHED) {
                         // Download the stashed folder into the workspace
                         List<SyncBlobEntry> lstCloudStashedFiles = inSyncAzure.getSyncListFileChildrenBatch(WildLogDataType.STASH, folderBlobEntry.getRecordID());
-                        double subLoopCount = 0.0;
+                        ExecutorService syncExecutor = Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_Sync(Update)"));
+                        AtomicInteger threadSubLoopCount = new AtomicInteger(0);
+                        final int threadBaseProgress = baseProgress;
+                        final double threadFolderTotalSize = lstCloudStashedBlobFolders.size();
+                        final double threadTotalSize = lstCloudStashedFiles.size();
                         for (SyncBlobEntry fileBlobEntry : lstCloudStashedFiles) {
-                            SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, fileBlobEntry.getRecordID(), visit.getName(), null);
-                            String[] namePieces = fileBlobEntry.getFullBlobID().split("/");
-                            Path workspacePath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).resolve(namePieces[namePieces.length - 1]);
-                            SyncBlobMetadata syncBlobMetadata = inSyncAzure.downloadFile(WildLogDataType.STASH, workspacePath, 
-                                    fileBlobEntry.getParentID(), fileBlobEntry.getRecordID());
-                            logIfFailed(inFeedback, syncAction, syncBlobMetadata.isSuccess());
-                            // Set the metadata (needed to do the bulk import
-                            if (syncBlobMetadata.isSuccess()) {
-                                try {
-                                    String dateTime = syncBlobMetadata.getDatetime();
-                                    LLJTran lljTran = new LLJTran(workspacePath.toFile());
-                                    lljTran.read(LLJTran.READ_ALL, true);
-                                    //lljTran.read(LLJTran.READ_INFO, true);
-                                    lljTran.addAppx(LLJTran.dummyExifHeader, 0, LLJTran.dummyExifHeader.length, true);
-                                    Exif exif = (Exif) lljTran.getImageInfo();
-                                    if (dateTime != null && !dateTime.trim().isEmpty()) {
-                                        Entry entry = new Entry(Exif.ASCII);
-                                        entry.setValue(0, dateTime.replace('.', ':'));
-                                        exif.setTagValue(Exif.DATETIME, 0, entry, true);
-                                    }
+                            syncExecutor.submit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    SyncAction syncAction = new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, fileBlobEntry.getRecordID(), visit.getName(), null);
+                                    String[] namePieces = fileBlobEntry.getFullBlobID().split("/");
+                                    Path workspacePath = WildLogPaths.WILDLOG_FILES_STASH.getAbsoluteFullPath().resolve(visit.getName()).resolve(namePieces[namePieces.length - 1]);
+                                    SyncBlobMetadata syncBlobMetadata = inSyncAzure.downloadFile(WildLogDataType.STASH, workspacePath, 
+                                            fileBlobEntry.getParentID(), fileBlobEntry.getRecordID());
+                                    logIfFailed(inFeedback, syncAction, syncBlobMetadata.isSuccess());
+                                    // Set the metadata (needed to do the bulk import
+                                    if (syncBlobMetadata.isSuccess()) {
+                                        try {
+                                            String dateTime = syncBlobMetadata.getDatetime();
+                                            LLJTran lljTran = new LLJTran(workspacePath.toFile());
+                                            lljTran.read(LLJTran.READ_ALL, true);
+                                            //lljTran.read(LLJTran.READ_INFO, true);
+                                            lljTran.addAppx(LLJTran.dummyExifHeader, 0, LLJTran.dummyExifHeader.length, true);
+                                            Exif exif = (Exif) lljTran.getImageInfo();
+                                            if (dateTime != null && !dateTime.trim().isEmpty()) {
+                                                Entry entry = new Entry(Exif.ASCII);
+                                                entry.setValue(0, dateTime.replace('.', ':'));
+                                                exif.setTagValue(Exif.DATETIME, 0, entry, true);
+                                            }
 // TODO: Die GPS write werk nog nie (nie krieties nie, maar sal nice wees as dit kan werk...) Extend dalk Exif.java om die GPS IFD te kan hanteer...
-//                                    String latitude = syncBlobMetadata.getLatitude();
-//                                    if (latitude != null && !latitude.trim().isEmpty()) {
-//                                        Entry entry = new Entry(Exif.ASCII);
-//                                        entry.setValue(0, latitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
-//                                        exif.setTagValue(Exif.GPSINFO, Exif.GPSLatitude, entry, true);
-//                                    }
-//                                    String longitude = syncBlobMetadata.getLongitude();
-//                                    if (longitude != null && !longitude.trim().isEmpty()) {
-//                                        Entry entry = new Entry(Exif.ASCII);
-//                                        entry.setValue(0, longitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
-//                                        exif.setTagValue(Exif.GPSINFO, Exif.GPSLongitude, entry, true);
-//                                    }
-                                    lljTran.refreshAppx();
-                                    try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(workspacePath.toFile()))) {
-                                        lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
-                                        //lljTran.xferInfo(null, outputStream, LLJTran.REPLACE, LLJTran.REMOVE);
+//                                            String latitude = syncBlobMetadata.getLatitude();
+//                                            if (latitude != null && !latitude.trim().isEmpty()) {
+//                                                Entry entry = new Entry(Exif.ASCII);
+//                                                entry.setValue(0, latitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
+//                                                exif.setTagValue(Exif.GPSINFO, Exif.GPSLatitude, entry, true);
+//                                            }
+//                                            String longitude = syncBlobMetadata.getLongitude();
+//                                            if (longitude != null && !longitude.trim().isEmpty()) {
+//                                                Entry entry = new Entry(Exif.ASCII);
+//                                                entry.setValue(0, longitude.replace('D', '°').replace('M', '\'').replace('S', '"'));
+//                                                exif.setTagValue(Exif.GPSINFO, Exif.GPSLongitude, entry, true);
+//                                            }
+                                            lljTran.refreshAppx();
+                                            try (OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(workspacePath.toFile()))) {
+                                                lljTran.save(outputStream, LLJTran.OPT_WRITE_ALL);
+                                                //lljTran.xferInfo(null, outputStream, LLJTran.REPLACE, LLJTran.REMOVE);
+                                            }
+                                            finally {
+                                                lljTran.freeMemory();
+                                            }
+                                        }
+                                        catch (IOException | LLJTranException ex) {
+                                            WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
+                                            logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, fileBlobEntry.getRecordID(), 
+                                                    "Unable to set the file metadata [" + visit.getID() + "]", null), false);
+                                        }
                                     }
-                                    finally {
-                                        lljTran.freeMemory();
-                                    }
+                                    // Update progess
+                                    inProgressbar.setTaskProgress(threadBaseProgress + ((int) (((double) inProgressStepSize) 
+                                            / 3.0 * (double) threadLoopCount.get() / threadFolderTotalSize
+                                            * (double) threadSubLoopCount.incrementAndGet() / threadTotalSize)));
+                                    inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+                                    syncStashDown++;
                                 }
-                                catch (IOException | LLJTranException ex) {
-                                    WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
-                                    logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.STASH, fileBlobEntry.getRecordID(), 
-                                            "Unable to set the file metadata [" + visit.getID() + "]", null), false);
-                                }
-                            }
-                            // Update progess
-                            inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * loopCount / ((double) lstCloudStashedBlobFolders.size())
-                                    * subLoopCount++ / ((double) lstCloudStashedFiles.size()))));
-                            inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
-                            syncStashDown++;
+                            });
                         }
                     }
                     else {
@@ -1681,7 +1742,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     }
                 }
             }
-            inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * loopCount++ / ((double) lstCloudStashedBlobFolders.size()))));
+            inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * threadLoopCount.incrementAndGet() / ((double) lstCloudStashedBlobFolders.size()))));
             inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
         }
         inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0))); // Step 3 of 3 complete

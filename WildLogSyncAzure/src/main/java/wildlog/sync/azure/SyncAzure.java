@@ -1,39 +1,31 @@
 package wildlog.sync.azure;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobContainerClientBuilder;
+import com.azure.storage.blob.models.BlobErrorCode;
+import com.azure.storage.blob.models.BlobItem;
+import com.azure.storage.blob.models.BlobProperties;
+import com.azure.storage.blob.models.BlobStorageException;
+import com.azure.storage.blob.models.ListBlobsOptions;
+import com.azure.storage.common.StorageSharedKeyCredential;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.BlockBlobURL;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlobDirectory;
-import com.microsoft.azure.storage.blob.ContainerURL;
-import com.microsoft.azure.storage.blob.DownloadResponse;
 import com.microsoft.azure.storage.blob.ListBlobItem;
-import com.microsoft.azure.storage.blob.ListBlobsOptions;
-import com.microsoft.azure.storage.blob.Metadata;
-import com.microsoft.azure.storage.blob.PipelineOptions;
-import com.microsoft.azure.storage.blob.ServiceURL;
-import com.microsoft.azure.storage.blob.SharedKeyCredentials;
-import com.microsoft.azure.storage.blob.StorageURL;
-import com.microsoft.azure.storage.blob.TransferManager;
-import com.microsoft.azure.storage.blob.TransferManagerUploadToBlockBlobOptions;
-import com.microsoft.azure.storage.blob.models.BlobItem;
-import com.microsoft.azure.storage.blob.models.ContainerListBlobFlatSegmentResponse;
 import com.microsoft.azure.storage.table.CloudTable;
 import com.microsoft.azure.storage.table.CloudTableClient;
 import com.microsoft.azure.storage.table.TableBatchOperation;
 import com.microsoft.azure.storage.table.TableOperation;
 import com.microsoft.azure.storage.table.TableQuery;
-import com.microsoft.rest.v2.RestException;
-import io.reactivex.Single;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.channels.AsynchronousFileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,7 +43,7 @@ import wildlog.sync.azure.dataobjects.SyncTableEntry;
  *  - Moving an Azure Storage Account to a different region:
  *      https://docs.microsoft.com/en-us/azure/storage/common/storage-account-move?tabs=azure-portal
  *      Basies maak mens 'n nuwe account en copy dan die data oor met AzCopy (blobs, tussen servers) of StorageExplorer (tables, met die hand).
- *          ./azcopy copy 'https://<source-storage-account-name>.blob.core.windows.net/<SAS-token>' 'https://<destination-storage-account-name>.blob.core.windows.net/' --recursive
+ *          ./azcopy copy 'https://<source-storage-account-name>.blob.core.windows.net/<SAS-token>' 'https://<destination-storage-account-name>.blob.core.windows.net/<SAS-token>' --recursive
  *  - Preferred setup:
  *      Performance/Access tier: Standard/Hot
  *      Replication: Locally-redundant storage (LRS)
@@ -68,7 +60,7 @@ public final class SyncAzure {
     private long workspaceID;
     private int dbVersion;
     private Map<WildLogDataType, CloudTable> mapTables = new HashMap<>();
-    private Map<WildLogDataType, ContainerURL> mapContainers = new HashMap<>();
+    private Map<WildLogDataType, BlobContainerClient> mapBlobContainers = new HashMap<>();
     
     public SyncAzure(String inStorageConnectionString, String inAccountName, String inAccountKey, long inWorkspaceID, int inDBVersion) {
         storageConnectionString = inStorageConnectionString;
@@ -301,7 +293,6 @@ public final class SyncAzure {
             // Create the id filter (if present)
             String idFilter = null;
             if (inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
-System.out.println("Downloading table data: " + inLstRecordIDs.size() + " records");
                 for (long recordID : inLstRecordIDs) {
                     if (idFilter == null) {
                         idFilter = TableQuery.generateFilterCondition("RowKey", TableQuery.QueryComparisons.EQUAL, Long.toString(recordID));
@@ -312,9 +303,6 @@ System.out.println("Downloading table data: " + inLstRecordIDs.size() + " record
                     }
                 }
             }
-else {
-System.out.println("Downloading table data: " + null + " records");
-}
             // Build the combined filters
             if (workspaceID > 0 && inAfterTimestamp > 0 && inLstRecordIDs != null && !inLstRecordIDs.isEmpty()) {
                 String baseFilter = TableQuery.combineFilters(
@@ -344,15 +332,8 @@ System.out.println("Downloading table data: " + null + " records");
                     throw new Exception("ERROR: Only WildLog Options can be read without specifying the PartitionKey (WorkspaceID)!");
                 }
             }
-if (query.getFilterString() != null) {
-System.out.println("Submitting download query for table data: " + query.getFilterString().length() + " query length");
-}
-else {
-System.out.println("Submitting download query for table data: " + null + " query length");
-}
             // Make sure the query isn't too long
             if (query.getFilterString() != null && query.getFilterString().length() > URL_LIMIT) {
-System.out.println("SPLITTING");
                 int splitIndex = inLstRecordIDs.size() / 2;
                 lstSyncTableEntries.addAll(downloadDataPerBatch(inDataType, inAfterTimestamp, inLstRecordIDs.subList(0, splitIndex)));
                 lstSyncTableEntries.addAll(downloadDataPerBatch(inDataType, inAfterTimestamp, inLstRecordIDs.subList(splitIndex, inLstRecordIDs.size())));
@@ -412,35 +393,40 @@ System.out.println("SPLITTING");
     
     // FILES
     
-    private ContainerURL getContainerURL(WildLogDataType inDataType) 
+    private BlobContainerClient getContainerURL(WildLogDataType inDataType) 
             throws InvalidKeyException, MalformedURLException {
-        ContainerURL containerURL = mapContainers.get(inDataType);
-        if (containerURL == null) {
-            SharedKeyCredentials sharedKeyCredentials = new SharedKeyCredentials(accountName, accountKey);
-            ServiceURL serviceURL = new ServiceURL(new URL("https://" + accountName + ".blob.core.windows.net"), 
-                    StorageURL.createPipeline(sharedKeyCredentials, new PipelineOptions()));
-            containerURL = serviceURL.createContainerURL(inDataType.getDescription().toLowerCase());
+        BlobContainerClient blobContainerClient = mapBlobContainers.get(inDataType);
+        if (blobContainerClient == null) {
+            // Setup the client
+            StorageSharedKeyCredential credential = new StorageSharedKeyCredential(accountName, accountKey);
+            blobContainerClient = new BlobContainerClientBuilder()
+                    .endpoint("https://" + accountName + ".blob.core.windows.net")
+                    .credential(credential)
+                    .containerName(inDataType.getDescription().toLowerCase())
+                    .buildClient();
+            // Make sure the container has been created
             try {
-                containerURL.create(null, null, null).blockingGet();
+                blobContainerClient.create();
                 System.out.println("Blob Container [" + inDataType.getDescription().toLowerCase() + "] was created.");
             }
-            catch (Exception ex){
-                if (ex instanceof RestException && ((RestException)ex).response().statusCode() != 409) {
+            catch (BlobStorageException ex) {
+                if (!ex.getErrorCode().equals(BlobErrorCode.CONTAINER_ALREADY_EXISTS)) {
                     throw ex;
                 }
             }
-            mapContainers.put(inDataType, containerURL);
+            // Store the reference for future re-use
+            mapBlobContainers.put(inDataType, blobContainerClient);
         }
-        return containerURL;
+        return blobContainerClient;
     }
     
     public boolean uploadFile(WildLogDataType inDataType, Path inFilePath, long inParentID, long inRecordID, 
             String inDate, String inLatitude, String inLongitude) {
         try {
-            ContainerURL container = getContainerURL(inDataType);
-            BlockBlobURL blockBlob = container.createBlockBlobURL(calculateFullBlobID(inParentID, inRecordID, inFilePath));
+            BlobContainerClient blobContainerClient = getContainerURL(inDataType);
+            BlobClient blobClient = blobContainerClient.getBlobClient(calculateFullBlobID(inParentID, inRecordID, inFilePath));
             // Set the EXIF values on the blob
-            Metadata metadata = new Metadata();
+            Map<String, String> metadata = new HashMap<>();
             if (inDate != null && !inDate.trim().isEmpty()) {
                 metadata.put("DateTime", inDate.replace(':', '.'));
             }
@@ -450,15 +436,12 @@ System.out.println("SPLITTING");
             if (inLongitude != null && !inLongitude.trim().isEmpty()) {
                 metadata.put("GPSLongitude", inLongitude.replace('°', 'D').replace('\'', 'M').replace('"', 'S'));
             }
-            blockBlob.setMetadata(metadata);
-            TransferManagerUploadToBlockBlobOptions blobOptions = new TransferManagerUploadToBlockBlobOptions(null, null, metadata, null, null);
             // Upload the file
-            AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath);
             try {
-                TransferManager.uploadFileToBlockBlob(fileChannel, blockBlob, MAX_BLOB_SIZE, MAX_BLOB_UPLOAD_SIZE, blobOptions).blockingGet();
+                blobClient.uploadFromFile(inFilePath.toString(), null, null, metadata, null, null, null);
             }
-            finally {
-                fileChannel.close();
+            catch (UncheckedIOException ex) {
+                ex.printStackTrace(System.err);
             }
             return true;
         }
@@ -472,25 +455,23 @@ System.out.println("SPLITTING");
         SyncBlobMetadata syncBlobMetadata = new SyncBlobMetadata();
         String blobID = calculateFullBlobID(inParentID, inRecordID, inFilePath);
         try {
-            ContainerURL container = getContainerURL(inDataType);
-            BlockBlobURL blockBlob = container.createBlockBlobURL(blobID);
+            BlobContainerClient blobContainerClient = getContainerURL(inDataType);
+            BlobClient blobClient = blobContainerClient.getBlobClient(calculateFullBlobID(inParentID, inRecordID, inFilePath));
+            // Download the file
             if (!Files.exists(inFilePath)) {
                 Files.createDirectories(inFilePath.getParent());
-                Files.createFile(inFilePath);
             }
-            // Download the file
-            AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(inFilePath, StandardOpenOption.CREATE, StandardOpenOption.WRITE);
-            try {
-                TransferManager.downloadBlobToFile(fileChannel, blockBlob, null, null).blockingGet();
+            BlobProperties blobProperties;
+            if (Files.exists(inFilePath)) {
+                blobProperties = blobClient.downloadToFile(inFilePath.toString(), true);
             }
-            finally {
-                fileChannel.close();
+            else {
+                blobProperties = blobClient.downloadToFile(inFilePath.toString());
             }
             // Set the EXIF values on the file
-            DownloadResponse downloadResponse = blockBlob.download().blockingGet();
-            syncBlobMetadata.setDatetime(downloadResponse.headers().metadata().get("DateTime"));
-            syncBlobMetadata.setLatitude(downloadResponse.headers().metadata().get("GPSLatitude"));
-            syncBlobMetadata.setLongitude(downloadResponse.headers().metadata().get("GPSLongitude"));
+            syncBlobMetadata.setDatetime(blobProperties.getMetadata().get("DateTime"));
+            syncBlobMetadata.setLatitude(blobProperties.getMetadata().get("GPSLatitude"));
+            syncBlobMetadata.setLongitude(blobProperties.getMetadata().get("GPSLongitude"));
             syncBlobMetadata.setSuccess(true);
         }
         catch (Exception ex) {
@@ -512,9 +493,9 @@ System.out.println("SPLITTING");
     
     public boolean deleteFile(WildLogDataType inDataType, String inFullBlobName) {
         try {
-            ContainerURL container = getContainerURL(inDataType);
-            BlockBlobURL blockBlob = container.createBlockBlobURL(inFullBlobName);
-            blockBlob.delete(null, null, null).blockingGet();
+            BlobContainerClient blobContainerClient = getContainerURL(inDataType);
+            BlobClient blobClient = blobContainerClient.getBlobClient(inFullBlobName);
+            blobClient.delete();
             return true;
         }
         catch (Exception ex) {
@@ -528,26 +509,11 @@ System.out.println("SPLITTING");
     public List<SyncBlobEntry> getSyncListFilesBatch(WildLogDataType inDataType) {
         List<SyncBlobEntry> lstSyncBlobEntries = new ArrayList<>();
         try {
-            ContainerURL container = getContainerURL(inDataType);
+            BlobContainerClient blobContainerClient = getContainerURL(inDataType);
             ListBlobsOptions options = new ListBlobsOptions();
-            options.withMaxResults(100);
-            options.withPrefix(Long.toString(workspaceID));
-            container.listBlobsFlatSegment(null, options, null)
-                    .flatMap(containerListBlobFlatSegmentResponse ->
-                            listAllBlobs(container, containerListBlobFlatSegmentResponse, options, inDataType, lstSyncBlobEntries))
-                    .blockingGet();
-        }
-        catch (Exception ex) {
-            ex.printStackTrace(System.err);
-        }
-        return lstSyncBlobEntries;
-    }
-
-    private Single<ContainerListBlobFlatSegmentResponse> listAllBlobs(ContainerURL inContainer, ContainerListBlobFlatSegmentResponse inResponse, 
-            ListBlobsOptions inOptions, WildLogDataType inDataType, List<SyncBlobEntry> inLstSyncBlobEntries) {
-        if (inResponse.body().segment() != null) {
-            for (BlobItem blobItem : inResponse.body().segment().blobItems()) {
-                String[] namePieces = blobItem.name().split("/");
+            options.setPrefix(Long.toString(workspaceID));
+            for (BlobItem blobItem : blobContainerClient.listBlobs(options, null)) {
+                String[] namePieces = blobItem.getName().split("/");
                 long recordsID = 0;
                 String name = namePieces[2].substring(0, namePieces[2].lastIndexOf('.'));
                 try {
@@ -556,32 +522,24 @@ System.out.println("SPLITTING");
                 catch (NumberFormatException ex) {
                     // Ignore (stashed files will not be numbers, but imported files of type WildLogFile will use IDs)
                 }
-                inLstSyncBlobEntries.add(new SyncBlobEntry(
+                lstSyncBlobEntries.add(new SyncBlobEntry(
                         inDataType, 
                         Long.parseLong(namePieces[0]),
                         Long.parseLong(namePieces[1]), 
                         recordsID,
-                        blobItem.name()));
+                        blobItem.getName()));
             }
         }
-        // If there is not another segment, return this response as the final response
-        if (inResponse.body().nextMarker() == null) {
-            return Single.just(inResponse);
+        catch (Exception ex) {
+            ex.printStackTrace(System.err);
         }
-        else {
-            // IMPORTANT:
-            // ListBlobsFlatSegment returns the start of the next segment
-            // You MUST use this to get the next segment
-            String nextMarker = inResponse.body().nextMarker();
-            return inContainer.listBlobsFlatSegment(nextMarker, inOptions, null)
-                    .flatMap(containersListBlobFlatSegmentResponse ->
-                            listAllBlobs(inContainer, containersListBlobFlatSegmentResponse, inOptions, inDataType, inLstSyncBlobEntries));
-        }
+        return lstSyncBlobEntries;
     }
     
     public List<SyncBlobEntry> getSyncListFileParentsBatch(WildLogDataType inDataType) {
         ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
         try {
+// FIXME: Maybe rather use the blobContainerClient.listBlobsByHierarchy() ???
             // Setup the blob container
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.parse(storageConnectionString);
             CloudBlobClient cloudBlobClient = cloudStorageAccount.createCloudBlobClient();
@@ -609,6 +567,7 @@ System.out.println("SPLITTING");
     public List<SyncBlobEntry> getSyncListFileChildrenBatch(WildLogDataType inDataType, long inParentID) {
         ArrayList<SyncBlobEntry> lstParents = new ArrayList<>();
         try {
+// FIXME: Maybe rather use the blobContainerClient.listBlobsByHierarchy() ???
             // Setup the blob container
             CloudStorageAccount cloudStorageAccount = CloudStorageAccount.parse(storageConnectionString);
             CloudBlobClient cloudBlobClient = cloudStorageAccount.createCloudBlobClient();

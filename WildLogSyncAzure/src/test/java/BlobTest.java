@@ -144,18 +144,18 @@ public class BlobTest extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadActionPerformed
-        syncAzure.uploadFile(WildLogDataType.ELEMENT, new File("C:\\temp\\mol.jpg").toPath(), 777L, 222L, 
+        syncAzure.uploadFile(WildLogDataType.ELEMENT, new File("C:\\_temp\\mol.jpg").toPath(), 777L, 555L, 
                 "2019:07:25 14:27:00", "-33° 45' 0.62\"", "26° 31' 46.68\"");
         System.out.println("UPLOADED");
     }//GEN-LAST:event_btnUploadActionPerformed
 
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        syncAzure.downloadFile(WildLogDataType.ELEMENT, new File("C:\\temp\\mol.jpg").toPath(), 777L, 222L);
+        syncAzure.downloadFile(WildLogDataType.ELEMENT, new File("C:\\_temp\\mol.jpg").toPath(), 777L, 555L);
         System.out.println("DOWNLOADED");
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        syncAzure.deleteFile(WildLogDataType.ELEMENT, Long.toString(123L) + "/" + Long.toString(777L) + "/" + Long.toString(222L) + ".jpg");
+        syncAzure.deleteFile(WildLogDataType.ELEMENT, Long.toString(123L) + "/" + Long.toString(777L) + "/" + Long.toString(55L) + ".jpg");
         System.out.println("DELETED");
     }//GEN-LAST:event_btnDeleteActionPerformed
 
