@@ -244,6 +244,17 @@ public class UtilsImageProcessing {
     }
 
     private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
+// FIXME: Hierdie werk nie vir sync downloaded files nie???
+//java.lang.IllegalArgumentException: Width (0) and height (260) must be non-zero
+//	at java.awt.image.ReplicateScaleFilter.<init>(ReplicateScaleFilter.java:102) ~[?:?]
+//	at java.awt.image.AreaAveragingScaleFilter.<init>(AreaAveragingScaleFilter.java:77) ~[?:?]
+//	at java.awt.Image.getScaledInstance(Image.java:172) ~[?:?]
+//	at wildlog.utils.UtilsImageProcessing.getScaledImage(UtilsImageProcessing.java:247) ~[classes/:?]
+//	at wildlog.utils.UtilsImageProcessing.getScaledIcon(UtilsImageProcessing.java:146) ~[classes/:?]
+//	at wildlog.utils.UtilsImageProcessing.getScaledIcon(UtilsImageProcessing.java:106) ~[classes/:?]
+//	at wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper.getIcon(BulkUploadImageFileWrapper.java:38) ~[classes/:?]
+//	at wildlog.ui.panels.bulkupload.ImageBox.populateUI(ImageBox.java:56) ~[classes/:?]
+//	at wildlog.ui.panels.bulkupload.ImageBox.<init>(ImageBox.java:51) ~[classes/:?]
         return inImage.getScaledInstance(inWidth, inHeight, Image.SCALE_SMOOTH);
     }
 
@@ -265,6 +276,10 @@ public class UtilsImageProcessing {
     
     public static ImageIcon getScaledIconForStashedFiles(WildLogThumbnailSizes inSize) {
         return getScaledIconForPlaceholder(WildLogSystemImages.STASH.getWildLogFile(), inSize);
+    }
+    
+    public static ImageIcon getScaledIconForReStashedFiles(WildLogThumbnailSizes inSize) {
+        return getScaledIconForPlaceholder(WildLogSystemImages.RESTASH.getWildLogFile(), inSize);
     }
 
     private static ImageIcon getScaledIconForPlaceholder(WildLogSystemFile inWildLogSystemFile, WildLogThumbnailSizes inSize) {
