@@ -194,9 +194,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 txtVisitName.setEnabled(false);
                 cmbVisitType.setSelectedItem(existingVisit.getType());
                 cmbVisitType.setEnabled(false);
+                // Don't allow stashing into existing Visits that aren't a Stashed Visit
+                btnStash.setEnabled(false);
             }
             else {
                 cmbVisitType.setSelectedItem(VisitType.NONE);
+                // Don't allow renaming once the Visit has been stashed (to keep thing simpler - sync, re-stach, import, export, etc.)
+                txtVisitName.setEnabled(false);
             }
             dtpStartDate.setDate(existingVisit.getStartDate());
             dtpEndDate.setDate(existingVisit.getEndDate());
@@ -1615,7 +1619,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Finished stashing files");
                     }
                     // If the visit's name changed also delete the stashed files in the folder that points to the old name
-                    if (!visit.getName().equalsIgnoreCase(originalVisitName)) {
+                    if (originalVisitName != null && !visit.getName().equalsIgnoreCase(originalVisitName)) {
                         WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Delete old stash...");
                         setTaskProgress(95);
                         setMessage("Stashing the Bulk Import: Cleaning... " + getProgress() + "%");

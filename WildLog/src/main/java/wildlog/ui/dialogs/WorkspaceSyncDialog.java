@@ -100,10 +100,10 @@ public class WorkspaceSyncDialog extends JDialog {
     private int syncDeleteDown = 0;
     private int syncDataUp = 0;
     private int syncDataDown = 0;
-    private int syncFileUp = 0;
-    private int syncStashUp = 0;
+    private AtomicInteger syncFileUp = new AtomicInteger(0);
+    private AtomicInteger syncStashUp = new AtomicInteger(0);
     private AtomicInteger syncFileDown = new AtomicInteger(0);
-    private int syncStashDown = 0;
+    private AtomicInteger syncStashDown = new AtomicInteger(0);
     private int syncFail = 0;
 
 
@@ -675,10 +675,10 @@ public class WorkspaceSyncDialog extends JDialog {
                                 feedback.println("DeleteLog Downloads   : " + syncDeleteDown);
                                 feedback.println("Data Uploads          : " + syncDataUp);
                                 feedback.println("Data Downloads        : " + syncDataDown);
-                                feedback.println("File Uploads          : " + syncFileUp);
+                                feedback.println("File Uploads          : " + syncFileUp.get());
                                 feedback.println("File Downloads        : " + syncFileDown.get());
-                                feedback.println("Stash Uploads         : " + syncStashUp);
-                                feedback.println("Stash Downloads       : " + syncStashDown);
+                                feedback.println("Stash Uploads         : " + syncStashUp.get());
+                                feedback.println("Stash Downloads       : " + syncStashDown.get());
                                 feedback.println("Stash Cloud Deletes   : " + syncDeleteStashUp);
                                 feedback.println("");
                                 feedback.println("--------------- DURATION ----------------");
@@ -703,10 +703,10 @@ public class WorkspaceSyncDialog extends JDialog {
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced DeleteLog Downloads   : {}", syncDeleteDown);
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Data Uploads          : {}", syncDataUp);
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Data Downloads        : {}", syncDataDown);
-                                WildLogApp.LOGGER.log(Level.INFO, "Synced File Uploads          : {}", syncFileUp);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced File Uploads          : {}", syncFileUp.get());
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced File Downloads        : {}", syncFileDown.get());
-                                WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Uploads         : {}", syncStashUp);
-                                WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Downloads       : {}", syncStashDown);
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Uploads         : {}", syncStashUp.get());
+                                WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Downloads       : {}", syncStashDown.get());
                                 WildLogApp.LOGGER.log(Level.INFO, "Synced Stash Cloud Deletes   : {}", syncDeleteStashUp);
                                 WildLogApp.LOGGER.log(Level.INFO, "Cloud Sync Duration: {} hours, {} minutes, {} seconds", hours, minutes, seconds);
                             }
@@ -734,10 +734,10 @@ public class WorkspaceSyncDialog extends JDialog {
                                                 + "<br/>DeleteLog Downloads   : " + syncDeleteDown
                                                 + "<br/>Data Uploads          : " + syncDataUp
                                                 + "<br/>Data Downloads        : " + syncDataDown
-                                                + "<br/>File Uploads          : " + syncFileUp
+                                                + "<br/>File Uploads          : " + syncFileUp.get()
                                                 + "<br/>File Downloads        : " + syncFileDown.get()
-                                                + "<br/>Stash Uploads         : " + syncStashUp
-                                                + "<br/>Stash Downloads       : " + syncStashDown
+                                                + "<br/>Stash Uploads         : " + syncStashUp.get()
+                                                + "<br/>Stash Downloads       : " + syncStashDown.get()
                                                 + "<br/>Stash Cloud Deletes   : " + syncDeleteStashUp
                                                 + "<br/><br/><hr/><br/></html>",
                                         "Completed Cloud Sync", WLOptionPane.INFORMATION_MESSAGE);
@@ -1314,17 +1314,39 @@ public class WorkspaceSyncDialog extends JDialog {
         }
         // Upload the files
         if (!lstSyncActions.isEmpty()) {
-            // Note: Files are always uploaded one at a time
-            loopCount = 0.0;
+            // Note: Files are always uploaded one at a time (but can be multi-threaded)
+            ExecutorService syncExecutor = Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_Sync(Upload)"));
+            AtomicInteger threadLoopCount = new AtomicInteger(0);
+            final int threadBaseProgress = baseProgress;
+            final double threadTotalSize = lstSyncActions.size();
             for (SyncAction syncAction : lstSyncActions) {
-                WildLogFile wildLogFile = (WildLogFile) syncAction.data;
-                syncAction.details = wildLogFile.getLinkType().getDescription() + "_FILE";
-                uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile);
-                syncAction.details = wildLogFile.getLinkType().getDescription() + "_DATA";
-                logIfFailed(inFeedback, syncAction, inSyncAzure.uploadData(WildLogDataType.FILE, syncAction.data));
-                syncFileUp++;
-                inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * loopCount++ / ((double) lstSyncActions.size()))));
-                inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+                syncExecutor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        WildLogFile wildLogFile = (WildLogFile) syncAction.data;
+                        syncAction.details = wildLogFile.getLinkType().getDescription() + "_FILE";
+                        uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile);
+                        syncAction.details = wildLogFile.getLinkType().getDescription() + "_DATA";
+                        logIfFailed(inFeedback, syncAction, inSyncAzure.uploadData(WildLogDataType.FILE, syncAction.data));
+                        syncFileUp.incrementAndGet();
+                        inProgressbar.setTaskProgress(threadBaseProgress + ((int) (((double) inProgressStepSize) 
+                                / 3.0 * (double) threadLoopCount.incrementAndGet() / threadTotalSize)));
+                        inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+                    }
+                });
+            }
+            // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
+            try {
+                syncExecutor.shutdown();
+                if (!syncExecutor.awaitTermination(3, TimeUnit.DAYS)) {
+                    WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown timeout!!!");
+                    logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "TIMEOUT", null), false);
+                }
+            }
+            catch (InterruptedException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown failed!!!");
+                logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "ERROR", null), false);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Upload Files");
@@ -1619,14 +1641,36 @@ public class WorkspaceSyncDialog extends JDialog {
         }
         // Upload the files
         if (!lstSyncActions.isEmpty()) {
-            // Note: Files are always uploaded one at a time
-            double loopCount = 0.0;
+            // Note: Files are always uploaded one at a time (but can be multi-threaded)
+            ExecutorService syncExecutor = Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_Sync(Upload-Stash)"));
+            AtomicInteger threadLoopCount = new AtomicInteger(0);
+            final int threadBaseProgress = baseProgress;
+            final double threadTotalSize = lstSyncActions.size();
             for (SyncAction syncAction : lstSyncActions) {
-                WildLogFile wildLogFile = (WildLogFile) syncAction.data;
-                uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile);
-                syncStashUp++;
-                inProgressbar.setTaskProgress(baseProgress + ((int) (((double) inProgressStepSize) / 3.0 * loopCount++ / ((double) lstSyncActions.size()))));
-                inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+                syncExecutor.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        WildLogFile wildLogFile = (WildLogFile) syncAction.data;
+                        uploadWildLogFile(inFeedback, inSyncAzure, syncAction, wildLogFile);
+                        syncStashUp.incrementAndGet();
+                        inProgressbar.setTaskProgress(threadBaseProgress + ((int) (((double) inProgressStepSize) 
+                                / 3.0 * (double) threadLoopCount.incrementAndGet() / threadTotalSize)));
+                        inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
+                    }
+                });
+            }
+            // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
+            try {
+                syncExecutor.shutdown();
+                if (!syncExecutor.awaitTermination(3, TimeUnit.DAYS)) {
+                    WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown timeout!!!");
+                    logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "TIMEOUT", null), false);
+                }
+            }
+            catch (InterruptedException ex) {
+                WildLogApp.LOGGER.log(Level.ERROR, "Sync - ExecutorService shutdown failed!!!");
+                logIfFailed(inFeedback, new SyncAction("WORKSPACE_DOWNLOAD", WildLogDataType.FILE, 0, "ERROR", null), false);
+                WildLogApp.LOGGER.log(Level.ERROR, ex.toString(), ex);
             }
         }
         WildLogApp.LOGGER.log(Level.INFO, "Sync - Step Completed: Upload Stashed Files");
@@ -1654,7 +1698,7 @@ public class WorkspaceSyncDialog extends JDialog {
                     if (visit != null && visit.getType() == VisitType.STASHED) {
                         // Download the stashed folder into the workspace
                         List<SyncBlobEntry> lstCloudStashedFiles = inSyncAzure.getSyncListFileChildrenBatch(WildLogDataType.STASH, folderBlobEntry.getRecordID());
-                        ExecutorService syncExecutor = Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_Sync(Update)"));
+                        ExecutorService syncExecutor = Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_Sync(Update-Stash)"));
                         AtomicInteger threadSubLoopCount = new AtomicInteger(0);
                         final int threadBaseProgress = baseProgress;
                         final double threadFolderTotalSize = lstCloudStashedBlobFolders.size();
@@ -1716,7 +1760,7 @@ public class WorkspaceSyncDialog extends JDialog {
                                             / 3.0 * (double) threadLoopCount.get() / threadFolderTotalSize
                                             * (double) threadSubLoopCount.incrementAndGet() / threadTotalSize)));
                                     inProgressbar.setMessage(inProgressbar.getMessage().substring(0, inProgressbar.getMessage().lastIndexOf(' ') + 1) + inProgressbar.getProgress() + "%");
-                                    syncStashDown++;
+                                    syncStashDown.incrementAndGet();
                                 }
                             });
                         }
