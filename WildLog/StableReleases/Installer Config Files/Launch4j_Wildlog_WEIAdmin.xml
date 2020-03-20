@@ -3,7 +3,7 @@
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
   <jar>.\WildLog-WEIAdmin.jar</jar>
-  <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLog-WEIAdmin.exe</outfile>
+  <outfile>C:\_Code\GitHub\WildLog\WildLog\StableReleases\Installer Config Files\WildLog\application\WildLogWEI Admin.exe</outfile>
   <errTitle>WildLog Startup Error</errTitle>
   <cmdLine>properties=./wildlog-wei.properties</cmdLine>
   <chdir></chdir>

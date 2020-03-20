@@ -325,6 +325,10 @@ public final class ReportOccupanyModelForR extends JDialog {
                             // Populate the presence values
                             long sightingDaysFromStart = ChronoUnit.DAYS.between(startDate, UtilsTime.getLocalDateFromDate(sighting.getDate()));
                             int sightingInterval = (int) sightingDaysFromStart / daysPerInterval;
+                            if (sightingInterval >= intervals) {
+                                // The last interval is slightly bigger than the others (Sightings on the last edge should not spawn a new interval)
+                                sightingInterval = intervals - 1;
+                            }
                             occupancyData.lstPressences.set(sightingInterval, occupancyData.lstPressences.get(sightingInterval) + 1);
                         }
                     }
