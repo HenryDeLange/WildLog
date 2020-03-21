@@ -173,9 +173,10 @@ public class UserManagementDialog extends JDialog {
                 return;
             }
             if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.ADMIN 
-                    && !(userToDelete.getType() == WildLogUserTypes.VOLUNTEER || userToDelete.getType() == WildLogUserTypes.VOLUNTEER)) {
+                    && !(userToDelete.getType() == WildLogUserTypes.STUDENT || userToDelete.getType() == WildLogUserTypes.VOLUNTEER
+                    || userToDelete.getType() == WildLogUserTypes.REMOTE)) {
                 WLOptionPane.showMessageDialog(this,
-                        "Admin users can only delete Volunteer and Student users.",
+                        "Admin users can only delete Student, Volunteer and Remote users.",
                         "Invalid User Type", JOptionPane.WARNING_MESSAGE);
                 return;
             }

@@ -194,6 +194,9 @@ public class UserLoginDialog extends JDialog {
                 WildLogApp.WILDLOG_USER_TYPE = user.getType();
                 WildLogApp.LOGGER.log(Level.INFO, "WildLog User Type: {}", user.getType());
                 loginSuccess = true;
+                // Close the popup if the login was a success
+                setVisible(false);
+                dispose();
             }
         }
         if (!loginSuccess) {
@@ -203,8 +206,6 @@ public class UserLoginDialog extends JDialog {
                     "Incorrect Login!", 
                     JOptionPane.ERROR_MESSAGE);
         }
-        setVisible(false);
-        dispose();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed

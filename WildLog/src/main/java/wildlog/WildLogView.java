@@ -168,7 +168,7 @@ public final class WildLogView extends JFrame {
         initComponents();
         // Maximise the window
         setExtendedState(Frame.MAXIMIZED_BOTH);
-        // status bar initialization - message timeout, idle icon and busy animation, etc
+        // Status bar initialization - message timeout, idle icon and busy animation, etc
         balloonTip = new BalloonTip(progressPanel, "");
         balloonTip.setVisible(false);
         JButton btnCloseBallonTip = BalloonTip.getDefaultCloseButton();
@@ -197,7 +197,7 @@ public final class WildLogView extends JFrame {
         idleIcon = new ImageIcon(getClass().getResource("/wildlog/resources/busyicons/idle-icon.png"));
         statusAnimationLabel.setIcon(idleIcon);
         progressBar.setVisible(false);
-        // connecting action tasks to status bar via TaskMonitor
+        // Connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(app.getContext());
         taskMonitor.addPropertyChangeListener(new PropertyChangeListener() {
             @Override

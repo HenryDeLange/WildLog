@@ -16,6 +16,7 @@ import wildlog.sync.azure.dataobjects.SyncTableEntry;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.WLOptionPane;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.WildLogApplicationTypes;
 
 
 public class WorkspaceListSyncDialog extends JDialog {
@@ -226,6 +227,32 @@ public class WorkspaceListSyncDialog extends JDialog {
                         "Invalid Sync Token!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            // If this is a remote volunteer then they must also provide the workspace ID they are working on
+            long filterWorkspaceID = 0;
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                String workspaceIDString = (String) WLOptionPane.showInputDialog(this,
+                        "<html>The provide the <i>WildLog ID</i> to use.</html>",
+                        "Workspace ID", JOptionPane.QUESTION_MESSAGE,  
+                        null, null, 0);
+                if (workspaceIDString == null || workspaceIDString.isEmpty()) {
+                    WLOptionPane.showMessageDialog(this,
+                        "<html>The provided <i>WildLog ID</i> could not be read."
+                                + "<br>Please provide a valid <i>WildLog ID</i>, or contact <u>support@mywild.co.za</> for help.</html>",
+                        "Invalid Workspace ID!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                try {
+                    filterWorkspaceID = Long.parseLong(workspaceIDString);
+                }
+                catch (NumberFormatException ex) {
+                    WLOptionPane.showMessageDialog(this,
+                        "<html>The provided <i>WildLog ID</i> could not be read."
+                                + "<br>Please provide a valid <i>WildLog ID</i>, or contact <u>support@mywild.co.za</> for help.</html>",
+                        "Invalid Workspace ID!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            long finalFilterWorkspaceID = filterWorkspaceID;
             // Get a list of WildLogOptions entries (one per synced workspace)
             String[] syncTokenValues = syncToken.split(" ");
             SyncAzure syncAzure = new SyncAzure(syncTokenValues[3], syncTokenValues[1], syncTokenValues[2], 0, 0);
@@ -244,8 +271,10 @@ public class WorkspaceListSyncDialog extends JDialog {
                                 // Show the workspaces on the UI
                                 lstWorkspaces.setModel(new DefaultComboBoxModel<>());
                                 for (SyncTableEntry syncEntry : lstWorkspaceOptions) {
-                                    ((DefaultComboBoxModel) lstWorkspaces.getModel()).addElement(
-                                            Long.toString(syncEntry.getWorkspaceID()) + " - " +((WildLogOptions) syncEntry.getData()).getWorkspaceName());
+                                    if (finalFilterWorkspaceID == 0 || finalFilterWorkspaceID == syncEntry.getWorkspaceID()) {
+                                        ((DefaultComboBoxModel) lstWorkspaces.getModel()).addElement(
+                                                Long.toString(syncEntry.getWorkspaceID()) + " - " +((WildLogOptions) syncEntry.getData()).getWorkspaceName());
+                                    }
                                 }
                             }
                             catch (Exception ex) {
