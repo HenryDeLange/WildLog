@@ -27,7 +27,8 @@ public class CheckAndCleanStepsDialog extends JDialog {
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
         // Do WEI specific stuff
         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             chkStep10.setSelected(false);
             chkStep10.setEnabled(false);
             chkStep10.setVisible(false);

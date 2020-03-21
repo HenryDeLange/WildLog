@@ -290,7 +290,8 @@ public final class UtilsTableGenerator {
                                         "ID" // Hidden
                                         };
                 if(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
-                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                     columnNames[3] = "Description";
                 }
                 // Load data from DB
@@ -310,7 +311,8 @@ public final class UtilsTableGenerator {
                                 data[finalT][2] = tempLocation.getRating();
                                 
                                 if(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
-                                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                                     data[finalT][3] = tempLocation.getDescription();
                                 }
                                 else {
@@ -344,7 +346,8 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(100);
                     inTable.getColumnModel().getColumn(2).setMaxWidth(120);
                     if(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
-                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                         inTable.getColumnModel().getColumn(3).setMinWidth(150);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(250);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(550);
@@ -440,6 +443,7 @@ public final class UtilsTableGenerator {
                                             }
                                             data[finalT][5] = countSightings;
                                             data[finalT][6] = countElements.size();
+                                            break;
                                         }
                                     }
                                     if (!foundSavedData) {
@@ -559,6 +563,7 @@ public final class UtilsTableGenerator {
                                                     }
                                                 }
                                                 data[finalT][4] = countSightings;
+                                                break;
                                             }
                                         }
                                         if (!foundSavedData) {

@@ -86,7 +86,7 @@ public class WildLogApp extends Application {
     private static WildLogApp INSTANCE = null;
     public static String WILDLOG_VERSION = "6.1.3.BETA";
     public static Class APPLICATION_CLASS = WildLogApp.class;
-    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG_WEI_ADMIN;
+    public static WildLogApplicationTypes WILDLOG_APPLICATION_TYPE = WildLogApplicationTypes.WILDLOG_WEI_REMOTE;
     public static String WILDLOG_USER_NAME = "WildLogUser"; // Default username (when user management is off)
     public static WildLogUserTypes WILDLOG_USER_TYPE = WildLogUserTypes.OWNER; // Default user type (when user management is off)
     public static Logger LOGGER;
@@ -94,7 +94,7 @@ public class WildLogApp extends Application {
     private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static String iNaturalistToken;
     private static boolean useNimbusLF = false;
-    private static boolean useH2AutoServer = true;
+    protected static boolean useH2AutoServer = true;
     private static ScheduledExecutorService dailyBackupExecutorService = Executors.newScheduledThreadPool(1, new NamedThreadFactory("WL_DailyBackup"));
     private WildLogView view;
     private WildLogOptions wildLogOptions;
@@ -292,6 +292,14 @@ public class WildLogApp extends Application {
                     && WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
                 WLOptionPane.showMessageDialog(null,
                         "This user can only use the Volunteer application.",
+                        "Incorrect Application Type!", 
+                        JOptionPane.ERROR_MESSAGE);
+                exit();
+                return;
+            }
+            if (WILDLOG_USER_TYPE == WildLogUserTypes.REMOTE && WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+                WLOptionPane.showMessageDialog(null,
+                        "This user can only use the Remote Volunteer application.",
                         "Incorrect Application Type!", 
                         JOptionPane.ERROR_MESSAGE);
                 exit();

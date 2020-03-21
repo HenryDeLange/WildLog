@@ -210,7 +210,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             chkForceLocationGPSCoordinates.setSelected(false);
         }
         else
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             chkForceLocationGPSCoordinates.setSelected(true);
         }
         else {
@@ -219,16 +220,27 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             chkForceLocationGPSCoordinates.setVisible(false);
         }
         // Do WEI volunteer specific stuff
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             // Set the image box size to the largest
             cmbImageBoxSize.setSelectedIndex(2);
+            chkSmoothScroll.setSelected(true);
+            chkSmoothScrollActionPerformed(null);
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            // Don't allow remote volunteers to actually do the processing, they should re-stash
+            btnProcess.setEnabled(false);
+            btnProcess.setVisible(false);
+            btnGPSForAll.setEnabled(false);
+            btnGPSForAll.setVisible(false);
         }
         // Setup the tab's content
         setupTable(inProgressbarTask);
         // Setup the initial visit name
         setupVisitName();
         // Do WEI volunteer specific stuff
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             // For WEI show a tips popup
             if (showAsTab) {
                 SwingUtilities.invokeLater(new Runnable() {
@@ -414,8 +426,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     
     private void setupVisitName() {
         if (existingVisit == null || existingVisit.getID() <= 0 || existingVisit.getType() == VisitType.STASHED) {
-            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN || 
-                    WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
+                    || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                    || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                 String locationName;
                 if (selectedLocation != null && selectedLocation.getName() != null && !selectedLocation.getName().isEmpty()) {
                     locationName = selectedLocation.getName();
@@ -895,8 +908,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         });
 
         btnStash.setBackground(new java.awt.Color(153, 180, 115));
+        btnStash.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnStash.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Stash Icon Small.png"))); // NOI18N
-        btnStash.setText("Stash for later");
+        btnStash.setText("ReStash");
         btnStash.setToolTipText("Stash these files in the Workspace and save all assigned values. Stashed Periods can be Bulk Imported at a later stage.");
         btnStash.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnStash.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1159,7 +1173,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     setMessage("Saving the Bulk Import: Starting...");
                     closeTab();
                     // For volunteers redirect to the home tab and then show the welcome dialog again
-                    if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                    if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
@@ -1275,7 +1290,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 }
                                 // For WEI, set the camera model as a tag
                                 if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                                     if (sightingWrapper.getTag() == null) {
                                         sightingWrapper.setTag("");
                                     }
@@ -1505,7 +1521,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 if (selectedLocation != null && selectedLocation.getID() > 0 && txtVisitName.getText() != null && !txtVisitName.getText().trim().isEmpty()) {
                     String stashedVisitName = txtVisitName.getText().trim();
                     if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
-                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                         if (!stashedVisitName.endsWith(" - File Stash")) {
                             stashedVisitName = stashedVisitName + " - File Stash";
                         }
@@ -1531,7 +1548,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     setMessage("Stashing the Bulk Import: Starting...");
                     closeTab();
                     // For volunteers redirect to the home tab and then show the welcome dialog again
-                    if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                    if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                            || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
@@ -1680,7 +1698,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     }
                     // Saving is done, now open the visits's tab
                     WildLogApp.LOGGER.log(Level.INFO, "Starting BulkUploadPanel.btnStashActionPerformed() - Finished saving ExtraData for the Visit");
-                    if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                    if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                            && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                         openVisitTab(visit, (JTabbedPane) thisParentHandle);
                     }
                     setMessage("Stashing the Bulk Import: Finished");
@@ -1699,7 +1718,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void openVisitTab(Visit visit, JTabbedPane inParent) {
         if (existingVisit == null || existingVisit.getID() == 0) {
-            if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                    && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                 // Open the new tab
                 UtilsPanelGenerator.openPanelAsTab(app, visit.getID(), PanelCanSetupHeader.TabTypes.VISIT, inParent, selectedLocation);
             }

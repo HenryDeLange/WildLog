@@ -112,7 +112,8 @@ public class ChartsBaseDialog extends JFrame {
             }
         });
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             pnlExport.setEnabled(false);
             pnlExport.setVisible(false);
             btnExport.setEnabled(false);
@@ -160,7 +161,8 @@ public class ChartsBaseDialog extends JFrame {
         reports.add(new VisitChart(lstFilteredData, lblReportDescription, this));
         reports.add(new SightingPropertiesChart(lstFilteredData, lblReportDescription, this));
         reports.add(new DayAndNightChart(lstFilteredData, lblReportDescription, this));
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription, this));
             reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription, this));
             reports.add(new DurationChart(lstFilteredData, lblReportDescription, this));
@@ -226,7 +228,8 @@ public class ChartsBaseDialog extends JFrame {
         stackPane.getChildren().add(jfxReportChartPanel.getScene().getRoot());
         ImageView watermark;
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/wei/WEI-square-50px.png")));
         }
         else {

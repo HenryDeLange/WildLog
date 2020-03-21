@@ -40,13 +40,18 @@ public class PanelTabLocations extends JPanel {
         UtilsTableGenerator.setupColumnResizingListener(tblElement, 1);
         UtilsTableGenerator.setupColumnResizingListener(tblVisit, 1);
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnDeleteLocation.setEnabled(false);
             btnDeleteLocation.setVisible(false);
             if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
                 btnAddLocation.setEnabled(false);
                 btnAddLocation.setVisible(false);
             }
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            btnAddLocation.setEnabled(false);
+            btnAddLocation.setVisible(false);
         }
     }
 
@@ -386,7 +391,8 @@ public class PanelTabLocations extends JPanel {
 
     private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             return;
         }
         if (tblLocation.getSelectedRowCount() > 0) {

@@ -29,7 +29,8 @@ public class UserLoginDialog extends JDialog {
         }
         else 
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             lblBannerLogo.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-horizontal-400px.png")));
         }
         txtUsername.requestFocus();

@@ -52,7 +52,8 @@ public class AdvancedDialog extends JDialog {
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(this, null);
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnMergeSightings.setEnabled(false);
             btnMergeSightings.setVisible(false);
             btnMoveVisit.setEnabled(false);

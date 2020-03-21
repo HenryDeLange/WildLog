@@ -111,17 +111,19 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         // Setup the table
         tblLocation.getTableHeader().setReorderingAllowed(false);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
-        // setup the file dropping
-        if (!isPopup) {
-            FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
-                @Override
-                public void filesDropped(List<File> inFiles) {
-                    btnUpdateActionPerformed(null);
-                    if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-                        uploadFiles(inFiles);
+        // Setup the file dropping
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            if (!isPopup) {
+                FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
+                    @Override
+                    public void filesDropped(List<File> inFiles) {
+                        btnUpdateActionPerformed(null);
+                        if (!txtPrimaryName.getBackground().equals(Color.RED)) {
+                            uploadFiles(inFiles);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtPrimaryName);
@@ -144,7 +146,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtDistribution.setCaretPosition(0);
         txtNutrition.setCaretPosition(0);
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnExport.setEnabled(false);
             btnExport.setVisible(false);
             btnSlideshow.setEnabled(false);
@@ -155,6 +158,40 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 btnReport.setEnabled(false);
                 btnReport.setVisible(false);
             }
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            txtPrimaryName.setEnabled(false);
+            txtOtherName.setEnabled(false);
+            txtScienceName.setEnabled(false);
+            txtReferenceID.setEnabled(false);
+            cmbEndangeredStatus.setEnabled(false);
+            cmbFeedingClass.setEnabled(false);
+            cmbType.setEnabled(false);
+            txtBehaviourDescription.setEnabled(false);
+            txtDescription.setEnabled(false);
+            txtDiagnosticDescription.setEnabled(false);
+            txtNutrition.setEnabled(false);
+            txtDistribution.setEnabled(false);
+            btnMap.setEnabled(false);
+            btnMap.setVisible(false);
+            btnReport.setEnabled(false);
+            btnReport.setVisible(false);
+            btnAddSighting.setEnabled(false);
+            btnAddSighting.setVisible(false);
+            btnDeleteImage.setEnabled(false);
+            btnDeleteImage.setVisible(false);
+            btnExtraData.setEnabled(false);
+            btnExtraData.setVisible(false);
+            btnUpdate.setEnabled(false);
+            btnUpdate.setVisible(false);
+            btnUploadImage.setEnabled(false);
+            btnUploadImage.setVisible(false);
+            btnSetMainImage.setEnabled(false);
+            btnSetMainImage.setVisible(false);
+            btnINaturalist.setEnabled(false);
+            btnINaturalist.setVisible(false);
+            btnCheckIUCNOtherName.setEnabled(false);
+            btnCheckIUCNOtherName.setVisible(false);
         }
     }
 
@@ -421,19 +458,18 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         pnlFiles.setLayout(pnlFilesLayout);
         pnlFilesLayout.setHorizontalGroup(
             pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnlFilesLayout.createSequentialGroup()
-                    .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(pnlFilesLayout.createSequentialGroup()
-                            .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, 0)
-                            .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, 0)
-                            .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlFilesLayout.createSequentialGroup()
+                .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlFilesLayout.createSequentialGroup()
+                        .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(jSeparator1)
         );
         pnlFilesLayout.setVerticalGroup(
@@ -853,7 +889,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addGap(0, 0, 0)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane16)
-                    .addComponent(jScrollPane17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
+                    .addComponent(jScrollPane17, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
                     .addComponent(cmbType, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbFeedingClass, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cmbEndangeredStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1019,7 +1055,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(pnlTables, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(6, 6, 6))
+                .addGap(5, 5, 5))
         );
         elementIncludesLayout.setVerticalGroup(
             elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

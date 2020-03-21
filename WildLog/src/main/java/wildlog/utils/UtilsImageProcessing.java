@@ -244,6 +244,7 @@ public class UtilsImageProcessing {
     }
 
     private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
+        
 // FIXME: Hierdie werk nie vir sync downloaded files nie???
 //java.lang.IllegalArgumentException: Width (0) and height (260) must be non-zero
 //	at java.awt.image.ReplicateScaleFilter.<init>(ReplicateScaleFilter.java:102) ~[?:?]
@@ -255,6 +256,7 @@ public class UtilsImageProcessing {
 //	at wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper.getIcon(BulkUploadImageFileWrapper.java:38) ~[classes/:?]
 //	at wildlog.ui.panels.bulkupload.ImageBox.populateUI(ImageBox.java:56) ~[classes/:?]
 //	at wildlog.ui.panels.bulkupload.ImageBox.<init>(ImageBox.java:51) ~[classes/:?]
+
         return inImage.getScaledInstance(inWidth, inHeight, Image.SCALE_SMOOTH);
     }
 

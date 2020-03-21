@@ -863,7 +863,8 @@ public class UtilsCheckAndClean {
             // For WEI, set the camera model as a tag
             if (inSelectedSteps.contains(10)) {
                 if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                        || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                     inProgressbarTask.setTaskProgress(99);
                     inProgressbarTask.setMessage("Cleanup Step 10: Set the camera model as the Observation's Tag... " + inProgressbarTask.getProgress() + "%");
                     finalHandleFeedback.println("");

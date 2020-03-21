@@ -163,7 +163,7 @@ public abstract class PanelCanSetupHeader extends JPanel {
 
     /**
      * Closes the tab. Some implementations may show a popup to ask whether to save the tab or not.
-     * Return true if the tab was closes (regardless of being saved or not) and false if the
+     * Return true if the tab was closed (regardless of being saved or not) and false if the
      * tab was not closed (for example the Cancel option was selected on the popup).
      * @return
      */

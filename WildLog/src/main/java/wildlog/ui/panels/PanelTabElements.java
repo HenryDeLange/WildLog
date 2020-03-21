@@ -41,9 +41,14 @@ public class PanelTabElements extends javax.swing.JPanel {
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtSearch);
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnDeleteElement.setEnabled(false);
             btnDeleteElement.setVisible(false);
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            btnAddElement.setEnabled(false);
+            btnAddElement.setVisible(false);
         }
     }
 
@@ -379,7 +384,8 @@ public class PanelTabElements extends javax.swing.JPanel {
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             return;
         }
         if (tblElement.getSelectedRowCount() > 0) {

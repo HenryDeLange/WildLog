@@ -322,7 +322,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         });
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnINaturalist.setEnabled(false);
             btnINaturalist.setVisible(false);
             if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
@@ -340,6 +341,28 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     }
                 });
             }
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            btnGPS.setEnabled(false);
+            btnGPS.setVisible(false);
+            btnGetDateFromImage.setEnabled(false);
+            btnGetDateFromImage.setVisible(false);
+            btnGetGPSFromImage.setEnabled(false);
+            btnGetGPSFromImage.setVisible(false);
+            btnCalculateDuration.setEnabled(false);
+            btnCalculateDuration.setVisible(false);
+            btnUploadImage.setEnabled(false);
+            btnUploadImage.setVisible(false);
+            btnDeleteImage.setEnabled(false);
+            btnDeleteImage.setVisible(false);
+            btnSetMainImage.setEnabled(false);
+            btnSetMainImage.setVisible(false);
+            btnAddNewElement.setEnabled(false);
+            btnAddNewElement.setVisible(false);
+            btnAddNewLocation.setEnabled(false);
+            btnAddNewLocation.setVisible(false);
+            btnAddNewVisit.setEnabled(false);
+            btnAddNewVisit.setVisible(false);
         }
         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
             btnSetDefaultElementImage.setEnabled(false);
@@ -367,7 +390,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                         }
                         // For WEI, set the camera model as a tag
                         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                             Set<String> setCameraNames = new HashSet<>();
                             for (File file : inFiles) {
                                 String cameraName = UtilsImageProcessing.getExifCameraNameFromJpeg(file.toPath());
@@ -688,7 +712,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                             .addGroup(pnlImageControlsLayout.createSequentialGroup()
                                 .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
-                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(0, 0, 0)
                                 .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))

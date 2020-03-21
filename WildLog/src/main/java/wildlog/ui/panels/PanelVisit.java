@@ -152,17 +152,19 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         // Setup the table
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
         UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);
-        // setup the file dropping
-        if (!isPopup) {
-            FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
-                @Override
-                public void filesDropped(List<File> inFiles) {
-                    btnUpdateActionPerformed(null);
-                    if (!txtName.getBackground().equals(Color.RED)) {
-                        uploadFiles(inFiles);
+        // Setup the file dropping
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            if (!isPopup) {
+                FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
+                    @Override
+                    public void filesDropped(List<File> inFiles) {
+                        btnUpdateActionPerformed(null);
+                        if (!txtName.getBackground().equals(Color.RED)) {
+                            uploadFiles(inFiles);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtName);
@@ -177,14 +179,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         // Scroll to the top of the text areas
         txtDescription.setCaretPosition(0);
         // Show or hide fields based on application type
-        if (!(WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER)) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnAutoName.setVisible(false);
             lblTotalFiles.setVisible(false);
             lblTotalNumberOfFiles.setVisible(false);
         }
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnExport.setEnabled(false);
             btnExport.setVisible(false);
             if (WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
@@ -199,6 +203,41 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnAdvanced.setEnabled(false);
                 btnAdvanced.setVisible(false);
             }
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            cmbType.setEnabled(false);
+            txtName.setEnabled(false);
+            dtpStartDate.setEnabled(false);
+            dtpEndDate.setEnabled(false);
+            cmbGameWatchIntensity.setEnabled(false);
+            txtDescription.setEnabled(false);
+            btnExport.setEnabled(false);
+            btnExport.setVisible(false);
+            btnDeleteSighting.setEnabled(false);
+            btnDeleteSighting.setVisible(false);
+            btnDeleteImage.setEnabled(false);
+            btnDeleteImage.setVisible(false);
+            btnReport.setEnabled(false);
+            btnReport.setVisible(false);
+            btnSlideshow.setEnabled(false);
+            btnSlideshow.setVisible(false);
+            btnAdvanced.setEnabled(false);
+            btnAdvanced.setVisible(false);
+            btnAddSighting.setEnabled(false);
+            btnAddSighting.setVisible(false);
+            pnlSelectedFiles.setVisible(false);
+            btnMapSighting.setEnabled(false);
+            btnMapSighting.setVisible(false);
+            btnUploadImage.setEnabled(false);
+            btnUploadImage.setVisible(false);
+            btnSetMainImage.setEnabled(false);
+            btnSetMainImage.setVisible(false);
+            btnUpdate.setEnabled(false);
+            btnUpdate.setVisible(false);
+            btnExtraData.setEnabled(false);
+            btnExtraData.setVisible(false);
+            btnAutoName.setEnabled(false);
+            btnAutoName.setVisible(false);
         }
         // As dit 'n Stashed visit is dan moet ek die UI sodanig aanpas
         if (VisitType.STASHED == visit.getType()) {
@@ -222,7 +261,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             cmbType.setSelectedItem(visit.getType());
             txtName.setEnabled(false);
             if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
-                    && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                    && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                    && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                 dtpStartDate.setEnabled(false);
                 dtpEndDate.setEnabled(false);
             }
@@ -579,35 +619,30 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFilesLayout.createSequentialGroup()
                         .addGap(35, 35, 35)
-                        .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, 0)
-                        .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35))
-                    .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlFilesLayout.createSequentialGroup()
-                        .addGap(265, 265, 265)
-                        .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFilesLayout.createSequentialGroup()
-                        .addGap(35, 35, 35)
                         .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlFilesLayout.createSequentialGroup()
+                        .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlFilesLayout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(1, 1, 1)
+                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(1, 1, 1)
+                        .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFilesLayout.createSequentialGroup()
+                                .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(35, 35, 35))
+                            .addComponent(btnNextImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         pnlFilesLayout.setVerticalGroup(
             pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFilesLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
                 .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlFilesLayout.createSequentialGroup()
                         .addGap(327, 327, 327)
                         .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFilesLayout.createSequentialGroup()
-                        .addGap(327, 327, 327)
-                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFilesLayout.createSequentialGroup()
-                        .addGap(327, 327, 327)
-                        .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlFilesLayout.createSequentialGroup()
                         .addGap(300, 300, 300)
                         .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -615,10 +650,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGap(300, 300, 300)
                         .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlFilesLayout.createSequentialGroup()
-                        .addGap(300, 300, 300)
-                        .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0))
+                        .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlFilesLayout.createSequentialGroup()
+                                .addGap(300, 300, 300)
+                                .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(2, 2, 2)
+                        .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 5, Short.MAX_VALUE))
         );
 
         pnlButtons.setBackground(new java.awt.Color(230, 228, 240));
@@ -930,7 +971,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addGap(71, 71, 71)
-                                        .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))
+                                        .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE))
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addComponent(jLabel52)
                                         .addGap(311, 311, 311)))
@@ -1073,7 +1114,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
             .addComponent(jSeparator5)
         );
@@ -1246,7 +1287,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlFiles, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnlSelectedFiles, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8))
+                .addGap(5, 5, 5))
         );
         visitIncludesLayout.setVerticalGroup(
             visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1268,7 +1309,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(pnlSightings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addComponent(pnlFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
+                        .addGap(0, 0, 0)
                         .addComponent(pnlSelectedFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 21, Short.MAX_VALUE)))
                 .addGap(0, 0, 0))
@@ -1292,7 +1333,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 }
             }
             lblNumberOfElements.setText(Integer.toString(allElements.size()));
-            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                    || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                    || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                 List<Sighting> lstSightings = app.getDBI().listSightings(0, 0, visit.getID(), false, Sighting.class);
                 int totalFiles = 0;
                 for (Sighting sighting : lstSightings) {
@@ -1305,7 +1348,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, 0);
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
-            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
+            if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
+                    || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                    || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                 lblTotalNumberOfFiles.setText("0");
             }
         }
@@ -1351,8 +1396,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
        // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
-                && WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
+        if ((WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER)
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             return;
         }
         if (tblSightings.getSelectedRowCount() > 0) {
@@ -1794,7 +1840,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     
     private void generateVisitName() {
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
-                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             LocalDate startDate;
             if (dtpStartDate.getDate() != null) {
                 startDate = UtilsTime.getLocalDateFromDate(dtpStartDate.getDate());

@@ -169,7 +169,8 @@ public class BulkUploadDataLoader {
     public static void setDefaultsForNewBulkUploadSightings(BulkUploadSightingWrapper inBulkUploadSightingWrapper, 
             boolean inForceLocationGPS, Location inLocation) {
         // Setup the certainty
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             inBulkUploadSightingWrapper.setCertainty(Certainty.NONE);
         }
         else {
@@ -183,7 +184,8 @@ public class BulkUploadDataLoader {
         }
         // For WEI default to the GPS of the location
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             if (inForceLocationGPS && inLocation != null && UtilsGPS.hasGPSData(inLocation)) {
                 UtilsGPS.copyGpsBetweenDOs(inBulkUploadSightingWrapper, inLocation);
             }

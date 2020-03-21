@@ -285,8 +285,18 @@ public final class WildLogView extends JFrame {
             setTitle("WEI WildLog Volunteer v" + WildLogApp.WILDLOG_VERSION + " -- " + app.getWildLogOptions().getWorkspaceName());
             lblWildLogName.setText("WEI WildLog");
         }
+        else
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            tabHome.setBackground(new Color(88, 90, 10));
+            lblFooterLogo.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-full-horizontal-400px.png")));
+            lblBlog.setText("http://wei.org.za ");
+            setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/wei/WEI-square-20px.png")).getImage());
+            setTitle("WEI WildLog Remote Volunteer v" + WildLogApp.WILDLOG_VERSION + " -- " + app.getWildLogOptions().getWorkspaceName());
+            lblWildLogName.setText("WEI WildLog");
+        }
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             sprWorkspace2.setVisible(false);
             mnuCleanWorkspace.setEnabled(false);
             mnuCleanWorkspace.setVisible(false);
@@ -343,6 +353,20 @@ public final class WildLogView extends JFrame {
             restoreMenu.setVisible(false);
             workspaceMenu.setEnabled(false);
             workspaceMenu.setVisible(false);
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            mnuBackupDatabase.setEnabled(false);
+            mnuBackupDatabase.setVisible(false);
+            backupMenu.setEnabled(false);
+            backupMenu.setVisible(false);
+            mnuExifMenuItem.setEnabled(false);
+            mnuExifMenuItem.setVisible(false);
+            mnuCreateGIF.setEnabled(false);
+            mnuCreateGIF.setVisible(false);
+            mnuCreateSlideshow.setEnabled(false);
+            mnuCreateSlideshow.setVisible(false);
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
             // Show the WEI welcome popup
             showWelcomeDialog();
         }
@@ -2127,7 +2151,8 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuCalcSunMoonActionPerformed
 
     private void mnuBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBulkImportActionPerformed
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {

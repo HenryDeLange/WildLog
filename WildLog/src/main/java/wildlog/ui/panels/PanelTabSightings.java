@@ -94,7 +94,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         // Add listner to auto resize columns.
         UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnBulkEditSighting.setEnabled(false);
             btnBulkEditSighting.setVisible(false);
             btnExport.setEnabled(false);
@@ -105,6 +106,18 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 btnDeleteSighting.setEnabled(false);
                 btnDeleteSighting.setVisible(false);
             }
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            btnAddSighting.setEnabled(false);
+            btnAddSighting.setVisible(false);
+            btnDeleteSighting.setEnabled(false);
+            btnDeleteSighting.setVisible(false);
+            pnlFeatures.setEnabled(false);
+            pnlFeatures.setVisible(false);
+            btnMap.setEnabled(false);
+            btnMap.setVisible(false);
+            btnReport.setEnabled(false);
+            btnReport.setVisible(false);
         }
         // Setup the grid sizes
         DefaultComboBoxModel<WildLogThumbnailSizes> model = new DefaultComboBoxModel<>();
@@ -813,7 +826,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
         List<Sighting> lstSelectedSightings = getListOfSelectedSightings(activeLayout, true);
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             if (WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER) {
                 if (lstSelectedSightings.size() > 1) {
                     WLOptionPane.showMessageDialog(app.getMainFrame(),
@@ -977,9 +991,9 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_btnResetFiltersActionPerformed
 
     private void btnGoBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoBrowseActionPerformed
-        if (tblSightings.getSelectedRowCount() == 1) {
-            app.getMainFrame().browseSelectedSighting(app.getDBI().findSighting((Long) tblSightings.getModel().getValueAt(
-                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8), true, Sighting.class));
+        List<Sighting> lstSelectedSightings = getListOfSelectedSightings(activeLayout, true);
+        if (lstSelectedSightings.size() == 1) {
+            app.getMainFrame().browseSelectedSighting(app.getDBI().findSighting(lstSelectedSightings.get(0).getID(), true, Sighting.class));
         }
     }//GEN-LAST:event_btnGoBrowseActionPerformed
 

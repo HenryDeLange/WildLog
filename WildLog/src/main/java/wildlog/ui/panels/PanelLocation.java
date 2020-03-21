@@ -135,17 +135,19 @@ public class PanelLocation extends PanelCanSetupHeader {
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
         UtilsTableGenerator.setupColumnResizingListener(tblVisit, 1);
-        // setup the file dropping
-        if (!isPopup) {
-            FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
-                @Override
-                public void filesDropped(List<File> inFiles) {
-                    btnUpdateActionPerformed(null);
-                    if (!txtName.getBackground().equals(Color.RED)) {
-                        uploadFiles(inFiles);
+        // Setup the file dropping
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            if (!isPopup) {
+                FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
+                    @Override
+                    public void filesDropped(List<File> inFiles) {
+                        btnUpdateActionPerformed(null);
+                        if (!txtName.getBackground().equals(Color.RED)) {
+                            uploadFiles(inFiles);
+                        }
                     }
-                }
-            });
+                });
+            }
         }
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtName);
@@ -159,7 +161,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtHabitatType.setCaretPosition(0);
         txtDescription.setCaretPosition(0);
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             btnDeleteVisit.setEnabled(false);
             btnDeleteVisit.setVisible(false);
             pnlSubButtons2.setVisible(false);
@@ -176,6 +179,33 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnReport.setEnabled(false);
                 btnReport.setVisible(false);
             }
+        }
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
+            txtName.setEnabled(false);
+            txtDescription.setEnabled(false);
+            txtHabitatType.setEnabled(false);
+            cmbGameRating.setEnabled(false);
+            cmbRating.setEnabled(false);
+            btnMap.setEnabled(false);
+            btnMap.setVisible(false);
+            btnReport.setEnabled(false);
+            btnReport.setVisible(false);
+            btnExtraData.setEnabled(false);
+            btnExtraData.setVisible(false);
+            btnDeleteImage.setEnabled(false);
+            btnDeleteImage.setVisible(false);
+            btnDeleteVisit.setEnabled(false);
+            btnDeleteVisit.setEnabled(false);
+            btnAddVisit.setEnabled(false);
+            btnAddVisit.setVisible(false);
+            btnUploadImage.setEnabled(false);
+            btnUploadImage.setVisible(false);
+            btnSetMainImage.setEnabled(false);
+            btnSetMainImage.setVisible(false);
+            btnUpdate.setEnabled(false);
+            btnUpdate.setVisible(false);
+            btnGPS.setEnabled(false);
+            btnGPS.setVisible(false);
         }
         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_ADMIN) {
             btnApplyGPSToVisit.setEnabled(false);
@@ -238,7 +268,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                  return true;
             }
         }
-         return false;
+        return false;
     }
 
 
@@ -447,7 +477,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                             .addGroup(pnlFilesLayout.createSequentialGroup()
                                 .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, 0)
-                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(0, 0, 0)
                                 .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1291,8 +1321,9 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
-                && WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER) {
+        if ((WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_USER_TYPE == WildLogUserTypes.VOLUNTEER)
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             return;
         }
         imageIndex = UtilsImageProcessing.removeImage(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.S0300_NORMAL, app);
@@ -1320,7 +1351,8 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             return;
         }
         if (tblVisit.getSelectedRowCount() > 0) {

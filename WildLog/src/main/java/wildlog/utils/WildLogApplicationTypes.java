@@ -3,7 +3,8 @@ package wildlog.utils;
 public enum WildLogApplicationTypes {
     WILDLOG("MyWild Edition"),
     WILDLOG_WEI_ADMIN("WEI Admin"),
-    WILDLOG_WEI_VOLUNTEER("WEI Volunteer");
+    WILDLOG_WEI_VOLUNTEER("WEI Volunteer"),
+    WILDLOG_WEI_REMOTE("WEI Remote Volunteer");
     
     private final String edition;
 

@@ -59,7 +59,8 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
                 }
             }
         }
-        if (!inIsSummary && (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER)) {
+        if (!inIsSummary && (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE)) {
             html.append("<br/><hr/>");
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>ID:</b><br/>", id, true);
             UtilsHTML.appendIfNotNullNorEmpty(html, "<br/><b>Audit Time:</b><br/>", UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(

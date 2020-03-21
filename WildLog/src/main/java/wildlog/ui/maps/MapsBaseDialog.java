@@ -112,7 +112,8 @@ public class MapsBaseDialog extends JFrame {
         // Note: Dit mag lank vat die eerste keer, maar dis hopelik steeds beter om dit hier te doen en te wag (vs. multihtreaded as die program begin)
         UtilsFileProcessing.copyMapLayersWithPopup(this);
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             pnlExport.setEnabled(false);
             pnlExport.setVisible(false);
             btnExport.setEnabled(false);
@@ -161,14 +162,17 @@ public class MapsBaseDialog extends JFrame {
         lstMaps.add(new PointMap(lstFilteredData, lblMapDescription, this));
         lstMaps.add(new EarthMap(lstFilteredData, lblMapDescription, this));
         // Enforce user access
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             lstMaps.add(new HeatMap(lstFilteredData, lblMapDescription, this));
             lstMaps.add(new DistributionMap(lstFilteredData, elementID, lblMapDescription, this));
             lstMaps.add(new WebDistributionMap(lstFilteredData, lblMapDescription, this));
         }
         if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE
                 || (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
-                && WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER)) {
+                && WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.VOLUNTEER
+                && WildLogApp.WILDLOG_USER_TYPE != WildLogUserTypes.REMOTE)) {
             lstMaps.add(new BiomeMap(lstFilteredData, lblMapDescription, this));
             lstMaps.add(new ClimateMap(lstFilteredData, lblMapDescription, this));
             lstMaps.add(new LandStatusMap(lstFilteredData, lblMapDescription, this));

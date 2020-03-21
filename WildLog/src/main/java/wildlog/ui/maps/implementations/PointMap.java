@@ -107,7 +107,8 @@ public class PointMap extends AbstractMap<Sighting> {
         });
         lstCustomButtons.add(chkShowFileThumbnails);
         // View in browser
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                && WildLogApp.WILDLOG_APPLICATION_TYPE != WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             Hyperlink btnOpenInBrowser = new Hyperlink("View in External Web Browser");
             btnOpenInBrowser.setCursor(Cursor.HAND);
             btnOpenInBrowser.setOnAction(new EventHandler() {

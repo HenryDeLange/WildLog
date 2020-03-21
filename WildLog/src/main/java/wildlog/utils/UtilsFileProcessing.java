@@ -669,7 +669,8 @@ public final class UtilsFileProcessing {
                         Location location = WildLogApp.getApplication().getDBI().findLocation(locationDialog.getSelectedLocationID(), null, false, Location.class);
                         Visit visit = new Visit();
                         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN 
-                                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
                             visit.setName(UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(LocalDate.now()) 
                                     + "-" + UtilsTime.WL_DATE_FORMATTER_FOR_VISITS_WEI.format(LocalDate.now())
                                     + "_" + location.getName()

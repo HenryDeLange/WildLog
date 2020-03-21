@@ -66,7 +66,8 @@ public class InfoBox extends JPanel {
             spinnerEditor.getTextField().setBackground(new Color(225, 230, 215));
         }
         // Do WEI volunteer specific stuff
-        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+        if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             // For camera trap bulk imports, hide the GPS button because it the GPS will come from the location
             if (inLocation.getName().contains("_CT")) {
                 btnGPS.setVisible(false);

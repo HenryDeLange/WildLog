@@ -91,7 +91,8 @@ public abstract class AbstractMap<T extends DataObjectWithGPS> {
         stackPane.getChildren().add(mapsBaseDialog.getJFXMapPanel().getScene().getRoot());
         ImageView watermark;
         if (WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_ADMIN
-                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER) {
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_VOLUNTEER
+                || WildLogApp.WILDLOG_APPLICATION_TYPE == WildLogApplicationTypes.WILDLOG_WEI_REMOTE) {
             watermark = new ImageView(new Image(WildLogApp.class.getResourceAsStream("resources/wei/WEI-square-50px.png")));
         }
         else {
